@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
@@ -30,17 +30,17 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * AST node that represent line comments.
  * </p>
  * Line comments are started with "//" and finish at the end of the line ("\n").
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public final class LineComment extends Comment {
 
     public LineComment() {
-        this(Range.UNKNOWN, "empty");
+        this(null, "empty");
     }
 
     public LineComment(String content) {
-        this(Range.UNKNOWN, content);
+        this(null, content);
     }
 
     public LineComment(Range range, String content) {
@@ -58,8 +58,7 @@ public final class LineComment extends Comment {
     }
 
     @Override
-    public boolean isLineComment()
-    {
+    public boolean isLineComment() {
         return true;
     }
 }

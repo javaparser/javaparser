@@ -8,12 +8,12 @@ public class NameTest {
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
         Name name = Name.parse("a.b.c");
-        assertEquals("c", name.getId());
+        assertEquals("c", name.getIdentifier());
     }
 
     @Test
     public void parsingAndUnparsingWorks() {
         Name name = Name.parse("a.b.c");
-        assertEquals("a.b.c", name.toString());
+        assertEquals("a.b.c", name.asString());
     }
 }

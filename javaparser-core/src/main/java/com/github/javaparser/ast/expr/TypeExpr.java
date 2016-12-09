@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -33,15 +33,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
- * @author Raquel Pau
  *
+ * @author Raquel Pau
  */
 public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<?>> {
 
     private Type<?> type;
 
     public TypeExpr() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public TypeExpr(Range range, Type<?> type) {
@@ -71,7 +71,6 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<
         setAsParentNodeOf(this.type);
         return this;
     }
-
 
 
 }

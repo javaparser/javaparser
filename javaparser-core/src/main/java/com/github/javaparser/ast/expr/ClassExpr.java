@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -33,20 +33,21 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * Defines an expression that accesses the class of a type.
  * Example:
  * <code>
- *     Object.class
+ * Object.class
  * </code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type<?>> {
 
-    private Type type;
+    private Type<?> type;
 
     public ClassExpr() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public ClassExpr(Type<?> type) {
-       this(Range.UNKNOWN, type);
+        this(null, type);
     }
 
     public ClassExpr(Range range, Type type) {
@@ -65,15 +66,15 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
-    public Type getType() {
+    public Type<?> getType() {
         return type;
     }
 
     @Override
-    public ClassExpr setType(Type type) {
+    public ClassExpr setType(Type<?> type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
         return this;
     }
 }

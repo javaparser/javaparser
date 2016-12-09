@@ -1,12 +1,12 @@
 package com.github.javaparser;
 
-import static com.github.javaparser.utils.Utils.EOL;
-import static java.util.Collections.singletonList;
+import com.github.javaparser.ast.comments.CommentsCollection;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.github.javaparser.ast.comments.CommentsCollection;
+import static com.github.javaparser.utils.Utils.EOL;
+import static java.util.Collections.singletonList;
 
 /**
  * The results given when parsing with an instance of JavaParser.
@@ -14,16 +14,17 @@ import com.github.javaparser.ast.comments.CommentsCollection;
 public class ParseResult<T> {
     private final T result;
     private final List<Problem> problems;
-    private final List<Token> tokens;
+    private final List<JavaToken> tokens;
     private final CommentsCollection commentsCollection;
 
     /**
      * General constructor.
+     *
      * @param result the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    ParseResult(T result, List<Problem> problems, List<Token> tokens, CommentsCollection commentsCollection) {
+    ParseResult(T result, List<Problem> problems, List<JavaToken> tokens, CommentsCollection commentsCollection) {
         this.commentsCollection = commentsCollection;
         this.result = result;
         this.problems = problems;
@@ -70,7 +71,7 @@ public class ParseResult<T> {
     /**
      * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    public Optional<List<Token>> getTokens() {
+    public Optional<List<JavaToken>> getTokens() {
         return Optional.ofNullable(tokens);
     }
 

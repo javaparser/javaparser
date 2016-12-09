@@ -45,13 +45,13 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements 
-        NodeWithJavaDoc<ConstructorDeclaration>, 
+public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements
+        NodeWithJavaDoc<ConstructorDeclaration>,
         NodeWithDeclaration,
-        NodeWithSimpleName<ConstructorDeclaration>, 
+        NodeWithSimpleName<ConstructorDeclaration>,
         NodeWithModifiers<ConstructorDeclaration>,
-        NodeWithParameters<ConstructorDeclaration>, 
-        NodeWithThrowable<ConstructorDeclaration>,
+        NodeWithParameters<ConstructorDeclaration>,
+        NodeWithThrownExceptions<ConstructorDeclaration>,
         NodeWithBlockStmt<ConstructorDeclaration>,
         NodeWithTypeParameters<ConstructorDeclaration> {
 
@@ -63,12 +63,12 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> throws_;
+    private NodeList<ReferenceType<?>> thrownExceptions;
 
     private BlockStmt body;
 
     public ConstructorDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new NodeList<>(),
@@ -79,7 +79,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
@@ -91,27 +91,27 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   NodeList<TypeParameter> typeParameters,
-                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_,
+                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions,
                                   BlockStmt block) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 typeParameters,
                 name,
                 parameters,
-                throws_,
+                thrownExceptions,
                 block);
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name,
-                                  NodeList<Parameter> parameters, NodeList<ReferenceType<?>> throws_, BlockStmt block) {
+                                  NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
         setParameters(parameters);
-        setThrows(throws_);
+        setThrownExceptions(thrownExceptions);
         setBody(block);
     }
 
@@ -127,9 +127,9 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -147,8 +147,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrows() {
-        return throws_;
+    public NodeList<ReferenceType<?>> getThrownExceptions() {
+        return thrownExceptions;
     }
 
     public NodeList<TypeParameter> getTypeParameters() {
@@ -178,10 +178,10 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setThrows(NodeList<ReferenceType<?>> throws_) {
-        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
-        this.throws_ = assertNotNull(throws_);
-        setAsParentNodeOf(this.throws_);
+    public ConstructorDeclaration setThrownExceptions(NodeList<ReferenceType<?>> thrownExceptions) {
+        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
+        this.thrownExceptions = assertNotNull(thrownExceptions);
+        setAsParentNodeOf(this.thrownExceptions);
         return this;
     }
 
@@ -194,7 +194,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     /**
      * The declaration returned has this schema:
-     *
+     * <p>
      * [accessSpecifier] className ([paramType [paramName]])
      * [throws exceptionsList]
      */
@@ -204,7 +204,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
-            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier.asString());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
         }
         sb.append(getName());
@@ -219,13 +219,13 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
             if (includingParameterName) {
                 sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getElementType().toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType thr : getThrows()) {
+            for (ReferenceType thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -273,7 +273,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
         res.add(parameters);
-        res.add(throws_);
+        res.add(thrownExceptions);
         return res;
     }
 }

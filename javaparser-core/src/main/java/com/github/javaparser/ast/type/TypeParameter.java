@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -33,106 +33,108 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <p>
- * This class represents the declaration of a generics argument.
- * </p>
- * The TypeParameter is constructed following the syntax:<br>
+ * <p> This class represents the declaration of a generics argument. </p> The TypeParameter is constructed following the
+ * syntax:<br>
  * <pre>
  * {@code
- * TypeParameter ::= <IDENTIFIER> ( "extends" }{@link ClassOrInterfaceType}{@code ( "&" }{@link ClassOrInterfaceType}{@code )* )?
+ * TypeParameter ::= <IDENTIFIER> ( "extends" }{@link ClassOrInterfaceType}{@code ( "&" }{@link
+ * ClassOrInterfaceType}{@code )* )?
  * }
  * </pre>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter> {
 
-	private SimpleName name;
+    private SimpleName name;
 
     private NodeList<AnnotationExpr> annotations;
 
-	private NodeList<ClassOrInterfaceType> typeBound;
+    private NodeList<ClassOrInterfaceType> typeBound;
 
-	public TypeParameter() {
-		this(Range.UNKNOWN,
-				new SimpleName(),
-				new NodeList<>(),
-				new NodeList<>());
-	}
+    public TypeParameter() {
+        this(null,
+                new SimpleName(),
+                new NodeList<>(),
+                new NodeList<>());
+    }
 
-	public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
-		this(Range.UNKNOWN,
-				new SimpleName(name),
-				typeBound,
-				new NodeList<>());
-	}
+    public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
+        this(null,
+                new SimpleName(name),
+                typeBound,
+                new NodeList<>());
+    }
 
-	public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
-		this(range,
-				name,
-				typeBound,
-				new NodeList<>());
-	}
+    public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
+        this(range,
+                name,
+                typeBound,
+                new NodeList<>());
+    }
 
-	public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
-		super(range);
-		setName(name);
-		setTypeBound(typeBound);
-		setAnnotations(annotations);
-	}
+    public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
+        super(range);
+        setName(name);
+        setTypeBound(typeBound);
+        setAnnotations(annotations);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	/**
-	 * Return the name of the paramenter.
-	 * 
-	 * @return the name of the paramenter
-	 */
-	@Override
-	public SimpleName getName() {
-		return name;
-	}
+    /**
+     * Return the name of the paramenter.
+     *
+     * @return the name of the paramenter
+     */
+    @Override
+    public SimpleName getName() {
+        return name;
+    }
 
-	/**
-	 * Return the list of {@link ClassOrInterfaceType} that this parameter
-	 * extends. Return <code>null</code> null if there are no type.
-	 * 
-	 * @return list of types that this paramente extends or <code>null</code>
-	 */
-	public NodeList<ClassOrInterfaceType> getTypeBound() {
+    /**
+     * Return the list of {@link ClassOrInterfaceType} that this parameter
+     * extends. Return <code>null</code> null if there are no type.
+     *
+     * @return list of types that this paramente extends or <code>null</code>
+     */
+    public NodeList<ClassOrInterfaceType> getTypeBound() {
         return typeBound;
-	}
+    }
 
     @Override
     public TypeParameter setName(final SimpleName name) {
-	    notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-		this.name = assertNotNull(name);
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
         setAsParentNodeOf(name);
         return this;
-	}
+    }
 
-	public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
+    public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
         notifyPropertyChange(ObservableProperty.TYPE_BOUND, this.typeBound, typeBound);
-		this.typeBound = assertNotNull(typeBound);
-		setAsParentNodeOf(typeBound);
-		return this;
-	}
+        this.typeBound = assertNotNull(typeBound);
+        setAsParentNodeOf(typeBound);
+        return this;
+    }
 
-	@Override
+    @Override
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-	@Override
+    @Override
     public TypeParameter setAnnotations(NodeList<AnnotationExpr> annotations) {
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-		this.annotations = assertNotNull(annotations);
-	    setAsParentNodeOf(this.annotations);
-		return this;
+        this.annotations = assertNotNull(annotations);
+        setAsParentNodeOf(this.annotations);
+        return this;
     }
 }

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -37,12 +37,13 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>
+ * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
  * 
+ * "int" is the element type.
+ * All the brackets are stored in the levels field, from left to right.
+ *
  * @author Julio Vilmar Gesser
  */
-// NOTE does not implement NodeWithType because setType is problematic
-// NOTE does not implement NodeWithElementType because that implies a list of ArrayBracketPairs
 public final class ArrayCreationExpr extends Expression {
 
     private NodeList<ArrayCreationLevel> levels;
@@ -52,21 +53,21 @@ public final class ArrayCreationExpr extends Expression {
     private ArrayInitializerExpr initializer;
 
     public ArrayCreationExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
     public ArrayCreationExpr(Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
-        this(Range.UNKNOWN,
+        this(null,
                 elementType,
                 levels,
                 initializer);
     }
 
     public ArrayCreationExpr(Type<?> elementType) {
-        this(Range.UNKNOWN,
+        this(null,
                 elementType,
                 new NodeList<>(),
                 new ArrayInitializerExpr());
@@ -106,21 +107,21 @@ public final class ArrayCreationExpr extends Expression {
 
     /**
      * Sets the initializer
-     * 
+     *
      * @param initializer the initializer, can be null
      * @return this, the ArrayCreationExpr
      */
     public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         this.initializer = initializer;
-		setAsParentNodeOf(this.initializer);
+        setAsParentNodeOf(this.initializer);
         return this;
     }
 
     public ArrayCreationExpr setElementType(Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
-		setAsParentNodeOf(this.elementType);
+        setAsParentNodeOf(this.elementType);
         return this;
     }
 
@@ -138,7 +139,7 @@ public final class ArrayCreationExpr extends Expression {
     /**
      * Takes the element type and wraps it in an ArrayType for every array creation level.
      */
-    public Type<?> getType() {
+    public Type<?> createdType() {
         Type<?> result = elementType;
         for (int i = 0; i < levels.size(); i++) {
             result = new ArrayType(result, new NodeList<>());

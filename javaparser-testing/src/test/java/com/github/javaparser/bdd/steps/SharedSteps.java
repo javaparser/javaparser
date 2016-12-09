@@ -18,8 +18,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import org.hamcrest.CoreMatchers;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -27,32 +43,12 @@ import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Map;
-
-import com.github.javaparser.ParseProblemException;
-import org.hamcrest.CoreMatchers;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-
 public class SharedSteps {
 
     /* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
     private Map<String, Object> state;
 
-    public SharedSteps(Map<String, Object> state){
+    public SharedSteps(Map<String, Object> state) {
         this.state = state;
     }
 
@@ -134,34 +130,34 @@ public class SharedSteps {
         assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
     }
 
-	public static BodyDeclaration<?> getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<? extends BodyDeclaration<?>> typeClass) {
+    public static BodyDeclaration<?> getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<? extends BodyDeclaration<?>> typeClass) {
         int typeCount = 0;
-		for (BodyDeclaration<?> declaration : typeDeclaration.getMembers()) {
-            if(declaration.getClass().equals(typeClass)){
-                if(typeCount == position){
+        for (BodyDeclaration<?> declaration : typeDeclaration.getMembers()) {
+            if (declaration.getClass().equals(typeClass)) {
+                if (typeCount == position) {
                     return declaration;
                 }
                 typeCount++;
             }
         }
-        throw new IllegalArgumentException("No member " + typeClass + " at position: " + position );
+        throw new IllegalArgumentException("No member " + typeClass + " at position: " + position);
     }
 
     public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
-                                                                         int methodPosition, int classPosition) {
-		TypeDeclaration<?> type = compilationUnit.getType(classPosition - 1);
+                                                                        int methodPosition, int classPosition) {
+        TypeDeclaration<?> type = compilationUnit.getType(classPosition - 1);
 
         int memberCount = 0;
         int methodCount = 0;
-		for (BodyDeclaration<?> bodyDeclaration : type.getMembers()) {
-            if(bodyDeclaration instanceof MethodDeclaration){
-                if(methodCount == methodPosition -1) {
+        for (BodyDeclaration<?> bodyDeclaration : type.getMembers()) {
+            if (bodyDeclaration instanceof MethodDeclaration) {
+                if (methodCount == methodPosition - 1) {
                     return (MethodDeclaration) type.getMember(memberCount);
                 }
                 methodCount++;
             }
             memberCount++;
         }
-        throw new IllegalArgumentException("Method not found at position " +methodPosition+ "in class " + classPosition);
+        throw new IllegalArgumentException("Method not found at position " + methodPosition + "in class " + classPosition);
     }
 }

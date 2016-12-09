@@ -23,7 +23,7 @@ options {
   LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
-  COMMON_TOKEN_ACTION=true; // Using the CommonTokenAction callback to collect tokens for later usage
+  COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
   TOKEN_FACTORY = "ASTParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
@@ -146,7 +146,7 @@ final class ASTParser {
      *
      * @return a list of tokens
      */
-    public List<Token> getTokens() {
+    public List<JavaToken> getTokens() {
         return token_source.getTokens();
     }
 
@@ -155,30 +155,31 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, tokenRange(), null));
+        // TODO tokenRange only takes the final token. Need all the tokens.
+        problems.add(new Problem(message, tokenRange(), null));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
             if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                VariableDeclaratorId id = new VariableDeclaratorId(inner.get().getRange(), ((NameExpr) inner.get()).getName(), emptyList());
-                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));
-                ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), params, lambdaBody, true);
+                SimpleName id = ((NameExpr)inner.get()).getName();
+                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
+                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
             } else {
-                ret = new LambdaExpr(range(ret.getBegin(), lambdaBody.getEnd()), emptyList(), lambdaBody, true);
+                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
-            VariableDeclaratorId id = new VariableDeclaratorId(ret.getRange(), ((NameExpr) ret).getName(), emptyList());
-            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));
-            ret = new LambdaExpr(ret.getRange(), params, lambdaBody, false);
+            SimpleName id = ((NameExpr)ret).getName();
+            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
+            ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
-            ret.setEnd(lambdaBody.getEnd());
+            ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
-            Expression inner = generateLambda(castExpr.getExpr(), lambdaBody);
-            castExpr.setExpr(inner);
+            Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
+            castExpr.setExpression(inner);
         } else {
             addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }
@@ -194,6 +195,12 @@ final class ASTParser {
         return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
 
+    private Type<?> juggleArrayType(Type<?> partialType, List<ArrayBracketPair> additionalBrackets) {
+        Pair<Type<?>, List<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
+        Type<?> elementType = partialParts.a;
+        List<ArrayBracketPair> leftMostBrackets = partialParts.b;
+        return ArrayType.wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
+    }
 
     static final class GTToken extends Token {
         int realKind = ASTParserConstants.GT;
@@ -209,7 +216,9 @@ final class ASTParser {
     }
 
     private static class RangedList<T extends Node> {
-        Range range = Range.UNKNOWN;
+        /* A ranged list MUST be set to a begin and end,
+           or these temporary values will leak out */
+        Range range = range(0, 0, 0, 0);
         NodeList<T> list;
         RangedList(NodeList<T> list) {
             this.list = list;
@@ -249,7 +258,7 @@ PARSER_END(ASTParser)
 
 /* WHITE SPACE */
 
-SKIP :
+SPECIAL_TOKEN :
 {
   " "
 | "\t"
@@ -285,46 +294,44 @@ SKIP :
 
 TOKEN_MGR_DECLS :
 {
-    private List<Token> tokens = new ArrayList<Token>();
+    private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
 
     void reset() {
-        tokens = new ArrayList<Token>();
+        tokens = new ArrayList<JavaToken>();
         commentsCollection = new CommentsCollection();
     }
 
-    List<Token> getTokens() {
+    List<JavaToken> getTokens() {
         return tokens;
     }
-    
+
     CommentsCollection getCommentsCollection() {
         return commentsCollection;
     }
 
     private void CommonTokenAction(Token token) {
-        tokens.add(token);
+        if(token.specialToken!=null) {
+            CommonTokenAction(token.specialToken);
+        }
+        tokens.add(new JavaToken(token));
 
-        while (token.specialToken != null) {
-            token = token.specialToken;
-            String commentText = token.image;
-            if (token.kind == JAVA_DOC_COMMENT) {
-                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == MULTI_LINE_COMMENT) {
-                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == SINGLE_LINE_COMMENT) {
-                // line comments have their end of line character(s) included, and we don't want that.
-                Range range = tokenRange(token);
-                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                    commentText = commentText.substring(0, commentText.length() - 1);
-                }
-                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(range, commentText.substring(2));
-                commentsCollection.addComment(comment);
-            } else {
-                throw new AssertionError("Didn't expect to get here. Please file a bug report. [" + commentText + "]");
+        String commentText = token.image;
+        if (token.kind == JAVA_DOC_COMMENT) {
+            JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
+            commentsCollection.addComment(comment);
+        } else if (token.kind == MULTI_LINE_COMMENT) {
+            BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
+            commentsCollection.addComment(comment);
+        } else if (token.kind == SINGLE_LINE_COMMENT) {
+            // line comments have their end of line character(s) included, and we don't want that.
+            Range range = tokenRange(token);
+            while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
+                commentText = commentText.substring(0, commentText.length() - 1);
             }
+            range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
+            LineComment comment = new LineComment(range, commentText.substring(2));
+            commentsCollection.addComment(comment);
         }
     }
 }
@@ -1304,11 +1311,15 @@ CompilationUnit CompilationUnit():
 	TypeDeclaration tn = null;
 }
 {
-  [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-  ( in = ImportDeclaration() { imports = add(imports, in); } )*
-  ( tn = TypeDeclaration() { types = add(types, tn); } )*
-  (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
+    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    ( LOOKAHEAD(ImportDeclaration())
+        in = ImportDeclaration() { imports = add(imports, in); }
+        |
+        ";"
+    )*
+    ( tn = TypeDeclaration() { types = add(types, tn); } )*
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1326,22 +1337,37 @@ PackageDeclaration PackageDeclaration():
 ImportDeclaration ImportDeclaration():
 {
     Name name;
-    boolean isStatic = false;
-    boolean isAsterisk = false;
+    ClassOrInterfaceType type;
     Position begin;
     ImportDeclaration ret;
 }
 {
+    "import" {begin = tokenBegin();}
     (
-        "import" {begin = tokenBegin();} 
-        [ "static" { isStatic = true; } ] 
-        name = Name() 
-        [ "." "*" { isAsterisk = true; } ] ";"
-        { ret = ImportDeclaration.create(range(begin, tokenEnd()), name, isStatic, isAsterisk); }
+        "static" type = ClassOrInterfaceType()
+        (
+            "." "*" ";"
+            { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
+        |
+            ";"
+            {
+                if(!type.getScope().isPresent()){
+                    addProblem("import static has only one identifier");
+                    ret = new BadImportDeclaration(range(begin, tokenEnd()));
+                } else {
+                    ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
+                }
+            }
+        )
     |
-        ";" {begin = tokenBegin();} 
-        { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
-    )    
+        ( LOOKAHEAD(Name() "." "*")
+            name = Name() "." "*" ";"
+            { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
+        |
+            type = ClassOrInterfaceType() ";"
+            { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
+        )
+    )
     { return ret; }
 }
 
@@ -1384,7 +1410,7 @@ ModifierHolder Modifiers():
   |
    "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
   |
-   ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin()); }
+   ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); }
   )
  )*
 
@@ -1510,7 +1536,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
 }
 {
   {  }
-  ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin()); } )*
+  ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); } )*
   name = SimpleName() { begin = begin.orIfInvalid(tokenBegin()); } 
   [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
   { 
@@ -1642,43 +1668,45 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 
 FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 {
-	Type type;
+	Type partialType;
 	NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
 	VariableDeclarator val;
 }
 {
   // Modifiers are already matched in the caller
-  type = Type()
-          val = VariableDeclarator() { variables.add(val); }
-  ( "," val = VariableDeclarator() { variables.add(val); } )* ";"
+  partialType = Type()
+          val = VariableDeclarator(partialType) { variables.add(val); }
+  ( "," val = VariableDeclarator(partialType) { variables.add(val); } )* ";"
 
     { 
-        Position begin = modifier.begin.orIfInvalid(type.getBegin());
-        Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
+        Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
+        return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, variables);
     }
 }
 
-VariableDeclarator VariableDeclarator():
+VariableDeclarator VariableDeclarator(Type partialType):
 {
-	VariableDeclaratorId id;
+	Pair<SimpleName, List<ArrayBracketPair>> id;
 	Expression init = null;
 }
 {
-  id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
-  { return new  VariableDeclarator(range(id.getBegin(), tokenEnd()), id, init); }
+    id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
+    { return new VariableDeclarator(range(id.a.getBegin().get(), tokenEnd()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
-VariableDeclaratorId VariableDeclaratorId():
+Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 {
 	SimpleName name;
 	Position begin;
 	ArrayBracketPair arrayBracketPair;
-	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
-  name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  { return new VariableDeclaratorId(range(begin, tokenEnd()),name, arrayBracketPairs); }
+    name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    {
+        name.setRange(name.getRange().get().withEnd(tokenEnd()));    
+        return new Pair(name, arrayBracketPairs);
+    }
 }
 
 Expression VariableInitializer():
@@ -1708,28 +1736,28 @@ ArrayInitializerExpr ArrayInitializer():
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
-	Type type;
+	Type<?> type;
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
-	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 	NodeList<ReferenceType<?>> throws_ = emptyList();
 	BlockStmt block = null;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
 }
 {
-  // Modifiers already matched in the caller!
-  [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
-  type = ResultType() { begin = begin.orIfInvalid(type.getBegin()); }
-  name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-  [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-    ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
-  ( block = Block() | ";" )
-  { 
-        Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, typeListPair.a, typeListPair.b, name, false, parameters, arrayBracketPairs, throws_, block);
-  }
+    // Modifiers already matched in the caller!
+    [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
+    type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
+    name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+      ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
+    ( block = Block() | ";" )
+    { 
+        type = juggleArrayType(type, arrayBracketPairs);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, false, parameters, throws_, block);
+    }
 }
 
 ReferenceType ReferenceTypeWithAnnotations():
@@ -1775,32 +1803,30 @@ NodeList<Parameter> FormalLambdaParameters():
 
 NodeList<Parameter> InferredLambdaParameters():
 {
-  NodeList<Parameter> ret = null;
-  VariableDeclaratorId id;
+    NodeList<Parameter> ret = null;
+    Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-   ","
-  	id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id));}
-  (
-    "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.getBegin(), id.getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id)); }
-  )*
-  { return ret;  }
+    ","
+    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id.a));}
+    (
+        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id.a)); }
+    )*
+    { return ret;  }
 }
 
 Parameter FormalParameter():
 {
 	ModifierHolder modifier;
-	Type type;
+	Type partialType;
 	boolean isVarArg = false;
-	VariableDeclaratorId id;
+	Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-  modifier = Modifiers() type = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
-
+  modifier = Modifiers() partialType = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
   {
-        Position begin = modifier.begin.orIfInvalid(type.getBegin());
-        Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, typeListPair.b, isVarArg, id);
+        Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
+        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, id.a);
   }
 }
 
@@ -1819,7 +1845,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); begin = begin.orIfInvalid(tokenBegin()); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
   ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   "{" { blockBegin=tokenBegin(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
@@ -1852,7 +1878,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	  [
 	    LOOKAHEAD( PrimaryExpressionWithoutSuperSuffix() "." )
 	  	expr = PrimaryExpressionWithoutSuperSuffix() "."
-	  	{ begin=expr.getBegin(); }
+	  	{ begin=expr.getBegin().get(); }
 	  ]
 	  [ typeArgs = TypeArguments() { begin = begin.orIfInvalid(typeArgs.range.begin); } ]
 	  <SUPER> {begin = begin.orIfInvalid(tokenBegin());}
@@ -1879,7 +1905,7 @@ InitializerDeclaration InitializerDeclaration():
 }
 {
   [ "static" { isStatic = true; begin=tokenBegin();} ] 
-  block = Block() {begin = begin.orIfInvalid(block.getBegin());}
+  block = Block() {begin = begin.orIfInvalid(block.getBegin().get());}
   { return new InitializerDeclaration(range(begin, tokenEnd()), isStatic, block); }
 }
 
@@ -1905,7 +1931,7 @@ ReferenceType<?> ReferenceType():
 {
 	Type<?> type;
 	ArrayBracketPair arrayBracketPair;
-	NodeList<ArrayBracketPair> arrayBracketPairs = emptyList();
+	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
   (
@@ -1934,7 +1960,7 @@ IntersectionType IntersectionType():
 	NodeList<ReferenceType<?>> elements = emptyList();
 }
 {
-    elementType=ReferenceType() { begin=elementType.getBegin(); elements = add(elements, elementType); }
+    elementType=ReferenceType() { begin=elementType.getBegin().get(); elements = add(elements, elementType); }
     "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
     { return new IntersectionType(range(begin, tokenEnd()), elements); }
 }
@@ -2043,21 +2069,21 @@ PrimitiveType PrimitiveType():
 }
 {
 (
-  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Boolean); }
+  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN); }
 |
-  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Char); }
+  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR); }
 |
-  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Byte); }
+  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE); }
 |
-  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Short); }
+  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT); }
 |
-  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Int); }
+  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT); }
 |
-  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Long); }
+  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG); }
 |
-  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Float); }
+  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT); }
 |
-  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.Double); }
+  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE); }
 )
 { return ret; }
 }
@@ -2085,7 +2111,7 @@ Name Name():
 }
 {
   <IDENTIFIER> { ret = new Name(tokenRange(), null, token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new Name(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
+  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
   { return ret; }
 }
 
@@ -2124,7 +2150,7 @@ Expression Expression():
   [
     (
        LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, value, op); }
+    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, value, op); }
   |
    "->" lambdaBody = LambdaBody()
    {
@@ -2145,7 +2171,7 @@ Expression Expression():
    }
  |  "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
  {
-   ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
+   ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
  }
    )
   ]
@@ -2159,18 +2185,18 @@ AssignExpr.Operator AssignmentOperator():
 }
 {
   (
-      "="    { ret = AssignExpr.Operator.assign; }
-    | "*="   { ret = AssignExpr.Operator.star; }
-    | "/="   { ret = AssignExpr.Operator.slash; }
-    | "%="   { ret = AssignExpr.Operator.rem; }
-    | "+="   { ret = AssignExpr.Operator.plus; }
-    | "-="   { ret = AssignExpr.Operator.minus; }
-    | "<<="  { ret = AssignExpr.Operator.lShift; }
-    | ">>="  { ret = AssignExpr.Operator.rSignedShift; }
-    | ">>>=" { ret = AssignExpr.Operator.rUnsignedShift; }
-    | "&="   { ret = AssignExpr.Operator.and; }
-    | "^="   { ret = AssignExpr.Operator.xor; }
-    | "|="   { ret = AssignExpr.Operator.or; }
+      "="    { ret = AssignExpr.Operator.ASSIGN; }
+    | "*="   { ret = AssignExpr.Operator.MULTIPLY; }
+    | "/="   { ret = AssignExpr.Operator.DIVIDE; }
+    | "%="   { ret = AssignExpr.Operator.REMAINDER; }
+    | "+="   { ret = AssignExpr.Operator.PLUS; }
+    | "-="   { ret = AssignExpr.Operator.MINUS; }
+    | "<<="  { ret = AssignExpr.Operator.LEFT_SHIFT; }
+    | ">>="  { ret = AssignExpr.Operator.SIGNED_RIGHT_SHIFT; }
+    | ">>>=" { ret = AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
+    | "&="   { ret = AssignExpr.Operator.AND; }
+    | "^="   { ret = AssignExpr.Operator.XOR; }
+    | "|="   { ret = AssignExpr.Operator.OR; }
   )
   { return ret; }
 }
@@ -2183,7 +2209,7 @@ Expression ConditionalExpression():
 }
 {
   ret = ConditionalOrExpression()
-  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, left, right); } ]
+  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, left, right); } ]
   { return ret; }
 }
 
@@ -2193,7 +2219,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.or); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.OR); } )*
   { return ret; }
 }
 
@@ -2203,7 +2229,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.and); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.AND); } )*
   { return ret; }
 }
 
@@ -2213,7 +2239,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.binOr); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
   { return ret; }
 }
 
@@ -2223,7 +2249,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.xor); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.XOR); } )*
   { return ret; }
 }
 
@@ -2233,7 +2259,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.binAnd); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
   { return ret; }
 }
 
@@ -2246,9 +2272,9 @@ Expression EqualityExpression():
 {
   ret = InstanceOfExpression()
   (
-    ( "==" { op = BinaryExpr.Operator.equals; } |
-      "!=" { op = BinaryExpr.Operator.notEquals; }
-    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
+    ( "==" { op = BinaryExpr.Operator.EQUALS; } |
+      "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
+    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2259,7 +2285,7 @@ Expression InstanceOfExpression():
 	ReferenceType<?> type;
 }
 {
-  ret = RelationalExpression() [ "instanceof" type = ReferenceType() { ret = new InstanceOfExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, type); } ]
+  ret = RelationalExpression() [ "instanceof" type = ReferenceType() { ret = new InstanceOfExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, type); } ]
   { return ret; }
 }
 
@@ -2272,11 +2298,11 @@ Expression RelationalExpression():
 {
   ret = ShiftExpression()
   (
-  	( "<"  { op = BinaryExpr.Operator.less; } |
-  	  ">"  { op = BinaryExpr.Operator.greater; } |
-  	  "<=" { op = BinaryExpr.Operator.lessEquals; } |
-  	  ">=" { op = BinaryExpr.Operator.greaterEquals; }
-  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	( "<"  { op = BinaryExpr.Operator.LESS; } |
+  	  ">"  { op = BinaryExpr.Operator.GREATER; } |
+  	  "<=" { op = BinaryExpr.Operator.LESS_EQUALS; } |
+  	  ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
+  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2290,10 +2316,10 @@ Expression ShiftExpression():
 {
   ret = AdditiveExpression()
   (
-  	( "<<"             { op = BinaryExpr.Operator.lShift; } |
-  	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.rSignedShift; } |
-  	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.rUnsignedShift; }
-  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	( "<<"             { op = BinaryExpr.Operator.LEFT_SHIFT; } |
+  	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT; } |
+  	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
+  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2307,9 +2333,9 @@ Expression AdditiveExpression():
 {
   ret = MultiplicativeExpression()
   (
-  	( "+" { op = BinaryExpr.Operator.plus; } |
-  	  "-" { op = BinaryExpr.Operator.minus; }
-  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	( "+" { op = BinaryExpr.Operator.PLUS; } |
+  	  "-" { op = BinaryExpr.Operator.MINUS; }
+  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2323,10 +2349,10 @@ Expression MultiplicativeExpression():
 {
   ret = UnaryExpression()
   (
-  	( "*" { op = BinaryExpr.Operator.times; } |
-  	  "/" { op = BinaryExpr.Operator.divide; } |
-  	  "%" { op = BinaryExpr.Operator.remainder; }
-  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin(), tokenEnd()), ret, right, op); }
+  	( "*" { op = BinaryExpr.Operator.MULTIPLY; } |
+  	  "/" { op = BinaryExpr.Operator.DIVIDE; } |
+  	  "%" { op = BinaryExpr.Operator.REMAINDER; }
+  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2343,21 +2369,11 @@ Expression UnaryExpression():
 	|
 	  ret = PreDecrementExpression()
 	|
-	  ( "+" { op = UnaryExpr.Operator.positive; begin=tokenBegin();} |
-	    "-" { op = UnaryExpr.Operator.negative; begin=tokenBegin();}
+	  ( "+" { op = UnaryExpr.Operator.PLUS; begin=tokenBegin();} |
+	    "-" { op = UnaryExpr.Operator.MINUS; begin=tokenBegin();}
 	  ) ret = UnaryExpression()
 	  {
-	  	 if(op == UnaryExpr.Operator.negative) {
-	  	 	if (ret instanceof IntegerLiteralExpr && ((IntegerLiteralExpr)ret).isMinValue()) {
-	  	 		ret = new IntegerLiteralMinValueExpr(range(begin, tokenEnd()));
-	  	 	} else if (ret instanceof LongLiteralExpr && ((LongLiteralExpr)ret).isMinValue()) {
-	  	 		ret = new LongLiteralMinValueExpr(range(begin, tokenEnd()));
-	  	 	} else {
-	  	 		ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
-	  	 	}
-	  	 } else {
-	  	 	ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
-	  	 }
+        ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
 	  }
 	|
 	  ret = UnaryExpressionNotPlusMinus()
@@ -2371,7 +2387,7 @@ Expression PreIncrementExpression():
 	Position begin = INVALID;
 }
 {
-  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preIncrement); }
+  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
   { return ret; }
 }
 
@@ -2381,7 +2397,7 @@ Expression PreDecrementExpression():
 	Position begin;
 }
 {
-  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.preDecrement); }
+  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
   { return ret; }
 }
 
@@ -2393,8 +2409,8 @@ Expression UnaryExpressionNotPlusMinus():
 }
 {
   (
-	  ( "~" { op = UnaryExpr.Operator.inverse; begin=tokenBegin(); } |
-	    "!" { op = UnaryExpr.Operator.not;     begin=tokenBegin(); }
+	  ( "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=tokenBegin(); } |
+	    "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=tokenBegin(); }
 	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, op); }
 	|
 	  LOOKAHEAD( CastExpression() )
@@ -2414,9 +2430,9 @@ Expression PostfixExpression():
   ret = PrimaryExpression()
   [
   	LOOKAHEAD(2)
-    ( "++" { op = UnaryExpr.Operator.postIncrement; } |
-      "--" { op = UnaryExpr.Operator.postDecrement; }
-    ) { ret = new UnaryExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, op); }
+    ( "++" { op = UnaryExpr.Operator.POSTFIX_INCREMENT; } |
+      "--" { op = UnaryExpr.Operator.POSTFIX_DECREMENT; }
+    ) { ret = new UnaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, op); }
   ]
   { return ret; }
 }
@@ -2484,7 +2500,7 @@ Expression PrimaryPrefix():
 	Type type;
 	Position begin;
 	Parameter p = null;
-	VariableDeclaratorId id = null;
+	SimpleName id = null;
 }
 {
   (
@@ -2500,15 +2516,15 @@ Expression PrimaryPrefix():
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, args);
 			} else {
-	  			ret = new FieldAccessExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, emptyList(), name);
+	  			ret = new FieldAccessExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, emptyList(), name);
 			}
 	  	}
 	 |
 		"::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
 		{
-		  ret = new MethodReferenceExpr(range(ret.getBegin(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
+		  ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
 		}
 	  )
 	|
@@ -2525,14 +2541,14 @@ Expression PrimaryPrefix():
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
-	  		  		    id = new VariableDeclaratorId(range(ret.getBegin(), ret.getEnd()), ((NameExpr)ret).getName(), emptyList());
-	  		  		    p = new Parameter(range(ret.getBegin(), ret.getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), emptyList(), false, id);
+	  		  		    id = ((NameExpr)ret).getName();
+	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id);
 	  		  		  }
 
 	  		  		}
 	  		  		params = add(0, params, p);
 	  		  		// TODO p may be null here
-	  		  		ret = new LambdaExpr(range(p.getBegin(), tokenEnd()), params, null, true);
+	  		  		ret = new LambdaExpr(range(p.getBegin().get(), tokenEnd()), params, null, true);
 	  		 	}
 
 	  		 }
@@ -2540,13 +2556,13 @@ Expression PrimaryPrefix():
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBegin(), tokenEnd()), type); }
+	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBegin().get(), tokenEnd()), type); }
 
 	| LOOKAHEAD (ResultType() "::" )
 	  type = ResultType() "::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
 		{
-		  ret = new TypeExpr(type.getRange(), type);
-		  ret = new MethodReferenceExpr(ret.getRange(), ret, typeArgs.list, token.image);
+		  ret = new TypeExpr(type.getRange().get(), type);
+		  ret = new MethodReferenceExpr(ret.getRange().get(), ret, typeArgs.list, token.image);
 		}
 
 	|
@@ -2572,7 +2588,7 @@ Expression PrimarySuffix(Expression scope):
   	LOOKAHEAD(2)
 	ret = PrimarySuffixWithoutSuper(scope)
 	|
-  	"." "super" { ret = new SuperExpr(range(scope.getBegin(), tokenEnd()), scope); }
+  	"." "super" { ret = new SuperExpr(range(scope.getBegin().get(), tokenEnd()), scope); }
   )
   { return ret; }
 }
@@ -2589,7 +2605,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-		"this" { ret = new ThisExpr(range(scope.getBegin(), tokenEnd()), scope); }
+		"this" { ret = new ThisExpr(range(scope.getBegin().get(), tokenEnd()), scope); }
 	  |
 	  	ret = AllocationExpression(scope)
 	  |
@@ -2599,14 +2615,14 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(scope.getBegin(), tokenEnd()), scope, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name, args);
 			} else {
-	  			ret =  new FieldAccessExpr(range(scope.getBegin(), tokenEnd()), scope, typeArgs.list, name);
+	  			ret =  new FieldAccessExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name);
 			}
 	  	}
 	)
 	|
-	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope.getBegin(), tokenEnd()), scope, ret); }
+	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope.getBegin().get(), tokenEnd()), scope, ret); }
   )
   { return ret; }
 }
@@ -2686,7 +2702,7 @@ NodeList<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	Type type;
+	Type<?> type;
 	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
@@ -2694,29 +2710,25 @@ Expression AllocationExpression(Expression scope):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin();} }
-
-  annotations = Annotations() 
-  (
-	  type = PrimitiveType() {type.setAnnotations(annotations); }
-	  ret = ArrayCreation(begin, type)
-	|
-	 [ typeArgs = TypeArguments() annotations = Annotations() ]
-	  type = AnnotatedClassOrInterfaceType()
-      (
-	      ret = ArrayCreation(begin, type)
-	  |
-	      args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-	      { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
-      )
-  )
-  { return ret; }
+    "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
+    
+    annotations = Annotations() 
+    (
+        type = PrimitiveType() { type.setAnnotations(annotations); }
+        ret = ArrayCreation(begin, type)
+    |
+        [ typeArgs = TypeArguments() annotations = Annotations() ]
+        type = AnnotatedClassOrInterfaceType()
+        (
+            ret = ArrayCreation(begin, type)
+        |
+            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
+            { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+        )
+    )
+    { return ret; }
 }
 
-/*
- * The third LOOKAHEAD specification below is to parse to PrimarySuffix
- * if there is an expression between the "[...]".
- */
 ArrayCreationExpr ArrayCreation(Position begin, Type type):
 {
 	Expression expr = null;
@@ -2726,11 +2738,10 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 { 
-    (
+    ( LOOKAHEAD(2)
         annotations = Annotations() 
         "[" 
-        (expr = Expression())? 
-            { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
+        (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
         "]" 
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
@@ -2834,11 +2845,11 @@ Statement BlockStatement():
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
   	  {  }
 	  modifier = Modifiers()
-	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDecl.getBegin().line, typeDecl.getBegin().column, token.endLine, token.endColumn), typeDecl); }
+	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
 	|
   	  LOOKAHEAD(VariableDeclarationExpression() )
 	  expr = VariableDeclarationExpression() ";"
-	  { ret = new ExpressionStmt(range(expr.getBegin().line, expr.getBegin().column, token.endLine, token.endColumn), expr); } 
+	  { ret = new ExpressionStmt(range(expr.getBegin().get().line, expr.getBegin().get().column, token.endLine, token.endColumn), expr); } 
     |
 	  ret = Statement()
   )
@@ -2848,16 +2859,15 @@ Statement BlockStatement():
 VariableDeclarationExpr VariableDeclarationExpression():
 {
 	ModifierHolder modifier;
-	Type type;
+	Type partialType;
 	NodeList<VariableDeclarator> variables = new NodeList<VariableDeclarator>();
 	VariableDeclarator var;
 }
 {
-  modifier = Modifiers() type = Type() var = VariableDeclarator() { variables.add(var); } ( "," var = VariableDeclarator() { variables.add(var); } )*
+  modifier = Modifiers() partialType = Type() var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
   {
-        Position begin=modifier.begin.orIfInvalid(type.getBegin());
-        Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(type);
-        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeListPair.a, variables, typeListPair.b);
+        Position begin=modifier.begin.orIfInvalid(partialType.getBegin().get());
+        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, variables);
   }
 }
 
@@ -2877,7 +2887,7 @@ Statement LambdaBody():
   (
   	expr = Expression()
   	{
-  	  n = new ExpressionStmt(range(expr.getBegin(), tokenEnd()), expr);
+  	  n = new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr);
   	}
  	|  n = Block()
   )
@@ -2908,12 +2918,12 @@ ExpressionStmt StatementExpression():
 	|
 	  expr = PrimaryExpression()
 	  [
-	    "++" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.postIncrement);  }
+	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
 	  |
-	    "--" { expr = new UnaryExpr(range(expr.getBegin(), tokenEnd()), expr, UnaryExpr.Operator.postDecrement);  }
+	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
 	  |
-	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin(), tokenEnd()), expr, value, op); }
-	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
+	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
+	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
 
 	 |
 	   "->" lambdaBody = LambdaBody()
@@ -2923,7 +2933,7 @@ ExpressionStmt StatementExpression():
 	  ]
   )
   ";"
-  { return new ExpressionStmt(range(expr.getBegin(), tokenEnd()), expr); }
+  { return new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr); }
 }
 
 SwitchStmt SwitchStatement():
@@ -2969,20 +2979,11 @@ IfStmt IfStatement():
 	Statement thenStmt;
 	Statement elseStmt = null;
 	Position begin;
-    Comment thenCmmt = null;
-    Comment elseCmmt = null;
 }
 {
   "if" {begin=tokenBegin();} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
   { 
-      IfStmt tmp = new IfStmt(range(begin, tokenEnd()),condition, thenStmt, elseStmt);
-      
-      // TODO comment is always null
-      thenStmt.setComment(thenCmmt);
-      if (elseStmt != null)
-          // TODO comment is always null
-          elseStmt.setComment(elseCmmt);
-      return tmp;
+      return new IfStmt(range(begin, tokenEnd()), condition, thenStmt, elseStmt);
   }
 }
 
@@ -3125,10 +3126,6 @@ SynchronizedStmt SynchronizedStatement():
 }
 
 TryStmt TryStatement():
-/*
- * Semantic check required here to make sure that at least one
- * finally/catch is present.
- */
 {
 	NodeList<VariableDeclarationExpr> resources = emptyList();
 	BlockStmt tryBlock;
@@ -3138,9 +3135,10 @@ TryStmt TryStatement():
 	ModifierHolder exceptModifier;
 	ReferenceType exceptionType;
 	NodeList<ReferenceType<?>> exceptionTypes = emptyList();
-	VariableDeclaratorId exceptId;
+	Pair<SimpleName, List<ArrayBracketPair>> exceptId;
 	Position begin;
 	Position catchBegin;
+	Position typesBegin;
 	Type type;
 }
 {
@@ -3151,7 +3149,7 @@ TryStmt TryStatement():
         LOOKAHEAD(2)
   		(
   			"catch" {catchBegin=tokenBegin();}
-  			"(" 
+  			"(" { typesBegin=tokenBegin(); }
   			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
   			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId()
@@ -3160,11 +3158,11 @@ TryStmt TryStatement():
   			catchBlock = Block()
   			{
   			    if (exceptionTypes.size() > 1) {
-  			        type = new UnionType(exceptionTypes);
+  			        type = new UnionType(range(typesBegin, tokenEnd()), exceptionTypes);
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(Range.UNKNOWN, exceptModifier.modifiers, exceptModifier.annotations, type, emptyList(), false, exceptId);
+				Parameter catchType = new Parameter(type.getRange().get(), exceptModifier.modifiers, exceptModifier.annotations, type, false, exceptId.a);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
@@ -3236,57 +3234,32 @@ NodeList<AnnotationExpr> Annotations():
 	AnnotationExpr annotation;
 }
 {
-   (annotation = Annotation()  {annotations = add(annotations, annotation);} )*
+   (LOOKAHEAD("@") annotation = Annotation()  {annotations = add(annotations, annotation);} )*
    { return annotations; }
 }
 
 AnnotationExpr Annotation():
 {
 	AnnotationExpr ret;
-}
-{
-  (
-	   LOOKAHEAD( "@" Name() "(" ( <IDENTIFIER> "=" | ")" ))
-	   ret = NormalAnnotation()
-	 |
-	   LOOKAHEAD( "@" Name() "(" )
-	   ret = SingleMemberAnnotation()
-	 |
-	   ret = MarkerAnnotation()
-  )
-  { return ret; }
-}
-
-NormalAnnotationExpr NormalAnnotation():
-{
 	Name name;
 	NodeList<MemberValuePair> pairs = emptyList();
 	Position begin;
-}
-{
-   "@" {begin=tokenBegin();} name = Name() "(" [ pairs = MemberValuePairs() ] ")"
-   { return new NormalAnnotationExpr(range(begin, tokenEnd()),name, pairs); }
-}
-
-MarkerAnnotationExpr MarkerAnnotation():
-{
-	Name name;
-	Position begin;
-}
-{
-  "@" {begin=tokenBegin();} name = Name()
-  { return new MarkerAnnotationExpr(range(begin, tokenEnd()),name); }
-}
-
-SingleMemberAnnotationExpr SingleMemberAnnotation():
-{
-	Name name;
 	Expression memberVal;
-	Position begin;
 }
 {
-  "@" {begin=tokenBegin();} name = Name() "(" memberVal = MemberValue() ")"
-  { return new SingleMemberAnnotationExpr(range(begin, tokenEnd()),name, memberVal); }
+    "@" { begin=tokenBegin(); } name = Name()
+    (
+        LOOKAHEAD( "(" ( <IDENTIFIER> "=" | ")" ))
+        "(" [ pairs = MemberValuePairs() ] ")"
+        { ret = new NormalAnnotationExpr(range(begin, tokenEnd()), name, pairs); }
+    |
+        LOOKAHEAD( "(" )
+        "(" memberVal = MemberValue() ")"
+        { ret = new SingleMemberAnnotationExpr(range(begin, tokenEnd()), name, memberVal); }
+    |
+        { ret = new MarkerAnnotationExpr(range(begin, tokenEnd()), name); }
+    )
+    { return ret; }
 }
 
 NodeList<MemberValuePair> MemberValuePairs():

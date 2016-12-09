@@ -18,15 +18,16 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.bdd.visitors.PositionTestVisitor;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.bdd.visitors.PositionTestVisitor;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -50,7 +51,7 @@ public class VisitorSteps {
     /* Map that maintains shares state across step classes.  If manipulating the objects in the map you must update the state */
     private Map<String, Object> state;
 
-    public VisitorSteps(Map<String, Object> state){
+    public VisitorSteps(Map<String, Object> state) {
         this.state = state;
     }
 
@@ -58,7 +59,7 @@ public class VisitorSteps {
     public void givenAVoidVisitorAdapterWithAVisitMethodThatChangesVariableNamesToUppercase() {
         toUpperCaseVariableNameVisitor = new VoidVisitorAdapter<AtomicReference<String>>() {
             @Override
-            public void visit(VariableDeclaratorId n, AtomicReference<String> arg) {
+            public void visit(VariableDeclarator n, AtomicReference<String> arg) {
                 n.setName(n.getNameAsString().toUpperCase());
             }
         };
@@ -68,7 +69,12 @@ public class VisitorSteps {
     public void givenAVoidVisitorAdapterWithAVisitMethodThatCollectsTheVariableName() {
         collectVariableNameVisitor = new VoidVisitorAdapter<AtomicReference<String>>() {
             @Override
-            public void visit(VariableDeclaratorId n, AtomicReference<String> arg) {
+            public void visit(VariableDeclarator n, AtomicReference<String> arg) {
+                arg.set(arg.get() + n.getName() + ";");
+            }
+
+            @Override
+            public void visit(Parameter n, AtomicReference<String> arg) {
                 arg.set(arg.get() + n.getName() + ";");
             }
         };
@@ -78,7 +84,7 @@ public class VisitorSteps {
     public void givenAGenericVisitorAdapterWithAVisitMethodThatReturnsVariableNames() {
         nameReturningVisitor = new GenericVisitorAdapter<String, Void>() {
             @Override
-            public String visit(VariableDeclaratorId n, Void arg) {
+            public String visit(VariableDeclarator n, Void arg) {
                 return n.getNameAsString();
             }
         };
@@ -92,7 +98,7 @@ public class VisitorSteps {
     @When("the CompilationUnit is cloned to the second CompilationUnit")
     public void whenTheSecondCompilationUnitIsCloned() {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        CompilationUnit compilationUnit2 = (CompilationUnit)compilationUnit.accept(new CloneVisitor(), null);
+        CompilationUnit compilationUnit2 = (CompilationUnit) compilationUnit.accept(new CloneVisitor(), null);
         state.put("cu2", compilationUnit2);
     }
 

@@ -28,7 +28,7 @@ import com.github.javaparser.ast.type.Type;
 
 /**
  * A node having a type.
- *
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with getType/setType
  * methods
  *
@@ -37,14 +37,14 @@ import com.github.javaparser.ast.type.Type;
 public interface NodeWithType<N extends Node, T extends Type<?>> {
     /**
      * Gets the type
-     * 
+     *
      * @return the type
      */
     T getType();
 
     /**
      * Sets the type
-     * 
+     *
      * @param type the type
      * @return this
      */
@@ -52,7 +52,7 @@ public interface NodeWithType<N extends Node, T extends Type<?>> {
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
-     * 
+     *
      * @param typeClass the type
      * @return this
      */

@@ -18,12 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,39 +34,44 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ExpressionStmt extends Statement {
+public final class ExpressionStmt extends Statement implements
+        NodeWithExpression<ExpressionStmt> {
 
-	private Expression expr;
+    private Expression expression;
 
-	public ExpressionStmt() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr());
-	}
+    public ExpressionStmt() {
+        this(null, new BooleanLiteralExpr());
+    }
 
-	public ExpressionStmt(final Expression expr) {
-		this(Range.UNKNOWN, expr);
-	}
+    public ExpressionStmt(final Expression expression) {
+        this(null, expression);
+    }
 
-	public ExpressionStmt(Range range, final Expression expr) {
-		super(range);
-		setExpression(expr);
-	}
+    public ExpressionStmt(Range range, final Expression expression) {
+        super(range);
+        setExpression(expression);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getExpression() {
-		return expr;
-	}
+    @Override
+    public Expression getExpression() {
+        return expression;
+    }
 
-	public ExpressionStmt setExpression(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = assertNotNull(expr);
-		setAsParentNodeOf(this.expr);
-		return this;
-	}
+    @Override
+    public ExpressionStmt setExpression(final Expression expression) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        this.expression = assertNotNull(expression);
+        setAsParentNodeOf(this.expression);
+        return this;
+    }
 }

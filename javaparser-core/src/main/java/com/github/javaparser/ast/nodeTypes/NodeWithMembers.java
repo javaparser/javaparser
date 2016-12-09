@@ -19,10 +19,9 @@ import static java.util.stream.Collectors.*;
 
 /**
  * A node having members.
- *
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getMembers
  * method.
- *
  */
 public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
@@ -69,11 +68,10 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         getMembers().add(fieldDeclaration);
-        VariableDeclarator variable = new VariableDeclarator(new VariableDeclaratorId(name));
+        VariableDeclarator variable = new VariableDeclarator(type, name);
         fieldDeclaration.getVariables().add(variable);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        variable.setType(type);
         return fieldDeclaration;
     }
 
@@ -102,7 +100,7 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Add a public field to this
-     * 
+     *
      * @param typeClass the type of the field
      * @param name the name of the field
      * @return the {@link FieldDeclaration} created
@@ -166,11 +164,11 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Adds a constructor to this
-     * 
+     *
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
-    default ConstructorDeclaration addCtor(Modifier... modifiers) {
+    default ConstructorDeclaration addConstructor(Modifier... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
         constructorDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
@@ -223,31 +221,31 @@ public interface NodeWithMembers<N extends Node> {
     /**
      * Try to find a {@link MethodDeclaration} by its parameters types
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
-     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
                         && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
-                                .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
+                        .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
     /**
      * Try to find a {@link MethodDeclaration} by its parameters types
      *
-     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
-     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(Class<?>... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
                         && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
-                                .collect(toSet())
-                                .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
+                        .collect(toSet())
+                        .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
@@ -260,18 +258,18 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration getFieldByName(String name) {
         return (FieldDeclaration) getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
-                        .anyMatch(var -> var.getId().getNameAsString().equals(name)))
+                        .anyMatch(var -> var.getNameAsString().equals(name)))
                 .findFirst().orElse(null);
     }
 
     /**
-	 * Find all fields in the members of this node.
+     * Find all fields in the members of this node.
      *
-	 * @return the fields found. This list is immutable.
+     * @return the fields found. This list is immutable.
      */
     default List<FieldDeclaration> getFields() {
         return unmodifiableList(getMembers().stream()
-                .filter(m -> m instanceof FieldDeclaration )
+                .filter(m -> m instanceof FieldDeclaration)
                 .map(m -> (FieldDeclaration) m)
                 .collect(toList()));
     }

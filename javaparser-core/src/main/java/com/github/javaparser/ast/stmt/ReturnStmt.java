@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -35,51 +35,52 @@ import java.util.Optional;
  */
 public final class ReturnStmt extends Statement {
 
-	private Expression expr;
+    private Expression expression;
 
-	public ReturnStmt() {
-        this(Range.UNKNOWN, null);
-	}
+    public ReturnStmt() {
+        this(null, null);
+    }
 
-	public ReturnStmt(final Expression expr) {
-		this(Range.UNKNOWN, expr);
-	}
+    public ReturnStmt(final Expression expression) {
+        this(null, expression);
+    }
 
-	public ReturnStmt(Range range, final Expression expr) {
-		super(range);
-		setExpr(expr);
-	}
+    public ReturnStmt(Range range, final Expression expression) {
+        super(range);
+        setExpression(expression);
+    }
 
     /**
      * Will create a NameExpr with the string param
      */
-    public ReturnStmt(String expr) {
-        this(Range.UNKNOWN, new NameExpr(expr));
+    public ReturnStmt(String expression) {
+        this(null, new NameExpr(expression));
     }
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-    public Optional<Expression> getExpr() {
-        return Optional.ofNullable(expr);
-	}
+    public Optional<Expression> getExpression() {
+        return Optional.ofNullable(expression);
+    }
 
     /**
-     * Sets the expr
-     * 
-     * @param expr the expr, can be null
+     * Sets the expression
+     *
+     * @param expression the expression, can be null
      * @return this, the ReturnStmt
      */
-	public ReturnStmt setExpr(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-		return this;
-	}
+    public ReturnStmt setExpression(final Expression expression) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        this.expression = expression;
+        setAsParentNodeOf(this.expression);
+        return this;
+    }
 }

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -34,53 +34,55 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
-	private Statement body;
+    private Statement body;
 
-	private Expression condition;
+    private Expression condition;
 
-	public DoStmt() {
-        this(Range.UNKNOWN, new EmptyStmt(), new BooleanLiteralExpr());
-	}
+    public DoStmt() {
+        this(null, new EmptyStmt(), new BooleanLiteralExpr());
+    }
 
-	public DoStmt(final Statement body, final Expression condition) {
-        this(Range.UNKNOWN, body, condition);
-	}
+    public DoStmt(final Statement body, final Expression condition) {
+        this(null, body, condition);
+    }
 
-	public DoStmt(Range range, final Statement body, final Expression condition) {
-		super(range);
-		setBody(body);
-		setCondition(condition);
-	}
+    public DoStmt(Range range, final Statement body, final Expression condition) {
+        super(range);
+        setBody(body);
+        setCondition(condition);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
+    @Override
     public Statement getBody() {
-		return body;
-	}
+        return body;
+    }
 
-	public Expression getCondition() {
-		return condition;
-	}
+    public Expression getCondition() {
+        return condition;
+    }
 
-	@Override
+    @Override
     public DoStmt setBody(final Statement body) {
-		notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-		this.body = body;
-		setAsParentNodeOf(this.body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        this.body = body;
+        setAsParentNodeOf(this.body);
         return this;
-	}
+    }
 
-	public DoStmt setCondition(final Expression condition) {
-		notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-		this.condition = condition;
-		setAsParentNodeOf(this.condition);
-		return this;
-	}
+    public DoStmt setCondition(final Expression condition) {
+        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        this.condition = condition;
+        setAsParentNodeOf(this.condition);
+        return this;
+    }
 }

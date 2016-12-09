@@ -18,11 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -30,31 +29,27 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.observing.ObservableProperty;
-import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Pair;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class Parameter extends Node implements
-        NodeWithType<Parameter, Type<?>>,
-        NodeWithElementType<Parameter>,
+        NodeWithType<Parameter,Type<?>>,
         NodeWithAnnotations<Parameter>,
         NodeWithSimpleName<Parameter>,
         NodeWithModifiers<Parameter> {
 
-    private Type<?> elementType;
+    private Type<?> type;
 
     private boolean isVarArgs;
 
@@ -62,72 +57,62 @@ public final class Parameter extends Node implements
 
     private NodeList<AnnotationExpr> annotations;
 
-    private VariableDeclaratorId id;
-
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
+    private SimpleName name;
 
     public Parameter() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
-                new NodeList<>(),
                 false,
-                new VariableDeclaratorId());
+                new SimpleName());
     }
 
-    public Parameter(Type<?> elementType, VariableDeclaratorId id) {
-        this(Range.UNKNOWN,
+    public Parameter(Type<?> type, SimpleName name) {
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                elementType,
-                new NodeList<>(),
+                type,
                 false,
-                id);
+                name);
     }
 
     /**
      * Creates a new {@link Parameter}.
      *
-     * @param elementType
-     *            type of the parameter
-     * @param name
-     *            name of the parameter
+     * @param type type of the parameter
+     * @param name name of the parameter
      */
-    public Parameter(Type<?> elementType, String name) {
-        this(Range.UNKNOWN,
+    public Parameter(Type<?> type, String name) {
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
-                elementType,
-                new NodeList<>(),
+                type,
                 false,
-                new VariableDeclaratorId(name));
+                new SimpleName(name));
     }
 
-    public Parameter(EnumSet<Modifier> modifiers, Type<?> elementType, VariableDeclaratorId id) {
-        this(Range.UNKNOWN,
+    public Parameter(EnumSet<Modifier> modifiers, Type<?> type, SimpleName name) {
+        this(null,
                 modifiers,
                 new NodeList<>(),
-                elementType,
-                new NodeList<>(),
+                type,
                 false,
-                id);
+                name);
     }
 
-    public Parameter(final Range range, 
+    public Parameter(final Range range,
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,
-                     Type<?> elementType,
-                     NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                     boolean isVarArgs, 
-                     VariableDeclaratorId id) {
+                     Type<?> type,
+                     boolean isVarArgs,
+                     SimpleName name) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
-        setId(id);
-        setElementType(elementType);
+        setName(name);
+        setType(type);
         setVarArgs(isVarArgs);
-        setArrayBracketPairsAfterElementType(assertNotNull(arrayBracketPairsAfterElementType));
     }
 
     @Override
@@ -142,21 +127,18 @@ public final class Parameter extends Node implements
 
     @Override
     public Type<?> getType() {
-        return wrapInArrayTypes(elementType,
-                getArrayBracketPairsAfterElementType(),
-                getId().getArrayBracketPairsAfterId());
+        return type;
     }
-
+    
     public boolean isVarArgs() {
         return isVarArgs;
     }
 
     @Override
     public Parameter setType(Type<?> type) {
-        Pair<Type<?>, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
-        setElementType(unwrapped.a);
-        setArrayBracketPairsAfterElementType(unwrapped.b);
-        getId().setArrayBracketPairsAfterId(new NodeList<>());
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.type = type;
+        setAsParentNodeOf(this.type);
         return this;
     }
 
@@ -165,6 +147,7 @@ public final class Parameter extends Node implements
         this.isVarArgs = isVarArgs;
         return this;
     }
+
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
@@ -173,33 +156,16 @@ public final class Parameter extends Node implements
         return annotations;
     }
 
-    public VariableDeclaratorId getId() {
-        return id;
-    }
-
     @Override
     public SimpleName getName() {
-        return getId().getName();
+        return name;
     }
-
-    @Override
-    public Parameter setName(SimpleName name) {
-        assertNotNull(name);
-        if (id != null) {
-            id.setName(name);
-        } else {
-            VariableDeclaratorId newId = new VariableDeclaratorId(name);
-            notifyPropertyChange(ObservableProperty.ID, this.id, newId);
-            id = newId;
-        }
-        return this;
-    }
-
+    
     /**
      * Return the modifiers of this parameter declaration.
      *
-     * @see Modifier
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -207,8 +173,8 @@ public final class Parameter extends Node implements
     }
 
     /**
-     * @param annotations a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
+     * so please avoid passing null
      */
     @Override
     public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
@@ -218,9 +184,12 @@ public final class Parameter extends Node implements
         return this;
     }
 
-    public void setId(VariableDeclaratorId id) {
-        this.id = id;
-        setAsParentNodeOf(this.id);
+    @Override
+    public Parameter setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
+        return this;
     }
 
     @Override
@@ -229,36 +198,9 @@ public final class Parameter extends Node implements
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
-
-    @Override
-    public Type getElementType() {
-        return elementType;
-    }
-
-    @Override
-    public Parameter setElementType(final Type<?> elementType) {
-        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
-        this.elementType = assertNotNull(elementType);
-        setAsParentNodeOf(this.elementType);
-        return this;
-    }
-
-    @Override
-    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        return arrayBracketPairsAfterType;
-    }
-
-    @Override
-    public Parameter setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
-        notifyPropertyChange(ObservableProperty.ARRAY_BRACKET_PAIRS_AFTER_TYPE,
-                this.arrayBracketPairsAfterType, arrayBracketPairsAfterType);
-        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
-        setAsParentNodeOf(arrayBracketPairsAfterType);
-        return this;
-    }
-
+    
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(annotations, arrayBracketPairsAfterType);
+        return Arrays.asList(annotations);
     }
 }

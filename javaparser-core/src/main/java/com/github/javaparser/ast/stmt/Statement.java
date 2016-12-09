@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -28,7 +28,7 @@ import com.github.javaparser.ast.Node;
  * @author Julio Vilmar Gesser
  */
 public abstract class Statement extends Node {
-	public Statement(final Range range) {
-		super(range);
-	}
+    public Statement(final Range range) {
+        super(range);
+    }
 }

@@ -23,9 +23,12 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -33,34 +36,33 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A name that may consist of multiple identifiers.
  * In other words: it.may.contain.dots.
  * <p>
- * The rightmost identifier is "id",
- * The one to the left of it is "qualifier.id", etc.
+ * The rightmost identifier is "identifier",
+ * The one to the left of it is "qualifier.identifier", etc.
  * <p>
  * You can construct one from a String with the name(...) method.
  *
- * @see SimpleName
  * @author Julio Vilmar Gesser
+ * @see SimpleName
  */
-public class Name extends Node {
-    private String id;
-    // TODO nullable
+public class Name extends Node implements NodeWithIdentifier<Name> {
+    private String identifier;
     private Name qualifier;
 
     public Name() {
-        this(Range.UNKNOWN, null, "empty");
+        this(null, null, "empty");
     }
 
-    public Name(final String id) {
-        this(Range.UNKNOWN, null, id);
+    public Name(final String identifier) {
+        this(null, null, identifier);
     }
 
-    public Name(Name qualifier, final String id) {
-        this(Range.UNKNOWN, qualifier, id);
+    public Name(Name qualifier, final String identifier) {
+        this(null, qualifier, identifier);
     }
 
-    public Name(Range range, Name qualifier, final String id) {
+    public Name(Range range, Name qualifier, final String identifier) {
         super(range);
-        setId(id);
+        setIdentifier(identifier);
         setQualifier(qualifier);
     }
 
@@ -74,13 +76,13 @@ public class Name extends Node {
         v.visit(this, arg);
     }
 
-    public final String getId() {
-        return id;
+    public final String getIdentifier() {
+        return identifier;
     }
 
-    public Name setId(final String id) {
-        notifyPropertyChange(ObservableProperty.ID, this.id, id);
-        this.id = assertNotNull(id);
+    public Name setIdentifier(final String identifier) {
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        this.identifier = assertNotNull(identifier);
         return this;
     }
 
@@ -100,8 +102,18 @@ public class Name extends Node {
         return ret;
     }
 
-    public Name getQualifier() {
-        return qualifier;
+    /**
+     * @return the complete qualified name. Only the identifiers and the dots, so no comments or whitespace.
+     */
+    public String asString() {
+        if (qualifier != null) {
+            return qualifier.asString() + "." + identifier;
+        }
+        return identifier;
+    }
+
+    public Optional<Name> getQualifier() {
+        return Optional.ofNullable(qualifier);
     }
 
     public Name setQualifier(final Name qualifier) {

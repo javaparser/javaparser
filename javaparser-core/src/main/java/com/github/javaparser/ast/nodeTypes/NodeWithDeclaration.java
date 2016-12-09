@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.nodeTypes;
 
 /**
@@ -32,6 +32,7 @@ public interface NodeWithDeclaration {
     /**
      * As {@link NodeWithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
      * the modifiers, the throws clause and the parameters with both type and name.
+     *
      * @return String representation of declaration
      */
     String getDeclarationAsString();
@@ -39,6 +40,7 @@ public interface NodeWithDeclaration {
     /**
      * As {@link NodeWithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
      * the parameters with both type and name.
+     *
      * @param includingModifiers flag to include the modifiers (if present) in the string produced
      * @param includingThrows flag to include the throws clause (if present) in the string produced
      * @return String representation of declaration based on parameter flags
@@ -48,9 +50,11 @@ public interface NodeWithDeclaration {
     /**
      * A simple representation of the element declaration.
      * It should fit one string.
+     *
      * @param includingModifiers flag to include the modifiers (if present) in the string produced
      * @param includingThrows flag to include the throws clause (if present) in the string produced
-     * @param includingParameterName flag to include the parameter name (while the parameter type is always included) in the string produced
+     * @param includingParameterName flag to include the parameter name (while the parameter type is always included) in
+     * the string produced
      * @return String representation of declaration based on parameter flags
      */
     String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName);

@@ -23,7 +23,6 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -38,29 +37,25 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Pair;
 
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements 
-        NodeWithJavaDoc<MethodDeclaration>, 
+public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements
+        NodeWithJavaDoc<MethodDeclaration>,
         NodeWithDeclaration,
         NodeWithSimpleName<MethodDeclaration>,
         NodeWithType<MethodDeclaration, Type<?>>,
-        NodeWithElementType<MethodDeclaration>,
-        NodeWithModifiers<MethodDeclaration>, 
+        NodeWithModifiers<MethodDeclaration>,
         NodeWithParameters<MethodDeclaration>,
-        NodeWithThrowable<MethodDeclaration>, 
+        NodeWithThrownExceptions<MethodDeclaration>,
         NodeWithOptionalBlockStmt<MethodDeclaration>,
         NodeWithTypeParameters<MethodDeclaration> {
 
@@ -68,114 +63,96 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<TypeParameter> typeParameters;
 
-    private Type<?> elementType;
-
     private SimpleName name;
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> throws_;
+    private NodeList<ReferenceType<?>> thrownExceptions;
 
     private BlockStmt body;
 
     private boolean isDefault;
 
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterType;
-
-    private NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList;
+    private Type<?> type;
 
     public MethodDeclaration() {
-        this(Range.UNKNOWN,
+        this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
                 new NodeList<>(),
                 new ClassOrInterfaceType(),
-                new NodeList<>(),
                 new SimpleName(),
                 false,
                 new NodeList<>(),
                 new NodeList<>(),
-                new NodeList<>(),
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> elementType, final String name) {
-        this(Range.UNKNOWN,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> type, final String name) {
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
-                elementType,
-                new NodeList<>(),
+                type,
                 new SimpleName(name),
                 false,
                 new NodeList<>(),
                 new NodeList<>(),
-                new NodeList<>(),
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> elementType, final String name,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type<?> type,
                              final NodeList<Parameter> parameters) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new NodeList<>(),
-                elementType,
-                new NodeList<>(),
+                type,
                 new SimpleName(name),
                 false,
                 parameters,
                 new NodeList<>(),
-                new NodeList<>(),
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, 
+    public MethodDeclaration(final EnumSet<Modifier> modifiers,
                              final NodeList<AnnotationExpr> annotations,
-                             final NodeList<TypeParameter> typeParameters, 
-                             final Type<?> elementType,
-                             final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
+                             final NodeList<TypeParameter> typeParameters,
+                             final Type<?> type,
                              final SimpleName name,
                              final boolean isDefault,
-                             final NodeList<Parameter> parameters, 
-                             final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> throws_, 
+                             final NodeList<Parameter> parameters,
+                             final NodeList<ReferenceType<?>> thrownExceptions,
                              final BlockStmt body) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 typeParameters,
-                elementType,
-                arrayBracketPairsAfterElementType,
+                type,
                 name,
                 isDefault,
                 parameters,
-                arrayBracketPairsAfterParameterList,
-                throws_,
+                thrownExceptions,
                 body);
     }
 
     public MethodDeclaration(Range range,
-                             final EnumSet<Modifier> modifiers, 
+                             final EnumSet<Modifier> modifiers,
                              final NodeList<AnnotationExpr> annotations,
-                             final NodeList<TypeParameter> typeParameters, 
-                             final Type<?> elementType,
-                             final NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType,
+                             final NodeList<TypeParameter> typeParameters,
+                             final Type<?> type,
                              final SimpleName name,
                              final boolean isDefault,
-                             final NodeList<Parameter> parameters, 
-                             final NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final NodeList<ReferenceType<?>> throws_, 
+                             final NodeList<Parameter> parameters,
+                             final NodeList<ReferenceType<?>> thrownExceptions,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
-        setElementType(elementType);
+        setType(type);
         setName(name);
         setParameters(parameters);
-        setArrayBracketPairsAfterElementType(arrayBracketPairsAfterElementType);
-        setArrayBracketPairsAfterParameterList(arrayBracketPairsAfterParameterList);
-        setThrows(throws_);
+        setThrownExceptions(thrownExceptions);
         setBody(body);
         setDefault(isDefault);
     }
@@ -197,9 +174,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -217,20 +194,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrows() {
-        return throws_;
-    }
-
-    @Override
-    public Type<?> getType() {
-        return wrapInArrayTypes(getElementType(),
-                getArrayBracketPairsAfterElementType(),
-                getArrayBracketPairsAfterParameterList());
-    }
-
-    @Override
-    public Type<?> getElementType() {
-        return elementType;
+    public NodeList<ReferenceType<?>> getThrownExceptions() {
+        return thrownExceptions;
     }
 
     @Override
@@ -240,7 +205,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * Sets the body
-     * 
+     *
      * @param body the body, can be null
      * @return this, the MethodDeclaration
      */
@@ -276,27 +241,23 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setThrows(final NodeList<ReferenceType<?>> throws_) {
-        notifyPropertyChange(ObservableProperty.THROWS, this.throws_, throws_);
-        this.throws_ = assertNotNull(throws_);
-        setAsParentNodeOf(this.throws_);
+    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
+        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
+        this.thrownExceptions = assertNotNull(thrownExceptions);
+        setAsParentNodeOf(this.thrownExceptions);
         return this;
     }
 
     @Override
-    public MethodDeclaration setType(final Type<?> type) {
-        Pair<Type<?>, NodeList<ArrayBracketPair>> typeListPair = unwrapArrayTypes(assertNotNull(type));
-        setElementType(typeListPair.a);
-        setArrayBracketPairsAfterElementType(typeListPair.b);
-        setArrayBracketPairsAfterParameterList(new NodeList<>());
-        return this;
+    public Type<?> getType() {
+        return type;
     }
 
     @Override
-    public MethodDeclaration setElementType(final Type<?> elementType) {
-        notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
-        this.elementType = assertNotNull(elementType);
-        setAsParentNodeOf(this.elementType);
+    public MethodDeclaration setType(Type<?> type) {
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.type = type;
+        setAsParentNodeOf(this.type);
         return this;
     }
 
@@ -329,11 +290,11 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * The declaration returned has this schema:
-     *
+     * <p>
      * [accessSpecifier] [static] [abstract] [final] [native]
      * [synchronized] returnType methodName ([paramType [paramName]])
      * [throws exceptionsList]
-     * 
+     *
      * @return method declaration as String
      */
     @Override
@@ -342,7 +303,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
-            sb.append(accessSpecifier.getCodeRepresenation());
+            sb.append(accessSpecifier.asString());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
             if (getModifiers().contains(Modifier.STATIC)) {
                 sb.append("static ");
@@ -361,7 +322,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             }
         }
         // TODO verify it does not print comments connected to the type
-        sb.append(getElementType().toString(prettyPrinterNoCommentsConfiguration));
+        sb.append(getType().toString(prettyPrinterNoCommentsConfiguration));
         sb.append(" ");
         sb.append(getName());
         sb.append("(");
@@ -375,7 +336,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             if (includingParameterName) {
                 sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getElementType().toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
                 if (param.isVarArgs()) {
                     sb.append("...");
                 }
@@ -384,7 +345,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType<?> thr : getThrows()) {
+            for (ReferenceType<?> thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -404,43 +365,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         }
         return null;
     }
-
-    /**
-     * @return the array brackets in this position: <code>class C { int[] abc; }</code>
-     */
-    @Override
-    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterElementType() {
-        return arrayBracketPairsAfterType;
-    }
-
-    @Override
-    public MethodDeclaration setArrayBracketPairsAfterElementType(NodeList<ArrayBracketPair> arrayBracketPairsAfterType) {
-        this.arrayBracketPairsAfterType = assertNotNull(arrayBracketPairsAfterType);
-        setAsParentNodeOf(arrayBracketPairsAfterType);
-        return this;
-    }
-
-	/**
-     * @return the array brackets in this position: <code>int abc()[] {...}</code>
-     */
-    public NodeList<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {
-        return arrayBracketPairsAfterParameterList;
-    }
-
-    public MethodDeclaration setArrayBracketPairsAfterParameterList(NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList) {
-        this.arrayBracketPairsAfterParameterList = assertNotNull(arrayBracketPairsAfterParameterList);
-        setAsParentNodeOf(arrayBracketPairsAfterParameterList);
-        return this;
-    }
-
+    
     @Override
     public List<NodeList<?>> getNodeLists() {
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
         res.add(parameters);
-        res.add(throws_);
-        res.add(arrayBracketPairsAfterType);
-        res.add(arrayBracketPairsAfterParameterList);
+        res.add(thrownExceptions);
         return res;
     }
 }

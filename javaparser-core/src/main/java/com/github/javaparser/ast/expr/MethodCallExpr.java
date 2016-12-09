@@ -38,7 +38,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodCallExpr extends Expression implements 
+public final class MethodCallExpr extends Expression implements
         NodeWithTypeArguments<MethodCallExpr>,
         NodeWithArguments<MethodCallExpr>,
         NodeWithSimpleName<MethodCallExpr> {
@@ -49,10 +49,10 @@ public final class MethodCallExpr extends Expression implements
 
     private SimpleName name;
 
-    private NodeList<Expression> args;
+    private NodeList<Expression> arguments;
 
     public MethodCallExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new NodeList<>(),
                 new SimpleName(),
@@ -60,28 +60,28 @@ public final class MethodCallExpr extends Expression implements
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 scope,
                 new NodeList<>(),
                 new SimpleName(name),
                 new NodeList<>());
     }
 
-    public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> args) {
-        this(Range.UNKNOWN,
+    public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
+        this(null,
                 scope,
                 new NodeList<>(),
                 name,
-                args);
+                arguments);
     }
 
-	public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName name, final NodeList<Expression> args) {
-		super(range);
-		setScope(scope);
-		setTypeArguments(typeArguments);
-		setName(name);
-		setArgs(args);
-	}
+    public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
+        super(range);
+        setScope(scope);
+        setTypeArguments(typeArguments);
+        setName(name);
+        setArguments(arguments);
+    }
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -93,9 +93,8 @@ public final class MethodCallExpr extends Expression implements
         v.visit(this, arg);
     }
 
-    @Override
-    public NodeList<Expression> getArgs() {
-        return args;
+    public NodeList<Expression> getArguments() {
+        return arguments;
     }
 
     @Override
@@ -107,13 +106,12 @@ public final class MethodCallExpr extends Expression implements
         return scope;
     }
 
-    @Override
-	public MethodCallExpr setArgs(final NodeList<Expression> args) {
-        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
-		this.args = assertNotNull(args);
-		setAsParentNodeOf(this.args);
+    public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        this.arguments = assertNotNull(arguments);
+        setAsParentNodeOf(this.arguments);
         return this;
-	}
+    }
 
     @Override
     public MethodCallExpr setName(final SimpleName name) {
@@ -137,7 +135,7 @@ public final class MethodCallExpr extends Expression implements
 
     /**
      * Sets the typeArguments
-     * 
+     *
      * @param typeArguments the typeArguments, can be null
      * @return this, the MethodCallExpr
      */

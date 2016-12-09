@@ -9,14 +9,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Example: <code>import com.github.javaparser.JavaParser;</code>
- * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.1">JLS 7.5.1. Single-Type-Import Declarations</a></p>
+ * Example: <code>import com.github.javaparser.JavaParser;</code> <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.1">JLS
+ * 7.5.1. Single-Type-Import Declarations</a></p>
  */
-public class SingleTypeImportDeclaration extends NonEmptyImportDeclaration {
+public class SingleTypeImportDeclaration extends ImportDeclaration {
     private ClassOrInterfaceType type;
 
     public SingleTypeImportDeclaration() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType());
+        this(null, new ClassOrInterfaceType());
     }
 
     public SingleTypeImportDeclaration(Range range, ClassOrInterfaceType type) {

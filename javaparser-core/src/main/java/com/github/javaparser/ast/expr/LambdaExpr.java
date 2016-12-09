@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -39,71 +39,71 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Raquel Pau
  */
 public class LambdaExpr extends Expression implements
-		NodeWithParameters<LambdaExpr> {
+        NodeWithParameters<LambdaExpr> {
 
-	private NodeList<Parameter> parameters;
+    private NodeList<Parameter> parameters;
 
-	private boolean parametersEnclosed;
+    private boolean isEnclosingParameters;
 
-	private Statement body;
+    private Statement body;
 
-	public LambdaExpr() {
-        this(Range.UNKNOWN,
+    public LambdaExpr() {
+        this(null,
                 new NodeList<>(),
                 new EmptyStmt(),
                 false);
-	}
+    }
 
-	public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,
-                      boolean parametersEnclosed) {
+    public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,
+                      boolean isEnclosingParameters) {
 
-		super(range);
-		setParameters(parameters);
-		setBody(body);
-        setParametersEnclosed(parametersEnclosed);
-	}
+        super(range);
+        setParameters(parameters);
+        setBody(body);
+        setEnclosingParameters(isEnclosingParameters);
+    }
 
     @Override
-	public NodeList<Parameter> getParameters() {
+    public NodeList<Parameter> getParameters() {
         return parameters;
-	}
+    }
 
-	@Override
-	public LambdaExpr setParameters(NodeList<Parameter> parameters) {
-	    notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-		this.parameters = assertNotNull(parameters);
-		setAsParentNodeOf(this.parameters);
-		return this;
-	}
+    @Override
+    public LambdaExpr setParameters(NodeList<Parameter> parameters) {
+        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
+        this.parameters = assertNotNull(parameters);
+        setAsParentNodeOf(this.parameters);
+        return this;
+    }
 
-	public Statement getBody() {
-		return body;
-	}
+    public Statement getBody() {
+        return body;
+    }
 
-	public LambdaExpr setBody(Statement body) {
-		this.body = body;
-		setAsParentNodeOf(this.body);
-		return this;
-	}
+    public LambdaExpr setBody(Statement body) {
+        this.body = body;
+        setAsParentNodeOf(this.body);
+        return this;
+    }
 
-	@Override
-	public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override
-	public <A> void accept(VoidVisitor<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(VoidVisitor<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	public boolean isParametersEnclosed() {
-		return parametersEnclosed;
-	}
+    public boolean isEnclosingParameters() {
+        return isEnclosingParameters;
+    }
 
-	public LambdaExpr setParametersEnclosed(boolean parametersEnclosed) {
-		notifyPropertyChange(ObservableProperty.PARAMETERS_ENCLOSED, this.parametersEnclosed, parametersEnclosed);
-		this.parametersEnclosed = parametersEnclosed;
-		return this;
-	}
+    public LambdaExpr setEnclosingParameters(boolean enclosingParameters) {
+        notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, enclosingParameters);
+        this.isEnclosingParameters = enclosingParameters;
+        return this;
+    }
 
 }

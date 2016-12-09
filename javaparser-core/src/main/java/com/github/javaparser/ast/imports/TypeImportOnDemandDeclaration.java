@@ -10,26 +10,23 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Examples: 
- * <code>
- *     import com.github.javaparser.*;
- *     import com.github.javaparser.JavaParser.*;
- * </code>
- * Since a parser cannot differentiate between a type name and a package name, we can only store a Name.
- * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.2">JLS 7.5.2. Type-Import-on-Demand Declarations</a></p>
+ * Examples: <code> import com.github.javaparser.*; import com.github.javaparser.JavaParser.*; </code> Since a parser
+ * cannot differentiate between a type name and a package name, we can only store a Name. <p><a
+ * href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.2">JLS 7.5.2. Type-Import-on-Demand
+ * Declarations</a></p>
  */
-public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration implements NodeWithName<TypeImportOnDemandDeclaration> {
+public class TypeImportOnDemandDeclaration extends ImportDeclaration implements NodeWithName<TypeImportOnDemandDeclaration> {
     private Name name;
 
     public TypeImportOnDemandDeclaration() {
-        this(Range.UNKNOWN, new Name());
+        this(null, new Name());
     }
-    
+
     public TypeImportOnDemandDeclaration(Range range, Name name) {
         super(range);
         setName(name);
     }
-    
+
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return v.visit(this, arg);
@@ -54,8 +51,7 @@ public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration imp
     /**
      * Sets the name this import.
      *
-     * @param name
-     *            the name to set
+     * @param name the name to set
      */
     @Override
     public TypeImportOnDemandDeclaration setName(Name name) {

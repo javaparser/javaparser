@@ -89,7 +89,7 @@ package japa.parser.ast.manipulation;
 
 public class UpdateMethod {
 
-    public void changeToUpperCase(String param){}
+    public void changeToUpperCase(String parameter){}
 
     public void anotherMethodToChange(){}
 }
@@ -107,7 +107,7 @@ package japa.parser.ast.manipulation;
 
 public class UpdateMethod {
 
-    public void changeToUpperCase(String param){}
+    public void changeToUpperCase(String parameter){}
 
     public void anotherMethodToChange(){}
 }
@@ -127,7 +127,7 @@ package japa.parser.ast.manipulation;
 
 public class UpdateMethod {
 
-    public void changeToUpperCase(String param){}
+    public void changeToUpperCase(String parameter){}
 
     public void anotherMethodToChange(){}
 }

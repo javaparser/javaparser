@@ -27,7 +27,7 @@ import com.github.javaparser.ast.expr.*;
 
 import java.lang.annotation.Annotation;
 
-import static com.github.javaparser.ast.expr.Name.*;
+import static com.github.javaparser.ast.expr.Name.parse;
 
 /**
  * An element which can be the target of annotations.
@@ -46,7 +46,7 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Annotates this
-     * 
+     *
      * @param name the name of the annotation
      * @return the {@link NormalAnnotationExpr} added
      */
@@ -60,7 +60,7 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Annotates this and automatically add the import
-     * 
+     *
      * @param clazz the class of the annotation
      * @return the {@link NormalAnnotationExpr} added
      */
@@ -71,7 +71,7 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Annotates this with a marker annotation
-     * 
+     *
      * @param name the name of the annotation
      * @return this
      */
@@ -86,7 +86,7 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Annotates this with a marker annotation and automatically add the import
-     * 
+     *
      * @param clazz the class of the annotation
      * @return this
      */
@@ -97,7 +97,7 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Annotates this with a single member annotation
-     * 
+     *
      * @param name the name of the annotation
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
@@ -113,7 +113,7 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Annotates this with a single member annotation and automatically add the import
-     * 
+     *
      * @param clazz the class of the annotation
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
@@ -126,17 +126,17 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Check whether an annotation with this name is present on this element
-     * 
+     *
      * @param annotationName the name of the annotation
      * @return true if found, false if not
      */
     default boolean isAnnotationPresent(String annotationName) {
-        return getAnnotations().stream().anyMatch(a -> a.getName().getId().equals(annotationName));
+        return getAnnotations().stream().anyMatch(a -> a.getName().getIdentifier().equals(annotationName));
     }
 
     /**
      * Check whether an annotation with this class is present on this element
-     * 
+     *
      * @param annotationClass the class of the annotation
      * @return true if found, false if not
      */
@@ -146,18 +146,18 @@ public interface NodeWithAnnotations<N extends Node> {
 
     /**
      * Try to find an annotation by its name
-     * 
+     *
      * @param annotationName the name of the annotation
      * @return null if not found, the annotation otherwise
      */
     default AnnotationExpr getAnnotationByName(String annotationName) {
-        return getAnnotations().stream().filter(a -> a.getName().getId().equals(annotationName)).findFirst()
+        return getAnnotations().stream().filter(a -> a.getName().getIdentifier().equals(annotationName)).findFirst()
                 .orElse(null);
     }
 
     /**
      * Try to find an annotation by its class
-     * 
+     *
      * @param annotationClass the class of the annotation
      * @return null if not found, the annotation otherwise
      */

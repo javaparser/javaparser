@@ -9,17 +9,17 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Example: <code>import static com.github.javaparser.JavaParser.parse;</code>
- * In the example, "com.github.javaparser.JavaParser" is the type,
- * and "parse" is the staticMember.
- * <p><a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.3">7.5.3. Single-Static-Import Declarations</a></p>
+ * Example: <code>import static com.github.javaparser.JavaParser.parse;</code> In the example,
+ * "com.github.javaparser.JavaParser" is the type, and "parse" is the staticMember. <p><a
+ * href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.3">7.5.3. Single-Static-Import
+ * Declarations</a></p>
  */
-public class SingleStaticImportDeclaration extends NonEmptyImportDeclaration {
+public class SingleStaticImportDeclaration extends ImportDeclaration {
     private ClassOrInterfaceType type;
     private String staticMember;
 
     public SingleStaticImportDeclaration() {
-        this(Range.UNKNOWN, new ClassOrInterfaceType(), "empty");
+        this(null, new ClassOrInterfaceType(), "empty");
     }
 
     public SingleStaticImportDeclaration(Range range, ClassOrInterfaceType type, String staticMember) {

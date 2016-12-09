@@ -36,18 +36,21 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
 
 /**
  * Abstract class for all nodes of the AST.
- *
+ * <p>
  * Each Node can have one associated comment which describe it and
  * a number of "orphan comments" which it contains but are not specifically
  * associated to any element.
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 // Use <Node> to prevent Node from becoming generic.
@@ -79,7 +82,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> a.getBegin().compareTo(b.getBegin());
+    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> {
+        if (a.getRange().isPresent() && b.getRange().isPresent()) {
+            return a.getRange().get().begin.compareTo(b.getRange().get().begin);
+        }
+        if (a.getRange().isPresent() || b.getRange().isPresent()) {
+            if (a.getRange().isPresent()) {
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
+
+    };
 
     private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
@@ -88,10 +103,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     private Node parentNode;
 
-    private List<Node> childrenNodes = new LinkedList<>();
+    private List<Node> childNodes = new LinkedList<>();
     private List<Comment> orphanComments = new LinkedList<>();
 
-    private IdentityHashMap<DataKey<?>, Object> userData = null;
+    private IdentityHashMap<DataKey<?>, Object> data = null;
 
     private Comment comment;
 
@@ -113,42 +128,33 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * The begin position of this node in the source file.
      */
-    public Position getBegin() {
-        return range.begin;
+    public Optional<Position> getBegin() {
+        if (range == null) {
+            return Optional.empty();
+        }
+        return Optional.of(range.begin);
     }
 
     /**
      * The end position of this node in the source file.
      */
-    public Position getEnd() {
-        return range.end;
-    }
-
-    /**
-     * Sets the begin position of this node in the source file.
-     */
-    public Node setBegin(Position begin) {
-        range = range.withBegin(begin);
-        return this;
-    }
-
-    /**
-     * Sets the end position of this node in the source file.
-     */
-    public Node setEnd(Position end) {
-        range = range.withEnd(end);
-        return this;
+    public Optional<Position> getEnd() {
+        if (range == null) {
+            return Optional.empty();
+        }
+        return Optional.of(range.end);
     }
 
     /**
      * @return the range of characters in the source code that this node covers.
      */
-    public Range getRange() {
-        return range;
+    public Optional<Range> getRange() {
+        return Optional.ofNullable(range);
     }
 
     /**
-     * @param range the range of characters in the source code that this node covers.
+     * @param range the range of characters in the source code that this node covers. null can be used to indicate that
+     * no range information is known, or that it is not of interest.
      */
     public Node setRange(Range range) {
         notifyPropertyChange(ObservableProperty.RANGE, this.range, range);
@@ -196,7 +202,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     /**
      * Return the String representation of this node.
-     * 
+     *
      * @return the String representation of this node
      */
     @Override
@@ -239,11 +245,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @return all nodes that have this node as their parent.
      */
     public List<Node> getChildNodes() {
-        return unmodifiableList(childrenNodes);
+        return unmodifiableList(childNodes);
     }
 
     public <N extends Node> boolean containsWithin(N other) {
-        return range.contains(other.getRange());
+        if (getRange().isPresent() && other.getRange().isPresent()) {
+            return range.contains(other.getRange().get());
+        }
+        return false;
     }
 
     public void addOrphanComment(Comment comment) {
@@ -254,13 +263,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * This is a list of Comment which are inside the node and are not associated
      * with any meaningful AST Node.
-     *
+     * <p>
      * For example, comments at the end of methods (immediately before the parenthesis)
      * or at the end of CompilationUnit are orphan comments.
-     *
+     * <p>
      * When more than one comment preceeds a statement, the one immediately preceding it
      * it is associated with the statements, while the others are orphans.
-     * 
+     *
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
@@ -271,7 +280,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * This is the list of Comment which are contained in the Node either because
      * they are properly associated to one of its children or because they are floating
      * around inside the Node
-     * 
+     *
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
@@ -300,12 +309,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
         // remove from old parent, if any
         if (this.parentNode != null) {
-            this.parentNode.childrenNodes.remove(this);
+            this.parentNode.childNodes.remove(this);
         }
         this.parentNode = parentNode;
         // add to new parent, if any
         if (this.parentNode != null) {
-            this.parentNode.childrenNodes.add(this);
+            this.parentNode.childNodes.add(this);
         }
         return this;
     }
@@ -313,11 +322,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
     public static final int ABSOLUTE_END_LINE = -2;
 
+    @Deprecated
     public boolean isPositionedAfter(Position position) {
+        if (range == null) {
+            return false;
+        }
         return range.isAfter(position);
     }
 
+    @Deprecated
     public boolean isPositionedBefore(Position position) {
+        if (range == null) {
+            return true;
+        }
         return range.isBefore(position);
     }
 
@@ -349,47 +366,40 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     /**
-     * Gets user data for this component using the given key.
+     * Gets data for this component using the given key.
      *
-     * @param <M>
-     *            The type of the user data.
-     *
-     * @param key
-     *            The key for the data
-     * @return The user data or null of no user data was found for the given key
+     * @param <M> The type of the data.
+     * @param key The key for the data
+     * @return The data or null of no data was found for the given key
      * @see DataKey
      */
     public <M> M getData(final DataKey<M> key) {
-        if (userData == null) {
+        if (data == null) {
             return null;
         }
-        return (M) userData.get(key);
+        return (M) data.get(key);
     }
 
     /**
-     * Sets user data for this component using the given key.
+     * Sets data for this component using the given key.
      * For information on creating DataKey, see {@link DataKey}.
      *
-     * @param <M>
-     *            The type of user data
-     *
-     * @param key
-     *            The singleton key for the user data
-     * @param object
-     *            The user data object
+     * @param <M> The type of data
+     * @param key The singleton key for the data
+     * @param object The data object
      * @throws IllegalArgumentException
      * @see DataKey
      */
     public <M> void setData(DataKey<M> key, M object) {
-        if (userData == null) {
-            userData = new IdentityHashMap<>();
+        if (data == null) {
+            data = new IdentityHashMap<>();
         }
-        userData.put(key, object);
+        data.put(key, object);
     }
 
     /**
      * Try to remove this node from the parent
-     * 
+     *
      * @return true if removed, false otherwise
      * @throws RuntimeException if it fails in an unexpected way
      */
@@ -404,14 +414,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         // we are going to look to remove the node either by checking if it is part of a NodeList
         // of if there is an explicit setter for it
 
-        for (Method method : parentClass.getMethods()){
+        for (Method method : parentClass.getMethods()) {
             if (!removed && !java.lang.reflect.Modifier.isStatic(method.getModifiers())) {
                 // looking for methods returning a NodeList
                 if (method.getParameterCount() == 0 && NodeList.class.isAssignableFrom(method.getReturnType())) {
                     try {
                         NodeList result = (NodeList) method.invoke(parentNode);
                         removed = result.remove(this);
-                    } catch (IllegalAccessException|InvocationTargetException e) {
+                    } catch (IllegalAccessException | InvocationTargetException e) {
                         // nothing to do here
                     }
                 } else if ((method.getReturnType().isAssignableFrom(this.getClass()) || isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()))
@@ -431,12 +441,23 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                     if (optSetter.isPresent()) {
                         try {
                             Object resultRaw = method.invoke(parentNode);
-                            Node result = isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()) ? (Node)((Optional)resultRaw).get(): (Node) resultRaw;
+                            Node result;
+                            if (isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass())) {
+                                Optional optionalResultRaw = (Optional) resultRaw;
+                                if (optionalResultRaw.isPresent()) {
+                                    Object o = optionalResultRaw.get();
+                                    if (Node.class.isAssignableFrom(o.getClass())) {
+                                        result = (Node) o;
+                                    } else continue;
+                                } else continue;
+                            } else {
+                                result = (Node) resultRaw;
+                            }
                             if (this == result) {
                                 optSetter.get().invoke(parentNode, (Object) null);
                                 removed = true;
                             }
-                        } catch (IllegalAccessException|InvocationTargetException e) {
+                        } catch (IllegalAccessException | InvocationTargetException e) {
                             // nothing to do here
                         }
                     }
@@ -532,18 +553,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (!(type instanceof ParameterizedType)) {
             return Optional.empty();
         }
-        ParameterizedType parameterizedType = (ParameterizedType)type;
+        ParameterizedType parameterizedType = (ParameterizedType) type;
         if (!(parameterizedType.getRawType() instanceof Class)) {
             return Optional.empty();
         }
-        Class rawType = (Class)parameterizedType.getRawType();
+        Class rawType = (Class) parameterizedType.getRawType();
         if (!(rawType.equals(Optional.class))) {
             return Optional.empty();
         }
         if (!(parameterizedType.getActualTypeArguments()[0] instanceof Class)) {
             return Optional.empty();
         }
-        Class parameterType = (Class)parameterizedType.getActualTypeArguments()[0];
+        Class parameterType = (Class) parameterizedType.getActualTypeArguments()[0];
         return Optional.of(parameterType);
     }
 }

@@ -8,6 +8,7 @@ public class ClassUtils {
      * Maps primitive {@code Class}es to their corresponding wrapper {@code Class}.
      */
     private static final Map<Class<?>, Class<?>> primitiveWrapperMap = new HashMap<Class<?>, Class<?>>();
+
     static {
         primitiveWrapperMap.put(Boolean.TYPE, Boolean.class);
         primitiveWrapperMap.put(Byte.TYPE, Byte.class);
@@ -24,6 +25,7 @@ public class ClassUtils {
      * Maps wrapper {@code Class}es to their corresponding primitive types.
      */
     private static final Map<Class<?>, Class<?>> wrapperPrimitiveMap = new HashMap<Class<?>, Class<?>>();
+
     static {
         for (final Class<?> primitiveClass : primitiveWrapperMap.keySet()) {
             final Class<?> wrapperClass = primitiveWrapperMap.get(primitiveClass);
@@ -38,11 +40,9 @@ public class ClassUtils {
      * {@link Character},
      * {@link Short}, {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
      *
-     * @param type
-     *            The class to query or null.
-     * @return true if the given {@code type} is a primitive or primitive wrapper ({@link Boolean}, {@link Byte},
-     *         {@link Character},
-     *         {@link Short}, {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
+     * @param type The class to query or null.
+     * @return true if the given {@code type} is a primitive or primitive wrapper ({@link Boolean}, {@link Byte}, {@link
+     * Character}, {@link Short}, {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
      */
     public static boolean isPrimitiveOrWrapper(final Class<?> type) {
         if (type == null) {
@@ -56,11 +56,9 @@ public class ClassUtils {
      * {@link Short},
      * {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
      *
-     * @param type
-     *            The class to query or null.
+     * @param type The class to query or null.
      * @return true if the given {@code type} is a primitive wrapper ({@link Boolean}, {@link Byte}, {@link Character},
-     *         {@link Short},
-     *         {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
+     * {@link Short}, {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
      * @since 3.1
      */
     public static boolean isPrimitiveWrapper(final Class<?> type) {

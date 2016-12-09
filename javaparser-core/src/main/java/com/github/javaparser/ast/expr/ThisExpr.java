@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -26,43 +26,46 @@ import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
 /**
  * @author Julio Vilmar Gesser
  */
 public final class ThisExpr extends Expression {
 
-    // TODO can be null
-	private Expression classExpr;
+    private Expression classExpr;
 
-	public ThisExpr() {
-        this(Range.UNKNOWN, null); 
-	}
+    public ThisExpr() {
+        this(null, null);
+    }
 
-	public ThisExpr(final Expression classExpr) {
-		this(Range.UNKNOWN, classExpr);
-	}
+    public ThisExpr(final Expression classExpr) {
+        this(null, classExpr);
+    }
 
-	public ThisExpr(final Range range, final Expression classExpr) {
-		super(range);
-		setClassExpr(classExpr);
-	}
+    public ThisExpr(final Range range, final Expression classExpr) {
+        super(range);
+        setClassExpr(classExpr);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getClassExpr() {
-		return classExpr;
-	}
+    public Optional<Expression> getClassExpr() {
+        return Optional.ofNullable(classExpr);
+    }
 
-	public ThisExpr setClassExpr(final Expression classExpr) {
-		notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
-		this.classExpr = classExpr;
-		setAsParentNodeOf(this.classExpr);
-		return this;
-	}
+    public ThisExpr setClassExpr(final Expression classExpr) {
+        notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
+        this.classExpr = classExpr;
+        setAsParentNodeOf(this.classExpr);
+        return this;
+    }
 }

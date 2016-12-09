@@ -3,29 +3,29 @@ package com.github.javaparser.ast;
 import java.util.EnumSet;
 
 public enum Modifier {
-	PUBLIC("public"),
-    PROTECTED("protected"),
-	PRIVATE("private"),
-    ABSTRACT("abstract"),
-	STATIC("static"),
-	FINAL("final"),
-    TRANSIENT("transient"), 
-    VOLATILE("volatile"),
-	SYNCHRONIZED("synchronized"),
-	NATIVE("native"),
-	STRICTFP("strictfp");
+    PUBLIC,
+    PROTECTED,
+    PRIVATE,
+    ABSTRACT,
+    STATIC,
+    FINAL,
+    TRANSIENT,
+    VOLATILE,
+    SYNCHRONIZED,
+    NATIVE,
+    STRICTFP;
 
-    String lib;
+    final String codeRepresentation;
 
-    private Modifier(String lib) {
-        this.lib = lib;
+    Modifier() {
+        this.codeRepresentation = name().toLowerCase();
     }
 
     /**
-     * @return the lib
+     * @return the keyword represented by this modifier.
      */
-    public String getLib() {
-        return lib;
+    public String asString() {
+        return codeRepresentation;
     }
 
     public EnumSet<Modifier> toEnumSet() {

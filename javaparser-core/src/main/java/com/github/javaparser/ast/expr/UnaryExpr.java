@@ -18,10 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -29,63 +30,88 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class UnaryExpr extends Expression {
+public final class UnaryExpr extends Expression implements
+        NodeWithExpression<UnaryExpr> {
 
-	public enum Operator {
-		positive, // +
-		negative, // -
-		preIncrement, // ++
-		preDecrement, // --
-		not, // !
-		inverse, // ~
-        postIncrement, // ++
-        postDecrement, // --
-	}
+    public enum Operator {
+        PLUS("+", false),
+        MINUS("-", false),
+        PREFIX_INCREMENT("++", false),
+        PREFIX_DECREMENT("--", false),
+        LOGICAL_COMPLEMENT("!", false),
+        BITWISE_COMPLEMENT("~", false),
+        POSTFIX_INCREMENT("++", true),
+        POSTFIX_DECREMENT("--", true);
 
-	private Expression expr;
+        private final String codeRepresentation;
+        private final boolean isPostfix;
 
-	private Operator op;
+        Operator(String codeRepresentation, boolean isPostfix) {
+            this.codeRepresentation = codeRepresentation;
+            this.isPostfix = isPostfix;
+        }
 
-	public UnaryExpr() {
-        this(Range.UNKNOWN, new IntegerLiteralExpr(), Operator.postIncrement);
-	}
+        public String asString() {
+            return codeRepresentation;
+        }
 
-	public UnaryExpr(final Expression expr, final Operator op) {
-        this(Range.UNKNOWN, expr, op);
-	}
+        public boolean isPostfix() {
+            return isPostfix;
+        }
 
-	public UnaryExpr(final Range range, final Expression expr, final Operator op) {
-		super(range);
-		setExpr(expr);
-		setOperator(op);
-	}
+        public boolean isPrefix() {
+            return !isPostfix();
+        }
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    private Expression expression;
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    private Operator operator;
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public UnaryExpr() {
+        this(null, new IntegerLiteralExpr(), Operator.POSTFIX_INCREMENT);
+    }
 
-	public Operator getOperator() {
-		return op;
-	}
+    public UnaryExpr(final Expression expression, final Operator operator) {
+        this(null, expression, operator);
+    }
 
-	public UnaryExpr setExpr(final Expression expr) {
-		notifyPropertyChange(ObservableProperty.EXPR, this.expr, expr);
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-		return this;
-	}
+    public UnaryExpr(final Range range, final Expression expression, final Operator operator) {
+        super(range);
+        setExpression(expression);
+        setOperator(operator);
+    }
 
-	public UnaryExpr setOperator(final Operator op) {
-		notifyPropertyChange(ObservableProperty.OPERATOR, this.op, op);
-		this.op = op;
-		return this;
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
+
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
+
+    @Override
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public Operator getOperator() {
+        return operator;
+    }
+
+    @Override
+    public UnaryExpr setExpression(final Expression expr) {
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expr);
+        this.expression = expr;
+        setAsParentNodeOf(this.expression);
+        return this;
+    }
+
+    public UnaryExpr setOperator(final Operator op) {
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
+        this.operator = op;
+        return this;
+    }
 }

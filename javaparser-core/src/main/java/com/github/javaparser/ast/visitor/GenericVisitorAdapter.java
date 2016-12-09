@@ -21,109 +21,16 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.ArrayBracketPair;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EmptyMemberDeclaration;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.ArrayAccessExpr;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.AssignExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.BooleanLiteralExpr;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
-import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
-import com.github.javaparser.ast.expr.DoubleLiteralExpr;
-import com.github.javaparser.ast.expr.EnclosedExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.LongLiteralExpr;
-import com.github.javaparser.ast.expr.LongLiteralMinValueExpr;
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.MemberValuePair;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
-import com.github.javaparser.ast.expr.SuperExpr;
-import com.github.javaparser.ast.expr.ThisExpr;
-import com.github.javaparser.ast.expr.TypeExpr;
-import com.github.javaparser.ast.expr.UnaryExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.imports.EmptyImportDeclaration;
-import com.github.javaparser.ast.imports.ImportDeclaration;
-import com.github.javaparser.ast.imports.SingleStaticImportDeclaration;
-import com.github.javaparser.ast.imports.SingleTypeImportDeclaration;
-import com.github.javaparser.ast.imports.StaticImportOnDemandDeclaration;
-import com.github.javaparser.ast.imports.TypeImportOnDemandDeclaration;
-import com.github.javaparser.ast.stmt.AssertStmt;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.BreakStmt;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ContinueStmt;
-import com.github.javaparser.ast.stmt.DoStmt;
-import com.github.javaparser.ast.stmt.EmptyStmt;
-import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.ForStmt;
-import com.github.javaparser.ast.stmt.ForeachStmt;
-import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.LabeledStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
-import com.github.javaparser.ast.stmt.SwitchStmt;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
-import com.github.javaparser.ast.stmt.ThrowStmt;
-import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.stmt.TypeDeclarationStmt;
-import com.github.javaparser.ast.stmt.WhileStmt;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.ReferenceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.VoidType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.imports.*;
+import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.*;
 
 /**
  * @author Julio Vilmar Gesser
@@ -303,8 +210,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BlockStmt n, final A arg) {
         visitComment(n, arg);
-        if (n.getStmts() != null) {
-            for (final Statement s : n.getStmts()) {
+        if (n.getStatements() != null) {
+            for (final Statement s : n.getStatements()) {
                 {
                     R result = s.accept(this, arg);
                     if (result != null) {
@@ -339,7 +246,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getExpr().accept(this, arg);
+            R result = n.getExpression().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -351,7 +258,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final CatchClause n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getParam().accept(this, arg);
+            R result = n.getParameter().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -560,8 +467,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getThrows() != null) {
-            for (final ReferenceType name : n.getThrows()) {
+        if (n.getThrownExceptions() != null) {
+            for (final ReferenceType name : n.getThrownExceptions()) {
                 {
                     R result = name.accept(this, arg);
                     if (result != null) {
@@ -654,8 +561,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getArgs() != null) {
-            for (final Expression e : n.getArgs()) {
+        if (n.getArguments() != null) {
+            for (final Expression e : n.getArguments()) {
                 {
                     R result = e.accept(this, arg);
                     if (result != null) {
@@ -726,9 +633,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ExplicitConstructorInvocationStmt n, final A arg) {
         visitComment(n, arg);
-        if (!n.isThis() && n.getExpr().isPresent()) {
+        if (!n.isThis() && n.getExpression().isPresent()) {
             {
-                R result = n.getExpr().get().accept(this, arg);
+                R result = n.getExpression().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -742,8 +649,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getArgs() != null) {
-            for (final Expression e : n.getArgs()) {
+        if (n.getArguments() != null) {
+            for (final Expression e : n.getArguments()) {
                 {
                     R result = e.accept(this, arg);
                     if (result != null) {
@@ -804,12 +711,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        {
-            R result = n.getElementType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
         for (final VariableDeclarator var : n.getVariables()) {
             {
                 R result = var.accept(this, arg);
@@ -848,8 +749,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ForStmt n, final A arg) {
         visitComment(n, arg);
-        if (n.getInit() != null) {
-            for (final Expression e : n.getInit()) {
+        if (n.getInitialization() != null) {
+            for (final Expression e : n.getInitialization()) {
                 {
                     R result = e.accept(this, arg);
                     if (result != null) {
@@ -927,7 +828,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final InstanceOfExpr n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getExpr().accept(this, arg);
+            R result = n.getExpression().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -948,12 +849,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final IntegerLiteralMinValueExpr n, final A arg) {
-        visitComment(n, arg);
-        return null;
-    }
-
-    @Override
     public R visit(final JavadocComment n, final A arg) {
         return null;
     }
@@ -962,7 +857,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final LabeledStmt n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getStmt().accept(this, arg);
+            R result = n.getStatement().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -972,12 +867,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
 
     @Override
     public R visit(final LongLiteralExpr n, final A arg) {
-        visitComment(n, arg);
-        return null;
-    }
-
-    @Override
-    public R visit(final LongLiteralMinValueExpr n, final A arg) {
         visitComment(n, arg);
         return null;
     }
@@ -1025,8 +914,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getArgs() != null) {
-            for (final Expression e : n.getArgs()) {
+        if (n.getArguments() != null) {
+            for (final Expression e : n.getArguments()) {
                 {
                     R result = e.accept(this, arg);
                     if (result != null) {
@@ -1062,7 +951,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getElementType().accept(this, arg);
+            R result = n.getType().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1077,8 +966,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getThrows() != null) {
-            for (final ReferenceType<?> name : n.getThrows()) {
+        if (n.getThrownExceptions() != null) {
+            for (final ReferenceType<?> name : n.getThrownExceptions()) {
                 {
                     R result = name.accept(this, arg);
                     if (result != null) {
@@ -1157,8 +1046,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
             }
         }
-        if (n.getArgs() != null) {
-            for (final Expression e : n.getArgs()) {
+        if (n.getArguments() != null) {
+            for (final Expression e : n.getArguments()) {
                 {
                     R result = e.accept(this, arg);
                     if (result != null) {
@@ -1216,13 +1105,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getElementType().accept(this, arg);
+            R result = n.getType().accept(this, arg);
             if (result != null) {
                 return result;
             }
         }
         {
-            R result = n.getId().accept(this, arg);
+            R result = n.getName().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1245,8 +1134,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final Name n, final A arg) {
         visitComment(n, arg);
-        if (n.getQualifier() != null) {
-            R result = n.getQualifier().accept(this, arg);
+        if (n.getQualifier().isPresent()) {
+            R result = n.getQualifier().get().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1341,9 +1230,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ReturnStmt n, final A arg) {
         visitComment(n, arg);
-        if (n.getExpr().isPresent()) {
+        if (n.getExpression().isPresent()) {
             {
-                R result = n.getExpr().get().accept(this, arg);
+                R result = n.getExpression().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -1401,8 +1290,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getStmts() != null) {
-            for (final Statement s : n.getStmts()) {
+        if (n.getStatements() != null) {
+            for (final Statement s : n.getStatements()) {
                 {
                     R result = s.accept(this, arg);
                     if (result != null) {
@@ -1441,8 +1330,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final SynchronizedStmt n, final A arg) {
         visitComment(n, arg);
         {
-            if (n.getExpr() != null) {
-                R result = n.getExpr().accept(this, arg);
+            if (n.getExpression() != null) {
+                R result = n.getExpression().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -1460,9 +1349,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ThisExpr n, final A arg) {
         visitComment(n, arg);
-        if (n.getClassExpr() != null) {
+        if (n.getClassExpr().isPresent()) {
             {
-                R result = n.getClassExpr().accept(this, arg);
+                R result = n.getClassExpr().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -1475,7 +1364,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final ThrowStmt n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getExpr().accept(this, arg);
+            R result = n.getExpression().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1497,24 +1386,24 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getTryBlock().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
-        if (n.getCatchs() != null) {
-            for (final CatchClause c : n.getCatchs()) {
-                {
-                    R result = c.accept(this, arg);
-                    if (result != null) {
-                        return result;
-                    }
+            if (n.getTryBlock().isPresent()) {
+                R result = n.getTryBlock().get().accept(this, arg);
+                if (result != null) {
+                    return result;
                 }
             }
         }
-        if (n.getFinallyBlock() != null) {
+        for (final CatchClause c : n.getCatchClauses()) {
             {
-                R result = n.getFinallyBlock().accept(this, arg);
+                R result = c.accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        if (n.getFinallyBlock().isPresent()) {
+            {
+                R result = n.getFinallyBlock().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -1555,7 +1444,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final UnaryExpr n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getExpr().accept(this, arg);
+            R result = n.getExpression().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1578,12 +1467,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
             }
         }
-        {
-            R result = n.getElementType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
         for (final VariableDeclarator v : n.getVariables()) {
             {
                 R result = v.accept(this, arg);
@@ -1599,25 +1482,25 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final VariableDeclarator n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getId().accept(this, arg);
+            R result = n.getName().accept(this, arg);
             if (result != null) {
                 return result;
             }
         }
-        if (n.getInit().isPresent()) {
+        {
+            R result = n.getType().accept(this, arg);
+            if (result != null) {
+                return result;
+            }
+        }
+        if (n.getInitializer().isPresent()) {
             {
-                R result = n.getInit().get().accept(this, arg);
+                R result = n.getInitializer().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
             }
         }
-        return null;
-    }
-
-    @Override
-    public R visit(final VariableDeclaratorId n, final A arg) {
-        visitComment(n, arg);
         return null;
     }
 
@@ -1660,17 +1543,17 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
             }
         }
-        if (n.getExtends().isPresent()) {
+        if (n.getExtendedTypes().isPresent()) {
             {
-                R result = n.getExtends().get().accept(this, arg);
+                R result = n.getExtendedTypes().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
             }
         }
-        if (n.getSuper().isPresent()) {
+        if (n.getSuperTypes().isPresent()) {
             {
-                R result = n.getSuper().get().accept(this, arg);
+                R result = n.getSuperTypes().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -1732,22 +1615,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         return null;
     }
-
+    
     @Override
-    public R visit(ArrayBracketPair n, A arg) {
-        for (final AnnotationExpr a : n.getAnnotations()) {
-            {
-                R result = a.accept(this, arg);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(EmptyImportDeclaration n, A arg) {
+    public R visit(BadImportDeclaration n, A arg) {
         visitComment(n, arg);
         return null;
     }

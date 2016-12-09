@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -41,25 +41,25 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements 
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
         NodeWithImplements<EnumDeclaration> {
 
-    private NodeList<ClassOrInterfaceType> implementsList;
+    private NodeList<ClassOrInterfaceType> implementedTypes;
 
     private NodeList<EnumConstantDeclaration> entries;
 
     public EnumDeclaration() {
-        this(Range.UNKNOWN, 
-                EnumSet.noneOf(Modifier.class), 
-                new NodeList<>(), 
-                new SimpleName(), 
+        this(null,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 new NodeList<>(),
                 new SimpleName(name),
@@ -69,22 +69,22 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
-                           NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
-        this(Range.UNKNOWN,
+        this(null,
                 modifiers,
                 annotations,
                 name,
-                implementsList,
+                implementedTypes,
                 entries,
                 members);
     }
 
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
-                           NodeList<ClassOrInterfaceType> implementsList, NodeList<EnumConstantDeclaration> entries,
+                           NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
-        setImplements(implementsList);
+        setImplements(implementedTypes);
         setEntries(entries);
     }
 
@@ -109,21 +109,21 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     @Override
     public NodeList<ClassOrInterfaceType> getImplements() {
-        return implementsList;
+        return implementedTypes;
     }
 
     public EnumDeclaration setEntries(NodeList<EnumConstantDeclaration> entries) {
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
         this.entries = assertNotNull(entries);
-		setAsParentNodeOf(this.entries);
+        setAsParentNodeOf(this.entries);
         return this;
     }
 
     @Override
     public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
-        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
-        this.implementsList = assertNotNull(implementsList);
-		setAsParentNodeOf(this.implementsList);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
+        this.implementedTypes = assertNotNull(implementsList);
+        setAsParentNodeOf(this.implementedTypes);
         return this;
     }
 
@@ -137,7 +137,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     @Override
     public List<NodeList<?>> getNodeLists() {
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(implementsList);
+        res.add(implementedTypes);
         res.add(entries);
         return res;
     }

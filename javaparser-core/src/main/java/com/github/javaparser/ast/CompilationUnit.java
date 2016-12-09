@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
@@ -46,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * compilation unit.
  * </p>
  * The CompilationUnit is constructed following the syntax:<br>
- * 
+ * <p>
  * <pre>
  * {@code
  * CompilationUnit ::=  ( }{@link PackageDeclaration}{@code )?
@@ -54,29 +55,29 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *                      ( }{@link TypeDeclaration}{@code )*
  * }
  * </pre>
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public final class CompilationUnit extends Node {
 
-    private PackageDeclaration pakage;
+    private PackageDeclaration packageDeclaration;
 
     private NodeList<ImportDeclaration> imports;
 
     private NodeList<TypeDeclaration<?>> types;
 
     public CompilationUnit() {
-        this(Range.UNKNOWN, null, new NodeList<>(), new NodeList<>());
+        this(null, null, new NodeList<>(), new NodeList<>());
     }
 
-    public CompilationUnit(PackageDeclaration pakage, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
-        this(Range.UNKNOWN, pakage, imports, types);
+    public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
+        this(null, packageDeclaration, imports, types);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration pakage, NodeList<ImportDeclaration> imports,
+    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports,
                            NodeList<TypeDeclaration<?>> types) {
         super(range);
-        setPackage(pakage);
+        setPackage(packageDeclaration);
         setImports(imports);
         setTypes(types);
     }
@@ -95,10 +96,9 @@ public final class CompilationUnit extends Node {
      * Return a list containing all comments declared in this compilation unit.
      * Including javadocs, line comments and block comments of all types,
      * inner-classes and other members.<br>
-     * If there is no comment, <code>null</code> is returned.
-     * 
-     * @return list with all comments of this compilation unit or
-     *         <code>null</code>
+     * If there is no comment, an empty list is returned.
+     *
+     * @return list with all comments of this compilation unit.
      * @see JavadocComment
      * @see com.github.javaparser.ast.comments.LineComment
      * @see com.github.javaparser.ast.comments.BlockComment
@@ -110,7 +110,7 @@ public final class CompilationUnit extends Node {
     /**
      * Retrieves the list of imports declared in this compilation unit or
      * <code>null</code> if there is no import.
-     * 
+     *
      * @return the list of imports or <code>null</code> if there is no import
      */
     public NodeList<ImportDeclaration> getImports() {
@@ -125,17 +125,17 @@ public final class CompilationUnit extends Node {
      * Retrieves the package declaration of this compilation unit.<br>
      * If this compilation unit has no package declaration (default package),
      * <code>null</code> is returned.
-     * 
+     *
      * @return the package declaration or <code>null</code>
      */
     public Optional<PackageDeclaration> getPackage() {
-        return Optional.ofNullable(pakage);
+        return Optional.ofNullable(packageDeclaration);
     }
 
     /**
      * Return the list of types declared in this compilation unit.<br>
      * If there is no types declared, <code>null</code> is returned.
-     * 
+     *
      * @return the list of types or <code>null</code> null if there is no type
      * @see AnnotationDeclaration
      * @see ClassOrInterfaceDeclaration
@@ -149,29 +149,18 @@ public final class CompilationUnit extends Node {
     /**
      * Convenience method that wraps <code>getTypes()</code>.<br>
      * If <code>i</code> is out of bounds, throws <code>IndexOutOfBoundsException.</code>
-     * @param i
-     *            the index of the type declaration to retrieve
+     *
+     * @param i the index of the type declaration to retrieve
      */
     public TypeDeclaration<?> getType(int i) {
         return getTypes().get(i);
     }
 
     /**
-     * Sets the list of comments of this compilation unit.
-     * 
-     * @param comments
-     *            the list of comments
-     */
-    public CompilationUnit setComments(List<Comment> comments) {
-        throw new RuntimeException("Not implemented!");
-    }
-
-    /**
      * Sets the list of imports of this compilation unit. The list is initially
      * <code>null</code>.
-     * 
-     * @param imports
-     *            the list of imports
+     *
+     * @param imports the list of imports
      */
     public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
@@ -182,23 +171,20 @@ public final class CompilationUnit extends Node {
 
     /**
      * Sets or clear the package declarations of this compilation unit.
-     * 
-     * @param pakage
-     *            the pakage declaration to set or <code>null</code> to default
-     *            package
+     *
+     * @param pakage the packageDeclaration declaration to set or <code>null</code> to default package
      */
     public CompilationUnit setPackage(PackageDeclaration pakage) {
-        notifyPropertyChange(ObservableProperty.PACKAGE, this.pakage, pakage);
-        this.pakage = pakage;
-        setAsParentNodeOf(this.pakage);
+        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, pakage);
+        this.packageDeclaration = pakage;
+        setAsParentNodeOf(this.packageDeclaration);
         return this;
     }
 
     /**
      * Sets the list of types declared in this compilation unit.
-     * 
-     * @param types
-     *            the lis of types
+     *
+     * @param types the lis of types
      */
     public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
@@ -209,7 +195,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * sets the package declaration of this compilation unit
-     * 
+     *
      * @param name the name of the package
      * @return this, the {@link CompilationUnit}
      */
@@ -221,7 +207,7 @@ public final class CompilationUnit extends Node {
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * shorthand for {@link #addImport(String, boolean, boolean)} with name,false,false
-     * 
+     *
      * @param name the import name
      * @return this, the {@link CompilationUnit}
      */
@@ -232,7 +218,7 @@ public final class CompilationUnit extends Node {
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * shorthand for {@link #addImport(String)} with clazz.getName()
-     * 
+     *
      * @param clazz the class to import
      * @return this, the {@link CompilationUnit}
      */
@@ -248,15 +234,24 @@ public final class CompilationUnit extends Node {
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * <b>This method check if no import with the same name is already in the list</b>
-     * 
+     *
      * @param name the import name
-     * @param isStatic      is it an "import static"
+     * @param isStatic is it an "import static"
      * @param isAsterisk does the import end with ".*"
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
-        final ImportDeclaration importDeclaration = ImportDeclaration.create(Range.UNKNOWN, Name.parse(name), isStatic, isAsterisk);
-        if (getImports().stream().anyMatch(i -> i.toString().equals(importDeclaration.toString())))
+        final StringBuilder i = new StringBuilder("import ");
+        if (isStatic) {
+            i.append("static ");
+        }
+        i.append(name);
+        if (isAsterisk) {
+            i.append(".*");
+        }
+        i.append(";");
+        ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
+        if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
             return this;
         else {
             getImports().add(importDeclaration);
@@ -267,7 +262,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add a public class to the types of this compilation unit
-     * 
+     *
      * @param name the class name
      * @return the newly created class
      */
@@ -277,7 +272,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add a class to the types of this compilation unit
-     * 
+     *
      * @param name the class name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
@@ -294,7 +289,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add a public interface class to the types of this compilation unit
-     * 
+     *
      * @param name the interface name
      * @return the newly created class
      */
@@ -304,7 +299,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add an interface to the types of this compilation unit
-     * 
+     *
      * @param name the interface name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
@@ -321,7 +316,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add a public enum to the types of this compilation unit
-     * 
+     *
      * @param name the enum name
      * @return the newly created class
      */
@@ -331,7 +326,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add an enum to the types of this compilation unit
-     * 
+     *
      * @param name the enum name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
@@ -346,7 +341,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add a public annotation declaration to the types of this compilation unit
-     * 
+     *
      * @param name the annotation name
      * @return the newly created class
      */
@@ -356,7 +351,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Add an annotation declaration to the types of this compilation unit
-     * 
+     *
      * @param name the annotation name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
@@ -371,7 +366,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Try to get a class by its name
-     * 
+     *
      * @param className the class name (case-sensitive)
      * @return null if not found, the class otherwise
      */
@@ -383,7 +378,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Try to get an interface by its name
-     * 
+     *
      * @param interfaceName the interface name (case-sensitive)
      * @return null if not found, the interface otherwise
      */
@@ -395,7 +390,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Try to get an enum by its name
-     * 
+     *
      * @param enumName the enum name (case-sensitive)
      * @return null if not found, the enum otherwise
      */
@@ -407,7 +402,7 @@ public final class CompilationUnit extends Node {
 
     /**
      * Try to get an annotation by its name
-     * 
+     *
      * @param annotationName the annotation name (case-sensitive)
      * @return null if not found, the annotation otherwise
      */

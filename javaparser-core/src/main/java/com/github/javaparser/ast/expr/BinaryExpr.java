@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -32,46 +32,56 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class BinaryExpr extends Expression {
 
     public enum Operator {
-        or, // ||
-        and, // &&
-        binOr, // |
-        binAnd, // &
-        xor, // ^
-        equals, // ==
-        notEquals, // !=
-        less, // <
-        greater, // >
-        lessEquals, // <=
-        greaterEquals, // >=
-        lShift, // <<
-        rSignedShift, // >>
-        rUnsignedShift, // >>>
-        plus, // +
-        minus, // -
-        times, // *
-        divide, // /
-        remainder, // %
+        OR("||"),
+        AND("&&"),
+        BINARY_OR("|"),
+        BINARY_AND("&"),
+        XOR("^"),
+        EQUALS("=="),
+        NOT_EQUALS("!="),
+        LESS("<"),
+        GREATER(">"),
+        LESS_EQUALS("<="),
+        GREATER_EQUALS(">="),
+        LEFT_SHIFT("<<"),
+        SIGNED_RIGHT_SHIFT(">>"),
+        UNSIGNED_RIGHT_SHIFT(">>>"),
+        PLUS("+"),
+        MINUS("-"),
+        MULTIPLY("*"),
+        DIVIDE("/"),
+        REMAINDER("%");
+
+        private final String codeRepresentation;
+
+        Operator(String codeRepresentation) {
+            this.codeRepresentation = codeRepresentation;
+        }
+
+        public String asString() {
+            return codeRepresentation;
+        }
     }
 
     private Expression left;
 
     private Expression right;
 
-    private Operator op;
+    private Operator operator;
 
     public BinaryExpr() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.equals);
+        this(null, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.EQUALS);
     }
 
-    public BinaryExpr(Expression left, Expression right, Operator op) {
-        this(Range.UNKNOWN, left, right, op);
+    public BinaryExpr(Expression left, Expression right, Operator operator) {
+        this(null, left, right, operator);
     }
 
-    public BinaryExpr(Range range, Expression left, Expression right, Operator op) {
+    public BinaryExpr(Range range, Expression left, Expression right, Operator operator) {
         super(range);
-    	setLeft(left);
-    	setRight(right);
-    	setOperator(op);
+        setLeft(left);
+        setRight(right);
+        setOperator(operator);
     }
 
     @Override
@@ -89,7 +99,7 @@ public final class BinaryExpr extends Expression {
     }
 
     public Operator getOperator() {
-        return op;
+        return operator;
     }
 
     public Expression getRight() {
@@ -99,20 +109,20 @@ public final class BinaryExpr extends Expression {
     public BinaryExpr setLeft(Expression left) {
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
         this.left = left;
-		setAsParentNodeOf(this.left);
+        setAsParentNodeOf(this.left);
         return this;
     }
 
     public BinaryExpr setOperator(Operator op) {
-        notifyPropertyChange(ObservableProperty.OPERATOR, this.op, op);
-        this.op = op;
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
+        this.operator = op;
         return this;
     }
 
     public BinaryExpr setRight(Expression right) {
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
         this.right = right;
-		setAsParentNodeOf(this.right);
+        setAsParentNodeOf(this.right);
         return this;
     }
 }

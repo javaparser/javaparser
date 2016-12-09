@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -49,21 +50,21 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     private NodeList<Type<?>> typeArguments;
 
     public ClassOrInterfaceType() {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new SimpleName(),
                 null);
     }
 
     public ClassOrInterfaceType(final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new SimpleName(name),
                 null);
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
-        this(Range.UNKNOWN,
+        this(null,
                 scope,
                 new SimpleName(name),
                 null);
@@ -110,13 +111,13 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     @Override
     public ClassOrInterfaceType setName(final SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-    	this.name = assertNotNull(name);
+        this.name = assertNotNull(name);
         return this;
     }
 
     /**
      * Sets the scope
-     * 
+     *
      * @param scope the scope, can be null
      * @return this, the ClassOrInterfaceType
      */
@@ -134,7 +135,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
 
     /**
      * Sets the typeArguments
-     * 
+     *
      * @param typeArguments the typeArguments, can be null
      * @return this, the ClassOrInterfaceType
      */

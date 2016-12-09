@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -43,11 +43,11 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     private BlockStmt block;
 
     public InitializerDeclaration() {
-        this(Range.UNKNOWN, false, new BlockStmt());
+        this(null, false, new BlockStmt());
     }
 
     public InitializerDeclaration(boolean isStatic, BlockStmt block) {
-        this(Range.UNKNOWN, isStatic, block);
+        this(null, isStatic, block);
     }
 
     public InitializerDeclaration(Range range, boolean isStatic, BlockStmt block) {
@@ -77,7 +77,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     public InitializerDeclaration setBlock(BlockStmt block) {
         notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
         this.block = assertNotNull(block);
-		setAsParentNodeOf(this.block);
+        setAsParentNodeOf(this.block);
         return this;
     }
 
@@ -89,7 +89,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;

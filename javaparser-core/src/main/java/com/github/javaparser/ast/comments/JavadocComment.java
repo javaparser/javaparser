@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
@@ -31,11 +31,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class JavadocComment extends Comment {
 
     public JavadocComment() {
-        this(Range.UNKNOWN, "empty");
+        this(null, "empty");
     }
 
     public JavadocComment(String content) {
-        this(Range.UNKNOWN, content);
+        this(null, content);
     }
 
     public JavadocComment(Range range, String content) {

@@ -44,42 +44,42 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements 
-        NodeWithImplements<ClassOrInterfaceDeclaration>, 
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements
+        NodeWithImplements<ClassOrInterfaceDeclaration>,
         NodeWithExtends<ClassOrInterfaceDeclaration>,
         NodeWithTypeParameters<ClassOrInterfaceDeclaration> {
 
-    private boolean interface_;
+    private boolean isInterface;
 
     private NodeList<TypeParameter> typeParameters;
 
     // Can contain more than one item if this is an interface
-    private NodeList<ClassOrInterfaceType> extendsList;
+    private NodeList<ClassOrInterfaceType> extendedTypes;
 
-    private NodeList<ClassOrInterfaceType> implementsList;
+    private NodeList<ClassOrInterfaceType> implementedTypes;
 
     public ClassOrInterfaceDeclaration() {
-        this(Range.UNKNOWN, 
-                EnumSet.noneOf(Modifier.class), 
-                new NodeList<>(), 
-                false, 
+        this(null,
+                EnumSet.noneOf(Modifier.class),
+                new NodeList<>(),
+                false,
                 new SimpleName(),
                 new NodeList<>(),
-                new NodeList<>(), 
-                new NodeList<>(), 
-                new NodeList<>()); 
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>());
     }
 
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
                                        final String name) {
-        this(Range.UNKNOWN, 
-                modifiers, 
-                new NodeList<>(), 
+        this(null,
+                modifiers,
+                new NodeList<>(),
                 isInterface,
                 new SimpleName(name),
                 new NodeList<>(),
-                new NodeList<>(), 
-                new NodeList<>(), 
+                new NodeList<>(),
+                new NodeList<>(),
                 new NodeList<>());
     }
 
@@ -87,24 +87,24 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final SimpleName name,
                                        final NodeList<TypeParameter> typeParameters,
-                                       final NodeList<ClassOrInterfaceType> extendsList,
-                                       final NodeList<ClassOrInterfaceType> implementsList,
+                                       final NodeList<ClassOrInterfaceType> extendedTypes,
+                                       final NodeList<ClassOrInterfaceType> implementedTypes,
                                        final NodeList<BodyDeclaration<?>> members) {
-        this(Range.UNKNOWN, modifiers, annotations, isInterface, name, typeParameters, extendsList, implementsList, members);
+        this(null, modifiers, annotations, isInterface, name, typeParameters, extendedTypes, implementedTypes, members);
     }
 
     public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final SimpleName name,
                                        final NodeList<TypeParameter> typeParameters,
-                                       final NodeList<ClassOrInterfaceType> extendsList,
-                                       final NodeList<ClassOrInterfaceType> implementsList,
+                                       final NodeList<ClassOrInterfaceType> extendedTypes,
+                                       final NodeList<ClassOrInterfaceType> implementedTypes,
                                        final NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
-        setExtends(extendsList);
-        setImplements(implementsList);
+        setExtends(extendedTypes);
+        setImplements(implementedTypes);
     }
 
     @Override
@@ -119,12 +119,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
 
     @Override
     public NodeList<ClassOrInterfaceType> getExtends() {
-        return extendsList;
+        return extendedTypes;
     }
 
     @Override
     public NodeList<ClassOrInterfaceType> getImplements() {
-        return implementsList;
+        return implementedTypes;
     }
 
     public NodeList<TypeParameter> getTypeParameters() {
@@ -132,28 +132,28 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     public boolean isInterface() {
-        return interface_;
+        return isInterface;
     }
 
     @Override
     public ClassOrInterfaceDeclaration setExtends(final NodeList<ClassOrInterfaceType> extendsList) {
-        notifyPropertyChange(ObservableProperty.EXTENDS, this.extendsList, extendsList);
-        this.extendsList = assertNotNull(extendsList);
-        setAsParentNodeOf(this.extendsList);
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendsList);
+        this.extendedTypes = assertNotNull(extendsList);
+        setAsParentNodeOf(this.extendedTypes);
         return this;
     }
 
     @Override
     public ClassOrInterfaceDeclaration setImplements(final NodeList<ClassOrInterfaceType> implementsList) {
-        notifyPropertyChange(ObservableProperty.IMPLEMENTS_LIST, this.implementsList, implementsList);
-        this.implementsList = assertNotNull(implementsList);
-        setAsParentNodeOf(this.implementsList);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
+        this.implementedTypes = assertNotNull(implementsList);
+        setAsParentNodeOf(this.implementedTypes);
         return this;
     }
 
     public ClassOrInterfaceDeclaration setInterface(final boolean interface_) {
-        notifyPropertyChange(ObservableProperty.INTERFACE, this.interface_, interface_);
-        this.interface_ = interface_;
+        notifyPropertyChange(ObservableProperty.IS_INTERFACE, this.isInterface, interface_);
+        this.isInterface = interface_;
         return this;
     }
 
@@ -169,8 +169,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public List<NodeList<?>> getNodeLists() {
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(typeParameters);
-        res.add(extendsList);
-        res.add(implementsList);
+        res.add(extendedTypes);
+        res.add(implementedTypes);
         return res;
     }
 }

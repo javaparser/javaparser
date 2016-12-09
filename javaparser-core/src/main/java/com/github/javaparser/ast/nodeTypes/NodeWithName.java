@@ -28,22 +28,22 @@ import static com.github.javaparser.ast.expr.Name.parse;
 
 /**
  * A node having a name.
- *  
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
- * 
- * @since 2.0.1 
+ *
+ * @since 2.0.1
  */
 public interface NodeWithName<N extends Node> {
     Name getName();
 
     N setName(Name name);
 
-    default N setName(String name){
+    default N setName(String name) {
         setName(parse(name));
         return (N) this;
     }
 
-    default String getNameAsString(){
-        return getName().toString();
+    default String getNameAsString() {
+        return getName().asString();
     }
 }

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -27,7 +27,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.observing.ObservableProperty;
 
-import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
@@ -54,5 +54,17 @@ public abstract class Type<T extends Type> extends Node {
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(annotations);
         return (T) this;
+    }
+
+    /**
+     * Finds the element type, meaning: the type without ArrayTypes around it.
+     * 
+     * In "<code>int[] a[];</code>", the element type is int.
+     */
+    public Type<?> getElementType() {
+        if (this instanceof ArrayType) {
+            return ((ArrayType) this).getComponentType().getElementType();
+        }
+        return this;
     }
 }

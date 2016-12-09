@@ -18,11 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
@@ -34,14 +35,16 @@ import java.util.Optional;
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * These are some examples:
+ * <p>
+ * System.out::println;
+ * <p>
+ * (test ? stream.map(String::trim) : stream)::toArray;
  *
- * System.out::println; 
- *
- * (test ? stream.map(String::trim) : stream)::toArray; 
  * @author Raquel Pau
- *
  */
-public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr> {
+public class MethodReferenceExpr extends Expression implements
+        NodeWithTypeArguments<MethodReferenceExpr>,
+        NodeWithIdentifier<MethodReferenceExpr> {
 
     private Expression scope;
 
@@ -50,7 +53,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     private String identifier;
 
     public MethodReferenceExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 new ClassExpr(),
                 null,
                 "empty");
@@ -93,7 +96,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     /**
      * Sets the typeArguments
-     * 
+     *
      * @param typeArguments the typeArguments, can be null
      * @return this, the MethodReferenceExpr
      */
@@ -105,14 +108,15 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return this;
     }
 
+    @Override
     public String getIdentifier() {
         return identifier;
     }
 
+    @Override
     public MethodReferenceExpr setIdentifier(String identifier) {
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }
-
 }

@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -35,42 +35,44 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ContinueStmt extends Statement {
 
-	private String id;
+    private String identifier;
 
-	public ContinueStmt() {
-        this(Range.UNKNOWN, null);
-	}
+    public ContinueStmt() {
+        this(null, null);
+    }
 
-	public ContinueStmt(final String id) {
-		this(Range.UNKNOWN, id);
-	}
+    public ContinueStmt(final String identifier) {
+        this(null, identifier);
+    }
 
-	public ContinueStmt(Range range, final String id) {
-		super(range);
-		this.id = id;
-	}
+    public ContinueStmt(Range range, final String identifier) {
+        super(range);
+        this.identifier = identifier;
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-    public Optional<String> getId() {
-        return Optional.ofNullable(id);
+    public Optional<String> getIdentifier() {
+        return Optional.ofNullable(identifier);
     }
 
     /**
-     * Sets the id
-     * 
-     * @param id the id, can be null
+     * Sets the identifier
+     *
+     * @param identifier the identifier, can be null
      * @return this, the ContinueStmt
      */
-    public ContinueStmt setId(final String id) {
-	    notifyPropertyChange(ObservableProperty.ID, this.id, id);
-        this.id = assertNotNull(id);
+    public ContinueStmt setIdentifier(final String identifier) {
+        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
+        this.identifier = assertNotNull(identifier);
         return this;
     }
 }

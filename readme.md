@@ -2,7 +2,12 @@
 
 This package contains a Java 1.8 Parser with AST generation and visitor support.
 
-The AST records the source code structure, javadoc and comments. It is also possible to change the AST nodes or create new ones to modify the source code.
+The AST records the source code structure.
+You can analyze source code for any purpose.
+It is possible to change the AST nodes or create new ones to modify the source code.
+
+When you need not only the text from the source code but you also need type information,
+you can use [the Java Symbol Solver project.](https://github.com/javaparser/javasymbolsolver)
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.javaparser/javaparser-core.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.javaparser%22%20AND%20a%3A%22javaparser-core%22)
 [![Build Status](https://travis-ci.org/javaparser/javaparser.svg?branch=master)](https://travis-ci.org/javaparser/javaparser)
@@ -15,30 +20,29 @@ The AST records the source code structure, javadoc and comments. It is also poss
 *   Performant
 *   Easy to use
 *   Modifiable AST
-*   Create AST from scratch
+*   Code generation
 *   Support of comments
 
 ## Dependency Management
 
 The project binaries are available in Maven Central.  Just add the following to your maven configuration or tailor to your own dependency management system.
 
-Current 1.8 Release
+Suggested version (many fixes, new features, and mostly stable API):
+```xml
+<dependency>
+    <groupId>com.github.javaparser</groupId>
+    <artifactId>javaparser-core</artifactId>
+    <version>3.0.0-RC.1</version>
+</dependency>
+```
+
+Current production release:
 
 ```xml
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
     <version>2.5.1</version>
-</dependency>
-```
-
-Final 1.7 Release
-
-```xml
-<dependency>
-    <groupId>com.google.code.javaparser</groupId>
-    <artifactId>javaparser</artifactId>
-    <version>1.0.11</version>
 </dependency>
 ```
 
@@ -50,7 +54,7 @@ If you have checkout the project from GitHub you can build the project with mave
 mvn clean install
 ```
 
-If you checkout the sources and want to view the project in an IDE, it is best to generate the additional source files; otherwise you will get many compilation complaints in the IDE
+If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files; otherwise you will get many compilation complaints in the IDE. (mvn clean install already does this for you.)
 
 ```
 mvn javacc:javacc
@@ -62,9 +66,11 @@ Examples of how to use the library can be found on the [Manual](https://github.c
 
 ## Troubleshooting
 
-In the first instance try the [wiki](https://github.com/javaparser/javaparser/wiki)
+First try the [wiki](https://github.com/javaparser/javaparser/wiki).
 
-In the second instance please feel free to open an [issue](https://github.com/javaparser/javaparser/issues).
+Didn't find an answer? Try [searching for existing issues](https://github.com/javaparser/javaparser/issues?utf8=%E2%9C%93&q=is%3Aissue%20)
+
+Still nothing? [Open an issue](https://github.com/javaparser/javaparser/issues/new) or [come chat on Gitter](https://gitter.im/javaparser/javaparser)
 
 ## Javadoc
 

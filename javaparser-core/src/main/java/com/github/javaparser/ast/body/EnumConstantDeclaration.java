@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -42,43 +42,43 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements 
+public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements
         NodeWithJavaDoc<EnumConstantDeclaration>,
         NodeWithSimpleName<EnumConstantDeclaration>,
         NodeWithArguments<EnumConstantDeclaration> {
 
     private SimpleName name;
 
-    private NodeList<Expression> args;
+    private NodeList<Expression> arguments;
 
     private NodeList<BodyDeclaration<?>> classBody;
 
     public EnumConstantDeclaration() {
-        this(Range.UNKNOWN, 
-                new NodeList<>(), 
+        this(null,
+                new NodeList<>(),
                 new SimpleName(),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
     public EnumConstantDeclaration(String name) {
-        this(Range.UNKNOWN, 
+        this(null,
                 new NodeList<>(),
                 new SimpleName(name),
                 new NodeList<>(),
                 new NodeList<>());
     }
 
-    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
+    public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments,
                                    NodeList<BodyDeclaration<?>> classBody) {
-        this(Range.UNKNOWN, annotations, name, args, classBody);
+        this(null, annotations, name, arguments, classBody);
     }
 
-    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> args,
+    public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments,
                                    NodeList<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
-        setArgs(args);
+        setArguments(arguments);
         setClassBody(classBody);
     }
 
@@ -92,8 +92,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         v.visit(this, arg);
     }
 
-    public NodeList<Expression> getArgs() {
-        return args;
+    public NodeList<Expression> getArguments() {
+        return arguments;
     }
 
     public NodeList<BodyDeclaration<?>> getClassBody() {
@@ -105,17 +105,17 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
-    public EnumConstantDeclaration setArgs(NodeList<Expression> args) {
-        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
-        this.args = assertNotNull(args);
-		setAsParentNodeOf(this.args);
+    public EnumConstantDeclaration setArguments(NodeList<Expression> arguments) {
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        this.arguments = assertNotNull(arguments);
+        setAsParentNodeOf(this.arguments);
         return this;
     }
 
     public EnumConstantDeclaration setClassBody(NodeList<BodyDeclaration<?>> classBody) {
         notifyPropertyChange(ObservableProperty.CLASS_BODY, this.classBody, classBody);
         this.classBody = assertNotNull(classBody);
-		setAsParentNodeOf(this.classBody);
+        setAsParentNodeOf(this.classBody);
         return this;
     }
 
@@ -129,7 +129,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;
@@ -138,7 +138,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Override
     public List<NodeList<?>> getNodeLists() {
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(args);
+        res.add(arguments);
         res.add(classBody);
         return res;
     }

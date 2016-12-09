@@ -39,7 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
-    private NodeList<Expression> init;
+    private NodeList<Expression> initialization;
 
     private Expression compare;
 
@@ -48,24 +48,24 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     private Statement body;
 
     public ForStmt() {
-        this(Range.UNKNOWN,
+        this(null,
                 new NodeList<>(),
                 new BooleanLiteralExpr(),
                 new NodeList<>(),
                 new EmptyStmt());
     }
 
-    public ForStmt(final NodeList<Expression> init, final Expression compare,
+    public ForStmt(final NodeList<Expression> initialization, final Expression compare,
                    final NodeList<Expression> update, final Statement body) {
-        this(Range.UNKNOWN, init, compare, update, body);
+        this(null, initialization, compare, update, body);
     }
 
     public ForStmt(Range range,
-                   final NodeList<Expression> init, final Expression compare,
+                   final NodeList<Expression> initialization, final Expression compare,
                    final NodeList<Expression> update, final Statement body) {
         super(range);
         setCompare(compare);
-        setInit(init);
+        setInitialization(initialization);
         setUpdate(update);
         setBody(body);
     }
@@ -89,8 +89,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return Optional.ofNullable(compare);
     }
 
-    public NodeList<Expression> getInit() {
-        return init;
+    public NodeList<Expression> getInitialization() {
+        return initialization;
     }
 
     public NodeList<Expression> getUpdate() {
@@ -107,7 +107,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     /**
      * Sets the compare
-     * 
+     *
      * @param compare the compare, can be null
      * @return this, the ForStmt
      */
@@ -118,10 +118,10 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
-    public ForStmt setInit(final NodeList<Expression> init) {
-        notifyPropertyChange(ObservableProperty.INIT, this.init, init);
-        this.init = assertNotNull(init);
-        setAsParentNodeOf(this.init);
+    public ForStmt setInitialization(final NodeList<Expression> initialization) {
+        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initialization, initialization);
+        this.initialization = assertNotNull(initialization);
+        setAsParentNodeOf(this.initialization);
         return this;
     }
 

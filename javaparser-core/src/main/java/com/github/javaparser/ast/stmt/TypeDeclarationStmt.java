@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -35,37 +35,39 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class TypeDeclarationStmt extends Statement {
 
-	private TypeDeclaration typeDecl;
+    private TypeDeclaration typeDecl;
 
-	public TypeDeclarationStmt() {
-        this(Range.UNKNOWN, new EmptyTypeDeclaration());
-	}
+    public TypeDeclarationStmt() {
+        this(null, new EmptyTypeDeclaration());
+    }
 
-	public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
-		this(Range.UNKNOWN, typeDecl);
-	}
+    public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
+        this(null, typeDecl);
+    }
 
-	public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {
-		super(range);
-		setTypeDeclaration(typeDecl);
-	}
+    public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {
+        super(range);
+        setTypeDeclaration(typeDecl);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public TypeDeclaration getTypeDeclaration() {
-		return typeDecl;
-	}
+    public TypeDeclaration getTypeDeclaration() {
+        return typeDecl;
+    }
 
-	public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
-		notifyPropertyChange(ObservableProperty.TYPE_DECLARATION, this.typeDecl, typeDecl);
-		this.typeDecl = assertNotNull(typeDecl);
-		setAsParentNodeOf(this.typeDecl);
-		return this;
-	}
+    public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
+        notifyPropertyChange(ObservableProperty.TYPE_DECLARATION, this.typeDecl, typeDecl);
+        this.typeDecl = assertNotNull(typeDecl);
+        setAsParentNodeOf(this.typeDecl);
+        return this;
+    }
 }

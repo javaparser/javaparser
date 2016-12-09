@@ -39,24 +39,24 @@ public final class AssertStmt extends Statement {
 
     private Expression check;
 
-    private Expression msg;
+    private Expression message;
 
     public AssertStmt() {
-        this(Range.UNKNOWN, new BooleanLiteralExpr(), null);
+        this(null, new BooleanLiteralExpr(), null);
     }
 
     public AssertStmt(final Expression check) {
-        this(Range.UNKNOWN, check, null);
+        this(null, check, null);
     }
 
-    public AssertStmt(final Expression check, final Expression msg) {
-        this(Range.UNKNOWN, check, msg);
+    public AssertStmt(final Expression check, final Expression message) {
+        this(null, check, message);
     }
 
-    public AssertStmt(final Range range, final Expression check, final Expression msg) {
+    public AssertStmt(final Range range, final Expression check, final Expression message) {
         super(range);
         setCheck(check);
-        setMessage(msg);
+        setMessage(message);
     }
 
     @Override
@@ -74,7 +74,7 @@ public final class AssertStmt extends Statement {
     }
 
     public Optional<Expression> getMessage() {
-        return Optional.ofNullable(msg);
+        return Optional.ofNullable(message);
     }
 
     public AssertStmt setCheck(final Expression check) {
@@ -86,14 +86,14 @@ public final class AssertStmt extends Statement {
 
     /**
      * Sets the message
-     * 
+     *
      * @param msg the message, can be null
      * @return this, the AssertStmt
      */
     public AssertStmt setMessage(final Expression msg) {
-        notifyPropertyChange(ObservableProperty.MSG, this.msg, msg);
-        this.msg = msg;
-        setAsParentNodeOf(this.msg);
+        notifyPropertyChange(ObservableProperty.MESSAGE, this.message, msg);
+        this.message = msg;
+        setAsParentNodeOf(this.message);
         return this;
     }
 }

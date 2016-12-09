@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -33,50 +33,52 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class LabeledStmt extends Statement {
 
-	private String label;
+    private String label;
 
-	private Statement stmt;
+    private Statement statement;
 
-	public LabeledStmt() {
-        this(Range.UNKNOWN, "empty", new EmptyStmt());
-	}
+    public LabeledStmt() {
+        this(null, "empty", new EmptyStmt());
+    }
 
-	public LabeledStmt(final String label, final Statement stmt) {
-        this(Range.UNKNOWN, label, stmt);
-	}
+    public LabeledStmt(final String label, final Statement statement) {
+        this(null, label, statement);
+    }
 
-	public LabeledStmt(Range range, final String label, final Statement stmt) {
-		super(range);
-		setLabel(label);
-		setStmt(stmt);
-	}
+    public LabeledStmt(Range range, final String label, final Statement statement) {
+        super(range);
+        setLabel(label);
+        setStatement(statement);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public String getLabel() {
-		return label;
-	}
+    public String getLabel() {
+        return label;
+    }
 
-	public Statement getStmt() {
-		return stmt;
-	}
+    public Statement getStatement() {
+        return statement;
+    }
 
-	public LabeledStmt setLabel(final String label) {
-		notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-		this.label = assertNotNull(label);
-		return this;
-	}
+    public LabeledStmt setLabel(final String label) {
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        this.label = assertNotNull(label);
+        return this;
+    }
 
-	public LabeledStmt setStmt(final Statement stmt) {
-		notifyPropertyChange(ObservableProperty.STMT, this.stmt, stmt);
-		this.stmt = assertNotNull(stmt);
-		setAsParentNodeOf(this.stmt);
-		return this;
-	}
+    public LabeledStmt setStatement(final Statement statement) {
+        notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
+        this.statement = assertNotNull(statement);
+        setAsParentNodeOf(this.statement);
+        return this;
+    }
 }

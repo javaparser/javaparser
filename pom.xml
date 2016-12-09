@@ -1,197 +1,198 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>javaparser-core</module>
         <module>javaparser-testing</module>
     </modules>
 
-	<groupId>com.github.javaparser</groupId>
-	<artifactId>javaparser-parent</artifactId>
-	<packaging>pom</packaging>
-	<version>3.0.1-alpha.10-SNAPSHOT</version>
+    <groupId>com.github.javaparser</groupId>
+    <artifactId>javaparser-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>3.0.1-RC.1-SNAPSHOT</version>
 
-	<name>javaparser-parent</name>
-	<url>https://github.com/javaparser</url>
-	<inceptionYear>2007</inceptionYear>
-	<description>Java 1.8 Parser Parser and Abstract Syntax Tree for Java</description>
+    <name>javaparser-parent</name>
+    <url>https://github.com/javaparser</url>
+    <inceptionYear>2007</inceptionYear>
+    <description>Java 1.8 Parser Parser and Abstract Syntax Tree for Java</description>
 
-	<licenses>
-		<license>
-			<name>GNU Lesser General Public License</name>
-			<url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
-			<distribution>repo</distribution>
-		</license>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-			<comments>A business-friendly OSS license</comments>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<name>Danny van Bruggen</name>
-			<email>hexagonaal@gmail.com</email>
-			<url>https://github.com/matozoid</url>
-			<id>matozoid</id>
-		</developer>
-		<developer>
-			<name>Júlio Vilmar Gesser</name>
-			<email>jgesser@gmail.com</email>
-		</developer>
-		<developer>
-			<name>Sebastian Kirsch</name>
-			<email>sebastian.kirsch@immobilienscout24.de</email>
-			<url>https://github.com/sebastiankirsch</url>
-			<id>sebastiankirsch</id>
-		</developer>
-		<developer>
-			<name>André Rouél</name>
-			<url>https://github.com/before</url>
-			<id>before</id>
-		</developer>
-		<developer>
-			<name>Nicholas Smith</name>
-			<email>smiddypence@gmail.com</email>
-			<url>https://github.com/SmiddyPence</url>
-			<id>SmiddyPence</id>
-		</developer>
-		<developer>
-			<name>Federico Tomassetti</name>
-			<email>federico@tomassetti.me</email>
-			<url>https://github.com/ftomassetti</url>
-			<id>ftomassetti</id>
-		</developer>
-		<developer>
-			<name>Didier Villevalois</name>
-			<email>ptitjes@free.fr</email>
-			<url>https://github.com/ptitjes</url>
-			<id>ptitjes</id>
-		</developer>
-	</developers>
-	<contributors>
-		<contributor>
-			<name>Sebastian Kürten</name>
-			<email>sebastian@topobyte.de</email>
-			<url>https://github.com/sebkur</url>
-		</contributor>
-		<contributor>
-			<name>Junfei Liang</name>
-			<email>fly2best@gmail.com</email>
-			<url>https://github.com/fly2best</url>
-		</contributor>
-		<contributor>
-			<name>Jarkko Miettinen</name>
-			<url>https://github.com/jmiettinen</url>
-		</contributor>
-		<contributor>
-			<name>Alexey Morozov</name>
-			<email>morozov@altlinux.org</email>
-			<url>https://github.com/amorozov</url>
-		</contributor>
-		<contributor>
-			<name>Donny Nadolny</name>
-			<email>donny.nadolny@gmail.com</email>
-			<url>https://github.com/dnadolny</url>
-		</contributor>
-		<contributor>
-			<name>Raquel Pau</name>
-			<email>raquelpau@gmail.com</email>
-			<url>https://github.com/rpau</url>
-		</contributor>
-		<contributor>
-			<name>Chao Shi</name>
-			<email>stepinto@live.com</email>
-			<url>https://github.com/stepinto</url>
-		</contributor>
-		<contributor>
-			<name>Michael Schieder</name>
-			<email>michael.schieder@gmail.com</email>
-			<url>https://github.com/mschieder</url>
-		</contributor>
-		<contributor>
-			<name>CRUZ Maximilien</name>
-			<email>maximilien.cruz@gmail.com</email>
-			<url>https://github.com/DeepSnowNeeL</url>
-		</contributor>
-	</contributors>
+    <developers>
+        <developer>
+            <name>Danny van Bruggen</name>
+            <email>hexagonaal@gmail.com</email>
+            <url>https://github.com/matozoid</url>
+            <id>matozoid</id>
+        </developer>
+        <developer>
+            <name>Júlio Vilmar Gesser</name>
+            <email>jgesser@gmail.com</email>
+        </developer>
+        <developer>
+            <name>Sebastian Kirsch</name>
+            <email>sebastian.kirsch@immobilienscout24.de</email>
+            <url>https://github.com/sebastiankirsch</url>
+            <id>sebastiankirsch</id>
+        </developer>
+        <developer>
+            <name>André Rouél</name>
+            <url>https://github.com/before</url>
+            <id>before</id>
+        </developer>
+        <developer>
+            <name>Nicholas Smith</name>
+            <email>smiddypence@gmail.com</email>
+            <url>https://github.com/SmiddyPence</url>
+            <id>SmiddyPence</id>
+        </developer>
+        <developer>
+            <name>Federico Tomassetti</name>
+            <email>federico@tomassetti.me</email>
+            <url>https://github.com/ftomassetti</url>
+            <id>ftomassetti</id>
+        </developer>
+        <developer>
+            <name>Didier Villevalois</name>
+            <email>ptitjes@free.fr</email>
+            <url>https://github.com/ptitjes</url>
+            <id>ptitjes</id>
+        </developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Sebastian Kürten</name>
+            <email>sebastian@topobyte.de</email>
+            <url>https://github.com/sebkur</url>
+        </contributor>
+        <contributor>
+            <name>Junfei Liang</name>
+            <email>fly2best@gmail.com</email>
+            <url>https://github.com/fly2best</url>
+        </contributor>
+        <contributor>
+            <name>Jarkko Miettinen</name>
+            <url>https://github.com/jmiettinen</url>
+        </contributor>
+        <contributor>
+            <name>Alexey Morozov</name>
+            <email>morozov@altlinux.org</email>
+            <url>https://github.com/amorozov</url>
+        </contributor>
+        <contributor>
+            <name>Donny Nadolny</name>
+            <email>donny.nadolny@gmail.com</email>
+            <url>https://github.com/dnadolny</url>
+        </contributor>
+        <contributor>
+            <name>Raquel Pau</name>
+            <email>raquelpau@gmail.com</email>
+            <url>https://github.com/rpau</url>
+        </contributor>
+        <contributor>
+            <name>Chao Shi</name>
+            <email>stepinto@live.com</email>
+            <url>https://github.com/stepinto</url>
+        </contributor>
+        <contributor>
+            <name>Michael Schieder</name>
+            <email>michael.schieder@gmail.com</email>
+            <url>https://github.com/mschieder</url>
+        </contributor>
+        <contributor>
+            <name>CRUZ Maximilien</name>
+            <email>maximilien.cruz@gmail.com</email>
+            <url>https://github.com/DeepSnowNeeL</url>
+        </contributor>
+    </contributors>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
 
-		<!-- Maven Plugins -->
-		<javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
-		<maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
-		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <!-- Maven Plugins -->
+        <javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <maven-jacoco-plugin.version>0.7.7.201606060606</maven-jacoco-plugin.version>
         <maven-coveralls-plugin.version>4.2.0</maven-coveralls-plugin.version>
         <bnd-maven-plugin.version>3.2.0</bnd-maven-plugin.version>
-	</properties>
+    </properties>
 
-	<scm>
-		<connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
-		<developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
-		<url>https://github.com/javaparser/javaparser.git</url>
-		<tag>HEAD</tag>
-	</scm>
+    <scm>
+        <connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
+        <developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
+        <url>https://github.com/javaparser/javaparser.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
-	<issueManagement>
-		<system>GitHub Issue Tracker</system>
-		<url>https://github.com/javaparser/javaparser/issues</url>
-	</issueManagement>
+    <issueManagement>
+        <system>GitHub Issue Tracker</system>
+        <url>https://github.com/javaparser/javaparser/issues</url>
+    </issueManagement>
 
-	<distributionManagement>
-		<repository>
-			<id>bintray-javaparser-JavaParser</id>
-			<name>javaparser-JavaParser</name>
-			<url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/</url>
-		</repository>
-	</distributionManagement>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>javacc-maven-plugin</artifactId>
-					<version>${javacc-maven-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>${maven-clean-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${maven-compiler-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>${maven-install-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>${maven-release-plugin.version}</version>
-				</plugin>
+    <distributionManagement>
+        <repository>
+            <id>bintray-javaparser-JavaParser</id>
+            <name>javaparser-JavaParser</name>
+            <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javacc-maven-plugin</artifactId>
+                    <version>${javacc-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.eluder.coveralls</groupId>
                     <artifactId>coveralls-maven-plugin</artifactId>
@@ -202,18 +203,18 @@
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${maven-jacoco-plugin.version}</version>
                 </plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-	<profiles>
-		<profile>
-			<id>doclint-java8-disable</id>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-			<properties>
-				<additionalparam>-Xdoclint:none</additionalparam>
-			</properties>
-		</profile>
-	</profiles>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <profiles>
+        <profile>
+            <id>doclint-java8-disable</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
+    </profiles>
 </project>

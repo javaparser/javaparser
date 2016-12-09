@@ -22,67 +22,66 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observing.ObservableProperty;
-import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Pair;
 
 import java.util.Optional;
 
-import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarator extends Node implements
-        NodeWithType<VariableDeclarator, Type<?>> {
+        NodeWithType<VariableDeclarator, Type<?>>,
+        NodeWithSimpleName<VariableDeclarator> {
 
-    private VariableDeclaratorId id;
+    private SimpleName name;
 
-    private Expression init;
+    private Expression initializer;
+
+    private Type<?> type;
 
     public VariableDeclarator() {
-        this(Range.UNKNOWN, new VariableDeclaratorId(), null);
+        this(null, new SimpleName(), null);
     }
 
-    public VariableDeclarator(VariableDeclaratorId id) {
-        this(Range.UNKNOWN, id, null);
+    public VariableDeclarator(Type<?> type, SimpleName name) {
+        this(null, type, name, null);
     }
 
-    public VariableDeclarator(String variableName) {
-        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), null);
+    public VariableDeclarator(Type<?> type, String variableName) {
+        this(null, type, new SimpleName(variableName), null);
     }
 
     /**
      * Defines the declaration of a variable.
-     * 
-     * @param id The identifier for this variable. IE. The variables name.
-     * @param init What this variable should be initialized to.
-     *            An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
-     *            already added.
+     *
+     * @param name The identifier for this variable. IE. The variables name.
+     * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
+     * is unnecessary as the <code>=</code> operator is already added.
      */
-    public VariableDeclarator(VariableDeclaratorId id, Expression init) {
-        this(Range.UNKNOWN, id, init);
+    public VariableDeclarator(Type<?> type, SimpleName name, Expression initializer) {
+        this(null, type, name, initializer);
     }
 
-    public VariableDeclarator(String variableName, Expression init) {
-        this(Range.UNKNOWN, new VariableDeclaratorId(variableName), init);
+    public VariableDeclarator(Type<?> type, String variableName, Expression initializer) {
+        this(null, type, new SimpleName(variableName), initializer);
     }
 
-    public VariableDeclarator(Range range, VariableDeclaratorId id, Expression init) {
+    public VariableDeclarator(Range range, Type<?> type, SimpleName name, Expression initializer) {
         super(range);
-        setId(id);
-        setInit(init);
+        setName(name);
+        setInitializer(initializer);
+        setType(type);
     }
 
     @Override
@@ -95,68 +94,56 @@ public final class VariableDeclarator extends Node implements
         v.visit(this, arg);
     }
 
-    public VariableDeclaratorId getId() {
-        return id;
+    public Optional<Expression> getInitializer() {
+        return Optional.ofNullable(initializer);
     }
-
-    public Optional<Expression> getInit() {
-        return Optional.ofNullable(init);
-    }
-
-    public VariableDeclarator setId(VariableDeclaratorId id) {
-        notifyPropertyChange(ObservableProperty.ID, this.id, id);
-        this.id = assertNotNull(id);
-        setAsParentNodeOf(this.id);
-        return this;
-    }
-
-    /**
-     * Sets the init expression
-     * 
-     * @param init the init expression, can be null
-     * @return this, the VariableDeclarator
-     */
-    public VariableDeclarator setInit(Expression init) {
-        notifyPropertyChange(ObservableProperty.INIT, this.init, init);
-        this.init = init;
-        setAsParentNodeOf(this.init);
-        return this;
-    }
-
-    /**
-     * Will create a {@link NameExpr} with the init param
-     * 
-     * @param init the init expression, can be null
-     * @return this, the VariableDeclarator
-     */
-    public VariableDeclarator setInit(String init) {
-        NameExpr newInit = new NameExpr(assertNotNull(init));
-        notifyPropertyChange(ObservableProperty.INIT, this.init, newInit);
-        this.init = newInit;
-        setAsParentNodeOf(this.init);
-        return this;
-    }
-
 
     @Override
-    public Type getType() {
-        NodeWithElementType<?> elementType = getAncestorOfType(NodeWithElementType.class);
+    public SimpleName getName() {
+        return name;
+    }
 
-        return wrapInArrayTypes(elementType.getElementType(),
-                elementType.getArrayBracketPairsAfterElementType(),
-                getId().getArrayBracketPairsAfterId());
+    @Override
+    public VariableDeclarator setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
+        return this;
+    }
+
+    /**
+     * Sets the initializer expression
+     *
+     * @param initializer the initializer expression, can be null
+     * @return this, the VariableDeclarator
+     */
+    public VariableDeclarator setInitializer(Expression initializer) {
+        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
+        this.initializer = initializer;
+        setAsParentNodeOf(this.initializer);
+        return this;
+    }
+
+    /**
+     * Will create a {@link NameExpr} with the initializer param
+     *
+     * @param init the initializer expression, can be null
+     * @return this, the VariableDeclarator
+     */
+    public VariableDeclarator setInitializer(String init) {
+        return setInitializer(new NameExpr(assertNotNull(init)));
+    }
+
+    @Override
+    public Type<?> getType() {
+        return type;
     }
 
     @Override
     public VariableDeclarator setType(Type<?> type) {
-        Pair<Type<?>, NodeList<ArrayBracketPair>> unwrapped = ArrayType.unwrapArrayTypes(type);
-        NodeWithElementType<?> nodeWithElementType = getAncestorOfType(NodeWithElementType.class);
-        if (nodeWithElementType == null) {
-            throw new IllegalStateException("Cannot set type without a parent");
-        }
-        nodeWithElementType.setElementType(unwrapped.a);
-        nodeWithElementType.setArrayBracketPairsAfterElementType(new NodeList<>());
-        getId().setArrayBracketPairsAfterId(unwrapped.b);
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        this.type = type;
+        setAsParentNodeOf(this.type);
         return this;
     }
 }

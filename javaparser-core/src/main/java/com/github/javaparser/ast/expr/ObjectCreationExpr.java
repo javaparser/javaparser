@@ -21,10 +21,6 @@
 
 package com.github.javaparser.ast.expr;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Optional;
-
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -37,11 +33,15 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * Defines constructor call expression.
  * Example:
  * <code>
- *     new Object()
+ * new Object()
  * </code>
  *
  * @author Julio Vilmar Gesser
@@ -57,12 +57,12 @@ public final class ObjectCreationExpr extends Expression implements
 
     private NodeList<Type<?>> typeArguments;
 
-    private NodeList<Expression> args;
+    private NodeList<Expression> arguments;
 
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
-        this(Range.UNKNOWN,
+        this(null,
                 null,
                 new ClassOrInterfaceType(),
                 new NodeList<>(),
@@ -72,30 +72,30 @@ public final class ObjectCreationExpr extends Expression implements
 
     /**
      * Defines a call to a constructor.
-     * 
+     *
      * @param scope may be null
      * @param type this is the class that the constructor is being called for.
-     * @param args Any arguments to pass to the constructor
+     * @param arguments Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type,
-                              final NodeList<Expression> args) {
-        this(Range.UNKNOWN,
+                              final NodeList<Expression> arguments) {
+        this(null,
                 scope,
                 type,
                 new NodeList<>(),
-                args,
+                arguments,
                 null);
     }
 
     public ObjectCreationExpr(final Range range,
                               final Expression scope, final ClassOrInterfaceType type,
                               final NodeList<Type<?>> typeArguments,
-                              final NodeList<Expression> args, final NodeList<BodyDeclaration<?>> anonymousBody) {
+                              final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousBody) {
         super(range);
         setScope(scope);
         setType(type);
         setTypeArguments(typeArguments);
-        setArgs(args);
+        setArguments(arguments);
         setAnonymousClassBody(anonymousBody);
     }
 
@@ -120,8 +120,8 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public NodeList<Expression> getArgs() {
-        return args;
+    public NodeList<Expression> getArguments() {
+        return arguments;
     }
 
     public Optional<Expression> getScope() {
@@ -137,7 +137,7 @@ public final class ObjectCreationExpr extends Expression implements
      * Sets the anonymousClassBody<br>
      * Null means no class body<br>
      * Empty NodeList means new ClassName(){ }
-     * 
+     *
      * @param anonymousClassBody the anonymousClassBody, can be null or empty
      * @return this, the ObjectCreationExpr
      */
@@ -149,16 +149,16 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public ObjectCreationExpr setArgs(final NodeList<Expression> args) {
-        notifyPropertyChange(ObservableProperty.ARGS, this.args, args);
-        this.args = assertNotNull(args);
-        setAsParentNodeOf(this.args);
+    public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
+        notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        this.arguments = assertNotNull(arguments);
+        setAsParentNodeOf(this.arguments);
         return this;
     }
 
     /**
      * Sets the scope
-     * 
+     *
      * @param scope the scope, can be null
      * @return this, the ObjectCreationExpr
      */
@@ -185,7 +185,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     /**
      * Sets the typeArguments
-     * 
+     *
      * @param typeArguments the typeArguments, can be null
      * @return this, the ObjectCreationExpr
      */
