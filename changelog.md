@@ -1,3 +1,11 @@
+Version 3.0.0-RC.2
+------------------
+* 593 EmptyImportDeclaration and NonEmptyImportDeclaration have been removed
+* 612 VariableDeclaratorId has been removed. It has been substituted by "SimpleName name"
+* 614 617 the list of tokens has been linearized and simplified
+* 615 support for arrays has once more been changed. See [the issue](https://github.com/javaparser/javaparser/issues/592) 
+* 580 453 380 618 580 611 610 424 608 smaller improvements and fixes
+
 Version 3.0.0-RC.1
 ------------------
 * 499 601 renames many fields to be more consistent
