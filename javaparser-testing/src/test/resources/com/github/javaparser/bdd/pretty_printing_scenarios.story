@@ -191,8 +191,6 @@ When the class is parsed by the Java parser
 Then it is printed as:
 package a.b.c;
 
-;
-
 Scenario: we can parse blocks
 Given the block:
 {
@@ -242,13 +240,6 @@ import a.b.c.Abc;
 When the import is parsed by the Java parser
 Then it is printed as:
 import a.b.c.Abc;
-
-Scenario: we can parse empty imports
-Given the import:
-;
-When the import is parsed by the Java parser
-Then it is printed as:
-;
 
 Scenario: we can parse annotations
 Given the annotation:

@@ -823,7 +823,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(EmptyImportDeclaration n, A arg) {
+    public void visit(BadImportDeclaration n, A arg) {
         visitComment(n.getComment(), arg);
 
     }

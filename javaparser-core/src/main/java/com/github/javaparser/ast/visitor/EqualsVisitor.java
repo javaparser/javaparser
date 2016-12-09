@@ -1516,7 +1516,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(EmptyImportDeclaration n1, Visitable arg) {
+    public Boolean visit(BadImportDeclaration n1, Visitable arg) {
         return true;
     }
 

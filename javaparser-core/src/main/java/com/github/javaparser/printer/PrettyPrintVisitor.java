@@ -1368,8 +1368,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(EmptyImportDeclaration n, Void arg) {
-        printer.println(";");
+    public void visit(BadImportDeclaration n, Void arg) {
+        printer.println("???");
     }
 
     @Override

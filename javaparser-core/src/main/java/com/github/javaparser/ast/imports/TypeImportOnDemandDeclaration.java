@@ -15,7 +15,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.2">JLS 7.5.2. Type-Import-on-Demand
  * Declarations</a></p>
  */
-public class TypeImportOnDemandDeclaration extends NonEmptyImportDeclaration implements NodeWithName<TypeImportOnDemandDeclaration> {
+public class TypeImportOnDemandDeclaration extends ImportDeclaration implements NodeWithName<TypeImportOnDemandDeclaration> {
     private Name name;
 
     public TypeImportOnDemandDeclaration() {
