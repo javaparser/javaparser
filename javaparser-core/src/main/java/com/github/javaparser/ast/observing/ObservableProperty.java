@@ -6,10 +6,6 @@ package com.github.javaparser.ast.observing;
 public enum ObservableProperty {
     ANNOTATIONS,
     ANONYMOUS_CLASS_BODY,
-    @Deprecated
-    ARRAY_BRACKET_PAIRS_AFTER_ID,
-    @Deprecated
-    ARRAY_BRACKET_PAIRS_AFTER_TYPE,
     ARGUMENTS,
     BLOCK,
     BODY,
@@ -27,8 +23,6 @@ public enum ObservableProperty {
     DEFAULT_VALUE,
     DIMENSION,
     ELEMENTS,
-    @Deprecated
-    ELEMENT_TYPE,
     ELSE_EXPR,
     ELSE_STMT,
     ENTRIES,
@@ -86,5 +80,6 @@ public enum ObservableProperty {
     VALUES,
     VARIABLE,
     VARIABLES,
+    ELEMENT_TYPE, 
     VAR_ARGS
 }

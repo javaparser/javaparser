@@ -219,7 +219,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
             if (includingParameterName) {
                 sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getElementType().toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         sb.append(")");

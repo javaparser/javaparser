@@ -55,4 +55,16 @@ public abstract class Type<T extends Type> extends Node {
         setAsParentNodeOf(annotations);
         return (T) this;
     }
+
+    /**
+     * Finds the element type, meaning: the type without ArrayTypes around it.
+     * 
+     * In "<code>int[] a[];</code>", the element type is int.
+     */
+    public Type<?> getElementType() {
+        if (this instanceof ArrayType) {
+            return ((ArrayType) this).getComponentType().getElementType();
+        }
+        return this;
+    }
 }

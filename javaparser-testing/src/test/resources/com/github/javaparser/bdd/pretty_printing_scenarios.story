@@ -367,6 +367,7 @@ Given the class:
 public class Foo {
     public void m1(boolean[] boolArray) {}
     public void m1(boolean boolArray[]) {}
+    public void m1(boolean[] boolArray[]) {}
 }
 When the class is parsed by the Java parser
 Then it is printed as:
@@ -375,7 +376,10 @@ public class Foo {
     public void m1(boolean[] boolArray) {
     }
 
-    public void m1(boolean boolArray[]) {
+    public void m1(boolean[] boolArray) {
+    }
+
+    public void m1(boolean[][] boolArray) {
     }
 }
 
@@ -448,7 +452,7 @@ Then it is printed as:
 public class Abc<@C A, @C X extends @C String & @C Serializable> {
 
     @C
-    int @C [] @C [] f;
+    int f @C [] @C [];
 
     @C
     public Abc(@C int p, List<@C ? extends Object> aa) {

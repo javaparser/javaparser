@@ -68,8 +68,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(VariableDeclarator n, A arg);
 
-    R visit(VariableDeclaratorId n, A arg);
-
     R visit(ConstructorDeclaration n, A arg);
 
     R visit(MethodDeclaration n, A arg);
@@ -211,8 +209,6 @@ public interface GenericVisitor<R, A> {
     R visit(MethodReferenceExpr n, A arg);
 
     R visit(TypeExpr n, A arg);
-
-    R visit(ArrayBracketPair arrayBracketPair, A arg);
 
     R visit(NodeList n, A arg);
 

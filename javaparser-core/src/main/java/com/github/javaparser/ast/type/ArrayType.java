@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -9,6 +8,10 @@ import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -22,6 +25,10 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
 
     public ArrayType(Type<?> componentType, NodeList<AnnotationExpr> annotations) {
         this(null, componentType, annotations);
+    }
+
+    public ArrayType(Type<?> type, AnnotationExpr... annotations) {
+        this(type, nodeList(annotations));
     }
 
     public ArrayType(Range range, Type<?> componentType, NodeList<AnnotationExpr> annotations) {
@@ -57,9 +64,9 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      * to the rightmost ArrayBracketPair.
      */
     @SafeVarargs
-    public static Type wrapInArrayTypes(Type type, NodeList<ArrayBracketPair>... arrayBracketPairLists) {
+    public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
-            final NodeList<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
+            final List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
@@ -75,8 +82,8 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      *
      * @return a pair of the element type, and the unwrapped ArrayTypes, if any.
      */
-    public static Pair<Type<?>, NodeList<ArrayBracketPair>> unwrapArrayTypes(Type<?> type) {
-        final NodeList<ArrayBracketPair> arrayBracketPairs = new NodeList<>();
+    public static Pair<Type<?>, List<ArrayBracketPair>> unwrapArrayTypes(Type<?> type) {
+        final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>(0);
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
             arrayBracketPairs.add(new ArrayBracketPair(type.getRange().orElse(null), arrayType.getAnnotations()));
@@ -85,7 +92,35 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         return new Pair<>(type, arrayBracketPairs);
     }
 
-    public static ArrayType arrayOf(Type type, AnnotationExpr... annotations) {
-        return new ArrayType(type, nodeList(annotations));
+    /**
+     * Helper class that stores information about a pair of brackets.
+     */
+    public static class ArrayBracketPair {
+        private Range range;
+        private NodeList<AnnotationExpr> annotations = new NodeList<>();
+
+        public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
+            setRange(range);
+            setAnnotations(annotations);
+        }
+
+        public NodeList<AnnotationExpr> getAnnotations() {
+            return annotations;
+        }
+
+        public ArrayBracketPair setAnnotations(NodeList<AnnotationExpr> annotations) {
+            this.annotations = assertNotNull(annotations);
+            return this;
+        }
+
+        public ArrayBracketPair setRange(Range range) {
+            this.range = range;
+            return this;
+        }
+
+        public Optional<Range> getRange() {
+            return Optional.ofNullable(range);
+        }
     }
+
 }

@@ -22,7 +22,8 @@
 package com.github.javaparser.bdd.steps;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -58,7 +59,7 @@ public class VisitorSteps {
     public void givenAVoidVisitorAdapterWithAVisitMethodThatChangesVariableNamesToUppercase() {
         toUpperCaseVariableNameVisitor = new VoidVisitorAdapter<AtomicReference<String>>() {
             @Override
-            public void visit(VariableDeclaratorId n, AtomicReference<String> arg) {
+            public void visit(VariableDeclarator n, AtomicReference<String> arg) {
                 n.setName(n.getNameAsString().toUpperCase());
             }
         };
@@ -68,7 +69,12 @@ public class VisitorSteps {
     public void givenAVoidVisitorAdapterWithAVisitMethodThatCollectsTheVariableName() {
         collectVariableNameVisitor = new VoidVisitorAdapter<AtomicReference<String>>() {
             @Override
-            public void visit(VariableDeclaratorId n, AtomicReference<String> arg) {
+            public void visit(VariableDeclarator n, AtomicReference<String> arg) {
+                arg.set(arg.get() + n.getName() + ";");
+            }
+
+            @Override
+            public void visit(Parameter n, AtomicReference<String> arg) {
                 arg.set(arg.get() + n.getName() + ";");
             }
         };
@@ -78,7 +84,7 @@ public class VisitorSteps {
     public void givenAGenericVisitorAdapterWithAVisitMethodThatReturnsVariableNames() {
         nameReturningVisitor = new GenericVisitorAdapter<String, Void>() {
             @Override
-            public String visit(VariableDeclaratorId n, Void arg) {
+            public String visit(VariableDeclarator n, Void arg) {
                 return n.getNameAsString();
             }
         };

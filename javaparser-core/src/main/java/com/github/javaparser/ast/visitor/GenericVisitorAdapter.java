@@ -711,12 +711,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        {
-            R result = n.getElementType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
         for (final VariableDeclarator var : n.getVariables()) {
             {
                 R result = var.accept(this, arg);
@@ -957,7 +951,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getElementType().accept(this, arg);
+            R result = n.getType().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1111,13 +1105,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         {
-            R result = n.getElementType().accept(this, arg);
+            R result = n.getType().accept(this, arg);
             if (result != null) {
                 return result;
             }
         }
         {
-            R result = n.getIdentifier().accept(this, arg);
+            R result = n.getName().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1473,12 +1467,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
             }
         }
-        {
-            R result = n.getElementType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
         for (final VariableDeclarator v : n.getVariables()) {
             {
                 R result = v.accept(this, arg);
@@ -1494,7 +1482,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final VariableDeclarator n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getIdentifier().accept(this, arg);
+            R result = n.getName().accept(this, arg);
+            if (result != null) {
+                return result;
+            }
+        }
+        {
+            R result = n.getType().accept(this, arg);
             if (result != null) {
                 return result;
             }
@@ -1507,12 +1501,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        return null;
-    }
-
-    @Override
-    public R visit(final VariableDeclaratorId n, final A arg) {
-        visitComment(n, arg);
         return null;
     }
 
@@ -1627,20 +1615,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         return null;
     }
-
-    @Override
-    public R visit(ArrayBracketPair n, A arg) {
-        for (final AnnotationExpr a : n.getAnnotations()) {
-            {
-                R result = a.accept(this, arg);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-        return null;
-    }
-
+    
     @Override
     public R visit(BadImportDeclaration n, A arg) {
         visitComment(n, arg);

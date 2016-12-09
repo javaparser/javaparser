@@ -498,12 +498,6 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(ArrayBracketPair n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
         public void visit(NodeList n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
@@ -565,12 +559,6 @@ class ExistenceOfParentNodeVerifier {
 
         @Override
         public void visit(VariableDeclarator n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(VariableDeclaratorId n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }

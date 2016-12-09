@@ -1,6 +1,6 @@
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.body.VariableDeclaratorId;
+import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -18,7 +18,7 @@ public class DataKeyTest {
 
     @Test
     public void addAFewKeysAndSeeIfTheyAreStoredCorrectly() {
-        Node node = new VariableDeclaratorId();
+        Node node = new SimpleName();
 
         node.setData(ABC, "Hurray!");
         node.setData(LISTY, Arrays.asList("a", "b"));

@@ -68,11 +68,10 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         getMembers().add(fieldDeclaration);
-        VariableDeclarator variable = new VariableDeclarator(new VariableDeclaratorId(name));
+        VariableDeclarator variable = new VariableDeclarator(type, name);
         fieldDeclaration.getVariables().add(variable);
         fieldDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        variable.setType(type);
         return fieldDeclaration;
     }
 
@@ -169,7 +168,7 @@ public interface NodeWithMembers<N extends Node> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
-    default ConstructorDeclaration addCtor(Modifier... modifiers) {
+    default ConstructorDeclaration addConstructor(Modifier... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
         constructorDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
@@ -259,7 +258,7 @@ public interface NodeWithMembers<N extends Node> {
     default FieldDeclaration getFieldByName(String name) {
         return (FieldDeclaration) getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
-                        .anyMatch(var -> var.getIdentifier().getNameAsString().equals(name)))
+                        .anyMatch(var -> var.getNameAsString().equals(name)))
                 .findFirst().orElse(null);
     }
 

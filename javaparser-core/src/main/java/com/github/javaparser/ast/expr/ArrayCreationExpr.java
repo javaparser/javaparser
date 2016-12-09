@@ -37,12 +37,13 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>
+ * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
+ * 
+ * "int" is the element type.
+ * All the brackets are stored in the levels field, from left to right.
  *
  * @author Julio Vilmar Gesser
  */
-// NOTE does not implement NodeWithType because setType is problematic
-// NOTE does not implement NodeWithElementType because that implies a list of ArrayBracketPairs
 public final class ArrayCreationExpr extends Expression {
 
     private NodeList<ArrayCreationLevel> levels;
@@ -100,10 +101,6 @@ public final class ArrayCreationExpr extends Expression {
         return Optional.ofNullable(initializer);
     }
 
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
     public Type<?> getElementType() {
         return elementType;
     }
@@ -121,10 +118,6 @@ public final class ArrayCreationExpr extends Expression {
         return this;
     }
 
-    /**
-     * @deprecated will be removed in 3.0
-     */
-    @Deprecated
     public ArrayCreationExpr setElementType(Type<?> elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
@@ -146,7 +139,7 @@ public final class ArrayCreationExpr extends Expression {
     /**
      * Takes the element type and wraps it in an ArrayType for every array creation level.
      */
-    public Type<?> getType() {
+    public Type<?> createdType() {
         Type<?> result = elementType;
         for (int i = 0; i < levels.size(); i++) {
             result = new ArrayType(result, new NodeList<>());

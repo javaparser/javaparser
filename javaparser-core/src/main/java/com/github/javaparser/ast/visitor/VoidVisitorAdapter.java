@@ -357,7 +357,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final FieldDeclaration n, final A arg) {
         visitComment(n.getComment(), arg);
         visitAnnotations(n, arg);
-        n.getElementType().accept(this, arg);
         for (final VariableDeclarator var : n.getVariables()) {
             var.accept(this, arg);
         }
@@ -477,7 +476,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
                 t.accept(this, arg);
             }
         }
-        n.getElementType().accept(this, arg);
+        n.getType().accept(this, arg);
         n.getName().accept(this, arg);
         if (n.getParameters() != null) {
             for (final Parameter p : n.getParameters()) {
@@ -550,8 +549,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final Parameter n, final A arg) {
         visitComment(n.getComment(), arg);
         visitAnnotations(n, arg);
-        n.getElementType().accept(this, arg);
-        n.getIdentifier().accept(this, arg);
+        n.getType().accept(this, arg);
+        n.getName().accept(this, arg);
     }
 
     @Override
@@ -730,7 +729,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final VariableDeclarationExpr n, final A arg) {
         visitComment(n.getComment(), arg);
         visitAnnotations(n, arg);
-        n.getElementType().accept(this, arg);
         for (final VariableDeclarator v : n.getVariables()) {
             v.accept(this, arg);
         }
@@ -739,15 +737,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final VariableDeclarator n, final A arg) {
         visitComment(n.getComment(), arg);
-        n.getIdentifier().accept(this, arg);
+        n.getName().accept(this, arg);
+        n.getType().accept(this, arg);
         if (n.getInitializer().isPresent()) {
             n.getInitializer().get().accept(this, arg);
         }
-    }
-
-    @Override
-    public void visit(final VariableDeclaratorId n, final A arg) {
-        visitComment(n.getComment(), arg);
     }
 
     @Override
@@ -808,11 +802,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         if (n.getType() != null) {
             n.getType().accept(this, arg);
         }
-    }
-
-    @Override
-    public void visit(ArrayBracketPair n, A arg) {
-        visitAnnotations(n, arg);
     }
 
     @Override

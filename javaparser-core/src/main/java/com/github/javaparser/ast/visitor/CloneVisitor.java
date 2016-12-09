@@ -181,19 +181,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(FieldDeclaration _n, Object _arg) {
         NodeList<AnnotationExpr> annotations_ = cloneList(_n.getAnnotations(), _arg);
-        Type<?> elementType_ = cloneNode(_n.getElementType(), _arg);
         NodeList<VariableDeclarator> variables_ = cloneList(_n.getVariables(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
-        NodeList<ArrayBracketPair> arrayBracketPairsAfterType_ = cloneList(_n.getArrayBracketPairsAfterElementType(), _arg);
 
         FieldDeclaration r = new FieldDeclaration(
                 _n.getRange().orElse(null),
                 _n.getModifiers(),
                 annotations_,
-                elementType_,
-                variables_,
-                arrayBracketPairsAfterType_
-
+                variables_
         );
         r.setComment(comment);
         return r;
@@ -201,27 +196,16 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(VariableDeclarator _n, Object _arg) {
-        VariableDeclaratorId id = cloneNode(_n.getIdentifier(), _arg);
+        SimpleName id = cloneNode(_n.getName(), _arg);
         Expression init = cloneNode(_n.getInitializer(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
+        Type<?> type = cloneNode(_n.getType(), _arg);
 
         VariableDeclarator r = new VariableDeclarator(
                 _n.getRange().orElse(null),
-                id, init
-        );
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(VariableDeclaratorId _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        NodeList<ArrayBracketPair> arrayBracketPairsAfterId_ = cloneList(_n.getArrayBracketPairsAfterId(), _arg);
-
-        VariableDeclaratorId r = new VariableDeclaratorId(
-                _n.getRange().orElse(null),
-                _n.getName(),
-                arrayBracketPairsAfterId_
+                type,
+                id, 
+                init
         );
         r.setComment(comment);
         return r;
@@ -249,14 +233,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(MethodDeclaration _n, Object _arg) {
         NodeList<AnnotationExpr> annotations_ = cloneList(_n.getAnnotations(), _arg);
         NodeList<TypeParameter> typeParameters_ = cloneList(_n.getTypeParameters(), _arg);
-        Type<?> type_ = cloneNode(_n.getElementType(), _arg);
+        Type<?> type_ = cloneNode(_n.getType(), _arg);
         SimpleName nameExpr_ = cloneNode(_n.getName(), _arg);
         NodeList<Parameter> parameters_ = cloneList(_n.getParameters(), _arg);
         NodeList<ReferenceType<?>> throws_ = cloneList(_n.getThrownExceptions(), _arg);
         BlockStmt block_ = cloneNode(_n.getBody(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
-        NodeList<ArrayBracketPair> arrayBracketPairsAfterElementType_ = cloneList(_n.getArrayBracketPairsAfterElementType(), _arg);
-        NodeList<ArrayBracketPair> arrayBracketPairsAfterParameterList_ = cloneList(_n.getArrayBracketPairsAfterParameterList(), _arg);
 
         MethodDeclaration r = new MethodDeclaration(
                 _n.getRange().orElse(null),
@@ -264,11 +246,9 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
                 annotations_,
                 typeParameters_,
                 type_,
-                arrayBracketPairsAfterElementType_,
                 nameExpr_,
                 _n.isDefault(),
                 parameters_,
-                arrayBracketPairsAfterParameterList_,
                 throws_,
                 block_
         );
@@ -279,17 +259,15 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(Parameter _n, Object _arg) {
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Type<?> type_ = cloneNode(_n.getElementType(), _arg);
-        VariableDeclaratorId id = cloneNode(_n.getIdentifier(), _arg);
+        Type<?> type_ = cloneNode(_n.getType(), _arg);
+        SimpleName id = cloneNode(_n.getName(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
-        NodeList<ArrayBracketPair> arrayBracketPairsAfterType_ = cloneList(_n.getArrayBracketPairsAfterElementType(), _arg);
 
         Parameter r = new Parameter(
                 _n.getRange().orElse(null),
                 _n.getModifiers(),
                 annotations,
                 type_,
-                arrayBracketPairsAfterType_,
                 _n.isVarArgs(),
                 id
         );
@@ -787,18 +765,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(VariableDeclarationExpr _n, Object _arg) {
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Type<?> type_ = cloneNode(_n.getElementType(), _arg);
         NodeList<VariableDeclarator> variables_ = cloneList(_n.getVariables(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
-        NodeList<ArrayBracketPair> arrayBracketPairsAfterType_ = cloneList(_n.getArrayBracketPairsAfterElementType(), _arg);
 
         VariableDeclarationExpr r = new VariableDeclarationExpr(
                 _n.getRange().orElse(null),
                 _n.getModifiers(),
                 annotations,
-                type_,
-                variables_,
-                arrayBracketPairsAfterType_
+                variables_
         );
         r.setComment(comment);
         return r;
@@ -1170,13 +1144,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Type<?> t = cloneNode(n.getType(), arg);
 
         return new TypeExpr(n.getRange().orElse(null), t);
-    }
-
-    @Override
-    public Visitable visit(ArrayBracketPair _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-
-        return new ArrayBracketPair(_n.getRange().orElse(null), annotations);
     }
 
     @Override

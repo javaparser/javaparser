@@ -68,8 +68,6 @@ public interface VoidVisitor<A> {
 
     void visit(VariableDeclarator n, A arg);
 
-    void visit(VariableDeclaratorId n, A arg);
-
     void visit(ConstructorDeclaration n, A arg);
 
     void visit(MethodDeclaration n, A arg);
@@ -211,8 +209,6 @@ public interface VoidVisitor<A> {
     void visit(MethodReferenceExpr n, A arg);
 
     void visit(TypeExpr n, A arg);
-
-    void visit(ArrayBracketPair arrayBracketPair, A arg);
 
     void visit(NodeList n, A arg);
 

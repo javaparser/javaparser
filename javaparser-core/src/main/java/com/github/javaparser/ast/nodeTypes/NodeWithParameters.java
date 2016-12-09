@@ -3,7 +3,6 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
@@ -17,7 +16,7 @@ public interface NodeWithParameters<N extends Node> {
     N setParameters(NodeList<Parameter> parameters);
 
     default N addParameter(Type type, String name) {
-        return addParameter(new Parameter(type, new VariableDeclaratorId(name)));
+        return addParameter(new Parameter(type, name));
     }
 
     default N addParameter(Class<?> paramClass, String name) {
@@ -42,7 +41,7 @@ public interface NodeWithParameters<N extends Node> {
     }
 
     default Parameter addAndGetParameter(Type type, String name) {
-        return addAndGetParameter(new Parameter(type, new VariableDeclaratorId(name)));
+        return addAndGetParameter(new Parameter(type, name));
     }
 
     default Parameter addAndGetParameter(Class<?> paramClass, String name) {

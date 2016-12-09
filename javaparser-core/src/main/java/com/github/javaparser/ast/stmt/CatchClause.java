@@ -26,8 +26,8 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclaratorId;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -56,16 +56,15 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     public CatchClause(final EnumSet<Modifier> exceptModifier,
                        final NodeList<AnnotationExpr> exceptAnnotations,
                        final ClassOrInterfaceType exceptType,
-                       final VariableDeclaratorId exceptId,
+                       final SimpleName exceptName,
                        final BlockStmt catchBlock) {
         this(null,
                 new Parameter(null,
                         exceptModifier,
                         exceptAnnotations,
                         exceptType,
-                        new NodeList<>(),
                         false,
-                        exceptId),
+                        exceptName),
                 catchBlock);
     }
 

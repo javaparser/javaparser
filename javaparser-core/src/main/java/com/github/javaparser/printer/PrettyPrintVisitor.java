@@ -407,9 +407,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
-        n.getElementType().accept(this, arg);
-        for (ArrayBracketPair pair : n.getArrayBracketPairsAfterElementType()) {
-            pair.accept(this, arg);
+        if(!n.getVariables().isEmpty()) {
+            n.getVariables().get(0).getType().getElementType().accept(this, arg);
         }
 
         printer.print(" ");
@@ -427,19 +426,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final VariableDeclarator n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getIdentifier().accept(this, arg);
+        n.getName().accept(this, arg);
+
+
+        final List<ArrayType> arrayTypeBuffer = new LinkedList<>();
+        Type type = n.getType();
+        while (type instanceof ArrayType) {
+            final ArrayType arrayType = (ArrayType) type;
+            arrayTypeBuffer.add(arrayType);
+            type = arrayType.getComponentType();
+        }
+
+        for (ArrayType arrayType : arrayTypeBuffer) {
+            printAnnotations(arrayType.getAnnotations(), true, arg);
+            printer.print("[]");
+        }
+
         if (n.getInitializer().isPresent()) {
             printer.print(" = ");
             n.getInitializer().get().accept(this, arg);
-        }
-    }
-
-    @Override
-    public void visit(final VariableDeclaratorId n, final Void arg) {
-        printJavaComment(n.getComment(), arg);
-        n.getName().accept(this, arg);
-        for (ArrayBracketPair pair : n.getArrayBracketPairsAfterId()) {
-            pair.accept(this, arg);
         }
     }
 
@@ -737,10 +742,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.print(" ");
         }
 
-        n.getElementType().accept(this, arg);
-        for (ArrayBracketPair pair : n.getArrayBracketPairsAfterElementType()) {
-            pair.accept(this, arg);
-        }
+        n.getType().accept(this, arg);
         printer.print(" ");
         n.getName().accept(this, arg);
 
@@ -755,10 +757,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             }
         }
         printer.print(")");
-
-        for (ArrayBracketPair pair : n.getArrayBracketPairsAfterParameterList()) {
-            pair.accept(this, arg);
-        }
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
@@ -783,17 +781,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printModifiers(n.getModifiers());
-        if (n.getElementType() != null) {
-            n.getElementType().accept(this, arg);
-        }
-        for (ArrayBracketPair pair : n.getArrayBracketPairsAfterElementType()) {
-            pair.accept(this, arg);
+        if (n.getType() != null) {
+            n.getType().accept(this, arg);
         }
         if (n.isVarArgs()) {
             printer.print("...");
         }
         printer.print(" ");
-        n.getIdentifier().accept(this, arg);
+        n.getName().accept(this, arg);
     }
 
     @Override
@@ -820,9 +815,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printAnnotations(n.getAnnotations(), false, arg);
         printModifiers(n.getModifiers());
 
-        n.getElementType().accept(this, arg);
-        for (ArrayBracketPair pair : n.getArrayBracketPairsAfterElementType()) {
-            pair.accept(this, arg);
+        if(!n.getVariables().isEmpty()) {
+            n.getVariables().get(0).getType().getElementType().accept(this, arg);
         }
         printer.print(" ");
 
@@ -1352,12 +1346,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getType() != null) {
             n.getType().accept(this, arg);
         }
-    }
-
-    @Override
-    public void visit(ArrayBracketPair arrayBracketPair, Void arg) {
-        printAnnotations(arrayBracketPair.getAnnotations(), true, arg);
-        printer.print("[]");
     }
 
     @Override

@@ -267,7 +267,7 @@ public class ManipulationSteps {
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameter(parameterPosition - 1);
         assertThat(parameter.getType(), is(INT_TYPE));
-        assertThat(parameter.getIdentifier().getNameAsString(), is(expectedName));
+        assertThat(parameter.getNameAsString(), is(expectedName));
     }
 
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {

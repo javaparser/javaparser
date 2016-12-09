@@ -139,7 +139,7 @@ public class ParsingSteps {
         Statement statement = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         VariableDeclarationExpr expression = (VariableDeclarationExpr) ((ExpressionStmt) statement).getExpression();
         VariableDeclarator variableDeclarator = expression.getVariable(0);
-        assertThat(variableDeclarator.getIdentifier().getNameAsString(), is(expectedName));
+        assertThat(variableDeclarator.getNameAsString(), is(expectedName));
     }
 
     @Then("lambda in statement $statementPosition in method $methodPosition in class $classPosition body is \"$expectedBody\"")
@@ -172,7 +172,7 @@ public class ParsingSteps {
     public void thenLambdaInStatementInMethodInClassHasParametersWithNonNullType(int statementPosition, int methodPosition, int classPosition) {
         LambdaExpr lambdaExpr = getLambdaExprInStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         for (Parameter parameter : lambdaExpr.getParameters()) {
-            assertThat(parameter.getElementType(), is(notNullValue()));
+            assertThat(parameter.getType(), is(notNullValue()));
         }
     }
 

@@ -30,7 +30,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithElementType;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.type.Type;
 
 import java.util.Collections;
 import java.util.List;
@@ -115,8 +116,8 @@ public final class PositionUtils {
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
         if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
-            NodeWithElementType<?> casted = (NodeWithElementType<?>) node;
-            return casted.getElementType();
+            NodeWithType<?, Type<?>> casted = (NodeWithType<?, Type<?>>) node;
+            return casted.getType();
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
             return casted.getName();
