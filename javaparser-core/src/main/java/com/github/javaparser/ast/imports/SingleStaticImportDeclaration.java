@@ -14,7 +14,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-7.html#jls-7.5.3">7.5.3. Single-Static-Import
  * Declarations</a></p>
  */
-public class SingleStaticImportDeclaration extends NonEmptyImportDeclaration {
+public class SingleStaticImportDeclaration extends ImportDeclaration {
     private ClassOrInterfaceType type;
     private String staticMember;
 

@@ -155,7 +155,8 @@ final class ASTParser {
     }
 
     private void addProblem(String message) {
-        problems.add(new Problem(message + ": \"" + token.image, tokenRange(), null));
+        // TODO tokenRange only takes the final token. Need all the tokens.
+        problems.add(new Problem(message, tokenRange(), null));
     }
 
     private Expression generateLambda(Expression ret, Statement lambdaBody) {
@@ -1304,11 +1305,15 @@ CompilationUnit CompilationUnit():
 	TypeDeclaration tn = null;
 }
 {
-  [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-  ( LOOKAHEAD(ImportDeclaration()) in = ImportDeclaration() { imports = add(imports, in); } )*
-  ( tn = TypeDeclaration() { types = add(types, tn); } )*
-  (<EOF> | "\u001A" /** ctrl+z char **/)
-  { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
+    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    ( LOOKAHEAD(ImportDeclaration())
+        in = ImportDeclaration() { imports = add(imports, in); }
+        |
+        ";"
+    )*
+    ( tn = TypeDeclaration() { types = add(types, tn); } )*
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1331,37 +1336,32 @@ ImportDeclaration ImportDeclaration():
     ImportDeclaration ret;
 }
 {
+    "import" {begin = tokenBegin();}
     (
-        "import" {begin = tokenBegin();}
+        "static" type = ClassOrInterfaceType()
         (
-            "static" type = ClassOrInterfaceType()
-            (
-                "." "*" ";"
-                { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
-            |
-                ";"
-                {
-                    if(!type.getScope().isPresent()){
-                        addProblem("import static has only one identifier");
-                        ret = new EmptyImportDeclaration(range(begin, tokenEnd()));
-                    } else {
-                        ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
-                    }
-                }
-            )
+            "." "*" ";"
+            { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
         |
-            ( LOOKAHEAD(Name() "." "*")
-                name = Name() "." "*" ";"
-                { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
-            |
-                type = ClassOrInterfaceType() ";"
-                { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
-            )
+            ";"
+            {
+                if(!type.getScope().isPresent()){
+                    addProblem("import static has only one identifier");
+                    ret = new BadImportDeclaration(range(begin, tokenEnd()));
+                } else {
+                    ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
+                }
+            }
         )
     |
-        ";" {begin = tokenBegin();}
-        { ret = new EmptyImportDeclaration(range(begin, tokenEnd())); }
-    )    
+        ( LOOKAHEAD(Name() "." "*")
+            name = Name() "." "*" ";"
+            { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
+        |
+            type = ClassOrInterfaceType() ";"
+            { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
+        )
+    )
     { return ret; }
 }
 
