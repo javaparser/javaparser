@@ -41,6 +41,10 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.1">JLS</a>
+ * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
+ * Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters are different from arguments.</a> 
+ * "String x" and "float y" are the parameters in <code>int abc(String x, float y) {...}</code>
  * @author Julio Vilmar Gesser
  */
 public final class Parameter extends Node implements

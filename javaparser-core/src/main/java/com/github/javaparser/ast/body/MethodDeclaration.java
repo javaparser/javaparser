@@ -46,6 +46,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4">JLS</a>
+ * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;} }</code>
  * @author Julio Vilmar Gesser
  */
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements

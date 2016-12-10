@@ -307,12 +307,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final EmptyTypeDeclaration n, final A arg) {
-        visitComment(n, arg);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final EnclosedExpr n, final A arg) {
         visitComment(n, arg);
         if (n.getInner().isPresent())

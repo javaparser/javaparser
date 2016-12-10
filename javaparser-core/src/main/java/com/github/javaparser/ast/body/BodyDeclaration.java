@@ -34,6 +34,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Any declaration that can appear between the { and } of a class, interface, or enum.
  * @author Julio Vilmar Gesser
  */
 public abstract class BodyDeclaration<T extends Node> extends Node implements NodeWithAnnotations<T> {

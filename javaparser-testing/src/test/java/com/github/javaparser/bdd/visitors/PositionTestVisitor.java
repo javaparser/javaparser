@@ -249,12 +249,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override
-    public void visit(final EmptyTypeDeclaration n, final Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
     public void visit(final EnclosedExpr n, final Object arg) {
         doTest(n);
         super.visit(n, arg);

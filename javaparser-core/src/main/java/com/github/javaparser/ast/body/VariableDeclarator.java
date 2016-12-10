@@ -38,6 +38,9 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-14.4">JLS</a>
+ * The declaration of a variable. <code>int x = 14;</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarator extends Node implements

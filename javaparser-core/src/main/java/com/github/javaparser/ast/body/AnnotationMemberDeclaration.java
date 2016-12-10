@@ -44,6 +44,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-AnnotationTypeElementDeclaration">JLS</a> 
+ * The "int id();" in <code>@interface X { int id(); }</code>
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements

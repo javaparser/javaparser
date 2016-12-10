@@ -29,8 +29,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * A loose ";" inside a body. <code>class X { ; }</code>
  * @author Julio Vilmar Gesser
+ * @deprecated these ;'s should be ignored
  */
+@Deprecated
 public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDeclaration>
         implements NodeWithJavaDoc<EmptyMemberDeclaration> {
 

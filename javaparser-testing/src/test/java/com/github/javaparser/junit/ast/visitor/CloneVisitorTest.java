@@ -42,9 +42,9 @@ public class CloneVisitorTest {
         annotationDeclaration.setName("nnotationDeclarationTest");
         typeDeclarationList.add(annotationDeclaration.setJavaDocComment("javadoc"));
 
-        EmptyTypeDeclaration emptyTypeDeclaration = new EmptyTypeDeclaration();
-        emptyTypeDeclaration.setName("emptyTypeDeclarationTest");
-        typeDeclarationList.add(emptyTypeDeclaration.setJavaDocComment("javadoc"));
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration2 = new ClassOrInterfaceDeclaration();
+        classOrInterfaceDeclaration2.setName("emptyTypeDeclarationTest");
+        typeDeclarationList.add(classOrInterfaceDeclaration2.setJavaDocComment("javadoc"));
 
         EnumDeclaration enumDeclaration = new EnumDeclaration();
         enumDeclaration.setName("enumDeclarationTest");
@@ -54,9 +54,9 @@ public class CloneVisitorTest {
         classOrInterfaceDeclaration.setName("classOrInterfaceDeclarationTest");
         typeDeclarationList.add(classOrInterfaceDeclaration.setJavaDocComment("javadoc"));
 
-        EmptyTypeDeclaration emptyTypeDeclaration1 = new EmptyTypeDeclaration();
-        emptyTypeDeclaration1.setName("emptyTypeDeclarationTest1");
-        typeDeclarationList.add(emptyTypeDeclaration.setMembers(bodyDeclarationList));
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration1 = new ClassOrInterfaceDeclaration();
+        classOrInterfaceDeclaration1.setName("emptyTypeDeclarationTest1");
+        typeDeclarationList.add(classOrInterfaceDeclaration2.setMembers(bodyDeclarationList));
 
         cu.setTypes(typeDeclarationList);
         CompilationUnit cuClone = (CompilationUnit) new CloneVisitor().visit(cu, null);

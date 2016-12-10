@@ -49,6 +49,8 @@ import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3">JLS</a>
+ * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static int a=15*15; }</code>
  * @author Julio Vilmar Gesser
  */
 public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements

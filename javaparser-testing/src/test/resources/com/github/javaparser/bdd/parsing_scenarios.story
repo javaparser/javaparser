@@ -316,13 +316,24 @@ class A {
 Then all nodes refer to their parent
 
 
-Scenario: Parsing trailing semicolons at the end of the imports area should work
-
+Scenario: Parsing excess semicolons on CompilationUnit level should work
 Given a CompilationUnit
 When the following source is parsed:
-import foo.a;;
+;
+package a;
+;
+import foo.a;
+;
+class A { }
+;
+Then no errors are reported
 
-class A {
+Scenario: Parsing excess semicolons in an AnnotationTypeDeclaration should work
+Given a CompilationUnit
+When the following source is parsed:
+@interface A {
+    ;
+    ;
 }
 Then no errors are reported
 

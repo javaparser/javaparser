@@ -27,7 +27,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * @author Julio Vilmar Gesser
+ * @deprecated these ;'s should be ignored
  */
+@Deprecated
 public final class EmptyStmt extends Statement {
 
     public EmptyStmt() {

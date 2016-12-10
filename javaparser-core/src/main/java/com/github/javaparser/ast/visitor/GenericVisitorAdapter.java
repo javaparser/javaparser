@@ -529,12 +529,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final EmptyTypeDeclaration n, final A arg) {
-        visitComment(n, arg);
-        return null;
-    }
-
-    @Override
     public R visit(final EnclosedExpr n, final A arg) {
         visitComment(n, arg);
         {
