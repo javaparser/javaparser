@@ -42,6 +42,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.1">JLS</a>
+ * A definition of a class or interface. <code>class X { ... }</code>
  * @author Julio Vilmar Gesser
  */
 public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements

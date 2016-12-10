@@ -15,12 +15,10 @@ public class MethodChanger_2 {
 
     public static void main(String[] args) throws Exception {
         // creates an input stream for the file to be parsed
-
-        CompilationUnit cu;
-        try (FileInputStream in = new FileInputStream("test.java")) {
-            // parse the file
-            cu = JavaParser.parse(in);
-        }
+        FileInputStream in = new FileInputStream("test.java");
+        
+        // parse the file
+        CompilationUnit cu = JavaParser.parse(in);
 
         // change the methods names and parameters
         changeMethods(cu);
@@ -30,8 +28,10 @@ public class MethodChanger_2 {
     }
 
     private static void changeMethods(CompilationUnit cu) {
+        // Go through all the types in the file
         NodeList<TypeDeclaration<?>> types = cu.getTypes();
         for (TypeDeclaration<?> type : types) {
+            // Go through all fields, methods, etc. in this type
             NodeList<BodyDeclaration<?>> members = type.getMembers();
             for (BodyDeclaration<?> member : members) {
                 if (member instanceof MethodDeclaration) {

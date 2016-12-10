@@ -260,14 +260,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final EmptyTypeDeclaration n, final Void arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print(";");
-
-        printOrphanCommentsEnding(n);
-    }
-
-    @Override
     public void visit(final JavadocComment n, final Void arg) {
         printer.print("/**");
         printer.print(n.getContent());

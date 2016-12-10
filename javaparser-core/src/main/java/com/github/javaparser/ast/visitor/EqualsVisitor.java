@@ -280,11 +280,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final EmptyTypeDeclaration n1, final Visitable arg) {
-        return true;
-    }
-
-    @Override
     public Boolean visit(final EnumConstantDeclaration n1, final Visitable arg) {
         final EnumConstantDeclaration n2 = (EnumConstantDeclaration) arg;
 

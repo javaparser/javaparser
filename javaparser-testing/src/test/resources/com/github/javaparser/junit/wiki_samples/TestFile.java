@@ -1,9 +1,8 @@
 package com.github.javaparser.junit.wiki_samples;
 
 public class TestFile {
-    public int foo(int e) {
+    public void foo(int e) {
         int a = 20;
-        return a;
     }
 
     public void abc() {

@@ -13,13 +13,8 @@ public class MethodPrinter {
         // creates an input stream for the file to be parsed
         FileInputStream in = new FileInputStream("test.java");
 
-        CompilationUnit cu;
-        try {
-            // parse the file
-            cu = JavaParser.parse(in);
-        } finally {
-            in.close();
-        }
+        // parse it
+        CompilationUnit cu = JavaParser.parse(in);
 
         // visit and print the methods names
         new MethodVisitor().visit(cu, null);
@@ -28,13 +23,12 @@ public class MethodPrinter {
     /**
      * Simple visitor implementation for visiting MethodDeclaration nodes.
      */
-    private static class MethodVisitor extends VoidVisitorAdapter {
-
+    private static class MethodVisitor extends VoidVisitorAdapter<Void> {
         @Override
-        public void visit(MethodDeclaration n, Object arg) {
-            // here you can access the attributes of the method.
-            // this method will be called for all methods in this 
-            // CompilationUnit, including inner class methods
+        public void visit(MethodDeclaration n, Void arg) {
+            /* here you can access the attributes of the method.
+             this method will be called for all methods in this 
+             CompilationUnit, including inner class methods */
             System.out.println(n.getName());
             super.visit(n, arg);
         }

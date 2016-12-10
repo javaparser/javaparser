@@ -24,7 +24,7 @@ public class Problem {
         if (cause != null) {
             str.append(" stack : ").append(System.lineSeparator());
             for (StackTraceElement ste : cause.getStackTrace())
-                str.append(ste.toString());
+                str.append(ste.toString()).append(System.lineSeparator());
         }
         return str.toString();
     }

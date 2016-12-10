@@ -21,7 +21,10 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -55,8 +58,6 @@ public interface VoidVisitor<A> {
     void visit(ClassOrInterfaceDeclaration n, A arg);
 
     void visit(EnumDeclaration n, A arg);
-
-    void visit(EmptyTypeDeclaration n, A arg);
 
     void visit(EnumConstantDeclaration n, A arg);
 

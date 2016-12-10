@@ -1,7 +1,7 @@
 package com.github.javaparser.junit.ast.visitor;
 
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
-import com.github.javaparser.ast.visitor.ModifierVisitorAdapter;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 /**
@@ -17,6 +17,6 @@ class VoidVisitorAdapterTest extends VoidVisitorAdapter<Object> {
     // Has to be empty!
 }
 
-class ModifierVisitorAdapterTest extends ModifierVisitorAdapter<Object> {
+class ModifierVisitorTest extends ModifierVisitor<Object> {
     // Has to be empty!
 }

@@ -206,12 +206,6 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(EmptyTypeDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
         public void visit(EnclosedExpr n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);

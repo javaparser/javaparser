@@ -87,6 +87,13 @@ final class ASTParser {
     	return list;
     }
 
+    private <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
+        if(obj == null) {
+            return list;
+        }
+        return add(list, obj);
+    }
+
     private <T extends Node> NodeList<T> add(int pos, NodeList<T> list, T obj) {
     	if (list == null) {
     		list = new NodeList<T>();
@@ -1311,13 +1318,10 @@ CompilationUnit CompilationUnit():
 	TypeDeclaration tn = null;
 }
 {
+    ( ";" )*
     [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    ( LOOKAHEAD(ImportDeclaration())
-        in = ImportDeclaration() { imports = add(imports, in); }
-        |
-        ";"
-    )*
-    ( tn = TypeDeclaration() { types = add(types, tn); } )*
+    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
+    ( tn = TypeDeclaration() { types = add(types, tn); } | ";")*
     (<EOF> | "\u001A" /** ctrl+z char **/)
     { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types); }
 }
@@ -1428,19 +1432,14 @@ TypeDeclaration TypeDeclaration():
    TypeDeclaration ret;
 }
 {
-  {  }
-  (
-    ";" { ret = new EmptyTypeDeclaration(tokenRange()); }
-  |
     modifier = Modifiers()
     (
-       ret = ClassOrInterfaceDeclaration(modifier)
-     |
-       ret = EnumDeclaration(modifier)
-     |
-       ret = AnnotationTypeDeclaration(modifier)
+        ret = ClassOrInterfaceDeclaration(modifier)
+    |
+        ret = EnumDeclaration(modifier)
+    |
+        ret = AnnotationTypeDeclaration(modifier)
     )
-  )
   { return ret; }
 }
 
@@ -3323,7 +3322,6 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
   "@" { begin=begin.orIfInvalid(tokenBegin()); }
   "interface" name = SimpleName() members = AnnotationTypeBody()
-
   { 
       return new AnnotationDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, name, members);
   }
@@ -3335,8 +3333,7 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 	BodyDeclaration member;
 }
 {
-  "{" ( member = AnnotationBodyDeclaration() { ret = add(ret, member); } )* "}"
-
+  "{" ( member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); } )* "}"
   { return ret; }
 }
 
@@ -3348,7 +3345,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 {
   {  }
   (
-	";" { ret = new EmptyTypeDeclaration(tokenRange()); }
+	";" { ret = null; }
   |
     modifier = Modifiers()
     (

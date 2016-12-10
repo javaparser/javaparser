@@ -56,8 +56,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(EnumDeclaration n, A arg);
 
-    R visit(EmptyTypeDeclaration n, A arg);
-
     R visit(EnumConstantDeclaration n, A arg);
 
     R visit(AnnotationDeclaration n, A arg);

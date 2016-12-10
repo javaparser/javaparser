@@ -22,7 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.body.EmptyTypeDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -38,7 +38,7 @@ public final class TypeDeclarationStmt extends Statement {
     private TypeDeclaration typeDecl;
 
     public TypeDeclarationStmt() {
-        this(null, new EmptyTypeDeclaration());
+        this(null, new ClassOrInterfaceDeclaration());
     }
 
     public TypeDeclarationStmt(final TypeDeclaration typeDecl) {

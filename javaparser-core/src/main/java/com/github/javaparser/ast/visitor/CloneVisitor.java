@@ -120,17 +120,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(EmptyTypeDeclaration _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-
-        EmptyTypeDeclaration r = new EmptyTypeDeclaration(
-                _n.getRange().orElse(null)
-        );
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
     public Visitable visit(EnumConstantDeclaration _n, Object _arg) {
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
         NodeList<Expression> args = cloneList(_n.getArguments(), _arg);
