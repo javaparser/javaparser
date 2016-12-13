@@ -16,11 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
-
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.IfStmt;
@@ -35,6 +30,11 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -81,7 +81,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return symbolReference;
         }
 
-      // we should look in all the statements preceding, treating them as SymbolDeclarators
+        // we should look in all the statements preceding, treating them as SymbolDeclarators
         if (getParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
@@ -151,7 +151,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             throw new RuntimeException();
         }
         for (int i = position - 1; i >= 0; i--) {
-             symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStmts().get(i), typeSolver);
+            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStmts().get(i), typeSolver);
             symbolReference = solveWith(symbolDeclarator, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;

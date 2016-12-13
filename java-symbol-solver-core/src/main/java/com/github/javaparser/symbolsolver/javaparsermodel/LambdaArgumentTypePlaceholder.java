@@ -61,8 +61,8 @@ public class LambdaArgumentTypePlaceholder implements Type {
     }
 
     public void setMethod(SymbolReference<? extends MethodLikeDeclaration> method) {
-      this.method = method;
-  }
+        this.method = method;
+    }
 
     @Override
     public boolean isAssignableBy(Type other) {

@@ -68,6 +68,6 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-      return this.wrapped.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
+        return this.wrapped.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 }

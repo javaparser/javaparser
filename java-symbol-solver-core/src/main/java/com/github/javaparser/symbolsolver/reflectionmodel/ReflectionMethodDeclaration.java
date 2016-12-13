@@ -76,7 +76,8 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     public ReferenceTypeDeclaration declaringType() {
         if (method.getDeclaringClass().isInterface()) {
             return new ReflectionInterfaceDeclaration(method.getDeclaringClass(), typeSolver);
-        } if (method.getDeclaringClass().isEnum()) {
+        }
+        if (method.getDeclaringClass().isEnum()) {
             return new ReflectionEnumDeclaration(method.getDeclaringClass(), typeSolver);
         } else {
             return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);

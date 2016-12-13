@@ -21,7 +21,6 @@ import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-
 import javassist.CtField;
 import javassist.NotFoundException;
 
@@ -76,12 +75,12 @@ public class JavassistFieldDeclaration implements FieldDeclaration {
     @Override
     public AccessLevel accessLevel() {
 //        throw new UnsupportedOperationException();
-      return JavassistFactory.modifiersToAccessLevel(ctField.getModifiers());
+        return JavassistFactory.modifiersToAccessLevel(ctField.getModifiers());
     }
 
     @Override
     public TypeDeclaration declaringType() {
 //        throw new UnsupportedOperationException();
-      return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
+        return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
     }
 }

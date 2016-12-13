@@ -197,7 +197,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public String getQualifiedName() {
-       return javaParserTypeAdapter.getQualifiedName();
+        return javaParserTypeAdapter.getQualifiedName();
     }
 
     @Override
@@ -320,19 +320,19 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     private ReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
-          // look for the qualified name (for example class of type Rectangle2D.Double)
-          className = classOrInterfaceType.getScope().get().toString() + "." + className;
+            // look for the qualified name (for example class of type Rectangle2D.Double)
+            className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
         SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
         if (!ref.isSolved()) {
-          Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
-          if (localScope.isPresent()) {
-            String localName = localScope.get().getName().getId() + "." + classOrInterfaceType.getName().getId();
-            ref = solveType(localName, typeSolver);
-          }
+            Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
+            if (localScope.isPresent()) {
+                String localName = localScope.get().getName().getId() + "." + classOrInterfaceType.getName().getId();
+                ref = solveType(localName, typeSolver);
+            }
         }
         if (!ref.isSolved()) {
-          throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
+            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);

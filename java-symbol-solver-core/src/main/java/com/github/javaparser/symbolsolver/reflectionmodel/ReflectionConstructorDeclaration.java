@@ -40,7 +40,7 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
 
     @Override
     public ClassDeclaration declaringType() {
-      return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
+        return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
     }
 
     @Override
@@ -67,11 +67,11 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
 
     @Override
     public AccessLevel accessLevel() {
-      return ReflectionFactory.modifiersToAccessLevel(constructor.getModifiers());
+        return ReflectionFactory.modifiersToAccessLevel(constructor.getModifiers());
     }
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-      return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
+        return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 }

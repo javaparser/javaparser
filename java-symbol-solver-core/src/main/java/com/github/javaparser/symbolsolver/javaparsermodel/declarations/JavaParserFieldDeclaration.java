@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -72,12 +71,12 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
         } else {
             Type retType = JavaParserFacade.get(typeSolver).convert(wrappedNode.getElementType(), wrappedNode);
             for (int i = 0; i < wrappedNode.getArrayBracketPairsAfterElementType().size(); i++) {
-              retType = new ArrayType(retType);
-            }
-            for (VariableDeclarator varDecl: wrappedNode.getVariables()) {
-              for (int i = 0; i < varDecl.getId().getArrayBracketPairsAfterId().size(); i++) {
                 retType = new ArrayType(retType);
-              }
+            }
+            for (VariableDeclarator varDecl : wrappedNode.getVariables()) {
+                for (int i = 0; i < varDecl.getId().getArrayBracketPairsAfterId().size(); i++) {
+                    retType = new ArrayType(retType);
+                }
             }
             return retType;
         }

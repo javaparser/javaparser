@@ -176,8 +176,8 @@ class ReflectionClassAdapter {
     }
 
     public List<ConstructorDeclaration> getConstructors() {
-      return Arrays.stream(clazz.getConstructors())
-          .map(m -> new ReflectionConstructorDeclaration(m, typeSolver))
-          .collect(Collectors.toList());
+        return Arrays.stream(clazz.getConstructors())
+                .map(m -> new ReflectionConstructorDeclaration(m, typeSolver))
+                .collect(Collectors.toList());
     }
 }

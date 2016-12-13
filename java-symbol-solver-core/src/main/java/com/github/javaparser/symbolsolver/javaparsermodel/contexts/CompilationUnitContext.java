@@ -113,7 +113,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
                     } else if (type instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration)type, typeSolver));
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration) type, typeSolver));
                     } else {
                         throw new UnsupportedOperationException(type.getClass().getCanonicalName());
                     }
@@ -125,7 +125,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             int dotPos = name.indexOf('.');
             String prefix = null;
             if (dotPos > -1) {
-              prefix = name.substring(0, dotPos);
+                prefix = name.substring(0, dotPos);
             }
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl instanceof SingleTypeImportDeclaration) {
@@ -133,12 +133,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     String qName = qName(importedType);
                     boolean found = qName.equals(name) || qName.endsWith("." + name);
                     if (!found) {
-                      if (prefix != null) {
-                        found = qName.endsWith("." + prefix);
-                        if (found) {
-                          qName = qName + name.substring(dotPos);
+                        if (prefix != null) {
+                            found = qName.endsWith("." + prefix);
+                            if (found) {
+                                qName = qName + name.substring(dotPos);
+                            }
                         }
-                      }
                     }
                     if (found) {
                         SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);

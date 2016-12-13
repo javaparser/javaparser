@@ -14,14 +14,14 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.lang.reflect.Modifier;
-
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import javassist.CtClass;
 import javassist.NotFoundException;
+
+import java.lang.reflect.Modifier;
 
 /**
  * @author Federico Tomassetti

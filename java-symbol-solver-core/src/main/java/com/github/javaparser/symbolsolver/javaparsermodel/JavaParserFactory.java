@@ -19,12 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.FieldAccessExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
@@ -68,17 +63,17 @@ public class JavaParserFactory {
         } else if (node instanceof SwitchEntryStmt) {
             return new SwitchEntryContext((SwitchEntryStmt) node, typeSolver);
         } else if (node instanceof Statement) {
-          return new StatementContext<Statement>((Statement) node, typeSolver);
+            return new StatementContext<Statement>((Statement) node, typeSolver);
         } else if (node instanceof CatchClause) {
-          return new CatchClauseContext((CatchClause) node, typeSolver);
+            return new CatchClauseContext((CatchClause) node, typeSolver);
         } else {
-          if (node instanceof NameExpr) {
-            // to resolve a name when in a fieldAccess context, we can get to the grand parent to prevent a infinite loop if the name is the same as the field (ie x.x)
-            if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr && node.getParentNode().get().getParentNode().isPresent()) {
-              return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
+            if (node instanceof NameExpr) {
+                // to resolve a name when in a fieldAccess context, we can get to the grand parent to prevent a infinite loop if the name is the same as the field (ie x.x)
+                if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr && node.getParentNode().get().getParentNode().isPresent()) {
+                    return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
+                }
             }
-          }
-          return getContext(getParentNode(node), typeSolver);
+            return getContext(getParentNode(node), typeSolver);
         }
     }
 

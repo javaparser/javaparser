@@ -16,22 +16,17 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
-import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-
 import javassist.CtConstructor;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -74,7 +69,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public ClassDeclaration declaringType() {
-      return new JavassistClassDeclaration(ctConstructor.getDeclaringClass(), typeSolver);
+        return new JavassistClassDeclaration(ctConstructor.getDeclaringClass(), typeSolver);
     }
 
     @Override

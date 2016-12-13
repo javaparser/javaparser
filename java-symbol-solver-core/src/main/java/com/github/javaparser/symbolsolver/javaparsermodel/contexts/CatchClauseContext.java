@@ -1,8 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -12,6 +9,9 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -23,11 +23,11 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
     }
 
     public final SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-      SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParam(), typeSolver);
-      SymbolReference<? extends ValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
-      if (symbolReference.isSolved()) {
-          return symbolReference;
-      }
+        SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParam(), typeSolver);
+        SymbolReference<? extends ValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
+        if (symbolReference.isSolved()) {
+            return symbolReference;
+        }
 
         // if nothing is found we should ask the parent context
         return getParent().solveSymbol(name, typeSolver);
@@ -35,12 +35,12 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
 
     @Override
     public final Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-      SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParam(), typeSolver);
-      Optional<Value> symbolReference = solveWithAsValue(sb, name, typeSolver);
-      if (symbolReference.isPresent()) {
-          // Perform parameter type substitution as needed
-          return symbolReference;
-      }
+        SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParam(), typeSolver);
+        Optional<Value> symbolReference = solveWithAsValue(sb, name, typeSolver);
+        if (symbolReference.isPresent()) {
+            // Perform parameter type substitution as needed
+            return symbolReference;
+        }
 
         // if nothing is found we should ask the parent context
         return getParent().solveSymbolAsValue(name, typeSolver);

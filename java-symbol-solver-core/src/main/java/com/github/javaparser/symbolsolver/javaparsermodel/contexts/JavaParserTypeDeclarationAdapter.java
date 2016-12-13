@@ -1,8 +1,5 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -10,11 +7,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
@@ -22,6 +15,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -63,7 +59,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         if (wrappedNode instanceof NodeWithTypeParameters) {
             NodeWithTypeParameters<?> nodeWithTypeParameters = (NodeWithTypeParameters<?>) wrappedNode;
-            for (TypeParameter astTpRaw : (Iterable<TypeParameter>)nodeWithTypeParameters.getTypeParameters()) {
+            for (TypeParameter astTpRaw : (Iterable<TypeParameter>) nodeWithTypeParameters.getTypeParameters()) {
                 TypeParameter astTp = (TypeParameter) astTpRaw;
                 if (astTp.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(astTp, typeSolver));
@@ -99,19 +95,19 @@ public class JavaParserTypeDeclarationAdapter {
 
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
-          SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
-          if (res.isSolved()) {
-              candidateMethods.add(res.getCorrespondingDeclaration());
-          }
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
+            if (res.isSolved()) {
+                candidateMethods.add(res.getCorrespondingDeclaration());
+            }
         }
-        
+
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
     }
 
     public SymbolReference<ConstructorDeclaration> solveConstructor(List<Type> argumentsTypes, TypeSolver typeSolver) {
-      if (typeDeclaration instanceof ClassDeclaration) {
-        return ConstructorResolutionLogic.findMostApplicable(((ClassDeclaration) typeDeclaration).getConstructors(), argumentsTypes, typeSolver);
-      }
-      return SymbolReference.unsolved(ConstructorDeclaration.class);
+        if (typeDeclaration instanceof ClassDeclaration) {
+            return ConstructorResolutionLogic.findMostApplicable(((ClassDeclaration) typeDeclaration).getConstructors(), argumentsTypes, typeSolver);
+        }
+        return SymbolReference.unsolved(ConstructorDeclaration.class);
     }
 }
