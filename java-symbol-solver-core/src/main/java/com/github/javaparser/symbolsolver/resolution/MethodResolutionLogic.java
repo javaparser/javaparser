@@ -367,16 +367,41 @@ public class MethodResolutionLogic {
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
-        // remove abstract method if there is a non abstract one
-        List<MethodDeclaration> abstractMethods = new ArrayList<>();
-        for (int i = 0; i < applicableMethods.size(); i++) {
-          if (applicableMethods.get(i).isAbstract()) {
-            abstractMethods.add(applicableMethods.get(i));
+        if (applicableMethods.size() > 1) {
+          // remove abstract method if there is a non abstract one
+          List<MethodDeclaration> abstractMethods = new ArrayList<>();
+          for (int i = 0; i < applicableMethods.size(); i++) {
+            if (applicableMethods.get(i).isAbstract()) {
+              abstractMethods.add(applicableMethods.get(i));
+            }
           }
+          if (!abstractMethods.isEmpty() && abstractMethods.size() < applicableMethods.size()) {
+            // remove the abstract to keep the "real" methods
+            applicableMethods.removeAll(abstractMethods);
+          }
+          
         }
-        if (abstractMethods.size() < applicableMethods.size()) {
-          // remove the abstract to keep the "real" methods
-          applicableMethods.removeAll(abstractMethods);
+        if (applicableMethods.size() > 1) {
+          List<Integer> nullParamIndexes = new ArrayList<>();
+          for (int i = 0; i < argumentsTypes.size(); i++) {
+            if (argumentsTypes.get(i).isNull()) {
+              nullParamIndexes.add(i);
+            }
+          }
+          if (!nullParamIndexes.isEmpty()) {
+            // remove method with array param if a non array exists and arg is null
+            Set<MethodDeclaration> removeCandidates = new HashSet<>();
+            for (Integer nullParamIndex: nullParamIndexes) {
+              for (MethodDeclaration methDecl: applicableMethods) {
+                if (methDecl.getParam(nullParamIndex.intValue()).getType().isArray()) {
+                  removeCandidates.add(methDecl);
+                }
+              }
+            }
+            if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
+              applicableMethods.removeAll(removeCandidates);
+            }
+          }
         }
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
