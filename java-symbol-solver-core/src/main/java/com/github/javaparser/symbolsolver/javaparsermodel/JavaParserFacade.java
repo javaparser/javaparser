@@ -154,7 +154,7 @@ public class JavaParserFacade {
         List<Type> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
-        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArgs(), solveLambdas, argumentTypes, placeholders);
+        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         ClassOrInterfaceDeclaration classNode = explicitConstructorInvocationStmt.getAncestorOfType(ClassOrInterfaceDeclaration.class);
         if (classNode == null) {
@@ -189,7 +189,7 @@ public class JavaParserFacade {
         List<Type> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
-        solveArguments(objectCreationExpr, objectCreationExpr.getArgs(), solveLambdas, argumentTypes, placeholders);
+        solveArguments(objectCreationExpr, objectCreationExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         Type classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
         if (!classDecl.isReferenceType()) {
@@ -230,7 +230,7 @@ public class JavaParserFacade {
         List<Type> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
-        solveArguments(methodCallExpr, methodCallExpr.getArgs(), solveLambdas, argumentTypes, placeholders);
+        solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
@@ -253,7 +253,7 @@ public class JavaParserFacade {
                 boolean secondPassNecessary = false;
                 if (node instanceof MethodCallExpr) {
                     MethodCallExpr methodCallExpr = (MethodCallExpr) node;
-                    for (Node arg : methodCallExpr.getArgs()) {
+                    for (Node arg : methodCallExpr.getArguments()) {
                         if (!cacheWithLambdasSolved.containsKey(arg)) {
                             getType(arg, true);
                             secondPassNecessary = true;
@@ -579,43 +579,43 @@ public class JavaParserFacade {
         } else if (node instanceof UnaryExpr) {
             UnaryExpr unaryExpr = (UnaryExpr) node;
             switch (unaryExpr.getOperator()) {
-                case negative:
-                case positive:
-                    return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
-                case not:
+                case MINUS:
+                case PLUS:
+                    return getTypeConcrete(unaryExpr.getExpression(), solveLambdas);
+                case LOGICAL_COMPLEMENT:
                     return PrimitiveType.BOOLEAN;
-                case postIncrement:
-                case preIncrement:
-                case preDecrement:
-                case postDecrement:
-                    return getTypeConcrete(unaryExpr.getExpr(), solveLambdas);
+                case POSTFIX_DECREMENT:
+                case PREFIX_DECREMENT:
+                case POSTFIX_INCREMENT:
+                case PREFIX_INCREMENT:
+                    return getTypeConcrete(unaryExpr.getExpression(), solveLambdas);
                 default:
                     throw new UnsupportedOperationException(unaryExpr.getOperator().name());
             }
         } else if (node instanceof BinaryExpr) {
             BinaryExpr binaryExpr = (BinaryExpr) node;
             switch (binaryExpr.getOperator()) {
-                case plus:
-                case minus:
-                case divide:
-                case times:
+                case PLUS:
+                case MINUS:
+                case DIVIDE:
+                case MULTIPLY:
                     return getBinaryTypeConcrete(binaryExpr.getLeft(), binaryExpr.getRight(), solveLambdas);
-                case lessEquals:
-                case less:
-                case greater:
-                case greaterEquals:
-                case equals:
-                case notEquals:
-                case or:
-                case and:
+                case LESS_EQUALS:
+                case LESS:
+                case GREATER:
+                case GREATER_EQUALS:
+                case EQUALS:
+                case NOT_EQUALS:
+                case OR:
+                case AND:
                     return PrimitiveType.BOOLEAN;
-                case binAnd:
-                case binOr:
-                case rSignedShift:
-                case rUnsignedShift:
-                case lShift:
-                case remainder:
-                case xor:
+                case BINARY_AND:
+                case BINARY_OR:
+                case SIGNED_RIGHT_SHIFT:
+                case UNSIGNED_RIGHT_SHIFT:
+                case LEFT_SHIFT:
+                case REMAINDER:
+                case XOR:
                     return getTypeConcrete(binaryExpr.getLeft(), solveLambdas);
                 default:
                     throw new UnsupportedOperationException("FOO " + binaryExpr.getOperator().name());
@@ -644,7 +644,10 @@ public class JavaParserFacade {
             return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
         } else if (node instanceof ArrayCreationExpr) {
             ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) node;
-            Type res = convertToUsage(arrayCreationExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
+            Type res = convertToUsage(arrayCreationExpr.getElementType(), JavaParserFactory.getContext(node, typeSolver));
+            for (int i=0;i<arrayCreationExpr.getLevels().size();i++) {
+                res = new ArrayType(res);
+            }
             return res;
         } else if (node instanceof ArrayAccessExpr) {
             ArrayAccessExpr arrayAccessExpr = (ArrayAccessExpr) node;
@@ -732,11 +735,11 @@ public class JavaParserFacade {
             return PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name());
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
-            if (wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
-                return Wildcard.extendsBound(convertToUsage(wildcardType.getExtends().get(), context)); // removed (ReferenceTypeImpl) 
-            } else if (!wildcardType.getExtends().isPresent() && wildcardType.getSuper().isPresent()) {
-                return Wildcard.extendsBound(convertToUsage(wildcardType.getSuper().get(), context)); // removed (ReferenceTypeImpl) 
-            } else if (!wildcardType.getExtends().isPresent() && !wildcardType.getSuper().isPresent()) {
+            if (wildcardType.getExtendedTypes().isPresent() && !wildcardType.getSuperTypes().isPresent()) {
+                return Wildcard.extendsBound(convertToUsage(wildcardType.getExtendedTypes().get(), context)); // removed (ReferenceTypeImpl)
+            } else if (!wildcardType.getExtendedTypes().isPresent() && wildcardType.getSuperTypes().isPresent()) {
+                return Wildcard.extendsBound(convertToUsage(wildcardType.getSuperTypes().get(), context)); // removed (ReferenceTypeImpl)
+            } else if (!wildcardType.getExtendedTypes().isPresent() && !wildcardType.getSuperTypes().isPresent()) {
                 return Wildcard.UNBOUNDED;
             } else {
                 throw new UnsupportedOperationException(wildcardType.toString());
@@ -762,8 +765,8 @@ public class JavaParserFacade {
 
     public MethodUsage solveMethodAsUsage(MethodCallExpr call) {
         List<Type> params = new ArrayList<>();
-        if (call.getArgs() != null) {
-            for (Expression param : call.getArgs()) {
+        if (call.getArguments() != null) {
+            for (Expression param : call.getArguments()) {
                 //getTypeConcrete(Node node, boolean solveLambdas)
                 try {
                     params.add(getType(param, false));
@@ -777,7 +780,7 @@ public class JavaParserFacade {
         Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName().getId(), params, typeSolver);
         if (!methodUsage.isPresent()) {
             throw new RuntimeException("Method '" + call.getName() + "' cannot be resolved in context "
-                    + call + " (line: " + call.getRange().begin.line + ") " + context + ". Parameter types: " + params);
+                    + call + " (line: " + call.getRange().get().begin.line + ") " + context + ". Parameter types: " + params);
         }
         return methodUsage.get();
     }

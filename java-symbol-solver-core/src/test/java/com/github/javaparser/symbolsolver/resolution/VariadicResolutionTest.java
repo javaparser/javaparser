@@ -41,8 +41,8 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo3");
 
-        ReturnStmt stmt = (ReturnStmt) method.getBody().get().getStmts().get(0);
-        Expression expression = stmt.getExpr().get();
+        ReturnStmt stmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        Expression expression = stmt.getExpression().get();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);
         assertEquals(true, type.isReferenceType());

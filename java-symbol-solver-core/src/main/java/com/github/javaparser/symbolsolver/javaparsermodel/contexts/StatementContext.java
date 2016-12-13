@@ -51,8 +51,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         NodeWithStatements<?> blockStmt = (NodeWithStatements<?>) getParentNode(stmt);
         int position = -1;
-        for (int i = 0; i < blockStmt.getStmts().size(); i++) {
-            if (blockStmt.getStmts().get(i).equals(stmt)) {
+        for (int i = 0; i < blockStmt.getStatements().size(); i++) {
+            if (blockStmt.getStatements().get(i).equals(stmt)) {
                 position = i;
             }
         }
@@ -60,7 +60,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             throw new RuntimeException();
         }
         for (int i = position - 1; i >= 0; i--) {
-            SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStmts().get(i), typeSolver);
+            SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver);
             SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
@@ -96,8 +96,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) getParentNode(wrappedNode);
         int position = -1;
-        for (int i = 0; i < nodeWithStmt.getStmts().size(); i++) {
-            if (nodeWithStmt.getStmts().get(i).equals(wrappedNode)) {
+        for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
+            if (nodeWithStmt.getStatements().get(i).equals(wrappedNode)) {
                 position = i;
             }
         }
@@ -105,7 +105,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             throw new RuntimeException();
         }
         for (int i = position - 1; i >= 0; i--) {
-            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStmts().get(i), typeSolver);
+            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver);
             symbolReference = solveWithAsValue(symbolDeclarator, name, typeSolver);
             if (symbolReference.isPresent()) {
                 return symbolReference;
@@ -142,8 +142,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) getParentNode(wrappedNode);
         int position = -1;
-        for (int i = 0; i < nodeWithStmt.getStmts().size(); i++) {
-            if (nodeWithStmt.getStmts().get(i).equals(wrappedNode)) {
+        for (int i = 0; i < nodeWithStmt.getStatements().size(); i++) {
+            if (nodeWithStmt.getStatements().get(i).equals(wrappedNode)) {
                 position = i;
             }
         }
@@ -151,7 +151,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             throw new RuntimeException();
         }
         for (int i = position - 1; i >= 0; i--) {
-            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStmts().get(i), typeSolver);
+            symbolDeclarator = JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver);
             symbolReference = solveWith(symbolDeclarator, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;

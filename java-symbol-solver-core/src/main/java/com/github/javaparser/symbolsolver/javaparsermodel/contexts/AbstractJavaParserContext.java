@@ -102,8 +102,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         if (getParentNode(wrappedNode) instanceof MethodCallExpr) {
             MethodCallExpr parentCall = (MethodCallExpr) getParentNode(wrappedNode);
             boolean found = false;
-            if (parentCall.getArgs() != null) {
-                for (Expression expression : parentCall.getArgs()) {
+            if (parentCall.getArguments() != null) {
+                for (Expression expression : parentCall.getArguments()) {
                     if (expression == wrappedNode) {
                         found = true;
                     }

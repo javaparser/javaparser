@@ -38,8 +38,8 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpr().get();
-        Expression expression = methodCallExpr.getArgs().get(0);
+        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
+        Expression expression = methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);
@@ -52,7 +52,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpr().get();
+        Expression expression = returnStmt.getExpression().get();
         expression = Navigator.findMethodCall(expression, "stream");
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
@@ -66,7 +66,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpr().get();
+        Expression expression = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);
@@ -79,9 +79,9 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpr().get();
+        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
         // Collectors.toList()
-        Expression expression = methodCallExpr.getArgs().get(0);
+        Expression expression = methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);
@@ -94,7 +94,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpr().get();
+        Expression expression = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         Type type = javaParserFacade.getType(expression);

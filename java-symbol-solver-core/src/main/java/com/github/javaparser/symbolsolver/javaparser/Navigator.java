@@ -120,7 +120,7 @@ public final class Navigator {
             if (bd instanceof FieldDeclaration) {
                 FieldDeclaration fd = (FieldDeclaration) bd;
                 for (VariableDeclarator vd : fd.getVariables()) {
-                    if (vd.getId().getName().getId().equals(name)) {
+                    if (vd.getName().getId().equals(name)) {
                         return vd;
                     }
                 }
@@ -180,7 +180,7 @@ public final class Navigator {
     public static VariableDeclarator demandVariableDeclaration(Node node, String name) {
         if (node instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) node;
-            if (variableDeclarator.getId().getName().getId().equals(name)) {
+            if (variableDeclarator.getName().getId().equals(name)) {
                 return variableDeclarator;
             }
         }

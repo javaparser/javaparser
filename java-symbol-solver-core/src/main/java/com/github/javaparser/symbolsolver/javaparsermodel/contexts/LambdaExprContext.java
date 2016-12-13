@@ -148,7 +148,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
     private int pos(MethodCallExpr callExpr, Expression param) {
         int i = 0;
-        for (Expression p : callExpr.getArgs()) {
+        for (Expression p : callExpr.getArguments()) {
             if (p == param) {
                 return i;
             }

@@ -60,7 +60,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
         // look for declaration in other switch statements
         for (SwitchEntryStmt seStmt : switchStmt.getEntries()) {
             if (!seStmt.equals(wrappedNode)) {
-                for (Statement stmt : seStmt.getStmts()) {
+                for (Statement stmt : seStmt.getStatements()) {
                     SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
                     SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
                     if (symbolReference.isSolved()) {

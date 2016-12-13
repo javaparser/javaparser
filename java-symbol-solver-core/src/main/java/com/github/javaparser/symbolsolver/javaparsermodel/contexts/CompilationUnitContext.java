@@ -189,8 +189,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     private String qName(Name name) {
-        if (name.getQualifier() != null) {
-            return qName(name.getQualifier()) + "." + name.getId();
+        if (name.getQualifier().isPresent()) {
+            return qName(name.getQualifier().get()) + "." + name.getId();
         } else {
             return name.getId();
         }

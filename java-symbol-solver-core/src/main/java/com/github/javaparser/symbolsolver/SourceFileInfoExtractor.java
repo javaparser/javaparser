@@ -120,7 +120,7 @@ public class SourceFileInfoExtractor {
             } else if ((getParentNode(node) instanceof Statement) || (getParentNode(node) instanceof VariableDeclarator)) {
                 try {
                     Type ref = JavaParserFacade.get(typeSolver).getType(node);
-                    out.println("  Line " + node.getRange().begin.line + ") " + node + " ==> " + ref.describe());
+                    out.println("  Line " + node.getRange().get().begin.line + ") " + node + " ==> " + ref.describe());
                     ok++;
                 } catch (UnsupportedOperationException upe) {
                     unsupported++;
@@ -137,7 +137,7 @@ public class SourceFileInfoExtractor {
 
     private void solveMethodCalls(Node node) {
         if (node instanceof MethodCallExpr) {
-            out.println("  Line " + node.getBegin().line + ") " + node + " ==> " + toString((MethodCallExpr) node));
+            out.println("  Line " + node.getBegin().get().line + ") " + node + " ==> " + toString((MethodCallExpr) node));
         }
         for (Node child : node.getChildNodes()) {
             solveMethodCalls(child);
@@ -149,7 +149,7 @@ public class SourceFileInfoExtractor {
             return toString(JavaParserFacade.get(typeSolver).solve(node));
         } catch (Exception e) {
             if (verbose) {
-                System.err.println("Error resolving call at L" + node.getBegin().line + ": " + node);
+                System.err.println("Error resolving call at L" + node.getBegin().get().line + ": " + node);
                 e.printStackTrace();
             }
             return "ERROR";
@@ -167,7 +167,7 @@ public class SourceFileInfoExtractor {
     private List<Node> collectAllNodes(Node node) {
         List<Node> nodes = new LinkedList<>();
         collectAllNodes(node, nodes);
-        nodes.sort((n1, n2) -> n1.getBegin().compareTo(n2.getBegin()));
+        nodes.sort((n1, n2) -> n1.getBegin().get().compareTo(n2.getBegin().get()));
         return nodes;
     }
 

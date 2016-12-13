@@ -42,11 +42,11 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        for (Expression expression : wrappedNode.getInit()) {
+        for (Expression expression : wrappedNode.getInitialization()) {
             if (expression instanceof VariableDeclarationExpr) {
                 VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expression;
                 for (VariableDeclarator variableDeclarator : variableDeclarationExpr.getVariables()) {
-                    if (variableDeclarator.getId().getName().getId().equals(name)) {
+                    if (variableDeclarator.getName().getId().equals(name)) {
                         return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
                     }
                 }

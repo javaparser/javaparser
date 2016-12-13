@@ -23,7 +23,7 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
     }
 
     public final SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParam(), typeSolver);
+        SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver);
         SymbolReference<? extends ValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
         if (symbolReference.isSolved()) {
             return symbolReference;
@@ -35,7 +35,7 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
 
     @Override
     public final Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParam(), typeSolver);
+        SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver);
         Optional<Value> symbolReference = solveWithAsValue(sb, name, typeSolver);
         if (symbolReference.isPresent()) {
             // Perform parameter type substitution as needed
