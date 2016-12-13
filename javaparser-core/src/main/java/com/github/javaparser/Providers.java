@@ -62,10 +62,10 @@ public final class Providers {
      * Provide a Provider from the resource found in class loader with the provided encoding.<br/> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
-    public static Provider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) {
+    public static Provider resourceProvider(ClassLoader classLoader, String pathToResource, Charset encoding) throws IOException {
         InputStream resourceAsStream = classLoader.getResourceAsStream(pathToResource);
         if (resourceAsStream == null) {
-            throw new AssertionError("Cannot find " + pathToResource);
+            throw new IOException("Cannot find " + pathToResource);
         }
         return provider(resourceAsStream, encoding);
     }
@@ -74,7 +74,7 @@ public final class Providers {
      * Provide a Provider from the resource found in the current class loader with the provided encoding.<br/> As
      * resource is accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
-    public static Provider resourceProvider(String pathToResource, Charset encoding) {
+    public static Provider resourceProvider(String pathToResource, Charset encoding) throws IOException {
         ClassLoader classLoader = Provider.class.getClassLoader();
         return resourceProvider(classLoader, pathToResource, encoding);
     }
@@ -83,7 +83,7 @@ public final class Providers {
      * Provide a Provider from the resource found in the current class loader with UTF-8 encoding.<br/> As resource is
      * accessed through a class loader, a leading "/" is not allowed in pathToResource
      */
-    public static Provider resourceProvider(String pathToResource) {
+    public static Provider resourceProvider(String pathToResource) throws IOException {
         return resourceProvider(pathToResource, UTF8);
     }
 
