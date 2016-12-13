@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Federico Tomassetti
+ * @author Fred Lefévère-Laoide
  */
 public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
 

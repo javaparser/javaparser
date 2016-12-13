@@ -149,10 +149,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 } else {
                     return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
                 }
-            } else if (typeOfScope.isArray() /*&& typeOfScope.asArrayType().getComponentType().isReferenceType()*/) {
+            } else if (typeOfScope.isArray()) {
                 // method call on array are Object methods
                 return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
-//                return MethodResolutionLogic.solveMethodInType(typeOfScope.asArrayType().getComponentType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
             } else if (typeOfScope.isTypeVariable()) {
                 for (TypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
                     SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
@@ -350,7 +349,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         } else if (type instanceof ArrayType) {
             // An array inherits methods from Object not from it's component type
             return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, typeSolver, invokationContext);
-            //return solveMethodAsUsage(((ArrayType) type).getComponentType(), name, argumentsTypes, typeSolver, invokationContext);
         } else {
             throw new UnsupportedOperationException("type usage: " + type.getClass().getCanonicalName());
         }

@@ -46,7 +46,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     }
 
     public static SymbolReference<? extends ValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
-        if (!(getParentNode(stmt) instanceof NodeWithStatements)) { // was BlockStmt
+        if (!(getParentNode(stmt) instanceof NodeWithStatements)) {
             throw new IllegalArgumentException();
         }
         NodeWithStatements<?> blockStmt = (NodeWithStatements<?>) getParentNode(stmt);
@@ -91,7 +91,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         if (getParentNode(wrappedNode) instanceof IfStmt) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
-        if (!(getParentNode(wrappedNode) instanceof NodeWithStatements)) { // was BlockStmt
+        if (!(getParentNode(wrappedNode) instanceof NodeWithStatements)) {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) getParentNode(wrappedNode);
@@ -137,7 +137,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         if (getParentNode(wrappedNode) instanceof LambdaExpr) {
             return getParent().solveSymbol(name, typeSolver);
         }
-        if (!(getParentNode(wrappedNode) instanceof NodeWithStatements)) { // was BlockStmt
+        if (!(getParentNode(wrappedNode) instanceof NodeWithStatements)) {
             return getParent().solveSymbol(name, typeSolver);
         }
         NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) getParentNode(wrappedNode);
