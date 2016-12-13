@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -328,5 +329,16 @@ public final class JavaParser {
      */
     public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
         return simplifiedParse(CLASS_OR_INTERFACE_TYPE, provider(type));
+    }
+
+    /**
+     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr} that represents it.
+     *
+     * @param declaration a variable declaration like <code>int x=2;</code>
+     * @return VariableDeclarationExpr representing the type
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
+        return simplifiedParse(VARIABLE_DECLARATION_EXPR, provider(declaration));
     }
 }
