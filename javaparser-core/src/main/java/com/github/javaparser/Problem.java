@@ -22,9 +22,13 @@ public class Problem {
         if (range != null)
             str.append(" ").append(range);
         if (cause != null) {
-            str.append(" stack : ").append(System.lineSeparator());
-            for (StackTraceElement ste : cause.getStackTrace())
-                str.append(ste.toString()).append(System.lineSeparator());
+            str.append(System.lineSeparator()).append("Problem stacktrace : ").append(System.lineSeparator());
+            for (int i = 0; i < cause.getStackTrace().length; i++) {
+                StackTraceElement ste = cause.getStackTrace()[i];
+                str.append("  ").append(ste.toString());
+                if (i + 1 != cause.getStackTrace().length)
+                    str.append(System.lineSeparator());
+            }
         }
         return str.toString();
     }
