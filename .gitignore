@@ -22,3 +22,4 @@ javadoc
 build-*
 *.asc
 build
+/.project

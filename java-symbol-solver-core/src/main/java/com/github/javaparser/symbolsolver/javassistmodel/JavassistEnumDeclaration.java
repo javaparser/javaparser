@@ -16,13 +16,21 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import javassist.CtClass;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.NotFoundException;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -112,4 +120,33 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     public Optional<ReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
+
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
+      List<MethodDeclaration> candidates = new ArrayList<>();
+      for (CtMethod method : ctClass.getDeclaredMethods()) {
+          // TODO avoid bridge and synthetic methods
+          if (method.getName().equals(name)) {
+              candidates.add(new JavassistMethodDeclaration(method, typeSolver));
+          }
+      }
+
+      try {
+          CtClass superClass = ctClass.getSuperclass();
+          if (superClass != null) {
+              SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes);
+              if (ref.isSolved()) {
+                  candidates.add(ref.getCorrespondingDeclaration());
+              }
+          }
+      } catch (NotFoundException e) {
+          throw new RuntimeException(e);
+      }
+
+      return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+    }
+
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
+      return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
+    }
+
 }

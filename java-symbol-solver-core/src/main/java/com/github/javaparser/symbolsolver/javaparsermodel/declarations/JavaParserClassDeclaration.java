@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -49,7 +50,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.ClassOrInterfaceDeclaration wrappedNode;
-    private JavaParserTypeAdapter javaParserTypeAdapter;
+    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     ///
     /// Constructors
@@ -62,7 +63,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         }
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
-        this.javaParserTypeAdapter = new JavaParserTypeAdapter(wrappedNode, typeSolver);
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<ClassOrInterfaceDeclaration>(wrappedNode, typeSolver);
     }
 
     ///
@@ -100,7 +101,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public List<FieldDeclaration> getAllFields() {
         ArrayList<FieldDeclaration> fields = new ArrayList<>();
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
                 com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
                 for (VariableDeclarator vd : field.getVariables()) {
@@ -165,7 +166,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public List<ConstructorDeclaration> getConstructors() {
         List<ConstructorDeclaration> declared = new LinkedList<>();
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
                 com.github.javaparser.ast.body.ConstructorDeclaration constructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) member;
                 declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver));
@@ -274,7 +275,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         Set<MethodDeclaration> methods = new HashSet<>();
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
                 methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
             }
@@ -317,9 +318,21 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     ///
 
     private ReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        SymbolReference<TypeDeclaration> ref = solveType(classOrInterfaceType.getName().getId(), typeSolver);
+        String className = classOrInterfaceType.getName().getId();
+        if (classOrInterfaceType.getScope().isPresent()) {
+          // look for the qualified name (for example class of type Rectangle2D.Double)
+          className = classOrInterfaceType.getScope().get().toString() + "." + className;
+        }
+        SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
         if (!ref.isSolved()) {
-            throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
+          Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
+          if (localScope.isPresent()) {
+            String localName = localScope.get().getName().getId() + "." + classOrInterfaceType.getName().getId();
+            ref = solveType(localName, typeSolver);
+          }
+        }
+        if (!ref.isSolved()) {
+          throw new UnsolvedSymbolException(classOrInterfaceType.getName().getId());
         }
         if (!classOrInterfaceType.getTypeArguments().isPresent()) {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);

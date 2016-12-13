@@ -201,7 +201,7 @@ public class PrimitiveTypeTest {
         assertEquals(false, PrimitiveType.SHORT.isAssignableBy(PrimitiveType.DOUBLE));
 
         assertEquals(false, PrimitiveType.INT.isAssignableBy(PrimitiveType.BOOLEAN));
-        assertEquals(false, PrimitiveType.INT.isAssignableBy(PrimitiveType.CHAR));
+        assertEquals(true, PrimitiveType.INT.isAssignableBy(PrimitiveType.CHAR));
         assertEquals(true, PrimitiveType.INT.isAssignableBy(PrimitiveType.BYTE));
         assertEquals(true, PrimitiveType.INT.isAssignableBy(PrimitiveType.SHORT));
         assertEquals(true, PrimitiveType.INT.isAssignableBy(PrimitiveType.INT));
@@ -210,7 +210,7 @@ public class PrimitiveTypeTest {
         assertEquals(false, PrimitiveType.INT.isAssignableBy(PrimitiveType.DOUBLE));
 
         assertEquals(false, PrimitiveType.LONG.isAssignableBy(PrimitiveType.BOOLEAN));
-        assertEquals(false, PrimitiveType.LONG.isAssignableBy(PrimitiveType.CHAR));
+        assertEquals(true, PrimitiveType.LONG.isAssignableBy(PrimitiveType.CHAR));
         assertEquals(true, PrimitiveType.LONG.isAssignableBy(PrimitiveType.BYTE));
         assertEquals(true, PrimitiveType.LONG.isAssignableBy(PrimitiveType.SHORT));
         assertEquals(true, PrimitiveType.LONG.isAssignableBy(PrimitiveType.INT));
@@ -219,20 +219,20 @@ public class PrimitiveTypeTest {
         assertEquals(false, PrimitiveType.LONG.isAssignableBy(PrimitiveType.DOUBLE));
 
         assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.BOOLEAN));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.CHAR));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.BYTE));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.SHORT));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.INT));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.LONG));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.CHAR));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.BYTE));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.SHORT));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.INT));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.LONG));
         assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.FLOAT));
         assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(PrimitiveType.DOUBLE));
 
         assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.BOOLEAN));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.CHAR));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.BYTE));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.SHORT));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.INT));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.LONG));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.CHAR));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.BYTE));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.SHORT));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.INT));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.LONG));
         assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.FLOAT));
         assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(PrimitiveType.DOUBLE));
     }
@@ -276,7 +276,7 @@ public class PrimitiveTypeTest {
         assertEquals(false, PrimitiveType.SHORT.isAssignableBy(doubleBox));
 
         assertEquals(false, PrimitiveType.INT.isAssignableBy(booleanBox));
-        assertEquals(false, PrimitiveType.INT.isAssignableBy(characterBox));
+        assertEquals(true, PrimitiveType.INT.isAssignableBy(characterBox));
         assertEquals(true, PrimitiveType.INT.isAssignableBy(byteBox));
         assertEquals(true, PrimitiveType.INT.isAssignableBy(shortBox));
         assertEquals(true, PrimitiveType.INT.isAssignableBy(integerBox));
@@ -285,7 +285,7 @@ public class PrimitiveTypeTest {
         assertEquals(false, PrimitiveType.INT.isAssignableBy(doubleBox));
 
         assertEquals(false, PrimitiveType.LONG.isAssignableBy(booleanBox));
-        assertEquals(false, PrimitiveType.LONG.isAssignableBy(characterBox));
+        assertEquals(true, PrimitiveType.LONG.isAssignableBy(characterBox));
         assertEquals(true, PrimitiveType.LONG.isAssignableBy(byteBox));
         assertEquals(true, PrimitiveType.LONG.isAssignableBy(shortBox));
         assertEquals(true, PrimitiveType.LONG.isAssignableBy(integerBox));
@@ -294,20 +294,20 @@ public class PrimitiveTypeTest {
         assertEquals(false, PrimitiveType.LONG.isAssignableBy(doubleBox));
 
         assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(booleanBox));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(characterBox));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(byteBox));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(shortBox));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(integerBox));
-        assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(longBox));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(characterBox));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(byteBox));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(shortBox));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(integerBox));
+        assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(longBox));
         assertEquals(true, PrimitiveType.FLOAT.isAssignableBy(floatBox));
         assertEquals(false, PrimitiveType.FLOAT.isAssignableBy(doubleBox));
 
         assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(booleanBox));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(characterBox));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(byteBox));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(shortBox));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(integerBox));
-        assertEquals(false, PrimitiveType.DOUBLE.isAssignableBy(longBox));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(characterBox));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(byteBox));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(shortBox));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(integerBox));
+        assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(longBox));
         assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(floatBox));
         assertEquals(true, PrimitiveType.DOUBLE.isAssignableBy(doubleBox));
     }

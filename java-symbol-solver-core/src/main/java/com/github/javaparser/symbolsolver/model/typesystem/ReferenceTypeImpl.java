@@ -77,6 +77,10 @@ public class ReferenceTypeImpl extends ReferenceType {
         if (other instanceof NullType) {
             return !this.isPrimitive();
         }
+        // everything is assignable to Object except void
+        if (!other.isVoid() && this.getQualifiedName().equals(Object.class.getCanonicalName())) {
+          return true;
+        }
         // consider boxing
         if (other.isPrimitive()) {
             if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {

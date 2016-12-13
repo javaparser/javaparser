@@ -16,10 +16,16 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+
+import java.util.List;
+
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -27,10 +33,6 @@ import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-
-import java.util.List;
-
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
@@ -48,12 +50,12 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
                         return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
                     }
                 }
-            } else {
+            } else if (!(expression instanceof AssignExpr || expression instanceof MethodCallExpr)) {
                 throw new UnsupportedOperationException(expression.getClass().getCanonicalName());
             }
         }
 
-        if (getParentNode(wrappedNode) instanceof BlockStmt) {
+        if (getParentNode(wrappedNode) instanceof NodeWithStatements) { // was BlockStmt
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbol(name, typeSolver);

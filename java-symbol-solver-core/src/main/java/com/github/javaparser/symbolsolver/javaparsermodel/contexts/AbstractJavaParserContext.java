@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -74,7 +75,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractJavaParserContext that = (AbstractJavaParserContext) o;
+        AbstractJavaParserContext<?> that = (AbstractJavaParserContext<?>) o;
 
         if (wrappedNode != null ? !wrappedNode.equals(that.wrappedNode) : that.wrappedNode != null) return false;
 
@@ -117,7 +118,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         Node notMethod = getParentNode(wrappedNode);
-        while (notMethod instanceof MethodCallExpr) {
+        while (notMethod instanceof MethodCallExpr || notMethod instanceof FieldAccessExpr) {  // FRED
             notMethod = getParentNode(notMethod);
         }
         return JavaParserFactory.getContext(notMethod, typeSolver);

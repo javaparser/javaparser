@@ -1,5 +1,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -7,6 +10,8 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
+import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -14,10 +19,9 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -44,9 +48,9 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
+                com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
                 if (internalType.getName().getId().equals(name)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
                 } else if (name.startsWith(String.format("%s.%s", wrappedNode.getName(), internalType.getName()))) {
@@ -58,7 +62,7 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         if (wrappedNode instanceof NodeWithTypeParameters) {
-            NodeWithTypeParameters nodeWithTypeParameters = (NodeWithTypeParameters) wrappedNode;
+            NodeWithTypeParameters<?> nodeWithTypeParameters = (NodeWithTypeParameters<?>) wrappedNode;
             for (TypeParameter astTpRaw : (Iterable<TypeParameter>)nodeWithTypeParameters.getTypeParameters()) {
                 TypeParameter astTp = (TypeParameter) astTpRaw;
                 if (astTp.getName().getId().equals(name)) {
@@ -77,8 +81,9 @@ public class JavaParserTypeDeclarationAdapter {
 
         for (ReferenceType ancestor : typeDeclaration.getAncestors()) {
             SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver);
-            // consider methods from superclasses and only default methods from interfaces
-            if (res.isSolved() && (!ancestor.getTypeDeclaration().isInterface() || res.getCorrespondingDeclaration().isDefaultMethod())) {
+            // consider methods from superclasses and only default methods from interfaces : not true, we should keep abstract as a valid candidate
+            // abstract are removed in MethodResolutionLogic.isApplicable is necessary
+            if (res.isSolved() /*&& (!ancestor.getTypeDeclaration().isInterface() || res.getCorrespondingDeclaration().isDefaultMethod())*/) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }
         }
@@ -92,6 +97,21 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
+        // if is interface and candidate method list is empty, we should check the Object Methods
+        if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
+          SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
+          if (res.isSolved()) {
+              candidateMethods.add(res.getCorrespondingDeclaration());
+          }
+        }
+        
         return MethodResolutionLogic.findMostApplicable(candidateMethods, name, argumentsTypes, typeSolver);
+    }
+
+    public SymbolReference<ConstructorDeclaration> solveConstructor(List<Type> argumentsTypes, TypeSolver typeSolver) {
+      if (typeDeclaration instanceof ClassDeclaration) {
+        return ConstructorResolutionLogic.findMostApplicable(((ClassDeclaration) typeDeclaration).getConstructors(), argumentsTypes, typeSolver);
+      }
+      return SymbolReference.unsolved(ConstructorDeclaration.class);
     }
 }

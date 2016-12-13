@@ -35,6 +35,7 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -258,6 +259,13 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
         }
         return res;
+    }
+
+    @Override
+    public Set<ReferenceTypeDeclaration> internalTypes() {
+        return Arrays.stream(this.clazz.getDeclaredClasses())
+                .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
+                .collect(Collectors.toSet());
     }
 
     @Override

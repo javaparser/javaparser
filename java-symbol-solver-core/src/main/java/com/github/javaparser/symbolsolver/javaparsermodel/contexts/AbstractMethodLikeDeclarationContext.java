@@ -32,7 +32,7 @@ public abstract class AbstractMethodLikeDeclarationContext
     public final SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            SymbolReference symbolReference = AbstractJavaParserContext.solveWith(sb, name);
+            SymbolReference<? extends ValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
             }

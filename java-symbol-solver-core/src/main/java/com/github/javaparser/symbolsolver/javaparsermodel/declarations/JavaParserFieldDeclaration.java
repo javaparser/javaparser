@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.ArrayBracketPair;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -25,6 +26,7 @@ import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
@@ -68,7 +70,16 @@ public class JavaParserFieldDeclaration implements FieldDeclaration {
             com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) getParentNode(enumConstantDeclaration);
             return new ReferenceTypeImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
         } else {
-            return JavaParserFacade.get(typeSolver).convert(wrappedNode.getElementType(), wrappedNode);
+            Type retType = JavaParserFacade.get(typeSolver).convert(wrappedNode.getElementType(), wrappedNode);
+            for (int i = 0; i < wrappedNode.getArrayBracketPairsAfterElementType().size(); i++) {
+              retType = new ArrayType(retType);
+            }
+            for (VariableDeclarator varDecl: wrappedNode.getVariables()) {
+              for (int i = 0; i < varDecl.getId().getArrayBracketPairsAfterId().size(); i++) {
+                retType = new ArrayType(retType);
+              }
+            }
+            return retType;
         }
     }
 

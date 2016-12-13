@@ -51,8 +51,8 @@ public class ReflectionFactory {
 
     public static Type typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
         if (type instanceof java.lang.reflect.TypeVariable) {
-            java.lang.reflect.TypeVariable tv = (java.lang.reflect.TypeVariable) type;
-            boolean declaredOnClass = ((java.lang.reflect.TypeVariable) type).getGenericDeclaration() instanceof java.lang.reflect.Type;
+            java.lang.reflect.TypeVariable<?> tv = (java.lang.reflect.TypeVariable<?>) type;
+            boolean declaredOnClass = tv.getGenericDeclaration() instanceof java.lang.reflect.Type;
             TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
             return new com.github.javaparser.symbolsolver.model.typesystem.TypeVariable(typeParameter);
         } else if (type instanceof ParameterizedType) {
@@ -64,7 +64,7 @@ public class ReflectionFactory {
             rawType = rawType.transformTypeParameters(tp -> typeUsageFor(actualTypes.remove(0), typeSolver)).asReferenceType();
             return rawType;
         } else if (type instanceof Class) {
-            Class c = (Class) type;
+            Class<?> c = (Class<?>) type;
             if (c.isPrimitive()) {
                 if (c.getName().equals(Void.TYPE.getName())) {
                     return VoidType.INSTANCE;

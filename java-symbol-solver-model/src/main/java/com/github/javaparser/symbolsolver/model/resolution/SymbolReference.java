@@ -38,14 +38,14 @@ public class SymbolReference<S extends Declaration> {
      * Create a solve reference to the given symbol.
      */
     public static <S extends Declaration, S2 extends S> SymbolReference<S> solved(S2 symbolDeclaration) {
-        return new SymbolReference(Optional.of(symbolDeclaration));
+        return new SymbolReference<S>(Optional.of(symbolDeclaration));
     }
 
     /**
      * Create an unsolved reference specifying the type of the value expected.
      */
     public static <S extends Declaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
-        return new SymbolReference(Optional.<S>empty());
+        return new SymbolReference<S>(Optional.<S>empty());
     }
 
     @Override

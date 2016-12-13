@@ -98,7 +98,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public String getQualifiedName() {
-        return ctClass.getName();
+        return ctClass.getName().replace('$', '.');
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
@@ -225,19 +225,20 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return false;
     }
 
-    @Override
-    public FieldDeclaration getField(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean hasField(String name) {
-        throw new UnsupportedOperationException();
-    }
+//    @Override
+//    public FieldDeclaration getField(String name) {
+//        throw new UnsupportedOperationException("JavassistClassDeclaration.getField");
+//    }
+//
+//    @Override
+//    public boolean hasField(String name) {
+//        throw new UnsupportedOperationException("JavassistClassDeclaration.hasField");
+//    }
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-        throw new UnsupportedOperationException();
+      //throw new UnsupportedOperationException("JavassistClassDeclaration.getAllFields");
+      return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
@@ -327,7 +328,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ConstructorDeclaration> getConstructors() {
-        throw new UnsupportedOperationException();
+      return javassistTypeDeclarationAdapter.getConstructors();
     }
 
     @Override

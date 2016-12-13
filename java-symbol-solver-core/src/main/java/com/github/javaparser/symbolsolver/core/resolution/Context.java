@@ -16,6 +16,10 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
+import java.util.List;
+import java.util.Optional;
+
+import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -25,9 +29,6 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Context is very similar to scope.
@@ -50,7 +51,7 @@ public interface Context {
         if (parent == null) {
             return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
         } else {
-            return getParent().solveType(name, typeSolver);
+            return parent.solveType(name, typeSolver);
         }
     }
 
@@ -66,6 +67,15 @@ public interface Context {
         } else {
             return Optional.empty();
         }
+    }
+
+    /* Constructor resolution */
+
+    /**
+     * We find the method declaration which is the best match for the given name and list of typeParametersValues.
+     */
+    default SymbolReference<ConstructorDeclaration> solveConstructor(List<Type> argumentsTypes, TypeSolver typeSolver) {
+      throw new IllegalArgumentException("Constrictor resolution is available only on Class Context");
     }
 
     /* Methods resolution */

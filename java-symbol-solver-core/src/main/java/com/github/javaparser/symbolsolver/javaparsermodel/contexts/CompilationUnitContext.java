@@ -108,7 +108,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     @Override
     public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypes() != null) {
-            for (TypeDeclaration type : wrappedNode.getTypes()) {
+            for (TypeDeclaration<?> type : wrappedNode.getTypes()) {
                 if (type.getName().getId().equals(name)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
@@ -122,11 +122,25 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         if (wrappedNode.getImports() != null) {
+            int dotPos = name.indexOf('.');
+            String prefix = null;
+            if (dotPos > -1) {
+              prefix = name.substring(0, dotPos);
+            }
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl instanceof SingleTypeImportDeclaration) {
                     ClassOrInterfaceType importedType = ((SingleTypeImportDeclaration) importDecl).getType();
                     String qName = qName(importedType);
-                    if (qName.equals(name) || qName.endsWith("." + name)) {
+                    boolean found = qName.equals(name) || qName.endsWith("." + name);
+                    if (!found) {
+                      if (prefix != null) {
+                        found = qName.endsWith("." + prefix);
+                        if (found) {
+                          qName = qName + name.substring(dotPos);
+                        }
+                      }
+                    }
+                    if (found) {
                         SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref.isSolved()) {
                             return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);

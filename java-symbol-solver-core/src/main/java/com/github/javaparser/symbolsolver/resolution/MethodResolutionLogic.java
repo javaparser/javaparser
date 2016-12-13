@@ -16,26 +16,41 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
+import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodAmbiguityException;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -90,6 +105,9 @@ public class MethodResolutionLogic {
                     }
                 } // else it is already assignable, nothing to do
             } else {
+                if (pos > argumentsTypes.size()) {
+                  return false;
+                }
                 argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
             }
         }
@@ -349,26 +367,59 @@ public class MethodResolutionLogic {
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
+        // remove abstract method if there is a non abstract one
+        List<MethodDeclaration> abstractMethods = new ArrayList<>();
+        for (int i = 0; i < applicableMethods.size(); i++) {
+          if (applicableMethods.get(i).isAbstract()) {
+            abstractMethods.add(applicableMethods.get(i));
+          }
+        }
+        if (abstractMethods.size() < applicableMethods.size()) {
+          // remove the abstract to keep the "real" methods
+          applicableMethods.removeAll(abstractMethods);
+        }
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         } else {
             MethodDeclaration winningCandidate = applicableMethods.get(0);
+            MethodDeclaration other = null;
+            boolean possibleAmbiguity = false;
             for (int i = 1; i < applicableMethods.size(); i++) {
-                MethodDeclaration other = applicableMethods.get(i);
+                other = applicableMethods.get(i);
                 if (isMoreSpecific(winningCandidate, other, typeSolver)) {
-                    // nothing to do
+                    possibleAmbiguity = false;
                 } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+                    possibleAmbiguity = false;
                     winningCandidate = other;
                 } else {
                     if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
+                        possibleAmbiguity = true;
                     } else {
                         // we expect the methods to be ordered such that inherited methods are later in the list
                     }
                 }
             }
+            if (possibleAmbiguity) {
+              // pick the first exact match if it exists
+              if (!isExactMatch(winningCandidate, argumentsTypes)) {
+                if (isExactMatch(other, argumentsTypes)) {
+                  winningCandidate = other;
+                } else {
+                  throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
+                }
+              }
+            }
             return SymbolReference.solved(winningCandidate);
         }
+    }
+
+    protected static boolean isExactMatch(MethodLikeDeclaration method, List<Type> argumentsTypes) {
+      for (int i = 0; i < method.getNumberOfParams(); i++) {
+        if (!method.getParam(i).getType().equals(argumentsTypes.get(i))) {
+          return false;
+        }
+      }
+      return true;
     }
 
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
@@ -493,13 +544,19 @@ public class MethodResolutionLogic {
             return ((ReflectionClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+          return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+        }
+          if (typeDeclaration instanceof ReflectionEnumDeclaration) {
+            return ((ReflectionEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
             return ((JavassistInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
-            return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+          return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+        }
+          if (typeDeclaration instanceof JavassistEnumDeclaration) {
+            return ((JavassistEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

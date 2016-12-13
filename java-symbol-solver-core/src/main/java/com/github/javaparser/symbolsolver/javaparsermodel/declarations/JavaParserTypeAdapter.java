@@ -75,9 +75,9 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         }
 
         // Internal classes
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration internalType = (com.github.javaparser.ast.body.TypeDeclaration) member;
+                com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
                 String prefix = internalType.getName() + ".";
                 if (internalType.getName().getId().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {

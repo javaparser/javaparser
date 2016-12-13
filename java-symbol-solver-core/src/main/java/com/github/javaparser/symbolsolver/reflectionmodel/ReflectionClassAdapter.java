@@ -55,9 +55,9 @@ class ReflectionClassAdapter {
                 List<Type> typeParameters = Arrays.stream(parameterizedType.getActualTypeArguments())
                         .map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver))
                         .collect(Collectors.toList());
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) ((ParameterizedType) superInterface).getRawType(), typeSolver), typeParameters, typeSolver));
             } else {
-                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class) superInterface, typeSolver), typeSolver));
+                interfaces.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration((Class<?>) superInterface, typeSolver), typeSolver));
             }
         }
         return interfaces;
@@ -132,7 +132,7 @@ class ReflectionClassAdapter {
 
     public List<TypeParameterDeclaration> getTypeParameters() {
         List<TypeParameterDeclaration> params = new ArrayList<>();
-        for (TypeVariable tv : this.clazz.getTypeParameters()) {
+        for (TypeVariable<?> tv : this.clazz.getTypeParameters()) {
             params.add(new ReflectionTypeParameter(tv, true, typeSolver));
         }
         return params;
@@ -173,5 +173,11 @@ class ReflectionClassAdapter {
 
     private final boolean isFunctionalInterface() {
         return FunctionalInterfaceLogic.getFunctionalMethod(typeDeclaration).isPresent();
+    }
+
+    public List<ConstructorDeclaration> getConstructors() {
+      return Arrays.stream(clazz.getConstructors())
+          .map(m -> new ReflectionConstructorDeclaration(m, typeSolver))
+          .collect(Collectors.toList());
     }
 }

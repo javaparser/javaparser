@@ -16,25 +16,34 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
+import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javaslang.Tuple2;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javaslang.Tuple2;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -127,7 +136,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // consider static methods
             if (wrappedNode.getScope() instanceof NameExpr) {
                 NameExpr scopeAsName = (NameExpr) wrappedNode.getScope();
-                SymbolReference symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
+                SymbolReference<TypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
                     return MethodResolutionLogic.solveMethodInType(typeDeclaration, name, argumentsTypes, typeSolver);
@@ -146,8 +155,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 } else {
                     return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
                 }
-            } else if (typeOfScope.isArray() && typeOfScope.asArrayType().getComponentType().isReferenceType()) {
-                return MethodResolutionLogic.solveMethodInType(typeOfScope.asArrayType().getComponentType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
+            } else if (typeOfScope.isArray() /*&& typeOfScope.asArrayType().getComponentType().isReferenceType()*/) {
+                // method call on array are Object methods
+                return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
+//                return MethodResolutionLogic.solveMethodInType(typeOfScope.asArrayType().getComponentType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
             } else if (typeOfScope.isTypeVariable()) {
                 for (TypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
                     SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
@@ -343,7 +354,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 throw new UnsupportedOperationException("unbounded wildcard");
             }
         } else if (type instanceof ArrayType) {
-            return solveMethodAsUsage(((ArrayType) type).getComponentType(), name, argumentsTypes, typeSolver, invokationContext);
+            // An array inherits methods from Object not from it's component type
+            return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, typeSolver, invokationContext);
+            //return solveMethodAsUsage(((ArrayType) type).getComponentType(), name, argumentsTypes, typeSolver, invokationContext);
         } else {
             throw new UnsupportedOperationException("type usage: " + type.getClass().getCanonicalName());
         }

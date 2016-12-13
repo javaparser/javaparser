@@ -14,38 +14,38 @@
  * limitations under the License.
  */
 
-package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
+package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Federico Tomassetti
+ * @author Fred Lefévère-Laoide
  */
-public class JavaParserConstructorDeclaration implements ConstructorDeclaration {
+public class ReflectionConstructorDeclaration implements ConstructorDeclaration {
 
-    private ClassDeclaration classDeclaration;
-    private com.github.javaparser.ast.body.ConstructorDeclaration wrapped;
+    private Constructor<?> constructor;
     private TypeSolver typeSolver;
 
-    public JavaParserConstructorDeclaration(ClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrapped,
+    public ReflectionConstructorDeclaration(Constructor<?> constructor,
                                             TypeSolver typeSolver) {
-        this.classDeclaration = classDeclaration;
-        this.wrapped = wrapped;
+        this.constructor = constructor;
         this.typeSolver = typeSolver;
     }
 
     @Override
     public ClassDeclaration declaringType() {
-        return classDeclaration;
+      return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
     }
 
     @Override
     public int getNumberOfParams() {
-        return this.wrapped.getParameters().size();
+        return constructor.getParameterCount();
     }
 
     @Override
@@ -53,21 +53,25 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
         if (i < 0 || i >= getNumberOfParams()) {
             throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
-        return new JavaParserParameterDeclaration(wrapped.getParameters().get(i), typeSolver);
+        boolean variadic = false;
+        if (constructor.isVarArgs()) {
+            variadic = i == (constructor.getParameterCount() - 1);
+        }
+        return new ReflectionParameterDeclaration(constructor.getParameterTypes()[i], constructor.getGenericParameterTypes()[i], typeSolver, variadic);
     }
 
     @Override
     public String getName() {
-        return this.classDeclaration.getName();
+        return constructor.getName();
     }
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+      return ReflectionFactory.modifiersToAccessLevel(constructor.getModifiers());
     }
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-      return this.wrapped.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
+      return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 }

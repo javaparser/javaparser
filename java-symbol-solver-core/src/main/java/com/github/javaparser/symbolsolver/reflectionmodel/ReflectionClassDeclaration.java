@@ -152,7 +152,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
             if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             MethodUsage methodUsage = new MethodUsage(methodDeclaration);
-            for (int i = 0; i < getTypeParameters().size(); i++) {
+            for (int i = 0; i < getTypeParameters().size() && i < typeParameterValues.size(); i++) {
                 TypeParameterDeclaration tpToReplace = getTypeParameters().get(i);
                 Type newValue = typeParameterValues.get(i);
                 methodUsage = methodUsage.replaceTypeParameter(tpToReplace, newValue);
@@ -188,7 +188,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
                 && new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
             return true;
         }
-        for (Class interfaze : clazz.getInterfaces()) {
+        for (Class<?> interfaze : clazz.getInterfaces()) {
             if (new ReflectionInterfaceDeclaration(interfaze, typeSolver).canBeAssignedTo(other)) {
                 return true;
             }
@@ -294,7 +294,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ConstructorDeclaration> getConstructors() {
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getConstructors();
     }
 
     @Override
