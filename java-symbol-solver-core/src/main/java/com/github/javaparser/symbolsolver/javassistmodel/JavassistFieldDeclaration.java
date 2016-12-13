@@ -74,13 +74,11 @@ public class JavassistFieldDeclaration implements FieldDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-//        throw new UnsupportedOperationException();
         return JavassistFactory.modifiersToAccessLevel(ctField.getModifiers());
     }
 
     @Override
     public TypeDeclaration declaringType() {
-//        throw new UnsupportedOperationException();
         return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
     }
 }

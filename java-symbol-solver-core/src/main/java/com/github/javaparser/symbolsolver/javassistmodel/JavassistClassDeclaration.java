@@ -225,19 +225,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return false;
     }
 
-//    @Override
-//    public FieldDeclaration getField(String name) {
-//        throw new UnsupportedOperationException("JavassistClassDeclaration.getField");
-//    }
-//
-//    @Override
-//    public boolean hasField(String name) {
-//        throw new UnsupportedOperationException("JavassistClassDeclaration.hasField");
-//    }
-
     @Override
     public List<FieldDeclaration> getAllFields() {
-      //throw new UnsupportedOperationException("JavassistClassDeclaration.getAllFields");
       return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 

@@ -123,19 +123,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         throw new UnsupportedOperationException();
     }
 
-//    @Override
-//    public FieldDeclaration getField(String name) {
-//        throw new UnsupportedOperationException("JavassistInterfaceDeclaration.getField("+name+")");
-//    }
-//
-//    @Override
-//    public boolean hasField(String name) {
-//        throw new UnsupportedOperationException("JavassistInterfaceDeclaration.hasField("+name+")");
-//    }
-
     @Override
     public List<FieldDeclaration> getAllFields() {
-//        throw new UnsupportedOperationException("JavassistInterfaceDeclaration.getAllFields()");
       return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 

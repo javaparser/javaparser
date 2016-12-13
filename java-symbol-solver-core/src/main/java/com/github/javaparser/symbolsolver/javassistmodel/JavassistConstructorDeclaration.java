@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Federico Tomassetti
+ * @author Fred Lefévère-Laoide
  */
 public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     private CtConstructor ctConstructor;
