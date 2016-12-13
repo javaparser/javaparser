@@ -75,7 +75,7 @@ public interface Context {
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
     default SymbolReference<ConstructorDeclaration> solveConstructor(List<Type> argumentsTypes, TypeSolver typeSolver) {
-      throw new IllegalArgumentException("Constrictor resolution is available only on Class Context");
+        throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
     }
 
     /* Methods resolution */

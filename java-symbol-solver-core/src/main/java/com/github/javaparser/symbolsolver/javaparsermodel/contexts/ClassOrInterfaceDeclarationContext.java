@@ -98,8 +98,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, typeSolver);
     }
-    
-    @Override
+
     public SymbolReference<ConstructorDeclaration> solveConstructor(List<Type> argumentsTypes, TypeSolver typeSolver) {
       return javaParserTypeDeclarationAdapter.solveConstructor(argumentsTypes, typeSolver);
     }
