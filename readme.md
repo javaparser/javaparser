@@ -27,7 +27,8 @@ you can use [the Java Symbol Solver project.](https://github.com/javaparser/java
 
 The project binaries are available in Maven Central.  Just add the following to your maven configuration or tailor to your own dependency management system.
 
-Suggested version (many fixes, new features, and mostly stable API):
+Suggested version (many fixes, new features, and mostly stable API).
+[Please refer to the Migration Guide when upgrading.](https://github.com/javaparser/javaparser/wiki/Migration-Guide)
 ```xml
 <dependency>
     <groupId>com.github.javaparser</groupId>
