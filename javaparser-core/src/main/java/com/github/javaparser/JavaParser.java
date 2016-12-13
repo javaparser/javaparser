@@ -47,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
-    private static final JavaParser staticJavaParser = new JavaParser();
+    private static final JavaParser defaultInstance = new JavaParser();
 
     private final CommentsInserter commentsInserter;
     private final ParserConfiguration configuration;
@@ -246,7 +246,7 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = staticJavaParser.parse(context, provider);
+        ParseResult<T> result = defaultInstance.parse(context, provider);
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
