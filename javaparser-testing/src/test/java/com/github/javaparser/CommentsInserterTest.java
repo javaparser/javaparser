@@ -22,11 +22,13 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.ast.expr.Expression;
 import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -47,6 +49,28 @@ public class CommentsInserterTest {
         CommentsCollection cc = (CommentsCollection) result.getCommentsCollection().get();
         assertEquals(1, cc.getLineComments().size());
         assertEquals(1, cc.getJavadocComments().size());
+    }
+
+
+    @Test
+    public void xxx() {
+ParserConfiguration configuration = new ParserConfiguration();
+JavaParser parser = new JavaParser(configuration);
+ParseResult<Expression> parseResult = parser.parse(ParseStart.EXPRESSION, Providers.provider("1+1"));
+if (!parseResult.isSuccessful()) {
+    System.out.println(parseResult.getProblems().toString());
+}
+// a failed parse does not always mean there is no result.
+if (parseResult.getResult().isPresent()) {
+    Expression expression = parseResult.getResult().get();
+    System.out.println(expression);
+}
+if (parseResult.getCommentsCollection().isPresent()) {
+    // ...
+}
+if (parseResult.getTokens().isPresent()) {
+    // ...
+}
     }
 
 }
