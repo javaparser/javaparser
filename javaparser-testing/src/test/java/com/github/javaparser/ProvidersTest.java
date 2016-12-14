@@ -24,6 +24,7 @@ package com.github.javaparser;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertFalse;
@@ -36,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 public class ProvidersTest {
 
     @Test
-    public void testResourceProvider() {
+    public void testResourceProvider() throws IOException {
         Provider provider = Providers.resourceProvider("com/github/javaparser/issue_samples/Issue290.java.txt");
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
@@ -44,7 +45,7 @@ public class ProvidersTest {
         assertTrue(parse.isSuccessful());
     }
     @Test
-    public void testResourceProviderWithWrongEncoding() {
+    public void testResourceProviderWithWrongEncoding() throws IOException {
         Provider provider = Providers.resourceProvider("com/github/javaparser/TestFileIso88591.java");
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
@@ -52,7 +53,7 @@ public class ProvidersTest {
         assertFalse(parse.isSuccessful());
     }
     @Test
-    public void testResourceProviderWithEncoding() {
+    public void testResourceProviderWithEncoding() throws IOException {
         Provider provider = Providers.resourceProvider(
                 "com/github/javaparser/TestFileIso88591.java",
                 Charset.forName("ISO-8859-1")
