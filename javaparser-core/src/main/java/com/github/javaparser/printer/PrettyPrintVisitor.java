@@ -30,6 +30,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -399,8 +400,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
-        if(!n.getVariables().isEmpty()) {
-            n.getVariables().get(0).getType().getElementType().accept(this, arg);
+        if (!n.getVariables().isEmpty()) {
+            n.getCommonType().accept(this, arg);
         }
 
         printer.print(" ");
@@ -420,16 +421,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
+        Type commonType = n.getAncestorOfType(NodeWithVariables.class).getCommonType();
 
-        final List<ArrayType> arrayTypeBuffer = new LinkedList<>();
         Type type = n.getType();
-        while (type instanceof ArrayType) {
-            final ArrayType arrayType = (ArrayType) type;
-            arrayTypeBuffer.add(arrayType);
-            type = arrayType.getComponentType();
-        }
 
-        for (ArrayType arrayType : arrayTypeBuffer) {
+        ArrayType arrayType = null;
+
+        for (int i=commonType.getArrayLevel();i<type.getArrayLevel();i++){
+            if (arrayType == null) {
+                arrayType = (ArrayType)type;
+            } else {
+                arrayType = (ArrayType) arrayType.getComponentType();
+            }
             printAnnotations(arrayType.getAnnotations(), true, arg);
             printer.print("[]");
         }
@@ -808,7 +811,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
 
         if(!n.getVariables().isEmpty()) {
-            n.getVariables().get(0).getType().getElementType().accept(this, arg);
+            n.getCommonType().accept(this, arg);
         }
         printer.print(" ");
 
