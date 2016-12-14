@@ -80,6 +80,7 @@ public final class JavaParser {
         } else {
             astParser.reset(provider);
         }
+        astParser.setTabSize(configuration.getTabSize());
         return astParser;
     }
 
@@ -99,7 +100,7 @@ public final class JavaParser {
         try {
             final ASTParser parser = getParserForProvider(provider);
             N resultNode = start.parse(parser);
-            if (configuration.attributeComments) {
+            if (configuration.isAttributeComments()) {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }

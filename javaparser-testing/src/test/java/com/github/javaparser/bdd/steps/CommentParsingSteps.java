@@ -85,12 +85,12 @@ public class CommentParsingSteps {
 
     @When("the do not consider annotations as node start for code attribution is $value on the Java parser")
     public void whenTheDoNotConsiderAnnotationsAsNodeStartForCodeAttributionIsTrueOnTheJavaParser(boolean value) {
-        configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution = value;
+        configuration.setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(value);
     }
 
     @When("the do not assign comments preceding empty lines is $value on the Java parser")
     public void whenTheDoNotAssignCommentsPrecedingEmptyLinesIsTrueOnTheJavaParser(boolean value) {
-        configuration.doNotAssignCommentsPrecedingEmptyLines = value;
+        configuration.setDoNotAssignCommentsPrecedingEmptyLines(value);
     }
 
     @When("the class is parsed by the Java parser")
