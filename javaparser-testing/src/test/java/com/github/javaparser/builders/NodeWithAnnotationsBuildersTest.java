@@ -34,7 +34,7 @@ public class NodeWithAnnotationsBuildersTest {
     @Test
     public void testAddAnnotation() {
         NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
-        assertEquals("import NodeWithAnnotationsBuildersTest$hey;", cu.getImport(0).toString().trim());
+        assertEquals("import com.github.javaparser.builders.NodeWithAnnotationsBuildersTest$hey;", cu.getImport(0).toString().trim());
         assertEquals(1, testClass.getAnnotations().size());
         assertEquals(annotation, testClass.getAnnotation(0));
         assertEquals(NormalAnnotationExpr.class, testClass.getAnnotation(0).getClass());
