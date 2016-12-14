@@ -67,4 +67,12 @@ public abstract class Type extends Node {
         }
         return this;
     }
+
+    public int getArrayLevel() {
+        if (this instanceof ArrayType) {
+            return 1 + ((ArrayType) this).getComponentType().getArrayLevel();
+        } else {
+            return 0;
+        }
+    }
 }
