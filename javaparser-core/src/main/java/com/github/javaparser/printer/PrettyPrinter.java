@@ -8,6 +8,10 @@ import com.github.javaparser.ast.Node;
 public class PrettyPrinter {
     private final PrettyPrinterConfiguration configuration;
 
+    public PrettyPrinter() {
+        this(new PrettyPrinterConfiguration());
+    }
+
     public PrettyPrinter(PrettyPrinterConfiguration configuration) {
         this.configuration = configuration;
     }
