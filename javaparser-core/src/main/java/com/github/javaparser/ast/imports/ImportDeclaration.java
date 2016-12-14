@@ -44,7 +44,7 @@ public abstract class ImportDeclaration extends Node {
         super(range);
     }
 
-    abstract boolean isAsterisk();
+    public abstract boolean isAsterisk();
 
-    abstract boolean isStatic();
+    public abstract boolean isStatic();
 }

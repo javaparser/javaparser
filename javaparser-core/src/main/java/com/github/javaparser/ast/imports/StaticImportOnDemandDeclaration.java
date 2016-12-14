@@ -46,12 +46,12 @@ public class StaticImportOnDemandDeclaration extends ImportDeclaration {
     }
 
     @Override
-    boolean isAsterisk() {
+    public boolean isAsterisk() {
         return true;
     }
 
     @Override
-    boolean isStatic() {
+    public boolean isStatic() {
         return true;
     }
 }
