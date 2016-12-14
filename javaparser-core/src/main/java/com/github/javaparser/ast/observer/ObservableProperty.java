@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.observing;
+package com.github.javaparser.ast.observer;
 
 /**
  * Properties considered by the AstObserver

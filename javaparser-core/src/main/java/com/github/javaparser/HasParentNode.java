@@ -1,7 +1,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.observing.Observable;
+import com.github.javaparser.ast.observer.Observable;
 
 import java.util.List;
 import java.util.Optional;

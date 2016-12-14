@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.observing;
+package com.github.javaparser.ast.observer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
