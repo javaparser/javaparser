@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.imports.ImportDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -39,6 +40,7 @@ import java.nio.file.Path;
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.Providers.resourceProvider;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -47,7 +49,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
+    private static final JavaParser defaultInstance = new JavaParser();
+
     private final CommentsInserter commentsInserter;
+    private final ParserConfiguration configuration;
 
     private ASTParser astParser = null;
 
@@ -65,6 +70,7 @@ public final class JavaParser {
      * Creating an instance will reduce setup time between parsing files.
      */
     public JavaParser(ParserConfiguration configuration) {
+        this.configuration = configuration;
         commentsInserter = new CommentsInserter(configuration);
     }
 
@@ -93,11 +99,13 @@ public final class JavaParser {
         try {
             final ASTParser parser = getParserForProvider(provider);
             N resultNode = start.parse(parser);
-            final CommentsCollection comments = astParser.getCommentsCollection();
-            commentsInserter.insertComments(resultNode, comments.copy().getComments());
+            if (configuration.attributeComments) {
+                final CommentsCollection comments = parser.getCommentsCollection();
+                commentsInserter.insertComments(resultNode, comments.copy().getComments());
+            }
 
-            return new ParseResult<>(resultNode, parser.problems, astParser.getTokens(),
-                    astParser.getCommentsCollection());
+            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
+                    parser.getCommentsCollection());
         } catch (Exception e) {
             return new ParseResult<>(e);
         } finally {
@@ -192,6 +200,51 @@ public final class JavaParser {
     }
 
     /**
+     * Parses the Java code contained in a resource and returns a
+     * {@link CompilationUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     *
+     * @param path path to a resource containing Java source code. As resource is
+     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static CompilationUnit parseResource(final String path) throws IOException {
+        return simplifiedParse(COMPILATION_UNIT, resourceProvider(path));
+    }
+
+    /**
+     * Parses the Java code contained in a resource and returns a
+     * {@link CompilationUnit} that represents it.<br>
+     *
+     * @param path path to a resource containing Java source code. As resource is
+     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param encoding encoding of the source code
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static CompilationUnit parseResource(final String path, Charset encoding) throws IOException {
+        return simplifiedParse(COMPILATION_UNIT, resourceProvider(path, encoding));
+    }
+
+    /**
+     * Parses the Java code contained in a resource and returns a
+     * {@link CompilationUnit} that represents it.<br>
+     *
+     * @param classLoader the classLoader that is asked to load the resource
+     * @param path path to a resource containing Java source code. As resource is
+     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @return CompilationUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static CompilationUnit parseResource(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+        return simplifiedParse(COMPILATION_UNIT, resourceProvider(classLoader, path, encoding));
+    }
+
+    /**
      * Parses Java code from a Reader and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
@@ -240,7 +293,7 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
+        ParseResult<T> result = defaultInstance.parse(context, provider);
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
@@ -328,5 +381,16 @@ public final class JavaParser {
      */
     public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
         return simplifiedParse(CLASS_OR_INTERFACE_TYPE, provider(type));
+    }
+
+    /**
+     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr} that represents it.
+     *
+     * @param declaration a variable declaration like <code>int x=2;</code>
+     * @return VariableDeclarationExpr representing the type
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
+        return simplifiedParse(VARIABLE_DECLARATION_EXPR, provider(declaration));
     }
 }

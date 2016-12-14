@@ -1,8 +1,8 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
-import com.github.javaparser.ast.observing.AstObserver;
-import com.github.javaparser.ast.observing.Observable;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;

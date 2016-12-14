@@ -173,6 +173,10 @@ class CommentsInserter {
     }
 
     private boolean attributeLineCommentToNodeOrChild(Node node, LineComment lineComment) {
+        if (!node.getRange().isPresent() || !lineComment.getRange().isPresent()) {
+            return false;
+        }
+        
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().get().line == lineComment.getBegin().get().line

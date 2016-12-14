@@ -2,11 +2,8 @@ package com.github.javaparser.ast.imports;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.BadNode;
-import com.github.javaparser.ast.observing.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An import declaration that failed to parse.

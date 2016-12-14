@@ -1,9 +1,9 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.observing.AstObserver;
-import com.github.javaparser.ast.observing.AstObserverAdapter;
-import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
