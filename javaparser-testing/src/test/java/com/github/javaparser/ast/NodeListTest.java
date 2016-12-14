@@ -4,8 +4,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.observing.AstObserver;
-import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 

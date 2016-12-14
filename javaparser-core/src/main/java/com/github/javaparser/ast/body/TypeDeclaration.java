@@ -32,7 +32,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
-import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.observer.ObservableProperty;
 
 import java.util.EnumSet;
 import java.util.LinkedList;

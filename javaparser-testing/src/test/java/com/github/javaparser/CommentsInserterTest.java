@@ -21,20 +21,22 @@
 
 package com.github.javaparser;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.CommentsCollection;
-import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
 
 public class CommentsInserterTest {
+    private String makeFilename(String sampleName) {
+        return "com/github/javaparser/issue_samples/" + sampleName + ".java.txt";
+    }
 
-    private ParseResult parseSample(String sampleName) {
+    private ParseResult<CompilationUnit> parseSample(String sampleName) throws IOException {
         Provider p = Providers.resourceProvider(
-                "com/github/javaparser/issue_samples/" + sampleName + ".java.txt");
+                makeFilename(sampleName));
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
     }
 
@@ -47,6 +49,12 @@ public class CommentsInserterTest {
         CommentsCollection cc = (CommentsCollection) result.getCommentsCollection().get();
         assertEquals(1, cc.getLineComments().size());
         assertEquals(1, cc.getJavadocComments().size());
+    }
+
+    @Test
+    public void issue624() throws IOException {
+        JavaParser.parseResource(makeFilename("Issue624"));
+        // Should not fail
     }
 
 }

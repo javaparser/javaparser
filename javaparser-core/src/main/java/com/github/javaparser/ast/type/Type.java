@@ -25,7 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.observing.ObservableProperty;
+import com.github.javaparser.ast.observer.ObservableProperty;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
