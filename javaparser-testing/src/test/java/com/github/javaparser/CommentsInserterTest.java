@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CommentsInserterTest {
 
-    private ParseResult parseSample(String sampleName) {
+    private ParseResult parseSample(String sampleName) throws IOException {
         Provider p = Providers.resourceProvider(
                 "com/github/javaparser/issue_samples/" + sampleName + ".java.txt");
         return new JavaParser().parse(ParseStart.COMPILATION_UNIT, p);
