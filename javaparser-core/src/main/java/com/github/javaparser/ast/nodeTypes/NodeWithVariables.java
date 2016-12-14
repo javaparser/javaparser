@@ -81,4 +81,12 @@ public interface NodeWithVariables<N extends Node> {
         }
         return type;
     }
+
+    default Type getMinimumCommonType() {
+        return getVariables().stream().map(v -> v.getType())
+                .sorted((Comparator<Type<?>>) (a, b) -> a.getArrayLevel() - b.getArrayLevel())
+                .findFirst()
+                .orElse(null);
+    }
+
 }
