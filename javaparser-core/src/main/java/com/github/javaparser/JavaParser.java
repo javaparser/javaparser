@@ -47,7 +47,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
+    private static final JavaParser defaultInstance = new JavaParser();
+
     private final CommentsInserter commentsInserter;
+    private final ParserConfiguration configuration;
 
     private ASTParser astParser = null;
 
@@ -65,6 +68,7 @@ public final class JavaParser {
      * Creating an instance will reduce setup time between parsing files.
      */
     public JavaParser(ParserConfiguration configuration) {
+        this.configuration = configuration;
         commentsInserter = new CommentsInserter(configuration);
     }
 
@@ -93,11 +97,13 @@ public final class JavaParser {
         try {
             final ASTParser parser = getParserForProvider(provider);
             N resultNode = start.parse(parser);
-            final CommentsCollection comments = astParser.getCommentsCollection();
-            commentsInserter.insertComments(resultNode, comments.copy().getComments());
+            if (configuration.attributeComments) {
+                final CommentsCollection comments = parser.getCommentsCollection();
+                commentsInserter.insertComments(resultNode, comments.copy().getComments());
+            }
 
-            return new ParseResult<>(resultNode, parser.problems, astParser.getTokens(),
-                    astParser.getCommentsCollection());
+            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
+                    parser.getCommentsCollection());
         } catch (Exception e) {
             return new ParseResult<>(e);
         } finally {
@@ -240,7 +246,7 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
+        ParseResult<T> result = defaultInstance.parse(context, provider);
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
