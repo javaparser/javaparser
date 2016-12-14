@@ -30,12 +30,12 @@ public class BadImportDeclaration extends ImportDeclaration implements
     }
 
     @Override
-    boolean isAsterisk() {
+    public boolean isAsterisk() {
         return false;
     }
 
     @Override
-    boolean isStatic() {
+    public boolean isStatic() {
         return false;
     }
 }

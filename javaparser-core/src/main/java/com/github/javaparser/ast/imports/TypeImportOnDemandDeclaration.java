@@ -62,12 +62,12 @@ public class TypeImportOnDemandDeclaration extends ImportDeclaration implements 
     }
 
     @Override
-    boolean isAsterisk() {
+    public boolean isAsterisk() {
         return true;
     }
 
     @Override
-    boolean isStatic() {
+    public boolean isStatic() {
         return false;
     }
 }
