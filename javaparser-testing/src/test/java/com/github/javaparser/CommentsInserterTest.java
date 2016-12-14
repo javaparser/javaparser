@@ -23,13 +23,9 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.CommentsCollection;
-import com.github.javaparser.ast.expr.Expression;
-import org.apache.commons.io.Charsets;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
