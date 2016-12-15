@@ -23,6 +23,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -33,7 +34,7 @@ import java.util.HashMap;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class PrimitiveType extends Type<PrimitiveType> implements NodeWithAnnotations<PrimitiveType> {
+public final class PrimitiveType extends Type implements NodeWithAnnotations<PrimitiveType> {
 
     public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.BYTE);
 
@@ -127,5 +128,10 @@ public final class PrimitiveType extends Type<PrimitiveType> implements NodeWith
 
     public String asString() {
         return type.asString();
+    }
+
+    @Override
+    public PrimitiveType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        return (PrimitiveType) super.setAnnotations(annotations);
     }
 }

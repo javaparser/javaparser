@@ -116,7 +116,7 @@ public final class PositionUtils {
 
     private static Node beginNodeWithoutConsideringAnnotations(Node node) {
         if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
-            NodeWithType<?, Type<?>> casted = (NodeWithType<?, Type<?>>) node;
+            NodeWithType<?, Type> casted = (NodeWithType<?, Type>) node;
             return casted.getType();
         } else if (node instanceof ClassOrInterfaceDeclaration) {
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;

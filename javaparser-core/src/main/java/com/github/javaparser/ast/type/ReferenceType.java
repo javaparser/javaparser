@@ -27,7 +27,7 @@ import com.github.javaparser.ast.NodeList;
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class ReferenceType<T extends ReferenceType> extends Type<T> {
+public abstract class ReferenceType<T extends ReferenceType> extends Type {
 
     public ReferenceType() {
         this(null);

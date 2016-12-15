@@ -42,14 +42,14 @@ public interface NodeWithTypeArguments<N extends Node> {
     /**
      * @return the types that can be found in the type arguments: &lt;String, Integer&gt;.
      */
-    Optional<NodeList<Type<?>>> getTypeArguments();
+    Optional<NodeList<Type>> getTypeArguments();
 
     /**
      * Allows you to set the generic arguments
      *
      * @param typeArguments The list of types of the generics, can be null
      */
-    N setTypeArguments(NodeList<Type<?>> typeArguments);
+    N setTypeArguments(NodeList<Type> typeArguments);
 
     /**
      * @return whether the type arguments look like &lt;>.
@@ -75,12 +75,12 @@ public interface NodeWithTypeArguments<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N removeTypeArguments() {
-        setTypeArguments((NodeList<Type<?>>) null);
+        setTypeArguments((NodeList<Type>) null);
         return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default N setTypeArguments(Type<?>... typeArguments) {
+    default N setTypeArguments(Type... typeArguments) {
         setTypeArguments(nodeList(typeArguments));
         return (N) this;
     }

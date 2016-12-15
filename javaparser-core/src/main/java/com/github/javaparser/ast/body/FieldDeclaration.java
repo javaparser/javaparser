@@ -105,7 +105,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      * @param type type
      * @param name field name
      */
-    public FieldDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name) {
+    public FieldDeclaration(EnumSet<Modifier> modifiers, Type type, String name) {
         this(assertNotNull(modifiers), new VariableDeclarator(type, assertNotNull(name)));
     }
 

@@ -65,7 +65,7 @@ public interface NodeWithMembers<N extends Node> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Type<?> type, String name, Modifier... modifiers) {
+    default FieldDeclaration addField(Type type, String name, Modifier... modifiers) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
         getMembers().add(fieldDeclaration);
         VariableDeclarator variable = new VariableDeclarator(type, name);

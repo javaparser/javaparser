@@ -23,6 +23,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -38,7 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceType> implements
+public final class ClassOrInterfaceType extends ReferenceType implements
         NodeWithSimpleName<ClassOrInterfaceType>,
         NodeWithAnnotations<ClassOrInterfaceType>,
         NodeWithTypeArguments<ClassOrInterfaceType> {
@@ -47,7 +48,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
 
     private SimpleName name;
 
-    private NodeList<Type<?>> typeArguments;
+    private NodeList<Type> typeArguments;
 
     public ClassOrInterfaceType() {
         this(null,
@@ -71,7 +72,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name,
-                                final NodeList<Type<?>> typeArguments) {
+                                final NodeList<Type> typeArguments) {
         super(range);
         setScope(scope);
         setName(name);
@@ -98,14 +99,14 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     public boolean isBoxedType() {
-        return PrimitiveType.unboxMap.containsKey(name);
+        return PrimitiveType.unboxMap.containsKey(name.getIdentifier());
     }
 
     public PrimitiveType toUnboxedType() throws UnsupportedOperationException {
         if (!isBoxedType()) {
             throw new UnsupportedOperationException(name + " isn't a boxed type.");
         }
-        return new PrimitiveType(PrimitiveType.unboxMap.get(name));
+        return new PrimitiveType(PrimitiveType.unboxMap.get(name.getIdentifier()));
     }
 
     @Override
@@ -129,7 +130,7 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -140,10 +141,15 @@ public final class ClassOrInterfaceType extends ReferenceType<ClassOrInterfaceTy
      * @return this, the ClassOrInterfaceType
      */
     @Override
-    public ClassOrInterfaceType setTypeArguments(final NodeList<Type<?>> typeArguments) {
+    public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);
         return this;
+    }
+
+    @Override
+    public ClassOrInterfaceType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        return (ClassOrInterfaceType) super.setAnnotations(annotations);
     }
 }

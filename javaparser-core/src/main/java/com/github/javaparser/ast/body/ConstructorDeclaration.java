@@ -65,7 +65,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> thrownExceptions;
+    private NodeList<ReferenceType> thrownExceptions;
 
     private BlockStmt body;
 
@@ -93,7 +93,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   NodeList<TypeParameter> typeParameters,
-                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions,
+                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions,
                                   BlockStmt block) {
         this(null,
                 modifiers,
@@ -107,7 +107,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name,
-                                  NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions, BlockStmt block) {
+                                  NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt block) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -149,7 +149,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrownExceptions() {
+    public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
@@ -180,7 +180,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setThrownExceptions(NodeList<ReferenceType<?>> thrownExceptions) {
+    public ConstructorDeclaration setThrownExceptions(NodeList<ReferenceType> thrownExceptions) {
         notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
         this.thrownExceptions = assertNotNull(thrownExceptions);
         setAsParentNodeOf(this.thrownExceptions);

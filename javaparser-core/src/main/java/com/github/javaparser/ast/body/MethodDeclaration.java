@@ -54,7 +54,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         NodeWithJavaDoc<MethodDeclaration>,
         NodeWithDeclaration,
         NodeWithSimpleName<MethodDeclaration>,
-        NodeWithType<MethodDeclaration, Type<?>>,
+        NodeWithType<MethodDeclaration, Type>,
         NodeWithModifiers<MethodDeclaration>,
         NodeWithParameters<MethodDeclaration>,
         NodeWithThrownExceptions<MethodDeclaration>,
@@ -69,13 +69,13 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> thrownExceptions;
+    private NodeList<ReferenceType> thrownExceptions;
 
     private BlockStmt body;
 
     private boolean isDefault;
 
-    private Type<?> type;
+    private Type type;
 
     public MethodDeclaration() {
         this(null,
@@ -90,7 +90,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type<?> type, final String name) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
         this(null,
                 modifiers,
                 new NodeList<>(),
@@ -103,7 +103,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type<?> type,
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type type,
                              final NodeList<Parameter> parameters) {
         this(null,
                 modifiers,
@@ -120,11 +120,11 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     public MethodDeclaration(final EnumSet<Modifier> modifiers,
                              final NodeList<AnnotationExpr> annotations,
                              final NodeList<TypeParameter> typeParameters,
-                             final Type<?> type,
+                             final Type type,
                              final SimpleName name,
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
-                             final NodeList<ReferenceType<?>> thrownExceptions,
+                             final NodeList<ReferenceType> thrownExceptions,
                              final BlockStmt body) {
         this(null,
                 modifiers,
@@ -142,11 +142,11 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                              final EnumSet<Modifier> modifiers,
                              final NodeList<AnnotationExpr> annotations,
                              final NodeList<TypeParameter> typeParameters,
-                             final Type<?> type,
+                             final Type type,
                              final SimpleName name,
                              final boolean isDefault,
                              final NodeList<Parameter> parameters,
-                             final NodeList<ReferenceType<?>> thrownExceptions,
+                             final NodeList<ReferenceType> thrownExceptions,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -196,7 +196,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public NodeList<ReferenceType<?>> getThrownExceptions() {
+    public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
@@ -243,7 +243,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
+    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
         this.thrownExceptions = assertNotNull(thrownExceptions);
         setAsParentNodeOf(this.thrownExceptions);
@@ -251,12 +251,12 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public Type<?> getType() {
+    public Type getType() {
         return type;
     }
 
     @Override
-    public MethodDeclaration setType(Type<?> type) {
+    public MethodDeclaration setType(Type type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         setAsParentNodeOf(this.type);
@@ -347,7 +347,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         sb.append(")");
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType<?> thr : getThrownExceptions()) {
+            for (ReferenceType thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");

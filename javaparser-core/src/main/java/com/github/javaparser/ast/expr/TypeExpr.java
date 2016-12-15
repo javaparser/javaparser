@@ -36,15 +36,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Raquel Pau
  */
-public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<?>> {
+public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type> {
 
-    private Type<?> type;
+    private Type type;
 
     public TypeExpr() {
         this(null, new ClassOrInterfaceType());
     }
 
-    public TypeExpr(Range range, Type<?> type) {
+    public TypeExpr(Range range, Type type) {
         super(range);
         setType(type);
     }
@@ -60,12 +60,12 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type<
     }
 
     @Override
-    public Type<?> getType() {
+    public Type getType() {
         return type;
     }
 
     @Override
-    public TypeExpr setType(Type<?> type) {
+    public TypeExpr setType(Type type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(this.type);

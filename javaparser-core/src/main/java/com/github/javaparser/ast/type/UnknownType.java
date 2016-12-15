@@ -33,7 +33,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  *
  * @author Didier Villevalois
  */
-public final class UnknownType extends Type<UnknownType> {
+public final class UnknownType extends Type {
 
     public UnknownType() {
         super(null, new NodeList<>());
