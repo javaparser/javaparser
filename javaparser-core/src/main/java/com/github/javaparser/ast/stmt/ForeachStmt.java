@@ -47,7 +47,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         this(null,
                 new VariableDeclarationExpr(),
                 new NameExpr(),
-                new EmptyStmt());
+                new ReturnStmt());
     }
 
     public ForeachStmt(final VariableDeclarationExpr variable,

@@ -14,11 +14,13 @@ public interface NodeWithArguments<N extends Node> {
         return getArguments().get(i);
     }
 
+    @SuppressWarnings("unchecked")
     default N addArgument(String arg) {
         addArgument(new NameExpr(arg));
         return (N) this;
     }
 
+    @SuppressWarnings("unchecked")
     default N addArgument(Expression arg) {
         getArguments().add(arg);
         return (N) this;

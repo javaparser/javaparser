@@ -860,7 +860,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final LabeledStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getLabel());
+        n.getLabel().accept(this, arg);
         printer.print(": ");
         n.getStatement().accept(this, arg);
     }

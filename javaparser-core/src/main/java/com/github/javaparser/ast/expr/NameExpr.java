@@ -63,10 +63,12 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         v.visit(this, arg);
     }
 
+    @Override
     public final SimpleName getName() {
         return name;
     }
 
+    @Override
     public NameExpr setName(final SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);

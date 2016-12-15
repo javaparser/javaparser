@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -29,23 +30,24 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A statement that is labeled, like <code>label123: println("continuing");</code>
  * @author Julio Vilmar Gesser
  */
 public final class LabeledStmt extends Statement {
 
-    private String label;
+    private SimpleName label;
 
     private Statement statement;
 
     public LabeledStmt() {
-        this(null, "empty", new EmptyStmt());
+        this(null, new SimpleName(), new ReturnStmt());
     }
 
     public LabeledStmt(final String label, final Statement statement) {
-        this(null, label, statement);
+        this(null, new SimpleName(label), statement);
     }
 
-    public LabeledStmt(Range range, final String label, final Statement statement) {
+    public LabeledStmt(Range range, final SimpleName label, final Statement statement) {
         super(range);
         setLabel(label);
         setStatement(statement);
@@ -61,24 +63,25 @@ public final class LabeledStmt extends Statement {
         v.visit(this, arg);
     }
 
-    public String getLabel() {
-        return label;
-    }
-
     public Statement getStatement() {
         return statement;
-    }
-
-    public LabeledStmt setLabel(final String label) {
-        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        this.label = assertNotNull(label);
-        return this;
     }
 
     public LabeledStmt setStatement(final Statement statement) {
         notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
         this.statement = assertNotNull(statement);
         setAsParentNodeOf(this.statement);
+        return this;
+    }
+
+    public final SimpleName getLabel() {
+        return label;
+    }
+
+    public LabeledStmt setLabel(final SimpleName label) {
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        this.label = assertNotNull(label);
+        setAsParentNodeOf(label);
         return this;
     }
 }

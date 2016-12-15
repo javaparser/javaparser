@@ -102,7 +102,7 @@ public class PrettyPrintingSteps {
 
     @When("the class is visited by an empty ModifierVisitorAdapter")
     public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() {
-        (new ModifierVisitor() {
+        (new ModifierVisitor<Void>() {
         }).visit((CompilationUnit) resultNode, null);
     }
 

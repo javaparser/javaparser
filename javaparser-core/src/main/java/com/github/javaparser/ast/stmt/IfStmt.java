@@ -46,7 +46,7 @@ public final class IfStmt extends Statement {
     public IfStmt() {
         this(null,
                 new BooleanLiteralExpr(),
-                new EmptyStmt(),
+                new ReturnStmt(),
                 null);
     }
 
