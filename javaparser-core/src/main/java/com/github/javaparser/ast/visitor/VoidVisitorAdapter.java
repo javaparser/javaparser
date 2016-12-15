@@ -188,7 +188,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
             n.getScope().get().accept(this, arg);
         }
         if (n.getTypeArguments().isPresent()) {
-            for (final Type<?> t : n.getTypeArguments().get()) {
+            for (final Type t : n.getTypeArguments().get()) {
                 t.accept(this, arg);
             }
         }
@@ -322,7 +322,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
             n.getExpression().get().accept(this, arg);
         }
         if (n.getTypeArguments().isPresent()) {
-            for (final Type<?> t : n.getTypeArguments().get()) {
+            for (final Type t : n.getTypeArguments().get()) {
                 t.accept(this, arg);
             }
         }
@@ -449,7 +449,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
             n.getScope().accept(this, arg);
         }
         if (n.getTypeArguments().isPresent()) {
-            for (final Type<?> t : n.getTypeArguments().get()) {
+            for (final Type t : n.getTypeArguments().get()) {
                 t.accept(this, arg);
             }
         }
@@ -478,7 +478,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
             }
         }
         if (n.getThrownExceptions() != null) {
-            for (final ReferenceType<?> name : n.getThrownExceptions()) {
+            for (final ReferenceType name : n.getThrownExceptions()) {
                 name.accept(this, arg);
             }
         }
@@ -515,7 +515,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
             n.getScope().get().accept(this, arg);
         }
         if (n.getTypeArguments().isPresent()) {
-            for (final Type<?> t : n.getTypeArguments().get()) {
+            for (final Type t : n.getTypeArguments().get()) {
                 t.accept(this, arg);
             }
         }
@@ -781,7 +781,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(MethodReferenceExpr n, final A arg) {
         visitComment(n.getComment(), arg);
         if (n.getTypeArguments().isPresent()) {
-            for (final Type<?> t : n.getTypeArguments().get()) {
+            for (final Type t : n.getTypeArguments().get()) {
                 t.accept(this, arg);
             }
         }

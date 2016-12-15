@@ -36,22 +36,22 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class InstanceOfExpr extends Expression implements
-        NodeWithType<InstanceOfExpr, ReferenceType<?>>,
+        NodeWithType<InstanceOfExpr, ReferenceType>,
         NodeWithExpression<InstanceOfExpr> {
 
     private Expression expression;
 
-    private ReferenceType<?> type;
+    private ReferenceType type;
 
     public InstanceOfExpr() {
         this(null, new NameExpr(), new ClassOrInterfaceType());
     }
 
-    public InstanceOfExpr(final Expression expression, final ReferenceType<?> type) {
+    public InstanceOfExpr(final Expression expression, final ReferenceType type) {
         this(null, expression, type);
     }
 
-    public InstanceOfExpr(final Range range, final Expression expression, final ReferenceType<?> type) {
+    public InstanceOfExpr(final Range range, final Expression expression, final ReferenceType type) {
         super(range);
         setExpression(expression);
         setType(type);
@@ -73,7 +73,7 @@ public final class InstanceOfExpr extends Expression implements
     }
 
     @Override
-    public ReferenceType<?> getType() {
+    public ReferenceType getType() {
         return type;
     }
 
@@ -86,7 +86,7 @@ public final class InstanceOfExpr extends Expression implements
     }
 
     @Override
-    public InstanceOfExpr setType(final ReferenceType<?> type) {
+    public InstanceOfExpr setType(final ReferenceType type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(this.type);

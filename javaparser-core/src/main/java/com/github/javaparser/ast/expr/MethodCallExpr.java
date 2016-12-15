@@ -45,7 +45,7 @@ public final class MethodCallExpr extends Expression implements
 
     private Expression scope;
 
-    private NodeList<Type<?>> typeArguments;
+    private NodeList<Type> typeArguments;
 
     private SimpleName name;
 
@@ -75,7 +75,7 @@ public final class MethodCallExpr extends Expression implements
                 arguments);
     }
 
-    public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
+    public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
         super(range);
         setScope(scope);
         setTypeArguments(typeArguments);
@@ -129,7 +129,7 @@ public final class MethodCallExpr extends Expression implements
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -140,7 +140,7 @@ public final class MethodCallExpr extends Expression implements
      * @return this, the MethodCallExpr
      */
     @Override
-    public MethodCallExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
+    public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);

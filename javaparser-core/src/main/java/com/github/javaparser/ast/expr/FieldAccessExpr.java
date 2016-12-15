@@ -40,7 +40,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
 
     private Expression scope;
 
-    private NodeList<Type<?>> typeArguments;
+    private NodeList<Type> typeArguments;
 
     private SimpleName field;
 
@@ -52,7 +52,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
         this(null, scope, new NodeList<>(), new SimpleName(field));
     }
 
-    public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type<?>> typeArguments,
+    public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments,
                            final SimpleName field) {
         super(range);
         setScope(scope);
@@ -104,7 +104,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -115,7 +115,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
      * @return this, the FieldAccessExpr
      */
     @Override
-    public FieldAccessExpr setTypeArguments(final NodeList<Type<?>> types) {
+    public FieldAccessExpr setTypeArguments(final NodeList<Type> types) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = types;
         setAsParentNodeOf(this.typeArguments);

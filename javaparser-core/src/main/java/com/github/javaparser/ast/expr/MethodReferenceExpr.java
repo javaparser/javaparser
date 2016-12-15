@@ -48,7 +48,7 @@ public class MethodReferenceExpr extends Expression implements
 
     private Expression scope;
 
-    private NodeList<Type<?>> typeArguments;
+    private NodeList<Type> typeArguments;
 
     private String identifier;
 
@@ -60,7 +60,7 @@ public class MethodReferenceExpr extends Expression implements
     }
 
     public MethodReferenceExpr(Range range, Expression scope,
-                               NodeList<Type<?>> typeArguments, String identifier) {
+                               NodeList<Type> typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
@@ -90,7 +90,7 @@ public class MethodReferenceExpr extends Expression implements
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -101,7 +101,7 @@ public class MethodReferenceExpr extends Expression implements
      * @return this, the MethodReferenceExpr
      */
     @Override
-    public MethodReferenceExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
+    public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);

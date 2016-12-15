@@ -366,7 +366,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         if (n.getTypeArguments().isPresent()) {
-            for (Type<?> type : n.getTypeArguments().get()) {
+            for (Type type : n.getTypeArguments().get()) {
                 R result = type.accept(this, arg);
                 if (result != null) {
                     return result;
@@ -636,7 +636,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         if (n.getTypeArguments().isPresent()) {
-            for (Type<?> type : n.getTypeArguments().get()) {
+            for (Type type : n.getTypeArguments().get()) {
                 R result = type.accept(this, arg);
                 if (result != null) {
                     return result;
@@ -681,7 +681,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             if (n.getTypeArguments().isPresent()) {
-                for (Type<?> type : n.getTypeArguments().get()) {
+                for (Type type : n.getTypeArguments().get()) {
                     R result = type.accept(this, arg);
                     if (result != null) {
                         return result;
@@ -901,7 +901,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         if (n.getTypeArguments().isPresent()) {
-            for (Type<?> type : n.getTypeArguments().get()) {
+            for (Type type : n.getTypeArguments().get()) {
                 R result = type.accept(this, arg);
                 if (result != null) {
                     return result;
@@ -961,7 +961,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         if (n.getThrownExceptions() != null) {
-            for (final ReferenceType<?> name : n.getThrownExceptions()) {
+            for (final ReferenceType name : n.getThrownExceptions()) {
                 {
                     R result = name.accept(this, arg);
                     if (result != null) {
@@ -1027,7 +1027,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
         if (n.getTypeArguments().isPresent()) {
-            for (Type<?> type : n.getTypeArguments().get()) {
+            for (Type type : n.getTypeArguments().get()) {
                 R result = type.accept(this, arg);
                 if (result != null) {
                     return result;
@@ -1581,7 +1581,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         visitComment(n, arg);
         {
             if (n.getTypeArguments().isPresent()) {
-                for (Type<?> type : n.getTypeArguments().get()) {
+                for (Type type : n.getTypeArguments().get()) {
                     R result = type.accept(this, arg);
                     if (result != null) {
                         return result;

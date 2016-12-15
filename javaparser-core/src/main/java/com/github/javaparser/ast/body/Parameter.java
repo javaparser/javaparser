@@ -48,12 +48,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class Parameter extends Node implements
-        NodeWithType<Parameter,Type<?>>,
+        NodeWithType<Parameter,Type>,
         NodeWithAnnotations<Parameter>,
         NodeWithSimpleName<Parameter>,
         NodeWithModifiers<Parameter> {
 
-    private Type<?> type;
+    private Type type;
 
     private boolean isVarArgs;
 
@@ -72,7 +72,7 @@ public final class Parameter extends Node implements
                 new SimpleName());
     }
 
-    public Parameter(Type<?> type, SimpleName name) {
+    public Parameter(Type type, SimpleName name) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
@@ -87,7 +87,7 @@ public final class Parameter extends Node implements
      * @param type type of the parameter
      * @param name name of the parameter
      */
-    public Parameter(Type<?> type, String name) {
+    public Parameter(Type type, String name) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
@@ -96,7 +96,7 @@ public final class Parameter extends Node implements
                 new SimpleName(name));
     }
 
-    public Parameter(EnumSet<Modifier> modifiers, Type<?> type, SimpleName name) {
+    public Parameter(EnumSet<Modifier> modifiers, Type type, SimpleName name) {
         this(null,
                 modifiers,
                 new NodeList<>(),
@@ -108,7 +108,7 @@ public final class Parameter extends Node implements
     public Parameter(final Range range,
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,
-                     Type<?> type,
+                     Type type,
                      boolean isVarArgs,
                      SimpleName name) {
         super(range);
@@ -130,7 +130,7 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Type<?> getType() {
+    public Type getType() {
         return type;
     }
     
@@ -139,7 +139,7 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Parameter setType(Type<?> type) {
+    public Parameter setType(Type type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         setAsParentNodeOf(this.type);

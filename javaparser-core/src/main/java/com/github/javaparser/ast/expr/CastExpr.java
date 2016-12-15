@@ -36,10 +36,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class CastExpr extends Expression implements
-        NodeWithType<CastExpr, Type<?>>,
+        NodeWithType<CastExpr, Type>,
         NodeWithExpression<CastExpr> {
 
-    private Type<?> type;
+    private Type type;
 
     private Expression expression;
 
@@ -47,11 +47,11 @@ public final class CastExpr extends Expression implements
         this(null, new ClassOrInterfaceType(), new NameExpr());
     }
 
-    public CastExpr(Type<?> type, Expression expression) {
+    public CastExpr(Type type, Expression expression) {
         this(null, type, expression);
     }
 
-    public CastExpr(Range range, Type<?> type, Expression expression) {
+    public CastExpr(Range range, Type type, Expression expression) {
         super(range);
         setType(type);
         setExpression(expression);
@@ -73,7 +73,7 @@ public final class CastExpr extends Expression implements
     }
 
     @Override
-    public Type<?> getType() {
+    public Type getType() {
         return type;
     }
 
@@ -86,7 +86,7 @@ public final class CastExpr extends Expression implements
     }
 
     @Override
-    public CastExpr setType(Type<?> type) {
+    public CastExpr setType(Type type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(this.type);
