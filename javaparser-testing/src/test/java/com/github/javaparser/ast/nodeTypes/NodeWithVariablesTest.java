@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
@@ -68,5 +69,26 @@ public class NodeWithVariablesTest {
         VariableDeclarationExpr declaration = JavaParser.parseVariableDeclarationExpr("int a;");
         declaration.getVariables().clear();
         declaration.getElementType();
+    }
+
+    @Test
+    public void getMaximumCommonTypeWithoutAnnotations() {
+        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
+        assertEquals("int[]", vde1.getMaximumCommonType().toString());
+
+        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[][] a[], b[]");
+        assertEquals("int[][][]", vde2.getMaximumCommonType().toString());
+
+        VariableDeclarationExpr vde3 = JavaParser.parseVariableDeclarationExpr("int[][] a, b[]");
+        assertEquals("int[][]", vde3.getMaximumCommonType().toString());
+    }
+
+    @Test
+    public void getMaximumCommonTypeWithAnnotations() {
+        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
+        assertEquals("int", vde1.getMaximumCommonType().toString());
+
+        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
+        assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().toString());
     }
 }

@@ -401,7 +401,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
         if (!n.getVariables().isEmpty()) {
-            n.getMinimumCommonType().accept(this, arg);
+            n.getMaximumCommonType().accept(this, arg);
         }
 
         printer.print(" ");
@@ -421,7 +421,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Type commonType = n.getAncestorOfType(NodeWithVariables.class).getMinimumCommonType();
+        Type commonType = n.getAncestorOfType(NodeWithVariables.class).getMaximumCommonType();
 
         Type type = n.getType();
 
@@ -811,7 +811,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
 
         if(!n.getVariables().isEmpty()) {
-            n.getMinimumCommonType().accept(this, arg);
+            n.getMaximumCommonType().accept(this, arg);
         }
         printer.print(" ");
 
