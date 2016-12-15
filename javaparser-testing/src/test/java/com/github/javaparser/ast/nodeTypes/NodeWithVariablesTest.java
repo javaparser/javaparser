@@ -8,6 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class NodeWithVariablesTest {
+
     @Test
     public void getCommonTypeWorksForNormalVariables() {
         VariableDeclarationExpr declaration = JavaParser.parseVariableDeclarationExpr("int a,b;");

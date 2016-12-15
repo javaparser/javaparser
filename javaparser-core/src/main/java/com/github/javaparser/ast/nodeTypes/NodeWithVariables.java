@@ -26,6 +26,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.Type;
 
+import java.util.Comparator;
+
 /**
  * A node which has a list of variables.
  */
@@ -82,9 +84,16 @@ public interface NodeWithVariables<N extends Node> {
         return type;
     }
 
+    /**
+     * Returns the type that minimum shared type between all variables.
+     * <br/>For <code>int a;</code> this is int.
+     * <br/>For <code>int a,b,c,d;</code> this is also int.
+     * <br/>For <code>int a,b[],c;</code> this is also int.
+     * * <br/>For <code>int[] a[][],b[],c[][];</code> this is int[][].
+     */
     default Type getMinimumCommonType() {
         return getVariables().stream().map(v -> v.getType())
-                .sorted((Comparator<Type<?>>) (a, b) -> a.getArrayLevel() - b.getArrayLevel())
+                .sorted((a, b) -> a.getArrayLevel() - b.getArrayLevel())
                 .findFirst()
                 .orElse(null);
     }
