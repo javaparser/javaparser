@@ -259,6 +259,10 @@ final class ASTParser {
     public static Range tokenRange(Token token) {
         return range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
     }
+    
+    public void setTabSize(int size) {
+        jj_input_stream.setTabSize(size);
+    }
 }
 
 PARSER_END(ASTParser)

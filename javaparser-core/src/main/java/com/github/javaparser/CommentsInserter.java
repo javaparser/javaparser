@@ -103,7 +103,7 @@ class CommentsInserter {
                     commentsToAttribute.stream()
                             .filter(c -> c.getRange().isPresent())
                             .filter(c -> PositionUtils.nodeContains(child, c,
-                                    configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution)).collect(Collectors.toList()));
+                                    configuration.isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution())).collect(Collectors.toList()));
             commentsToAttribute.removeAll(commentsInsideChild);
             insertComments(child, commentsInsideChild);
         }
@@ -121,7 +121,7 @@ class CommentsInserter {
 
         childrenAndComments.addAll(commentsToAttribute);
         PositionUtils.sortByBeginPosition(childrenAndComments,
-                configuration.doNotConsiderAnnotationsAsNodeStartForCodeAttribution);
+                configuration.isDoNotConsiderAnnotationsAsNodeStartForCodeAttribution());
 
         for (Node thing : childrenAndComments) {
             if (thing instanceof Comment) {
@@ -131,7 +131,7 @@ class CommentsInserter {
                 }
             } else {
                 if (previousComment != null && !thing.hasComment()) {
-                    if (!configuration.doNotAssignCommentsPrecedingEmptyLines
+                    if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines()
                             || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
                         attributedComments.add(previousComment);
