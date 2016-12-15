@@ -171,14 +171,14 @@ final class ASTParser {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
             if (inner.isPresent() && inner.get() instanceof NameExpr) {
                 SimpleName id = ((NameExpr)inner.get()).getName();
-                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(id.getRange().get()), false, id));
+                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
             } else {
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr)ret).getName();
-            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(id.getRange().get()), false, id));
+            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
             ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1811,9 +1811,9 @@ NodeList<Parameter> InferredLambdaParameters():
 }
 {
     ","
-    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(id.a.getRange().get()), false, id.a));}
+    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id.a));}
     (
-        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(id.a.getRange().get()), false, id.a)); }
+        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id.a)); }
     )*
     { return ret;  }
 }
@@ -2545,7 +2545,7 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = ((NameExpr)ret).getName();
-	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(id.getRange().get()), false, id);
+	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id);
 	  		  		  }
 
 	  		  		}
@@ -2575,7 +2575,7 @@ Expression PrimaryPrefix():
 	  		if (hasArgs) {
 	  			ret = new MethodCallExpr(range(begin, tokenEnd()), null, emptyList(), name, args);
 			} else {
-	  			ret = new NameExpr(range(begin, tokenEnd()), name);
+	  			ret = new NameExpr(name);
 			}
 	  	}
   )

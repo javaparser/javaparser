@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -38,10 +37,6 @@ public final class UnknownType extends Type {
 
     public UnknownType() {
         super(null, new NodeList<>());
-    }
-
-    public UnknownType(Range range) {
-        super(range, new NodeList<>());
     }
 
     @Override
