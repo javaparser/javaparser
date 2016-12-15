@@ -202,9 +202,9 @@ final class ASTParser {
         return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
 
-    private Type<?> juggleArrayType(Type<?> partialType, List<ArrayBracketPair> additionalBrackets) {
-        Pair<Type<?>, List<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
-        Type<?> elementType = partialParts.a;
+    private Type juggleArrayType(Type partialType, List<ArrayBracketPair> additionalBrackets) {
+        Pair<Type, List<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
+        Type elementType = partialParts.a;
         List<ArrayBracketPair> leftMostBrackets = partialParts.b;
         return ArrayType.wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
     }
@@ -1739,12 +1739,12 @@ ArrayInitializerExpr ArrayInitializer():
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
-	Type<?> type;
+	Type type;
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
-	NodeList<ReferenceType<?>> throws_ = emptyList();
+	NodeList<ReferenceType> throws_ = emptyList();
 	BlockStmt block = null;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
@@ -1838,7 +1838,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
-	NodeList<ReferenceType<?>> throws_ = emptyList();
+	NodeList<ReferenceType> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
     Position begin = modifier.begin;
@@ -1868,7 +1868,7 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	boolean isThis = false;
 	NodeList<Expression> args;
 	Expression expr = null;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	Position begin = INVALID;
 }
 {
@@ -1917,9 +1917,9 @@ InitializerDeclaration InitializerDeclaration():
  * Type, name and expression syntax follows.
  */
 
-Type<?> Type():
+Type Type():
 {
-	Type<?> ret;
+	Type ret;
 }
 {
  (
@@ -1930,9 +1930,9 @@ Type<?> Type():
  { return ret; }
 }
 
-ReferenceType<?> ReferenceType():
+ReferenceType ReferenceType():
 {
-	Type<?> type;
+	Type type;
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
@@ -1942,7 +1942,7 @@ ReferenceType<?> ReferenceType():
   |
    type = ClassOrInterfaceType()  ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
-  { return (ReferenceType<?>)wrapInArrayTypes(type, arrayBracketPairs); }
+  { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
 ArrayBracketPair ArrayBracketPair():
@@ -1959,8 +1959,8 @@ ArrayBracketPair ArrayBracketPair():
 IntersectionType IntersectionType():
 {
 	Position begin;
-	ReferenceType<?> elementType;
-	NodeList<ReferenceType<?>> elements = emptyList();
+	ReferenceType elementType;
+	NodeList<ReferenceType> elements = emptyList();
 }
 {
     elementType=ReferenceType() { begin=elementType.getBegin().get(); elements = add(elements, elementType); }
@@ -1990,7 +1990,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
 {
 	ClassOrInterfaceType ret;
 	SimpleName name;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	Position begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
@@ -2012,9 +2012,9 @@ ClassOrInterfaceType ClassOrInterfaceType():
   { return ret; }
 }
 
-RangedList<Type<?>> TypeArguments():
+RangedList<Type> TypeArguments():
 {
-	RangedList<Type<?>> ret = new RangedList<Type<?>>(new NodeList<Type<?>>());
+	RangedList<Type> ret = new RangedList<Type>(new NodeList<Type>());
 	Type type;
 }
 {
@@ -2091,9 +2091,9 @@ PrimitiveType PrimitiveType():
 { return ret; }
 }
 
-Type<?> ResultType():
+Type ResultType():
 {
-	Type<?> ret;
+	Type ret;
 }
 {
   (
@@ -2146,7 +2146,7 @@ Expression Expression():
 	AssignExpr.Operator op;
 	Expression value;
 	Statement lambdaBody = null;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 }
 {
   ret = ConditionalExpression()
@@ -2285,7 +2285,7 @@ Expression EqualityExpression():
 Expression InstanceOfExpression():
 {
 	Expression ret;
-	ReferenceType<?> type;
+	ReferenceType type;
 }
 {
   ret = RelationalExpression() [ "instanceof" type = ReferenceType() { ret = new InstanceOfExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, type); } ]
@@ -2447,7 +2447,7 @@ Expression CastExpression():
 	PrimitiveType primitiveType;
 	Position begin = INVALID;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	NodeList<ReferenceType<?>> typesOfMultiCast = emptyList();
+	NodeList<ReferenceType> typesOfMultiCast = emptyList();
 }
 {
   "(" {begin=tokenBegin();}
@@ -2495,7 +2495,7 @@ Expression PrimaryPrefix():
 {
 	Expression ret = null;
 	SimpleName name;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	NodeList<Expression> args = emptyList();
 	NodeList<Parameter> params = emptyList();
 	boolean hasArgs = false;
@@ -2599,7 +2599,7 @@ Expression PrimarySuffix(Expression scope):
 Expression PrimarySuffixWithoutSuper(Expression scope):
 {
 	Expression ret;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	NodeList<Expression> args = emptyList();
 	boolean hasArgs = false;
 	SimpleName name;
@@ -2705,8 +2705,8 @@ NodeList<Expression> ArgumentList():
 Expression AllocationExpression(Expression scope):
 {
 	Expression ret;
-	Type<?> type;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	Type type;
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
 	Position begin;
@@ -2910,7 +2910,7 @@ ExpressionStmt StatementExpression():
 	Expression expr;
 	AssignExpr.Operator op;
 	Expression value;
-	RangedList<Type<?>> typeArgs = new RangedList<Type<?>>(null);
+	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	Statement lambdaBody;
 }
 {
@@ -3137,7 +3137,7 @@ TryStmt TryStatement():
 	BlockStmt catchBlock;
 	ModifierHolder exceptModifier;
 	ReferenceType exceptionType;
-	NodeList<ReferenceType<?>> exceptionTypes = emptyList();
+	NodeList<ReferenceType> exceptionTypes = emptyList();
 	Pair<SimpleName, List<ArrayBracketPair>> exceptId;
 	Position begin;
 	Position catchBegin;

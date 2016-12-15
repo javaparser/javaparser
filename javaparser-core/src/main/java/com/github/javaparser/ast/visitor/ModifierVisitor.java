@@ -259,7 +259,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrownExceptions((NodeList<ReferenceType<?>>) n.getThrownExceptions().accept(this, arg));
+        n.setThrownExceptions((NodeList<ReferenceType>) n.getThrownExceptions().accept(this, arg));
         n.setBody((BlockStmt) n.getBody().accept(this, arg));
         return n;
     }
@@ -431,7 +431,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final InstanceOfExpr n, final A arg) {
         visitComment(n, arg);
         n.setExpression((Expression) n.getExpression().accept(this, arg));
-        n.setType((ReferenceType<?>) n.getType().accept(this, arg));
+        n.setType((ReferenceType) n.getType().accept(this, arg));
         return n;
     }
 
@@ -491,7 +491,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setType((Type) n.getType().accept(this, arg));
         n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrownExceptions((NodeList<ReferenceType<?>>) n.getThrownExceptions().accept(this, arg));
+        n.setThrownExceptions((NodeList<ReferenceType>) n.getThrownExceptions().accept(this, arg));
         if (n.getBody().isPresent()) {
             n.setBody((BlockStmt) n.getBody().get().accept(this, arg));
         }
@@ -592,7 +592,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final IntersectionType n, final A arg) {
         visitComment(n, arg);
         visitAnnotations(n, arg);
-        n.setElements((NodeList<ReferenceType<?>>) n.getElements().accept(this, arg));
+        n.setElements((NodeList<ReferenceType>) n.getElements().accept(this, arg));
         return n;
     }
 
@@ -600,7 +600,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final UnionType n, final A arg) {
         visitComment(n, arg);
         visitAnnotations(n, arg);
-        n.setElements((NodeList<ReferenceType<?>>) n.getElements().accept(this, arg));
+        n.setElements((NodeList<ReferenceType>) n.getElements().accept(this, arg));
         return n;
     }
 
@@ -739,7 +739,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         }
         n.setName(id);
-        Type<?> type = (Type) n.getType().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
         if (type == null) {
             return null;
         }
@@ -802,7 +802,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final TypeExpr n, final A arg) {
         visitComment(n, arg);
         if (n.getType() != null) {
-            n.setType((Type<?>) n.getType().accept(this, arg));
+            n.setType((Type) n.getType().accept(this, arg));
         }
         return n;
     }

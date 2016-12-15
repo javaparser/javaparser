@@ -51,12 +51,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements
         NodeWithJavaDoc<AnnotationMemberDeclaration>,
         NodeWithSimpleName<AnnotationMemberDeclaration>,
-        NodeWithType<AnnotationMemberDeclaration, Type<?>>,
+        NodeWithType<AnnotationMemberDeclaration, Type>,
         NodeWithModifiers<AnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
-    private Type<?> type;
+    private Type type;
 
     private SimpleName name;
 
@@ -71,7 +71,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 null);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type<?> type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type type, String name, Expression defaultValue) {
         this(null,
                 modifiers,
                 new NodeList<>(),
@@ -80,7 +80,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 defaultValue);
     }
 
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type<?> type, SimpleName name,
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name,
                                        Expression defaultValue) {
         this(null,
                 modifiers,
@@ -130,7 +130,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public Type<?> getType() {
+    public Type getType() {
         return type;
     }
 
@@ -162,7 +162,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public AnnotationMemberDeclaration setType(Type<?> type) {
+    public AnnotationMemberDeclaration setType(Type type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = assertNotNull(type);
         setAsParentNodeOf(type);

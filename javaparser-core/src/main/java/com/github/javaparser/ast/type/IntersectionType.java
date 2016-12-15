@@ -2,6 +2,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -21,15 +22,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @since 3.0.0
  */
-public class IntersectionType extends Type<IntersectionType> implements NodeWithAnnotations<IntersectionType> {
+public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
-    private NodeList<ReferenceType<?>> elements;
+    private NodeList<ReferenceType> elements;
 
-    public IntersectionType(NodeList<ReferenceType<?>> elements) {
+    public IntersectionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }
 
-    public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
+    public IntersectionType(Range range, NodeList<ReferenceType> elements) {
         super(range, new NodeList<>());
         setElements(elements);
     }
@@ -44,14 +45,19 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
         v.visit(this, arg);
     }
 
-    public NodeList<ReferenceType<?>> getElements() {
+    public NodeList<ReferenceType> getElements() {
         return elements;
     }
 
-    public IntersectionType setElements(NodeList<ReferenceType<?>> elements) {
+    public IntersectionType setElements(NodeList<ReferenceType> elements) {
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         this.elements = assertNotNull(elements);
         setAsParentNodeOf(this.elements);
         return this;
+    }
+
+    @Override
+    public IntersectionType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        return (IntersectionType) super.setAnnotations(annotations);
     }
 }

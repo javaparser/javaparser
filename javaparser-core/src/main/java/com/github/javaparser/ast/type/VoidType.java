@@ -23,6 +23,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -30,7 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class VoidType extends Type<VoidType> implements NodeWithAnnotations<VoidType> {
+public final class VoidType extends Type implements NodeWithAnnotations<VoidType> {
 
     public static final VoidType VOID_TYPE = new VoidType();
 
@@ -50,6 +51,11 @@ public final class VoidType extends Type<VoidType> implements NodeWithAnnotation
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    @Override
+    public VoidType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        return (VoidType) super.setAnnotations(annotations);
     }
 
 }

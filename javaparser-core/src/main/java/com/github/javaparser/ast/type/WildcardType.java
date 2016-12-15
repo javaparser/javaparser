@@ -23,6 +23,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -33,26 +34,26 @@ import java.util.Optional;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class WildcardType extends Type<WildcardType> implements NodeWithAnnotations<WildcardType> {
+public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
 
-    private ReferenceType<?> extendedTypes;
+    private ReferenceType extendedTypes;
 
-    private ReferenceType<?> superTypes;
+    private ReferenceType superTypes;
 
     public WildcardType() {
         this(null, null, null);
     }
 
-    public WildcardType(final ReferenceType<?> extendedTypes) {
+    public WildcardType(final ReferenceType extendedTypes) {
         this(null, extendedTypes, null);
     }
 
-    public WildcardType(final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
+    public WildcardType(final ReferenceType extendedTypes, final ReferenceType superTypes) {
         this(null, extendedTypes, superTypes);
     }
 
     public WildcardType(final Range range,
-                        final ReferenceType<?> extendedTypes, final ReferenceType<?> superTypes) {
+                        final ReferenceType extendedTypes, final ReferenceType superTypes) {
         super(range, new NodeList<>());
         setExtendedTypes(extendedTypes);
         setSuperTypes(superTypes);
@@ -68,11 +69,11 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
         v.visit(this, arg);
     }
 
-    public Optional<ReferenceType<?>> getExtendedTypes() {
+    public Optional<ReferenceType> getExtendedTypes() {
         return Optional.ofNullable(extendedTypes);
     }
 
-    public Optional<ReferenceType<?>> getSuperTypes() {
+    public Optional<ReferenceType> getSuperTypes() {
         return Optional.ofNullable(superTypes);
     }
 
@@ -82,7 +83,7 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @param ext the extends, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setExtendedTypes(final ReferenceType<?> ext) {
+    public WildcardType setExtendedTypes(final ReferenceType ext) {
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, ext);
         this.extendedTypes = ext;
         setAsParentNodeOf(this.extendedTypes);
@@ -95,11 +96,15 @@ public final class WildcardType extends Type<WildcardType> implements NodeWithAn
      * @param sup the super, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setSuperTypes(final ReferenceType<?> sup) {
+    public WildcardType setSuperTypes(final ReferenceType sup) {
         notifyPropertyChange(ObservableProperty.SUPER, this.superTypes, sup);
         this.superTypes = sup;
         setAsParentNodeOf(this.superTypes);
         return this;
     }
 
+    @Override
+    public WildcardType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        return (WildcardType) super.setAnnotations(annotations);
+    }
 }

@@ -100,11 +100,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     private void printTypeArgs(final NodeWithTypeArguments<?> nodeWithTypeArguments, final Void arg) {
-        NodeList<Type<?>> typeArguments = nodeWithTypeArguments.getTypeArguments().orElse(null);
+        NodeList<Type> typeArguments = nodeWithTypeArguments.getTypeArguments().orElse(null);
         if (!isNullOrEmpty(typeArguments)) {
             printer.print("<");
-            for (final Iterator<Type<?>> i = typeArguments.iterator(); i.hasNext(); ) {
-                final Type<?> t = i.next();
+            for (final Iterator<Type> i = typeArguments.iterator(); i.hasNext(); ) {
+                final Type t = i.next();
                 t.accept(this, arg);
                 if (i.hasNext()) {
                     printer.print(", ");
@@ -707,8 +707,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
-                final ReferenceType<?> name = i.next();
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+                final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
                     printer.print(", ");
@@ -752,7 +752,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
                 final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {

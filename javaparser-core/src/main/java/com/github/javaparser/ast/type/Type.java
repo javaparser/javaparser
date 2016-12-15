@@ -32,7 +32,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public abstract class Type<T extends Type> extends Node {
+public abstract class Type extends Node {
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -49,11 +49,11 @@ public abstract class Type<T extends Type> extends Node {
         return getAnnotations().get(i);
     }
 
-    public T setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public Type setAnnotations(NodeList<AnnotationExpr> annotations) {
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);
         setAsParentNodeOf(annotations);
-        return (T) this;
+        return this;
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class Type<T extends Type> extends Node {
      * 
      * In "<code>int[] a[];</code>", the element type is int.
      */
-    public Type<?> getElementType() {
+    public Type getElementType() {
         if (this instanceof ArrayType) {
             return ((ArrayType) this).getComponentType().getElementType();
         }
