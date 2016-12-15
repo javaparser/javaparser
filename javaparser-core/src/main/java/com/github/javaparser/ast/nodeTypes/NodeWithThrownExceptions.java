@@ -6,9 +6,9 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
 public interface NodeWithThrownExceptions<N extends Node> {
-    N setThrownExceptions(NodeList<ReferenceType<?>> thrownExceptions);
+    N setThrownExceptions(NodeList<ReferenceType> thrownExceptions);
 
-    NodeList<ReferenceType<?>> getThrownExceptions();
+    NodeList<ReferenceType> getThrownExceptions();
 
     default ReferenceType getThrownException(int i) {
         return getThrownExceptions().get(i);
@@ -21,7 +21,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default N addThrownException(ReferenceType<?> throwType) {
+    default N addThrownException(ReferenceType throwType) {
         getThrownExceptions().add(throwType);
         throwType.setParentNode((Node) this);
         return (N) this;

@@ -135,7 +135,7 @@ public class TypeConstructionTest {
     public void getArrayCreationType() {
         ArrayCreationExpr expr = parseExpression("new int[]");
         ArrayType outerType = (ArrayType) expr.createdType();
-        Type<?> innerType = outerType.getComponentType();
+        Type innerType = outerType.getComponentType();
         assertThat(innerType).isEqualTo(expr.getElementType());
     }
 }

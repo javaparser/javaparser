@@ -61,7 +61,7 @@ public final class VariableDeclarationExpr extends Expression implements
                 new NodeList<>());
     }
 
-    public VariableDeclarationExpr(final Type<?> type, String variableName) {
+    public VariableDeclarationExpr(final Type type, String variableName) {
         this(null,
                 EnumSet.noneOf(Modifier.class),
                 new NodeList<>(),
@@ -75,7 +75,7 @@ public final class VariableDeclarationExpr extends Expression implements
                 nodeList(var));
     }
 
-    public VariableDeclarationExpr(final Type<?> type, String variableName, Modifier... modifiers) {
+    public VariableDeclarationExpr(final Type type, String variableName, Modifier... modifiers) {
         this(null,
                 Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
                 new NodeList<>(),

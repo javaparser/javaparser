@@ -44,24 +44,24 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarator extends Node implements
-        NodeWithType<VariableDeclarator, Type<?>>,
+        NodeWithType<VariableDeclarator, Type>,
         NodeWithSimpleName<VariableDeclarator> {
 
     private SimpleName name;
 
     private Expression initializer;
 
-    private Type<?> type;
+    private Type type;
 
     public VariableDeclarator() {
         this(null, new SimpleName(), null);
     }
 
-    public VariableDeclarator(Type<?> type, SimpleName name) {
+    public VariableDeclarator(Type type, SimpleName name) {
         this(null, type, name, null);
     }
 
-    public VariableDeclarator(Type<?> type, String variableName) {
+    public VariableDeclarator(Type type, String variableName) {
         this(null, type, new SimpleName(variableName), null);
     }
 
@@ -72,15 +72,15 @@ public final class VariableDeclarator extends Node implements
      * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
      * is unnecessary as the <code>=</code> operator is already added.
      */
-    public VariableDeclarator(Type<?> type, SimpleName name, Expression initializer) {
+    public VariableDeclarator(Type type, SimpleName name, Expression initializer) {
         this(null, type, name, initializer);
     }
 
-    public VariableDeclarator(Type<?> type, String variableName, Expression initializer) {
+    public VariableDeclarator(Type type, String variableName, Expression initializer) {
         this(null, type, new SimpleName(variableName), initializer);
     }
 
-    public VariableDeclarator(Range range, Type<?> type, SimpleName name, Expression initializer) {
+    public VariableDeclarator(Range range, Type type, SimpleName name, Expression initializer) {
         super(range);
         setName(name);
         setInitializer(initializer);
@@ -138,12 +138,12 @@ public final class VariableDeclarator extends Node implements
     }
 
     @Override
-    public Type<?> getType() {
+    public Type getType() {
         return type;
     }
 
     @Override
-    public VariableDeclarator setType(Type<?> type) {
+    public VariableDeclarator setType(Type type) {
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         setAsParentNodeOf(this.type);

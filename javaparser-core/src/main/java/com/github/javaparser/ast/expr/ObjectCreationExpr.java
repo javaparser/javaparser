@@ -55,7 +55,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     private ClassOrInterfaceType type;
 
-    private NodeList<Type<?>> typeArguments;
+    private NodeList<Type> typeArguments;
 
     private NodeList<Expression> arguments;
 
@@ -89,7 +89,7 @@ public final class ObjectCreationExpr extends Expression implements
 
     public ObjectCreationExpr(final Range range,
                               final Expression scope, final ClassOrInterfaceType type,
-                              final NodeList<Type<?>> typeArguments,
+                              final NodeList<Type> typeArguments,
                               final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousBody) {
         super(range);
         setScope(scope);
@@ -179,7 +179,7 @@ public final class ObjectCreationExpr extends Expression implements
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -190,7 +190,7 @@ public final class ObjectCreationExpr extends Expression implements
      * @return this, the ObjectCreationExpr
      */
     @Override
-    public ObjectCreationExpr setTypeArguments(final NodeList<Type<?>> typeArguments) {
+    public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);

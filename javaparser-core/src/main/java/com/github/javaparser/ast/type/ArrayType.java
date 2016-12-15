@@ -20,18 +20,18 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
  * So, int[][] becomes ArrayType(ArrayType(int)).
  */
-public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnotations<ArrayType> {
+public class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
     private Type componentType;
 
-    public ArrayType(Type<?> componentType, NodeList<AnnotationExpr> annotations) {
+    public ArrayType(Type componentType, NodeList<AnnotationExpr> annotations) {
         this(null, componentType, annotations);
     }
 
-    public ArrayType(Type<?> type, AnnotationExpr... annotations) {
+    public ArrayType(Type type, AnnotationExpr... annotations) {
         this(type, nodeList(annotations));
     }
 
-    public ArrayType(Range range, Type<?> componentType, NodeList<AnnotationExpr> annotations) {
+    public ArrayType(Range range, Type componentType, NodeList<AnnotationExpr> annotations) {
         super(range);
         setComponentType(componentType);
         setAnnotations(annotations);
@@ -51,7 +51,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         return componentType;
     }
 
-    public ArrayType setComponentType(final Type<?> type) {
+    public ArrayType setComponentType(final Type type) {
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
         this.componentType = assertNotNull(type);
         setAsParentNodeOf(this.componentType);
@@ -82,7 +82,7 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
      *
      * @return a pair of the element type, and the unwrapped ArrayTypes, if any.
      */
-    public static Pair<Type<?>, List<ArrayBracketPair>> unwrapArrayTypes(Type<?> type) {
+    public static Pair<Type, List<ArrayBracketPair>> unwrapArrayTypes(Type type) {
         final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>(0);
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
@@ -123,4 +123,8 @@ public class ArrayType extends ReferenceType<ArrayType> implements NodeWithAnnot
         }
     }
 
+    @Override
+    public ArrayType setAnnotations(NodeList<AnnotationExpr> annotations) {
+        return (ArrayType) super.setAnnotations(annotations);
+    }
 }

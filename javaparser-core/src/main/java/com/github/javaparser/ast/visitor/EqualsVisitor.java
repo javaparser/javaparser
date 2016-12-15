@@ -601,15 +601,15 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        NodeList<ReferenceType<?>> n1Elements = n1.getElements();
-        NodeList<ReferenceType<?>> n2Elements = n2.getElements();
+        NodeList<ReferenceType> n1Elements = n1.getElements();
+        NodeList<ReferenceType> n2Elements = n2.getElements();
 
         if (n1Elements != null && n2Elements != null) {
             if (n1Elements.size() != n2Elements.size()) {
                 return false;
             } else {
                 int i = 0;
-                for (ReferenceType<?> aux : n1Elements) {
+                for (ReferenceType aux : n1Elements) {
                     if (aux.accept(this, n2Elements.get(i))) {
                         return false;
                     }
@@ -630,15 +630,15 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        NodeList<ReferenceType<?>> n1Elements = n1.getElements();
-        NodeList<ReferenceType<?>> n2Elements = n2.getElements();
+        NodeList<ReferenceType> n1Elements = n1.getElements();
+        NodeList<ReferenceType> n2Elements = n2.getElements();
 
         if (n1Elements != null && n2Elements != null) {
             if (n1Elements.size() != n2Elements.size()) {
                 return false;
             } else {
                 int i = 0;
-                for (ReferenceType<?> aux : n1Elements) {
+                for (ReferenceType aux : n1Elements) {
                     if (aux.accept(this, n2Elements.get(i))) {
                         return false;
                     }

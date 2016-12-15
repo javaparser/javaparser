@@ -39,7 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
-    private NodeList<Type<?>> typeArguments;
+    private NodeList<Type> typeArguments;
 
     private boolean isThis;
 
@@ -57,7 +57,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     public ExplicitConstructorInvocationStmt(Range range,
-                                             final NodeList<Type<?>> typeArguments, final boolean isThis,
+                                             final NodeList<Type> typeArguments, final boolean isThis,
                                              final Expression expression, final NodeList<Expression> arguments) {
         super(range);
         setTypeArguments(typeArguments);
@@ -119,7 +119,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     @Override
-    public Optional<NodeList<Type<?>>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -130,7 +130,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @return this, the ExplicitConstructorInvocationStmt
      */
     @Override
-    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type<?>> typeArguments) {
+    public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(this.typeArguments);

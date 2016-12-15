@@ -48,7 +48,7 @@ public final class ArrayCreationExpr extends Expression {
 
     private NodeList<ArrayCreationLevel> levels;
 
-    private Type<?> elementType;
+    private Type elementType;
 
     private ArrayInitializerExpr initializer;
 
@@ -59,28 +59,28 @@ public final class ArrayCreationExpr extends Expression {
                 new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         this(null,
                 elementType,
                 levels,
                 initializer);
     }
 
-    public ArrayCreationExpr(Type<?> elementType) {
+    public ArrayCreationExpr(Type elementType) {
         this(null,
                 elementType,
                 new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Range range, Type<?> elementType) {
+    public ArrayCreationExpr(Range range, Type elementType) {
         this(range,
                 elementType,
                 new NodeList<>(),
                 new ArrayInitializerExpr());
     }
 
-    public ArrayCreationExpr(Range range, Type<?> elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(Range range, Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         super(range);
         setLevels(levels);
         setElementType(elementType);
@@ -101,7 +101,7 @@ public final class ArrayCreationExpr extends Expression {
         return Optional.ofNullable(initializer);
     }
 
-    public Type<?> getElementType() {
+    public Type getElementType() {
         return elementType;
     }
 
@@ -118,7 +118,7 @@ public final class ArrayCreationExpr extends Expression {
         return this;
     }
 
-    public ArrayCreationExpr setElementType(Type<?> elementType) {
+    public ArrayCreationExpr setElementType(Type elementType) {
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         this.elementType = assertNotNull(elementType);
         setAsParentNodeOf(this.elementType);
@@ -139,8 +139,8 @@ public final class ArrayCreationExpr extends Expression {
     /**
      * Takes the element type and wraps it in an ArrayType for every array creation level.
      */
-    public Type<?> createdType() {
-        Type<?> result = elementType;
+    public Type createdType() {
+        Type result = elementType;
         for (int i = 0; i < levels.size(); i++) {
             result = new ArrayType(result, new NodeList<>());
         }
