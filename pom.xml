@@ -3,6 +3,7 @@
     <modules>
         <module>javaparser-core</module>
         <module>javaparser-testing</module>
+        <module>javaparser-bootstrap</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>
