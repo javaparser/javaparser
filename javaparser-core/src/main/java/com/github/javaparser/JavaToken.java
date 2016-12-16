@@ -2,17 +2,17 @@ package com.github.javaparser;
 
 /**
  * A token from a parsed source file.
- * (Awkwardly named "Java"Token since JavaCC already generates an interal class Token.)
+ * (Awkwardly named "Java"Token since JavaCC already generates an internal class Token.)
  */
 public class JavaToken {
     public final Range range;
     public final int kind;
-    public final String image;
+    public final String text;
 
-    public JavaToken(Range range, int kind, String image) {
+    public JavaToken(Range range, int kind, String text) {
         this.range = range;
         this.kind = kind;
-        this.image = image;
+        this.text = text;
     }
 
     public JavaToken(Token token) {
@@ -27,12 +27,12 @@ public class JavaToken {
         return kind;
     }
 
-    public String getImage() {
-        return image;
+    public String getText() {
+        return text;
     }
 
     @Override
     public String toString() {
-        return image;
+        return text;
     }
 }
