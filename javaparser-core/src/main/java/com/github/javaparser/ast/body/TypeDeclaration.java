@@ -135,6 +135,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T setName(SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);

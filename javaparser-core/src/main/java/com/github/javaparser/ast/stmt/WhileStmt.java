@@ -39,7 +39,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     private Statement body;
 
     public WhileStmt() {
-        this(null, new BooleanLiteralExpr(), new EmptyStmt());
+        this(null, new BooleanLiteralExpr(), new ReturnStmt());
     }
 
     public WhileStmt(final Expression condition, final Statement body) {

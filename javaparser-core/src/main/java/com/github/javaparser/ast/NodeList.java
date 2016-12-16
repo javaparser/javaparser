@@ -15,6 +15,10 @@ import java.util.stream.Stream;
 
 /**
  * A list of nodes.
+ * It usually has a parent node.
+ * Different from normal Nodes, this does not mean that it is a child of that parent.
+ * Instead, this list will make every node it contains a child of its parent.
+ * This way, a NodeList does not create an extra level inside the AST.
  *
  * @param <N> the type of nodes contained.
  */
@@ -53,15 +57,13 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             notifyElementRemoved(index, node);
             node.setParentNode(null);
         }
-        boolean remove = innerList.remove(node);
-        return remove;
+        return innerList.remove(node);
     }
 
+    @SafeVarargs
     public static <X extends Node> NodeList<X> nodeList(X... nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        for (X node : nodes) {
-            nodeList.add(node);
-        }
+        Collections.addAll(nodeList, nodes);
         return nodeList;
     }
 
@@ -75,9 +77,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     public static <X extends Node> NodeList<X> nodeList(NodeList<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        for (X node : nodes) {
-            nodeList.add(node);
-        }
+        nodeList.addAll(nodes);
         return nodeList;
     }
 
@@ -180,7 +180,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param action
      * @see java.lang.Iterable#forEach(java.util.function.Consumer)
      */
     @Override
@@ -189,8 +188,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param o
-     * @return
      * @see java.util.List#contains(java.lang.Object)
      */
     @Override
@@ -199,7 +196,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @return
      * @see java.util.List#toArray()
      */
     @Override
@@ -208,8 +204,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param a
-     * @return
      * @see java.util.List#toArray(java.lang.Object[])
      */
     @Override
@@ -218,8 +212,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param o
-     * @return
      * @see java.util.List#remove(java.lang.Object)
      */
     @Override
@@ -232,8 +224,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param c
-     * @return
      * @see java.util.List#containsAll(java.util.Collection)
      */
     @Override
@@ -242,20 +232,15 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param c
-     * @return
      * @see java.util.List#addAll(java.util.Collection)
      */
     @Override
     public boolean addAll(Collection<? extends N> c) {
-        c.forEach(e -> add(e));
+        c.forEach(this::add);
         return !c.isEmpty();
     }
 
     /**
-     * @param index
-     * @param c
-     * @return
      * @see java.util.List#addAll(int, java.util.Collection)
      */
     @Override
@@ -267,8 +252,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param c
-     * @return
      * @see java.util.List#removeAll(java.util.Collection)
      */
     @Override
@@ -281,8 +264,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param c
-     * @return
      * @see java.util.List#retainAll(java.util.Collection)
      */
     @Override
@@ -297,7 +278,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param operator
      * @see java.util.List#replaceAll(java.util.function.UnaryOperator)
      */
     @Override
@@ -308,8 +288,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param filter
-     * @return
      * @see java.util.Collection#removeIf(java.util.function.Predicate)
      */
     @Override
@@ -332,8 +310,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param o
-     * @return
      * @see java.util.List#equals(java.lang.Object)
      */
     @Override
@@ -342,7 +318,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @return
      * @see java.util.List#hashCode()
      */
     @Override
@@ -351,8 +326,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param o
-     * @return
      * @see java.util.List#indexOf(java.lang.Object)
      */
     @Override
@@ -361,8 +334,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param o
-     * @return
      * @see java.util.List#lastIndexOf(java.lang.Object)
      */
     @Override
@@ -371,7 +342,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @return
      * @see java.util.List#listIterator()
      */
     @Override
@@ -380,8 +350,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param index
-     * @return
      * @see java.util.List#listIterator(int)
      */
     @Override
@@ -390,7 +358,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @return
      * @see java.util.Collection#parallelStream()
      */
     @Override
@@ -399,9 +366,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @param fromIndex
-     * @param toIndex
-     * @return
      * @see java.util.List#subList(int, int)
      */
     @Override
@@ -410,7 +374,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     }
 
     /**
-     * @return
      * @see java.util.List#spliterator()
      */
     @Override

@@ -26,7 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.EmptyStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -50,7 +50,7 @@ public class LambdaExpr extends Expression implements
     public LambdaExpr() {
         this(null,
                 new NodeList<>(),
-                new EmptyStmt(),
+                new ReturnStmt(),
                 false);
     }
 

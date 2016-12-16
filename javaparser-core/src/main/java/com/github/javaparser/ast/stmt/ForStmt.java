@@ -52,7 +52,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
                 new NodeList<>(),
                 new BooleanLiteralExpr(),
                 new NodeList<>(),
-                new EmptyStmt());
+                new ReturnStmt());
     }
 
     public ForStmt(final NodeList<Expression> initialization, final Expression compare,

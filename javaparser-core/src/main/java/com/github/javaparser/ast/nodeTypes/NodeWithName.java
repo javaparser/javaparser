@@ -38,6 +38,7 @@ public interface NodeWithName<N extends Node> {
 
     N setName(Name name);
 
+    @SuppressWarnings("unchecked")
     default N setName(String name) {
         setName(parse(name));
         return (N) this;

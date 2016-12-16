@@ -2807,18 +2807,18 @@ AssertStmt AssertStatement():
 }
 {
   "assert" {begin=tokenBegin();} check = Expression() [ ":" msg = Expression() ] ";"
-  { return new AssertStmt(range(begin, tokenEnd()),check, msg);  }
+  { return new AssertStmt(range(begin, tokenEnd()), check, msg);  }
 }
 
 LabeledStmt LabeledStatement():
 {
-	String label;
+	SimpleName label;
 	Statement stmt;
 	Position begin;
 }
 {
-  <IDENTIFIER> {begin=tokenBegin();} { label = token.image; } ":" stmt = Statement()
-  { return new LabeledStmt(range(begin, tokenEnd()),label, stmt); }
+  label = SimpleName() {begin=tokenBegin();} ":" stmt = Statement()
+  { return new LabeledStmt(range(begin, tokenEnd()), label, stmt); }
 }
 
 BlockStmt Block():

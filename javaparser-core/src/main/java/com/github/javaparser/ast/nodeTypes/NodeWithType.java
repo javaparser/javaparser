@@ -56,11 +56,13 @@ public interface NodeWithType<N extends Node, T extends Type> {
      * @param typeClass the type
      * @return this
      */
+    @SuppressWarnings("unchecked")
     default N setType(Class<?> typeClass) {
         ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
         return setType((T) new ClassOrInterfaceType(typeClass.getSimpleName()));
     }
 
+    @SuppressWarnings("unchecked")
     default N setType(final String type) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
         return setType((T) classOrInterfaceType);

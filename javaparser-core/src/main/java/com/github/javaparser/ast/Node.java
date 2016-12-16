@@ -373,6 +373,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @return The data or null of no data was found for the given key
      * @see DataKey
      */
+    @SuppressWarnings("unchecked")
     public <M> M getData(final DataKey<M> key) {
         if (data == null) {
             return null;
