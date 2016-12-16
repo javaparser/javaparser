@@ -99,6 +99,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
+    @FunctionalInterface
+    public interface ActionOnNode {
+        void execute(Node node);
+    }
     private Range range;
 
     private Node parentNode;
@@ -523,6 +527,16 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         register(observer);
         this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
         this.getNodeLists().forEach(nl -> nl.register(observer));
+    }
+
+    public void onSubStreeBreadthFirst(ActionOnNode action) {
+        action.execute(this);
+        this.getChildNodes().forEach(c -> c.onSubStreeBreadthFirst(action));
+    }
+
+    public void onSubStreeDepthFirst(ActionOnNode action) {
+        this.getChildNodes().forEach(c -> c.onSubStreeDepthFirst(action));
+        action.execute(this);
     }
 
     @Override
