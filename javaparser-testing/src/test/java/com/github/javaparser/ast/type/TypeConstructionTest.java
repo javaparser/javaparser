@@ -104,7 +104,7 @@ public class TypeConstructionTest {
         VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
 
         variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.INT_TYPE)));
-        assertEquals("@C int a[][];", variableDeclarationStatement.toString());
+        assertEquals("@C int[][] a;", variableDeclarationStatement.toString());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class TypeConstructionTest {
         FieldDeclaration fieldDeclaration = (FieldDeclaration) parseClassBodyDeclaration("int[][] a[][];");
         fieldDeclaration.getVariable(0).setType(new ArrayType(new ArrayType(new ClassOrInterfaceType("Blob"))));
 
-        assertEquals("Blob a[][];", fieldDeclaration.toString());
+        assertEquals("Blob[][] a;", fieldDeclaration.toString());
     }
 
     @Test

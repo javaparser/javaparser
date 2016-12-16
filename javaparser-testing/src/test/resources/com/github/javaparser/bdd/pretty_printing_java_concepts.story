@@ -24,11 +24,11 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
     Class clz4 = (int.class);
 
-    int arr[] = new int[10];
+    int[] arr = new int[10];
 
     byte bye = 0;
 
-    byte byebye[] = null;
+    byte[] byebye = null;
 
     short sh1, sh2 = 1;
 
@@ -46,7 +46,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
     int binaryLiteral = 0b101101;
 
-    List<String> arrLS[][] = (List<String>[][]) new List<?>[10][];
+    List<String>[][] arrLS = (List<String>[][]) new List<?>[10][];
 
     ;
 
@@ -101,15 +101,15 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
     ;
 
     @Deprecated()
-    int arr2[][][][] = new int[10][2][1][0];
+    int[][][][] arr2 = new int[10][2][1][0];
 
     volatile float fff = 0x1.fffeP+127f;
 
     char cc = 'a';
 
-    int arr3[][] = { { 1, 2 }, { 3, 4 } };
+    int[][] arr3 = { { 1, 2 }, { 3, 4 } };
 
-    static int arr4[][] = {};
+    static int[][] arr4 = {};
 
     public static JavaConcepts t;
 
