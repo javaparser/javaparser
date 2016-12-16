@@ -1,9 +1,8 @@
-package com.github.javaparser.ast.junit.visitor;
+package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.visitor.TreeVisitor;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
