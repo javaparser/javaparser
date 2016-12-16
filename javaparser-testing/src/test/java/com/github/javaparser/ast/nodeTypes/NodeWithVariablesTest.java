@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class NodeWithVariablesTest {
+
     @Test
     public void getCommonTypeWorksForNormalVariables() {
         VariableDeclarationExpr declaration = JavaParser.parseVariableDeclarationExpr("int a,b;");
@@ -68,4 +70,5 @@ public class NodeWithVariablesTest {
         declaration.getVariables().clear();
         declaration.getElementType();
     }
+
 }
