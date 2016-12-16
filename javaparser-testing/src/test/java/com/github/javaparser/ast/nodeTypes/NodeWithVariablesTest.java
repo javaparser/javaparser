@@ -71,24 +71,4 @@ public class NodeWithVariablesTest {
         declaration.getElementType();
     }
 
-    @Test
-    public void getMaximumCommonTypeWithoutAnnotations() {
-        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
-        assertEquals("int[]", vde1.getMaximumCommonType().toString());
-
-        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[][] a[], b[]");
-        assertEquals("int[][][]", vde2.getMaximumCommonType().toString());
-
-        VariableDeclarationExpr vde3 = JavaParser.parseVariableDeclarationExpr("int[][] a, b[]");
-        assertEquals("int[][]", vde3.getMaximumCommonType().toString());
-    }
-
-    @Test
-    public void getMaximumCommonTypeWithAnnotations() {
-        VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
-        assertEquals("int", vde1.getMaximumCommonType().toString());
-
-        VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
-        assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().toString());
-    }
 }
