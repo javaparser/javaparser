@@ -22,6 +22,10 @@ public class TypeImportOnDemandDeclaration extends ImportDeclaration implements 
         this(null, new Name());
     }
 
+    public TypeImportOnDemandDeclaration(String packag) {
+        this(null, new Name(packag));
+    }
+
     public TypeImportOnDemandDeclaration(Range range, Name name) {
         super(range);
         setName(name);

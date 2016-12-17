@@ -1,36 +1,42 @@
 package com.github.javaparser.bootstrap;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.model.JavaParserModel;
-import com.github.javaparser.model.NodeModel;
+import com.github.javaparser.model.JavaParserMetaModel;
+import com.github.javaparser.model.NodeMetaModel;
 
-import static com.github.javaparser.ast.Modifier.PUBLIC;
-import static com.github.javaparser.ast.NodeList.nodeList;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class VisitorGenerator {
-    private static JavaParserModel javaParserModel = new JavaParserModel();
+    private static JavaParserMetaModel javaParserMetaModel = new JavaParserMetaModel();
 
-    public static void main(String[] args) {
-        CompilationUnit cu = new CompilationUnit("com.github.javaparser.ast.visitor");
-        cu.addImport("com.github.javaparser.ast.*");
-        cu.addImport("com.github.javaparser.ast.body.*");
-        cu.addImport("com.github.javaparser.ast.comments.*");
-        cu.addImport("com.github.javaparser.ast.expr.*");
-        cu.addImport("com.github.javaparser.ast.imports.*");
-        cu.addImport("com.github.javaparser.ast.stmt.*");
-        cu.addImport("com.github.javaparser.ast.type.*");
+    public static void main(String[] args) throws IOException {
+        final Path root = new File(VisitorGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "/../../../javaparser-core/src/main/java/").toPath();
 
-        ClassOrInterfaceDeclaration visitor = cu.addInterface("VoidVisitor", PUBLIC);
-        visitor.setTypeParameters(nodeList(new TypeParameter("A")));
+        JavaParser javaParser = new JavaParser();
 
-        for (NodeModel node : javaParserModel.getNodeModels()) {
-            visitor.addMethod("visit")
-                    .addParameter(node.getClassName(), "n")
-                    .addParameter("A", "arg");
+        SourceRoot sourceRoot = new SourceRoot(root);
+
+        CompilationUnit voidVisitorCu = sourceRoot.parse("com.github.javaparser.ast.visitor", "VoidVisitor.java", javaParser).get();
+
+        ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getInterfaceByName("VoidVisitor");
+        voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
+
+        for (NodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
+            if (!node.isAbstract()) {
+                voidVisitor.addMethod("visit")
+                        .addParameter(node.getClassName(), "n")
+                        .addParameter("A", "arg")
+                        .setBody(null);
+            }
         }
 
-        System.out.println(cu);
+        sourceRoot.save();
+
     }
+
+
 }

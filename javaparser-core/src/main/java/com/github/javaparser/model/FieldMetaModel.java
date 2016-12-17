@@ -2,12 +2,15 @@ package com.github.javaparser.model;
 
 import java.lang.reflect.Field;
 
-public class FieldModel {
-    private final NodeModel nodeModel;
+/**
+ * Meta-data about a field in a node in the AST.
+ */
+public class FieldMetaModel {
+    private final NodeMetaModel nodeMetaModel;
     private final Field field;
 
-    public FieldModel(NodeModel nodeModel, Field field) {
-        this.nodeModel = nodeModel;
+    public FieldMetaModel(NodeMetaModel nodeMetaModel, Field field) {
+        this.nodeMetaModel = nodeMetaModel;
         this.field = field;
     }
     
@@ -20,7 +23,7 @@ public class FieldModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FieldModel that = (FieldModel) o;
+        FieldMetaModel that = (FieldMetaModel) o;
 
         if (!field.equals(that.field)) return false;
 
@@ -32,8 +35,8 @@ public class FieldModel {
         return field.hashCode();
     }
 
-    public NodeModel getNodeModel() {
-        return nodeModel;
+    public NodeMetaModel getNodeMetaModel() {
+        return nodeMetaModel;
     }
 
     public Field getField() {

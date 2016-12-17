@@ -1,9 +1,6 @@
 package com.github.javaparser.model;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
@@ -14,20 +11,22 @@ import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * The model contains meta-data about all nodes in the AST.
  * You can base source code generators on it.
  */
-public class JavaParserModel {
-    private static Set<Class<? extends Node>> ALL_NODE_CLASSES = new HashSet<Class<? extends Node>>() {{
+public class JavaParserMetaModel {
+    private static List<Class<?>> ALL_NODE_CLASSES = new ArrayList<Class<?>>() {{
         add(ArrayCreationLevel.class);
         add(CompilationUnit.class);
         add(Node.class);
         add(PackageDeclaration.class);
+        add(NodeList.class);
 
         add(AnnotationDeclaration.class);
         add(AnnotationMemberDeclaration.class);
@@ -130,25 +129,44 @@ public class JavaParserModel {
         add(WildcardType.class);
     }};
 
-    private final Set<NodeModel> nodeModels = new HashSet<>();
+    private static List<ImportDeclaration> IMPORT_DECLARATIONS = new ArrayList<ImportDeclaration>() {{
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast"));
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.body"));
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.comments"));
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.expr"));
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.imports"));
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.stmt"));
+        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.type"));
+    }};
 
-    public JavaParserModel() {
-        for (Class<? extends Node> nodeClass : ALL_NODE_CLASSES) {
-            nodeModels.add(new NodeModel(this, nodeClass));
+    static {
+        IMPORT_DECLARATIONS.sort(Comparator.comparing(Node::toString));
+        ALL_NODE_CLASSES.sort(Comparator.comparing(Class::getSimpleName));
+    }
+
+    private final List<NodeMetaModel> nodeMetaModels = new ArrayList<>();
+
+    public JavaParserMetaModel() {
+        for (Class<?> nodeClass : ALL_NODE_CLASSES) {
+            nodeMetaModels.add(new NodeMetaModel(this, nodeClass));
         }
-        nodeModels.forEach(NodeModel::initialize);
+        nodeMetaModels.forEach(NodeMetaModel::initialize);
     }
 
-    public Set<NodeModel> getNodeModels() {
-        return nodeModels;
+    public List<NodeMetaModel> getNodeMetaModels() {
+        return nodeMetaModels;
     }
 
-    public Optional<NodeModel> getNodeModel(Class<?> c) {
-        for (NodeModel nodeModel : nodeModels) {
-            if (nodeModel.getNodeClass().equals(c)) {
-                return Optional.of(nodeModel);
+    public Optional<NodeMetaModel> getNodeModel(Class<?> c) {
+        for (NodeMetaModel nodeMetaModel : nodeMetaModels) {
+            if (nodeMetaModel.getNodeClass().equals(c)) {
+                return Optional.of(nodeMetaModel);
             }
         }
         return Optional.empty();
+    }
+
+    public List<ImportDeclaration> getNodeImports() {
+        return IMPORT_DECLARATIONS;
     }
 }
