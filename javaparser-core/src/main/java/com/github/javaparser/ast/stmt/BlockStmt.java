@@ -28,6 +28,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -71,6 +74,10 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         setAsParentNodeOf(this.statements);
         return this;
     }
-
+    
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(statements);
+    }
 
 }
