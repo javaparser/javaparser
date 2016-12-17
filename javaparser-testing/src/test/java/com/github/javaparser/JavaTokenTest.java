@@ -29,7 +29,7 @@ public class JavaTokenTest {
     }
 
     private void assertToken(String image, Range range, int kind, JavaToken token) {
-        assertEquals(image, token.getImage());
+        assertEquals(image, token.getText());
         assertEquals(range, token.getRange());
         assertEquals(kind, token.getKind());
     }
