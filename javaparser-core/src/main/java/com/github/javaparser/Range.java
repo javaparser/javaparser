@@ -52,7 +52,19 @@ public class Range {
         return range(this.begin, end);
     }
 
+    /**
+     * As strictlyContains, but two exactly matching ranges are also considered contained one in each other.
+     */
     public boolean contains(Range other) {
+        return (begin.isBefore(other.begin) || begin.equals(other.begin)) &&
+                (end.isAfter(other.end) || end.equals(other.end));
+    }
+
+    /**
+     * Do this strictly contains other? It means that this has to be larger than other and it has to start as other
+     * or before and end as other or after.
+     */
+    public boolean strictlyContains(Range other) {
         return begin.isBefore(other.begin) && end.isAfter(other.end);
     }
 

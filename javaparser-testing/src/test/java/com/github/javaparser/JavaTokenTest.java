@@ -1,6 +1,5 @@
 package com.github.javaparser;
 
-import com.github.javaparser.*;
 import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
