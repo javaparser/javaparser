@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -124,7 +124,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final CompilationUnit n1, final Visitable arg) {
         final CompilationUnit n2 = (CompilationUnit) arg;
 
-        if (!nodeEquals(n1.getPackage().orElse(null), n2.getPackage().orElse(null))) {
+        if (!nodeEquals(n1.getPackageDeclaration().orElse(null), n2.getPackageDeclaration().orElse(null))) {
             return false;
         }
 
@@ -231,11 +231,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getExtends(), n2.getExtends())) {
+        if (!nodesEquals(n1.getExtendedTypes(), n2.getExtendedTypes())) {
             return false;
         }
 
-        if (!nodesEquals(n1.getImplements(), n2.getImplements())) {
+        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes())) {
             return false;
         }
 
@@ -264,7 +264,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getImplements(), n2.getImplements())) {
+        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes())) {
             return false;
         }
 
@@ -509,7 +509,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final InitializerDeclaration n1, final Visitable arg) {
         final InitializerDeclaration n2 = (InitializerDeclaration) arg;
 
-        if (!nodeEquals(n1.getBlock(), n2.getBlock())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody())) {
             return false;
         }
 

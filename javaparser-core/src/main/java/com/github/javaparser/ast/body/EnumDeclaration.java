@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -86,7 +86,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                            NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
-        setImplements(implementedTypes);
+        setImplementedTypes(implementedTypes);
         setEntries(entries);
     }
 
@@ -110,7 +110,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
-    public NodeList<ClassOrInterfaceType> getImplements() {
+    public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
     }
 
@@ -122,7 +122,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
-    public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
+    public EnumDeclaration setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList) {
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
         this.implementedTypes = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementedTypes);
