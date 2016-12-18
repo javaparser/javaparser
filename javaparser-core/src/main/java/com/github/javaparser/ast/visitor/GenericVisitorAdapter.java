@@ -314,8 +314,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getExtends() != null) {
-            for (final ClassOrInterfaceType c : n.getExtends()) {
+        if (n.getExtendedTypes() != null) {
+            for (final ClassOrInterfaceType c : n.getExtendedTypes()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {
@@ -325,8 +325,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
 
-        if (n.getImplements() != null) {
-            for (final ClassOrInterfaceType c : n.getImplements()) {
+        if (n.getImplementedTypes() != null) {
+            for (final ClassOrInterfaceType c : n.getImplementedTypes()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {
@@ -379,9 +379,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final CompilationUnit n, final A arg) {
         visitComment(n, arg);
-        if (n.getPackage().isPresent()) {
+        if (n.getPackageDeclaration().isPresent()) {
             {
-                R result = n.getPackage().get().accept(this, arg);
+                R result = n.getPackageDeclaration().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -591,8 +591,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getImplements() != null) {
-            for (final ClassOrInterfaceType c : n.getImplements()) {
+        if (n.getImplementedTypes() != null) {
+            for (final ClassOrInterfaceType c : n.getImplementedTypes()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {

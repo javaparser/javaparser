@@ -53,8 +53,8 @@ public class ClassOrInterfaceDeclarationBuildersTest {
         assertEquals(1, cu.getImports().size());
         assertEquals("import " + List.class.getName() + ";" + EOL,
                 cu.getImport(0).toString());
-        assertEquals(1, testClass.getExtends().size());
-        assertEquals(List.class.getSimpleName(), testClass.getExtends(0).getNameAsString());
+        assertEquals(1, testClass.getExtendedTypes().size());
+        assertEquals(List.class.getSimpleName(), testClass.getExtendedTypes(0).getNameAsString());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ClassOrInterfaceDeclarationBuildersTest {
         assertEquals(1, cu.getImports().size());
         assertEquals("import " + Function.class.getName() + ";" + EOL,
                 cu.getImport(0).toString());
-        assertEquals(1, testClass.getImplements().size());
-        assertEquals(Function.class.getSimpleName(), testClass.getImplements(0).getNameAsString());
+        assertEquals(1, testClass.getImplementedTypes().size());
+        assertEquals(Function.class.getSimpleName(), testClass.getImplementedTypes(0).getNameAsString());
     }
 }

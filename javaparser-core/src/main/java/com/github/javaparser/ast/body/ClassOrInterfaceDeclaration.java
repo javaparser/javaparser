@@ -105,8 +105,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         super(range, annotations, modifiers, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
-        setExtends(extendedTypes);
-        setImplements(implementedTypes);
+        setExtendedTypes(extendedTypes);
+        setImplementedTypes(implementedTypes);
     }
 
     @Override
@@ -120,12 +120,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
-    public NodeList<ClassOrInterfaceType> getExtends() {
+    public NodeList<ClassOrInterfaceType> getExtendedTypes() {
         return extendedTypes;
     }
 
     @Override
-    public NodeList<ClassOrInterfaceType> getImplements() {
+    public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
     }
 
@@ -138,7 +138,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
-    public ClassOrInterfaceDeclaration setExtends(final NodeList<ClassOrInterfaceType> extendsList) {
+    public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendsList) {
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendsList);
         this.extendedTypes = assertNotNull(extendsList);
         setAsParentNodeOf(this.extendedTypes);
@@ -146,7 +146,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
-    public ClassOrInterfaceDeclaration setImplements(final NodeList<ClassOrInterfaceType> implementsList) {
+    public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementsList) {
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
         this.implementedTypes = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementedTypes);

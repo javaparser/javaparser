@@ -26,13 +26,13 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public interface NodeWithExtends<N extends Node> {
-    NodeList<ClassOrInterfaceType> getExtends();
+    NodeList<ClassOrInterfaceType> getExtendedTypes();
 
-    default ClassOrInterfaceType getExtends(int i) {
-        return getExtends().get(i);
+    default ClassOrInterfaceType getExtendedTypes(int i) {
+        return getExtendedTypes().get(i);
     }
 
-    N setExtends(NodeList<ClassOrInterfaceType> extendsList);
+    N setExtendedTypes(NodeList<ClassOrInterfaceType> extendsList);
 
     /**
      * Add an extends to this and automatically add the import
@@ -54,7 +54,7 @@ public interface NodeWithExtends<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addExtends(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getExtends().add(classOrInterfaceType);
+        getExtendedTypes().add(classOrInterfaceType);
         classOrInterfaceType.setParentNode((Node) this);
         return (N) this;
     }

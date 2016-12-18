@@ -35,19 +35,19 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class TypeDeclarationStmt extends Statement {
 
-    private TypeDeclaration typeDecl;
+    private TypeDeclaration typeDeclaration;
 
     public TypeDeclarationStmt() {
         this(null, new ClassOrInterfaceDeclaration());
     }
 
-    public TypeDeclarationStmt(final TypeDeclaration typeDecl) {
-        this(null, typeDecl);
+    public TypeDeclarationStmt(final TypeDeclaration typeDeclaration) {
+        this(null, typeDeclaration);
     }
 
-    public TypeDeclarationStmt(Range range, final TypeDeclaration typeDecl) {
+    public TypeDeclarationStmt(Range range, final TypeDeclaration typeDeclaration) {
         super(range);
-        setTypeDeclaration(typeDecl);
+        setTypeDeclaration(typeDeclaration);
     }
 
     @Override
@@ -61,13 +61,13 @@ public final class TypeDeclarationStmt extends Statement {
     }
 
     public TypeDeclaration getTypeDeclaration() {
-        return typeDecl;
+        return typeDeclaration;
     }
 
     public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
-        notifyPropertyChange(ObservableProperty.TYPE_DECLARATION, this.typeDecl, typeDecl);
-        this.typeDecl = assertNotNull(typeDecl);
-        setAsParentNodeOf(this.typeDecl);
+        notifyPropertyChange(ObservableProperty.TYPE_DECLARATION, this.typeDeclaration, typeDecl);
+        this.typeDeclaration = assertNotNull(typeDecl);
+        setAsParentNodeOf(this.typeDeclaration);
         return this;
     }
 }
