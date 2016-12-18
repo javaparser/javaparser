@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -314,8 +314,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getExtends() != null) {
-            for (final ClassOrInterfaceType c : n.getExtends()) {
+        if (n.getExtendedTypes() != null) {
+            for (final ClassOrInterfaceType c : n.getExtendedTypes()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {
@@ -325,8 +325,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             }
         }
 
-        if (n.getImplements() != null) {
-            for (final ClassOrInterfaceType c : n.getImplements()) {
+        if (n.getImplementedTypes() != null) {
+            for (final ClassOrInterfaceType c : n.getImplementedTypes()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {
@@ -379,9 +379,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final CompilationUnit n, final A arg) {
         visitComment(n, arg);
-        if (n.getPackage().isPresent()) {
+        if (n.getPackageDeclaration().isPresent()) {
             {
-                R result = n.getPackage().get().accept(this, arg);
+                R result = n.getPackageDeclaration().get().accept(this, arg);
                 if (result != null) {
                     return result;
                 }
@@ -591,8 +591,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 }
             }
         }
-        if (n.getImplements() != null) {
-            for (final ClassOrInterfaceType c : n.getImplements()) {
+        if (n.getImplementedTypes() != null) {
+            for (final ClassOrInterfaceType c : n.getImplementedTypes()) {
                 {
                     R result = c.accept(this, arg);
                     if (result != null) {
@@ -810,7 +810,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     public R visit(final InitializerDeclaration n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getBlock().accept(this, arg);
+            R result = n.getBody().accept(this, arg);
             if (result != null) {
                 return result;
             }
