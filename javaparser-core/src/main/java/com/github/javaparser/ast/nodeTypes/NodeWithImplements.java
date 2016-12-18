@@ -5,13 +5,13 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public interface NodeWithImplements<N extends Node> {
-    NodeList<ClassOrInterfaceType> getImplements();
+    NodeList<ClassOrInterfaceType> getImplementedTypes();
 
-    default ClassOrInterfaceType getImplements(int i) {
-        return getImplements().get(i);
+    default ClassOrInterfaceType getImplementedTypes(int i) {
+        return getImplementedTypes().get(i);
     }
 
-    N setImplements(NodeList<ClassOrInterfaceType> implementsList);
+    N setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList);
 
     /**
      * Add an implements to this
@@ -22,7 +22,7 @@ public interface NodeWithImplements<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addImplements(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getImplements().add(classOrInterfaceType);
+        getImplementedTypes().add(classOrInterfaceType);
         classOrInterfaceType.setParentNode((Node) this);
         return (N) this;
     }

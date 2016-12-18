@@ -30,10 +30,10 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackage(new PackageDeclaration(Name.parse("java.parser.test")));
+        cu.setPackageDeclaration(new PackageDeclaration(Name.parse("java.parser.test")));
 
         // or a shortcut
-        cu.setPackage("java.parser.test");
+        cu.setPackageDeclaration("java.parser.test");
 
         // create the type declaration 
         ClassOrInterfaceDeclaration type = cu.addClass("GeneratedClass");
