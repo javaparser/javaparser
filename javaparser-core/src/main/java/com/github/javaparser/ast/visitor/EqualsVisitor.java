@@ -509,7 +509,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final InitializerDeclaration n1, final Visitable arg) {
         final InitializerDeclaration n2 = (InitializerDeclaration) arg;
 
-        if (!nodeEquals(n1.getBlock(), n2.getBlock())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody())) {
             return false;
         }
 

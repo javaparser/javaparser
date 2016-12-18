@@ -31,7 +31,6 @@ public enum ObservableProperty {
     BLOCK,
     BODY,
     CATCH_CLAUSES,
-    CATCH_BLOCK,
     CHECK,
     CLASS_BODY,
     CLASS_EXPR,

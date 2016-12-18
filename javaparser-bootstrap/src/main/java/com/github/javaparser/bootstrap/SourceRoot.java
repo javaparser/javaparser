@@ -10,8 +10,11 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Providers.*;
+
 /**
- * A collection of files located in one directory on the file system.
+ * A collection of files located in one directory and its subdirectories on the file system.
  * Files can be parsed and written back one by one or all together.
  */
 public class SourceRoot {
@@ -50,11 +53,11 @@ public class SourceRoot {
         return Paths.get(root.toString(), startPackage).normalize();
     }
 
-    public void save() throws FileNotFoundException, UnsupportedEncodingException {
+    public void saveAll() throws FileNotFoundException, UnsupportedEncodingException {
         for (CompilationUnit cu : compilationUnits) {
             Path filename = cu.getData(ORIGINAL_LOCATION);
             String code = new PrettyPrinter().print(cu);
-            try (PrintWriter out = new PrintWriter(filename.toFile(), Providers.UTF8.toString())) {
+            try (PrintWriter out = new PrintWriter(filename.toFile(), UTF8.toString())) {
                 out.println(code);
             }
         }
@@ -71,7 +74,7 @@ public class SourceRoot {
     public Optional<CompilationUnit> parse(String packag, String filename, JavaParser javaParser) throws IOException {
         Path path = fileInPackagePath(packag, filename);
         System.out.println(path);
-        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(path));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
         if (result.isSuccessful()) {
             CompilationUnit cu = result.getResult().get();
             compilationUnits.add(cu);

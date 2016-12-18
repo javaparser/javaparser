@@ -129,18 +129,7 @@ public class JavaParserMetaModel {
         add(WildcardType.class);
     }};
 
-    private static List<ImportDeclaration> IMPORT_DECLARATIONS = new ArrayList<ImportDeclaration>() {{
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast"));
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.body"));
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.comments"));
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.expr"));
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.imports"));
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.stmt"));
-        add(new TypeImportOnDemandDeclaration("com.github.javaparser.ast.type"));
-    }};
-
     static {
-        IMPORT_DECLARATIONS.sort(Comparator.comparing(Node::toString));
         ALL_MODEL_CLASSES.sort(Comparator.comparing(Class::getSimpleName));
     }
 
@@ -166,7 +155,15 @@ public class JavaParserMetaModel {
         return Optional.empty();
     }
 
-    public List<ImportDeclaration> getNodeImports() {
-        return IMPORT_DECLARATIONS;
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        for (ClassMetaModel classMetaModel : getClassMetaModels()) {
+            b.append(classMetaModel).append("\n");
+            for (FieldMetaModel fieldMetaModel : classMetaModel.getFieldMetaModels()) {
+                b.append("\t").append(fieldMetaModel).append("\n");
+            }
+        }
+        return b.toString();
     }
 }

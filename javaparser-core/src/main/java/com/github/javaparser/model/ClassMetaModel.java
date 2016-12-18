@@ -4,20 +4,22 @@ import com.github.javaparser.ast.Node;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
- * Meta-data about a type of node in the AST.
- * Exception: NodeList is in here, but is not a Node.
+ * Meta-data about all classes in the AST.
+ * These are all Nodes, except NodeList.
  */
 public class ClassMetaModel {
     private final JavaParserMetaModel javaParserMetaModel;
     private final Class<?> reflectionClass;
-    private final Set<FieldMetaModel> fieldMetaModels = new HashSet<>();
+    private final List<FieldMetaModel> fieldMetaModels = new ArrayList<>();
     private Optional<ClassMetaModel> superClassMetaModel;
-
+    private Flags flags = new Flags();
+    
     ClassMetaModel(JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass) {
         this.javaParserMetaModel = javaParserMetaModel;
         this.reflectionClass = reflectionClass;
@@ -30,6 +32,8 @@ public class ClassMetaModel {
                 fieldMetaModels.add(fieldMetaModel);
             }
         }
+
+        fieldMetaModels.sort(Comparator.comparing(FieldMetaModel::getName));
 
         Class<?> superclass = reflectionClass.getSuperclass();
         if (Node.class.isAssignableFrom(superclass)) {
@@ -52,10 +56,11 @@ public class ClassMetaModel {
     /**
      * Returns all fields, including fields of the super classes, as long as they are considered relevant to the AST.
      */
-    public Set<FieldMetaModel> getFieldMetaModels() {
-        HashSet<FieldMetaModel> allFields = new HashSet<>();
+    public List<FieldMetaModel> getFieldMetaModels() {
+        List<FieldMetaModel> allFields = new ArrayList<>();
         allFields.addAll(this.fieldMetaModels);
         superClassMetaModel.ifPresent(superClass -> allFields.addAll(superClass.getFieldMetaModels()));
+        allFields.sort(Comparator.comparing(FieldMetaModel::getName));
         return allFields;
     }
 
@@ -90,5 +95,18 @@ public class ClassMetaModel {
 
     public boolean isAbstract() {
         return Modifier.isAbstract(reflectionClass.getModifiers());
+    }
+
+    public boolean is(Class<?> c) {
+        return reflectionClass.equals(c);
+    }
+
+    public Flags getFlags() {
+        return flags;
+    }
+
+    @Override
+    public String toString() {
+        return getClassName();
     }
 }

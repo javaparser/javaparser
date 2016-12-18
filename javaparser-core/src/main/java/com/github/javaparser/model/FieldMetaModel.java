@@ -4,7 +4,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.capitalize;
 
@@ -14,7 +16,9 @@ import static com.github.javaparser.utils.Utils.capitalize;
 public class FieldMetaModel {
     private final ClassMetaModel classMetaModel;
     private final Field reflectionField;
-    private String getter;
+    private String getterMethodName;
+    private Flags flags = new Flags();
+    private boolean optional;
 
     FieldMetaModel(ClassMetaModel classMetaModel, Field reflectionField) {
         this.classMetaModel = classMetaModel;
@@ -24,11 +28,18 @@ public class FieldMetaModel {
     void initialize() {
         String name = reflectionField.getName();
         if (name.startsWith("is")) {
-            getter = name + "()";
+            getterMethodName = name;
         } else if (reflectionField.getType().equals(Boolean.class)) {
-            getter = "is" + capitalize(name) + "()";
+            getterMethodName = "is" + capitalize(name);
         } else {
-            getter = "get" + capitalize(name) + "()";
+            getterMethodName = "get" + capitalize(name);
+        }
+
+        try {
+            Method method = classMetaModel.getReflectionClass().getMethod(getterMethodName);
+            optional = method.getReturnType().equals(Optional.class);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -58,7 +69,7 @@ public class FieldMetaModel {
     }
 
     public String getter() {
-        return getter;
+        return getterMethodName + "()";
     }
 
     public String getName() {
@@ -70,26 +81,37 @@ public class FieldMetaModel {
     }
 
     boolean isPartOfModel() {
-        Class<?> type = getClassMetaModel().getReflectionClass();
-        String name = getName();
-        if (Modifier.isStatic(reflectionField.getModifiers())) {
+        if (Modifier.isStatic(reflectionField.getModifiers()) ||
+                is(Node.class, "parentNode") ||
+                is("observers") ||
+                is(NodeList.class, "innerList") ||
+                is(Node.class, "data") ||
+                is(Node.class, "range") ||
+                is(Node.class, "childNodes")
+                ) {
             return false;
-        }
-        if (name.equals("observers")) {
-            return false;
-        }
-        if (type.equals(NodeList.class)) {
-            if (name.equals("innerList")) {
-                return false;
-            }
-        }
-        if (type.equals(Node.class)) {
-            if (name.equals("data")) {
-                return false;
-            }
         }
         return true;
     }
 
+    public boolean is(Class<?> c, String fieldName) {
+        return getClassMetaModel().is(c) && getName().equals(fieldName);
+    }
 
+    public boolean is(String fieldName) {
+        return getName().equals(fieldName);
+    }
+
+    public Flags getFlags() {
+        return flags;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + getType().getSimpleName() + ")\t" + classMetaModel.toString() + "#" + getName();
+    }
 }
