@@ -29,11 +29,10 @@ public class PropagatingAstObserverTest {
         assertEquals(Arrays.asList(), changes);
 
         FieldDeclaration fieldDeclaration = cu.getClassByName("A").addField("String", "foo");
-        assertEquals(Arrays.asList("FieldDeclaration.modifiers changed from [] to []"), changes);
+        assertEquals(Arrays.asList(), changes);
         assertEquals(true, fieldDeclaration.isRegistered(observer));
 
         cu.getClassByName("A").getFieldByName("foo").getVariables().get(0).setName("Bar");
-        assertEquals(Arrays.asList("FieldDeclaration.modifiers changed from [] to []",
-                "VariableDeclarator.name changed from foo to Bar"), changes);
+        assertEquals(Arrays.asList("VariableDeclarator.name changed from foo to Bar"), changes);
     }
 }

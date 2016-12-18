@@ -137,7 +137,6 @@ public class NodeTest {
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam",
-                "FieldDeclaration.modifiers changed from [] to []",
                 "VariableDeclarator.initializer changed from null to 0"), changes);
     }
 
