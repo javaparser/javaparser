@@ -118,7 +118,7 @@ public final class CompilationUnit extends Node {
      * Retrieves the list of imports declared in this compilation unit or
      * <code>null</code> if there is no import.
      *
-     * @return the list of imports or <code>null</code> if there is no import
+     * @return the list of imports or <code>none</code> if there is no import
      */
     public NodeList<ImportDeclaration> getImports() {
         return imports;
@@ -131,9 +131,9 @@ public final class CompilationUnit extends Node {
     /**
      * Retrieves the package declaration of this compilation unit.<br>
      * If this compilation unit has no package declaration (default package),
-     * <code>null</code> is returned.
+     * <code>Optional.none()</code> is returned.
      *
-     * @return the package declaration or <code>null</code>
+     * @return the package declaration or <code>none</code>
      */
     public Optional<PackageDeclaration> getPackageDeclaration() {
         return Optional.ofNullable(packageDeclaration);
@@ -141,9 +141,9 @@ public final class CompilationUnit extends Node {
 
     /**
      * Return the list of types declared in this compilation unit.<br>
-     * If there is no types declared, <code>null</code> is returned.
+     * If there is no types declared, <code>none</code> is returned.
      *
-     * @return the list of types or <code>null</code> null if there is no type
+     * @return the list of types or <code>none</code> null if there is no type
      * @see AnnotationDeclaration
      * @see ClassOrInterfaceDeclaration
      * @see EnumDeclaration
@@ -205,7 +205,7 @@ public final class CompilationUnit extends Node {
      * @param name the name of the package
      * @return this, the {@link CompilationUnit}
      */
-    public CompilationUnit setPackageName(String name) {
+    public CompilationUnit setPackageDeclaration(String name) {
         setPackageDeclaration(new PackageDeclaration(Name.parse(name)));
         return this;
     }
@@ -421,12 +421,5 @@ public final class CompilationUnit extends Node {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(imports, types);
-    }
-
-    /**
-     * Shortcut: set the package declaration with a string.
-     */
-    public CompilationUnit setPackageDeclaration(String s) {
-        return setPackageDeclaration(new PackageDeclaration(Name.parse(assertNotNull(s))));
     }
 }

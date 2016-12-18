@@ -2,6 +2,8 @@ package com.github.javaparser.model;
 
 import java.lang.reflect.Field;
 
+import static com.github.javaparser.utils.Utils.capitalize;
+
 /**
  * Meta-data about a field in a node in the AST.
  */
@@ -41,5 +43,20 @@ public class FieldMetaModel {
 
     public Field getField() {
         return field;
+    }
+
+    public String getter() {
+        String name = field.getName();
+        if (name.startsWith("is")) {
+            return name + "()";
+        }
+        if (field.getType().equals(Boolean.class)) {
+            return "is" + capitalize(name) + "()";
+        }
+        return "get" + capitalize(name) + "()";
+    }
+
+    public Class<?> getType() {
+        return field.getType();
     }
 }

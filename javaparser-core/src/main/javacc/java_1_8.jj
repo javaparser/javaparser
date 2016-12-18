@@ -2840,7 +2840,7 @@ Statement BlockStatement():
 {
 	Statement ret;
 	Expression expr;
-	ClassOrInterfaceDeclaration typeDecl;
+	ClassOrInterfaceDeclaration typeDeclaration;
 	ModifierHolder modifier;
 }
 {
@@ -2848,7 +2848,7 @@ Statement BlockStatement():
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
   	  {  }
 	  modifier = Modifiers()
-	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
+	  typeDeclaration = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDeclaration.getBegin().get().line, typeDeclaration.getBegin().get().column, token.endLine, token.endColumn), typeDeclaration); }
 	|
   	  LOOKAHEAD(VariableDeclarationExpression() )
 	  expr = VariableDeclarationExpression() ";"
