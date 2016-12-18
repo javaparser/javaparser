@@ -1017,7 +1017,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.isStatic()) {
             printer.print("static ");
         }
-        n.getBlock().accept(this, arg);
+        n.getBody().accept(this, arg);
     }
 
     @Override

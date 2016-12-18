@@ -43,21 +43,21 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     private Parameter parameter;
 
-    private BlockStmt catchBlock;
+    private BlockStmt body;
 
     public CatchClause() {
         this(null, new Parameter(), new BlockStmt());
     }
 
-    public CatchClause(final Parameter parameter, final BlockStmt catchBlock) {
-        this(null, parameter, catchBlock);
+    public CatchClause(final Parameter parameter, final BlockStmt body) {
+        this(null, parameter, body);
     }
 
     public CatchClause(final EnumSet<Modifier> exceptModifier,
                        final NodeList<AnnotationExpr> exceptAnnotations,
                        final ClassOrInterfaceType exceptType,
                        final SimpleName exceptName,
-                       final BlockStmt catchBlock) {
+                       final BlockStmt body) {
         this(null,
                 new Parameter(null,
                         exceptModifier,
@@ -65,15 +65,15 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                         exceptType,
                         false,
                         exceptName),
-                catchBlock);
+                body);
     }
 
     public CatchClause(final Range range,
                        final Parameter parameter,
-                       final BlockStmt catchBlock) {
+                       final BlockStmt body) {
         super(range);
         setParameter(parameter);
-        setBody(catchBlock);
+        setBody(body);
     }
 
     @Override
@@ -87,28 +87,12 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     /**
-     * Use {@link #getBody()} instead
-     */
-    @Deprecated
-    public BlockStmt getCatchBlock() {
-        return catchBlock;
-    }
-
-    /**
      * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the
      * catch(@X A a |...) are found directly in the Parameter. Annotations that are on the second or later type -
      * catch(A a | @X B b ...) are found on those types.
      */
     public Parameter getParameter() {
         return parameter;
-    }
-
-    /**
-     * Use {@link #setBody(BlockStmt)} instead
-     */
-    @Deprecated
-    public CatchClause setCatchBlock(final BlockStmt catchBlock) {
-        return setBody(catchBlock);
     }
 
     public CatchClause setParameter(final Parameter parameter) {
@@ -120,14 +104,14 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     @Override
     public BlockStmt getBody() {
-        return catchBlock;
+        return body;
     }
 
     @Override
     public CatchClause setBody(BlockStmt block) {
-        notifyPropertyChange(ObservableProperty.CATCH_BLOCK, this.catchBlock, block);
-        this.catchBlock = block;
-        setAsParentNodeOf(this.catchBlock);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, block);
+        this.body = block;
+        setAsParentNodeOf(this.body);
         return this;
     }
 }

@@ -277,7 +277,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(InitializerDeclaration _n, Object _arg) {
-        BlockStmt block = cloneNode(_n.getBlock(), _arg);
+        BlockStmt block = cloneNode(_n.getBody(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
 
         InitializerDeclaration r = new InitializerDeclaration(

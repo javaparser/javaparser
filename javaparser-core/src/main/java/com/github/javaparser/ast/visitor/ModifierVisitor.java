@@ -423,7 +423,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final InitializerDeclaration n, final A arg) {
         visitComment(n, arg);
-        n.setBlock((BlockStmt) n.getBlock().accept(this, arg));
+        n.setBody((BlockStmt) n.getBody().accept(this, arg));
         return n;
     }
 

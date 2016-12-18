@@ -1745,7 +1745,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 	NodeList<ReferenceType> throws_ = emptyList();
-	BlockStmt block = null;
+	BlockStmt body = null;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
 }
@@ -1756,10 +1756,10 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
       ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
-    ( block = Block() | ";" )
+    ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, false, parameters, throws_, block);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, false, parameters, throws_, body);
     }
 }
 
@@ -1902,14 +1902,14 @@ NodeList<Statement> Statements():
 
 InitializerDeclaration InitializerDeclaration():
 {
-	BlockStmt block;
+	BlockStmt body;
 	Position begin = INVALID;
 	boolean isStatic = false;
 }
 {
   [ "static" { isStatic = true; begin=tokenBegin();} ] 
-  block = Block() {begin = begin.orIfInvalid(block.getBegin().get());}
-  { return new InitializerDeclaration(range(begin, tokenEnd()), isStatic, block); }
+  body = Block() {begin = begin.orIfInvalid(body.getBegin().get());}
+  { return new InitializerDeclaration(range(begin, tokenEnd()), isStatic, body); }
 }
 
 
@@ -2834,7 +2834,7 @@ BlockStmt Block():
 }
 
 /*
- * Classes inside block stametents can only be abstract or final. The semantic must check it.
+ * Classes inside body stametents can only be abstract or final. The semantic must check it.
  */
 Statement BlockStatement():
 {
@@ -3120,12 +3120,12 @@ ThrowStmt ThrowStatement():
 SynchronizedStmt SynchronizedStatement():
 {
 	Expression expr;
-	BlockStmt block;
+	BlockStmt body;
 	Position begin;
 }
 {
-  "synchronized" {begin=tokenBegin();} "(" expr = Expression() ")" block = Block()
-  { return new SynchronizedStmt(range(begin, tokenEnd()),expr, block); }
+  "synchronized" {begin=tokenBegin();} "(" expr = Expression() ")" body = Block()
+  { return new SynchronizedStmt(range(begin, tokenEnd()),expr, body); }
 }
 
 TryStmt TryStatement():
