@@ -41,20 +41,20 @@ public final class SynchronizedStmt extends Statement implements
 
     private Expression expression;
 
-    private BlockStmt block;
+    private BlockStmt body;
 
     public SynchronizedStmt() {
         this(null, new NameExpr(), new BlockStmt());
     }
 
-    public SynchronizedStmt(final Expression expression, final BlockStmt block) {
-        this(null, expression, block);
+    public SynchronizedStmt(final Expression expression, final BlockStmt body) {
+        this(null, expression, body);
     }
 
-    public SynchronizedStmt(Range range, final Expression expression, final BlockStmt block) {
+    public SynchronizedStmt(Range range, final Expression expression, final BlockStmt body) {
         super(range);
         setExpression(expression);
-        setBody(block);
+        setBody(body);
     }
 
     @Override
@@ -67,24 +67,8 @@ public final class SynchronizedStmt extends Statement implements
         v.visit(this, arg);
     }
 
-    /**
-     * @deprecated use {@link #getBody()}
-     */
-    @Deprecated
-    public BlockStmt getBlock() {
-        return block;
-    }
-
     public Expression getExpression() {
         return expression;
-    }
-
-    /**
-     * @deprecated Use {@link #setBody(BlockStmt)} instead
-     */
-    @Deprecated
-    public SynchronizedStmt setBlock(final BlockStmt block) {
-        return setBody(block);
     }
 
     public SynchronizedStmt setExpression(final Expression expression) {
@@ -96,14 +80,14 @@ public final class SynchronizedStmt extends Statement implements
 
     @Override
     public BlockStmt getBody() {
-        return block;
+        return body;
     }
 
     @Override
-    public SynchronizedStmt setBody(BlockStmt block) {
-        notifyPropertyChange(ObservableProperty.BLOCK, this.block, block);
-        this.block = assertNotNull(block);
-        setAsParentNodeOf(this.block);
+    public SynchronizedStmt setBody(BlockStmt body) {
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        this.body = assertNotNull(body);
+        setAsParentNodeOf(this.body);
         return this;
     }
 }
