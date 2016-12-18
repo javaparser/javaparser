@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -209,8 +209,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         visitAnnotations(n, arg);
         visitComment(n, arg);
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
-        n.setExtends(modifyList(n.getExtends(), arg));
-        n.setImplements(modifyList(n.getImplements(), arg));
+        n.setExtendedTypes(modifyList(n.getExtendedTypes(), arg));
+        n.setImplementedTypes(modifyList(n.getImplementedTypes(), arg));
         n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
         return n;
     }
@@ -236,8 +236,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final CompilationUnit n, final A arg) {
         visitComment(n, arg);
-        if (n.getPackage().isPresent()) {
-            n.setPackage((PackageDeclaration) n.getPackage().get().accept(this, arg));
+        if (n.getPackageDeclaration().isPresent()) {
+            n.setPackageDeclaration((PackageDeclaration) n.getPackageDeclaration().get().accept(this, arg));
         }
         n.setImports((NodeList<ImportDeclaration>) n.getImports().accept(this, arg));
         n.setTypes((NodeList<TypeDeclaration<?>>) n.getTypes().accept(this, arg));
@@ -327,7 +327,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final EnumDeclaration n, final A arg) {
         visitComment(n, arg);
         n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setImplements((NodeList<ClassOrInterfaceType>) n.getImplements().accept(this, arg));
+        n.setImplementedTypes((NodeList<ClassOrInterfaceType>) n.getImplementedTypes().accept(this, arg));
         n.setEntries((NodeList<EnumConstantDeclaration>) n.getEntries().accept(this, arg));
         n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
         return n;

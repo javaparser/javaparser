@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -153,8 +153,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final CompilationUnit n, final Void arg) {
         printJavaComment(n.getComment(), arg);
 
-        if (n.getPackage().isPresent()) {
-            n.getPackage().get().accept(this, arg);
+        if (n.getPackageDeclaration().isPresent()) {
+            n.getPackageDeclaration().get().accept(this, arg);
         }
 
         n.getImports().accept(this, arg);
@@ -226,9 +226,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printTypeParameters(n.getTypeParameters(), arg);
 
-        if (!n.getExtends().isEmpty()) {
+        if (!n.getExtendedTypes().isEmpty()) {
             printer.print(" extends ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext(); ) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getExtendedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -237,9 +237,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             }
         }
 
-        if (!n.getImplements().isEmpty()) {
+        if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -951,9 +951,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("enum ");
         n.getName().accept(this, arg);
 
-        if (!n.getImplements().isEmpty()) {
+        if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {

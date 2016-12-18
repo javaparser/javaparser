@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -38,7 +38,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(CompilationUnit _n, Object _arg) {
-        PackageDeclaration package_ = cloneNode(_n.getPackage(), _arg);
+        PackageDeclaration package_ = cloneNode(_n.getPackageDeclaration(), _arg);
         NodeList<ImportDeclaration> imports = cloneList(_n.getImports(), _arg);
         NodeList<TypeDeclaration<?>> types = cloneList(_n.getTypes(), _arg);
 
@@ -88,8 +88,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(ClassOrInterfaceDeclaration _n, Object _arg) {
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
         NodeList<TypeParameter> typeParameters = cloneList(_n.getTypeParameters(), _arg);
-        NodeList<ClassOrInterfaceType> extendsList = cloneList(_n.getExtends(), _arg);
-        NodeList<ClassOrInterfaceType> implementsList = cloneList(_n.getImplements(), _arg);
+        NodeList<ClassOrInterfaceType> extendsList = cloneList(_n.getExtendedTypes(), _arg);
+        NodeList<ClassOrInterfaceType> implementsList = cloneList(_n.getImplementedTypes(), _arg);
         NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
         SimpleName nameExpr_ = cloneNode(_n.getName(), _arg);
@@ -105,7 +105,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(EnumDeclaration _n, Object _arg) {
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        NodeList<ClassOrInterfaceType> implementsList = cloneList(_n.getImplements(), _arg);
+        NodeList<ClassOrInterfaceType> implementsList = cloneList(_n.getImplementedTypes(), _arg);
         NodeList<EnumConstantDeclaration> entries = cloneList(_n.getEntries(), _arg);
         NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
