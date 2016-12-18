@@ -124,7 +124,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final CompilationUnit n1, final Visitable arg) {
         final CompilationUnit n2 = (CompilationUnit) arg;
 
-        if (!nodeEquals(n1.getPackage().orElse(null), n2.getPackage().orElse(null))) {
+        if (!nodeEquals(n1.getPackageDeclaration().orElse(null), n2.getPackageDeclaration().orElse(null))) {
             return false;
         }
 
@@ -231,11 +231,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getExtends(), n2.getExtends())) {
+        if (!nodesEquals(n1.getExtendedTypes(), n2.getExtendedTypes())) {
             return false;
         }
 
-        if (!nodesEquals(n1.getImplements(), n2.getImplements())) {
+        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes())) {
             return false;
         }
 
@@ -264,7 +264,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getImplements(), n2.getImplements())) {
+        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes())) {
             return false;
         }
 

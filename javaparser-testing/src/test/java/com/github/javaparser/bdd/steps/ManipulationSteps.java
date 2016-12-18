@@ -124,7 +124,7 @@ public class ManipulationSteps {
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackage(new PackageDeclaration(Name.parse(packageName)));
+        compilationUnit.setPackageDeclaration(new PackageDeclaration(Name.parse(packageName)));
         state.put("cu1", compilationUnit);
     }
 

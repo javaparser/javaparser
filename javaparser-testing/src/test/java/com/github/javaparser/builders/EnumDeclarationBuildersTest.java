@@ -31,8 +31,8 @@ public class EnumDeclarationBuildersTest {
         assertEquals(1, cu.getImports().size());
         assertEquals("import " + Function.class.getName() + ";" + EOL,
                 cu.getImport(0).toString());
-        assertEquals(1, testEnum.getImplements().size());
-        assertEquals(Function.class.getSimpleName(), testEnum.getImplements(0).getNameAsString());
+        assertEquals(1, testEnum.getImplementedTypes().size());
+        assertEquals(Function.class.getSimpleName(), testEnum.getImplementedTypes(0).getNameAsString());
     }
 
     @Test
