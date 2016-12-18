@@ -1,6 +1,10 @@
 package com.github.javaparser.model;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import static com.github.javaparser.utils.Utils.capitalize;
 
@@ -8,16 +12,24 @@ import static com.github.javaparser.utils.Utils.capitalize;
  * Meta-data about a field in a node in the AST.
  */
 public class FieldMetaModel {
-    private final NodeMetaModel nodeMetaModel;
-    private final Field field;
+    private final ClassMetaModel classMetaModel;
+    private final Field reflectionField;
+    private String getter;
 
-    public FieldMetaModel(NodeMetaModel nodeMetaModel, Field field) {
-        this.nodeMetaModel = nodeMetaModel;
-        this.field = field;
+    FieldMetaModel(ClassMetaModel classMetaModel, Field reflectionField) {
+        this.classMetaModel = classMetaModel;
+        this.reflectionField = reflectionField;
     }
-    
+
     void initialize() {
-        
+        String name = reflectionField.getName();
+        if (name.startsWith("is")) {
+            getter = name + "()";
+        } else if (reflectionField.getType().equals(Boolean.class)) {
+            getter = "is" + capitalize(name) + "()";
+        } else {
+            getter = "get" + capitalize(name) + "()";
+        }
     }
 
     @Override
@@ -27,36 +39,57 @@ public class FieldMetaModel {
 
         FieldMetaModel that = (FieldMetaModel) o;
 
-        if (!field.equals(that.field)) return false;
+        if (!reflectionField.equals(that.reflectionField)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return field.hashCode();
+        return reflectionField.hashCode();
     }
 
-    public NodeMetaModel getNodeMetaModel() {
-        return nodeMetaModel;
+    public ClassMetaModel getClassMetaModel() {
+        return classMetaModel;
     }
 
-    public Field getField() {
-        return field;
+    public Field getReflectionField() {
+        return reflectionField;
     }
 
     public String getter() {
-        String name = field.getName();
-        if (name.startsWith("is")) {
-            return name + "()";
-        }
-        if (field.getType().equals(Boolean.class)) {
-            return "is" + capitalize(name) + "()";
-        }
-        return "get" + capitalize(name) + "()";
+        return getter;
+    }
+
+    public String getName() {
+        return reflectionField.getName();
     }
 
     public Class<?> getType() {
-        return field.getType();
+        return reflectionField.getType();
     }
+
+    boolean isPartOfModel() {
+        Class<?> type = getClassMetaModel().getReflectionClass();
+        String name = getName();
+        if (Modifier.isStatic(reflectionField.getModifiers())) {
+            return false;
+        }
+        if (name.equals("observers")) {
+            return false;
+        }
+        if (type.equals(NodeList.class)) {
+            if (name.equals("innerList")) {
+                return false;
+            }
+        }
+        if (type.equals(Node.class)) {
+            if (name.equals("data")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

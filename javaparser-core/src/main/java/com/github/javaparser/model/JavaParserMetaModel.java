@@ -21,7 +21,7 @@ import java.util.Optional;
  * You can base source code generators on it.
  */
 public class JavaParserMetaModel {
-    private static List<Class<?>> ALL_NODE_CLASSES = new ArrayList<Class<?>>() {{
+    private static List<Class<?>> ALL_MODEL_CLASSES = new ArrayList<Class<?>>() {{
         add(ArrayCreationLevel.class);
         add(CompilationUnit.class);
         add(Node.class);
@@ -141,26 +141,26 @@ public class JavaParserMetaModel {
 
     static {
         IMPORT_DECLARATIONS.sort(Comparator.comparing(Node::toString));
-        ALL_NODE_CLASSES.sort(Comparator.comparing(Class::getSimpleName));
+        ALL_MODEL_CLASSES.sort(Comparator.comparing(Class::getSimpleName));
     }
 
-    private final List<NodeMetaModel> nodeMetaModels = new ArrayList<>();
+    private final List<ClassMetaModel> classMetaModels = new ArrayList<>();
 
     public JavaParserMetaModel() {
-        for (Class<?> nodeClass : ALL_NODE_CLASSES) {
-            nodeMetaModels.add(new NodeMetaModel(this, nodeClass));
+        for (Class<?> nodeClass : ALL_MODEL_CLASSES) {
+            classMetaModels.add(new ClassMetaModel(this, nodeClass));
         }
-        nodeMetaModels.forEach(NodeMetaModel::initialize);
+        classMetaModels.forEach(ClassMetaModel::initialize);
     }
 
-    public List<NodeMetaModel> getNodeMetaModels() {
-        return nodeMetaModels;
+    public List<ClassMetaModel> getClassMetaModels() {
+        return classMetaModels;
     }
 
-    public Optional<NodeMetaModel> getNodeModel(Class<?> c) {
-        for (NodeMetaModel nodeMetaModel : nodeMetaModels) {
-            if (nodeMetaModel.getNodeClass().equals(c)) {
-                return Optional.of(nodeMetaModel);
+    public Optional<ClassMetaModel> getClassMetaModel(Class<?> c) {
+        for (ClassMetaModel classMetaModel : classMetaModels) {
+            if (classMetaModel.getReflectionClass().equals(c)) {
+                return Optional.of(classMetaModel);
             }
         }
         return Optional.empty();
