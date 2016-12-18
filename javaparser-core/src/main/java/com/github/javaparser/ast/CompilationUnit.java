@@ -77,7 +77,7 @@ public final class CompilationUnit extends Node {
     public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports,
                            NodeList<TypeDeclaration<?>> types) {
         super(range);
-        setPackage(packageDeclaration);
+        setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
     }
@@ -128,7 +128,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the package declaration or <code>null</code>
      */
-    public Optional<PackageDeclaration> getPackage() {
+    public Optional<PackageDeclaration> getPackageDeclaration() {
         return Optional.ofNullable(packageDeclaration);
     }
 
@@ -139,7 +139,6 @@ public final class CompilationUnit extends Node {
      * @return the list of types or <code>null</code> null if there is no type
      * @see AnnotationDeclaration
      * @see ClassOrInterfaceDeclaration
-     * @see EmptyTypeDeclaration
      * @see EnumDeclaration
      */
     public NodeList<TypeDeclaration<?>> getTypes() {
@@ -174,7 +173,7 @@ public final class CompilationUnit extends Node {
      *
      * @param pakage the packageDeclaration declaration to set or <code>null</code> to default package
      */
-    public CompilationUnit setPackage(PackageDeclaration pakage) {
+    public CompilationUnit setPackageDeclaration(PackageDeclaration pakage) {
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, pakage);
         this.packageDeclaration = pakage;
         setAsParentNodeOf(this.packageDeclaration);
@@ -200,7 +199,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageName(String name) {
-        setPackage(new PackageDeclaration(Name.parse(name)));
+        setPackageDeclaration(new PackageDeclaration(Name.parse(name)));
         return this;
     }
 
@@ -420,7 +419,7 @@ public final class CompilationUnit extends Node {
     /**
      * Shortcut: set the package declaration with a string.
      */
-    public CompilationUnit setPackage(String s) {
-        return setPackage(new PackageDeclaration(Name.parse(assertNotNull(s))));
+    public CompilationUnit setPackageDeclaration(String s) {
+        return setPackageDeclaration(new PackageDeclaration(Name.parse(assertNotNull(s))));
     }
 }

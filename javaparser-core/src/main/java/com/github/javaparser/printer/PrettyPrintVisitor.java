@@ -153,8 +153,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final CompilationUnit n, final Void arg) {
         printJavaComment(n.getComment(), arg);
 
-        if (n.getPackage().isPresent()) {
-            n.getPackage().get().accept(this, arg);
+        if (n.getPackageDeclaration().isPresent()) {
+            n.getPackageDeclaration().get().accept(this, arg);
         }
 
         n.getImports().accept(this, arg);
@@ -226,9 +226,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printTypeParameters(n.getTypeParameters(), arg);
 
-        if (!n.getExtends().isEmpty()) {
+        if (!n.getExtendedTypes().isEmpty()) {
             printer.print(" extends ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext(); ) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getExtendedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -237,9 +237,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             }
         }
 
-        if (!n.getImplements().isEmpty()) {
+        if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {
@@ -951,9 +951,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("enum ");
         n.getName().accept(this, arg);
 
-        if (!n.getImplements().isEmpty()) {
+        if (!n.getImplementedTypes().isEmpty()) {
             printer.print(" implements ");
-            for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext(); ) {
+            for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
                 if (i.hasNext()) {

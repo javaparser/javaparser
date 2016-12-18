@@ -67,9 +67,9 @@ class CommentsInserter {
         List<Node> children = cu.getChildNodes();
 
         Comment firstComment = comments.iterator().next();
-        if (cu.getPackage().isPresent()
+        if (cu.getPackageDeclaration().isPresent()
                 && (children.isEmpty() || PositionUtils.areInOrder(
-                firstComment, cu.getPackage().get()))) {
+                firstComment, cu.getPackageDeclaration().get()))) {
             cu.setComment(firstComment);
             comments.remove(firstComment);
         }

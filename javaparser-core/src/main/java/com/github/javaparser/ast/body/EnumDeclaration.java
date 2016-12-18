@@ -86,7 +86,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                            NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
-        setImplements(implementedTypes);
+        setImplementedTypes(implementedTypes);
         setEntries(entries);
     }
 
@@ -110,7 +110,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
-    public NodeList<ClassOrInterfaceType> getImplements() {
+    public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
     }
 
@@ -122,7 +122,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
-    public EnumDeclaration setImplements(NodeList<ClassOrInterfaceType> implementsList) {
+    public EnumDeclaration setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList) {
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
         this.implementedTypes = assertNotNull(implementsList);
         setAsParentNodeOf(this.implementedTypes);
