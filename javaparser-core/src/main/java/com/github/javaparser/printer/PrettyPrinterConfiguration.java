@@ -24,6 +24,7 @@ package com.github.javaparser.printer;
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private String indent = "    ";
+    private PrettyPrintVisitor visitor;
 
     public String getIndent() {
         return indent;
@@ -40,6 +41,15 @@ public class PrettyPrinterConfiguration {
 
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
+        return this;
+    }
+
+    public PrettyPrintVisitor getVisitor() {
+        return visitor;
+    }
+
+    public PrettyPrinterConfiguration setVisitor(PrettyPrintVisitor visitor) {
+        this.visitor = visitor;
         return this;
     }
 }
