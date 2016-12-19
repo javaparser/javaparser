@@ -105,38 +105,59 @@ class NodeText {
         addToken(index, separator.getTokenKind(), separator.getText());
     }
 
+    private int findChild(Node child, int from) {
+        for (int i=from; i<elements.size(); i++) {
+            TextElement element = elements.get(i);
+            if (element instanceof ChildTextElement) {
+                ChildTextElement childNodeTextElement = (ChildTextElement)element;
+                if (childNodeTextElement.getChild() == child) {
+                    return i;
+                }
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private int findToken(int tokenKind, int from) {
+        for (int i=from; i<elements.size(); i++) {
+            TextElement element = elements.get(i);
+            if (element instanceof TokenTextElement){
+                TokenTextElement tokenTextElement = (TokenTextElement)element;
+                if (tokenTextElement.getTokenKind() == tokenKind) {
+                    return i;
+                }
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     /**
      * Remove all elements between the given token (inclusive) and the given child (exclusive).
      * @param tokenKind
      * @param child
      */
     void removeTextBetween(int tokenKind, Node child) {
-        int endDeletion = -1;
-        int startDeletion = -1;
-        for (int i=0; i<elements.size(); i++) {
-            TextElement element = elements.get(i);
-            if (element instanceof ChildTextElement) {
-                ChildTextElement childNodeTextElement = (ChildTextElement)element;
-                if (childNodeTextElement.getChild() == child) {
-                    startDeletion = i;
-                }
-            } else if (element instanceof TokenTextElement){
-                TokenTextElement tokenTextElement = (TokenTextElement)element;
-                if (startDeletion != -1 && tokenTextElement.getTokenKind() == tokenKind) {
-                    endDeletion = i;
-                    break;
-                }
-            }
-        }
+        int startDeletion = findToken(tokenKind, 0);
+        int endDeletion = findChild(child, startDeletion + 1);
+        removeBetweenIndexes(startDeletion, endDeletion);
+    }
+
+    private void removeBetweenIndexes(int startDeletion, int endDeletion) {
         int i = endDeletion;
         while (i >= startDeletion) {
             elements.remove(i--);
         }
     }
 
+    private final static int WHITESPACE = 1;
+
     void removeTextBetween(Node child, int tokenKind, boolean removeSpaceImmediatelyAfter) {
-       // FIXME
-       removeTextBetween(tokenKind, child);
+        int startDeletion = findChild(child, 0);
+        int endDeletion = findToken(tokenKind, startDeletion + 1);
+        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) && ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == WHITESPACE) {
+            endDeletion++;
+        }
+        removeBetweenIndexes(startDeletion, endDeletion);
     }
 
     //
