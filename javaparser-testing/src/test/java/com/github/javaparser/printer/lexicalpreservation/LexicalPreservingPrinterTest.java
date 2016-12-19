@@ -51,10 +51,11 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
         FieldDeclaration fd = classA.getFieldByName("i");
         NodeText nodeText = lpp.getOrCreateNodeText(fd);
-        assertEquals(3, nodeText.numberOfElements());
-        assertEquals(" ", nodeText.getTextElement(0).expand());
-        assertEquals("", nodeText.getTextElement(1).expand());
-        assertEquals("", nodeText.getTextElement(2).expand());
+        assertEquals(4, nodeText.numberOfElements());
+        assertEquals("int", nodeText.getTextElement(0).expand());
+        assertEquals(" ", nodeText.getTextElement(1).expand());
+        assertEquals("i", nodeText.getTextElement(2).expand());
+        assertEquals(";", nodeText.getTextElement(3).expand());
     }
 
     @Test
