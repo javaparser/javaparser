@@ -5,10 +5,12 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -69,6 +71,33 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         MethodDeclaration md = classA.getMethodsByName("foo").get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(md);
         assertEquals(Arrays.asList("void", " ", "foo", "(", "int p1", ",", " ", "float p2", ")", " ", "{ }"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedForMethodParameter() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        MethodDeclaration md = classA.getMethodsByName("foo").get(0);
+        Parameter p1 = md.getParamByName("p1");
+        NodeText nodeText = lpp.getOrCreateNodeText(p1);
+        assertEquals(Arrays.asList("int", " ", "p1"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedForPrimitiveType() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        MethodDeclaration md = classA.getMethodsByName("foo").get(0);
+        Parameter p1 = md.getParamByName("p1");
+        Type t = p1.getType();
+        NodeText nodeText = lpp.getOrCreateNodeText(t);
+        assertEquals(Arrays.asList("int"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
