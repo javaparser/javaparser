@@ -137,7 +137,7 @@ public class LexicalPreservingPrinter {
             public void process(Node node) {
                 nodesDepthFirst.add(node);
             }
-        }.visitDepthFirst(root);
+        }.visitLeavesFirst(root);
 
         // We go over tokens and find to which nodes belong. Note that we start from the most specific nodes
         // and we move up to more general nodes
