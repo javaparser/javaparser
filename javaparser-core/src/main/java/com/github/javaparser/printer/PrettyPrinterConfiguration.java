@@ -24,7 +24,7 @@ package com.github.javaparser.printer;
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private String indent = "    ";
-    private PrettyPrintVisitor visitor;
+    private Class<? extends PrettyPrintVisitor> visitorClass;
 
     public String getIndent() {
         return indent;
@@ -44,12 +44,12 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
-    public PrettyPrintVisitor getVisitor() {
-        return visitor;
+    public Class<? extends PrettyPrintVisitor> getVisitorClass() {
+        return visitorClass;
     }
 
-    public PrettyPrinterConfiguration setVisitor(PrettyPrintVisitor visitor) {
-        this.visitor = visitor;
+    public PrettyPrinterConfiguration setVisitorClass(Class<? extends PrettyPrintVisitor> visitorClass) {
+        this.visitorClass = visitorClass;
         return this;
     }
 }

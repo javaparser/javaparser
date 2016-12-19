@@ -23,6 +23,7 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.After;
@@ -90,6 +91,19 @@ public class PrettyPrinterTest {
 
         code = "class A { void foo(){ int a[], b[]; }}";
         assertEquals("int[] a, b", prettyPrintVar(code));
+    }
+
+    private String prettyPrintConfigurable(String code) {
+        CompilationUnit cu = JavaParser.parse(code);
+        PrettyPrinter printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorClass(TestVisitor.class));
+        return printer.print(cu.getNodesByType(ClassOrInterfaceDeclaration.class).get(0));
+    }
+
+    @Test
+    public void printUseTestVisitor(){
+        String code;
+        code = "class A { void foo(){ int a, b[]; }}";
+        assertEquals("test", prettyPrintConfigurable(code));
     }
 
 }
