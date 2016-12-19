@@ -29,6 +29,10 @@ import com.github.javaparser.utils.Utils;
 /**
  * A literal character.
  * <br/><code>'a'</code>
+ * <br/><code>'\t'</code>
+ * <br/><code>'\u03a9'</code>
+ * <br/><code>'\177'</code>
+ * <br/><code>'💩'</code>
  *
  * @author Julio Vilmar Gesser
  */
