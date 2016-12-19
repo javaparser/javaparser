@@ -162,4 +162,9 @@ class NodeText {
     TextElement getTextElement(int index) {
         return elements.get(index);
     }
+
+    // Visible for testing
+    List<TextElement> getElements() {
+        return elements;
+    }
 }

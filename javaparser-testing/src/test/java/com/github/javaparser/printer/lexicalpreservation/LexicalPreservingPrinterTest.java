@@ -1,21 +1,19 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.utils.Pair;
-import org.junit.Before;
 import org.junit.Test;
 
-import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.setup;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.junit.Assert.assertEquals;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
@@ -56,6 +54,18 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals(" ", nodeText.getTextElement(1).expand());
         assertEquals("i", nodeText.getTextElement(2).expand());
         assertEquals(";", nodeText.getTextElement(3).expand());
+    }
+
+    @Test
+    public void checkNodeTextCreatedForMethod() {
+        String code = "class A {void foo(int p1, float p2) { }}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        MethodDeclaration md = classA.getMethodsByName("foo").get(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(md);
+        assertEquals(Arrays.asList("void", " ", "foo", "(", "int p1", ",", " ", "float p2", ")", " ", "{ }"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
     @Test
