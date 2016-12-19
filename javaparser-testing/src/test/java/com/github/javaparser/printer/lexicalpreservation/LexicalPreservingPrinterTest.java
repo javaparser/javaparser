@@ -18,6 +18,10 @@ import static org.junit.Assert.assertEquals;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
+    //
+    // Tests on TextNode definition
+    //
+
     @Test
     public void checkNodeTextCreatedForSimplestClass() {
         considerCode("class A {}");
@@ -67,6 +71,10 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals(Arrays.asList("void", " ", "foo", "(", "int p1", ",", " ", "float p2", ")", " ", "{ }"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
+
+    //
+    // Tests on printing
+    //
 
     @Test
     public void printASuperSimpleCUWithoutChanges() {

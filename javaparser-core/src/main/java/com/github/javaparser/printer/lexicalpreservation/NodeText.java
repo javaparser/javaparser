@@ -111,26 +111,26 @@ class NodeText {
      * @param child
      */
     void removeTextBetween(int tokenKind, Node child) {
-        int lastTokenFound = -1;
+        int endDeletion = -1;
+        int startDeletion = -1;
         for (int i=0; i<elements.size(); i++) {
             TextElement element = elements.get(i);
             if (element instanceof ChildTextElement) {
                 ChildTextElement childNodeTextElement = (ChildTextElement)element;
                 if (childNodeTextElement.getChild() == child) {
-                    if (lastTokenFound == -1) {
-                        throw new IllegalArgumentException();
-                    }
-                    while (i > lastTokenFound) {
-                        elements.remove(--i);
-                    }
-                    return;
+                    startDeletion = i;
                 }
             } else if (element instanceof TokenTextElement){
                 TokenTextElement tokenTextElement = (TokenTextElement)element;
-                if (tokenTextElement.getTokenKind() == tokenKind) {
-                    lastTokenFound = i;
+                if (startDeletion != -1 && tokenTextElement.getTokenKind() == tokenKind) {
+                    endDeletion = i;
+                    break;
                 }
             }
+        }
+        int i = endDeletion;
+        while (i >= startDeletion) {
+            elements.remove(i--);
         }
     }
 

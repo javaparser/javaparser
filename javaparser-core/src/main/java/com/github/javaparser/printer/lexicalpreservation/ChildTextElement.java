@@ -42,4 +42,28 @@ class ChildTextElement extends TextElement {
     Node getChild() {
         return child;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ChildTextElement that = (ChildTextElement) o;
+
+        if (!lexicalPreservingPrinter.equals(that.lexicalPreservingPrinter)) return false;
+        return child.equals(that.child);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = lexicalPreservingPrinter.hashCode();
+        result = 31 * result + child.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ChildTextElement{" + child + '}';
+    }
 }
