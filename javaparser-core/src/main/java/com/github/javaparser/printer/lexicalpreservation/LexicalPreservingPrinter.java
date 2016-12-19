@@ -358,7 +358,7 @@ public class LexicalPreservingPrinter {
                 }
             case "MethodDeclaration:Parameters":
                 return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
-            case "BlockStmt:Stmts":
+            case "BlockStmt:Statements":
                 return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
         }
 

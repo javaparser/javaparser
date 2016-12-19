@@ -188,6 +188,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         stmts.add(s);
         MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
         assertEquals("void foo(char p1, int p2) {\n" +
-                "    10 + 2;}", lpp.print(m));
+                "    10 + 2;\n" +
+                "}", lpp.print(m));
     }
 }
