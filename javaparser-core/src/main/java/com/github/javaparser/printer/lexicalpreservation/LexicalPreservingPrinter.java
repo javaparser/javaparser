@@ -135,7 +135,10 @@ public class LexicalPreservingPrinter {
         new TreeVisitor(){
             @Override
             public void process(Node node) {
-                nodesDepthFirst.add(node);
+                // we do not consider "phantom" nodes here, like the fake type of variable in FieldDeclaration
+                if (!node.getParentNode().isPresent() || node.getParentNode().get().getRange().get().contains(node.getRange().get())) {
+                    nodesDepthFirst.add(node);
+                }
             }
         }.visitLeavesFirst(root);
 
