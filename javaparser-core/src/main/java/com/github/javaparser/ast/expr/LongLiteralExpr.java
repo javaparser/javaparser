@@ -26,13 +26,16 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * All ways to specify a long literal.
+ * <br/><code>8934l</code>
+ * <br/><code>0x01L</code>
+ * <br/><code>022l</code>
+ * <br/><code>0B10101010L</code>
+ * <br/><code>99999999L</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public class LongLiteralExpr extends StringLiteralExpr {
-
-    private static final String UNSIGNED_MIN_VALUE = "9223372036854775808";
-
-    protected static final String MIN_VALUE = "-" + UNSIGNED_MIN_VALUE + "L";
 
     public LongLiteralExpr() {
         this(null, "0");
@@ -54,12 +57,5 @@ public class LongLiteralExpr extends StringLiteralExpr {
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    public final boolean isMinValue() {
-        return value != null && //
-                value.length() == 20 && //
-                value.startsWith(UNSIGNED_MIN_VALUE) && //
-                (value.charAt(19) == 'L' || value.charAt(19) == 'l');
     }
 }

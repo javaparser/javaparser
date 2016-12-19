@@ -42,7 +42,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * A definition of a class or interface. <code>class X { ... }</code>
+ * A definition of a class or interface.<br/><code>class X { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */

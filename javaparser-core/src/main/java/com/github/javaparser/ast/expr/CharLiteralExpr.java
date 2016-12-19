@@ -27,6 +27,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
 
 /**
+ * A literal character.
+ * <br/><code>'a'</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class CharLiteralExpr extends StringLiteralExpr {

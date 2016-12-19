@@ -27,6 +27,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * The boolean literals.
+ * <br/><code>true</code>
+ * <br/><code>false</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class BooleanLiteralExpr extends LiteralExpr {

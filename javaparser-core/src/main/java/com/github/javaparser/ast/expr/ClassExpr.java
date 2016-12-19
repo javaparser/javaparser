@@ -31,10 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * Defines an expression that accesses the class of a type.
- * Example:
- * <code>
- * Object.class
- * </code>
+ * <br/><code>Object.class</code>
  *
  * @author Julio Vilmar Gesser
  */

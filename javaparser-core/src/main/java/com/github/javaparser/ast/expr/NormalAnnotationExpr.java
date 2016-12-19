@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
  * @author Julio Vilmar Gesser
  */
 public final class NormalAnnotationExpr extends AnnotationExpr {

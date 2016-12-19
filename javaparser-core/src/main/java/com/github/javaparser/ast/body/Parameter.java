@@ -45,9 +45,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
- * Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
- * are different from arguments.</a> "String x" and "float y" are the parameters in <code>int abc(String x, float y)
- * {...}</code>
+ * <br/>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
+ * are different from arguments.</a> <br/>"String x" and "float y" are the parameters in <code>int abc(String x, float
+ * y) {...}</code>
  *
  * @author Julio Vilmar Gesser
  */

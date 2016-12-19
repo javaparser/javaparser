@@ -39,7 +39,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * The declaration of an enum. <code>enum X { ... }</code>
+ * The declaration of an enum.<br/><code>enum X { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */

@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 
 /**
+ * A base class for all expressions.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {

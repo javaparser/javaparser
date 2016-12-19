@@ -32,7 +32,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 
 /**
- * An annotation type declaration: <code>@interface X { ... }</code>
+ * An annotation type declaration.<br/><code>@interface X { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */

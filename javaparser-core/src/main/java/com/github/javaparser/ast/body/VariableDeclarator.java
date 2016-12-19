@@ -38,7 +38,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * The declaration of a variable. <code>int x = 14;</code>
+ * The declaration of a variable.<br/><code>int x = 14;</code>
  *
  * @author Julio Vilmar Gesser
  */

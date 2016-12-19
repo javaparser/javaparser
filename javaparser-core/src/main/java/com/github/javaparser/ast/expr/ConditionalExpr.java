@@ -29,6 +29,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * An if-then or if-then-else construct.
+ * In <code>if(a){b}else{c}</code>, a is the condition, b is thenExpr, and c is elseExpr.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ConditionalExpr extends Expression {
