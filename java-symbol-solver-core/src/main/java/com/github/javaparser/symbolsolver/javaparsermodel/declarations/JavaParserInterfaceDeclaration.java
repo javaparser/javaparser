@@ -114,8 +114,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ReferenceType> getInterfacesExtended() {
         List<ReferenceType> interfaces = new ArrayList<>();
-        if (wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
+        if (wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType t : wrappedNode.getImplementedTypes()) {
                 interfaces.add(new ReferenceTypeImpl(solveType(t.getName().getId(), typeSolver).getCorrespondingDeclaration().asInterface(), typeSolver));
             }
         }
@@ -143,8 +143,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
         }
-        if (this.wrappedNode.getExtends() != null) {
-            for (ClassOrInterfaceType type : wrappedNode.getExtends()) {
+        if (this.wrappedNode.getExtendedTypes() != null) {
+            for (ClassOrInterfaceType type : wrappedNode.getExtendedTypes()) {
                 ReferenceTypeDeclaration ancestor = (ReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
@@ -152,8 +152,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
 
-        if (this.wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType type : wrappedNode.getImplements()) {
+        if (this.wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType type : wrappedNode.getImplementedTypes()) {
                 ReferenceTypeDeclaration ancestor = (ReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
@@ -215,13 +215,13 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ReferenceType> getAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
-        if (wrappedNode.getExtends() != null) {
-            for (ClassOrInterfaceType extended : wrappedNode.getExtends()) {
+        if (wrappedNode.getExtendedTypes() != null) {
+            for (ClassOrInterfaceType extended : wrappedNode.getExtendedTypes()) {
                 ancestors.add(toReferenceType(extended));
             }
         }
-        if (wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
+        if (wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
                 ancestors.add(toReferenceType(implemented));
             }
         }

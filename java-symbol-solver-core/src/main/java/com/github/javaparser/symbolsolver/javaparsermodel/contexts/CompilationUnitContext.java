@@ -158,8 +158,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Look in current package
-        if (this.wrappedNode.getPackage().isPresent()) {
-            String qName = this.wrappedNode.getPackage().get().getName().toString() + "." + name;
+        if (this.wrappedNode.getPackageDeclaration().isPresent()) {
+            String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
             SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
                 return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);

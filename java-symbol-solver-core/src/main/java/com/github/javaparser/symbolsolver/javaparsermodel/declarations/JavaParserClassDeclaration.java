@@ -145,18 +145,18 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public ReferenceType getSuperClass() {
-        if (wrappedNode.getExtends().isEmpty()) {
+        if (wrappedNode.getExtendedTypes().isEmpty()) {
             return object();
         } else {
-            return toReferenceType(wrappedNode.getExtends().get(0));
+            return toReferenceType(wrappedNode.getExtendedTypes().get(0));
         }
     }
 
     @Override
     public List<ReferenceType> getInterfaces() {
         List<ReferenceType> interfaces = new ArrayList<>();
-        if (wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType t : wrappedNode.getImplements()) {
+        if (wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType t : wrappedNode.getImplementedTypes()) {
                 interfaces.add(toReferenceType(t));
             }
         }
@@ -221,8 +221,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             return true;
         }
 
-        if (this.wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType type : wrappedNode.getImplements()) {
+        if (this.wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType type : wrappedNode.getImplementedTypes()) {
                 ReferenceTypeDeclaration ancestor = (ReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
@@ -263,8 +263,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         if (superclass != null) {
             ancestors.add(superclass);
         }
-        if (wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType implemented : wrappedNode.getImplements()) {
+        if (wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType implemented : wrappedNode.getImplementedTypes()) {
                 ReferenceType ancestor = toReferenceType(implemented);
                 ancestors.add(ancestor);
             }

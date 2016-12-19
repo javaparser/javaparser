@@ -54,7 +54,7 @@ class Helper {
                 return b + "." + cn;
             }
         } else if (container instanceof CompilationUnit) {
-            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackage();
+            Optional<PackageDeclaration> p = ((CompilationUnit) container).getPackageDeclaration();
             if (p.isPresent()) {
                 String b = p.get().getName().toString();
                 if (base.isEmpty()) {

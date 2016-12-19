@@ -210,8 +210,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         TypeParameterDeclaration eTypeParameter = enumClass.getTypeDeclaration().getTypeParameters().get(0);
         enumClass = enumClass.deriveTypeParameters(new TypeParametersMap.Builder().setValue(eTypeParameter, new ReferenceTypeImpl(this, typeSolver)).build());
         ancestors.add(enumClass);
-        if (wrappedNode.getImplements() != null) {
-            for (ClassOrInterfaceType implementedType : wrappedNode.getImplements()) {
+        if (wrappedNode.getImplementedTypes() != null) {
+            for (ClassOrInterfaceType implementedType : wrappedNode.getImplementedTypes()) {
                 SymbolReference<TypeDeclaration> implementedDeclRef = new SymbolSolver(typeSolver).solveTypeInType(this, implementedType.getName().getId());
                 if (!implementedDeclRef.isSolved()) {
                     throw new UnsolvedSymbolException(implementedType.getName().getId());

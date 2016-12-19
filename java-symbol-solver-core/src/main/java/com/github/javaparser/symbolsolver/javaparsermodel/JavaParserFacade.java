@@ -162,7 +162,7 @@ public class JavaParserFacade {
         }
         TypeDeclaration typeDecl = null;
         if (!explicitConstructorInvocationStmt.isThis()) {
-            Type classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtends(0), classNode);
+            Type classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
             if (classDecl.isReferenceType()) {
                 typeDecl = classDecl.asReferenceType().getTypeDeclaration();
             }
@@ -666,7 +666,7 @@ public class JavaParserFacade {
         } else if (node instanceof ClassExpr) {
             // This implementation does not regard the actual type argument of the ClassExpr.
             ClassExpr classExpr = (ClassExpr) node;
-            com.github.javaparser.ast.type.Type<?> astType = classExpr.getType();
+            com.github.javaparser.ast.type.Type astType = classExpr.getType();
             Type jssType = convertToUsage(astType, classExpr.getType());
             return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType), typeSolver);
         } else {
@@ -691,7 +691,7 @@ public class JavaParserFacade {
         return type;
     }
 
-    public Type convertToUsage(com.github.javaparser.ast.type.Type<?> type, Node context) {
+    public Type convertToUsage(com.github.javaparser.ast.type.Type type, Node context) {
         if (type instanceof UnknownType) {
             throw new IllegalArgumentException("Unknown type");
         }
@@ -708,7 +708,7 @@ public class JavaParserFacade {
         }
     }
 
-    private Type convertToUsage(com.github.javaparser.ast.type.Type<?> type, Context context) {
+    private Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
@@ -755,11 +755,11 @@ public class JavaParserFacade {
     }
 
 
-    public Type convert(com.github.javaparser.ast.type.Type<?> type, Node node) {
+    public Type convert(com.github.javaparser.ast.type.Type type, Node node) {
         return convert(type, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public Type convert(com.github.javaparser.ast.type.Type<?> type, Context context) {
+    public Type convert(com.github.javaparser.ast.type.Type type, Context context) {
         return convertToUsage(type, context);
     }
 
