@@ -136,7 +136,7 @@ public class LexicalPreservingPrinter {
             @Override
             public void process(Node node) {
                 // we do not consider "phantom" nodes here, like the fake type of variable in FieldDeclaration
-                if (!node.getParentNode().isPresent() || node.getParentNode().get().getRange().get().contains(node.getRange().get())) {
+                if (!PhantomNodeLogic.isPhantomNode(node)) {
                     nodesDepthFirst.add(node);
                 }
             }
@@ -168,7 +168,9 @@ public class LexicalPreservingPrinter {
         }
         List<Pair<Range, TextElement>> elements = new LinkedList<>();
         for (Node child : node.getChildNodes()) {
-            elements.add(new Pair<>(child.getRange().get(), new ChildTextElement(this, child)));
+            if (!PhantomNodeLogic.isPhantomNode(child)) {
+                elements.add(new Pair<>(child.getRange().get(), new ChildTextElement(this, child)));
+            }
         }
         for (JavaToken token : nodeTokens) {
             elements.add(new Pair<>(token.getRange(), new TokenTextElement(token)));

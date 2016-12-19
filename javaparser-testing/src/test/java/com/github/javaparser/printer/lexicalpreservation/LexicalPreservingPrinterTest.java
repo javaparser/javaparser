@@ -2,10 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -56,6 +53,19 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         FieldDeclaration fd = classA.getFieldByName("i");
         NodeText nodeText = lpp.getOrCreateNodeText(fd);
         assertEquals(Arrays.asList("int", " ", "i", ";"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedForVariableDeclarator() {
+        String code = "class A {int i;}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        FieldDeclaration fd = classA.getFieldByName("i");
+        VariableDeclarator vd = fd.getVariables().get(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(vd);
+        assertEquals(Arrays.asList("i"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
