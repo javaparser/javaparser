@@ -39,8 +39,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9">JLS</a>
  * The declaration of an enum. <code>enum X { ... }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements

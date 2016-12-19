@@ -42,6 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A base class for all types of type declarations.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T> implements

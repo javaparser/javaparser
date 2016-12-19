@@ -43,8 +43,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.8">JLS</a>
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements

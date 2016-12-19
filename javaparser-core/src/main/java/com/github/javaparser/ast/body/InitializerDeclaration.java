@@ -34,11 +34,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.6">JLS</a>
- * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code> 
+ * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
+ *
  * @author Julio Vilmar Gesser
  */
-public final class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements 
+public final class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements
         NodeWithJavaDoc<InitializerDeclaration>,
         NodeWithBlockStmt<InitializerDeclaration> {
 

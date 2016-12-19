@@ -40,8 +40,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.9.1">JLS</a>
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements
