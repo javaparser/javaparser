@@ -42,6 +42,18 @@ public interface NodeWithAnnotations<N extends Node> {
         return getAnnotations().get(i);
     }
 
+    @SuppressWarnings("unchecked")
+    default N setAnnotation(int i, AnnotationExpr element) {
+        getAnnotations().set(i, element);
+        return (N)this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default N addAnnotation(AnnotationExpr element) {
+        getAnnotations().add(element);
+        return (N)this;
+    }
+
     N setAnnotations(NodeList<AnnotationExpr> annotations);
 
     /**

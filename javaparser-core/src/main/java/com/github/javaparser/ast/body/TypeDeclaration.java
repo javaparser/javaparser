@@ -96,10 +96,10 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
      *
      * @param decl member declaration
      */
-    public TypeDeclaration<T> addMember(BodyDeclaration<?> decl) {
+    public T addMember(BodyDeclaration<?> decl) {
         NodeList<BodyDeclaration<?>> members = getMembers();
         members.add(decl);
-        return this;
+        return (T) this;
     }
 
     @Override
