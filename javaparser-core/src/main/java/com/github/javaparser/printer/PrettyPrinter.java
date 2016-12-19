@@ -28,6 +28,7 @@ import com.github.javaparser.ast.Node;
  */
 public class PrettyPrinter {
     private final PrettyPrinterConfiguration configuration;
+    private PrettyPrintVisitor visitor;
 
     public PrettyPrinter() {
         this(new PrettyPrinterConfiguration());
@@ -35,11 +36,19 @@ public class PrettyPrinter {
 
     public PrettyPrinter(PrettyPrinterConfiguration configuration) {
         this.configuration = configuration;
+        this.setVisitor(configuration.getVisitor());
     }
 
     public String print(Node node) {
-        final PrettyPrintVisitor visitor = new PrettyPrintVisitor(configuration);
         node.accept(visitor, null);
         return visitor.getSource();
+    }
+
+    private void setVisitor(PrettyPrintVisitor visitor) {
+        if (visitor == null){
+            this.visitor = new PrettyPrintVisitor(configuration);
+        } else {
+            this.visitor = visitor;
+        }
     }
 }
