@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
  * An annotation that has a single value. <br/><code>@Count(15)</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class SingleMemberAnnotationExpr extends AnnotationExpr {

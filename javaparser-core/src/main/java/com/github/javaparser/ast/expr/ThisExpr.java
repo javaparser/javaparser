@@ -29,7 +29,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 /**
+ * An occurrence of the "this" keyword. <br/><code>World.this.greet()</code> is a MethodCallExpr of method name greet,
+ * and scope "World.super" which is a ThisExpr with classExpr "World". <br/><code>this.name</code> is a
+ * FieldAccessExpr of field greet, and a ThisExpr as its scope. The ThisExpr has no classExpr.
+ *
  * @author Julio Vilmar Gesser
+ * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+ * @see ThisExpr
  */
 public final class ThisExpr extends Expression {
 
