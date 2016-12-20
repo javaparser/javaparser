@@ -55,7 +55,6 @@ public abstract class Type extends Node {
         setAsParentNodeOf(annotations);
         return this;
     }
-
     /**
      * Finds the element type, meaning: the type without ArrayTypes around it.
      * 

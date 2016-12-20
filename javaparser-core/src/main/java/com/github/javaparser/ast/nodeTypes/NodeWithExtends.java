@@ -37,6 +37,17 @@ public interface NodeWithExtends<N extends Node> {
 
     N setExtendedTypes(NodeList<ClassOrInterfaceType> extendsList);
 
+    @SuppressWarnings("unchecked")
+    default N setExtendedType(int i, ClassOrInterfaceType extend) {
+        getExtendedTypes().set(i, extend);
+        return (N) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default N addExtendedType(ClassOrInterfaceType extend) {
+        getExtendedTypes().add(extend);
+        return (N) this;
+    }
     /**
      * Add an extends to this and automatically add the import
      *

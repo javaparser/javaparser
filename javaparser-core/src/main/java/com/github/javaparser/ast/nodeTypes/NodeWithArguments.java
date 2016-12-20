@@ -50,4 +50,10 @@ public interface NodeWithArguments<N extends Node> {
         return (N) this;
     }
 
+    @SuppressWarnings("unchecked")
+    default N setArgument(int i, Expression arg) {
+        getArguments().set(i, arg);
+        return (N) this;
+    }
+
 }
