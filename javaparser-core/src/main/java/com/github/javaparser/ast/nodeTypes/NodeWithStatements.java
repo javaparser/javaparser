@@ -39,6 +39,12 @@ public interface NodeWithStatements<N extends Node> {
         return getStatements().get(i);
     }
 
+    @SuppressWarnings("unchecked")
+    default N setStatement(int i, Statement statement) {
+        getStatements().set(i, statement);
+        return (N) this;
+    }
+
     N setStatements(final NodeList<Statement> statements);
 
     @SuppressWarnings("unchecked")

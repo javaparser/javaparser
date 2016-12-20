@@ -90,6 +90,16 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return getArguments().get(i);
     }
 
+    public ExplicitConstructorInvocationStmt setArgument(int i, Expression argument) {
+        getArguments().set(i, argument);
+        return this;
+    }
+
+    public ExplicitConstructorInvocationStmt addArgument(Expression argument) {
+        getArguments().add(argument);
+        return this;
+    }
+
     public Optional<Expression> getExpression() {
         return Optional.ofNullable(expression);
     }

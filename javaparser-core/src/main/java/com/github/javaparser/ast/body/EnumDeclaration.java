@@ -109,6 +109,16 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return getEntries().get(i);
     }
 
+    public EnumDeclaration setEntry(int i, EnumConstantDeclaration element){
+        getEntries().set(i, element);
+        return this;
+    }
+
+    public EnumDeclaration addEntry(EnumConstantDeclaration element){
+        getEntries().add(element);
+        return this;
+    }
+
     @Override
     public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
