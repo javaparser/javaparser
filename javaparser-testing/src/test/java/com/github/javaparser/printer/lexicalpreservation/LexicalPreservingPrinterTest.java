@@ -1,10 +1,12 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.imports.SingleTypeImportDeclaration;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
@@ -105,6 +107,17 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         Type t = p1.getType();
         NodeText nodeText = lpp.getOrCreateNodeText(t);
         assertEquals(Arrays.asList("int"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedForSimpleImport() {
+        String code = "import a.b.c.D;";
+        considerCode(code);
+
+        SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(imp);
+        assertEquals(Arrays.asList("import", " ", "a.b.c.D", ";", ""),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
@@ -226,5 +239,14 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("void foo(char p1, int p2) {\n" +
                 "    10 + 2;\n" +
                 "}", lpp.print(m));
+    }
+
+    @Test
+    public void printASimpleImport() {
+        String code = "import a.b.c.D;";
+        considerCode(code);
+
+        SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
+        assertEquals("import a.b.c.D;", lpp.print(imp));
     }
 }
