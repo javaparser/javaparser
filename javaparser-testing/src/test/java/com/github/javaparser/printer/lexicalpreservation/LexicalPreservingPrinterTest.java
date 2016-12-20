@@ -249,4 +249,13 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
         assertEquals("import a.b.c.D;", lpp.print(imp));
     }
+
+    @Test
+    public void printAnotherImport() {
+        String code = "import com.github.javaparser.ast.CompilationUnit;";
+        considerCode(code);
+
+        SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
+        assertEquals("import com.github.javaparser.ast.CompilationUnit;", lpp.print(imp));
+    }
 }
