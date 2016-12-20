@@ -33,16 +33,16 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Defines constructor call expression.
- * Example:
- * <code>
- * new Object()
- * </code>
+ * A constructor call. <br/>In <code>new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};</code>
+ * HashMap is the scope, Entry is the type, String and Long are type arguments, 15 is an argument, and everything in { }
+ * is the anonymous class body.
  *
  * @author Julio Vilmar Gesser
  */

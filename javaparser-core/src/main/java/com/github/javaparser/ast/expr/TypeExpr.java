@@ -33,6 +33,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
+ * <br/>In <code>World::greet</code> the ClassOrInterfaceType "World" is wrapped in a TypeExpr
+ * before it is set as the scope of the MethodReferenceExpr.
  *
  * @author Raquel Pau
  */

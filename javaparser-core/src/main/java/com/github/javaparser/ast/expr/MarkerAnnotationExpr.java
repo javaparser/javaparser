@@ -26,7 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
- * An annotation that uses only the annotation name. <br/><code>@Override</code>
+ * An annotation that uses only the annotation type name.
+ * <br/><code>@Override</code>
  *
  * @author Julio Vilmar Gesser
  */
