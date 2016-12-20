@@ -40,6 +40,18 @@ public interface NodeWithTypeParameters<N extends Node> {
         return getTypeParameters().get(i);
     }
 
+    @SuppressWarnings("unchecked")
+    default N setTypeParameter(int i, TypeParameter typeParameter) {
+        getTypeParameters().set(i, typeParameter);
+        return (N) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default N addTypeParameter(TypeParameter typeParameter) {
+        getTypeParameters().add(typeParameter);
+        return (N) this;
+    }
+
     N setTypeParameters(NodeList<TypeParameter> typeParameters);
 
     default boolean isGeneric() {
