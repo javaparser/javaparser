@@ -29,9 +29,14 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
     }
 
     @Test
-    public void unchanged() throws IOException {
+    public void unchangedSimpleClasses() throws IOException {
         assertUnchanged("Example1");
         assertUnchanged("Example2");
+    }
+
+    @Test
+    public void unchangedComplexFile() throws IOException {
+        assertUnchanged("Example4");
     }
 
     @Test
