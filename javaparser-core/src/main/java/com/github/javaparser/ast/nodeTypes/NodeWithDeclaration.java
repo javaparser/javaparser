@@ -22,7 +22,7 @@
 package com.github.javaparser.ast.nodeTypes;
 
 /**
- * Element with a declaration representable as a String.
+ * Node with a declaration representable as a String.
  *
  * @author Federico Tomassetti
  * @since July 2014

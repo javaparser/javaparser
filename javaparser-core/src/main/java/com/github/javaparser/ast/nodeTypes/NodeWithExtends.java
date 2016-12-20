@@ -25,6 +25,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+/**
+ * A node that extends other types.
+ */
 public interface NodeWithExtends<N extends Node> {
     NodeList<ClassOrInterfaceType> getExtendedTypes();
 

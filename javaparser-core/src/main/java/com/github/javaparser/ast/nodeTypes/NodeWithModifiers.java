@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * A Node with Modifiers.
+ * Note that not all modifiers may be valid for this node.
  */
 public interface NodeWithModifiers<N extends Node> {
     /**

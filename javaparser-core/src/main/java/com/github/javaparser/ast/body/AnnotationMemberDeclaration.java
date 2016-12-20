@@ -28,7 +28,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -49,7 +49,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements
-        NodeWithJavaDoc<AnnotationMemberDeclaration>,
+        NodeWithJavadoc<AnnotationMemberDeclaration>,
         NodeWithSimpleName<AnnotationMemberDeclaration>,
         NodeWithType<AnnotationMemberDeclaration, Type>,
         NodeWithModifiers<AnnotationMemberDeclaration> {

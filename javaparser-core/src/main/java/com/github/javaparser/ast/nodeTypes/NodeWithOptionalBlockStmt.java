@@ -26,6 +26,9 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 
 import java.util.Optional;
 
+/**
+ * A node with a body that is a BlockStmt, which is optional.
+ */
 public interface NodeWithOptionalBlockStmt<N extends Node> {
     Optional<BlockStmt> getBody();
 

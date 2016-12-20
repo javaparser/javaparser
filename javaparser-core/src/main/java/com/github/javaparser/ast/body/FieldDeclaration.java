@@ -29,7 +29,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -55,7 +55,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
-        NodeWithJavaDoc<FieldDeclaration>,
+        NodeWithJavadoc<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration>,
         NodeWithVariables<FieldDeclaration> {
 

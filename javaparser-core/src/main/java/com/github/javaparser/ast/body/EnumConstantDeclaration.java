@@ -28,7 +28,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -45,7 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements
-        NodeWithJavaDoc<EnumConstantDeclaration>,
+        NodeWithJavadoc<EnumConstantDeclaration>,
         NodeWithSimpleName<EnumConstantDeclaration>,
         NodeWithArguments<EnumConstantDeclaration> {
 

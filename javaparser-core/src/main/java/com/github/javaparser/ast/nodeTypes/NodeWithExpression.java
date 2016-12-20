@@ -24,6 +24,9 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 
+/**
+ * A node that has an expression in it.
+ */
 public interface NodeWithExpression<N extends Node> {
     Expression getExpression();
 

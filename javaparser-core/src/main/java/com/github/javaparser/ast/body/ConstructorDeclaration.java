@@ -48,7 +48,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements
-        NodeWithJavaDoc<ConstructorDeclaration>,
+        NodeWithJavadoc<ConstructorDeclaration>,
         NodeWithDeclaration,
         NodeWithSimpleName<ConstructorDeclaration>,
         NodeWithModifiers<ConstructorDeclaration>,

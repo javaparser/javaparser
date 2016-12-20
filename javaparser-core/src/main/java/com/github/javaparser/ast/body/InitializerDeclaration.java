@@ -25,7 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -39,7 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements
-        NodeWithJavaDoc<InitializerDeclaration>,
+        NodeWithJavadoc<InitializerDeclaration>,
         NodeWithBlockStmt<InitializerDeclaration> {
 
     private boolean isStatic;

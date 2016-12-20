@@ -26,6 +26,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 
+/**
+ * A node with arguments.
+ */
 public interface NodeWithArguments<N extends Node> {
     N setArguments(NodeList<Expression> arguments);
 

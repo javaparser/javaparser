@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 import static com.github.javaparser.ast.expr.Name.parse;
 
 /**
- * An element which can be the target of annotations.
+ * A node that can be annotated.
  *
  * @author Federico Tomassetti
  * @since July 2014

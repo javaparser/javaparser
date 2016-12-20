@@ -52,7 +52,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements
-        NodeWithJavaDoc<MethodDeclaration>,
+        NodeWithJavadoc<MethodDeclaration>,
         NodeWithDeclaration,
         NodeWithSimpleName<MethodDeclaration>,
         NodeWithType<MethodDeclaration, Type>,
