@@ -66,4 +66,9 @@ class ChildTextElement extends TextElement {
     public String toString() {
         return "ChildTextElement{" + child + '}';
     }
+
+    @Override
+    boolean isToken(int tokenKind) {
+        return false;
+    }
 }

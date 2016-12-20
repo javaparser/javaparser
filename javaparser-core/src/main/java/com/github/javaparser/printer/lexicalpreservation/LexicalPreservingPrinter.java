@@ -122,6 +122,19 @@ public class LexicalPreservingPrinter {
                     });
                     return;
                 }
+                NodeText nodeText = lpp.getTextForNode(observedNode);
+                if (property == ObservableProperty.INITIALIZER) {
+                    if (oldValue == null && newValue != null) {
+                        nodeText.addToken(Separator.SPACE);
+                        nodeText.addToken(Separator.EQUAL);
+                        nodeText.addToken(Separator.SPACE);
+                        nodeText.addChild((Node)newValue);
+                        return;
+                    } else if (oldValue != null && newValue == null) {
+                        nodeText.removeFromToken(Separator.EQUAL, true);
+                        return;
+                    }
+                }
                 throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
                         oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
             }

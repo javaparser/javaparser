@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
@@ -193,6 +194,21 @@ class NodeText {
         for (TextElement e : elements) {
             if ((e instanceof TokenTextElement) && ((TokenTextElement)e).getTokenKind() == tokenKind) {
                 elements.remove(e);
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void removeFromToken(Separator separator, boolean includingPreceedingSpace) {
+        for (int i=elements.size() -1; i>=0; i--) {
+            if (elements.get(i).isToken(separator.getTokenKind())) {
+                while (elements.size() > i) {
+                    elements.remove(i);
+                }
+                if (includingPreceedingSpace && elements.get(i - 1).isToken(Separator.SPACE.getTokenKind())) {
+                    elements.remove(i - 1);
+                }
                 return;
             }
         }

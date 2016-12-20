@@ -75,4 +75,9 @@ class TokenTextElement extends TextElement {
         return "TokenTextElement(" + tokenKind +
                 ") {" + text + '}';
     }
+
+    @Override
+    boolean isToken(int tokenKind) {
+        return this.tokenKind == tokenKind;
+    }
 }
