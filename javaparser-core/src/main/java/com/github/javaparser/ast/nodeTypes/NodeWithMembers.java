@@ -51,6 +51,18 @@ public interface NodeWithMembers<N extends Node> {
         return getMembers().get(i);
     }
 
+    @SuppressWarnings("unchecked")
+    default N setMember(int i, BodyDeclaration<?> member) {
+        getMembers().set(i, member);
+        return (N) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default N addMember(BodyDeclaration<?> member) {
+        getMembers().add(member);
+        return (N) this;
+    }
+
     N setMembers(NodeList<BodyDeclaration<?>> members);
 
     /**
