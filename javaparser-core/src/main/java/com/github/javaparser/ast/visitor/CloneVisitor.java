@@ -945,10 +945,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(BreakStmt _n, Object _arg) {
         Comment comment = cloneNode(_n.getComment(), _arg);
+        SimpleName label = cloneNode(_n.getLabel(), _arg);
 
         BreakStmt r = new BreakStmt(
                 _n.getRange().orElse(null),
-                _n.getIdentifier().orElse(null)
+                label
         );
         r.setComment(comment);
         return r;
@@ -999,10 +1000,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(ContinueStmt _n, Object _arg) {
         Comment comment = cloneNode(_n.getComment(), _arg);
+        SimpleName label = cloneNode(_n.getLabel(), _arg);
 
         ContinueStmt r = new ContinueStmt(
                 _n.getRange().orElse(null),
-                _n.getIdentifier().orElse(null)
+                label
         );
         r.setComment(comment);
         return r;

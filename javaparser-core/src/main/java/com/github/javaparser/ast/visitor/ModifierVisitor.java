@@ -163,6 +163,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final BreakStmt n, final A arg) {
         visitComment(n, arg);
+        n.getLabel().ifPresent(l -> n.setLabel((SimpleName) l.accept(this, arg)));
         return n;
     }
 
@@ -267,6 +268,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final ContinueStmt n, final A arg) {
         visitComment(n, arg);
+        n.getLabel().ifPresent(l -> n.setLabel((SimpleName) l.accept(this, arg)));
         return n;
     }
 

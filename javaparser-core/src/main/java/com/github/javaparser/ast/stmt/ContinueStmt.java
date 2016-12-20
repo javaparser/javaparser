@@ -22,6 +22,8 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalLabel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -31,23 +33,32 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A continue statement with an optional label;
+ * <br/><code>continue brains;</code>
+ * <br/><code>continue;</code>
+ *
  * @author Julio Vilmar Gesser
  */
-public final class ContinueStmt extends Statement {
+public final class ContinueStmt extends Statement implements
+        NodeWithOptionalLabel<ContinueStmt> {
 
-    private String identifier;
+    private SimpleName label;
 
     public ContinueStmt() {
         this(null, null);
     }
 
-    public ContinueStmt(final String identifier) {
-        this(null, identifier);
+    public ContinueStmt(final String label) {
+        this(null, new SimpleName(label));
     }
 
-    public ContinueStmt(Range range, final String identifier) {
+    public ContinueStmt(final SimpleName label) {
+        this(null, label);
+    }
+
+    public ContinueStmt(Range range, final SimpleName label) {
         super(range);
-        this.identifier = identifier;
+        this.label = label;
     }
 
     @Override
@@ -60,19 +71,21 @@ public final class ContinueStmt extends Statement {
         v.visit(this, arg);
     }
 
-    public Optional<String> getIdentifier() {
-        return Optional.ofNullable(identifier);
+    @Override
+    public Optional<SimpleName> getLabel() {
+        return Optional.ofNullable(label);
     }
 
     /**
-     * Sets the identifier
+     * Sets the label
      *
-     * @param identifier the identifier, can be null
+     * @param label the label, can be null
      * @return this, the ContinueStmt
      */
-    public ContinueStmt setIdentifier(final String identifier) {
-        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNotNull(identifier);
+    @Override
+    public ContinueStmt setLabel(final SimpleName label) {
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        this.label = assertNotNull(label);
         return this;
     }
 }

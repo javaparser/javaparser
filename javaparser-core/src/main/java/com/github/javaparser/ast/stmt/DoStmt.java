@@ -30,6 +30,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * A do-while.
+ * <br/><code>do { ... } while ( a==0 );</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
