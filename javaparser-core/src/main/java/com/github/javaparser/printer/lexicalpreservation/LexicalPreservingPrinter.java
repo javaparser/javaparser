@@ -31,6 +31,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.utils.Pair;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -106,6 +107,19 @@ public class LexicalPreservingPrinter {
                     return;
                 }
                 if (property == ObservableProperty.RANGE) {
+                    return;
+                }
+                if (property == ObservableProperty.MODIFIERS) {
+                    EnumSet<Modifier> oldModifiers = (EnumSet<Modifier>)oldValue;
+                    EnumSet<Modifier> newModifiers = (EnumSet<Modifier>)newValue;
+                    oldModifiers.removeAll(newModifiers);
+                    newModifiers.removeAll(oldModifiers);
+                    NodeText nodeText = lpp.getTextForNode(observedNode);
+                    oldModifiers.forEach(mToRemove -> nodeText.removeToken(Separator.fromModifier(mToRemove).getTokenKind()));
+                    newModifiers.forEach(mToAdd -> {
+                        nodeText.addToken(0, Separator.SPACE);
+                        nodeText.addToken(0, Separator.fromModifier(mToAdd));
+                    });
                     return;
                 }
                 throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,

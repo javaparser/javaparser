@@ -30,10 +30,12 @@ import com.github.javaparser.ast.Modifier;
  */
 enum Separator {
     COMMA(ASTParserConstants.COMMA, ","),
-    SPACE(0, " "),
+    SPACE(1, " "),
     SEMICOLON(ASTParserConstants.SEMICOLON, ";"),
-    NEWLINE(0, "\n"),
-    TAB(0, "    ");
+    NEWLINE(1, "\n"),
+    TAB(1, "    "),
+    STATIC(ASTParserConstants.STATIC, "static");
+
     private String text;
     private int tokenKind;
 

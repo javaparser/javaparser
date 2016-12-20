@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class TransformationsTest extends  AbstractLexicalPreservingTest {
 
     private void assertTransformed(String exampleName, CompilationUnit cu) throws IOException {
-        String expectedCode = readExample(exampleName + "_transformed");
+        String expectedCode = readExample(exampleName + "_expected");
         String actualCode = lpp.print(cu);
         assertEquals(expectedCode, actualCode);
     }

@@ -58,6 +58,9 @@ abstract class AbstractLexicalPreservingTest {
 
     protected String readExample(String resourceName) throws IOException {
         InputStream is = this.getClass().getResourceAsStream("/com/github/javaparser/lexical_preservation_samples/" + resourceName + ".java.txt");
+        if (is == null) {
+            throw new IllegalArgumentException("Example not found: " + resourceName);
+        }
         return read(is);
     }
 

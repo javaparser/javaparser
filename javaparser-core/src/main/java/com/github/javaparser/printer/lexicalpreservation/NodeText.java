@@ -188,4 +188,14 @@ class NodeText {
     List<TextElement> getElements() {
         return elements;
     }
+
+    public void removeToken(int tokenKind) {
+        for (TextElement e : elements) {
+            if ((e instanceof TokenTextElement) && ((TokenTextElement)e).getTokenKind() == tokenKind) {
+                elements.remove(e);
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }
