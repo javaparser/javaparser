@@ -1,3 +1,7 @@
+Version 3.0.0-RC.3
+------------------
+* 639 622 632 657 656 652 653 647 648 645 194 643 630 624 628 627 626 625 623 cleanups, small fixes, and general housekeeping
+
 Version 3.0.0-RC.2
 ------------------
 * 593 EmptyImportDeclaration and NonEmptyImportDeclaration have been removed

@@ -42,6 +42,18 @@ public interface NodeWithVariables<N extends Node> {
         return getVariables().get(i);
     }
 
+    @SuppressWarnings("unchecked")
+    default N setVariable(int i, VariableDeclarator variableDeclarator) {
+        getVariables().set(i, variableDeclarator);
+        return (N) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default N addVariable(VariableDeclarator variableDeclarator) {
+        getVariables().add(variableDeclarator);
+        return (N) this;
+    }
+
     /**
      * Returns the type that is shared between all variables.
      * This is a shortcut for when you are certain that all variables share one type.

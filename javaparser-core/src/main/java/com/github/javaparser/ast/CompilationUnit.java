@@ -175,6 +175,16 @@ public final class CompilationUnit extends Node {
         return this;
     }
 
+    public CompilationUnit setImport(int i, ImportDeclaration imports) {
+        getImports().set(i, imports);
+        return this;
+    }
+
+    public CompilationUnit addImport(ImportDeclaration imports) {
+        getImports().add(imports);
+        return this;
+    }
+
     /**
      * Sets or clear the package declarations of this compilation unit.
      *
@@ -196,6 +206,22 @@ public final class CompilationUnit extends Node {
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         this.types = assertNotNull(types);
         setAsParentNodeOf(this.types);
+        return this;
+    }
+
+    public CompilationUnit setType(int i, TypeDeclaration<?> type) {
+        NodeList<TypeDeclaration<?>> copy = new NodeList<>();
+        copy.addAll(getTypes());
+        getTypes().set(i, type);
+        notifyPropertyChange(ObservableProperty.TYPES, copy, types);
+        return this;
+    }
+
+    public CompilationUnit addType(TypeDeclaration<?> type) {
+        NodeList<TypeDeclaration<?>> copy = new NodeList<>();
+        copy.addAll(getTypes());
+        getTypes().add(type);
+        notifyPropertyChange(ObservableProperty.TYPES, copy, types);
         return this;
     }
 
