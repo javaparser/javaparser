@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.imports.SingleTypeImportDeclaration;
+import com.github.javaparser.ast.imports.StaticImportOnDemandDeclaration;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
@@ -258,4 +259,14 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
         assertEquals("import com.github.javaparser.ast.CompilationUnit;", lpp.print(imp));
     }
+
+    @Test
+    public void printAStaticImport() {
+        String code = "import static com.github.javaparser.ParseStart.*;";
+        considerCode(code);
+
+        StaticImportOnDemandDeclaration imp = (StaticImportOnDemandDeclaration)cu.getChildNodes().get(0);
+        assertEquals("import static com.github.javaparser.ParseStart.*;", lpp.print(imp));
+    }
+
 }
