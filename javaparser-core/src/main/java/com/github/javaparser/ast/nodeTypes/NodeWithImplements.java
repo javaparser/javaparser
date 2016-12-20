@@ -35,14 +35,14 @@ public interface NodeWithImplements<N extends Node> {
     N setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList);
 
     @SuppressWarnings("unchecked")
-    default N setImplements(int i, ClassOrInterfaceType implement){
-        getImplements().set(i, implement);
+    default N setImplementedType(int i, ClassOrInterfaceType implement){
+        getImplementedTypes().set(i, implement);
         return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default N addImplements(ClassOrInterfaceType implement){
-        getImplements().add(implement);
+    default N addImplementedType(ClassOrInterfaceType implement){
+        getImplementedTypes().add(implement);
         return (N) this;
     }
 

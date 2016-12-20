@@ -35,14 +35,14 @@ public interface NodeWithExtends<N extends Node> {
     N setExtendedTypes(NodeList<ClassOrInterfaceType> extendsList);
 
     @SuppressWarnings("unchecked")
-    default N setExtends(int i, ClassOrInterfaceType extend) {
-        getExtends().set(i, extend);
+    default N setExtendedType(int i, ClassOrInterfaceType extend) {
+        getExtendedTypes().set(i, extend);
         return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default N addExtends(ClassOrInterfaceType extend) {
-        getExtends().add(extend);
+    default N addExtendedType(ClassOrInterfaceType extend) {
+        getExtendedTypes().add(extend);
         return (N) this;
     }
     /**

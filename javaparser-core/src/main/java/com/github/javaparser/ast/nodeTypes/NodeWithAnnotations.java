@@ -36,6 +36,7 @@ import static com.github.javaparser.ast.expr.Name.parse;
  * @since July 2014
  */
 public interface NodeWithAnnotations<N extends Node> {
+
     NodeList<AnnotationExpr> getAnnotations();
 
     default AnnotationExpr getAnnotation(int i) {
@@ -45,13 +46,13 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N setAnnotation(int i, AnnotationExpr element) {
         getAnnotations().set(i, element);
-        return (N)this;
+        return (N) this;
     }
 
     @SuppressWarnings("unchecked")
     default N addAnnotation(AnnotationExpr element) {
         getAnnotations().add(element);
-        return (N)this;
+        return (N) this;
     }
 
     N setAnnotations(NodeList<AnnotationExpr> annotations);

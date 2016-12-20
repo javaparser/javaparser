@@ -55,16 +55,6 @@ public abstract class Type extends Node {
         setAsParentNodeOf(annotations);
         return this;
     }
-
-    public Type setAnnotation(int i, AnnotationExpr annotation) {
-        getAnnotations().set(i, annotation);
-        return this;
-    }
-
-    public Type addAnnotation(AnnotationExpr annotation) {
-        getAnnotations().add(annotation);
-        return this;
-    }
     /**
      * Finds the element type, meaning: the type without ArrayTypes around it.
      * 
