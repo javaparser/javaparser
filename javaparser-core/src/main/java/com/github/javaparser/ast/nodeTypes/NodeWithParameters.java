@@ -34,6 +34,12 @@ public interface NodeWithParameters<N extends Node> {
         return getParameters().get(i);
     }
 
+    @SuppressWarnings("unchecked")
+    default N setParameter(int i, Parameter parameter) {
+        getParameters().set(i, parameter);
+        return (N) this;
+    }
+
     N setParameters(NodeList<Parameter> parameters);
 
     default N addParameter(Type type, String name) {

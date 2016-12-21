@@ -85,6 +85,16 @@ public final class SwitchStmt extends Statement {
         return this;
     }
 
+    public SwitchStmt setEntry(int i, SwitchEntryStmt entry) {
+        getEntries().set(i, entry);
+        return this;
+    }
+
+    public SwitchStmt addEntry(SwitchEntryStmt entry) {
+        getEntries().add(entry);
+        return this;
+    }
+
     public SwitchStmt setSelector(final Expression selector) {
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
         this.selector = selector;
