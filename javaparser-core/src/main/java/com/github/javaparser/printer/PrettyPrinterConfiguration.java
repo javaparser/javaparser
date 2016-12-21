@@ -22,11 +22,12 @@
 package com.github.javaparser.printer;
 
 import java.lang.reflect.Constructor;
+import java.util.function.Function;
 
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private String indent = "    ";
-    private Class<? extends PrettyPrintVisitor> visitorClass = PrettyPrintVisitor.class;
+    private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
 
     public String getIndent() {
         return indent;
@@ -46,19 +47,12 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
-    public PrettyPrinterConfiguration setVisitorClass(Class<? extends PrettyPrintVisitor> visitorClass) {
-        this.visitorClass = visitorClass;
-        return this;
+    public Function<PrettyPrinterConfiguration, PrettyPrintVisitor> getVisitorFactory() {
+        return visitorFactory;
     }
 
-    public PrettyPrintVisitor createVisitor() {
-        try {
-            Constructor<? extends PrettyPrintVisitor> constructor =
-                    visitorClass.getConstructor(this.getClass());
-            return constructor.newInstance(this);
-        } catch (Exception e) {
-            assert false;
-            return null;
-        }
+    public PrettyPrinterConfiguration setVisitorFactory(Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory) {
+        this.visitorFactory = visitorFactory;
+        return this;
     }
 }
