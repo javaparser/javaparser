@@ -696,9 +696,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final TypeDeclarationStmt n, final A arg) {
+    public Visitable visit(final LocalClassDeclarationStmt n, final A arg) {
         visitComment(n, arg);
-        n.setTypeDeclaration((TypeDeclaration<?>) n.getTypeDeclaration().accept(this, arg));
+        n.setClassDeclaration((ClassOrInterfaceDeclaration) n.getClassDeclaration().accept(this, arg));
         return n;
     }
 

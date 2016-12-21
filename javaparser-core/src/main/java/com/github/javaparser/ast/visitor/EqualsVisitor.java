@@ -1150,10 +1150,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final TypeDeclarationStmt n1, final Visitable arg) {
-        final TypeDeclarationStmt n2 = (TypeDeclarationStmt) arg;
+    public Boolean visit(final LocalClassDeclarationStmt n1, final Visitable arg) {
+        final LocalClassDeclarationStmt n2 = (LocalClassDeclarationStmt) arg;
 
-        if (!nodeEquals(n1.getTypeDeclaration(), n2.getTypeDeclaration())) {
+        if (!nodeEquals(n1.getClassDeclaration(), n2.getClassDeclaration())) {
             return false;
         }
 
