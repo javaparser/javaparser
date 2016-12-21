@@ -31,6 +31,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A class definition inside a method.
+ * <p>
+ * <br/><code>class X { void m() { <b>class Y { }</b> } }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class TypeDeclarationStmt extends Statement {

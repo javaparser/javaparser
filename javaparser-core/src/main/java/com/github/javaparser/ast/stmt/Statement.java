@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 
 /**
+ * A base class for all statements.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class Statement extends Node {
