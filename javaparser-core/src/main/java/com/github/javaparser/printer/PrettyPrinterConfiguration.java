@@ -21,10 +21,12 @@
 
 package com.github.javaparser.printer;
 
+import java.lang.reflect.Constructor;
+
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private String indent = "    ";
-    private Class<? extends PrettyPrintVisitor> visitorClass;
+    private Class<? extends PrettyPrintVisitor> visitorClass = PrettyPrintVisitor.class;
 
     public String getIndent() {
         return indent;
@@ -44,12 +46,19 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
-    public Class<? extends PrettyPrintVisitor> getVisitorClass() {
-        return visitorClass;
-    }
-
     public PrettyPrinterConfiguration setVisitorClass(Class<? extends PrettyPrintVisitor> visitorClass) {
         this.visitorClass = visitorClass;
         return this;
+    }
+
+    public PrettyPrintVisitor createVisitor() {
+        try {
+            Constructor<? extends PrettyPrintVisitor> constructor =
+                    visitorClass.getConstructor(this.getClass());
+            return constructor.newInstance(this);
+        } catch (Exception e) {
+            assert false;
+            return null;
+        }
     }
 }

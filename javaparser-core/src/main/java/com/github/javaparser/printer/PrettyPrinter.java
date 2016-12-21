@@ -23,8 +23,6 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.Node;
 
-import java.lang.reflect.Constructor;
-
 /**
  * Pretty printer for AST nodes.
  */
@@ -40,26 +38,8 @@ public class PrettyPrinter {
     }
 
     public String print(Node node) {
-
-        final PrettyPrintVisitor visitor = getNewInstance(configuration);
+        final PrettyPrintVisitor visitor = configuration.createVisitor();
         node.accept(visitor, null);
         return visitor.getSource();
     }
-
-    private PrettyPrintVisitor getNewInstance(PrettyPrinterConfiguration configuration){
-        try {
-            Class<? extends PrettyPrintVisitor> clazz = configuration.getVisitorClass();
-            if (clazz == null){
-                return new PrettyPrintVisitor(configuration);
-            }else{
-                Constructor<? extends PrettyPrintVisitor> constructor =
-                        clazz.getConstructor(configuration.getClass());
-                return constructor.newInstance(configuration);
-            }
-        } catch (Exception e) {
-            assert false;
-            return null;
-        }
-    }
-
 }
