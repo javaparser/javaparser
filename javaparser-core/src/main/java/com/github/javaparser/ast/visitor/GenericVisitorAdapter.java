@@ -1407,10 +1407,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final TypeDeclarationStmt n, final A arg) {
+    public R visit(final LocalClassDeclarationStmt n, final A arg) {
         visitComment(n, arg);
         {
-            R result = n.getTypeDeclaration().accept(this, arg);
+            R result = n.getClassDeclaration().accept(this, arg);
             if (result != null) {
                 return result;
             }

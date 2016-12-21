@@ -825,9 +825,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final TypeDeclarationStmt n, final Void arg) {
+    public void visit(final LocalClassDeclarationStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getTypeDeclaration().accept(this, arg);
+        n.getClassDeclaration().accept(this, arg);
     }
 
     @Override
