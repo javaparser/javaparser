@@ -22,7 +22,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class NodeWithVariablesTest {
     @Test
     public void getCommonTypeWorksForNormalVariables() {
         VariableDeclarationExpr declaration = JavaParser.parseVariableDeclarationExpr("int a,b;");
-        assertEquals(PrimitiveType.INT_TYPE, declaration.getCommonType());
+        assertEquals(PrimitiveType.intType(), declaration.getCommonType());
     }
 
     @Test
@@ -64,13 +63,13 @@ public class NodeWithVariablesTest {
     @Test
     public void getElementTypeWorksForNormalVariables() {
         VariableDeclarationExpr declaration = JavaParser.parseVariableDeclarationExpr("int a,b;");
-        assertEquals(PrimitiveType.INT_TYPE, declaration.getElementType());
+        assertEquals(PrimitiveType.intType(), declaration.getElementType());
     }
 
     @Test
     public void getElementTypeWorksForArrayTypes() {
         VariableDeclarationExpr declaration = JavaParser.parseVariableDeclarationExpr("int a[],b[];");
-        assertEquals(PrimitiveType.INT_TYPE, declaration.getElementType());
+        assertEquals(PrimitiveType.intType(), declaration.getElementType());
     }
 
     @Test

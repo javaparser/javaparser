@@ -36,6 +36,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -45,7 +46,6 @@ import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -217,7 +217,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             setter = parentClass.addMethod("set" + fieldNameUpper, PUBLIC);
         else
             setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
-        setter.setType(VOID_TYPE);
+        setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);

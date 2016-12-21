@@ -29,12 +29,13 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
+ * when it returns void.
+ * <br/><code><b>void</b> helloWorld() { ... }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class VoidType extends Type implements NodeWithAnnotations<VoidType> {
-
-    public static final VoidType VOID_TYPE = new VoidType();
-
     public VoidType() {
         this(null);
     }

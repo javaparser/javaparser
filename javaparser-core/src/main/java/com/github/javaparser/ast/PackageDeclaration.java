@@ -24,7 +24,6 @@ package com.github.javaparser.ast;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -37,16 +36,9 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <p>
- * This class represents the package declaration. The package declaration is
- * optional for the {@link CompilationUnit}.
- * </p>
- * The PackageDeclaration is constructed following the syntax:<br>
- * <pre>
- * {@code
- * PackageDeclaration ::= ( }{@link AnnotationExpr}{@code )* "package" }{@link NameExpr}{@code ) ";"
- * }
- * </pre>
+ * A package declaration.
+ * <br/><code>package com.github.javaparser.ast;</code>
+ * <br/><code>@Wonderful package anything.can.be.annotated.nowadays;</code>
  *
  * @author Julio Vilmar Gesser
  */

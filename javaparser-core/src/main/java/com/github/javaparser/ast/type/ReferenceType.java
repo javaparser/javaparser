@@ -25,6 +25,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 
 /**
+ * Base class for reference types.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class ReferenceType<T extends ReferenceType> extends Type {
