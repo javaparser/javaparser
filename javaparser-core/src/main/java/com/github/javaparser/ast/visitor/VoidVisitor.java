@@ -165,7 +165,7 @@ public interface VoidVisitor<A> {
 
     void visit(ExplicitConstructorInvocationStmt n, A arg);
 
-    void visit(TypeDeclarationStmt n, A arg);
+    void visit(LocalClassDeclarationStmt n, A arg);
 
     void visit(AssertStmt n, A arg);
 

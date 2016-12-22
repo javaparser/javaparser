@@ -162,7 +162,7 @@ public interface GenericVisitor<R, A> {
 
     R visit(ExplicitConstructorInvocationStmt n, A arg);
 
-    R visit(TypeDeclarationStmt n, A arg);
+    R visit(LocalClassDeclarationStmt n, A arg);
 
     R visit(AssertStmt n, A arg);
 
