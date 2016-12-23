@@ -49,7 +49,6 @@ import java.util.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -1342,41 +1341,20 @@ PackageDeclaration PackageDeclaration():
   { return new PackageDeclaration(range(begin, tokenEnd()), annotations, name); }
 }
 
+
 ImportDeclaration ImportDeclaration():
 {
     Name name;
-    ClassOrInterfaceType type;
+    boolean isStatic = false;
+    boolean isAsterisk = false;
     Position begin;
-    ImportDeclaration ret;
 }
 {
-    "import" {begin = tokenBegin();}
-    (
-        "static" type = ClassOrInterfaceType()
-        (
-            "." "*" ";"
-            { ret = new StaticImportOnDemandDeclaration(range(begin, tokenEnd()), type); }
-        |
-            ";"
-            {
-                if(!type.getScope().isPresent()){
-                    addProblem("import static has only one identifier");
-                    ret = new BadImportDeclaration(range(begin, tokenEnd()));
-                } else {
-                    ret = new SingleStaticImportDeclaration(range(begin, tokenEnd()), type.getScope().get(), type.getNameAsString());
-                }
-            }
-        )
-    |
-        ( LOOKAHEAD(Name() "." "*")
-            name = Name() "." "*" ";"
-            { ret = new TypeImportOnDemandDeclaration(range(begin, tokenEnd()), name); }
-        |
-            type = ClassOrInterfaceType() ";"
-            { ret = new SingleTypeImportDeclaration(range(begin, tokenEnd()), type); }
-        )
-    )
-    { return ret; }
+    "import" {begin = tokenBegin();} 
+    [ "static" { isStatic = true; } ] 
+    name = Name() 
+    [ "." "*" { isAsterisk = true; } ] ";"
+    { return new ImportDeclaration(range(begin, tokenEnd()), name, isStatic, isAsterisk); }
 }
 
 /*
