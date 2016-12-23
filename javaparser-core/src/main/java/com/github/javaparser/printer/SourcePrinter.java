@@ -23,7 +23,7 @@ package com.github.javaparser.printer;
 
 import static com.github.javaparser.utils.Utils.EOL;
 
-class SourcePrinter {
+public class SourcePrinter {
     private final String indentation;
     private int level = 0;
     private boolean indented = false;

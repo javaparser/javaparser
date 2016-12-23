@@ -21,9 +21,13 @@
 
 package com.github.javaparser.printer;
 
+import java.lang.reflect.Constructor;
+import java.util.function.Function;
+
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private String indent = "    ";
+    private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
 
     public String getIndent() {
         return indent;
@@ -40,6 +44,15 @@ public class PrettyPrinterConfiguration {
 
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
+        return this;
+    }
+
+    public Function<PrettyPrinterConfiguration, PrettyPrintVisitor> getVisitorFactory() {
+        return visitorFactory;
+    }
+
+    public PrettyPrinterConfiguration setVisitorFactory(Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory) {
+        this.visitorFactory = visitorFactory;
         return this;
     }
 }

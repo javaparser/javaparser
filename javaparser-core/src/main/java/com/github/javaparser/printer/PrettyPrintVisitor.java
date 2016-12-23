@@ -50,9 +50,8 @@ import static com.github.javaparser.utils.Utils.isNullOrEmpty;
  * @author Julio Vilmar Gesser
  */
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
-    private final PrettyPrinterConfiguration configuration;
-
-    private final SourcePrinter printer;
+    protected final PrettyPrinterConfiguration configuration;
+    protected final SourcePrinter printer;
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;

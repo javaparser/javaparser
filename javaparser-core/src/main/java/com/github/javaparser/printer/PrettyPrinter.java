@@ -38,7 +38,7 @@ public class PrettyPrinter {
     }
 
     public String print(Node node) {
-        final PrettyPrintVisitor visitor = new PrettyPrintVisitor(configuration);
+        final PrettyPrintVisitor visitor = configuration.getVisitorFactory().apply(configuration);
         node.accept(visitor, null);
         return visitor.getSource();
     }
