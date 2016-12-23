@@ -376,10 +376,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        CompilationUnit parentNode = getAncestorOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImport(clazz);
-        }
+        getAncestorOfType(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
     }
 
     /**
@@ -421,7 +418,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param <M> The type of data
      * @param key The singleton key for the data
      * @param object The data object
-     * @throws IllegalArgumentException
      * @see DataKey
      */
     public <M> void setData(DataKey<M> key, M object) {

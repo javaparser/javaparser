@@ -84,6 +84,7 @@ public final class PackageDeclaration extends Node implements
      *
      * @return list of annotations or <code>null</code>
      */
+    @Override
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
@@ -99,15 +100,9 @@ public final class PackageDeclaration extends Node implements
     }
 
     /**
-     * Get full package name.
-     */
-    public String getPackageName() {
-        return name.toString();
-    }
-
-    /**
      * @param annotations the annotations to set
      */
+    @Override
     public PackageDeclaration setAnnotations(NodeList<AnnotationExpr> annotations) {
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         this.annotations = assertNotNull(annotations);

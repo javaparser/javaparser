@@ -153,6 +153,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return thrownExceptions;
     }
 
+    @Override
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
@@ -164,6 +165,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return this;
     }
 
+    @Override
     public ConstructorDeclaration setName(SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
@@ -187,6 +189,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         return this;
     }
 
+    @Override
     public ConstructorDeclaration setTypeParameters(NodeList<TypeParameter> typeParameters) {
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         this.typeParameters = assertNotNull(typeParameters);
