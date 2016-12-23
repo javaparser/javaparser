@@ -28,6 +28,13 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * An expression where an operator is applied to a single expression.
+ * It supports the operators that are found the the UnaryExpr.Operator enum.
+ * <br/><code>11++</code>
+ * <br/><code>++11</code>
+ * <br/><code>~1</code>
+ * <br/><code>-333</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class UnaryExpr extends Expression implements

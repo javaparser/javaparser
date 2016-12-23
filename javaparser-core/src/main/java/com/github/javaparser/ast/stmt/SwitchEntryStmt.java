@@ -34,7 +34,24 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * One case in a switch statement.
+ * <br/><pre>
+ * switch (i) {
+ *   case 1:
+ *   case 2:
+ *     System.out.println(444);
+ *     break;
+ *   default:
+ *     System.out.println(0);
+ * }
+ * </pre>
+ * This contains three SwitchEntryStmts.
+ * <br/>The first one has label 1 and no statements.
+ * <br/>The second has label 2 and two statements (the println and the break).
+ * <br/>The third, the default, has no label and one statement.
+ *
  * @author Julio Vilmar Gesser
+ * @see SwitchStmt
  */
 public final class SwitchEntryStmt extends Statement implements NodeWithStatements<SwitchEntryStmt> {
 

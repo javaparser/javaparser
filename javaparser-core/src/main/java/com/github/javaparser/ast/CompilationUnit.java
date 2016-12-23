@@ -46,17 +46,14 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * This class represents the entire compilation unit. Each java file denotes a
  * compilation unit.
  * </p>
- * The CompilationUnit is constructed following the syntax:<br>
- * <p>
- * <pre>
- * {@code
- * CompilationUnit ::=  ( }{@link PackageDeclaration}{@code )?
- *                      ( }{@link ImportDeclaration}{@code )*
- *                      ( }{@link TypeDeclaration}{@code )*
- * }
- * </pre>
+ * A compilation unit start with an optional package declaration,
+ * followed by zero or more import declarations,
+ * followed by zero or more type declarations.
  *
  * @author Julio Vilmar Gesser
+ * @see PackageDeclaration
+ * @see ImportDeclaration
+ * @see TypeDeclaration
  */
 public final class CompilationUnit extends Node {
 

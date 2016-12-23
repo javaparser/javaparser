@@ -28,7 +28,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -42,11 +42,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A base class for all types of type declarations.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T> implements
         NodeWithSimpleName<T>,
-        NodeWithJavaDoc<T>,
+        NodeWithJavadoc<T>,
         NodeWithModifiers<T>,
         NodeWithMembers<T> {
 

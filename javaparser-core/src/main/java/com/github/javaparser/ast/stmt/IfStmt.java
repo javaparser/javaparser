@@ -33,6 +33,10 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * An if-then-else statement. The else is optional.
+ * <br/>In <code>if(a==5) hurray() else boo();</code> the condition is a==5,
+ * hurray() is the thenStmt, and boo() is the elseStmt.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class IfStmt extends Statement {

@@ -29,6 +29,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 /**
+ * An expression between ( ).
+ * <br/><code>(1+1)</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class EnclosedExpr extends Expression {

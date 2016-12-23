@@ -32,7 +32,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A switch statement.
+ * <br/>In <code>switch(a) { ... }</code> the selector is "a",
+ * and the contents of the { ... } are the entries.
+ *
  * @author Julio Vilmar Gesser
+ * @see SwitchEntryStmt
  */
 public final class SwitchStmt extends Statement {
 

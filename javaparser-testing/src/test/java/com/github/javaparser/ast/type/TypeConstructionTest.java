@@ -29,10 +29,6 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.Type;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -124,7 +120,7 @@ public class TypeConstructionTest {
         ExpressionStmt variableDeclarationStatement = (ExpressionStmt) parseStatement("@C int @A[] @B[] a @X[] @Y[];");
         VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
 
-        variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.INT_TYPE)));
+        variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.intType())));
         assertEquals("@C int[][] a;", variableDeclarationStatement.toString());
     }
 

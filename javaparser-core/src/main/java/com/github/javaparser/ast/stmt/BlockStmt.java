@@ -34,6 +34,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Statements in between { and }.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class BlockStmt extends Statement implements NodeWithStatements<BlockStmt> {
@@ -74,7 +76,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         setAsParentNodeOf(this.statements);
         return this;
     }
-    
+
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(statements);

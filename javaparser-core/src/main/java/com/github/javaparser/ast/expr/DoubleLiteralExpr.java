@@ -26,6 +26,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * A float or a double constant. This value is stored exactly as found in the source.
+ * <br/><code>100.1f</code>
+ * <br/><code>23958D</code>
+ * <br/><code>0x4.5p1f</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class DoubleLiteralExpr extends StringLiteralExpr {

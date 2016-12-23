@@ -33,6 +33,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A for-each statement.
+ * <br/><code>for(Object o: objects) { ... }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ForeachStmt extends Statement implements NodeWithBody<ForeachStmt> {

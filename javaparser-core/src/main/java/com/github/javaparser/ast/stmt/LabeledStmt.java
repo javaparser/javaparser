@@ -31,6 +31,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A statement that is labeled, like <code>label123: println("continuing");</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class LabeledStmt extends Statement {

@@ -35,6 +35,10 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A classic for statement.
+ * <br/>In <code>for(int a=3,b==5; a<99; a++) { ... }</code> the intialization is int a=3,b=5, 
+ * compare is b==5, update is a++, and the statement or block statement following it is in body.  
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {

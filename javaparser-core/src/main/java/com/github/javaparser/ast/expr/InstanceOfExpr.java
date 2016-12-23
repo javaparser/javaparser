@@ -33,6 +33,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Usage of the instanceof operator.
+ * <br/><code>tool instanceof Drill</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class InstanceOfExpr extends Expression implements

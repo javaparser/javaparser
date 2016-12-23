@@ -233,6 +233,15 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BreakStmt n, final A arg) {
         visitComment(n, arg);
+        if (n.getLabel().isPresent()) {
+            {
+                R result = n.getLabel().get().accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+
         return null;
     }
 
@@ -489,6 +498,14 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final ContinueStmt n, final A arg) {
         visitComment(n, arg);
+        if (n.getLabel().isPresent()) {
+            {
+                R result = n.getLabel().get().accept(this, arg);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
         return null;
     }
 
@@ -1609,7 +1626,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         return null;
     }
-    
+
     @Override
     public R visit(BadImportDeclaration n, A arg) {
         visitComment(n, arg);

@@ -24,18 +24,19 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
- * A loose ";" inside a body. <code>class X { ; }</code>
+ * A loose ";" inside a body.<br/><code>class X { ; }</code>
+ *
  * @author Julio Vilmar Gesser
  * @deprecated these ;'s should be ignored
  */
 @Deprecated
 public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDeclaration>
-        implements NodeWithJavaDoc<EmptyMemberDeclaration> {
+        implements NodeWithJavadoc<EmptyMemberDeclaration> {
 
     public EmptyMemberDeclaration() {
         this(null);

@@ -33,6 +33,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A typecast. The (long) in <code>(long)15</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class CastExpr extends Expression implements
