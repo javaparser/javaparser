@@ -49,8 +49,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Júlio Vilmar Gesser
  */
 public final class JavaParser {
-    private static final JavaParser defaultInstance = new JavaParser();
-
     private final CommentsInserter commentsInserter;
     private final ParserConfiguration configuration;
 
@@ -105,8 +103,8 @@ public final class JavaParser {
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
 
-            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
-                    parser.getCommentsCollection());
+            return new ParseResult<>(resultNode, parser.problems, astParser.getTokens(),
+                    astParser.getCommentsCollection());
         } catch (Exception e) {
             return new ParseResult<>(e);
         } finally {
@@ -294,7 +292,7 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = defaultInstance.parse(context, provider);
+        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
