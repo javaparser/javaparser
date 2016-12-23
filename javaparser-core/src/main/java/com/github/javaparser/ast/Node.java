@@ -55,6 +55,7 @@ import static java.util.Collections.unmodifiableList;
  * <li>use a convenience method, like "addStatement(...)", or if none are available...</li>
  * <li>use a convenient constructor, like ClassOrInterfaceType(String name), or if none are available...</li>
  * <li>use the default constructor.</li>
+ * <li>Alternatively, use one of the JavaParser.parse(snippet) methods.</li>
  * </ul>
  * ... and use the various methods on the node to initialize it further, if needed.
  * <h2>Parent/child</h2>
