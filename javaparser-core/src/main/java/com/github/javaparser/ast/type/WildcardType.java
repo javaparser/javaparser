@@ -32,6 +32,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 /**
+ * A wildcard type argument.
+ * <br/><code>void printCollection(Collection&lt;<b>?</b>> c) { ... }</code>
+ * <br/><code>boolean addAll(Collection&lt;<b>? extends E</b>> c)</code>
+ * <br/><code>Reference(T referent, ReferenceQueue&lt;<b>? super T</b>> queue)</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {

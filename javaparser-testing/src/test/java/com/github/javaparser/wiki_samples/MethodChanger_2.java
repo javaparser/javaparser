@@ -30,7 +30,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 
 import java.io.FileInputStream;
 
-import static com.github.javaparser.ast.type.PrimitiveType.INT_TYPE;
+import static com.github.javaparser.ast.type.PrimitiveType.intType;
 
 public class MethodChanger_2 {
 
@@ -68,6 +68,6 @@ public class MethodChanger_2 {
         n.setName(n.getNameAsString().toUpperCase());
 
         // create the new parameter
-        n.addParameter(INT_TYPE, "value");
+        n.addParameter(intType(), "value");
     }
 }

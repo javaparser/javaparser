@@ -27,7 +27,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
 /**
- * A node having a type.
+ * A node with a type.
  * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with getType/setType
  * methods

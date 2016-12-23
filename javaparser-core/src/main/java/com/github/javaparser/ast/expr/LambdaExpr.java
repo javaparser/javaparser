@@ -34,7 +34,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Lambda expression.
+ * A lambda expression. The parameters are on the left side of the ->.
+ * If a parameter uses type inference (it has no type specified) then its type is set to UnknownType.
+ * If they are in ( ), "isEnclosingParameters" is true.
+ * The body is to the right of the ->.
+ * <br/><code>(a, b) -> a+b</code>
+ * <br/><code>a -> ...</code>
+ * <br/><code>(Long a) -> {println(a);}</code>
  *
  * @author Raquel Pau
  */
@@ -56,7 +62,6 @@ public class LambdaExpr extends Expression implements
 
     public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,
                       boolean isEnclosingParameters) {
-
         super(range);
         setParameters(parameters);
         setBody(body);

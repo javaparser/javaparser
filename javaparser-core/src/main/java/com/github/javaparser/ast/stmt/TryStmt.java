@@ -33,7 +33,22 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * The try statement.
+ * <br/><pre>
+ * try (InputStream i = new FileInputStream("file")) {
+ *   // do things
+ * } catch (IOException e) {
+ *   e.printStackTrace();
+ * } finally {
+ *   System.out.println("Finally!!!");
+ * }
+ * </pre>
+ * In this code, "i" is a resource, "// do things" is the content of the tryBlock,
+ * there is one catch clause that catches IOException e, and there is a finally block.
+ * <p>All of these are optional, but they should not all be empty or none at the same time.
+ *
  * @author Julio Vilmar Gesser
+ * @see CatchClause
  */
 public final class TryStmt extends Statement {
 

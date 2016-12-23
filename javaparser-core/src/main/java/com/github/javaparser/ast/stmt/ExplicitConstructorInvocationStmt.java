@@ -35,7 +35,13 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A call to super or this in a constructor or initializer.
+ * <br/><code>class X { X() { super(15); } }</code>
+ * <br/><code>class X { X() { this(1, 2); } }</code>
+ *
  * @author Julio Vilmar Gesser
+ * @see com.github.javaparser.ast.expr.SuperExpr
+ * @see com.github.javaparser.ast.expr.ThisExpr
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 

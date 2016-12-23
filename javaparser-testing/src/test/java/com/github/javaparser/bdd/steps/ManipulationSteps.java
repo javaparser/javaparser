@@ -46,7 +46,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.ast.type.PrimitiveType.INT_TYPE;
+import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
@@ -187,7 +187,7 @@ public class ManipulationSteps {
     public void whenMethodInClassHasAnIntArgumentCalledAdded(int methodPosition, int classPosition, String paramName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        method.addParameter(INT_TYPE, paramName);
+        method.addParameter(intType(), paramName);
     }
 
     @When("the compilation unit is cloned")
@@ -266,7 +266,7 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameter(parameterPosition - 1);
-        assertThat(parameter.getType(), is(INT_TYPE));
+        assertThat(parameter.getType(), is(intType()));
         assertThat(parameter.getNameAsString(), is(expectedName));
     }
 
@@ -280,7 +280,7 @@ public class ManipulationSteps {
     private static class AddNewIntParameterCalledValueVisitor extends VoidVisitorAdapter<Void> {
         @Override
         public void visit(MethodDeclaration n, Void arg) {
-            n.addParameter(INT_TYPE, "value");
+            n.addParameter(intType(), "value");
         }
     }
 }

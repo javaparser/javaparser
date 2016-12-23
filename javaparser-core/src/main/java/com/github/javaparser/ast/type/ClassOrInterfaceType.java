@@ -37,6 +37,15 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
+ * <br/><code>java.util.Punchcard</code>
+ * <p>
+ * <p>Note that the syntax is ambiguous here, and JavaParser does not know what is to the left of the class. It assumes
+ * cases like <code>Map.Entry</code> where Map is the scope of Entry. In <code>java.util.Punchcard</code>, it will not
+ * recognize that java and util are parts of the package name. Instead, it will set util as the scope of Punchcard, as a
+ * ClassOrInterfaceType (which it is not.) In turn, util will have java as its scope, also as a
+ * ClassOrInterfaceType</p>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ClassOrInterfaceType extends ReferenceType implements

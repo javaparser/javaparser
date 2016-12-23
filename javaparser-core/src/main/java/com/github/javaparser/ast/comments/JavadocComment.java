@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class JavadocComment extends Comment {

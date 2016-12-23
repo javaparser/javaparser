@@ -2840,7 +2840,7 @@ Statement BlockStatement():
 {
 	Statement ret;
 	Expression expr;
-	ClassOrInterfaceDeclaration typeDeclaration;
+	ClassOrInterfaceDeclaration typeDecl;
 	ModifierHolder modifier;
 }
 {
@@ -2848,7 +2848,7 @@ Statement BlockStatement():
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
   	  {  }
 	  modifier = Modifiers()
-	  typeDeclaration = ClassOrInterfaceDeclaration(modifier) { ret = new TypeDeclarationStmt(range(typeDeclaration.getBegin().get().line, typeDeclaration.getBegin().get().column, token.endLine, token.endColumn), typeDeclaration); }
+	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
 	|
   	  LOOKAHEAD(VariableDeclarationExpression() )
 	  expr = VariableDeclarationExpression() ";"
@@ -2926,8 +2926,8 @@ ExpressionStmt StatementExpression():
 	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
-	  | "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
-
+	  |
+	    "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
@@ -3079,22 +3079,22 @@ NodeList<Expression> ForUpdate():
 
 BreakStmt BreakStatement():
 {
-	String id = null;
+	SimpleName label = null;
 	Position begin;
 }
 {
-  "break" {begin=tokenBegin();} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { return new BreakStmt(range(begin, tokenEnd()),id); }
+  "break" {begin=tokenBegin();} [ label = SimpleName() ] ";"
+  { return new BreakStmt(range(begin, tokenEnd()), label); }
 }
 
 ContinueStmt ContinueStatement():
 {
-	String id = null;
+	SimpleName label = null;
 	Position begin;
 }
 {
-  "continue" {begin=tokenBegin();} [ <IDENTIFIER> { id = token.image; } ] ";"
-  { return new ContinueStmt(range(begin, tokenEnd()),id); }
+  "continue" {begin=tokenBegin();} [ label = SimpleName() ] ";"
+  { return new ContinueStmt(range(begin, tokenEnd()), label); }
 }
 
 ReturnStmt ReturnStatement():

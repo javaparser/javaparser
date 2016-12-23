@@ -31,23 +31,28 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A class declaration inside a method. 
+ * Note that JavaParser wil parse interface declarations too, but these are not valid Java code.
+ * <p>
+ * <br/><code>class X { void m() { <b>class Y { }</b> } }</code>
+ *
  * @author Julio Vilmar Gesser
  */
-public final class TypeDeclarationStmt extends Statement {
+public final class LocalClassDeclarationStmt extends Statement {
 
-    private TypeDeclaration typeDeclaration;
+    private ClassOrInterfaceDeclaration classDeclaration;
 
-    public TypeDeclarationStmt() {
+    public LocalClassDeclarationStmt() {
         this(null, new ClassOrInterfaceDeclaration());
     }
 
-    public TypeDeclarationStmt(final TypeDeclaration typeDeclaration) {
-        this(null, typeDeclaration);
+    public LocalClassDeclarationStmt(final ClassOrInterfaceDeclaration classDeclaration) {
+        this(null, classDeclaration);
     }
 
-    public TypeDeclarationStmt(Range range, final TypeDeclaration typeDeclaration) {
+    public LocalClassDeclarationStmt(Range range, final ClassOrInterfaceDeclaration classDeclaration) {
         super(range);
-        setTypeDeclaration(typeDeclaration);
+        setClassDeclaration(classDeclaration);
     }
 
     @Override
@@ -60,14 +65,14 @@ public final class TypeDeclarationStmt extends Statement {
         v.visit(this, arg);
     }
 
-    public TypeDeclaration getTypeDeclaration() {
-        return typeDeclaration;
+    public ClassOrInterfaceDeclaration getClassDeclaration() {
+        return classDeclaration;
     }
 
-    public TypeDeclarationStmt setTypeDeclaration(final TypeDeclaration typeDecl) {
-        notifyPropertyChange(ObservableProperty.TYPE_DECLARATION, this.typeDeclaration, typeDecl);
-        this.typeDeclaration = assertNotNull(typeDecl);
-        setAsParentNodeOf(this.typeDeclaration);
+    public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
+        notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
+        this.classDeclaration = assertNotNull(classDeclaration);
+        setAsParentNodeOf(this.classDeclaration);
         return this;
     }
 }

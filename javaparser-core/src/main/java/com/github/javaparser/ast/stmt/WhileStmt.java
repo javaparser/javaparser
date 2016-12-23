@@ -30,6 +30,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * A while statement.
+ * <br/><code>while(true) { ... }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt> {

@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 /**
+ * The return statement, with an optional expression to return.
+ * <br/><code>return 5 * 5;</code>
  * @author Julio Vilmar Gesser
  */
 public final class ReturnStmt extends Statement {

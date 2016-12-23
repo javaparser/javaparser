@@ -93,7 +93,7 @@ public enum ObservableProperty {
     TYPES,
     TYPE_ARGUMENTS,
     TYPE_BOUND,
-    TYPE_DECLARATION,
+    CLASS_DECLARATION,
     TYPE_PARAMETERS,
     UPDATE,
     VALUE,

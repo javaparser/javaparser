@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -31,23 +32,30 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A usage of the break keyword.
+ * <br/>In <code>break abc;</code> the label is abc.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class BreakStmt extends Statement {
 
-    private String identifier;
+    private SimpleName label;
 
     public BreakStmt() {
-        this(null, "empty");
+        this(null, new SimpleName());
     }
 
-    public BreakStmt(final String id) {
-        this(null, id);
+    public BreakStmt(final String label) {
+        this(null, new SimpleName(label));
     }
 
-    public BreakStmt(final Range range, final String id) {
+    public BreakStmt(final SimpleName label) {
+        this(null, label);
+    }
+
+    public BreakStmt(final Range range, final SimpleName label) {
         super(range);
-        this.identifier = id;
+        this.label = label;
     }
 
     @Override
@@ -60,19 +68,19 @@ public final class BreakStmt extends Statement {
         v.visit(this, arg);
     }
 
-    public Optional<String> getIdentifier() {
-        return Optional.ofNullable(identifier);
+    public Optional<SimpleName> getLabel() {
+        return Optional.ofNullable(label);
     }
 
     /**
-     * Sets the identifier
+     * Sets the label
      *
-     * @param identifier the identifier, can be null
+     * @param label the label, can be null
      * @return this, the BreakStmt
      */
-    public BreakStmt setIdentifier(final String identifier) {
-        notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNotNull(identifier);
+    public BreakStmt setLabel(final SimpleName label) {
+        notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        this.label = assertNotNull(label);
         return this;
     }
 }

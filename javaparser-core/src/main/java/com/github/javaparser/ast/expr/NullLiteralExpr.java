@@ -26,6 +26,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * A literal "null".
+ * <br/><code>null</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class NullLiteralExpr extends LiteralExpr {

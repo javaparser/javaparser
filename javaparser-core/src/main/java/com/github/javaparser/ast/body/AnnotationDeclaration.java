@@ -32,8 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.6">JLS</a>
- * An annotation type declaration: <code>@interface X { ... }</code>
+ * An annotation type declaration.<br/><code>@interface X { ... }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> {

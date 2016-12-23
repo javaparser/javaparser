@@ -33,6 +33,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Usage of the synchronized keyword.
+ * <br/>In <code>synchronized (a123) { ... }</code> the expression is a123 and { ... } is the body 
+ *
  * @author Julio Vilmar Gesser
  */
 public final class SynchronizedStmt extends Statement implements

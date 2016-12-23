@@ -29,7 +29,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 /**
+ * An occurrence of the "super" keyword. <br/><code>World.super.greet()</code> is a MethodCallExpr of method name greet,
+ * and scope "World.super" which is a SuperExpr with classExpr "World". <br/><code>super.name</code> is a
+ * FieldAccessExpr of field greet, and a SuperExpr as its scope. The SuperExpr has no classExpr.
+ *
  * @author Julio Vilmar Gesser
+ * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+ * @see ThisExpr
  */
 public final class SuperExpr extends Expression {
 

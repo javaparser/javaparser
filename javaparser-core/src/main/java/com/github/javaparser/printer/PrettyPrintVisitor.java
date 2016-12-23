@@ -50,9 +50,8 @@ import static com.github.javaparser.utils.Utils.isNullOrEmpty;
  * @author Julio Vilmar Gesser
  */
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
-    private final PrettyPrinterConfiguration configuration;
-
-    private final SourcePrinter printer;
+    protected final PrettyPrinterConfiguration configuration;
+    protected final SourcePrinter printer;
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
@@ -825,9 +824,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(final TypeDeclarationStmt n, final Void arg) {
+    public void visit(final LocalClassDeclarationStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        n.getTypeDeclaration().accept(this, arg);
+        n.getClassDeclaration().accept(this, arg);
     }
 
     @Override
@@ -924,10 +923,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final BreakStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("break");
-        if (n.getIdentifier().isPresent()) {
-            printer.print(" ");
-            printer.print(n.getIdentifier().get());
-        }
+        n.getLabel().ifPresent(l -> printer.print(" ").print(l.getIdentifier()));
         printer.print(";");
     }
 
@@ -1068,10 +1064,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ContinueStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("continue");
-        if (n.getIdentifier().isPresent()) {
-            printer.print(" ");
-            printer.print(n.getIdentifier().get());
-        }
+        n.getLabel().ifPresent(l -> printer.print(" ").print(l.getIdentifier()));
         printer.print(";");
     }
 

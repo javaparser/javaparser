@@ -24,10 +24,12 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 
 /**
+ * A base class for all literal expressions.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class LiteralExpr extends Expression {
-    public LiteralExpr(Range range) {
+    protected LiteralExpr(Range range) {
         super(range);
     }
 }

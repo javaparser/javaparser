@@ -29,11 +29,14 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.io.IOException;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
  * As of Java 8 it is only used in catch clauses.
+ * <br/><code>try { ... } catch(<b>IOException | NullPointerException ex</b>) { ... }</code>
  */
 public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 

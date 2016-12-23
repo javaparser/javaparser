@@ -840,11 +840,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(TypeDeclarationStmt _n, Object _arg) {
-        TypeDeclaration<?> typeDecl = cloneNode(_n.getTypeDeclaration(), _arg);
+    public Visitable visit(LocalClassDeclarationStmt _n, Object _arg) {
+        ClassOrInterfaceDeclaration typeDecl = cloneNode(_n.getClassDeclaration(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
 
-        TypeDeclarationStmt r = new TypeDeclarationStmt(
+        LocalClassDeclarationStmt r = new LocalClassDeclarationStmt(
                 _n.getRange().orElse(null),
                 typeDecl
         );
@@ -945,10 +945,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(BreakStmt _n, Object _arg) {
         Comment comment = cloneNode(_n.getComment(), _arg);
+        SimpleName label = cloneNode(_n.getLabel(), _arg);
 
         BreakStmt r = new BreakStmt(
                 _n.getRange().orElse(null),
-                _n.getIdentifier().orElse(null)
+                label
         );
         r.setComment(comment);
         return r;
@@ -999,10 +1000,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(ContinueStmt _n, Object _arg) {
         Comment comment = cloneNode(_n.getComment(), _arg);
+        SimpleName label = cloneNode(_n.getLabel(), _arg);
 
         ContinueStmt r = new ContinueStmt(
                 _n.getRange().orElse(null),
-                _n.getIdentifier().orElse(null)
+                label
         );
         r.setComment(comment);
         return r;

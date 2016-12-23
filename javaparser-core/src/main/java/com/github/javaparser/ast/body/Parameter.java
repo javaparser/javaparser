@@ -27,7 +27,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -41,14 +44,15 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.1">JLS</a>
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
- * Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters are different from arguments.</a> 
- * "String x" and "float y" are the parameters in <code>int abc(String x, float y) {...}</code>
+ * <br/>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
+ * are different from arguments.</a> <br/>"String x" and "float y" are the parameters in <code>int abc(String x, float
+ * y) {...}</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class Parameter extends Node implements
-        NodeWithType<Parameter,Type>,
+        NodeWithType<Parameter, Type>,
         NodeWithAnnotations<Parameter>,
         NodeWithSimpleName<Parameter>,
         NodeWithModifiers<Parameter> {
@@ -133,7 +137,7 @@ public final class Parameter extends Node implements
     public Type getType() {
         return type;
     }
-    
+
     public boolean isVarArgs() {
         return isVarArgs;
     }
@@ -164,7 +168,7 @@ public final class Parameter extends Node implements
     public SimpleName getName() {
         return name;
     }
-    
+
     /**
      * Return the modifiers of this parameter declaration.
      *
@@ -202,7 +206,7 @@ public final class Parameter extends Node implements
         this.modifiers = assertNotNull(modifiers);
         return this;
     }
-    
+
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(annotations);

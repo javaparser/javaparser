@@ -24,6 +24,9 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.BlockStmt;
 
+/**
+ * A node with a body that is a BlockStmt.
+ */
 public interface NodeWithBlockStmt<N extends Node> {
     BlockStmt getBody();
 

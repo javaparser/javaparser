@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 /**
  * A list of nodes.
  * It usually has a parent node.
- * Different from normal Nodes, this does not mean that it is a child of that parent.
+ * Unlike normal Nodes, this does not mean that it is a child of that parent.
  * Instead, this list will make every node it contains a child of its parent.
  * This way, a NodeList does not create an extra level inside the AST.
  *

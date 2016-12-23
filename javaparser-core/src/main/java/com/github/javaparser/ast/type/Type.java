@@ -30,6 +30,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Base class for types.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class Type extends Node {
@@ -55,9 +57,10 @@ public abstract class Type extends Node {
         setAsParentNodeOf(annotations);
         return this;
     }
+
     /**
      * Finds the element type, meaning: the type without ArrayTypes around it.
-     * 
+     * <p>
      * In "<code>int[] a[];</code>", the element type is int.
      */
     public Type getElementType() {

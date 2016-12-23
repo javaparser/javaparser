@@ -480,7 +480,7 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(TypeDeclarationStmt n, Void arg) {
+        public void visit(LocalClassDeclarationStmt n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);
         }

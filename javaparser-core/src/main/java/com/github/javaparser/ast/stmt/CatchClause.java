@@ -37,6 +37,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 
 /**
+ * The catch part of a try-catch-finally. <br/>In <code>try { ... } catch (Exception e) { ... }</code> the CatchClause
+ * is <code>catch (Exception e) { ... }</code>. Exception e is the parameter. The { ... } is the body.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> {

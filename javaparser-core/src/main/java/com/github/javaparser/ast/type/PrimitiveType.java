@@ -32,25 +32,45 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.HashMap;
 
 /**
+ * A primitive type.
+ * <br/><code>int</code>
+ * <br/><code>boolean</code>
+ * <br/><code>short</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class PrimitiveType extends Type implements NodeWithAnnotations<PrimitiveType> {
+    public static PrimitiveType booleanType() {
+        return new PrimitiveType(Primitive.BOOLEAN);
+    }
 
-    public static final PrimitiveType BYTE_TYPE = new PrimitiveType(Primitive.BYTE);
+    public static PrimitiveType charType() {
+        return new PrimitiveType(Primitive.CHAR);
+    }
 
-    public static final PrimitiveType SHORT_TYPE = new PrimitiveType(Primitive.SHORT);
+    public static PrimitiveType byteType() {
+        return new PrimitiveType(Primitive.BYTE);
+    }
 
-    public static final PrimitiveType INT_TYPE = new PrimitiveType(Primitive.INT);
+    public static PrimitiveType shortType() {
+        return new PrimitiveType(Primitive.SHORT);
+    }
 
-    public static final PrimitiveType LONG_TYPE = new PrimitiveType(Primitive.LONG);
+    public static PrimitiveType intType() {
+        return new PrimitiveType(Primitive.INT);
+    }
 
-    public static final PrimitiveType FLOAT_TYPE = new PrimitiveType(Primitive.FLOAT);
+    public static PrimitiveType longType() {
+        return new PrimitiveType(Primitive.LONG);
+    }
 
-    public static final PrimitiveType DOUBLE_TYPE = new PrimitiveType(Primitive.DOUBLE);
+    public static PrimitiveType floatType() {
+        return new PrimitiveType(Primitive.FLOAT);
+    }
 
-    public static final PrimitiveType BOOLEAN_TYPE = new PrimitiveType(Primitive.BOOLEAN);
-
-    public static final PrimitiveType CHAR_TYPE = new PrimitiveType(Primitive.CHAR);
+    public static PrimitiveType doubleType() {
+        return new PrimitiveType(Primitive.DOUBLE);
+    }
 
     public enum Primitive {
         BOOLEAN("Boolean"),

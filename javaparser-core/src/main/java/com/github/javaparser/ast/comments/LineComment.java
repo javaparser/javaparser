@@ -29,7 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * <p>
  * AST node that represent line comments.
  * </p>
- * Line comments are started with "//" and finish at the end of the line ("\n").
+ * Line comments start with "//" and finish at the end of the line ("\n").
  *
  * @author Julio Vilmar Gesser
  */
