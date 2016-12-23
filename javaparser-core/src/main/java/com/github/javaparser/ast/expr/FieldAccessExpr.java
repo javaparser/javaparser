@@ -34,6 +34,9 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Access of a field of an object.
+ * <br/><code>person.name</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class FieldAccessExpr extends Expression implements NodeWithTypeArguments<FieldAccessExpr> {

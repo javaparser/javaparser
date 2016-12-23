@@ -30,6 +30,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * Usage of the throw statement.
+ * <br/><code>throw new Exception()</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ThrowStmt extends Statement implements

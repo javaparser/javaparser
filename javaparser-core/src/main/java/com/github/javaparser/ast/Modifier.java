@@ -23,6 +23,9 @@ package com.github.javaparser.ast;
 
 import java.util.EnumSet;
 
+/**
+ * One of the modifiers known in Java.
+ */
 public enum Modifier {
     PUBLIC,
     PROTECTED,

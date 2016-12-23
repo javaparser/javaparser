@@ -32,6 +32,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Julio Vilmar Gesser
@@ -110,6 +111,14 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         return n1.accept(this, n2);
     }
 
+    private <T extends Node> boolean nodeEquals(final Optional<T> n1, final Optional<T> n2) {
+        return nodeEquals(n1.orElse(null), n2.orElse(null));
+    }
+
+    private <T extends Node> boolean nodesEquals(final Optional<NodeList<T>> n1, final Optional<NodeList<T>> n2) {
+        return nodesEquals(n1.orElse(null), n2.orElse(null));
+    }
+
     private boolean objEquals(final Object n1, final Object n2) {
         if (n1 == n2) {
             return true;
@@ -124,7 +133,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final CompilationUnit n1, final Visitable arg) {
         final CompilationUnit n2 = (CompilationUnit) arg;
 
-        if (!nodeEquals(n1.getPackageDeclaration().orElse(null), n2.getPackageDeclaration().orElse(null))) {
+        if (!nodeEquals(n1.getPackageDeclaration(), n2.getPackageDeclaration())) {
             return false;
         }
 
@@ -347,7 +356,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getDefaultValue().orElse(null), n2.getDefaultValue().orElse(null))) {
+        if (!nodeEquals(n1.getDefaultValue(), n2.getDefaultValue())) {
             return false;
         }
 
@@ -391,7 +400,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getInitializer().orElse(null), n2.getInitializer().orElse(null))) {
+        if (!nodeEquals(n1.getInitializer(), n2.getInitializer())) {
             return false;
         }
 
@@ -457,7 +466,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getBody().orElse(null), n2.getBody().orElse(null))) {
+        if (!nodeEquals(n1.getBody(), n2.getBody())) {
             return false;
         }
 
@@ -539,11 +548,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getScope().orElse(null), n2.getScope().orElse(null))) {
+        if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
 
-        if (!nodesEquals(n1.getTypeArguments().orElse(null), n2.getTypeArguments().orElse(null))) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
 
@@ -584,7 +593,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(ArrayCreationLevel n1, Visitable arg) {
         final ArrayCreationLevel n2 = (ArrayCreationLevel) arg;
 
-        if (!nodeEquals(n1.getDimension().orElse(null), n2.getDimension().orElse(null))) {
+        if (!nodeEquals(n1.getDimension(), n2.getDimension())) {
             return false;
         }
         if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
@@ -664,11 +673,11 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final WildcardType n1, final Visitable arg) {
         final WildcardType n2 = (WildcardType) arg;
 
-        if (!nodeEquals(n1.getExtendedTypes().orElse(null), n2.getExtendedTypes().orElse(null))) {
+        if (!nodeEquals(n1.getExtendedTypes(), n2.getExtendedTypes())) {
             return false;
         }
 
-        if (!nodeEquals(n1.getSuperTypes().orElse(null), n2.getSuperTypes().orElse(null))) {
+        if (!nodeEquals(n1.getSuperTypes(), n2.getSuperTypes())) {
             return false;
         }
         if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
@@ -709,7 +718,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getInitializer().orElse(null), n2.getInitializer().orElse(null))) {
+        if (!nodeEquals(n1.getInitializer(), n2.getInitializer())) {
             return false;
         }
 
@@ -814,7 +823,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final EnclosedExpr n1, final Visitable arg) {
         final EnclosedExpr n2 = (EnclosedExpr) arg;
 
-        if (!nodeEquals(n1.getInner().orElse(null), n2.getInner().orElse(null))) {
+        if (!nodeEquals(n1.getInner(), n2.getInner())) {
             return false;
         }
 
@@ -825,7 +834,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final FieldAccessExpr n1, final Visitable arg) {
         final FieldAccessExpr n2 = (FieldAccessExpr) arg;
 
-        if (!nodeEquals(n1.getScope().orElse(null), n2.getScope().orElse(null))) {
+        if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
 
@@ -833,7 +842,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getTypeArguments().orElse(null), n2.getTypeArguments().orElse(null))) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
 
@@ -942,7 +951,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getTypeArguments().orElse(null), n2.getTypeArguments().orElse(null))) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
 
@@ -964,7 +973,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ObjectCreationExpr n1, final Visitable arg) {
         final ObjectCreationExpr n2 = (ObjectCreationExpr) arg;
 
-        if (!nodeEquals(n1.getScope().orElse(null), n2.getScope().orElse(null))) {
+        if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
 
@@ -972,7 +981,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getAnonymousClassBody().orElse(null), n2.getAnonymousClassBody().orElse(null))) {
+        if (!nodesEquals(n1.getAnonymousClassBody(), n2.getAnonymousClassBody())) {
             return false;
         }
 
@@ -980,7 +989,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getTypeArguments().orElse(null), n2.getTypeArguments().orElse(null))) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
 
@@ -991,7 +1000,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final Name n1, final Visitable arg) {
         final Name n2 = (Name) arg;
 
-        if (!nodeEquals(n1.getQualifier().orElse(null), n2.getQualifier().orElse(null))) {
+        if (!nodeEquals(n1.getQualifier(), n2.getQualifier())) {
             return false;
         }
 
@@ -1013,7 +1022,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ThisExpr n1, final Visitable arg) {
         final ThisExpr n2 = (ThisExpr) arg;
 
-        if (!nodeEquals(n1.getClassExpr().orElse(null), n2.getClassExpr().orElse(null))) {
+        if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {
             return false;
         }
 
@@ -1024,7 +1033,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final SuperExpr n1, final Visitable arg) {
         final SuperExpr n2 = (SuperExpr) arg;
 
-        if (!nodeEquals(n1.getClassExpr().orElse(null), n2.getClassExpr().orElse(null))) {
+        if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {
             return false;
         }
 
@@ -1125,7 +1134,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ExplicitConstructorInvocationStmt n1, final Visitable arg) {
         final ExplicitConstructorInvocationStmt n2 = (ExplicitConstructorInvocationStmt) arg;
 
-        if (!nodeEquals(n1.getExpression().orElse(null), n2.getExpression().orElse(null))) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
             return false;
         }
 
@@ -1133,7 +1142,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodesEquals(n1.getTypeArguments().orElse(null), n2.getTypeArguments().orElse(null))) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
 
@@ -1159,7 +1168,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getMessage().orElse(null), n2.getMessage().orElse(null))) {
+        if (!nodeEquals(n1.getMessage(), n2.getMessage())) {
             return false;
         }
 
@@ -1223,7 +1232,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final SwitchEntryStmt n1, final Visitable arg) {
         final SwitchEntryStmt n2 = (SwitchEntryStmt) arg;
 
-        if (!nodeEquals(n1.getLabel().orElse(null), n2.getLabel().orElse(null))) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel())) {
             return false;
         }
 
@@ -1238,7 +1247,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final BreakStmt n1, final Visitable arg) {
         final BreakStmt n2 = (BreakStmt) arg;
 
-        if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel())) {
             return false;
         }
 
@@ -1249,7 +1258,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ReturnStmt n1, final Visitable arg) {
         final ReturnStmt n2 = (ReturnStmt) arg;
 
-        if (!nodeEquals(n1.getExpression().orElse(null), n2.getExpression().orElse(null))) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
             return false;
         }
 
@@ -1268,7 +1277,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getElseStmt().orElse(null), n2.getElseStmt().orElse(null))) {
+        if (!nodeEquals(n1.getElseStmt(), n2.getElseStmt())) {
             return false;
         }
 
@@ -1294,7 +1303,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final ContinueStmt n1, final Visitable arg) {
         final ContinueStmt n2 = (ContinueStmt) arg;
 
-        if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel())) {
             return false;
         }
 
@@ -1343,7 +1352,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getCompare().orElse(null), n2.getCompare().orElse(null))) {
+        if (!nodeEquals(n1.getCompare(), n2.getCompare())) {
             return false;
         }
 
@@ -1388,7 +1397,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final TryStmt n1, final Visitable arg) {
         final TryStmt n2 = (TryStmt) arg;
 
-        if (!nodeEquals(n1.getTryBlock().orElse(null), n2.getTryBlock().orElse(null))) {
+        if (!nodeEquals(n1.getTryBlock(), n2.getTryBlock())) {
             return false;
         }
 
@@ -1400,7 +1409,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!nodeEquals(n1.getFinallyBlock().orElse(null), n2.getFinallyBlock().orElse(null))) {
+        if (!nodeEquals(n1.getFinallyBlock(), n2.getFinallyBlock())) {
             return false;
         }
 
@@ -1443,7 +1452,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n1.getScope(), n2.getScope())) {
             return false;
         }
-        if (!nodesEquals(n1.getTypeArguments().orElse(null), n2.getTypeArguments().orElse(null))) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
             return false;
         }
         if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {

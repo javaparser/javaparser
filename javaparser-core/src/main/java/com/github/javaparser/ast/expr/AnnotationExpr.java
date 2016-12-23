@@ -28,6 +28,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A base class for the different types of annotations.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class AnnotationExpr extends Expression implements NodeWithName<AnnotationExpr> {

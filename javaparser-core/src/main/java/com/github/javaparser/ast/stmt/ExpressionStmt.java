@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * Used to wrap an expression so that it can take the place of a statement.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ExpressionStmt extends Statement implements

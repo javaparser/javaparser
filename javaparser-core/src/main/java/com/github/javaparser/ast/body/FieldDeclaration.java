@@ -29,13 +29,14 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
 import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -45,16 +46,16 @@ import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3">JLS</a>
- * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static int a=15*15; }</code>
+ * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static
+ * int a=15*15; }</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
-        NodeWithJavaDoc<FieldDeclaration>,
+        NodeWithJavadoc<FieldDeclaration>,
         NodeWithModifiers<FieldDeclaration>,
         NodeWithVariables<FieldDeclaration> {
 
@@ -83,7 +84,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                 variables);
     }
 
-    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, 
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                             NodeList<VariableDeclarator> variables) {
         this(null,
                 modifiers,
@@ -91,7 +92,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                 variables);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, 
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                             NodeList<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -216,7 +217,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             setter = parentClass.addMethod("set" + fieldNameUpper, PUBLIC);
         else
             setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
-        setter.setType(VOID_TYPE);
+        setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);

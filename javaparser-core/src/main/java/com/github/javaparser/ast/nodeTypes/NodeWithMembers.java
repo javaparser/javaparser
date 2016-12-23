@@ -28,13 +28,13 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.VoidType;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.*;
 
@@ -187,7 +187,7 @@ public interface NodeWithMembers<N extends Node> {
     default MethodDeclaration addMethod(String methodName, Modifier... modifiers) {
         MethodDeclaration methodDeclaration = new MethodDeclaration();
         methodDeclaration.setName(methodName);
-        methodDeclaration.setType(VOID_TYPE);
+        methodDeclaration.setType(new VoidType());
         methodDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(methodDeclaration);

@@ -30,7 +30,11 @@ import com.github.javaparser.utils.Utils;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Java® Language Specification 3.10.5 String Literals
+ * A literal string.
+ * <br/><code>"Hello World!"</code>
+ * <br/><code>"\"\n"</code>
+ * <br/><code>"\u2122"</code>
+ * <br/><code>"💩"</code>
  *
  * @author Julio Vilmar Gesser
  */

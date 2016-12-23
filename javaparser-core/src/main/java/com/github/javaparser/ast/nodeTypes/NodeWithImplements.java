@@ -25,6 +25,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+/**
+ * A node that implements other types.
+ */
 public interface NodeWithImplements<N extends Node> {
     NodeList<ClassOrInterfaceType> getImplementedTypes();
 

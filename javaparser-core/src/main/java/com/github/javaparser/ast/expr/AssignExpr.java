@@ -27,6 +27,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
+ * <br/><code>a=5</code>
+ * <br/><code>time+=500</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class AssignExpr extends Expression {

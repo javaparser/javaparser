@@ -30,10 +30,9 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.VoidType;
 
 import java.util.EnumSet;
-
-import static com.github.javaparser.ast.type.VoidType.VOID_TYPE;
 
 public class ClassCreator {
 
@@ -61,7 +60,7 @@ public class ClassCreator {
 
         // create a method
         EnumSet<Modifier> modifiers = EnumSet.of(Modifier.PUBLIC);
-        MethodDeclaration method = new MethodDeclaration(modifiers, VOID_TYPE, "main");
+        MethodDeclaration method = new MethodDeclaration(modifiers, new VoidType(), "main");
         modifiers.add(Modifier.STATIC);
         method.setModifiers(modifiers);
         type.addMember(method);

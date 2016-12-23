@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * lambda parameters that have no explicit type declared. As such, it has no
  * lexical representation and hence gets no comment attributed.
  *
+ * <br/>In <code>DoubleToIntFunction d = <b>x</b> -> (int)x + 1;</code> the x parameter in bold has type UnknownType.
+ * 
  * @author Didier Villevalois
  */
 public final class UnknownType extends Type {

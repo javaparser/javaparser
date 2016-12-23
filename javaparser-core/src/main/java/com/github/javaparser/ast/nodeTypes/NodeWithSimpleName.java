@@ -25,7 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.SimpleName;
 
 /**
- * A node having a name.
+ * A node with a name.
  * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
  */

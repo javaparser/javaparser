@@ -26,16 +26,20 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 /**
+ * All ways to specify an int literal.
+ * <br/><code>8934</code>
+ * <br/><code>0x01</code>
+ * <br/><code>022</code>
+ * <br/><code>0B10101010</code>
+ * <br/><code>99999999L</code>
+ * 
  * @author Julio Vilmar Gesser
  */
 public class IntegerLiteralExpr extends StringLiteralExpr {
 
-    private static final String UNSIGNED_MIN_VALUE = "2147483648";
-
-    static final String MIN_VALUE = "-" + UNSIGNED_MIN_VALUE;
-
     public IntegerLiteralExpr() {
         this(null, "0");
+        int i = 0x00;
     }
 
     public IntegerLiteralExpr(final String value) {
@@ -54,11 +58,5 @@ public class IntegerLiteralExpr extends StringLiteralExpr {
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    public final boolean isMinValue() {
-        return value != null && //
-                value.length() == 10 && //
-                value.equals(UNSIGNED_MIN_VALUE);
     }
 }

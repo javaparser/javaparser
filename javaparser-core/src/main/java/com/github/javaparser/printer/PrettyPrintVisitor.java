@@ -923,10 +923,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final BreakStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("break");
-        if (n.getIdentifier().isPresent()) {
-            printer.print(" ");
-            printer.print(n.getIdentifier().get());
-        }
+        n.getLabel().ifPresent(l -> printer.print(" ").print(l.getIdentifier()));
         printer.print(";");
     }
 
@@ -1067,10 +1064,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ContinueStmt n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("continue");
-        if (n.getIdentifier().isPresent()) {
-            printer.print(" ");
-            printer.print(n.getIdentifier().get());
-        }
+        n.getLabel().ifPresent(l -> printer.print(" ").print(l.getIdentifier()));
         printer.print(";");
     }
 

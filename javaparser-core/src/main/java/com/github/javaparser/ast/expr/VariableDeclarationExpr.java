@@ -41,6 +41,11 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
+ * A declaration of variables.
+ * It is an expression, so it can be put in places like the initializer of a for loop,
+ * or the resources part of the try statement.
+ * <br/><code>final int x=3, y=55</code>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression implements
@@ -158,7 +163,7 @@ public final class VariableDeclarationExpr extends Expression implements
         this.modifiers = modifiers;
         return this;
     }
-    
+
     @Override
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
