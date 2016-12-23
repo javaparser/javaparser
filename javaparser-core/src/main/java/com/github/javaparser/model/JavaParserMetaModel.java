@@ -113,7 +113,7 @@ public class JavaParserMetaModel {
         add(SynchronizedStmt.class);
         add(ThrowStmt.class);
         add(TryStmt.class);
-        add(TypeDeclarationStmt.class);
+        add(LocalClassDeclarationStmt.class);
         add(WhileStmt.class);
 
         add(ArrayType.class);

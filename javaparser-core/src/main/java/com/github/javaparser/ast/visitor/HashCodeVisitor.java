@@ -75,7 +75,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(BreakStmt n, Void arg) {
-        return (n.getComment().accept(this, arg)) * 31 + (n.getIdentifier().hashCode()) * 31 + (n.getOrphanComments().hashCode());
+        return (n.getComment().accept(this, arg)) * 31 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getOrphanComments().hashCode());
     }
 
     public Integer visit(CastExpr n, Void arg) {
@@ -115,7 +115,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(ContinueStmt n, Void arg) {
-        return (n.getComment().accept(this, arg)) * 31 + (n.getIdentifier().hashCode()) * 31 + (n.getOrphanComments().hashCode());
+        return (n.getComment().accept(this, arg)) * 31 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getOrphanComments().hashCode());
     }
 
     public Integer visit(DoStmt n, Void arg) {
@@ -204,6 +204,10 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     public Integer visit(LineComment n, Void arg) {
         return (n.getComment().accept(this, arg)) * 31 + (n.getCommentedNode().isPresent() ? n.getCommentedNode().get().accept(this, arg) : 0) * 31 + (n.getContent().hashCode()) * 31 + (n.getOrphanComments().hashCode());
+    }
+
+    public Integer visit(LocalClassDeclarationStmt n, Void arg) {
+        return (n.getClassDeclaration().accept(this, arg)) * 31 + (n.getComment().accept(this, arg)) * 31 + (n.getOrphanComments().hashCode());
     }
 
     public Integer visit(LongLiteralExpr n, Void arg) {
@@ -320,10 +324,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     public Integer visit(TryStmt n, Void arg) {
         return (n.getCatchClauses().accept(this, arg)) * 31 + (n.getComment().accept(this, arg)) * 31 + (n.getFinallyBlock().isPresent() ? n.getFinallyBlock().get().accept(this, arg) : 0) * 31 + (n.getOrphanComments().hashCode()) * 31 + (n.getResources().accept(this, arg)) * 31 + (n.getTryBlock().isPresent() ? n.getTryBlock().get().accept(this, arg) : 0);
-    }
-
-    public Integer visit(TypeDeclarationStmt n, Void arg) {
-        return (n.getComment().accept(this, arg)) * 31 + (n.getOrphanComments().hashCode()) * 31 + (n.getTypeDeclaration().accept(this, arg));
     }
 
     public Integer visit(TypeExpr n, Void arg) {

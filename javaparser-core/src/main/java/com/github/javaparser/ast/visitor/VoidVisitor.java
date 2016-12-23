@@ -129,6 +129,8 @@ public interface VoidVisitor<A> {
 
     void visit(LineComment n, A arg);
 
+    void visit(LocalClassDeclarationStmt n, A arg);
+
     void visit(LongLiteralExpr n, A arg);
 
     void visit(MarkerAnnotationExpr n, A arg);
@@ -186,8 +188,6 @@ public interface VoidVisitor<A> {
     void visit(ThrowStmt n, A arg);
 
     void visit(TryStmt n, A arg);
-
-    void visit(TypeDeclarationStmt n, A arg);
 
     void visit(TypeExpr n, A arg);
 
