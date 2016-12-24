@@ -28,7 +28,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -1150,65 +1149,18 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(BadImportDeclaration _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        return new BadImportDeclaration(_n.getRange().orElse(null)).setComment(comment);
-    }
-
-    @Override
-    public Visitable visit(SingleStaticImportDeclaration _n, Object _arg) {
-        ClassOrInterfaceType type_ = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-
-
-        SingleStaticImportDeclaration r = new SingleStaticImportDeclaration(
-                _n.getRange().orElse(null),
-                type_,
-                _n.getStaticMember()
-        );
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(SingleTypeImportDeclaration _n, Object _arg) {
-        ClassOrInterfaceType type_ = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-
-        SingleTypeImportDeclaration r = new SingleTypeImportDeclaration(
-                _n.getRange().orElse(null),
-                type_
-        );
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(StaticImportOnDemandDeclaration _n, Object _arg) {
-        ClassOrInterfaceType type_ = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-
-        StaticImportOnDemandDeclaration r = new StaticImportOnDemandDeclaration(
-                _n.getRange().orElse(null),
-                type_
-        );
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
-    public Visitable visit(TypeImportOnDemandDeclaration _n, Object _arg) {
+    public Node visit(ImportDeclaration _n, Object _arg) {
         Name name = cloneNode(_n.getName(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
 
-        TypeImportOnDemandDeclaration r = new TypeImportOnDemandDeclaration(
+        ImportDeclaration r = new ImportDeclaration(
                 _n.getRange().orElse(null),
-                name
+                name, _n.isStatic(), _n.isAsterisk()
         );
         r.setComment(comment);
         return r;
     }
-
+    
     @SuppressWarnings("unchecked")
     protected <T extends Node> T cloneNode(Optional<T> _node, Object _arg) {
         if (!_node.isPresent()) {

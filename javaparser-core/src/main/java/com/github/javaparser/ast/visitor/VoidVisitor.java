@@ -21,16 +21,12 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -213,15 +209,7 @@ public interface VoidVisitor<A> {
 
     void visit(NodeList n, A arg);
 
-    void visit(BadImportDeclaration n, A arg);
-
-    void visit(SingleStaticImportDeclaration n, A arg);
-
-    void visit(SingleTypeImportDeclaration n, A arg);
-
-    void visit(StaticImportOnDemandDeclaration n, A arg);
-
-    void visit(TypeImportOnDemandDeclaration n, A arg);
+    void visit(ImportDeclaration n, A arg);
 
     void visit(Name n, A arg);
 

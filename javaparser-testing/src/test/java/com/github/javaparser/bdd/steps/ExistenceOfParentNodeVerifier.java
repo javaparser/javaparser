@@ -498,36 +498,6 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(BadImportDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SingleStaticImportDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(SingleTypeImportDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(StaticImportOnDemandDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
-        public void visit(TypeImportOnDemandDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
         public void visit(TypeParameter n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);

@@ -146,36 +146,6 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override
-    public void visit(BadImportDeclaration n, Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
-    public void visit(SingleStaticImportDeclaration n, Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
-    public void visit(SingleTypeImportDeclaration n, Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
-    public void visit(StaticImportOnDemandDeclaration n, Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
-    public void visit(TypeImportOnDemandDeclaration n, Object arg) {
-        doTest(n);
-        super.visit(n, arg);
-    }
-
-    @Override
     public void visit(final CharLiteralExpr n, final Object arg) {
         doTest(n);
         super.visit(n, arg);

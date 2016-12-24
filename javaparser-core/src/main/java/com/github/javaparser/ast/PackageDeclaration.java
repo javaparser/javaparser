@@ -118,7 +118,7 @@ public final class PackageDeclaration extends Node implements
     @Override
     public PackageDeclaration setName(Name name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = name;
+        this.name = assertNotNull(name);
         setAsParentNodeOf(this.name);
         return this;
     }
