@@ -64,15 +64,15 @@ public class NodeWithParametersBuildersTest {
     public void testGetParamByName() {
         MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
         Parameter addAndGetParameter = addMethod.addAndGetParameter(int.class, "yay");
-        assertEquals(addAndGetParameter, addMethod.getParamByName("yay"));
+        assertEquals(addAndGetParameter, addMethod.getParameterByName("yay").get());
     }
 
     @Test
     public void testGetParamByType() {
         MethodDeclaration addMethod = cu.addClass("test").addMethod("foo", Modifier.PUBLIC);
         Parameter addAndGetParameter = addMethod.addAndGetParameter(int.class, "yay");
-        assertEquals(addAndGetParameter, addMethod.getParamByType("int"));
-        assertEquals(addAndGetParameter, addMethod.getParamByType(int.class));
+        assertEquals(addAndGetParameter, addMethod.getParameterByType("int").get());
+        assertEquals(addAndGetParameter, addMethod.getParameterByType(int.class).get());
     }
 
 }

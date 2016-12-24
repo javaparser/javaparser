@@ -43,6 +43,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
@@ -170,9 +171,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        ClassOrInterfaceDeclaration parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
-        EnumDeclaration parentEnum = getAncestorOfType(EnumDeclaration.class);
-        if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
+        Optional<ClassOrInterfaceDeclaration> parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
+        Optional<EnumDeclaration> parentEnum = getAncestorOfType(EnumDeclaration.class);
+        if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
@@ -180,10 +181,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
-        if (parentClass != null)
-            getter = parentClass.addMethod("get" + fieldNameUpper, PUBLIC);
+        if (parentClass.isPresent())
+            getter = parentClass.get().addMethod("get" + fieldNameUpper, PUBLIC);
         else
-            getter = parentEnum.addMethod("get" + fieldNameUpper, PUBLIC);
+            getter = parentEnum.get().addMethod("get" + fieldNameUpper, PUBLIC);
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -202,9 +203,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
-        ClassOrInterfaceDeclaration parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
-        EnumDeclaration parentEnum = getAncestorOfType(EnumDeclaration.class);
-        if ((parentClass == null && parentEnum == null) || (parentClass != null && parentClass.isInterface()))
+        Optional<ClassOrInterfaceDeclaration> parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
+        Optional<EnumDeclaration> parentEnum = getAncestorOfType(EnumDeclaration.class);
+        if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
             throw new IllegalStateException(
                     "You can use this only when the field is attached to a class or an enum");
 
@@ -213,10 +214,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
-        if (parentClass != null)
-            setter = parentClass.addMethod("set" + fieldNameUpper, PUBLIC);
+        if (parentClass.isPresent())
+            setter = parentClass.get().addMethod("set" + fieldNameUpper, PUBLIC);
         else
-            setter = parentEnum.addMethod("set" + fieldNameUpper, PUBLIC);
+            setter = parentEnum.get().addMethod("set" + fieldNameUpper, PUBLIC);
         setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();

@@ -26,6 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 import static com.github.javaparser.ast.expr.Name.parse;
 
@@ -161,20 +162,17 @@ public interface NodeWithAnnotations<N extends Node> {
      * Try to find an annotation by its name
      *
      * @param annotationName the name of the annotation
-     * @return null if not found, the annotation otherwise
      */
-    default AnnotationExpr getAnnotationByName(String annotationName) {
-        return getAnnotations().stream().filter(a -> a.getName().getIdentifier().equals(annotationName)).findFirst()
-                .orElse(null);
+    default Optional<AnnotationExpr> getAnnotationByName(String annotationName) {
+        return getAnnotations().stream().filter(a -> a.getName().getIdentifier().equals(annotationName)).findFirst();
     }
 
     /**
      * Try to find an annotation by its class
      *
      * @param annotationClass the class of the annotation
-     * @return null if not found, the annotation otherwise
      */
-    default AnnotationExpr getAnnotationByClass(Class<? extends Annotation> annotationClass) {
+    default Optional<AnnotationExpr> getAnnotationByClass(Class<? extends Annotation> annotationClass) {
         return getAnnotationByName(annotationClass.getSimpleName());
     }
 }

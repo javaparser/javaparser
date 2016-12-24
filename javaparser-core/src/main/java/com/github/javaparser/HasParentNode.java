@@ -53,15 +53,15 @@ public interface HasParentNode<T> extends Observable {
     /**
      * Get the ancestor of the node having the given type, or null if no ancestor of the given type is found.
      */
-    default <N> N getAncestorOfType(Class<N> classType) {
+    default <N> Optional<N> getAncestorOfType(Class<N> classType) {
         Node parent = getParentNode().orElse(null);
         while (parent != null) {
             if (classType.isAssignableFrom(parent.getClass())) {
-                return classType.cast(parent);
+                return Optional.of(classType.cast(parent));
             }
             parent = parent.getParentNode().orElse(null);
         }
-        return null;
+        return Optional.empty();
     }
 
     // TODO should become protected once Java lets us

@@ -27,6 +27,8 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
+import java.util.Optional;
+
 public interface NodeWithParameters<N extends Node> {
     NodeList<Parameter> getParameters();
 
@@ -98,9 +100,9 @@ public interface NodeWithParameters<N extends Node> {
      * @param name the name of the param
      * @return null if not found, the param found otherwise
      */
-    default Parameter getParamByName(String name) {
+    default Optional<Parameter> getParameterByName(String name) {
         return getParameters().stream()
-                .filter(p -> p.getNameAsString().equals(name)).findFirst().orElse(null);
+                .filter(p -> p.getNameAsString().equals(name)).findFirst();
     }
 
     /**
@@ -109,9 +111,9 @@ public interface NodeWithParameters<N extends Node> {
      * @param type the type of the param
      * @return null if not found, the param found otherwise
      */
-    default Parameter getParamByType(String type) {
+    default Optional<Parameter> getParameterByType(String type) {
         return getParameters().stream()
-                .filter(p -> p.getType().toString().equals(type)).findFirst().orElse(null);
+                .filter(p -> p.getType().toString().equals(type)).findFirst();
     }
 
     /**
@@ -120,8 +122,8 @@ public interface NodeWithParameters<N extends Node> {
      * @param type the type of the param <b>take care about generics, it wont work</b>
      * @return null if not found, the param found otherwise
      */
-    default Parameter getParamByType(Class<?> type) {
+    default Optional<Parameter> getParameterByType(Class<?> type) {
         return getParameters().stream()
-                .filter(p -> p.getType().toString().equals(type.getSimpleName())).findFirst().orElse(null);
+                .filter(p -> p.getType().toString().equals(type.getSimpleName())).findFirst();
     }
 }
