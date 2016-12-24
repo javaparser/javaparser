@@ -55,6 +55,7 @@ import static java.util.Collections.unmodifiableList;
  * <li>use a convenience method, like "addStatement(...)", or if none are available...</li>
  * <li>use a convenient constructor, like ClassOrInterfaceType(String name), or if none are available...</li>
  * <li>use the default constructor.</li>
+ * <li>Alternatively, use one of the JavaParser.parse(snippet) methods.</li>
  * </ul>
  * ... and use the various methods on the node to initialize it further, if needed.
  * <h2>Parent/child</h2>
@@ -376,10 +377,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        CompilationUnit parentNode = getAncestorOfType(CompilationUnit.class);
-        if (parentNode != null) {
-            parentNode.addImport(clazz);
-        }
+        getAncestorOfType(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
     }
 
     /**
@@ -421,7 +419,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * @param <M> The type of data
      * @param key The singleton key for the data
      * @param object The data object
-     * @throws IllegalArgumentException
      * @see DataKey
      */
     public <M> void setData(DataKey<M> key, M object) {

@@ -115,7 +115,7 @@ public class NodeWithMembersBuildersTest {
     public void testGetFieldWithName() {
         FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", Modifier.PRIVATE);
         classDeclaration.addField(float.class, "secondField", Modifier.PRIVATE);
-        FieldDeclaration fieldByName = classDeclaration.getFieldByName("fieldName");
+        FieldDeclaration fieldByName = classDeclaration.getFieldByName("fieldName").get();
         assertEquals(addField, fieldByName);
     }
 

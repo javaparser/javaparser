@@ -191,8 +191,6 @@ public final class CompilationUnit extends Node {
 
     /**
      * Sets the list of types declared in this compilation unit.
-     *
-     * @param types the lis of types
      */
     public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
@@ -392,48 +390,48 @@ public final class CompilationUnit extends Node {
      * Try to get a class by its name
      *
      * @param className the class name (case-sensitive)
-     * @return null if not found, the class otherwise
      */
-    public ClassOrInterfaceDeclaration getClassByName(String className) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(className)
+    public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(className)
                 && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface())
-                .findFirst().orElse(null);
+                .findFirst()
+                .map(t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
      * Try to get an interface by its name
      *
      * @param interfaceName the interface name (case-sensitive)
-     * @return null if not found, the interface otherwise
      */
-    public ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
-        return (ClassOrInterfaceDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName)
+    public Optional<ClassOrInterfaceDeclaration> getInterfaceByName(String interfaceName) {
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName)
                 && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface())
-                .findFirst().orElse(null);
+                .findFirst()
+                .map(t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
      * Try to get an enum by its name
      *
      * @param enumName the enum name (case-sensitive)
-     * @return null if not found, the enum otherwise
      */
-    public EnumDeclaration getEnumByName(String enumName) {
-        return (EnumDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(enumName)
+    public Optional<EnumDeclaration> getEnumByName(String enumName) {
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(enumName)
                 && type instanceof EnumDeclaration)
-                .findFirst().orElse(null);
+                .findFirst()
+                .map(t -> (EnumDeclaration) t);
     }
 
     /**
      * Try to get an annotation by its name
      *
      * @param annotationName the annotation name (case-sensitive)
-     * @return null if not found, the annotation otherwise
      */
-    public AnnotationDeclaration getAnnotationDeclarationByName(String annotationName) {
-        return (AnnotationDeclaration) getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName)
+    public Optional<AnnotationDeclaration> getAnnotationDeclarationByName(String annotationName) {
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName)
                 && type instanceof AnnotationDeclaration)
-                .findFirst().orElse(null);
+                .findFirst()
+                .map(t -> (AnnotationDeclaration) t);
     }
 
     @Override

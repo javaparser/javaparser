@@ -303,7 +303,7 @@ public class ParsingSteps {
     @Then("the package name is $package")
     public void thenThePackageNameIs(String expected) {
         PackageDeclaration node = (PackageDeclaration) state.get("selectedNode");
-        assertEquals(expected, node.getPackageName());
+        assertEquals(expected, node.getNameAsString());
         assertEquals(expected, node.getName().toString());
     }
 

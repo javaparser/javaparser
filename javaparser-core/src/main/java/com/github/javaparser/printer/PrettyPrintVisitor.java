@@ -419,7 +419,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Type commonType = getMaximumCommonType(n.getAncestorOfType(NodeWithVariables.class));
+        Type commonType = getMaximumCommonType(n.getAncestorOfType(NodeWithVariables.class).get());
 
         Type type = n.getType();
 
@@ -1427,7 +1427,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             // From the implementation point of view we start from the actual type and we remove how many array
             // levels as needed to get the target level of arrays
             // It returns null if the type has less array levels then the desired target
-            Type toArrayLevel(Type type, int level) {
+            private Type toArrayLevel(Type type, int level) {
                 if (level > type.getArrayLevel()) {
                     return null;
                 }
