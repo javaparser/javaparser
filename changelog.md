@@ -1,3 +1,11 @@
+Version 3.0.0-RC.4
+------------------
+* 668 669 TypeDeclarationStmt became LocalClassDeclarationStmt
+* 347 665 every node now has some documentation
+* 660 670 673 four types of import declaration have been merged back into the old ImportDeclaration
+* 659 The pretty printer can now take customized visitors 
+* 650 671 672 674 524 smaller improvements and fixes
+
 Version 3.0.0-RC.3
 ------------------
 * 639 622 632 657 656 652 653 647 648 645 194 643 630 624 628 627 626 625 623 cleanups, small fixes, and general housekeeping
