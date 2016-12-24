@@ -28,7 +28,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -823,34 +822,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(BadImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(SingleStaticImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
-        return n;
-    }
-
-    @Override
-    public Visitable visit(SingleTypeImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
-        return n;
-    }
-
-    @Override
-    public Visitable visit(StaticImportOnDemandDeclaration n, A arg) {
-        visitComment(n, arg);
-        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
-        return n;
-    }
-
-    @Override
-    public Visitable visit(TypeImportOnDemandDeclaration n, A arg) {
+    public Node visit(final ImportDeclaration n, final A arg) {
         visitComment(n, arg);
         n.setName((Name) n.getName().accept(this, arg));
         return n;

@@ -79,7 +79,8 @@ public enum ObservableProperty {
     RIGHT,
     SCOPE,
     SELECTOR,
-    STATIC,
+    IS_ASTERISK,
+    IS_STATIC,
     STATIC_MEMBER,
     STATEMENT,
     STATEMENTS,
@@ -100,6 +101,6 @@ public enum ObservableProperty {
     VALUES,
     VARIABLE,
     VARIABLES,
-    ELEMENT_TYPE, 
+    ELEMENT_TYPE,
     VAR_ARGS
 }

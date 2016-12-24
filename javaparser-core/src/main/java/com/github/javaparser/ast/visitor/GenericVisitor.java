@@ -27,7 +27,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -210,17 +209,9 @@ public interface GenericVisitor<R, A> {
 
     R visit(NodeList n, A arg);
 
-    R visit(BadImportDeclaration n, A arg);
-
-    R visit(SingleStaticImportDeclaration n, A arg);
-
-    R visit(SingleTypeImportDeclaration n, A arg);
-
-    R visit(StaticImportOnDemandDeclaration n, A arg);
-
-    R visit(TypeImportOnDemandDeclaration n, A arg);
-
     R visit(Name n, A arg);
 
     R visit(SimpleName n, A arg);
+
+    R visit(ImportDeclaration n, A arg);
 }
