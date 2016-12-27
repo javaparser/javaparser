@@ -3,6 +3,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NullLiteralExpr;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -60,4 +61,10 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         assertTransformed("Example3", cu);
     }
 
+    @Test
+    public void example5() throws IOException {
+        considerExample("Example5_original");
+        cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setInitializer(new NullLiteralExpr());
+        assertTransformed("Example5", cu);
+    }
 }

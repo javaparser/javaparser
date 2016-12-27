@@ -109,12 +109,16 @@ public class LexicalPreservingPrinter {
                 if (property == ObservableProperty.RANGE) {
                     return;
                 }
+                NodeText nodeText = lpp.getTextForNode(observedNode);
+                if (oldValue instanceof Node && newValue instanceof Node) {
+                    nodeText.replace((Node)oldValue, (Node)newValue);
+                    return;
+                }
                 if (property == ObservableProperty.MODIFIERS) {
                     EnumSet<Modifier> oldModifiers = (EnumSet<Modifier>)oldValue;
                     EnumSet<Modifier> newModifiers = (EnumSet<Modifier>)newValue;
                     oldModifiers.removeAll(newModifiers);
                     newModifiers.removeAll(oldModifiers);
-                    NodeText nodeText = lpp.getTextForNode(observedNode);
                     oldModifiers.forEach(mToRemove -> nodeText.removeToken(Separator.fromModifier(mToRemove).getTokenKind()));
                     newModifiers.forEach(mToAdd -> {
                         nodeText.addToken(0, Separator.SPACE);
@@ -122,7 +126,6 @@ public class LexicalPreservingPrinter {
                     });
                     return;
                 }
-                NodeText nodeText = lpp.getTextForNode(observedNode);
                 if (property == ObservableProperty.INITIALIZER) {
                     if (oldValue == null && newValue != null) {
                         nodeText.addToken(Separator.SPACE);

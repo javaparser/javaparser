@@ -214,4 +214,10 @@ class NodeText {
         }
         throw new IllegalArgumentException();
     }
+
+    public void replace(Node oldChild, Node newChild) {
+        int index = findChild(oldChild, 0);
+        elements.remove(index);
+        elements.add(index, new ChildTextElement(lexicalPreservingPrinter, newChild));
+    }
 }
