@@ -155,7 +155,7 @@ public class LexicalPreservingPrinter {
     private void storeInitialText(ParseResult<? extends Node> parseResult) {
         Node root = parseResult.getResult().get();
         List<JavaToken> documentTokens = parseResult.getTokens().get();
-        Map<Node, List<JavaToken>> tokensByNode = new HashMap<>();
+        Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
         // Take all nodes and sort them to get the leaves first
         List<Node> nodesDepthFirst = new LinkedList<>();
