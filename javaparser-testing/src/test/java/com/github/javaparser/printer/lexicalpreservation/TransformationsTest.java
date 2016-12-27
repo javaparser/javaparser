@@ -126,4 +126,20 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         md.addParameter("char", "p2");
         assertTransformed("Example_param2", cu);
     }
+
+    @Test
+    public void exampleParam3() throws IOException {
+        considerExample("Example_param3_original");
+        MethodDeclaration md = (MethodDeclaration) cu.getClassByName("A").get().getMember(0);
+        md.getParameters().remove(0);
+        assertTransformed("Example_param3", cu);
+    }
+
+    @Test
+    public void exampleParam4() throws IOException {
+        considerExample("Example_param3_original");
+        MethodDeclaration md = (MethodDeclaration) cu.getClassByName("A").get().getMember(0);
+        md.getParameters().remove(1);
+        assertTransformed("Example_param4", cu);
+    }
 }
