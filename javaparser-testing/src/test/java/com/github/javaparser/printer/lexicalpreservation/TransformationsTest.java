@@ -101,4 +101,11 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         fd.addVariable(new VariableDeclarator(new ArrayType(PrimitiveType.intType()), "b"));
         assertTransformed("Example9", cu);
     }
+
+    @Test
+    public void example10() throws IOException {
+        considerExample("Example10_original");
+        cu.getClassByName("A").get().getMembers().remove(0);
+        assertTransformed("Example10", cu);
+    }
 }
