@@ -42,21 +42,21 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     public void example1() throws IOException {
         considerExample("Example1_original");
-        cu.getClassByName("A").getFieldByName("a").setModifiers(EnumSet.of(Modifier.STATIC));
+        cu.getClassByName("A").get().getFieldByName("a").get().setModifiers(EnumSet.of(Modifier.STATIC));
         assertTransformed("Example1", cu);
     }
 
     @Test
     public void example2() throws IOException {
         considerExample("Example2_original");
-        cu.getClassByName("A").getFieldByName("a").getVariable(0).setInitializer("10");
+        cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setInitializer("10");
         assertTransformed("Example2", cu);
     }
 
     @Test
     public void example3() throws IOException {
         considerExample("Example3_original");
-        cu.getClassByName("A").getFieldByName("a").getVariable(0).setInitializer((Expression) null);
+        cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setInitializer((Expression) null);
         assertTransformed("Example3", cu);
     }
 

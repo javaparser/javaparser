@@ -1,13 +1,11 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.imports.SingleTypeImportDeclaration;
-import com.github.javaparser.ast.imports.StaticImportOnDemandDeclaration;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
@@ -31,10 +29,10 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         // CU
         assertEquals(1, lpp.getTextForNode(cu).numberOfElements());
         assertEquals(true, lpp.getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
-        assertEquals(cu.getClassByName("A"), ((ChildTextElement)lpp.getTextForNode(cu).getTextElement(0)).getChild());
+        assertEquals(cu.getClassByName("A").get(), ((ChildTextElement)lpp.getTextForNode(cu).getTextElement(0)).getChild());
 
         // Class
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         assertEquals(7, lpp.getTextForNode(classA).numberOfElements());
         assertEquals("class", lpp.getTextForNode(classA).getTextElement(0).expand());
         assertEquals(" ", lpp.getTextForNode(classA).getTextElement(1).expand());
@@ -52,8 +50,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {int i;}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
-        FieldDeclaration fd = classA.getFieldByName("i");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        FieldDeclaration fd = classA.getFieldByName("i").get();
         NodeText nodeText = lpp.getOrCreateNodeText(fd);
         assertEquals(Arrays.asList("int", " ", "i", ";"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
@@ -64,8 +62,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {int i;}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
-        FieldDeclaration fd = classA.getFieldByName("i");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        FieldDeclaration fd = classA.getFieldByName("i").get();
         VariableDeclarator vd = fd.getVariables().get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(vd);
         assertEquals(Arrays.asList("i"),
@@ -77,7 +75,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {void foo(int p1, float p2) { }}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         MethodDeclaration md = classA.getMethodsByName("foo").get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(md);
         assertEquals(Arrays.asList("void", " ", "foo", "(", "int p1", ",", " ", "float p2", ")", " ", "{ }"),
@@ -89,9 +87,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {void foo(int p1, float p2) { }}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         MethodDeclaration md = classA.getMethodsByName("foo").get(0);
-        Parameter p1 = md.getParamByName("p1");
+        Parameter p1 = md.getParameterByName("p1").get();
         NodeText nodeText = lpp.getOrCreateNodeText(p1);
         assertEquals(Arrays.asList("int", " ", "p1"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
@@ -102,9 +100,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {void foo(int p1, float p2) { }}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         MethodDeclaration md = classA.getMethodsByName("foo").get(0);
-        Parameter p1 = md.getParamByName("p1");
+        Parameter p1 = md.getParameterByName("p1").get();
         Type t = p1.getType();
         NodeText nodeText = lpp.getOrCreateNodeText(t);
         assertEquals(Arrays.asList("int"),
@@ -116,7 +114,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "import a.b.c.D;";
         considerCode(code);
 
-        SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
+        ImportDeclaration imp = (ImportDeclaration)cu.getChildNodes().get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(imp);
         assertEquals(Arrays.asList("import", " ", "a.b.c.D", ";", ""),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
@@ -139,7 +137,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration classA = cu.getClassByName("A");
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         classA.addField("int", "myField");
         assertEquals("class A {\n    int myField;\n}", lpp.print(classA));
     }
@@ -149,7 +147,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A {}";
         considerCode(code);
 
-        assertEquals(code, lpp.print(cu.getClassByName("A")));
+        assertEquals(code, lpp.print(cu.getClassByName("A").get()));
     }
 
     @Test
@@ -158,8 +156,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerCode(code);
 
         assertEquals(code, lpp.print(cu));
-        assertEquals(code, lpp.print(cu.getClassByName("A")));
-        assertEquals("void foo(int p  ) { return  'z'  \t; }", lpp.print(cu.getClassByName("A").getMethodsByName("foo").get(0)));
+        assertEquals(code, lpp.print(cu.getClassByName("A").get()));
+        assertEquals("void foo(int p  ) { return  'z'  \t; }", lpp.print(cu.getClassByName("A").get().getMethodsByName("foo").get(0)));
     }
 
     @Test
@@ -167,7 +165,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class /*a comment*/ A {\t\t\n int f;\n\n\n         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
-        ClassOrInterfaceDeclaration c = cu.getClassByName("A");
+        ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
         assertEquals("class /*a comment*/ A {\t\t\n" +
                 " \n" +
@@ -181,7 +179,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A { void foo() {} }";
         considerCode(code);
 
-        MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
         m.addParameter("float", "p1");
         assertEquals("void foo(float p1) {}", lpp.print(m));
     }
@@ -191,7 +189,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A { void foo(char p1) {} }";
         considerCode(code);
 
-        MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
         m.addParameter("float", "p2");
         assertEquals("void foo(char p1, float p2) {}", lpp.print(m));
     }
@@ -201,7 +199,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A { void foo(float p1) {} }";
         considerCode(code);
 
-        MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
         m.getParameters().remove(0);
         assertEquals("void foo() {}", lpp.print(m));
     }
@@ -211,7 +209,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A { void foo(char p1, int p2) {} }";
         considerCode(code);
 
-        MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
         m.getParameters().remove(0);
         assertEquals("void foo(int p2) {}", lpp.print(m));
     }
@@ -221,7 +219,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "class A { void foo(char p1, int p2) {} }";
         considerCode(code);
 
-        MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
         m.getParameters().remove(1);
         assertEquals("void foo(char p1) {}", lpp.print(m));
     }
@@ -234,9 +232,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         Statement s = new ExpressionStmt(new BinaryExpr(
                 new IntegerLiteralExpr("10"), new IntegerLiteralExpr("2"), BinaryExpr.Operator.PLUS
         ));
-        NodeList<Statement> stmts = cu.getClassByName("A").getMethodsByName("foo").get(0).getBody().get().getStatements();
+        NodeList<Statement> stmts = cu.getClassByName("A").get().getMethodsByName("foo").get(0).getBody().get().getStatements();
         stmts.add(s);
-        MethodDeclaration m = cu.getClassByName("A").getMethodsByName("foo").get(0);
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
         assertEquals("void foo(char p1, int p2) {\n" +
                 "    10 + 2;\n" +
                 "}", lpp.print(m));
@@ -247,7 +245,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "import a.b.c.D;";
         considerCode(code);
 
-        SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
+        ImportDeclaration imp = (ImportDeclaration)cu.getChildNodes().get(0);
         assertEquals("import a.b.c.D;", lpp.print(imp));
     }
 
@@ -256,7 +254,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "import com.github.javaparser.ast.CompilationUnit;";
         considerCode(code);
 
-        SingleTypeImportDeclaration imp = (SingleTypeImportDeclaration)cu.getChildNodes().get(0);
+        ImportDeclaration imp = (ImportDeclaration)cu.getChildNodes().get(0);
         assertEquals("import com.github.javaparser.ast.CompilationUnit;", lpp.print(imp));
     }
 
@@ -265,7 +263,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         String code = "import static com.github.javaparser.ParseStart.*;";
         considerCode(code);
 
-        StaticImportOnDemandDeclaration imp = (StaticImportOnDemandDeclaration)cu.getChildNodes().get(0);
+        ImportDeclaration imp = (ImportDeclaration)cu.getChildNodes().get(0);
         assertEquals("import static com.github.javaparser.ParseStart.*;", lpp.print(imp));
     }
 
