@@ -2,6 +2,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.type.ArrayType;
@@ -82,5 +84,21 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         considerExample("Example7_original");
         cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setType(new ArrayType(PrimitiveType.intType()));
         assertTransformed("Example7", cu);
+    }
+
+    @Test
+    public void example8() throws IOException {
+        considerExample("Example8_original");
+        FieldDeclaration fd = (FieldDeclaration) cu.getClassByName("A").get().getMember(0);
+        fd.addVariable(new VariableDeclarator(PrimitiveType.intType(), "b"));
+        assertTransformed("Example8", cu);
+    }
+
+    @Test
+    public void example9() throws IOException {
+        considerExample("Example9_original");
+        FieldDeclaration fd = (FieldDeclaration) cu.getClassByName("A").get().getMember(0);
+        fd.addVariable(new VariableDeclarator(new ArrayType(PrimitiveType.intType()), "b"));
+        assertTransformed("Example9", cu);
     }
 }
