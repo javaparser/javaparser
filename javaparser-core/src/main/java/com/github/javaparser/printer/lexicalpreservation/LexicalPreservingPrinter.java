@@ -29,6 +29,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.utils.Pair;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -110,6 +111,23 @@ public class LexicalPreservingPrinter {
                     return;
                 }
                 NodeText nodeText = lpp.getTextForNode(observedNode);
+                if (property == ObservableProperty.TYPE) {
+                    // Here we have the infamous phantom nodes so we need to handle this specially
+                    // We first of all remove all tokens before the variables. We then print
+                    // the common type and a space
+                    // behind each variables we put the necessary brackets
+                    FieldDeclaration fieldDeclaration = (FieldDeclaration)observedNode.getParentNode().get();
+                    FieldDeclaration fieldDeclarationCopy = (FieldDeclaration) fieldDeclaration.clone();
+                    int varIndex = fieldDeclaration.getVariables().indexOf(observedNode);
+                    fieldDeclarationCopy.getVariable(varIndex).setType((Type) newValue);
+                    Type commonType = fieldDeclarationCopy.getCommonType();
+
+                    NodeText fieldNodeText = lpp.getTextForNode(fieldDeclaration);
+                    fieldNodeText.removeAllBefore(fieldDeclaration.getVariable(0));
+                    fieldNodeText.addChild(0, commonType);
+                    fieldNodeText.addToken(1, Separator.SPACE);
+                    return;
+                }
                 if (oldValue instanceof Node && newValue instanceof Node) {
                     nodeText.replace((Node)oldValue, (Node)newValue);
                     return;
@@ -187,7 +205,9 @@ public class LexicalPreservingPrinter {
         new TreeVisitor() {
             @Override
             public void process(Node node) {
-                LexicalPreservingPrinter.this.storeInitialTextForOneNode(node, tokensByNode.get(node));
+                if (!PhantomNodeLogic.isPhantomNode(node)) {
+                    LexicalPreservingPrinter.this.storeInitialTextForOneNode(node, tokensByNode.get(node));
+                }
             }
         }.visitBreadthFirst(root);
     }

@@ -4,6 +4,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -66,5 +68,19 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         considerExample("Example5_original");
         cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setInitializer(new NullLiteralExpr());
         assertTransformed("Example5", cu);
+    }
+
+    @Test
+    public void example6() throws IOException {
+        considerExample("Example6_original");
+        cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setName("someOtherName");
+        assertTransformed("Example6", cu);
+    }
+
+    @Test
+    public void example7() throws IOException {
+        considerExample("Example7_original");
+        cu.getClassByName("A").get().getFieldByName("a").get().getVariable(0).setType(new ArrayType(PrimitiveType.intType()));
+        assertTransformed("Example7", cu);
     }
 }

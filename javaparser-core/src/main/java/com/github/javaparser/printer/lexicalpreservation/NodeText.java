@@ -24,6 +24,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.VariableDeclarator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -74,6 +75,10 @@ class NodeText {
         addElement(new ChildTextElement(lexicalPreservingPrinter, child));
     }
 
+    void addChild(int index, Node child) {
+        addElement(index, new ChildTextElement(lexicalPreservingPrinter, child));
+    }
+
     void removeElementForChild(Node child) {
         elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
     }
@@ -116,7 +121,7 @@ class NodeText {
                 }
             }
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException(String.format("I could not find child '%s'", child));
     }
 
     private int findToken(int tokenKind, int from) {
@@ -219,5 +224,12 @@ class NodeText {
         int index = findChild(oldChild, 0);
         elements.remove(index);
         elements.add(index, new ChildTextElement(lexicalPreservingPrinter, newChild));
+    }
+
+    public void removeAllBefore(Node child) {
+        int index = findChild(child, 0);
+        for (int i=0;i<index;i++) {
+            elements.remove(0);
+        }
     }
 }
