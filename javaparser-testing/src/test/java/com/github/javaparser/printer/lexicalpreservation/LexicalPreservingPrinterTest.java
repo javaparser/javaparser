@@ -2,6 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.BinaryExpr;
@@ -117,6 +118,19 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         ImportDeclaration imp = (ImportDeclaration)cu.getChildNodes().get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(imp);
         assertEquals(Arrays.asList("import", " ", "a.b.c.D", ";", ""),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedGenericType() {
+        String code = "class A {ParseResult<T> result;}";
+        considerCode(code);
+
+        FieldDeclaration field = cu.getClassByName("A").get().getFieldByName("result").get();
+        Node t = field.getCommonType();
+        Node t2 = field.getVariable(0).getType();
+        NodeText nodeText = lpp.getOrCreateNodeText(field);
+        assertEquals(Arrays.asList("ParseResult", "<", "T", ">", " ", "result", ";"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
