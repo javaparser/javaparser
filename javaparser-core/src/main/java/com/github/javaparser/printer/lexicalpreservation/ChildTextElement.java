@@ -71,4 +71,8 @@ class ChildTextElement extends TextElement {
     boolean isToken(int tokenKind) {
         return false;
     }
+
+    NodeText getNodeTextForWrappedNode() {
+        return lexicalPreservingPrinter.getOrCreateNodeText(child);
+    }
 }

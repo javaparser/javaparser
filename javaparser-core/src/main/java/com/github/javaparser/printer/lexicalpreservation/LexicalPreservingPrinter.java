@@ -29,6 +29,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.utils.Pair;
@@ -111,7 +112,7 @@ public class LexicalPreservingPrinter {
                     return;
                 }
                 NodeText nodeText = lpp.getTextForNode(observedNode);
-                if (property == ObservableProperty.TYPE) {
+                if (property == ObservableProperty.TYPE && observedNode.getParentNode().get() instanceof FieldDeclaration) {
                     // Here we have the infamous phantom nodes so we need to handle this specially
                     // We first of all remove all tokens before the variables. We then print
                     // the common type and a space
@@ -230,6 +231,21 @@ public class LexicalPreservingPrinter {
     }
 
     //
+    // Iterators
+    //
+
+    public Iterator<TokenTextElement> tokensPreceeding(final Node node) {
+        if (!node.getParentNode().isPresent()) {
+            return new TextElementIteratorsFactory.EmptyIterator();
+        }
+        NodeText parentNodeText = getOrCreateNodeText(node.getParentNode().get());
+        int index = parentNodeText.findChild(node);
+        return new TextElementIteratorsFactory.CascadingIterator<>(
+                TextElementIteratorsFactory.reverseIterator(parentNodeText, index - 1),
+                () -> tokensPreceeding(node.getParentNode().get()));
+    }
+
+    //
     // Printing methods
     //
 
@@ -303,6 +319,10 @@ public class LexicalPreservingPrinter {
     }
 
     private NodeText prettyPrintingTextNode(Node node) {
+        if (node instanceof PrimitiveType) {
+            new JavaParser().parse(ParseStart.)
+        }
+
         // Here we can get the text easily but then we need to figure out how to parse it so that
         // we get the tokens
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
@@ -355,17 +375,24 @@ public class LexicalPreservingPrinter {
             NodeText nodeText = textForNodes.get(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
                 TextElement element = nodeText.getTextElement(i);
+                List<TokenTextElement> parentIndentation = findIndentation(parent);
                 if (element instanceof TokenTextElement) {
                     TokenTextElement tokenTextElement = (TokenTextElement)element;
                     if (tokenTextElement.getTokenKind() == tokenKind) {
                         int it = i+1;
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
                             nodeText.addToken(it++, Separator.NEWLINE);
+                            for (TokenTextElement e : parentIndentation) {
+                                nodeText.addElement(it++, e);
+                            }
                             nodeText.addToken(it++, Separator.TAB);
                         }
                         nodeText.addElement(it++, new ChildTextElement(LexicalPreservingPrinter.this, child));
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
                             nodeText.addToken(it++, Separator.NEWLINE);
+                            for (TokenTextElement e : parentIndentation) {
+                                nodeText.addElement(it++, e);
+                            }
                         }
                         return;
                     }
@@ -373,6 +400,19 @@ public class LexicalPreservingPrinter {
             }
             throw new IllegalArgumentException("I could not find the token of type " + tokenKind);
         };
+    }
+
+    private List<TokenTextElement> findIndentation(Node node) {
+        List<TokenTextElement> elements = new LinkedList<>();
+        Iterator<TokenTextElement> it = tokensPreceeding(node);
+        while (it.hasNext()) {
+            TokenTextElement tte = it.next();
+            if (tte.getTokenKind() == Separator.NEWLINE.getTokenKind() && (tte.getText().contains("\n") || tte.getText().contains("\r"))) {
+                return elements;
+            }
+            elements.add(tte);
+        }
+        return elements;
     }
 
     //

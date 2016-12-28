@@ -6,7 +6,9 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
@@ -141,5 +143,14 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         MethodDeclaration md = (MethodDeclaration) cu.getClassByName("A").get().getMember(0);
         md.getParameters().remove(1);
         assertTransformed("Example_param4", cu);
+    }
+
+    @Test
+    public void exampleParam5() throws IOException {
+        considerExample("Example_param3_original");
+        MethodDeclaration md = (MethodDeclaration) cu.getClassByName("A").get().getMember(0);
+        md.setType(PrimitiveType.intType());
+        md.getBody().get().getStatements().add(new ReturnStmt(new NameExpr("p1")));
+        assertTransformed("Example_param5", cu);
     }
 }

@@ -111,7 +111,11 @@ class NodeText {
         addToken(index, separator.getTokenKind(), separator.getText());
     }
 
-    private int findChild(Node child, int from) {
+    int findChild(Node child) {
+        return findChild(child, 0);
+    }
+
+    int findChild(Node child, int from) {
         for (int i=from; i<elements.size(); i++) {
             TextElement element = elements.get(i);
             if (element instanceof ChildTextElement) {
