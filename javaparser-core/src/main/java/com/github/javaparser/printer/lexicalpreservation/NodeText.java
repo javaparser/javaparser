@@ -83,7 +83,7 @@ class NodeText {
         elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
     }
 
-    private void addToken(int tokenKind, String text) {
+    void addToken(int tokenKind, String text) {
         elements.add(new TokenTextElement(tokenKind, text));
     }
 
@@ -150,6 +150,12 @@ class NodeText {
         int startDeletion = findToken(tokenKind, 0);
         int endDeletion = findChild(child, startDeletion + 1);
         removeBetweenIndexes(startDeletion, endDeletion);
+    }
+
+    void removeTextBetween(int startTokenKind, int endTokenKind) {
+        int startDeletion = findToken(startTokenKind, 0);
+        int endDeletion = findToken(endTokenKind, startDeletion + 1);
+        removeBetweenIndexes(startDeletion+1, endDeletion-1);
     }
 
     private void removeBetweenIndexes(int startDeletion, int endDeletion) {

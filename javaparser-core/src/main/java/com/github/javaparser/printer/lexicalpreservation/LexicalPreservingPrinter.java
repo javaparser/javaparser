@@ -29,11 +29,11 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.utils.Pair;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -309,7 +309,7 @@ public class LexicalPreservingPrinter {
 
         if (index == 0) {
             // First element of the list, special treatment
-            Inserter inserter = getPositionFinder(parent.getClass(), nodeListName);
+            Inserter inserter = getPositionFinder(parent.getClass(), nodeListName, parent, nodeList);
             inserter.insert(parent, child);
         } else {
             // Element inside the list
@@ -320,7 +320,16 @@ public class LexicalPreservingPrinter {
 
     private NodeText prettyPrintingTextNode(Node node) {
         if (node instanceof PrimitiveType) {
-            new JavaParser().parse(ParseStart.)
+            NodeText nodeText = new NodeText(this);
+            PrimitiveType primitiveType = (PrimitiveType)node;
+            switch (primitiveType.getType()) {
+                case INT:
+                    nodeText.addToken(ASTParserConstants.INT, node.toString());
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+            }
+            return nodeText;
         }
 
         // Here we can get the text easily but then we need to figure out how to parse it so that
@@ -370,12 +379,19 @@ public class LexicalPreservingPrinter {
         };
     }
 
+    private Node skipToMeaningful(Node node) {
+        if (node instanceof BlockStmt) {
+            return skipToMeaningful(node.getParentNode().get());
+        }
+        return node;
+    }
+
     private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode) {
         return (parent, child) -> {
             NodeText nodeText = textForNodes.get(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
                 TextElement element = nodeText.getTextElement(i);
-                List<TokenTextElement> parentIndentation = findIndentation(parent);
+                List<TokenTextElement> parentIndentation = findIndentation(skipToMeaningful(parent));
                 if (element instanceof TokenTextElement) {
                     TokenTextElement tokenTextElement = (TokenTextElement)element;
                     if (tokenTextElement.getTokenKind() == tokenKind) {
@@ -407,7 +423,13 @@ public class LexicalPreservingPrinter {
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
-            if (tte.getTokenKind() == Separator.NEWLINE.getTokenKind() && (tte.getText().contains("\n") || tte.getText().contains("\r"))) {
+            // For some reason 3 is used as token kind of newlines
+            if (tte.getTokenKind() != 1) {
+                return elements;
+            }
+            if (tte.getTokenKind() == ASTParserConstants.SINGLE_LINE_COMMENT
+                    || tte.getTokenKind() == 3
+                    || (tte.getTokenKind() == Separator.NEWLINE.getTokenKind() && (tte.getText().contains("\n") || tte.getText().contains("\r")))) {
                 return elements;
             }
             elements.add(tte);
@@ -440,10 +462,13 @@ public class LexicalPreservingPrinter {
         throw new IllegalArgumentException();
     }
 
-    private Inserter getPositionFinder(Class<?> parentClass, String nodeListName) {
+    private Inserter getPositionFinder(Class<?> parentClass, String nodeListName, Node parent, NodeList nodeList) {
         String key = String.format("%s:%s", parentClass.getSimpleName(), nodeListName);
         switch (key) {
             case "ClassOrInterfaceDeclaration:Members":
+                if (nodeList.isEmpty()) {
+                    getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
+                }
                 return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
             case "FieldDeclaration:Variables":
                 try {
@@ -454,6 +479,9 @@ public class LexicalPreservingPrinter {
             case "MethodDeclaration:Parameters":
                 return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
             case "BlockStmt:Statements":
+                if (nodeList.isEmpty()) {
+                    getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
+                }
                 return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
         }
 

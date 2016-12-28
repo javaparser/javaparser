@@ -109,13 +109,13 @@ public class TextElementIteratorsFactory {
 
         @Override
         public boolean hasNext() {
-            if (currIndex < 0) {
+            if (currIndex >= elements.size()) {
                 return false;
             }
             if (elements.get(currIndex).hasNext()){
                 return true;
             }
-            currIndex--;
+            currIndex++;
             return hasNext();
         }
 
