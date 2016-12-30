@@ -162,6 +162,41 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
+    @Test
+    public void checkNodeTextCreatedAnnotationMemberDeclarationWithArrayType() {
+        String code = "public @interface ClassPreamble { String[] author(); }";
+        considerCode(code);
+
+        AnnotationDeclaration ad = cu.getAnnotationDeclarationByName("ClassPreamble").get();
+        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)ad.getMember(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(md);
+        assertEquals(Arrays.asList("String[]", " ", "author", "(", ")", ";"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedAnnotationMemberDeclarationArrayType() {
+        String code = "public @interface ClassPreamble { String[] author(); }";
+        considerCode(code);
+
+        AnnotationDeclaration ad = cu.getAnnotationDeclarationByName("ClassPreamble").get();
+        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)ad.getMember(0);
+        Type type = md.getType();
+        NodeText nodeText = lpp.getOrCreateNodeText(type);
+        assertEquals(Arrays.asList("String", "[", "]"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedAnnotationMemberDeclarationWithComment() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+
+        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
+        NodeText nodeText = lpp.getOrCreateNodeText(md);
+        assertEquals(Arrays.asList("String[]", " ", "reviewers", "(", ")", ";"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
     //
     // Tests on findIndentation
     //
