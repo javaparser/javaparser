@@ -95,7 +95,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     @Test
     public void removingMember() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        cu.getAnnotationDeclarationByName("ClassPreamble").get().getFieldByName("currentRevision").get().remove();
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(2).remove();
         assertTransformed("AnnotationDeclaration_Example6", cu);
     }
 

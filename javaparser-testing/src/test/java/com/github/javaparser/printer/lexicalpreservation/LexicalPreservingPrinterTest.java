@@ -2,6 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
@@ -12,7 +13,11 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -155,6 +160,26 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         NodeText nodeText = lpp.getOrCreateNodeText(md);
         assertEquals(Arrays.asList("String", " ", "author", "(", ")", ";"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    //
+    // Tests on findIndentation
+    //
+
+    @Test
+    public void findIndentationForAnnotationMemberDeclarationWithoutComment() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+        Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(4);
+        List<TokenTextElement> indentation = lpp.findIndentation(node);
+        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(e -> e.expand()).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void findIndentationForAnnotationMemberDeclarationWithComment() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+        Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
+        List<TokenTextElement> indentation = lpp.findIndentation(node);
+        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(e -> e.expand()).collect(Collectors.toList()));
     }
 
     //

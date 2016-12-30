@@ -434,7 +434,8 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private List<TokenTextElement> findIndentation(Node node) {
+    // Visible for testing
+    List<TokenTextElement> findIndentation(Node node) {
         List<TokenTextElement> elements = new LinkedList<>();
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
