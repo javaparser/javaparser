@@ -49,6 +49,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     public void unchangedExamples() throws IOException {
         assertUnchanged("AnnotationDeclaration_Example1");
         assertUnchanged("AnnotationDeclaration_Example3");
+        assertUnchanged("AnnotationDeclaration_Example9");
     }
 
     // name
