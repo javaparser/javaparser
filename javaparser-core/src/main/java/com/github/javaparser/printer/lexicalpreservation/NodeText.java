@@ -256,4 +256,8 @@ class NodeText {
             elements.remove(0);
         }
     }
+
+    public void removeElement(int index) {
+        elements.remove(index);
+    }
 }

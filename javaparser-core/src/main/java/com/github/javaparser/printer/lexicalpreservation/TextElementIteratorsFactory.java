@@ -24,7 +24,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public class TextElementIteratorsFactory {
 
@@ -35,13 +34,15 @@ public class TextElementIteratorsFactory {
 
         private Provider<E> nextProvider;
         private Iterator<E> current;
+        private Iterator<E> next;
+        private boolean lastReturnedFromCurrent = false;
+        private boolean lastReturnedFromNext = false;
 
         public CascadingIterator(Iterator<E> current, Provider<E> nextProvider) {
             this.nextProvider = nextProvider;
             this.current = current;
         }
 
-        private Iterator<E> next;
 
         @Override
         public boolean hasNext() {
@@ -57,12 +58,29 @@ public class TextElementIteratorsFactory {
         @Override
         public E next() {
             if (current.hasNext()) {
+                lastReturnedFromCurrent = true;
+                lastReturnedFromNext = false;
                 return current.next();
             }
             if (next == null) {
                 next = nextProvider.provide();
             }
+            lastReturnedFromCurrent = false;
+            lastReturnedFromNext = true;
             return next.next();
+        }
+
+        @Override
+        public void remove() {
+            if (lastReturnedFromCurrent) {
+                current.remove();
+                return;
+            }
+            if (lastReturnedFromNext) {
+                next.remove();
+                return;
+            }
+            throw new IllegalArgumentException();
         }
     }
 
@@ -96,6 +114,11 @@ public class TextElementIteratorsFactory {
             returned = true;
             return element;
         }
+
+        @Override
+        public void remove() {
+
+        }
     }
 
     static class ComposedIterator<E> implements Iterator<E> {
@@ -126,11 +149,22 @@ public class TextElementIteratorsFactory {
             }
             return elements.get(currIndex).next();
         }
+
+        @Override
+        public void remove() {
+            elements.get(currIndex).remove();
+        }
     }
 
-    public static Iterator<TokenTextElement> reverseIterator(TextElement textElement) {
+    private static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int index) {
+        TextElement textElement = nodeText.getTextElement(index);
         if (textElement instanceof TokenTextElement) {
-            return new SingleElementIterator<>((TokenTextElement)textElement);
+            return new SingleElementIterator<TokenTextElement>((TokenTextElement)textElement) {
+                @Override
+                public void remove() {
+                    nodeText.removeElement(index);
+                }
+            };
         } else if (textElement instanceof ChildTextElement) {
             ChildTextElement childTextElement = (ChildTextElement)textElement;
             NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
@@ -141,13 +175,13 @@ public class TextElementIteratorsFactory {
     }
 
     public static Iterator<TokenTextElement> reverseIterator(NodeText nodeText) {
-        return reverseIterator(nodeText, nodeText.numberOfElements() - 1);
+        return partialReverseIterator(nodeText, nodeText.numberOfElements() - 1);
     }
 
-    public static Iterator<TokenTextElement> reverseIterator(NodeText nodeText, int fromIndex) {
+    public static Iterator<TokenTextElement> partialReverseIterator(NodeText nodeText, int fromIndex) {
         List<Iterator<TokenTextElement>> elements = new LinkedList<>();
         for (int i=fromIndex;i>=0;i--) {
-            elements.add(reverseIterator(nodeText.getTextElement(i)));
+            elements.add(reverseIterator(nodeText, i));
         }
         return new ComposedIterator<>(elements);
     }

@@ -256,7 +256,7 @@ public class LexicalPreservingPrinter {
         NodeText parentNodeText = getOrCreateNodeText(node.getParentNode().get());
         int index = parentNodeText.findChild(node);
         return new TextElementIteratorsFactory.CascadingIterator<>(
-                TextElementIteratorsFactory.reverseIterator(parentNodeText, index - 1),
+                TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1),
                 () -> tokensPreceeding(node.getParentNode().get()));
     }
 
@@ -308,6 +308,20 @@ public class LexicalPreservingPrinter {
             if (index != 0) {
                 // we should remove all the text between the child and the comma
                 textForNodes.get(parent).removeTextBetween(ASTParserConstants.COMMA, child);
+            }
+        }
+
+        if (property.isInOwnLine()) {
+            for (Iterator<TokenTextElement> it = tokensPreceeding(child); it.hasNext();) {
+               // Removing preceeding whitespace tokens until we reach a newline
+               TokenTextElement tte = it.next();
+               if (tte.getTokenKind() != 1 && tte.getTokenKind() !=3) {
+                   break;
+               }
+               it.remove();
+               if (tte.getTokenKind() == 3) {
+                   break;
+               }
             }
         }
 
