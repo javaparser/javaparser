@@ -25,6 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
@@ -38,17 +39,17 @@ import static org.junit.Assert.assertEquals;
  */
 public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
-    protected void assertTransformedToString(String expectedPartialCode, Node node) throws IOException {
+    private void assertTransformedToString(String expectedPartialCode, Node node) throws IOException {
         String actualCode = lpp.print(node);
         assertEquals(expectedPartialCode, actualCode);
     }
-
-    // Name
 
     private AnnotationMemberDeclaration consider(String code) {
         considerCode("@interface AD { " + code + " }");
         return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
     }
+
+    // Name
 
     @Test
     public void changingName() throws IOException {
@@ -59,9 +60,58 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
 
     // Type
 
+    @Test
+    public void changingType() throws IOException {
+        AnnotationMemberDeclaration md = consider("int foo();");
+        md.setType("String");
+        assertTransformedToString("String foo();", md);
+    }
+
     // Modifiers
 
+    @Test
+    public void addingModifiers() throws IOException {
+        AnnotationMemberDeclaration md = consider("int foo();");
+        md.setModifiers(EnumSet.of(Modifier.PUBLIC));
+        assertTransformedToString("public int foo();", md);
+    }
+
+    @Test
+    public void removingModifiers() throws IOException {
+        AnnotationMemberDeclaration md = consider("public int foo();");
+        md.setModifiers(EnumSet.noneOf(Modifier.class));
+        assertTransformedToString("int foo();", md);
+    }
+
+    @Test
+    public void replacingModifiers() throws IOException {
+        AnnotationMemberDeclaration md = consider("public int foo();");
+        md.setModifiers(EnumSet.of(Modifier.PROTECTED));
+        assertTransformedToString("protected int foo();", md);
+    }
+
     // Default value
+
+    @Test
+    public void addingDefaultValue() throws IOException {
+        AnnotationMemberDeclaration md = consider("int foo();");
+        md.setDefaultValue(new IntegerLiteralExpr("10"));
+        assertTransformedToString("int foo() default 10;", md);
+    }
+
+    @Test
+    public void removingDefaultValue() throws IOException {
+        AnnotationMemberDeclaration md = consider("int foo() default 10;");
+        assertEquals(true, md.getDefaultValue().get().remove());
+        assertTransformedToString("int foo();", md);
+    }
+
+    @Test
+    public void replacingDefaultValue() throws IOException {
+        AnnotationMemberDeclaration md = consider("int foo() default 10;");
+        md.setDefaultValue(new IntegerLiteralExpr("11"));
+        assertTransformedToString("int foo() default 11;", md);
+    }
 
     // Annotations
 

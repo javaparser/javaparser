@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This contains the lexical information for a single node.
@@ -230,9 +231,13 @@ class NodeText {
     }
 
     public void removeFromToken(Separator separator, boolean includingPreceedingSpace) {
+        removeFromTokenUntil(separator, Optional.empty(), includingPreceedingSpace);
+    }
+
+    public void removeFromTokenUntil(Separator separator, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
         for (int i=elements.size() -1; i>=0; i--) {
             if (elements.get(i).isToken(separator.getTokenKind())) {
-                while (elements.size() > i) {
+                while (elements.size() > i && (!stopTokenKind.isPresent() || !elements.get(i).isToken(stopTokenKind.get()))) {
                     elements.remove(i);
                 }
                 if (includingPreceedingSpace && elements.get(i - 1).isToken(Separator.SPACE.getTokenKind())) {

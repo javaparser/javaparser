@@ -172,6 +172,15 @@ public class LexicalPreservingPrinter {
                         return;
                     }
                 }
+                if (property == ObservableProperty.DEFAULT_VALUE) {
+                    if (oldValue == null && newValue != null) {
+                        lpp.insertBefore(ASTParserConstants.SEMICOLON, Separator.SPACE, Separator.DEFAULT, Separator.SPACE).insert(observedNode, (Node)newValue);
+                        return;
+                    } else if (oldValue != null && newValue == null) {
+                        nodeText.removeFromTokenUntil(Separator.DEFAULT, Optional.of(ASTParserConstants.SEMICOLON), true);
+                        return;
+                    }
+                }
                 if (property == ObservableProperty.COMMENT) {
                     if (oldValue == null && newValue != null) {
                         // FIXME consider CompilationUnit which contains its own JavaDoc
@@ -453,6 +462,28 @@ public class LexicalPreservingPrinter {
             return skipToMeaningful(node.getParentNode().get());
         }
         return node;
+    }
+
+    private Inserter insertBefore(final int tokenKind, Separator... separators) {
+        return (parent, child) -> {
+            NodeText nodeText = textForNodes.get(parent);
+            for (int i=0; i< nodeText.numberOfElements();i++) {
+                TextElement element = nodeText.getTextElement(i);
+                List<TokenTextElement> parentIndentation = findIndentation(skipToMeaningful(parent));
+                if (element instanceof TokenTextElement) {
+                    TokenTextElement tokenTextElement = (TokenTextElement)element;
+                    if (tokenTextElement.getTokenKind() == tokenKind) {
+                        int pos = i;
+                        for (Separator s : separators) {
+                            nodeText.addElement(pos++, new TokenTextElement(s.getTokenKind(), s.getText()));
+                        }
+                        nodeText.addElement(pos++, new ChildTextElement(LexicalPreservingPrinter.this, child));
+                        return;
+                    }
+                }
+            }
+            throw new IllegalArgumentException("I could not find the token of type " + tokenKind);
+        };
     }
 
     private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode) {

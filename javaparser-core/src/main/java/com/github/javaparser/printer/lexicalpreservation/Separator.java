@@ -37,7 +37,8 @@ enum Separator {
     PUBLIC(ASTParserConstants.PUBLIC, "public"),
     PROTECTED(ASTParserConstants.PROTECTED, "protected"),
     STATIC(ASTParserConstants.STATIC, "static"),
-    EQUAL(ASTParserConstants.ASSIGN, "=");
+    EQUAL(ASTParserConstants.ASSIGN, "="),
+    DEFAULT(ASTParserConstants._DEFAULT, "default");
 
     private String text;
     private int tokenKind;
