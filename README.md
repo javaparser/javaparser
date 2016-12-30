@@ -37,7 +37,7 @@ Take a look at `JavaParserFacade`. For example you can use it to find the type o
 
 ```java
 Node node = <get this node by parsing source code with JavaParser>
-TypeUsage typeOfTheNode = JavaParserFacade.get(typeSolver).getType(node);
+Type typeOfTheNode = JavaParserFacade.get(typeSolver).getType(node);
 ```
 
 Easy, right?
