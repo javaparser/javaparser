@@ -172,6 +172,19 @@ public class LexicalPreservingPrinter {
                         return;
                     }
                 }
+                if (property == ObservableProperty.COMMENT) {
+                    if (oldValue == null && newValue != null) {
+                        // FIXME consider CompilationUnit which contains its own JavaDoc
+                        lpp.insertBeforeChild(observedNode, true, Separator.NEWLINE).insert(observedNode.getParentNode().get(), (Node)newValue);
+                        return;
+                    } else if (oldValue != null && newValue == null) {
+                        throw new UnsupportedOperationException();
+                        //return;
+                    }
+                }
+                if (property == ObservableProperty.COMMENTED_NODE) {
+                    return;
+                }
                 throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
                         oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
             }
@@ -380,6 +393,32 @@ public class LexicalPreservingPrinter {
                 throw new IllegalArgumentException();
             }
             insertAfterChild(childToFollow, false, separators).insert(parent, child);
+        };
+    }
+
+    private Inserter insertBeforeChild(Node childToPreceed, boolean onIsOwnLine, Separator... separators) {
+        return (parent, child) -> {
+            NodeText nodeText = getOrCreateNodeText(parent);
+            for (int i=0; i< nodeText.numberOfElements();i++) {
+                TextElement element = nodeText.getTextElement(i);
+                if (element instanceof ChildTextElement) {
+                    ChildTextElement childElement = (ChildTextElement)element;
+                    if (childElement.getChild() == childToPreceed) {
+                        if (onIsOwnLine) {
+                            //nodeText.addToken(i--, Separator.NEWLINE);
+                            /*for (TokenTextElement e : findIndentation(childToPreceed)) {
+                                nodeText.addElement(++i, e);
+                            }*/
+                        }
+                        /*for (Separator s : separators) {
+                            nodeText.addToken(++i, s);
+                        }*/
+                        nodeText.addElement(i--, new ChildTextElement(LexicalPreservingPrinter.this, child));
+                        return;
+                    }
+                }
+            }
+            throw new IllegalArgumentException();
         };
     }
 

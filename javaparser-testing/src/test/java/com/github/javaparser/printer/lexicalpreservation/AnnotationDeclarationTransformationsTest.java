@@ -108,4 +108,26 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
 
     // javadoc
 
+    @Test
+    public void addingJavadoc() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setJavaDocComment("Cool this annotation!");
+        assertTransformed("AnnotationDeclaration_Example8", cu);
+    }
+
+//    @Test
+//    public void removingJavadoc() throws IOException {
+//        considerExample("AnnotationDeclaration_Example9_original");
+//        boolean removed = cu.getAnnotationDeclarationByName("ClassPreamble").get().getJavaDoc().remove();
+//        assertEquals(true, removed);
+//        assertTransformed("AnnotationDeclaration_Example9", cu);
+//    }
+//
+//    @Test
+//    public void replacingJavadoc() throws IOException {
+//        considerExample("AnnotationDeclaration_Example9_original");
+//        cu.getAnnotationDeclarationByName("ClassPreamble").get().setJavaDocComment("Super extra cool this annotation!!!");
+//        assertTransformed("AnnotationDeclaration_Example10", cu);
+//    }
+
 }
