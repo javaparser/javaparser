@@ -359,17 +359,13 @@ public class LexicalPreservingPrinter {
         return textForNodes.get(node);
     }
 
-    private Inserter insertAfterChild(Method method, Separator... separators) {
+    private Inserter insertAfterChild(ObservableProperty property, Separator... separators) {
         return (parent, child) -> {
-            try {
-                Node childToFollow = (Node) method.invoke(parent);
-                if (childToFollow == null) {
-                    throw new IllegalArgumentException();
-                }
-                insertAfterChild(childToFollow, separators).insert(parent, child);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            Node childToFollow = property.singleValueFor(parent);
+            if (childToFollow == null) {
+                throw new IllegalArgumentException();
             }
+            insertAfterChild(childToFollow, separators).insert(parent, child);
         };
     }
 
@@ -483,11 +479,7 @@ public class LexicalPreservingPrinter {
             }
             return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.equals(new QualifiedProperty(FieldDeclaration.class, ObservableProperty.VARIABLES))) {
-            try {
-                return insertAfterChild(FieldDeclaration.class.getMethod("getElementType"), Separator.SPACE);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            return insertAfterChild(ObservableProperty.ELEMENT_TYPE, Separator.SPACE);
         } else if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
             return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
         }  else if (property.equals(new QualifiedProperty(BlockStmt.class, ObservableProperty.STATEMENTS))) {
