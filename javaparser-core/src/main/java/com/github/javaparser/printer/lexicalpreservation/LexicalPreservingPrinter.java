@@ -25,7 +25,9 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
@@ -42,6 +44,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.github.javaparser.utils.Utils.uncapitalize;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
@@ -60,6 +64,9 @@ public class LexicalPreservingPrinter {
         void insert(Node parent, Node child);
     }
 
+    /**
+     * How should I adapt the whitespace around the element when inserting it?
+     */
     private enum InsertionMode {
         PLAIN,
         ON_ITS_OWN_LINE
@@ -72,8 +79,13 @@ public class LexicalPreservingPrinter {
     /**
      * Parse the code and setup the LexicalPreservingPrinter.
      */
-    public static <N extends Node> Pair<ParseResult<N>, LexicalPreservingPrinter> setup(ParseStart<N> parseStart, Provider provider) {
+    public static <N extends Node> Pair<ParseResult<N>, LexicalPreservingPrinter> setup(ParseStart<N> parseStart,
+                                                                                        Provider provider) {
         ParseResult<N> parseResult = new JavaParser().parse(parseStart, provider);
+        if (!parseResult.isSuccessful()) {
+            throw new RuntimeException("Parsing failed, unable to setup the lexical preservation printer: "
+                    + parseResult.getProblems());
+        }
         LexicalPreservingPrinter lexicalPreservingPrinter = new LexicalPreservingPrinter(parseResult);
         return new Pair<>(parseResult, lexicalPreservingPrinter);
     }
@@ -105,13 +117,16 @@ public class LexicalPreservingPrinter {
         return new PropagatingAstObserver() {
             @Override
             public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                if (oldValue != null && oldValue.equals(newValue)) {
+                // Not really a change, ignoring
+                if ((oldValue != null && oldValue.equals(newValue)) || (oldValue == null && newValue == null)) {
                     return;
                 }
                 if (property == ObservableProperty.RANGE) {
                     return;
                 }
                 NodeText nodeText = lpp.getTextForNode(observedNode);
+                // Type requires to be handled in a special way because it is basically a fake node, not part of the
+                // AST
                 if (property == ObservableProperty.TYPE && observedNode.getParentNode().get() instanceof FieldDeclaration) {
                     // Here we have the infamous phantom nodes so we need to handle this specially
                     // We first of all remove all tokens before the variables. We then print
@@ -283,21 +298,20 @@ public class LexicalPreservingPrinter {
             return;
         }
         Node parent = parentNode.get();
-        String key = parent.getClass().getSimpleName() + ":" + findNodeListName(nodeList);
+        QualifiedProperty property = new QualifiedProperty(parent.getClass(), findNodeListName(nodeList));
 
-        switch (key) {
-            case "MethodDeclaration:Parameters":
-                if (index == 0 && nodeList.size() > 1) {
-                    // we should remove all the text between the child and the comma
-                    textForNodes.get(parent).removeTextBetween(child, ASTParserConstants.COMMA, true);
-                }
-                if (index != 0) {
-                    // we should remove all the text between the child and the comma
-                    textForNodes.get(parent).removeTextBetween(ASTParserConstants.COMMA, child);
-                }
-            default:
-                textForNodes.get(parent).removeElementForChild(child);
+        if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
+            if (index == 0 && nodeList.size() > 1) {
+                // we should remove all the text between the child and the comma
+                textForNodes.get(parent).removeTextBetween(child, ASTParserConstants.COMMA, true);
+            }
+            if (index != 0) {
+                // we should remove all the text between the child and the comma
+                textForNodes.get(parent).removeTextBetween(ASTParserConstants.COMMA, child);
+            }
         }
+
+        textForNodes.get(parent).removeElementForChild(child);
     }
 
     private void updateTextBecauseOfAddedChild(NodeList nodeList, int index, Optional<Node> parentNode, Node child) {
@@ -305,11 +319,11 @@ public class LexicalPreservingPrinter {
             return;
         }
         Node parent = parentNode.get();
-        String nodeListName = findNodeListName(nodeList);
+        QualifiedProperty property = new QualifiedProperty(parent.getClass(), findNodeListName(nodeList));
 
         if (index == 0) {
             // First element of the list, special treatment
-            Inserter inserter = getPositionFinder(parent.getClass(), nodeListName, parent, nodeList);
+            Inserter inserter = getPositionFinder(property, parent, nodeList);
             inserter.insert(parent, child);
         } else {
             // Element inside the list
@@ -441,7 +455,7 @@ public class LexicalPreservingPrinter {
     // Helper methods
     //
 
-    private String findNodeListName(NodeList nodeList) {
+    private ObservableProperty findNodeListName(NodeList nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
             if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(NodeList.class.getCanonicalName())) {
@@ -452,7 +466,7 @@ public class LexicalPreservingPrinter {
                         if (name.startsWith("get")) {
                             name = name.substring("get".length());
                         }
-                        return name;
+                        return ObservableProperty.fromCamelCaseName(uncapitalize(name));
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
@@ -462,30 +476,28 @@ public class LexicalPreservingPrinter {
         throw new IllegalArgumentException();
     }
 
-    private Inserter getPositionFinder(Class<?> parentClass, String nodeListName, Node parent, NodeList nodeList) {
-        String key = String.format("%s:%s", parentClass.getSimpleName(), nodeListName);
-        switch (key) {
-            case "ClassOrInterfaceDeclaration:Members":
-                if (nodeList.isEmpty()) {
-                    getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
-                }
-                return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
-            case "FieldDeclaration:Variables":
-                try {
-                    return insertAfterChild(FieldDeclaration.class.getMethod("getElementType"), Separator.SPACE);
-                } catch (NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                }
-            case "MethodDeclaration:Parameters":
-                return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
-            case "BlockStmt:Statements":
-                if (nodeList.isEmpty()) {
-                    getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
-                }
-                return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
+    private Inserter getPositionFinder(QualifiedProperty property, Node parent, NodeList nodeList) {
+        if (property.equals(new QualifiedProperty(ClassOrInterfaceDeclaration.class, ObservableProperty.MEMBERS))) {
+            if (nodeList.isEmpty()) {
+                getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
+            }
+            return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
+        } else if (property.equals(new QualifiedProperty(FieldDeclaration.class, ObservableProperty.VARIABLES))) {
+            try {
+                return insertAfterChild(FieldDeclaration.class.getMethod("getElementType"), Separator.SPACE);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
+            return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
+        }  else if (property.equals(new QualifiedProperty(BlockStmt.class, ObservableProperty.STATEMENTS))) {
+            if (nodeList.isEmpty()) {
+                getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
+            }
+            return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
+        } else {
+            throw new UnsupportedOperationException("I do not know how to find the position of " + property);
         }
-
-        throw new UnsupportedOperationException(key);
     }
 
     // Visible for testing

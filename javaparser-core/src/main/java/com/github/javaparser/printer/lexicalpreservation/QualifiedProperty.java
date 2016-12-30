@@ -22,34 +22,23 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observer.ObservableProperty;
 
-/**
- * Represent the position of a child node in the NodeText of its parent.
- */
-class ChildTextElement extends TextElement {
-    private LexicalPreservingPrinter lexicalPreservingPrinter;
-    private Node child;
+class QualifiedProperty {
+    private Class<? extends Node> containerClass;
+    private ObservableProperty observableProperty;
 
-    ChildTextElement(LexicalPreservingPrinter lexicalPreservingPrinter, Node child) {
-        this.lexicalPreservingPrinter = lexicalPreservingPrinter;
-        this.child = child;
-    }
-
-    String expand() {
-        return lexicalPreservingPrinter.print(child);
-    }
-
-    Node getChild() {
-        return child;
+    QualifiedProperty(Class<? extends Node> containerClass, ObservableProperty observableProperty) {
+        this.containerClass = containerClass;
+        this.observableProperty = observableProperty;
     }
 
     @Override
-    boolean isToken(int tokenKind) {
-        return false;
-    }
-
-    NodeText getNodeTextForWrappedNode() {
-        return lexicalPreservingPrinter.getOrCreateNodeText(child);
+    public String toString() {
+        return "QualifiedProperty{" +
+                "containerClass=" + containerClass +
+                ", observableProperty=" + observableProperty +
+                '}';
     }
 
     @Override
@@ -57,23 +46,17 @@ class ChildTextElement extends TextElement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ChildTextElement that = (ChildTextElement) o;
+        QualifiedProperty that = (QualifiedProperty) o;
 
-        if (!lexicalPreservingPrinter.equals(that.lexicalPreservingPrinter)) return false;
-        return child.equals(that.child);
+        if (!containerClass.getCanonicalName().equals(that.containerClass.getCanonicalName())) return false;
+        return observableProperty == that.observableProperty;
 
     }
 
     @Override
     public int hashCode() {
-        int result = lexicalPreservingPrinter.hashCode();
-        result = 31 * result + child.hashCode();
+        int result = containerClass.getCanonicalName().hashCode();
+        result = 31 * result + observableProperty.hashCode();
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "ChildTextElement{" + child + '}';
-    }
-
 }
