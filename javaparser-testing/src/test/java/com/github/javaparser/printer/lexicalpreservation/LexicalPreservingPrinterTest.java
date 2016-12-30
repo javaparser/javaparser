@@ -134,6 +134,29 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 
+    @Test
+    public void checkNodeTextCreatedAnnotationDeclaration() {
+        String code = "public @interface ClassPreamble { String author(); }";
+        considerCode(code);
+
+        AnnotationDeclaration ad = cu.getAnnotationDeclarationByName("ClassPreamble").get();
+        NodeText nodeText = lpp.getOrCreateNodeText(ad);
+        assertEquals(Arrays.asList("public", " ", "@", "interface", " ", "ClassPreamble", " ", "{", " ", "String author();", " ", "}", ""),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedAnnotationMemberDeclaration() {
+        String code = "public @interface ClassPreamble { String author(); }";
+        considerCode(code);
+
+        AnnotationDeclaration ad = cu.getAnnotationDeclarationByName("ClassPreamble").get();
+        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)ad.getMember(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(md);
+        assertEquals(Arrays.asList("String", " ", "author", "(", ")", ";"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
     //
     // Tests on printing
     //

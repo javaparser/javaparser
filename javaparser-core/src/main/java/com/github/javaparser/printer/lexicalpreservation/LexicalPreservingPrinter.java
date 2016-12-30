@@ -327,7 +327,7 @@ public class LexicalPreservingPrinter {
             inserter.insert(parent, child);
         } else {
             // Element inside the list
-            Inserter inserter = insertAfterChild(nodeList.get(index - 1), Separator.COMMA, Separator.SPACE);
+            Inserter inserter = insertAfterChild(nodeList.get(index - 1), property.isInOwnLine(), property.separators());
             inserter.insert(parent, child);
         }
     }
@@ -365,11 +365,11 @@ public class LexicalPreservingPrinter {
             if (childToFollow == null) {
                 throw new IllegalArgumentException();
             }
-            insertAfterChild(childToFollow, separators).insert(parent, child);
+            insertAfterChild(childToFollow, false, separators).insert(parent, child);
         };
     }
 
-    private Inserter insertAfterChild(Node childToFollow, Separator... separators) {
+    private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, Separator... separators) {
         return (parent, child) -> {
                 NodeText nodeText = getOrCreateNodeText(parent);
                 for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -377,6 +377,12 @@ public class LexicalPreservingPrinter {
                     if (element instanceof ChildTextElement) {
                         ChildTextElement childElement = (ChildTextElement)element;
                         if (childElement.getChild() == childToFollow) {
+                            if (onIsOwnLine) {
+                                nodeText.addToken(++i, Separator.NEWLINE);
+                                for (TokenTextElement e : findIndentation(childToFollow)) {
+                                    nodeText.addElement(++i, e);
+                                }
+                            }
                             for (Separator s : separators) {
                                 nodeText.addToken(++i, s);
                             }

@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
 
 class QualifiedProperty {
@@ -58,5 +59,19 @@ class QualifiedProperty {
         int result = containerClass.getCanonicalName().hashCode();
         result = 31 * result + observableProperty.hashCode();
         return result;
+    }
+
+    public Separator[] separators() {
+        if (this.equals(new QualifiedProperty(AnnotationDeclaration.class, ObservableProperty.MEMBERS))) {
+            return new Separator[]{};
+        }
+        return new Separator[]{Separator.COMMA, Separator.SPACE};
+    }
+
+    public boolean isInOwnLine() {
+        if (this.equals(new QualifiedProperty(AnnotationDeclaration.class, ObservableProperty.MEMBERS))) {
+            return true;
+        }
+        return false;
     }
 }

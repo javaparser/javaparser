@@ -23,6 +23,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -47,6 +48,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     @Test
     public void unchangedExamples() throws IOException {
         assertUnchanged("AnnotationDeclaration_Example1");
+        assertUnchanged("AnnotationDeclaration_Example3");
     }
 
     // name
@@ -82,6 +84,28 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     }
 
     // members
+
+    @Test
+    public void addingMember() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().addMember(new AnnotationMemberDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), "foo", null));
+        assertTransformed("AnnotationDeclaration_Example5", cu);
+    }
+
+    @Test
+    public void removingMember() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().getFieldByName("currentRevision").get().remove();
+        assertTransformed("AnnotationDeclaration_Example6", cu);
+    }
+
+    @Test
+    public void replacingMember() throws IOException {
+        considerExample("AnnotationDeclaration_Example3_original");
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setMember(2, new AnnotationMemberDeclaration(EnumSet.noneOf(Modifier.class), PrimitiveType.intType(), "foo", null));
+        assertTransformed("AnnotationDeclaration_Example7", cu);
+    }
+
     // javadoc
 
 }
