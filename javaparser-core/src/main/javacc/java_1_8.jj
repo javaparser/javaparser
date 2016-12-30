@@ -3356,7 +3356,7 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
   type = Type() name = SimpleName() "(" ")" [ defaultVal = DefaultValue() ] ";"
 
   {
-	Position begin = modifier.begin.orIfInvalid(tokenBegin());
+	Position begin = modifier.begin.orIfInvalid(type.getBegin().get());
     return new AnnotationMemberDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
   }
 }
