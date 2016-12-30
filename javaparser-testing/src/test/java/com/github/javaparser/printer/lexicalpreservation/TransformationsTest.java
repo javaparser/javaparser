@@ -25,17 +25,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class TransformationsTest extends  AbstractLexicalPreservingTest {
 
-    private void assertTransformed(String exampleName, CompilationUnit cu) throws IOException {
-        String expectedCode = readExample(exampleName + "_expected");
-        String actualCode = lpp.print(cu);
-        assertEquals(expectedCode, actualCode);
-    }
-
-    private void assertUnchanged(String exampleName) throws IOException {
-        String code = considerExample(exampleName + "_original");
-        assertEquals(code, lpp.print(cu));
-    }
-
     @Test
     public void unchangedSimpleClasses() throws IOException {
         assertUnchanged("Example1");

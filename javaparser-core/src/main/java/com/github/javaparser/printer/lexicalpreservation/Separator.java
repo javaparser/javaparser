@@ -34,6 +34,8 @@ enum Separator {
     SEMICOLON(ASTParserConstants.SEMICOLON, ";"),
     NEWLINE(1, "\n"),
     TAB(1, "    "),
+    PUBLIC(ASTParserConstants.PUBLIC, "public"),
+    PROTECTED(ASTParserConstants.PROTECTED, "protected"),
     STATIC(ASTParserConstants.STATIC, "static"),
     EQUAL(ASTParserConstants.ASSIGN, "=");
 

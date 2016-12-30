@@ -153,7 +153,7 @@ public class LexicalPreservingPrinter {
                     EnumSet<Modifier> newModifiers = (EnumSet<Modifier>)newValue;
                     oldModifiers.removeAll(newModifiers);
                     newModifiers.removeAll(oldModifiers);
-                    oldModifiers.forEach(mToRemove -> nodeText.removeToken(Separator.fromModifier(mToRemove).getTokenKind()));
+                    oldModifiers.forEach(mToRemove -> nodeText.removeToken(Separator.fromModifier(mToRemove).getTokenKind(), true));
                     newModifiers.forEach(mToAdd -> {
                         nodeText.addToken(0, Separator.SPACE);
                         nodeText.addToken(0, Separator.fromModifier(mToAdd));

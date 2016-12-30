@@ -205,14 +205,28 @@ class NodeText {
         return elements;
     }
 
-    public void removeToken(int tokenKind) {
+    public void removeToken(int tokenKind, boolean potentiallyFollowingWhitespace) {
+        int i=0;
         for (TextElement e : elements) {
             if ((e instanceof TokenTextElement) && ((TokenTextElement)e).getTokenKind() == tokenKind) {
                 elements.remove(e);
+                if (potentiallyFollowingWhitespace) {
+                    if (i < elements.size()) {
+                        if (elements.get(i).isToken(1)) {
+                            elements.remove(i);
+                        }
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
+                }
                 return;
             }
         }
         throw new IllegalArgumentException();
+    }
+
+    public void removeToken(int tokenKind) {
+        removeToken(tokenKind, false);
     }
 
     public void removeFromToken(Separator separator, boolean includingPreceedingSpace) {

@@ -32,6 +32,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.junit.Assert.assertEquals;
+
 abstract class AbstractLexicalPreservingTest {
 
     protected LexicalPreservingPrinter lpp;
@@ -72,5 +74,16 @@ abstract class AbstractLexicalPreservingTest {
             result.write(buffer, 0, length);
         }
         return result.toString("UTF-8");
+    }
+
+    protected void assertTransformed(String exampleName, CompilationUnit cu) throws IOException {
+        String expectedCode = readExample(exampleName + "_expected");
+        String actualCode = lpp.print(cu);
+        assertEquals(expectedCode, actualCode);
+    }
+
+    protected void assertUnchanged(String exampleName) throws IOException {
+        String code = considerExample(exampleName + "_original");
+        assertEquals(code, lpp.print(cu));
     }
 }
