@@ -202,6 +202,15 @@ public class LexicalPreservingPrinter {
                     }
                     return;
                 }
+                if (property == ObservableProperty.IS_STATIC) {
+                    if ((Boolean)newValue) {
+                        nodeText.addElement(0, new TokenTextElement(ASTParserConstants.STATIC, "static"));
+                        nodeText.addElement(1, new TokenTextElement(0, " "));
+                    } else {
+                        nodeText.removeToken(ASTParserConstants.STATIC, true);
+                    }
+                    return;
+                }
                 throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
                         oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
             }
