@@ -21,9 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.ASTParserConstants;
+
 public abstract class TextElement {
 
     abstract String expand();
 
     abstract boolean isToken(int tokenKind);
+
+    public final boolean isCommentToken() {
+        return isToken(ASTParserConstants.JAVA_DOC_COMMENT) || isToken(ASTParserConstants.SINGLE_LINE_COMMENT) || isToken(ASTParserConstants.MULTI_LINE_COMMENT);
+    }
 }

@@ -25,6 +25,10 @@ import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -280,6 +284,42 @@ class NodeText {
         ++index;
         while (index < elements.size() && (elements.get(index).isToken(1)||elements.get(index).isToken(3))) {
             elements.remove(index);
+        }
+    }
+
+    public void removeComment(Comment comment) {
+        for (int i=0;i<elements.size();i++){
+            TextElement e = elements.get(i);
+            if (e.isCommentToken() && e.expand().trim().equals(comment.toString().trim())) {
+                elements.remove(i);
+                if (i<elements.size() && elements.get(i).isToken(3)) {
+                    elements.remove(i);
+                }
+                return;
+            }
+        }
+    }
+
+    public void replaceComment(Comment oldValue, Comment newValue) {
+        for (int i=0;i<elements.size();i++){
+            TextElement e = elements.get(i);
+            if (e.isCommentToken() && e.expand().trim().equals(oldValue.toString().trim())) {
+                elements.remove(i);
+                elements.add(i, new TokenTextElement(commentToTokenKind(newValue), newValue.toString().trim()));
+                return;
+            }
+        }
+    }
+
+    private int commentToTokenKind(Comment comment){
+        if (comment instanceof JavadocComment) {
+            return ASTParserConstants.JAVA_DOC_COMMENT;
+        } else if (comment instanceof LineComment) {
+            return ASTParserConstants.SINGLE_LINE_COMMENT;
+        } else if (comment instanceof BlockComment) {
+            return ASTParserConstants.MULTI_LINE_COMMENT;
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 }

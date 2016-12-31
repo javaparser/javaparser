@@ -29,6 +29,7 @@ import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
@@ -145,6 +146,11 @@ public class LexicalPreservingPrinter {
                     fieldNodeText.addToken(1, Separator.SPACE);
                     return;
                 }
+                if (oldValue instanceof Comment && newValue instanceof Comment) {
+                    NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
+                    nodeTextForParent.replaceComment((Comment)oldValue, (Comment)newValue);
+                    return;
+                }
                 if (oldValue instanceof Node && newValue instanceof Node) {
                     nodeText.replace((Node)oldValue, (Node)newValue);
                     return;
@@ -188,8 +194,9 @@ public class LexicalPreservingPrinter {
                         lpp.insertBeforeChild(observedNode, true, Separator.NEWLINE).insert(observedNode.getParentNode().get(), (Node)newValue);
                         return;
                     } else if (oldValue != null && newValue == null) {
-                        throw new UnsupportedOperationException();
-                        //return;
+                        NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
+                        nodeTextForParent.removeComment((Comment)oldValue);
+                        return;
                     }
                 }
                 if (property == ObservableProperty.COMMENTED_NODE) {

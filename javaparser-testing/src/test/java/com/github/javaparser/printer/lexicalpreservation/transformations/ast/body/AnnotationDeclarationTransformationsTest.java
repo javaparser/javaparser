@@ -21,17 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
@@ -117,19 +108,19 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
         assertTransformed("AnnotationDeclaration_Example8", cu);
     }
 
-//    @Test
-//    public void removingJavadoc() throws IOException {
-//        considerExample("AnnotationDeclaration_Example9_original");
-//        boolean removed = cu.getAnnotationDeclarationByName("ClassPreamble").get().getJavaDoc().remove();
-//        assertEquals(true, removed);
-//        assertTransformed("AnnotationDeclaration_Example9", cu);
-//    }
-//
-//    @Test
-//    public void replacingJavadoc() throws IOException {
-//        considerExample("AnnotationDeclaration_Example9_original");
-//        cu.getAnnotationDeclarationByName("ClassPreamble").get().setJavaDocComment("Super extra cool this annotation!!!");
-//        assertTransformed("AnnotationDeclaration_Example10", cu);
-//    }
+    @Test
+    public void removingJavadoc() throws IOException {
+        considerExample("AnnotationDeclaration_Example9_original");
+        boolean removed = cu.getAnnotationDeclarationByName("ClassPreamble").get().getJavaDoc().remove();
+        assertEquals(true, removed);
+        assertTransformed("AnnotationDeclaration_Example9", cu);
+    }
+
+    @Test
+    public void replacingJavadoc() throws IOException {
+        considerExample("AnnotationDeclaration_Example9_original");
+        cu.getAnnotationDeclarationByName("ClassPreamble").get().setJavaDocComment("Super extra cool this annotation!!!");
+        assertTransformed("AnnotationDeclaration_Example10", cu);
+    }
 
 }
