@@ -29,6 +29,14 @@ class QualifiedProperty {
     private Class<? extends Node> containerClass;
     private ObservableProperty observableProperty;
 
+    public Class<? extends Node> getContainerClass() {
+        return containerClass;
+    }
+
+    public ObservableProperty getObservableProperty() {
+        return observableProperty;
+    }
+
     QualifiedProperty(Class<? extends Node> containerClass, ObservableProperty observableProperty) {
         this.containerClass = containerClass;
         this.observableProperty = observableProperty;

@@ -25,6 +25,7 @@ import com.github.javaparser.*;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -350,6 +351,10 @@ public class LexicalPreservingPrinter {
             }
         }
 
+        if (property.getObservableProperty() == ObservableProperty.ANNOTATIONS) {
+            textForNodes.get(parent).removeWhiteSpaceFollowing(child);
+        }
+
         if (property.isInOwnLine()) {
             for (Iterator<TokenTextElement> it = tokensPreceeding(child); it.hasNext();) {
                // Removing preceeding whitespace tokens until we reach a newline
@@ -622,9 +627,20 @@ public class LexicalPreservingPrinter {
                     return insertAfter(ASTParserConstants.LT, InsertionMode.PLAIN, property.separators());
                 }
             }
+        } else if (property.getObservableProperty() == ObservableProperty.ANNOTATIONS) {
+            return insertAtBeginning(InsertionMode.ON_ITS_OWN_LINE);
         } else {
             throw new UnsupportedOperationException("I do not know how to find the position of " + property);
         }
+    }
+
+    private Inserter insertAtBeginning(InsertionMode insertionMode) {
+        return (parent, child) -> {
+            getOrCreateNodeText(parent).addElement(0, new ChildTextElement(this, child));
+            if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
+                getOrCreateNodeText(parent).addElement(1, new TokenTextElement(3, "\n"));
+            }
+        };
     }
 
     // Visible for testing

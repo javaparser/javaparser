@@ -24,8 +24,12 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast.bo
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
@@ -110,6 +114,34 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     }
 
     // Annotations
+
+    @Test
+    public void addingAnnotation() throws IOException {
+        AnnotationMemberDeclaration it = consider("int foo();");
+        it.addAnnotation("myAnno");
+        assertTransformedToString("@myAnno()\nint foo();", it);
+    }
+
+    @Test
+    public void removingAnnotationOnSomeLine() throws IOException {
+        AnnotationMemberDeclaration it = consider("@myAnno int foo();");
+        it.getAnnotations().remove(0);
+        assertTransformedToString("int foo();", it);
+    }
+
+    @Test
+    public void removingAnnotationOnPrevLine() throws IOException {
+        AnnotationMemberDeclaration it = consider("@myAnno\nint foo();");
+        it.getAnnotations().remove(0);
+        assertTransformedToString("int foo();", it);
+    }
+
+    @Test
+    public void replacingAnnotation() throws IOException {
+        AnnotationMemberDeclaration it = consider("@myAnno int foo();");
+        it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
+        assertTransformedToString("@myOtherAnno()\nint foo();", it);
+    }
 
     // Javadoc
 

@@ -274,4 +274,12 @@ class NodeText {
         int index = findToken(oldToken);
         elements.set(index, newToken);
     }
+
+    public void removeWhiteSpaceFollowing(Node child) {
+        int index = findChild(child);
+        ++index;
+        while (index < elements.size() && (elements.get(index).isToken(1)||elements.get(index).isToken(3))) {
+            elements.remove(index);
+        }
+    }
 }
