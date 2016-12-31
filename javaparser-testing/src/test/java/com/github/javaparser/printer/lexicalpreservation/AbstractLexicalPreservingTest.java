@@ -36,7 +36,7 @@ import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
 
-abstract class AbstractLexicalPreservingTest {
+public abstract class AbstractLexicalPreservingTest {
 
     protected LexicalPreservingPrinter lpp;
     protected CompilationUnit cu;

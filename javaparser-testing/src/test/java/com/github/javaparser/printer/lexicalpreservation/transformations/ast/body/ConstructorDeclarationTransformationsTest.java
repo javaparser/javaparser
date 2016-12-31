@@ -19,13 +19,14 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.printer.lexicalpreservation;
+package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
 import java.io.IOException;
