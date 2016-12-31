@@ -48,13 +48,34 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
 
     // Name
 
-    // isInterface;
+    @Test
+    public void settingName() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.setName("B");
+        assertTransformedToString("class B {}", cid);
+    }
 
-    // typeParameters;
+    // isInterface
 
-    //  extendedTypes;
+    @Test
+    public void classToInterface() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.setInterface(true);
+        assertTransformedToString("interface A {}", cid);
+    }
 
-    // implementedTypes;
+    @Test
+    public void interfaceToClass() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("interface A {}");
+        cid.setInterface(false);
+        assertTransformedToString("class A {}", cid);
+    }
+
+    // typeParameters
+
+    //  extendedTypes
+
+    // implementedTypes
 
     // Modifiers
 

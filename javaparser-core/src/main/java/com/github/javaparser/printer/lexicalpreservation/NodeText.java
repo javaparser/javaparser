@@ -129,6 +129,10 @@ class NodeText {
         throw new IllegalArgumentException(String.format("I could not find child '%s'", child));
     }
 
+    private int findToken(int tokenKind) {
+        return findToken(tokenKind, 0);
+    }
+
     private int findToken(int tokenKind, int from) {
         for (int i=from; i<elements.size(); i++) {
             TextElement element = elements.get(i);
@@ -264,5 +268,10 @@ class NodeText {
 
     public void removeElement(int index) {
         elements.remove(index);
+    }
+
+    void replaceToken(int oldToken, TokenTextElement newToken) {
+        int index = findToken(oldToken);
+        elements.set(index, newToken);
     }
 }

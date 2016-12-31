@@ -194,6 +194,14 @@ public class LexicalPreservingPrinter {
                 if (property == ObservableProperty.COMMENTED_NODE) {
                     return;
                 }
+                if (property == ObservableProperty.IS_INTERFACE) {
+                    if ((Boolean)newValue) {
+                        nodeText.replaceToken(ASTParserConstants.CLASS, new TokenTextElement(ASTParserConstants.INTERFACE, "interface"));
+                    } else {
+                        nodeText.replaceToken(ASTParserConstants.INTERFACE, new TokenTextElement(ASTParserConstants.CLASS, "class"));
+                    }
+                    return;
+                }
                 throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
                         oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
             }
