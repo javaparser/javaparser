@@ -39,12 +39,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
-    private void assertTransformedToString(String expectedPartialCode, Node node) throws IOException {
-        String actualCode = lpp.print(node);
-        assertEquals(expectedPartialCode, actualCode);
-    }
-
-    private AnnotationMemberDeclaration consider(String code) {
+    protected AnnotationMemberDeclaration consider(String code) {
         considerCode("@interface AD { " + code + " }");
         return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
     }

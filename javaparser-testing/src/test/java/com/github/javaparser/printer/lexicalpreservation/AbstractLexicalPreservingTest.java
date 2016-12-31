@@ -25,6 +25,8 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.Providers;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.utils.Pair;
 import org.junit.Before;
 
@@ -86,4 +88,10 @@ abstract class AbstractLexicalPreservingTest {
         String code = considerExample(exampleName + "_original");
         assertEquals(code, lpp.print(cu));
     }
+
+    protected void assertTransformedToString(String expectedPartialCode, Node node) throws IOException {
+        String actualCode = lpp.print(node);
+        assertEquals(expectedPartialCode, actualCode);
+    }
+
 }
