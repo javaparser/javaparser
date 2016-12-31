@@ -367,7 +367,7 @@ public class LexicalPreservingPrinter {
 
         if (index == 0) {
             // First element of the list, special treatment
-            Inserter inserter = getPositionFinder(property, parent, nodeList);
+            Inserter inserter = getPositionFinder(property, parent, nodeList, index);
             inserter.insert(parent, child);
         } else {
             // Element inside the list
@@ -440,28 +440,36 @@ public class LexicalPreservingPrinter {
     }
 
     private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, Separator... separators) {
+        List<TokenTextElement> beforeList = Arrays.stream(separators).map(e -> new TokenTextElement(e.getTokenKind(), e.getText())).collect(Collectors.toList());
+        return insertAfterChild(childToFollow, onIsOwnLine, beforeList.toArray(new TokenTextElement[]{}), new TokenTextElement[]{});
+    }
+
+    private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, TokenTextElement[] before, TokenTextElement[] after) {
         return (parent, child) -> {
-                NodeText nodeText = getOrCreateNodeText(parent);
-                for (int i=0; i< nodeText.numberOfElements();i++) {
-                    TextElement element = nodeText.getTextElement(i);
-                    if (element instanceof ChildTextElement) {
-                        ChildTextElement childElement = (ChildTextElement)element;
-                        if (childElement.getChild() == childToFollow) {
-                            if (onIsOwnLine) {
-                                nodeText.addToken(++i, Separator.NEWLINE);
-                                for (TokenTextElement e : findIndentation(childToFollow)) {
-                                    nodeText.addElement(++i, e);
-                                }
+            NodeText nodeText = getOrCreateNodeText(parent);
+            for (int i=0; i< nodeText.numberOfElements();i++) {
+                TextElement element = nodeText.getTextElement(i);
+                if (element instanceof ChildTextElement) {
+                    ChildTextElement childElement = (ChildTextElement)element;
+                    if (childElement.getChild() == childToFollow) {
+                        if (onIsOwnLine) {
+                            nodeText.addToken(++i, Separator.NEWLINE);
+                            for (TokenTextElement e : findIndentation(childToFollow)) {
+                                nodeText.addElement(++i, e);
                             }
-                            for (Separator s : separators) {
-                                nodeText.addToken(++i, s);
-                            }
-                            nodeText.addElement(++i, new ChildTextElement(LexicalPreservingPrinter.this, child));
-                            return;
                         }
+                        for (TokenTextElement e : before) {
+                            nodeText.addElement(++i, e);
+                        }
+                        nodeText.addElement(++i, new ChildTextElement(LexicalPreservingPrinter.this, child));
+                        for (TokenTextElement e : after) {
+                            nodeText.addElement(++i, e);
+                        }
+                        return;
                     }
                 }
-                throw new IllegalArgumentException();
+            }
+            throw new IllegalArgumentException();
         };
     }
 
@@ -494,7 +502,7 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode) {
+    private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode, Separator[] separators) {
         return (parent, child) -> {
             NodeText nodeText = textForNodes.get(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -512,6 +520,9 @@ public class LexicalPreservingPrinter {
                             nodeText.addToken(it++, Separator.TAB);
                         }
                         nodeText.addElement(it++, new ChildTextElement(LexicalPreservingPrinter.this, child));
+                        for (Separator s : separators) {
+                            nodeText.addElement(it++, new TokenTextElement(s.getTokenKind(), s.getText()));
+                        }
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
                             nodeText.addToken(it++, Separator.NEWLINE);
                             for (TokenTextElement e : parentIndentation) {
@@ -524,6 +535,10 @@ public class LexicalPreservingPrinter {
             }
             throw new IllegalArgumentException("I could not find the token of type " + tokenKind);
         };
+    }
+
+    private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode) {
+       return insertAfter(tokenKind, insertionMode, new Separator[]{});
     }
 
     // Visible for testing
@@ -571,7 +586,7 @@ public class LexicalPreservingPrinter {
         throw new IllegalArgumentException();
     }
 
-    private Inserter getPositionFinder(QualifiedProperty property, Node parent, NodeList nodeList) {
+    private Inserter getPositionFinder(QualifiedProperty property, Node parent, NodeList nodeList, int index) {
         if (property.equals(new QualifiedProperty(ClassOrInterfaceDeclaration.class, ObservableProperty.MEMBERS))) {
             if (nodeList.isEmpty()) {
                 getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
@@ -586,6 +601,18 @@ public class LexicalPreservingPrinter {
                 getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
             }
             return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
+        }  else if (property.equals(new QualifiedProperty(ClassOrInterfaceDeclaration.class, ObservableProperty.TYPE_PARAMETERS))) {
+            if (nodeList.isEmpty()) {
+                return insertAfterChild(((ClassOrInterfaceDeclaration) parent).getName(), false,
+                        new TokenTextElement[]{new TokenTextElement(ASTParserConstants.LT, "<")},
+                        new TokenTextElement[]{new TokenTextElement(ASTParserConstants.GT, ">")});
+            } else {
+                if (nodeList.size() == index) {
+                    return insertAfter(ASTParserConstants.LT, InsertionMode.PLAIN);
+                } else {
+                    return insertAfter(ASTParserConstants.LT, InsertionMode.PLAIN, property.separators());
+                }
+            }
         } else {
             throw new UnsupportedOperationException("I do not know how to find the position of " + property);
         }

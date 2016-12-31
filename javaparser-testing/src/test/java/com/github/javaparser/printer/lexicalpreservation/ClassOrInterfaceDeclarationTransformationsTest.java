@@ -73,6 +73,27 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
 
     // typeParameters
 
+    @Test
+    public void addingTypeParameterWhenThereAreNone() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.addTypeParameter(new TypeParameter("T", new NodeList<>()));
+        assertTransformedToString("class A<T> {}", cid);
+    }
+
+    @Test
+    public void addingTypeParameterAsFirstWhenThereAreSome() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A<U> {}");
+        cid.getTypeParameters().add(0, new TypeParameter("T", new NodeList<>()));
+        assertTransformedToString("class A<T, U> {}", cid);
+    }
+
+    @Test
+    public void addingTypeParameterAsLastWhenThereAreSome() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A<U> {}");
+        cid.addTypeParameter(new TypeParameter("T", new NodeList<>()));
+        assertTransformedToString("class A<U, T> {}", cid);
+    }
+
     //  extendedTypes
 
     // implementedTypes
