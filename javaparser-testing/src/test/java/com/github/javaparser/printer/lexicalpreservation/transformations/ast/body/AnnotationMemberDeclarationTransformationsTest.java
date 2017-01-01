@@ -21,16 +21,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
@@ -38,6 +34,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Transforming AnnotationMemberDeclaration and verifying the LexicalPreservation works as expected.
@@ -144,5 +141,27 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     }
 
     // Javadoc
+
+    @Test
+    public void addingJavadoc() throws IOException {
+        AnnotationMemberDeclaration it = consider("int foo();");
+        it.setJavaDocComment("Cool this annotation!");
+        assertTransformedToString("@interface AD { /**Cool this annotation!*/\n" +
+                "int foo(); }", it.getParentNode().get());
+    }
+
+    @Test
+    public void removingJavadoc() throws IOException {
+        AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
+        assertTrue(it.getJavaDoc().remove());
+        assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
+    }
+
+    @Test
+    public void replacingJavadoc() throws IOException {
+        AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
+        it.setJavaDocComment("Super extra cool this annotation!!!");
+        assertTransformedToString("@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());
+    }
 
 }
