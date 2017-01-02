@@ -265,7 +265,6 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
         assertEquals("class /*a comment*/ A {\t\t\n" +
-                " \n" +
                 "\n" +
                 "\n" +
                 "         void foo(int p  ) { return  'z'  \t; }}", lpp.print(c));

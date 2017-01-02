@@ -77,7 +77,7 @@ class QualifiedProperty {
     }
 
     public boolean isInOwnLine() {
-        if (this.equals(new QualifiedProperty(AnnotationDeclaration.class, ObservableProperty.MEMBERS))) {
+        if (getObservableProperty() == ObservableProperty.MEMBERS) {
             return true;
         }
         return false;

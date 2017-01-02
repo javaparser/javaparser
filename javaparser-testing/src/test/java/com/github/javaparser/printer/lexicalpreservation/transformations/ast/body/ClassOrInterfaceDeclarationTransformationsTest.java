@@ -26,8 +26,11 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
@@ -165,6 +168,27 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     }
 
     // members
+
+    @Test
+    public void addingField() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.addField("int", "foo");
+        assertTransformedToString("class A {\n    int foo;\n}", cid);
+    }
+
+    @Test
+    public void removingField() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("public class A { int foo; }");
+        cid.getMembers().remove(0);
+        assertTransformedToString("public class A { }", cid);
+    }
+
+    @Test
+    public void replacingFieldWithAnotherField() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("public class A {float f;}");
+        cid.getMembers().set(0, new FieldDeclaration(EnumSet.noneOf(Modifier.class), new VariableDeclarator(PrimitiveType.intType(), "bar")));
+        assertTransformedToString("public class A {\n    int bar;\n}", cid);
+    }
 
     // Annotations
 
