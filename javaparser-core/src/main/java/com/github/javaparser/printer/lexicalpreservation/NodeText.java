@@ -241,17 +241,17 @@ class NodeText {
         removeToken(tokenKind, false);
     }
 
-    public void removeFromToken(Separator separator, boolean includingPreceedingSpace) {
+    public void removeFromToken(TokenTextElement separator, boolean includingPreceedingSpace) {
         removeFromTokenUntil(separator, Optional.empty(), includingPreceedingSpace);
     }
 
-    public void removeFromTokenUntil(Separator separator, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
+    public void removeFromTokenUntil(TokenTextElement separator, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
         for (int i=elements.size() -1; i>=0; i--) {
             if (elements.get(i).isToken(separator.getTokenKind())) {
                 while (elements.size() > i && (!stopTokenKind.isPresent() || !elements.get(i).isToken(stopTokenKind.get()))) {
                     elements.remove(i);
                 }
-                if (includingPreceedingSpace && elements.get(i - 1).isToken(Separator.SPACE.getTokenKind())) {
+                if (includingPreceedingSpace && elements.get(i - 1).isToken(Tokens.space().getTokenKind())) {
                     elements.remove(i - 1);
                 }
                 return;

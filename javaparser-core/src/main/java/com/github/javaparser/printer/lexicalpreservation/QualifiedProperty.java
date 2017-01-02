@@ -69,11 +69,11 @@ class QualifiedProperty {
         return result;
     }
 
-    public Separator[] separators() {
+    public TextElement[] separators() {
         if (this.equals(new QualifiedProperty(AnnotationDeclaration.class, ObservableProperty.MEMBERS))) {
-            return new Separator[]{};
+            return new TextElement[]{};
         }
-        return new Separator[]{Separator.COMMA, Separator.SPACE};
+        return new TextElement[]{Tokens.comma(), Tokens.space()};
     }
 
     public boolean isInOwnLine() {

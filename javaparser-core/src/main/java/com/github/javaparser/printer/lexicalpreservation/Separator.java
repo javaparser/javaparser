@@ -29,18 +29,7 @@ import com.github.javaparser.ast.Modifier;
  * the text parsable and a correct layout.
  */
 enum Separator {
-    COMMA(ASTParserConstants.COMMA, ","),
-    SPACE(1, " "),
-    SEMICOLON(ASTParserConstants.SEMICOLON, ";"),
-    NEWLINE(1, "\n"),
-    TAB(1, "    "),
-    PUBLIC(ASTParserConstants.PUBLIC, "public"),
-    PROTECTED(ASTParserConstants.PROTECTED, "protected"),
-    STATIC(ASTParserConstants.STATIC, "static"),
-    EQUAL(ASTParserConstants.ASSIGN, "="),
-    DEFAULT(ASTParserConstants._DEFAULT, "default"),
-    EXTENDS(ASTParserConstants.EXTENDS, "extends"),
-    IMPLEMENTS(ASTParserConstants.IMPLEMENTS, "implements");
+    NEWLINE(1, "\n");
 
     private String text;
     private int tokenKind;
@@ -58,11 +47,4 @@ enum Separator {
         return tokenKind;
     }
 
-    public static Separator fromModifier(Modifier modifier) {
-        Separator separator = Separator.valueOf(modifier.name());
-        if (separator == null) {
-            throw new IllegalArgumentException(modifier.toString());
-        }
-        return separator;
-    }
 }

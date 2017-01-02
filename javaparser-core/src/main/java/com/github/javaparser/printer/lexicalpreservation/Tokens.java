@@ -26,6 +26,38 @@ import com.github.javaparser.ast.Modifier;
 
 public class Tokens {
 
+    public static TokenTextElement comma() {
+        return new TokenTextElement(ASTParserConstants.COMMA, ",");
+    }
+
+    public static TokenTextElement semicolon() {
+        return new TokenTextElement(ASTParserConstants.SEMICOLON, ";");
+    }
+
+    public static TokenTextElement space() {
+        return new TokenTextElement(1, " ");
+    }
+
+    public static TokenTextElement tab() {
+        return new TokenTextElement(1, "    ");
+    }
+
+    public static TokenTextElement newline() {
+        return new TokenTextElement(3, " ");
+    }
+
+    public static TokenTextElement equal() {
+        return new TokenTextElement(ASTParserConstants.ASSIGN, "=");
+    }
+
+    public static TokenTextElement create(int tokenKind) {
+        String text = ASTParserConstants.tokenImage[tokenKind];
+        if (text.startsWith("\"") && text.endsWith("\"")) {
+            text = text.substring(1, text.length() - 1);
+        }
+        return new TokenTextElement(tokenKind, text);
+    }
+
     public static TokenTextElement fromModifier(Modifier modifier) {
         try {
             int tokenKind = (int)ASTParserConstants.class.getField(modifier.name()).get(null);

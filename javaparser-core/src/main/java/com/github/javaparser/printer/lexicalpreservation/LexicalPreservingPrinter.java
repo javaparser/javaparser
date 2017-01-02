@@ -48,6 +48,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ASTParserConstants.EXTENDS;
+import static com.github.javaparser.ASTParserConstants.IMPLEMENTS;
+import static com.github.javaparser.printer.lexicalpreservation.Tokens.*;
 import static com.github.javaparser.utils.Utils.uncapitalize;
 
 /**
@@ -144,7 +147,7 @@ public class LexicalPreservingPrinter {
                     NodeText fieldNodeText = lpp.getTextForNode(fieldDeclaration);
                     fieldNodeText.removeAllBefore(fieldDeclaration.getVariable(0));
                     fieldNodeText.addChild(0, commonType);
-                    fieldNodeText.addToken(1, Separator.SPACE);
+                    fieldNodeText.addElement(1, space());
                     return;
                 }
                 if (oldValue instanceof Comment && newValue instanceof Comment) {
@@ -163,36 +166,36 @@ public class LexicalPreservingPrinter {
                     newModifiers.removeAll(oldModifiers);
                     oldModifiers.forEach(mToRemove -> nodeText.removeToken(Tokens.fromModifier(mToRemove).getTokenKind(), true));
                     newModifiers.forEach(mToAdd -> {
-                        nodeText.addToken(0, Separator.SPACE);
+                        nodeText.addElement(0, space());
                         nodeText.addElement(0, Tokens.fromModifier(mToAdd));
                     });
                     return;
                 }
                 if (property == ObservableProperty.INITIALIZER) {
                     if (oldValue == null && newValue != null) {
-                        nodeText.addToken(Separator.SPACE);
-                        nodeText.addToken(Separator.EQUAL);
-                        nodeText.addToken(Separator.SPACE);
+                        nodeText.addElement(space());
+                        nodeText.addElement(equal());
+                        nodeText.addElement(space());
                         nodeText.addChild((Node)newValue);
                         return;
                     } else if (oldValue != null && newValue == null) {
-                        nodeText.removeFromToken(Separator.EQUAL, true);
+                        nodeText.removeFromToken(equal(), true);
                         return;
                     }
                 }
                 if (property == ObservableProperty.DEFAULT_VALUE) {
                     if (oldValue == null && newValue != null) {
-                        lpp.insertBefore(ASTParserConstants.SEMICOLON, Separator.SPACE, Separator.DEFAULT, Separator.SPACE).insert(observedNode, (Node)newValue);
+                        lpp.insertBefore(ASTParserConstants.SEMICOLON, space(), Tokens.create(ASTParserConstants._DEFAULT), space()).insert(observedNode, (Node)newValue);
                         return;
                     } else if (oldValue != null && newValue == null) {
-                        nodeText.removeFromTokenUntil(Separator.DEFAULT, Optional.of(ASTParserConstants.SEMICOLON), true);
+                        nodeText.removeFromTokenUntil(Tokens.create(ASTParserConstants._DEFAULT), Optional.of(ASTParserConstants.SEMICOLON), true);
                         return;
                     }
                 }
                 if (property == ObservableProperty.COMMENT) {
                     if (oldValue == null && newValue != null) {
                         // FIXME consider CompilationUnit which contains its own JavaDoc
-                        lpp.insertBeforeChild(observedNode, true, Separator.NEWLINE).insert(observedNode.getParentNode().get(), (Node)newValue);
+                        lpp.insertBeforeChild(observedNode, true, Tokens.newline()).insert(observedNode.getParentNode().get(), (Node)newValue);
                         return;
                     } else if (oldValue != null && newValue == null) {
                         NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
@@ -361,7 +364,7 @@ public class LexicalPreservingPrinter {
 
         if (property.getObservableProperty() == ObservableProperty.EXTENDED_TYPES) {
             if (index == 0 && nodeList.size() == 1) {
-                textForNodes.get(parent).removeTextBetween(ASTParserConstants.EXTENDS, child, true);
+                textForNodes.get(parent).removeTextBetween(EXTENDS, child, true);
             }
         }
 
@@ -437,7 +440,7 @@ public class LexicalPreservingPrinter {
         return textForNodes.get(node);
     }
 
-    private Inserter insertAfterChild(ObservableProperty property, Separator... separators) {
+    private Inserter insertAfterChild(ObservableProperty property, TokenTextElement... separators) {
         return (parent, child) -> {
             Node childToFollow = property.singleValueFor(parent);
             if (childToFollow == null) {
@@ -447,7 +450,7 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private Inserter insertBeforeChild(Node childToPreceed, boolean onIsOwnLine, Separator... separators) {
+    private Inserter insertBeforeChild(Node childToPreceed, boolean onIsOwnLine, TokenTextElement... separators) {
         return (parent, child) -> {
             NodeText nodeText = getOrCreateNodeText(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -473,12 +476,11 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, Separator... separators) {
-        List<TokenTextElement> beforeList = Arrays.stream(separators).map(e -> new TokenTextElement(e.getTokenKind(), e.getText())).collect(Collectors.toList());
-        return insertAfterChild(childToFollow, onIsOwnLine, beforeList.toArray(new TokenTextElement[]{}), new TokenTextElement[]{});
+    private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, TextElement... separators) {
+        return insertAfterChild(childToFollow, onIsOwnLine, separators, new TokenTextElement[]{});
     }
 
-    private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, TokenTextElement[] before, TokenTextElement[] after) {
+    private Inserter insertAfterChild(Node childToFollow, boolean onIsOwnLine, TextElement[] before, TextElement[] after) {
         return (parent, child) -> {
             NodeText nodeText = getOrCreateNodeText(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -492,11 +494,11 @@ public class LexicalPreservingPrinter {
                                 nodeText.addElement(++i, e);
                             }
                         }
-                        for (TokenTextElement e : before) {
+                        for (TextElement e : before) {
                             nodeText.addElement(++i, e);
                         }
                         nodeText.addElement(++i, new ChildTextElement(LexicalPreservingPrinter.this, child));
-                        for (TokenTextElement e : after) {
+                        for (TextElement e : after) {
                             nodeText.addElement(++i, e);
                         }
                         return;
@@ -514,7 +516,7 @@ public class LexicalPreservingPrinter {
         return node;
     }
 
-    private Inserter insertBefore(final int tokenKind, Separator... separators) {
+    private Inserter insertBefore(final int tokenKind, TextElement... separators) {
         return (parent, child) -> {
             NodeText nodeText = textForNodes.get(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -524,8 +526,8 @@ public class LexicalPreservingPrinter {
                     TokenTextElement tokenTextElement = (TokenTextElement)element;
                     if (tokenTextElement.getTokenKind() == tokenKind) {
                         int pos = i;
-                        for (Separator s : separators) {
-                            nodeText.addElement(pos++, new TokenTextElement(s.getTokenKind(), s.getText()));
+                        for (TextElement s : separators) {
+                            nodeText.addElement(pos++, s);
                         }
                         nodeText.addElement(pos++, new ChildTextElement(LexicalPreservingPrinter.this, child));
                         return;
@@ -536,7 +538,7 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private Inserter insertAfter(final Node sibling, InsertionMode insertionMode, Separator[] separatorsBefore, Separator[] separatorsAfter) {
+    private Inserter insertAfter(final Node sibling, InsertionMode insertionMode, TextElement[] separatorsBefore, TextElement[] separatorsAfter) {
         return (parent, child) -> {
             NodeText nodeText = textForNodes.get(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -551,14 +553,14 @@ public class LexicalPreservingPrinter {
                             for (TokenTextElement e : parentIndentation) {
                                 nodeText.addElement(it++, e);
                             }
-                            nodeText.addToken(it++, Separator.TAB);
+                            nodeText.addElement(it++, tab());
                         }
-                        for (Separator s : separatorsBefore) {
-                            nodeText.addElement(it++, new TokenTextElement(s.getTokenKind(), s.getText()));
+                        for (TextElement s : separatorsBefore) {
+                            nodeText.addElement(it++, s);
                         }
                         nodeText.addElement(it++, new ChildTextElement(LexicalPreservingPrinter.this, child));
-                        for (Separator s : separatorsAfter) {
-                            nodeText.addElement(it++, new TokenTextElement(s.getTokenKind(), s.getText()));
+                        for (TextElement s : separatorsAfter) {
+                            nodeText.addElement(it++, s);
                         }
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
                             nodeText.addToken(it++, Separator.NEWLINE);
@@ -574,7 +576,7 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode, Separator[] separators) {
+    private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode, TextElement[] separators) {
         return (parent, child) -> {
             NodeText nodeText = textForNodes.get(parent);
             for (int i=0; i< nodeText.numberOfElements();i++) {
@@ -589,11 +591,11 @@ public class LexicalPreservingPrinter {
                             for (TokenTextElement e : parentIndentation) {
                                 nodeText.addElement(it++, e);
                             }
-                            nodeText.addToken(it++, Separator.TAB);
+                            nodeText.addElement(it++, tab());
                         }
                         nodeText.addElement(it++, new ChildTextElement(LexicalPreservingPrinter.this, child));
-                        for (Separator s : separators) {
-                            nodeText.addElement(it++, new TokenTextElement(s.getTokenKind(), s.getText()));
+                        for (TextElement s : separators) {
+                            nodeText.addElement(it++, s);
                         }
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
                             nodeText.addToken(it++, Separator.NEWLINE);
@@ -610,7 +612,7 @@ public class LexicalPreservingPrinter {
     }
 
     private Inserter insertAfter(final int tokenKind, InsertionMode insertionMode) {
-       return insertAfter(tokenKind, insertionMode, new Separator[]{});
+       return insertAfter(tokenKind, insertionMode, new TokenTextElement[]{});
     }
 
     // Visible for testing
@@ -665,7 +667,7 @@ public class LexicalPreservingPrinter {
             }
             return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.equals(new QualifiedProperty(FieldDeclaration.class, ObservableProperty.VARIABLES))) {
-            return insertAfterChild(ObservableProperty.ELEMENT_TYPE, Separator.SPACE);
+            return insertAfterChild(ObservableProperty.ELEMENT_TYPE, space());
         } else if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
             return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
         }  else if (property.equals(new QualifiedProperty(BlockStmt.class, ObservableProperty.STATEMENTS))) {
@@ -689,10 +691,10 @@ public class LexicalPreservingPrinter {
             return insertAtBeginning(InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.getObservableProperty() == ObservableProperty.EXTENDED_TYPES) {
             SimpleName name = ((ClassOrInterfaceDeclaration)parent).getName();
-            return insertAfter(name, InsertionMode.PLAIN, new Separator[]{Separator.SPACE, Separator.EXTENDS, Separator.SPACE}, new Separator[]{});
+            return insertAfter(name, InsertionMode.PLAIN, new TextElement[]{space(), Tokens.create(EXTENDS), space()}, new TextElement[]{});
         } else if (property.getObservableProperty() == ObservableProperty.IMPLEMENTED_TYPES) {
             SimpleName name = ((ClassOrInterfaceDeclaration)parent).getName();
-            return insertAfter(name, InsertionMode.PLAIN, new Separator[]{Separator.SPACE, Separator.IMPLEMENTS, Separator.SPACE}, new Separator[]{});
+            return insertAfter(name, InsertionMode.PLAIN, new TextElement[]{space(), Tokens.create(IMPLEMENTS), space()}, new TextElement[]{});
         } else {
             throw new UnsupportedOperationException("I do not know how to find the position of " + property);
         }
