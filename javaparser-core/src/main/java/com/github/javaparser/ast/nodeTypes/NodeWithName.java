@@ -40,8 +40,7 @@ public interface NodeWithName<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N setName(String name) {
-        setName(parse(name));
-        return (N) this;
+        return setName(parse(name));
     }
 
     default String getNameAsString() {

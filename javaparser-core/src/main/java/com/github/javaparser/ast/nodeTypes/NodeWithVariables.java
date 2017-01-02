@@ -82,7 +82,7 @@ public interface NodeWithVariables<N extends Node> {
      * <br/>For <code>int a;</code> this is int.
      * <br/>For <code>int a,b,c,d;</code> this is also int.
      * <br/>For <code>int a,b[],c;</code> this is also int. Note: no mention of b being an array.
-     * <br/>For <code>int a,b;</code>, then doing setType(String) on b, this is an assertion error. It is also a situation that you don't really want.
+     * <br/>For <code>int a,b;</code>, then doing setType(String) on b, then calling getElementType(). This is an assertion error. It is also a situation that you don't really want.
      */
     default Type getElementType() {
         NodeList<VariableDeclarator> variables = getVariables();
