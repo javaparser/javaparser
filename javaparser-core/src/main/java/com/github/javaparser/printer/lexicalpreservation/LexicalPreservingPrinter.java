@@ -355,7 +355,7 @@ public class LexicalPreservingPrinter {
         Node parent = parentNode.get();
         QualifiedProperty property = new QualifiedProperty(parent.getClass(), findNodeListName(nodeList));
 
-        if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
+        if (property.getObservableProperty() == ObservableProperty.PARAMETERS) {
             if (index == 0 && nodeList.size() > 1) {
                 // we should remove all the text between the child and the comma
                 textForNodes.get(parent).removeTextBetween(byNode(child), byTokenType(ASTParserConstants.COMMA), EnumSet.of(REMOVE_SPACE_IMMEDIATELY_AFTER));
@@ -659,7 +659,7 @@ public class LexicalPreservingPrinter {
             return insertAfter(byTokenType(ASTParserConstants.LBRACE), InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.equals(new QualifiedProperty(FieldDeclaration.class, ObservableProperty.VARIABLES))) {
             return insertAfterChild(ObservableProperty.ELEMENT_TYPE, space());
-        } else if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
+        } else if (property.getObservableProperty() == ObservableProperty.PARAMETERS) {
             return insertAfter(byTokenType(ASTParserConstants.LPAREN), InsertionMode.PLAIN);
         }  else if (property.equals(new QualifiedProperty(BlockStmt.class, ObservableProperty.STATEMENTS))) {
             if (nodeList.isEmpty()) {

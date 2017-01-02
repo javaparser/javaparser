@@ -24,6 +24,10 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast.bo
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
@@ -75,6 +79,41 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
     }
 
     // Parameters
+
+    @Test
+    public void addingParameters() throws IOException {
+        MethodDeclaration it = consider("void foo(){}");
+        it.addParameter(PrimitiveType.doubleType(), "d");
+        assertTransformedToString("void foo(double d){}", it);
+    }
+
+    @Test
+    public void removingOnlyParameter() throws IOException {
+        MethodDeclaration it = consider("public void foo(double d){}");
+        it.getParameters().remove(0);
+        assertTransformedToString("public void foo(){}", it);
+    }
+
+    @Test
+    public void removingFirstParameterOfMany() throws IOException {
+        MethodDeclaration it = consider("public void foo(double d, float f){}");
+        it.getParameters().remove(0);
+        assertTransformedToString("public void foo(float f){}", it);
+    }
+
+    @Test
+    public void removingLastParameterOfMany() throws IOException {
+        MethodDeclaration it = consider("public void foo(double d, float f){}");
+        it.getParameters().remove(1);
+        assertTransformedToString("public void foo(double d){}", it);
+    }
+
+    @Test
+    public void replacingOnlyParameter() throws IOException {
+        MethodDeclaration it = consider("public void foo(float f){}");
+        it.getParameters().set(0, new Parameter(new ArrayType(PrimitiveType.intType()), new SimpleName("foo")));
+        assertTransformedToString("public void foo(int[] foo){}", it);
+    }
 
     // ThrownExceptions
 

@@ -25,6 +25,10 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
@@ -77,6 +81,41 @@ public class ConstructorDeclarationTransformationsTest extends AbstractLexicalPr
     }
 
     // Parameters
+
+    @Test
+    public void addingParameters() throws IOException {
+        ConstructorDeclaration cd = consider("A(){}");
+        cd.addParameter(PrimitiveType.doubleType(), "d");
+        assertTransformedToString("A(double d){}", cd);
+    }
+
+    @Test
+    public void removingOnlyParameter() throws IOException {
+        ConstructorDeclaration cd = consider("public A(double d){}");
+        cd.getParameters().remove(0);
+        assertTransformedToString("public A(){}", cd);
+    }
+
+    @Test
+    public void removingFirstParameterOfMany() throws IOException {
+        ConstructorDeclaration cd = consider("public A(double d, float f){}");
+        cd.getParameters().remove(0);
+        assertTransformedToString("public A(float f){}", cd);
+    }
+
+    @Test
+    public void removingLastParameterOfMany() throws IOException {
+        ConstructorDeclaration cd = consider("public A(double d, float f){}");
+        cd.getParameters().remove(1);
+        assertTransformedToString("public A(double d){}", cd);
+    }
+
+    @Test
+    public void replacingOnlyParameter() throws IOException {
+        ConstructorDeclaration cd = consider("public A(float f){}");
+        cd.getParameters().set(0, new Parameter(new ArrayType(PrimitiveType.intType()), new SimpleName("foo")));
+        assertTransformedToString("public A(int[] foo){}", cd);
+    }
 
     // ThrownExceptions
 
