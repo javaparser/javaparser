@@ -27,6 +27,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * Abstract class for all AST nodes that represent comments.
  *
@@ -42,7 +44,7 @@ public abstract class Comment extends Node {
 
     public Comment(Range range, String content) {
         super(range);
-        this.content = content;
+        setContent(content);
     }
 
     /**
@@ -61,7 +63,7 @@ public abstract class Comment extends Node {
      */
     public Comment setContent(String content) {
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
-        this.content = content;
+        this.content = assertNotNull(content);
         return this;
     }
 
