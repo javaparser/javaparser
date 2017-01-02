@@ -26,6 +26,7 @@ import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -214,6 +215,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
             this.comment.setCommentedNode(this);
         }
         return this;
+    }
+
+    public boolean hasJavaDocComment() {
+        return hasComment() && getComment() instanceof JavadocComment;
     }
 
     /**

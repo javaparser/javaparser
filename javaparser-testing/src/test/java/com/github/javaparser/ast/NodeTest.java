@@ -26,6 +26,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
@@ -252,5 +254,44 @@ public class NodeTest {
         assertFalse(aClass.removeOrphanComment(c));
         assertEquals(1, aField.getOrphanComments().size());
         assertTrue(c.getParentNode().isPresent());
+    }
+
+    @Test
+    public void hasJavaDocCommentPositiveCaseWithSetJavaDocComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setJavaDocComment("A comment");
+        assertEquals(true, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentPositiveCaseWithSetComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setComment(new JavadocComment("A comment"));
+        assertEquals(true, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentNegativeCaseNoComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        assertEquals(false, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentNegativeCaseLineComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setComment(new LineComment("foo"));
+        assertEquals(false, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentNegativeCaseBlockComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setComment(new BlockComment("foo"));
+        assertEquals(false, decl.hasJavaDocComment());
     }
 }

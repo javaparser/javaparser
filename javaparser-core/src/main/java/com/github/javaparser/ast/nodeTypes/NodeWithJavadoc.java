@@ -45,4 +45,9 @@ public interface NodeWithJavadoc<N extends Node> {
         ((Node) this).setComment(new JavadocComment(comment));
         return (N) this;
     }
+
+    default boolean removeJavaDocComment() {
+        Node thisNode = (Node) this;
+        return thisNode.hasJavaDocComment() && thisNode.getComment().remove();
+    }
 }
