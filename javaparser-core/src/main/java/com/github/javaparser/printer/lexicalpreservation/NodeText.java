@@ -150,14 +150,21 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
+    void removeTextBetween(int tokenKind, Node child) {
+        removeTextBetween(tokenKind, child, false);
+    }
+
     /**
      * Remove all elements between the given token (inclusive) and the given child (exclusive).
      * @param tokenKind
      * @param child
      */
-    void removeTextBetween(int tokenKind, Node child) {
+    void removeTextBetween(int tokenKind, Node child, boolean removeSpaceImmediatelyAfter) {
         int startDeletion = findToken(tokenKind, 0);
         int endDeletion = findChild(child, startDeletion + 1);
+        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) && ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == WHITESPACE) {
+            endDeletion++;
+        }
         removeBetweenIndexes(startDeletion, endDeletion);
     }
 

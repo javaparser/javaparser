@@ -95,9 +95,51 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
         assertTransformedToString("class A<U, T> {}", cid);
     }
 
-    //  extendedTypes
+    // extendedTypes
+
+    @Test
+    public void addingExtendedTypes() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.addExtends("Foo");
+        assertTransformedToString("class A extends Foo {}", cid);
+    }
+
+    @Test
+    public void removingExtendedTypes() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("public class A extends Foo {}");
+        cid.getExtendedTypes().remove(0);
+        assertTransformedToString("public class A {}", cid);
+    }
+
+    @Test
+    public void replacingExtendedTypes() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("public class A extends Foo {}");
+        cid.getExtendedTypes().set(0, new ClassOrInterfaceType("Bar"));
+        assertTransformedToString("public class A extends Bar {}", cid);
+    }
 
     // implementedTypes
+
+    @Test
+    public void addingImplementedTypes() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("class A {}");
+        cid.addImplements("Foo");
+        assertTransformedToString("class A implements Foo {}", cid);
+    }
+
+    @Test
+    public void removingImplementedTypes() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("public class A implements Foo {}");
+        cid.getImplementedTypes().remove(0);
+        assertTransformedToString("public class A {}", cid);
+    }
+
+    @Test
+    public void replacingImplementedTypes() throws IOException {
+        ClassOrInterfaceDeclaration cid = consider("public class A implements Foo {}");
+        cid.getImplementedTypes().set(0, new ClassOrInterfaceType("Bar"));
+        assertTransformedToString("public class A implements Bar {}", cid);
+    }
 
     // Modifiers
 
