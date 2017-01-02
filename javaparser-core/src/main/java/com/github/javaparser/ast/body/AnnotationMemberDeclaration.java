@@ -158,6 +158,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     public AnnotationMemberDeclaration setName(SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 
