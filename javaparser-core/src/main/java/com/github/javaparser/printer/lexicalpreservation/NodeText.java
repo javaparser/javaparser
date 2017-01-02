@@ -126,22 +126,14 @@ class NodeText {
     // Removing single elements
     //
 
-    void removeElementForChild(Node child) {
-        elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
+    void remove(TextElementMatcher matcher) {
+        elements.removeIf(e -> matcher.match(e));
     }
 
-    public void removeToken(int tokenKind) {
-        removeToken(tokenKind, false);
-    }
-
-    //
-    // Removing sequences
-    //
-
-    public void removeToken(int tokenKind, boolean potentiallyFollowingWhitespace) {
+    public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
         int i=0;
         for (TextElement e : elements) {
-            if ((e instanceof TokenTextElement) && ((TokenTextElement)e).getTokenKind() == tokenKind) {
+            if (matcher.match(e)) {
                 elements.remove(e);
                 if (potentiallyFollowingWhitespace) {
                     if (i < elements.size()) {
@@ -158,13 +150,17 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
-    public void removeFromToken(TokenTextElement separator, boolean includingPreceedingSpace) {
-        removeFromTokenUntil(separator, Optional.empty(), includingPreceedingSpace);
+    //
+    // Removing sequences
+    //
+
+    public void removeFromToken(TextElementMatcher start, boolean includingPreceedingSpace) {
+        removeFromTokenUntil(start, Optional.empty(), includingPreceedingSpace);
     }
 
-    public void removeFromTokenUntil(TokenTextElement separator, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
+    public void removeFromTokenUntil(TextElementMatcher start, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
         for (int i=elements.size() -1; i>=0; i--) {
-            if (elements.get(i).isToken(separator.getTokenKind())) {
+            if (start.match(elements.get(i))) {
                 while (elements.size() > i && (!stopTokenKind.isPresent() || !elements.get(i).isToken(stopTokenKind.get()))) {
                     elements.remove(i);
                 }
@@ -177,8 +173,8 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
-    public void removeAllBefore(Node child) {
-        int index = findChild(child, 0);
+    public void removeAllBefore(TextElementMatcher delimiter) {
+        int index = findElement(delimiter);
         for (int i=0;i<index;i++) {
             elements.remove(0);
         }

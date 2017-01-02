@@ -50,6 +50,8 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.ASTParserConstants.EXTENDS;
 import static com.github.javaparser.ASTParserConstants.IMPLEMENTS;
+import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byNode;
+import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byTokenType;
 import static com.github.javaparser.printer.lexicalpreservation.Tokens.*;
 import static com.github.javaparser.utils.Utils.uncapitalize;
 
@@ -145,7 +147,7 @@ public class LexicalPreservingPrinter {
                     Type commonType = fieldDeclarationCopy.getCommonType();
 
                     NodeText fieldNodeText = lpp.getTextForNode(fieldDeclaration);
-                    fieldNodeText.removeAllBefore(fieldDeclaration.getVariable(0));
+                    fieldNodeText.removeAllBefore(byNode(fieldDeclaration.getVariable(0)));
                     fieldNodeText.addChild(0, commonType);
                     fieldNodeText.addElement(1, space());
                     return;
@@ -164,10 +166,10 @@ public class LexicalPreservingPrinter {
                     EnumSet<Modifier> newModifiers = (EnumSet<Modifier>)newValue;
                     oldModifiers.removeAll(newModifiers);
                     newModifiers.removeAll(oldModifiers);
-                    oldModifiers.forEach(mToRemove -> nodeText.removeToken(Tokens.fromModifier(mToRemove).getTokenKind(), true));
+                    oldModifiers.forEach(mToRemove -> nodeText.remove(byTokenType(fromModifier(mToRemove).getTokenKind()), true));
                     newModifiers.forEach(mToAdd -> {
                         nodeText.addElement(0, space());
-                        nodeText.addElement(0, Tokens.fromModifier(mToAdd));
+                        nodeText.addElement(0, fromModifier(mToAdd));
                     });
                     return;
                 }
@@ -219,7 +221,7 @@ public class LexicalPreservingPrinter {
                         nodeText.addElement(0, new TokenTextElement(ASTParserConstants.STATIC, "static"));
                         nodeText.addElement(1, new TokenTextElement(0, " "));
                     } else {
-                        nodeText.removeToken(ASTParserConstants.STATIC, true);
+                        nodeText.remove(byTokenType(ASTParserConstants.STATIC), true);
                     }
                     return;
                 }
@@ -392,7 +394,7 @@ public class LexicalPreservingPrinter {
             }
         }
 
-        textForNodes.get(parent).removeElementForChild(child);
+        textForNodes.get(parent).remove(byNode(child));
     }
 
     private void updateTextBecauseOfAddedChild(NodeList nodeList, int index, Optional<Node> parentNode, Node child) {
