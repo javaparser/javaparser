@@ -311,4 +311,9 @@ class NodeText {
             throw new IllegalArgumentException();
         }
     }
+
+    @Override
+    public String toString() {
+        return "NodeText{" + elements + '}';
+    }
 }

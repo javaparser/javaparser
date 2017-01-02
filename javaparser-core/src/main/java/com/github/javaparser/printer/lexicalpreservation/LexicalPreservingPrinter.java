@@ -609,7 +609,7 @@ public class LexicalPreservingPrinter {
                     }
                 }
             }
-            throw new IllegalArgumentException("I could not find the token of type " + tokenKind);
+            throw new IllegalArgumentException("I could not find the token of type " + tokenKind + ". NodeText: " + nodeText);
         };
     }
 
@@ -713,5 +713,10 @@ public class LexicalPreservingPrinter {
     // Visible for testing
     NodeText getTextForNode(Node node) {
         return textForNodes.get(node);
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 }
