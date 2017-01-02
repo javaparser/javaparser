@@ -88,18 +88,6 @@ class NodeText {
         elements.add(new TokenTextElement(tokenKind, text));
     }
 
-    private void addToken(int index, int tokenKind, String text) {
-        elements.add(index, new TokenTextElement(tokenKind, text));
-    }
-
-    //
-    // Removing elements
-    //
-
-    void removeElementForChild(Node child) {
-        elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
-    }
-
     //
     // Finding elements
     //
@@ -138,6 +126,93 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
+    //
+    // Removing single elements
+    //
+
+    void removeElementForChild(Node child) {
+        elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
+    }
+
+    public void removeToken(int tokenKind) {
+        removeToken(tokenKind, false);
+    }
+
+    //
+    // Removing sequences
+    //
+
+    public void removeToken(int tokenKind, boolean potentiallyFollowingWhitespace) {
+        int i=0;
+        for (TextElement e : elements) {
+            if ((e instanceof TokenTextElement) && ((TokenTextElement)e).getTokenKind() == tokenKind) {
+                elements.remove(e);
+                if (potentiallyFollowingWhitespace) {
+                    if (i < elements.size()) {
+                        if (elements.get(i).isToken(1)) {
+                            elements.remove(i);
+                        }
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
+                }
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void removeFromToken(TokenTextElement separator, boolean includingPreceedingSpace) {
+        removeFromTokenUntil(separator, Optional.empty(), includingPreceedingSpace);
+    }
+
+    public void removeFromTokenUntil(TokenTextElement separator, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
+        for (int i=elements.size() -1; i>=0; i--) {
+            if (elements.get(i).isToken(separator.getTokenKind())) {
+                while (elements.size() > i && (!stopTokenKind.isPresent() || !elements.get(i).isToken(stopTokenKind.get()))) {
+                    elements.remove(i);
+                }
+                if (includingPreceedingSpace && elements.get(i - 1).isToken(Tokens.space().getTokenKind())) {
+                    elements.remove(i - 1);
+                }
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public void removeAllBefore(Node child) {
+        int index = findChild(child, 0);
+        for (int i=0;i<index;i++) {
+            elements.remove(0);
+        }
+    }
+
+    public void removeElement(int index) {
+        elements.remove(index);
+    }
+
+    public void removeWhiteSpaceFollowing(Node child) {
+        int index = findChild(child);
+        ++index;
+        while (index < elements.size() && (elements.get(index).isToken(1)||elements.get(index).isToken(3))) {
+            elements.remove(index);
+        }
+    }
+
+    public void removeComment(Comment comment) {
+        for (int i=0;i<elements.size();i++){
+            TextElement e = elements.get(i);
+            if (e.isCommentToken() && e.expand().trim().equals(comment.toString().trim())) {
+                elements.remove(i);
+                if (i<elements.size() && elements.get(i).isToken(3)) {
+                    elements.remove(i);
+                }
+                return;
+            }
+        }
+    }
+
     void removeTextBetween(int tokenKind, Node child) {
         removeTextBetween(tokenKind, child, false);
     }
@@ -150,7 +225,8 @@ class NodeText {
     void removeTextBetween(int tokenKind, Node child, boolean removeSpaceImmediatelyAfter) {
         int startDeletion = findToken(tokenKind, 0);
         int endDeletion = findChild(child, startDeletion + 1);
-        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) && ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == WHITESPACE) {
+        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
+                ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == Tokens.whitespaceTokenKind()) {
             endDeletion++;
         }
         removeBetweenIndexes(startDeletion, endDeletion);
@@ -169,15 +245,40 @@ class NodeText {
         }
     }
 
-    private final static int WHITESPACE = 1;
-
     void removeTextBetween(Node child, int tokenKind, boolean removeSpaceImmediatelyAfter) {
         int startDeletion = findChild(child, 0);
         int endDeletion = findToken(tokenKind, startDeletion + 1);
-        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) && ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == WHITESPACE) {
+        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
+                ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == Tokens.whitespaceTokenKind()) {
             endDeletion++;
         }
         removeBetweenIndexes(startDeletion, endDeletion);
+    }
+
+    //
+    // Replacing elements
+    //
+
+    public void replace(Node oldChild, Node newChild) {
+        int index = findChild(oldChild, 0);
+        elements.remove(index);
+        elements.add(index, new ChildTextElement(lexicalPreservingPrinter, newChild));
+    }
+
+    void replaceToken(int oldToken, TokenTextElement newToken) {
+        int index = findToken(oldToken);
+        elements.set(index, newToken);
+    }
+
+    public void replaceComment(Comment oldValue, Comment newValue) {
+        for (int i=0;i<elements.size();i++){
+            TextElement e = elements.get(i);
+            if (e.isCommentToken() && e.expand().trim().equals(oldValue.toString().trim())) {
+                elements.remove(i);
+                elements.add(i, new TokenTextElement(commentToTokenKind(newValue), newValue.toString().trim()));
+                return;
+            }
+        }
     }
 
     //
@@ -207,103 +308,6 @@ class NodeText {
     // Visible for testing
     List<TextElement> getElements() {
         return elements;
-    }
-
-    public void removeToken(int tokenKind, boolean potentiallyFollowingWhitespace) {
-        int i=0;
-        for (TextElement e : elements) {
-            if ((e instanceof TokenTextElement) && ((TokenTextElement)e).getTokenKind() == tokenKind) {
-                elements.remove(e);
-                if (potentiallyFollowingWhitespace) {
-                    if (i < elements.size()) {
-                        if (elements.get(i).isToken(1)) {
-                            elements.remove(i);
-                        }
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                }
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    public void removeToken(int tokenKind) {
-        removeToken(tokenKind, false);
-    }
-
-    public void removeFromToken(TokenTextElement separator, boolean includingPreceedingSpace) {
-        removeFromTokenUntil(separator, Optional.empty(), includingPreceedingSpace);
-    }
-
-    public void removeFromTokenUntil(TokenTextElement separator, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
-        for (int i=elements.size() -1; i>=0; i--) {
-            if (elements.get(i).isToken(separator.getTokenKind())) {
-                while (elements.size() > i && (!stopTokenKind.isPresent() || !elements.get(i).isToken(stopTokenKind.get()))) {
-                    elements.remove(i);
-                }
-                if (includingPreceedingSpace && elements.get(i - 1).isToken(Tokens.space().getTokenKind())) {
-                    elements.remove(i - 1);
-                }
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    public void replace(Node oldChild, Node newChild) {
-        int index = findChild(oldChild, 0);
-        elements.remove(index);
-        elements.add(index, new ChildTextElement(lexicalPreservingPrinter, newChild));
-    }
-
-    public void removeAllBefore(Node child) {
-        int index = findChild(child, 0);
-        for (int i=0;i<index;i++) {
-            elements.remove(0);
-        }
-    }
-
-    public void removeElement(int index) {
-        elements.remove(index);
-    }
-
-    void replaceToken(int oldToken, TokenTextElement newToken) {
-        int index = findToken(oldToken);
-        elements.set(index, newToken);
-    }
-
-    public void removeWhiteSpaceFollowing(Node child) {
-        int index = findChild(child);
-        ++index;
-        while (index < elements.size() && (elements.get(index).isToken(1)||elements.get(index).isToken(3))) {
-            elements.remove(index);
-        }
-    }
-
-    public void removeComment(Comment comment) {
-        for (int i=0;i<elements.size();i++){
-            TextElement e = elements.get(i);
-            if (e.isCommentToken() && e.expand().trim().equals(comment.toString().trim())) {
-                elements.remove(i);
-                if (i<elements.size() && elements.get(i).isToken(3)) {
-                    elements.remove(i);
-                }
-                return;
-            }
-        }
-    }
-
-    public void replaceComment(Comment oldValue, Comment newValue) {
-        for (int i=0;i<elements.size();i++){
-            TextElement e = elements.get(i);
-            if (e.isCommentToken() && e.expand().trim().equals(oldValue.toString().trim())) {
-                elements.remove(i);
-                elements.add(i, new TokenTextElement(commentToTokenKind(newValue), newValue.toString().trim()));
-                return;
-            }
-        }
     }
 
     private int commentToTokenKind(Comment comment){

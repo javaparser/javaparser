@@ -26,6 +26,14 @@ import com.github.javaparser.ast.Modifier;
 
 public class Tokens {
 
+    public static int whitespaceTokenKind() {
+        return 1;
+    }
+
+    public static int newlineTokenKind() {
+        return 3;
+    }
+
     public static TokenTextElement comma() {
         return new TokenTextElement(ASTParserConstants.COMMA, ",");
     }
@@ -35,15 +43,15 @@ public class Tokens {
     }
 
     public static TokenTextElement space() {
-        return new TokenTextElement(1, " ");
+        return new TokenTextElement(whitespaceTokenKind(), " ");
     }
 
     public static TokenTextElement tab() {
-        return new TokenTextElement(1, "    ");
+        return new TokenTextElement(whitespaceTokenKind(), "    ");
     }
 
     public static TokenTextElement newline() {
-        return new TokenTextElement(3, "\n");
+        return new TokenTextElement(newlineTokenKind(), "\n");
     }
 
     public static TokenTextElement equal() {
