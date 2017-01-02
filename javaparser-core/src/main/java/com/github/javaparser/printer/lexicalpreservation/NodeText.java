@@ -59,7 +59,7 @@ class NodeText {
     }
 
     //
-    // Adding and removing elements
+    // Adding elements
     //
 
     /**
@@ -84,28 +84,12 @@ class NodeText {
         addElement(index, new ChildTextElement(lexicalPreservingPrinter, child));
     }
 
-    void removeElementForChild(Node child) {
-        elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
-    }
-
     void addToken(int tokenKind, String text) {
         elements.add(new TokenTextElement(tokenKind, text));
     }
 
     private void addToken(int index, int tokenKind, String text) {
         elements.add(index, new TokenTextElement(tokenKind, text));
-    }
-
-    void addList(NodeList<?> children, boolean separatorAfterLast, Separator... separators) {
-        for (int i=0; i<children.size(); i++) {
-            Node child = children.get(i);
-            addElement(new ChildTextElement(lexicalPreservingPrinter, child));
-            if ((i+1)<children.size() || separatorAfterLast) {
-                for (Separator s : separators) {
-                    addToken(s);
-                }
-            }
-        }
     }
 
     void addToken(Separator separator) {
@@ -115,6 +99,18 @@ class NodeText {
     void addToken(int index, Separator separator) {
         addToken(index, separator.getTokenKind(), separator.getText());
     }
+
+    //
+    // Removing elements
+    //
+
+    void removeElementForChild(Node child) {
+        elements.removeIf(e -> e instanceof ChildTextElement && ((ChildTextElement)e).getChild() == child);
+    }
+
+    //
+    // Finding elements
+    //
 
     int findChild(Node child) {
         return findChild(child, 0);
