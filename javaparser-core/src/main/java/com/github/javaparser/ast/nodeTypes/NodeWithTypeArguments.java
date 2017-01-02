@@ -66,8 +66,7 @@ public interface NodeWithTypeArguments<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N setDiamondOperator() {
-        setTypeArguments(new NodeList<>());
-        return (N) this;
+        return setTypeArguments(new NodeList<>());
     }
 
     /**
@@ -75,13 +74,11 @@ public interface NodeWithTypeArguments<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N removeTypeArguments() {
-        setTypeArguments((NodeList<Type>) null);
-        return (N) this;
+        return setTypeArguments((NodeList<Type>) null);
     }
 
     @SuppressWarnings("unchecked")
     default N setTypeArguments(Type... typeArguments) {
-        setTypeArguments(nodeList(typeArguments));
-        return (N) this;
+        return setTypeArguments(nodeList(typeArguments));
     }
 }
