@@ -173,26 +173,26 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
-    public void removeAllBefore(TextElementMatcher delimiter) {
+    void removeAllBefore(TextElementMatcher delimiter) {
         int index = findElement(delimiter);
         for (int i=0;i<index;i++) {
             elements.remove(0);
         }
     }
 
-    public void removeElement(int index) {
+    void removeElement(int index) {
         elements.remove(index);
     }
 
-    public void removeWhiteSpaceFollowing(Node child) {
-        int index = findChild(child);
+    void removeWhiteSpaceFollowing(TextElementMatcher delimiter) {
+        int index = findElement(delimiter);
         ++index;
         while (index < elements.size() && (elements.get(index).isToken(1)||elements.get(index).isToken(3))) {
             elements.remove(index);
         }
     }
 
-    public void removeComment(Comment comment) {
+    void removeComment(Comment comment) {
         for (int i=0;i<elements.size();i++){
             TextElement e = elements.get(i);
             if (e.isCommentToken() && e.expand().trim().equals(comment.toString().trim())) {
@@ -205,18 +205,16 @@ class NodeText {
         }
     }
 
-    void removeTextBetween(int tokenKind, Node child) {
-        removeTextBetween(tokenKind, child, false);
+    void removeTextBetween(TextElementMatcher start, TextElementMatcher end) {
+        removeTextBetween(start, end, false);
     }
 
     /**
      * Remove all elements between the given token (inclusive) and the given child (exclusive).
-     * @param tokenKind
-     * @param child
      */
-    void removeTextBetween(int tokenKind, Node child, boolean removeSpaceImmediatelyAfter) {
-        int startDeletion = findToken(tokenKind, 0);
-        int endDeletion = findChild(child, startDeletion + 1);
+    void removeTextBetween(TextElementMatcher start, TextElementMatcher end, boolean removeSpaceImmediatelyAfter) {
+        int startDeletion = findElement(start);
+        int endDeletion = findElement(end, startDeletion + 1);
         if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
                 ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == Tokens.whitespaceTokenKind()) {
             endDeletion++;

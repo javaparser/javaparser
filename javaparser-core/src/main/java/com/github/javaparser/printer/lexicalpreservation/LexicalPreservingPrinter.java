@@ -360,24 +360,24 @@ public class LexicalPreservingPrinter {
             }
             if (index != 0) {
                 // we should remove all the text between the child and the comma
-                textForNodes.get(parent).removeTextBetween(ASTParserConstants.COMMA, child);
+                textForNodes.get(parent).removeTextBetween(byTokenType(ASTParserConstants.COMMA), byNode(child));
             }
         }
 
         if (property.getObservableProperty() == ObservableProperty.EXTENDED_TYPES) {
             if (index == 0 && nodeList.size() == 1) {
-                textForNodes.get(parent).removeTextBetween(EXTENDS, child, true);
+                textForNodes.get(parent).removeTextBetween(byTokenType(EXTENDS), byNode(child), true);
             }
         }
 
         if (property.getObservableProperty() == ObservableProperty.IMPLEMENTED_TYPES) {
             if (index == 0 && nodeList.size() == 1) {
-                textForNodes.get(parent).removeTextBetween(ASTParserConstants.IMPLEMENTS, child, true);
+                textForNodes.get(parent).removeTextBetween(byTokenType(ASTParserConstants.IMPLEMENTS), byNode(child), true);
             }
         }
 
         if (property.getObservableProperty() == ObservableProperty.ANNOTATIONS) {
-            textForNodes.get(parent).removeWhiteSpaceFollowing(child);
+            textForNodes.get(parent).removeWhiteSpaceFollowing(byNode(child));
         }
 
         if (property.isInOwnLine()) {
