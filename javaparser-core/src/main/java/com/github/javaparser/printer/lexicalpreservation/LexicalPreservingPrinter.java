@@ -50,6 +50,9 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.ASTParserConstants.EXTENDS;
 import static com.github.javaparser.ASTParserConstants.IMPLEMENTS;
+import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.EXCLUDE_END;
+import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.EXCLUDE_START;
+import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.REMOVE_SPACE_IMMEDIATELY_AFTER;
 import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byNode;
 import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byTokenType;
 import static com.github.javaparser.printer.lexicalpreservation.Tokens.*;
@@ -190,7 +193,7 @@ public class LexicalPreservingPrinter {
                         lpp.insertBefore(ASTParserConstants.SEMICOLON, space(), Tokens.create(ASTParserConstants._DEFAULT), space()).insert(observedNode, (Node)newValue);
                         return;
                     } else if (oldValue != null && newValue == null) {
-                        nodeText.removeFromTokenUntil(Tokens.create(ASTParserConstants._DEFAULT), Optional.of(ASTParserConstants.SEMICOLON), true);
+                        nodeText.removeFromTokenUntil(Tokens.create(ASTParserConstants._DEFAULT), Optional.of(byTokenType(ASTParserConstants.SEMICOLON)), true);
                         return;
                     }
                 }
@@ -356,7 +359,7 @@ public class LexicalPreservingPrinter {
         if (property.equals(new QualifiedProperty(MethodDeclaration.class, ObservableProperty.PARAMETERS))) {
             if (index == 0 && nodeList.size() > 1) {
                 // we should remove all the text between the child and the comma
-                textForNodes.get(parent).removeTextBetween(child, ASTParserConstants.COMMA, true);
+                textForNodes.get(parent).removeTextBetween(byNode(child), byTokenType(ASTParserConstants.COMMA), EnumSet.of(REMOVE_SPACE_IMMEDIATELY_AFTER));
             }
             if (index != 0) {
                 // we should remove all the text between the child and the comma
@@ -366,13 +369,13 @@ public class LexicalPreservingPrinter {
 
         if (property.getObservableProperty() == ObservableProperty.EXTENDED_TYPES) {
             if (index == 0 && nodeList.size() == 1) {
-                textForNodes.get(parent).removeTextBetween(byTokenType(EXTENDS), byNode(child), true);
+                textForNodes.get(parent).removeTextBetween(byTokenType(EXTENDS), byNode(child), EnumSet.of(REMOVE_SPACE_IMMEDIATELY_AFTER));
             }
         }
 
         if (property.getObservableProperty() == ObservableProperty.IMPLEMENTED_TYPES) {
             if (index == 0 && nodeList.size() == 1) {
-                textForNodes.get(parent).removeTextBetween(byTokenType(ASTParserConstants.IMPLEMENTS), byNode(child), true);
+                textForNodes.get(parent).removeTextBetween(byTokenType(ASTParserConstants.IMPLEMENTS), byNode(child), EnumSet.of(REMOVE_SPACE_IMMEDIATELY_AFTER));
             }
         }
 
@@ -664,7 +667,8 @@ public class LexicalPreservingPrinter {
     private Inserter getPositionFinder(QualifiedProperty property, Node parent, NodeList nodeList, int index) {
         if (property.equals(new QualifiedProperty(ClassOrInterfaceDeclaration.class, ObservableProperty.MEMBERS))) {
             if (nodeList.isEmpty()) {
-                getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
+                getOrCreateNodeText(parent).removeTextBetween(byTokenType(ASTParserConstants.LBRACE), byTokenType(ASTParserConstants.RBRACE),
+                        EnumSet.of(EXCLUDE_START, EXCLUDE_END));
             }
             return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.equals(new QualifiedProperty(FieldDeclaration.class, ObservableProperty.VARIABLES))) {
@@ -673,7 +677,8 @@ public class LexicalPreservingPrinter {
             return insertAfter(ASTParserConstants.LPAREN, InsertionMode.PLAIN);
         }  else if (property.equals(new QualifiedProperty(BlockStmt.class, ObservableProperty.STATEMENTS))) {
             if (nodeList.isEmpty()) {
-                getOrCreateNodeText(parent).removeTextBetween(ASTParserConstants.LBRACE, ASTParserConstants.RBRACE);
+                getOrCreateNodeText(parent).removeTextBetween(byTokenType(ASTParserConstants.LBRACE), byTokenType(ASTParserConstants.RBRACE),
+                        EnumSet.of(EXCLUDE_START, EXCLUDE_END));
             }
             return insertAfter(ASTParserConstants.LBRACE, InsertionMode.ON_ITS_OWN_LINE);
         }  else if (property.equals(new QualifiedProperty(ClassOrInterfaceDeclaration.class, ObservableProperty.TYPE_PARAMETERS))) {

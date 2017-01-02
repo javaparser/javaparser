@@ -30,6 +30,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,12 @@ import java.util.Optional;
 class NodeText {
     private LexicalPreservingPrinter lexicalPreservingPrinter;
     private List<TextElement> elements;
+
+    enum Option {
+        REMOVE_SPACE_IMMEDIATELY_AFTER,
+        EXCLUDE_START,
+        EXCLUDE_END
+    }
 
     //
     // Constructors
@@ -154,14 +161,14 @@ class NodeText {
     // Removing sequences
     //
 
-    public void removeFromToken(TextElementMatcher start, boolean includingPreceedingSpace) {
+    void removeFromToken(TextElementMatcher start, boolean includingPreceedingSpace) {
         removeFromTokenUntil(start, Optional.empty(), includingPreceedingSpace);
     }
 
-    public void removeFromTokenUntil(TextElementMatcher start, Optional<Integer> stopTokenKind, boolean includingPreceedingSpace) {
+    void removeFromTokenUntil(TextElementMatcher start, Optional<TextElementMatcher> end, boolean includingPreceedingSpace) {
         for (int i=elements.size() -1; i>=0; i--) {
             if (start.match(elements.get(i))) {
-                while (elements.size() > i && (!stopTokenKind.isPresent() || !elements.get(i).isToken(stopTokenKind.get()))) {
+                while (elements.size() > i && (!end.isPresent() || !end.get().match(elements.get(i)))) {
                     elements.remove(i);
                 }
                 if (includingPreceedingSpace && elements.get(i - 1).isToken(Tokens.space().getTokenKind())) {
@@ -206,43 +213,36 @@ class NodeText {
     }
 
     void removeTextBetween(TextElementMatcher start, TextElementMatcher end) {
-        removeTextBetween(start, end, false);
+        removeTextBetween(start, end, EnumSet.noneOf(Option.class));
     }
 
     /**
      * Remove all elements between the given token (inclusive) and the given child (exclusive).
      */
-    void removeTextBetween(TextElementMatcher start, TextElementMatcher end, boolean removeSpaceImmediatelyAfter) {
+    void removeTextBetween(TextElementMatcher start, TextElementMatcher end, EnumSet<Option> options) {
         int startDeletion = findElement(start);
         int endDeletion = findElement(end, startDeletion + 1);
-        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
+        if (options.contains(Option.REMOVE_SPACE_IMMEDIATELY_AFTER) && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
                 ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == Tokens.whitespaceTokenKind()) {
             endDeletion++;
+        }
+        if (options.contains(Option.EXCLUDE_START)) {
+            startDeletion++;
+        }
+        if (options.contains(Option.EXCLUDE_END)) {
+            endDeletion--;
         }
         removeBetweenIndexes(startDeletion, endDeletion);
     }
 
-    void removeTextBetween(int startTokenKind, int endTokenKind) {
-        int startDeletion = findToken(startTokenKind, 0);
-        int endDeletion = findToken(endTokenKind, startDeletion + 1);
-        removeBetweenIndexes(startDeletion+1, endDeletion-1);
-    }
-
+    /**
+     * Remove all elements between startDeletion (inclusive) and endDeletion (exclusive).
+     */
     private void removeBetweenIndexes(int startDeletion, int endDeletion) {
         int i = endDeletion;
         while (i >= startDeletion) {
             elements.remove(i--);
         }
-    }
-
-    void removeTextBetween(Node child, int tokenKind, boolean removeSpaceImmediatelyAfter) {
-        int startDeletion = findChild(child, 0);
-        int endDeletion = findToken(tokenKind, startDeletion + 1);
-        if (removeSpaceImmediatelyAfter && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
-                ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == Tokens.whitespaceTokenKind()) {
-            endDeletion++;
-        }
-        removeBetweenIndexes(startDeletion, endDeletion);
     }
 
     //
