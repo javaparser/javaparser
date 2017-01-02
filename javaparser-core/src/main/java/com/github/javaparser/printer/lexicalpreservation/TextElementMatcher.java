@@ -21,23 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ASTParserConstants;
-import com.github.javaparser.ast.Node;
+public interface TextElementMatcher {
 
-public abstract class TextElement implements TextElementMatcher {
+    boolean match(TextElement textElement);
 
-    abstract String expand();
-
-    abstract boolean isToken(int tokenKind);
-
-    public final boolean isCommentToken() {
-        return isToken(ASTParserConstants.JAVA_DOC_COMMENT) || isToken(ASTParserConstants.SINGLE_LINE_COMMENT) || isToken(ASTParserConstants.MULTI_LINE_COMMENT);
-    }
-
-    @Override
-    public boolean match(TextElement textElement) {
-        return this.equals(textElement);
-    }
-
-    abstract boolean isNode(Node node);
 }

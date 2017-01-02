@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.JavaToken;
+import com.github.javaparser.ast.Node;
 
 class TokenTextElement extends TextElement {
 
@@ -79,5 +80,10 @@ class TokenTextElement extends TextElement {
     @Override
     boolean isToken(int tokenKind) {
         return this.tokenKind == tokenKind;
+    }
+
+    @Override
+    boolean isNode(Node node) {
+        return false;
     }
 }

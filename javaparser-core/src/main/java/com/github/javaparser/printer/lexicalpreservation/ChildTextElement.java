@@ -48,6 +48,11 @@ class ChildTextElement extends TextElement {
         return false;
     }
 
+    @Override
+    boolean isNode(Node node) {
+        return node == child;
+    }
+
     NodeText getNodeTextForWrappedNode() {
         return lexicalPreservingPrinter.getOrCreateNodeText(child);
     }

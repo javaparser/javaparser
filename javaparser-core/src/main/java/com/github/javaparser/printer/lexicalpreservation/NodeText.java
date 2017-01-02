@@ -92,21 +92,26 @@ class NodeText {
     // Finding elements
     //
 
+    int findElement(TextElementMatcher matcher) {
+        return findElement(matcher, 0);
+    }
+
+    int findElement(TextElementMatcher matcher, int from) {
+        for (int i=from; i<elements.size(); i++) {
+            TextElement element = elements.get(i);
+            if (matcher.match(element)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException(String.format("I could not find child '%s' from position %i", matcher, from));
+    }
+
     int findChild(Node child) {
         return findChild(child, 0);
     }
 
     int findChild(Node child, int from) {
-        for (int i=from; i<elements.size(); i++) {
-            TextElement element = elements.get(i);
-            if (element instanceof ChildTextElement) {
-                ChildTextElement childNodeTextElement = (ChildTextElement)element;
-                if (childNodeTextElement.getChild() == child) {
-                    return i;
-                }
-            }
-        }
-        throw new IllegalArgumentException(String.format("I could not find child '%s'", child));
+        return findElement(TextElementMatchers.byNode(child), from);
     }
 
     private int findToken(int tokenKind) {
@@ -114,16 +119,7 @@ class NodeText {
     }
 
     private int findToken(int tokenKind, int from) {
-        for (int i=from; i<elements.size(); i++) {
-            TextElement element = elements.get(i);
-            if (element instanceof TokenTextElement){
-                TokenTextElement tokenTextElement = (TokenTextElement)element;
-                if (tokenTextElement.getTokenKind() == tokenKind) {
-                    return i;
-                }
-            }
-        }
-        throw new IllegalArgumentException();
+        return findElement(TextElementMatchers.byTokenType(tokenKind), from);
     }
 
     //
