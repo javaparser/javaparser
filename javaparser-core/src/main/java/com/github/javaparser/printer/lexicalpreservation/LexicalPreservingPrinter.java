@@ -489,7 +489,7 @@ public class LexicalPreservingPrinter {
                     ChildTextElement childElement = (ChildTextElement)element;
                     if (childElement.getChild() == childToFollow) {
                         if (onIsOwnLine) {
-                            nodeText.addToken(++i, Separator.NEWLINE);
+                            nodeText.addElement(++i, Tokens.newline());
                             for (TokenTextElement e : findIndentation(childToFollow)) {
                                 nodeText.addElement(++i, e);
                             }
@@ -549,7 +549,7 @@ public class LexicalPreservingPrinter {
                     if (childTextElement.getChild() == sibling) {
                         int it = i+1;
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
-                            nodeText.addToken(it++, Separator.NEWLINE);
+                            nodeText.addElement(it++, Tokens.newline());
                             for (TokenTextElement e : parentIndentation) {
                                 nodeText.addElement(it++, e);
                             }
@@ -563,7 +563,7 @@ public class LexicalPreservingPrinter {
                             nodeText.addElement(it++, s);
                         }
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
-                            nodeText.addToken(it++, Separator.NEWLINE);
+                            nodeText.addElement(it++, Tokens.newline());
                             for (TokenTextElement e : parentIndentation) {
                                 nodeText.addElement(it++, e);
                             }
@@ -587,7 +587,7 @@ public class LexicalPreservingPrinter {
                     if (tokenTextElement.getTokenKind() == tokenKind) {
                         int it = i+1;
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
-                            nodeText.addToken(it++, Separator.NEWLINE);
+                            nodeText.addElement(it++, newline());
                             for (TokenTextElement e : parentIndentation) {
                                 nodeText.addElement(it++, e);
                             }
@@ -598,7 +598,7 @@ public class LexicalPreservingPrinter {
                             nodeText.addElement(it++, s);
                         }
                         if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
-                            nodeText.addToken(it++, Separator.NEWLINE);
+                            nodeText.addElement(it++, newline());
                             for (TokenTextElement e : parentIndentation) {
                                 nodeText.addElement(it++, e);
                             }
@@ -626,8 +626,7 @@ public class LexicalPreservingPrinter {
                 return elements;
             }
             if (tte.getTokenKind() == ASTParserConstants.SINGLE_LINE_COMMENT
-                    || tte.getTokenKind() == 3
-                    || (tte.getTokenKind() == Separator.NEWLINE.getTokenKind() && (tte.getText().contains("\n") || tte.getText().contains("\r")))) {
+                    || tte.getTokenKind() == Tokens.newline().getTokenKind()) {
                 return elements;
             }
             elements.add(tte);

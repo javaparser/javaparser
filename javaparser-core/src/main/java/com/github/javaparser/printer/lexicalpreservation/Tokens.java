@@ -43,7 +43,7 @@ public class Tokens {
     }
 
     public static TokenTextElement newline() {
-        return new TokenTextElement(3, " ");
+        return new TokenTextElement(3, "\n");
     }
 
     public static TokenTextElement equal() {

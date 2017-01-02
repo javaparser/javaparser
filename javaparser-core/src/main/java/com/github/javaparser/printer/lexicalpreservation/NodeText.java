@@ -92,14 +92,6 @@ class NodeText {
         elements.add(index, new TokenTextElement(tokenKind, text));
     }
 
-    void addToken(Separator separator) {
-        addToken(separator.getTokenKind(), separator.getText());
-    }
-
-    void addToken(int index, Separator separator) {
-        addToken(index, separator.getTokenKind(), separator.getText());
-    }
-
     //
     // Removing elements
     //
