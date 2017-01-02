@@ -249,18 +249,17 @@ class NodeText {
     // Replacing elements
     //
 
-    public void replace(Node oldChild, Node newChild) {
-        int index = findChild(oldChild, 0);
+    void replace(TextElementMatcher position, Node newChild) {
+        replace(position, new ChildTextElement(lexicalPreservingPrinter, newChild));
+    }
+
+    void replace(TextElementMatcher position, TextElement newElement) {
+        int index = findElement(position, 0);
         elements.remove(index);
-        elements.add(index, new ChildTextElement(lexicalPreservingPrinter, newChild));
+        elements.add(index, newElement);
     }
 
-    void replaceToken(int oldToken, TokenTextElement newToken) {
-        int index = findToken(oldToken);
-        elements.set(index, newToken);
-    }
-
-    public void replaceComment(Comment oldValue, Comment newValue) {
+    void replaceComment(Comment oldValue, Comment newValue) {
         for (int i=0;i<elements.size();i++){
             TextElement e = elements.get(i);
             if (e.isCommentToken() && e.expand().trim().equals(oldValue.toString().trim())) {

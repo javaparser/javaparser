@@ -30,7 +30,7 @@ public abstract class TextElement implements TextElementMatcher {
 
     abstract boolean isToken(int tokenKind);
 
-    public final boolean isCommentToken() {
+    final boolean isCommentToken() {
         return isToken(ASTParserConstants.JAVA_DOC_COMMENT) || isToken(ASTParserConstants.SINGLE_LINE_COMMENT) || isToken(ASTParserConstants.MULTI_LINE_COMMENT);
     }
 

@@ -161,7 +161,7 @@ public class LexicalPreservingPrinter {
                     return;
                 }
                 if (oldValue instanceof Node && newValue instanceof Node) {
-                    nodeText.replace((Node)oldValue, (Node)newValue);
+                    nodeText.replace(byNode((Node)oldValue), (Node)newValue);
                     return;
                 }
                 if (property == ObservableProperty.MODIFIERS) {
@@ -213,9 +213,9 @@ public class LexicalPreservingPrinter {
                 }
                 if (property == ObservableProperty.IS_INTERFACE) {
                     if ((Boolean)newValue) {
-                        nodeText.replaceToken(ASTParserConstants.CLASS, new TokenTextElement(ASTParserConstants.INTERFACE, "interface"));
+                        nodeText.replace(byTokenType(ASTParserConstants.CLASS), new TokenTextElement(ASTParserConstants.INTERFACE, "interface"));
                     } else {
-                        nodeText.replaceToken(ASTParserConstants.INTERFACE, new TokenTextElement(ASTParserConstants.CLASS, "class"));
+                        nodeText.replace(byTokenType(ASTParserConstants.INTERFACE), new TokenTextElement(ASTParserConstants.CLASS, "class"));
                     }
                     return;
                 }
