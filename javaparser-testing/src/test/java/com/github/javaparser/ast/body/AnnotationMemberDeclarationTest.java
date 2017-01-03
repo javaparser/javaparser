@@ -21,9 +21,13 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class AnnotationMemberDeclarationTest {
@@ -35,5 +39,24 @@ public class AnnotationMemberDeclarationTest {
         annotationMemberDeclaration.setName(name);
         assertTrue(name.getParentNode().isPresent());
         assertTrue(annotationMemberDeclaration == name.getParentNode().get());
+    }
+
+    @Test
+    public void removeDefaultValueWhenNoDefaultValueIsPresent() {
+        AnnotationMemberDeclaration annotationMemberDeclaration = new AnnotationMemberDeclaration();
+        SimpleName name = new SimpleName("foo");
+        annotationMemberDeclaration.setName(name);
+        assertTrue(null == annotationMemberDeclaration.removeDefaultValue());
+    }
+
+    @Test
+    public void removeDefaultValueWhenDefaultValueIsPresent() {
+        AnnotationMemberDeclaration annotationMemberDeclaration = new AnnotationMemberDeclaration();
+        SimpleName name = new SimpleName("foo");
+        annotationMemberDeclaration.setName(name);
+        Expression defaultValue = new IntegerLiteralExpr("2");
+        annotationMemberDeclaration.setDefaultValue(defaultValue);
+        assertTrue(defaultValue == annotationMemberDeclaration.removeDefaultValue());
+        assertFalse(defaultValue.getParentNode().isPresent());
     }
 }
