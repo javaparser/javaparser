@@ -26,6 +26,7 @@ import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -216,6 +217,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return this;
     }
 
+    public boolean hasJavaDocComment() {
+        return hasComment() && getComment() instanceof JavadocComment;
+    }
+
     /**
      * Use this to store additional information to this node.
      *
@@ -294,6 +299,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         comment.setParentNode(this);
     }
 
+    public boolean removeOrphanComment(Comment comment) {
+        boolean removed = orphanComments.remove(comment);
+        if (removed) {
+            comment.setParentNode(null);
+        }
+        return removed;
+    }
+
     /**
      * This is a list of Comment which are inside the node and are not associated
      * with any meaningful AST Node.
@@ -303,11 +316,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      * <p>
      * When more than one comment preceeds a statement, the one immediately preceding it
      * it is associated with the statements, while the others are orphans.
+     * <p>
+     * Changes to this list are not persisted.
      *
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
-        return orphanComments;
+        return new LinkedList<>(orphanComments);
     }
 
     /**

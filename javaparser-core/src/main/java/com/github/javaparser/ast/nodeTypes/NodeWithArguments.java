@@ -40,8 +40,7 @@ public interface NodeWithArguments<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N addArgument(String arg) {
-        addArgument(new NameExpr(arg));
-        return (N) this;
+        return addArgument(new NameExpr(arg));
     }
 
     @SuppressWarnings("unchecked")

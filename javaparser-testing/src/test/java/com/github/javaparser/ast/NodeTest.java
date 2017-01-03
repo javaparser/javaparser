@@ -22,6 +22,13 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -30,9 +37,12 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class NodeTest {
 
@@ -219,5 +229,69 @@ public class NodeTest {
 
         assertEquals(true, cu.getClassByName("A").get().getMethodsByName("foo").get(0).getBody().get().remove());
         assertEquals(Arrays.asList("setting [BODY] to null"), changes);
+    }
+
+    @Test
+    public void removeOrphanCommentPositiveCase() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+        Comment c = new LineComment("A comment");
+        decl.addOrphanComment(c);
+        assertEquals(1, decl.getOrphanComments().size());
+        assertTrue(decl == c.getParentNode().get());
+        assertTrue(decl.removeOrphanComment(c));
+        assertEquals(0, decl.getOrphanComments().size());
+        assertFalse(c.getParentNode().isPresent());
+    }
+
+    @Test
+    public void removeOrphanCommentNegativeCase() {
+        ClassOrInterfaceDeclaration aClass = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
+        FieldDeclaration aField = new FieldDeclaration(EnumSet.noneOf(Modifier.class), new VariableDeclarator(PrimitiveType.intType(), "f"));
+        aClass.getMembers().add(aField);
+        Comment c = new LineComment("A comment");
+        aField.addOrphanComment(c);
+        // the comment is an orphan comment of the field, so trying to remove it on the class should not work
+        assertFalse(aClass.removeOrphanComment(c));
+        assertEquals(1, aField.getOrphanComments().size());
+        assertTrue(c.getParentNode().isPresent());
+    }
+
+    @Test
+    public void hasJavaDocCommentPositiveCaseWithSetJavaDocComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setJavaDocComment("A comment");
+        assertEquals(true, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentPositiveCaseWithSetComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setComment(new JavadocComment("A comment"));
+        assertEquals(true, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentNegativeCaseNoComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        assertEquals(false, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentNegativeCaseLineComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setComment(new LineComment("foo"));
+        assertEquals(false, decl.hasJavaDocComment());
+    }
+
+    @Test
+    public void hasJavaDocCommentNegativeCaseBlockComment() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
+                false, "Foo");
+        decl.setComment(new BlockComment("foo"));
+        assertEquals(false, decl.hasJavaDocComment());
     }
 }

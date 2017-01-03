@@ -19,31 +19,22 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.ast.nodeTypes;
+package com.github.javaparser;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import org.junit.Test;
 
-import static com.github.javaparser.ast.expr.Name.parse;
+import static org.junit.Assert.assertEquals;
 
-/**
- * A node with a (qualified) name.
- * <p>
- * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
- *
- * @since 2.0.1
- */
-public interface NodeWithName<N extends Node> {
-    Name getName();
+public class JavaParserTest {
 
-    N setName(Name name);
-
-    @SuppressWarnings("unchecked")
-    default N setName(String name) {
-        return setName(parse(name));
-    }
-
-    default String getNameAsString() {
-        return getName().asString();
+    @Test
+    public void rangeOfAnnotationMemberDeclarationIsCorrect() {
+        String code = "@interface AD { String foo(); }";
+        CompilationUnit cu = JavaParser.parse(code);
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        assertEquals(true, memberDeclaration.getRange().isPresent());
+        assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
 }

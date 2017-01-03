@@ -36,8 +36,7 @@ public interface NodeWithSimpleName<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N setName(String name) {
-        setName(new SimpleName(name));
-        return (N) this;
+        return setName(new SimpleName(name));
     }
 
     default String getNameAsString() {
