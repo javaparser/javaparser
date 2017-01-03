@@ -134,6 +134,14 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
+    public Expression removeDefaultValue() {
+        Expression res = defaultValue;
+        if (res != null) {
+            setDefaultValue(null);
+        }
+        return res;
+    }
+
     /**
      * Sets the default value
      *
@@ -142,6 +150,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      */
     public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
+        if (this.defaultValue != null) {
+            this.defaultValue.setParentNode(null);
+        }
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
