@@ -33,7 +33,7 @@ Suggested version (many fixes, new features, and mostly stable API).
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.0.0-RC.3</version>
+    <version>3.0.0-RC.4</version>
 </dependency>
 ```
 
