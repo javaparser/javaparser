@@ -41,7 +41,8 @@ public class Issue116 extends AbstractResolutionTest {
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        Type type = javaParserFacade.convert(methodDeclaration.getParameters().get(0).getType(), methodDeclaration);
+        com.github.javaparser.ast.type.Type typeNode = methodDeclaration.getParameters().get(0).getType();
+        Type type = javaParserFacade.convert(typeNode, typeNode);
         assertEquals("java.lang.String[]", type.describe());
 
         ExpressionStmt expressionStmt = (ExpressionStmt) methodDeclaration.getBody().get().getStatements().get(0);
