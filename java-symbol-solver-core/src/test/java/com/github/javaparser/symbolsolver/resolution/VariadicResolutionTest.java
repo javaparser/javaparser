@@ -21,9 +21,12 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -34,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 
 public class VariadicResolutionTest extends AbstractResolutionTest {
 
-    @Test
+	@Test
     public void issue7() throws ParseException {
         CompilationUnit cu = parseSample("Generics_issue7");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SomeCollection");
@@ -48,6 +51,20 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
         assertEquals(true, type.isReferenceType());
         assertEquals(List.class.getCanonicalName(), type.asReferenceType().getQualifiedName());
         assertEquals("java.util.List<java.lang.Long>", type.describe());
+    }
+	
+	@Test
+    public void methodCallWithReferenceTypeAsVaridicArgumentIsSolved() throws ParseException {
+        CompilationUnit cu = parseSample("MethodCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "varidicMethod");
+        MethodCallExpr callExpr = Navigator.findMethodCall(method, "varidicMethod");
+        
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        MethodUsage callee = javaParserFacade.solveMethodAsUsage(callExpr);
+        assertEquals("varidicMethod", callee.getName());
     }
 
 }
