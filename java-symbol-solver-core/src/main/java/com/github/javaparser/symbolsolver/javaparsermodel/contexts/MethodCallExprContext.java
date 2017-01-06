@@ -21,6 +21,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
@@ -200,7 +201,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             Map<TypeParameterDeclaration, Type> derivedValues = new HashMap<>();
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
-                inferTypes(argumentsTypes.get(i), methodUsage.getDeclaration().getParam(i).getType(), derivedValues);
+                ParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
+                Type parameterType = parameter.getType();
+                if (parameter.isVariadic()) {
+                	parameterType = parameterType.asArrayType().getComponentType();
+                }
+                inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
 
             Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());

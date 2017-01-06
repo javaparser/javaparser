@@ -20,5 +20,10 @@ class MethodCalls {
 	{
 		return getSelf().m;
 	}
+	
+	void varidicMethod(String... s)
+	{
+		this.varidicMethod("test");
+	}
 
 }
