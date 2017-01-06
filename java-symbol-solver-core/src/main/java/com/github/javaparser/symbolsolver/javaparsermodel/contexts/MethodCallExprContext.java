@@ -228,10 +228,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isReferenceType() && target.isReferenceType()) {
-            if (source.asReferenceType().getQualifiedName().equals(target.asReferenceType().getQualifiedName())) {
-                for (int i = 0; i < source.asReferenceType().typeParametersValues().size(); i++) {
-                    inferTypes(source.asReferenceType().typeParametersValues().get(i), target.asReferenceType().typeParametersValues().get(i), mappings);
-                }
+        	ReferenceType sourceRefType = source.asReferenceType();
+        	ReferenceType targetRefType = target.asReferenceType();
+            if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
+            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+	                }
+            	}
             }
             return;
         }

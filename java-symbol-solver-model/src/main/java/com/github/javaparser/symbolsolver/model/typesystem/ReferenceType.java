@@ -287,8 +287,10 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
      */
     public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
         List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
-        for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+        if (!isRawType()) {
+	        for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
+	            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+	        }
         }
         return typeParametersMap;
     }
@@ -426,6 +428,8 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
                         if (thisParamAsWildcard.isSuper() && otherParam.isAssignableBy(thisParamAsWildcard.getBoundedType())) {
                             // ok
                         } else if (thisParamAsWildcard.isExtends() && thisParamAsWildcard.getBoundedType().isAssignableBy(otherParam)) {
+                            // ok
+                        } else if (!thisParamAsWildcard.isBounded()) {
                             // ok
                         } else {
                             return false;
