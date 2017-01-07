@@ -908,12 +908,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final MethodCallExpr n, final A arg) {
         visitComment(n, arg);
-        if (n.getScope() != null) {
-            {
-                R result = n.getScope().accept(this, arg);
-                if (result != null) {
-                    return result;
-                }
+        if (n.getScope().isPresent()) {
+            R result = n.getScope().get().accept(this, arg);
+            if (result != null) {
+                return result;
             }
         }
         if (n.getTypeArguments().isPresent()) {

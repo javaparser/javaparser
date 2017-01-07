@@ -105,8 +105,8 @@ public final class MethodCallExpr extends Expression implements
         return name;
     }
 
-    public Expression getScope() {
-        return scope;
+    public Optional<Expression> getScope() {
+        return Optional.ofNullable(scope);
     }
 
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
