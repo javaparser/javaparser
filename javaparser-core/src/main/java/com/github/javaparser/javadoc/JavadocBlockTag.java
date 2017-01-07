@@ -25,10 +25,55 @@ public class JavadocBlockTag {
     public enum Type {
         PARAM,
         RETURN,
-        UNKNOWN
+        UNKNOWN;
+
+        static Type fromName(String tagName) {
+            for (Type t : Type.values()) {
+                if (t.name().toLowerCase().equals(tagName)) {
+                    return t;
+                }
+            }
+            return UNKNOWN;
+        }
+
     }
 
-    public JavadocBlockTag(Type type, String content) {
+    private Type type;
+    private String content;
 
+    public JavadocBlockTag(Type type, String content) {
+        this.type = type;
+        this.content = content;
+    }
+
+    public JavadocBlockTag(String tagName, String content) {
+        this(Type.fromName(tagName), content);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavadocBlockTag that = (JavadocBlockTag) o;
+
+        if (type != that.type) return false;
+        return content.equals(that.content);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + content.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "JavadocBlockTag{" +
+                "type=" + type +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

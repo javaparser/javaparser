@@ -62,7 +62,18 @@ public class JavadocParser {
     }
 
     private JavadocBlockTag parseBlockTag(String line) {
-        throw new UnsupportedOperationException();
+        line = line.trim();
+        String tagName = nextWord(line);
+        String rest = line.substring(tagName.length()).trim();
+        return new JavadocBlockTag(tagName, rest);
+    }
+
+    private String nextWord(String string) {
+        int index = 0;
+        while (index < string.length() && !Character.isWhitespace(string.charAt(index))) {
+            index++;
+        }
+        return string.substring(0, index);
     }
 
     private boolean isABlockLine(String line) {
