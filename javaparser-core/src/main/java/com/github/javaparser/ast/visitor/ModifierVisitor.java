@@ -477,8 +477,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final MethodCallExpr n, final A arg) {
         visitComment(n, arg);
-        if (n.getScope() != null) {
-            n.setScope((Expression) n.getScope().accept(this, arg));
+        if (n.getScope().isPresent()) {
+            n.setScope((Expression) n.getScope().get().accept(this, arg));
         }
         n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
         n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
