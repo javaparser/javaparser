@@ -1,3 +1,7 @@
+Version 3.0.0
+------------------
+* 695 697 689 680 693 691 682 690 677 679 688 684 683 smaller improvements and fixes
+
 Version 3.0.0-RC.4
 ------------------
 * 668 669 TypeDeclarationStmt became LocalClassDeclarationStmt
