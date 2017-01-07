@@ -34,6 +34,20 @@ public class JavadocParserTest {
     }
 
     @Test
+    public void parseSingleLineWithSpacing() {
+        assertEquals(new JavadocDocument(JavadocText.fromText("The line number of the first character of this Token.")),
+                new JavadocParser().parse(" The line number of the first character of this Token. "));
+    }
+
+    @Test
+    public void parseSingleLineWithNewLines() {
+        assertEquals(new JavadocDocument(JavadocText.fromText("The string image of the token.")),
+                new JavadocParser().parse("\n" +
+                        "   * The string image of the token.\n" +
+                        "   "));
+    }
+
+    @Test
     public void parseCommentWithNewLines() {
         String text = "\n" +
                 "   * The version identifier for this Serializable class.\n" +
@@ -43,6 +57,23 @@ public class JavadocParserTest {
         assertEquals(new JavadocDocument(JavadocText.fromText("The version identifier for this Serializable class."),
                         JavadocText.fromText("Increment only if the <i>serialized</i> form of the\n" +
                                 "class changes.\n")),
+                new JavadocParser().parse(text));
+    }
+
+    @Test
+    public void parseCommentWithIndentation() {
+        String text = "Returns a new Token object, by default.\n" +
+                "   * However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
+                "   *\n" +
+                "   *    case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
+                "   *\n" +
+                "   * to the following switch statement. Then you can cast matchedToken";
+        assertEquals(new JavadocDocument(JavadocText.fromText("Returns a new Token object, by default."),
+                        JavadocText.fromText("However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
+                                "\n" +
+                                "   case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
+                                "\n" +
+                                "to the following switch statement. Then you can cast matchedToken")),
                 new JavadocParser().parse(text));
     }
 

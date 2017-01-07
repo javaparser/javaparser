@@ -38,13 +38,23 @@ public class JavadocParser {
         if (cleanLines.isEmpty()) {
             return new JavadocDocument(JavadocText.fromText(""));
         } else if (cleanLines.size() == 1) {
-            String summaryText = cleanLines.get(0);
+            String summaryText = trimRight(cleanLines.get(0));
             return new JavadocDocument(parseText(summaryText));
         } else {
-            String summaryText = cleanLines.get(0);
-            String detailsText = String.join("\n", cleanLines.subList(1, cleanLines.size()));
+            String summaryText = trimRight(cleanLines.get(0));
+            String detailsText = trimRight(String.join("\n", cleanLines.subList(1, cleanLines.size())));
+            if (detailsText.isEmpty()) {
+                return new JavadocDocument(parseText(summaryText));
+            }
             return new JavadocDocument(JavadocText.fromText(summaryText), JavadocText.fromText(detailsText));
         }
+    }
+
+    private String trimRight(String string) {
+        while (string.endsWith(" ") || string.endsWith("\t")) {
+            string = string.substring(0, string.length() - 1);
+        }
+        return string;
     }
 
     private JavadocText parseText(String content) {
@@ -60,7 +70,7 @@ public class JavadocParser {
                     } else {
                         // if a line starts with space followed by an asterisk drop to the asterisk
                         // if there is a space immediately after the asterisk drop it also
-                        if (l.length() > asteriskIndex) {
+                        if (l.length() > (asteriskIndex + 1)) {
 
                             char c = l.charAt(asteriskIndex + 1);
                             if (c == ' ' || c == '\t') {
@@ -72,6 +82,10 @@ public class JavadocParser {
                 }).collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines
         cleanedLines = cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
+        // if the first starts with a space, remove it
+        if (!cleanedLines.get(0).isEmpty() && (cleanedLines.get(0).charAt(0) == ' ' || cleanedLines.get(0).charAt(0) == '\t')) {
+            cleanedLines.set(0, cleanedLines.get(0).substring(1));
+        }
         // if the first line is empty, drop it
         if (cleanedLines.get(0).trim().length() == 0) {
             return cleanedLines.subList(1, cleanedLines.size());
