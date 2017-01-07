@@ -54,7 +54,7 @@ public class JavadocParser {
             blockLines = Collections.emptyList();
         } else {
             descriptionText = trimRight(String.join("\n", cleanLines.subList(0, index)));
-            blockLines = cleanLines.subList(index + 1, cleanLines.size());
+            blockLines = cleanLines.subList(index, cleanLines.size());
         }
         JavadocDocument document = new JavadocDocument(JavadocDescription.fromText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
@@ -62,13 +62,13 @@ public class JavadocParser {
     }
 
     private JavadocBlockTag parseBlockTag(String line) {
-        line = line.trim();
+        line = line.trim().substring(1);
         String tagName = nextWord(line);
         String rest = line.substring(tagName.length()).trim();
         return new JavadocBlockTag(tagName, rest);
     }
 
-    private String nextWord(String string) {
+    static String nextWord(String string) {
         int index = 0;
         while (index < string.length() && !Character.isWhitespace(string.charAt(index))) {
             index++;
@@ -81,7 +81,7 @@ public class JavadocParser {
     }
 
     private String trimRight(String string) {
-        while (string.endsWith(" ") || string.endsWith("\t")) {
+        while (!string.isEmpty() && Character.isWhitespace(string.charAt(string.length() - 1))) {
             string = string.substring(0, string.length() - 1);
         }
         return string;

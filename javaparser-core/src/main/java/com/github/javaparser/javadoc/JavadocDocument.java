@@ -41,8 +41,17 @@ public class JavadocDocument {
         this.blockTags = new LinkedList<>();
     }
 
-    public void addBlockTag(JavadocBlockTag blockTag) {
+    public JavadocDocument addBlockTag(JavadocBlockTag blockTag) {
         this.blockTags.add(blockTag);
+        return this;
+    }
+
+    public JavadocDocument addBlockTag(String tagName, String content) {
+        return addBlockTag(new JavadocBlockTag(tagName, content));
+    }
+
+    public JavadocDocument addBlockTag(String tagName) {
+        return addBlockTag(tagName, "");
     }
 
     public JavadocComment toJavadocComment() {

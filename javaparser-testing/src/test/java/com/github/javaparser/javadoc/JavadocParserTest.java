@@ -79,6 +79,35 @@ public class JavadocParserTest {
     }
 
     @Test
+    public void parseBlockTagsAndEmptyDescription() {
+        String text = "\n" +
+                "   * @deprecated\n" +
+                "   * @see #getEndColumn\n" +
+                "   ";
+        assertEquals(new JavadocDocument(JavadocDescription.fromText(""))
+                .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.DEPRECATED, ""))
+                .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.SEE, "#getEndColumn")), new JavadocParser().parse(text));
+    }
+
+    @Test
+    public void parseParamBlockTags() {
+        String text = "\n" +
+                "     * Add a field to this and automatically add the import of the type if needed\n" +
+                "     *\n" +
+                "     * @param typeClass the type of the field\n" +
+                "     * @param name the name of the field\n" +
+                "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}\n" +
+                "     * @return the {@link FieldDeclaration} created\n" +
+                "     ";
+        JavadocDocument res = new JavadocParser().parse(text);
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("Add a field to this and automatically add the import of the type if needed"))
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field"))
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("modifiers", "the modifiers like {@link Modifier#PUBLIC}"))
+                .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "the {@link FieldDeclaration} created")), res);
+    }
+
+    @Test
     public void startsWithAsteriskEmpty() {
         assertEquals(-1, JavadocParser.startsWithAsterisk(""));
     }

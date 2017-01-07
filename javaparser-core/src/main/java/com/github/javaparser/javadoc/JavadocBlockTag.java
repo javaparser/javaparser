@@ -21,11 +21,17 @@
 
 package com.github.javaparser.javadoc;
 
+import java.util.Optional;
+
 public class JavadocBlockTag {
     public enum Type {
         PARAM,
         RETURN,
-        UNKNOWN;
+        UNKNOWN, SEE, DEPRECATED;
+
+        boolean hasName() {
+            return this == PARAM;
+        }
 
         static Type fromName(String tagName) {
             for (Type t : Type.values()) {
@@ -40,14 +46,35 @@ public class JavadocBlockTag {
 
     private Type type;
     private String content;
+    private Optional<String> name = Optional.empty();
 
     public JavadocBlockTag(Type type, String content) {
         this.type = type;
+        if (type.hasName()) {
+            this.name = Optional.of(JavadocParser.nextWord(content));
+            content = content.substring(this.name.get().length()).trim();
+        }
         this.content = content;
     }
 
     public JavadocBlockTag(String tagName, String content) {
         this(Type.fromName(tagName), content);
+    }
+
+    public static JavadocBlockTag createParamBlockTag(String paramName, String content) {
+        return new JavadocBlockTag(Type.PARAM, paramName + " " + content);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Optional<String> getName() {
+        return name;
     }
 
     @Override
@@ -58,7 +85,8 @@ public class JavadocBlockTag {
         JavadocBlockTag that = (JavadocBlockTag) o;
 
         if (type != that.type) return false;
-        return content.equals(that.content);
+        if (!content.equals(that.content)) return false;
+        return name.equals(that.name);
 
     }
 
@@ -66,6 +94,7 @@ public class JavadocBlockTag {
     public int hashCode() {
         int result = type.hashCode();
         result = 31 * result + content.hashCode();
+        result = 31 * result + name.hashCode();
         return result;
     }
 
@@ -74,6 +103,7 @@ public class JavadocBlockTag {
         return "JavadocBlockTag{" +
                 "type=" + type +
                 ", content='" + content + '\'' +
+                ", name=" + name +
                 '}';
     }
 }
