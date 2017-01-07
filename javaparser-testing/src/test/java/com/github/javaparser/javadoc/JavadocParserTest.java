@@ -32,4 +32,18 @@ public class JavadocParserTest {
         assertEquals(new JavadocDocument(JavadocText.fromText("A simple line of text")),
                 new JavadocParser().parse("A simple line of text"));
     }
+
+    @Test
+    public void parseCommentWithNewLines() {
+        String text = "\n" +
+                "   * The version identifier for this Serializable class.\n" +
+                "   * Increment only if the <i>serialized</i> form of the\n" +
+                "   * class changes.\n" +
+                "   ";
+        assertEquals(new JavadocDocument(JavadocText.fromText("The version identifier for this Serializable class."),
+                        JavadocText.fromText("Increment only if the <i>serialized</i> form of the\n" +
+                                "class changes.\n")),
+                new JavadocParser().parse(text));
+    }
+
 }

@@ -66,4 +66,11 @@ public class JavadocText {
     public int hashCode() {
         return elements.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "JavadocText{" +
+                "elements=" + elements +
+                '}';
+    }
 }

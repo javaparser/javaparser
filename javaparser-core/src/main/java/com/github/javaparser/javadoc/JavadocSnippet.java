@@ -52,4 +52,10 @@ public class JavadocSnippet implements JavadocTextElement {
         return text.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "JavadocSnippet{" +
+                "text='" + text + '\'' +
+                '}';
+    }
 }

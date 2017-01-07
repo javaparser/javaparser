@@ -32,6 +32,11 @@ public class JavadocDocument {
         this.details = Optional.empty();
     }
 
+    public JavadocDocument(JavadocText summary, JavadocText details) {
+        this.summary = summary;
+        this.details = Optional.of(details);
+    }
+
     @Override
     public String toString() {
         return "JavadocDocument{" +
