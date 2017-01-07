@@ -22,11 +22,15 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.javadoc.description.JavadocDescription;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The class responsible for parsing the content of JavadocComments and produce JavadocDocuments.
+ */
 public class JavadocParser {
 
     public JavadocDocument parse(JavadocComment comment) {
@@ -34,9 +38,9 @@ public class JavadocParser {
     }
 
     public JavadocDocument parse(String commentContent) {
-        List<String> cleanLines = cleanLines(commentContent);
+        /*List<String> cleanLines = cleanLines(commentContent);
         if (cleanLines.isEmpty()) {
-            return new JavadocDocument(JavadocText.fromText(""));
+            return new JavadocDocument(JavadocDescription.fromText(""));
         } else if (cleanLines.size() == 1) {
             String summaryText = trimRight(cleanLines.get(0));
             return new JavadocDocument(parseText(summaryText));
@@ -46,19 +50,20 @@ public class JavadocParser {
             if (detailsText.isEmpty()) {
                 return new JavadocDocument(parseText(summaryText));
             }
-            return new JavadocDocument(JavadocText.fromText(summaryText), JavadocText.fromText(detailsText));
-        }
+            return new JavadocDocument(JavadocDescription.fromText(summaryText), JavadocDescription.fromText(detailsText));
+        }*/
+        throw new UnsupportedOperationException();
     }
 
-    private String trimRight(String string) {
+    /*private String trimRight(String string) {
         while (string.endsWith(" ") || string.endsWith("\t")) {
             string = string.substring(0, string.length() - 1);
         }
         return string;
     }
 
-    private JavadocText parseText(String content) {
-        return JavadocText.fromText(content);
+    private JavadocDescription parseText(String content) {
+        return JavadocDescription.fromText(content);
     }
 
     private List<String> cleanLines(String content) {
@@ -108,5 +113,5 @@ public class JavadocParser {
         } else {
             return -1;
         }
-    }
+    }*/
 }

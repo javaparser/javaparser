@@ -21,41 +21,14 @@
 
 package com.github.javaparser.javadoc;
 
-public class JavadocSnippet implements JavadocTextElement {
-    private String text;
-
-    public JavadocSnippet(String text) {
-        if (text == null) {
-            throw new NullPointerException();
-        }
-        this.text = text;
+public class JavadocBlockTag {
+    public enum Type {
+        PARAM,
+        RETURN,
+        UNKNOWN
     }
 
-    @Override
-    public String toText() {
-        return this.text;
-    }
+    public JavadocBlockTag(Type type, String content) {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        JavadocSnippet that = (JavadocSnippet) o;
-
-        return text.equals(that.text);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return text.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "JavadocSnippet{" +
-                "text='" + text + '\'' +
-                '}';
     }
 }

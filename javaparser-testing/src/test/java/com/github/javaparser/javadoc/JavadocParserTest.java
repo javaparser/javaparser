@@ -21,6 +21,7 @@
 
 package com.github.javaparser.javadoc;
 
+import com.github.javaparser.javadoc.description.JavadocDescription;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,19 +30,19 @@ public class JavadocParserTest {
 
     @Test
     public void parseSimplestContent() {
-        assertEquals(new JavadocDocument(JavadocText.fromText("A simple line of text")),
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("A simple line of text")),
                 new JavadocParser().parse("A simple line of text"));
     }
 
     @Test
     public void parseSingleLineWithSpacing() {
-        assertEquals(new JavadocDocument(JavadocText.fromText("The line number of the first character of this Token.")),
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("The line number of the first character of this Token.")),
                 new JavadocParser().parse(" The line number of the first character of this Token. "));
     }
 
     @Test
     public void parseSingleLineWithNewLines() {
-        assertEquals(new JavadocDocument(JavadocText.fromText("The string image of the token.")),
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("The string image of the token.")),
                 new JavadocParser().parse("\n" +
                         "   * The string image of the token.\n" +
                         "   "));
@@ -54,8 +55,8 @@ public class JavadocParserTest {
                 "   * Increment only if the <i>serialized</i> form of the\n" +
                 "   * class changes.\n" +
                 "   ";
-        assertEquals(new JavadocDocument(JavadocText.fromText("The version identifier for this Serializable class."),
-                        JavadocText.fromText("Increment only if the <i>serialized</i> form of the\n" +
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("The version identifier for this Serializable class."),
+                        JavadocDescription.fromText("Increment only if the <i>serialized</i> form of the\n" +
                                 "class changes.\n")),
                 new JavadocParser().parse(text));
     }
@@ -68,8 +69,8 @@ public class JavadocParserTest {
                 "   *    case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
                 "   *\n" +
                 "   * to the following switch statement. Then you can cast matchedToken";
-        assertEquals(new JavadocDocument(JavadocText.fromText("Returns a new Token object, by default."),
-                        JavadocText.fromText("However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("Returns a new Token object, by default."),
+                        JavadocDescription.fromText("However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
                                 "\n" +
                                 "   case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
                                 "\n" +

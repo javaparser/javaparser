@@ -19,34 +19,36 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.javadoc;
-
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.javadoc.description.JavadocDescription;
+package com.github.javaparser.javadoc.description;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The structured content of a single Javadoc Comment.
- * <p>
- * It is composed by a description and a list of block tags.
+ * A text, potentially containing inline tags.
  */
-public class JavadocDocument {
-    private JavadocDescription description;
-    private List<JavadocBlockTag> blockTags;
+public class JavadocDescription {
 
-    public JavadocDocument(JavadocDescription description) {
-        this.description = description;
-        this.blockTags = new LinkedList<>();
+    private List<JavadocDescriptionElement> elements;
+
+    public static JavadocDescription fromText(String text) {
+        JavadocDescription instance = new JavadocDescription();
+        instance.addElement(new JavadocSnippet(text));
+        return instance;
     }
 
-    public void addBlockTag(JavadocBlockTag blockTag) {
-        this.blockTags.add(blockTag);
+    public JavadocDescription() {
+        elements = new LinkedList<>();
     }
 
-    public JavadocComment toJavadocComment() {
-        throw new UnsupportedOperationException();
+    public void addElement(JavadocDescriptionElement element) {
+        this.elements.add(element);
+    }
+
+    public String toText() {
+        StringBuffer sb = new StringBuffer();
+        elements.forEach(e -> sb.append(e.toText()));
+        return sb.toString();
     }
 
     @Override
@@ -54,25 +56,21 @@ public class JavadocDocument {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        JavadocDocument document = (JavadocDocument) o;
+        JavadocDescription that = (JavadocDescription) o;
 
-        if (!description.equals(document.description)) return false;
-        return blockTags.equals(document.blockTags);
+        return elements.equals(that.elements);
 
     }
 
     @Override
     public int hashCode() {
-        int result = description.hashCode();
-        result = 31 * result + blockTags.hashCode();
-        return result;
+        return elements.hashCode();
     }
 
     @Override
     public String toString() {
-        return "JavadocDocument{" +
-                "description=" + description +
-                ", blockTags=" + blockTags +
+        return "JavadocDescription{" +
+                "elements=" + elements +
                 '}';
     }
 }

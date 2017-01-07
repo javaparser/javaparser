@@ -19,8 +19,11 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.javadoc;
+package com.github.javaparser.javadoc.description;
 
-public abstract class JavadocTag implements JavadocTextElement {
-    private String name;
+public class JavadocInlineTag implements JavadocDescriptionElement {
+    @Override
+    public String toText() {
+        throw new UnsupportedOperationException();
+    }
 }

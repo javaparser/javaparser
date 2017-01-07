@@ -19,36 +19,21 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.javadoc;
+package com.github.javaparser.javadoc.description;
 
-import java.util.LinkedList;
-import java.util.List;
+public class JavadocSnippet implements JavadocDescriptionElement {
+    private String text;
 
-/**
- * A text, potentially containing tags.
- */
-public class JavadocText {
-
-    private List<JavadocTextElement> elements;
-
-    public static JavadocText fromText(String text) {
-        JavadocText instance = new JavadocText();
-        instance.addElement(new JavadocSnippet(text));
-        return instance;
+    public JavadocSnippet(String text) {
+        if (text == null) {
+            throw new NullPointerException();
+        }
+        this.text = text;
     }
 
-    public JavadocText() {
-        elements = new LinkedList<>();
-    }
-
-    public void addElement(JavadocTextElement element) {
-        this.elements.add(element);
-    }
-
+    @Override
     public String toText() {
-        StringBuffer sb = new StringBuffer();
-        elements.forEach(e -> sb.append(e.toText()));
-        return sb.toString();
+        return this.text;
     }
 
     @Override
@@ -56,21 +41,21 @@ public class JavadocText {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        JavadocText that = (JavadocText) o;
+        JavadocSnippet that = (JavadocSnippet) o;
 
-        return elements.equals(that.elements);
+        return text.equals(that.text);
 
     }
 
     @Override
     public int hashCode() {
-        return elements.hashCode();
+        return text.hashCode();
     }
 
     @Override
     public String toString() {
-        return "JavadocText{" +
-                "elements=" + elements +
+        return "JavadocSnippet{" +
+                "text='" + text + '\'' +
                 '}';
     }
 }

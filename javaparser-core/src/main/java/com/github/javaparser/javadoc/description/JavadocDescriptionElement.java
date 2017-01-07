@@ -19,11 +19,8 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.javadoc;
+package com.github.javaparser.javadoc.description;
 
-public class SimpleJavadocTag extends JavadocTag {
-    @Override
-    public String toText() {
-        throw new UnsupportedOperationException();
-    }
+public interface JavadocDescriptionElement {
+    String toText();
 }
