@@ -23,6 +23,10 @@ package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class JavadocParser {
 
     public JavadocDocument parse(JavadocComment comment) {
@@ -30,7 +34,65 @@ public class JavadocParser {
     }
 
     public JavadocDocument parse(String commentContent) {
-        JavadocDocument document = new JavadocDocument(JavadocText.fromText(commentContent));
-        return document;
+        List<String> cleanLines = cleanLines(commentContent);
+        if (cleanLines.isEmpty()) {
+            return new JavadocDocument(JavadocText.fromText(""));
+        } else if (cleanLines.size() == 1) {
+            String summaryText = cleanLines.get(0);
+            return new JavadocDocument(parseText(summaryText));
+        } else {
+            String summaryText = cleanLines.get(0);
+            String detailsText = String.join("\n", cleanLines.subList(1, cleanLines.size()));
+            return new JavadocDocument(JavadocText.fromText(summaryText), JavadocText.fromText(detailsText));
+        }
+    }
+
+    private JavadocText parseText(String content) {
+        return JavadocText.fromText(content);
+    }
+
+    private List<String> cleanLines(String content) {
+        String[] lines = content.split("\n");
+        List<String> cleanedLines = Arrays.stream(lines).map(l -> {
+                    int asteriskIndex = startsWithAsterisk(l);
+                    if (asteriskIndex == -1) {
+                        return l;
+                    } else {
+                        // if a line starts with space followed by an asterisk drop to the asterisk
+                        // if there is a space immediately after the asterisk drop it also
+                        if (l.length() > asteriskIndex) {
+
+                            char c = l.charAt(asteriskIndex + 1);
+                            if (c == ' ' || c == '\t') {
+                                return l.substring(asteriskIndex + 2);
+                            }
+                        }
+                        return l.substring(asteriskIndex + 1);
+                    }
+                }).collect(Collectors.toList());
+        // lines containing only whitespace are normalized to empty lines
+        cleanedLines = cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
+        // if the first line is empty, drop it
+        if (cleanedLines.get(0).trim().length() == 0) {
+            return cleanedLines.subList(1, cleanedLines.size());
+        } else {
+            return cleanedLines;
+        }
+    }
+
+    // Visible for testing
+    static int startsWithAsterisk(String line) {
+        if (line.startsWith("*")) {
+            return 0;
+        } else if ((line.startsWith(" ") || line.startsWith("\t")) && line.length() > 1) {
+            int res = startsWithAsterisk(line.substring(1));
+            if (res == -1) {
+                return -1;
+            } else {
+                return 1 + res;
+            }
+        } else {
+            return -1;
+        }
     }
 }

@@ -46,4 +46,24 @@ public class JavadocParserTest {
                 new JavadocParser().parse(text));
     }
 
+    @Test
+    public void startsWithAsteriskEmpty() {
+        assertEquals(-1, JavadocParser.startsWithAsterisk(""));
+    }
+
+    @Test
+    public void startsWithAsteriskNoAsterisk() {
+        assertEquals(-1, JavadocParser.startsWithAsterisk(" ciao"));
+    }
+
+    @Test
+    public void startsWithAsteriskAtTheBeginning() {
+        assertEquals(0, JavadocParser.startsWithAsterisk("* ciao"));
+    }
+
+    @Test
+    public void startsWithAsteriskAfterSpaces() {
+        assertEquals(3, JavadocParser.startsWithAsterisk("   * ciao"));
+    }
+
 }
