@@ -25,6 +25,8 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,24 +40,36 @@ public class JavadocParser {
     }
 
     public JavadocDocument parse(String commentContent) {
-        /*List<String> cleanLines = cleanLines(commentContent);
-        if (cleanLines.isEmpty()) {
-            return new JavadocDocument(JavadocDescription.fromText(""));
-        } else if (cleanLines.size() == 1) {
-            String summaryText = trimRight(cleanLines.get(0));
-            return new JavadocDocument(parseText(summaryText));
-        } else {
-            String summaryText = trimRight(cleanLines.get(0));
-            String detailsText = trimRight(String.join("\n", cleanLines.subList(1, cleanLines.size())));
-            if (detailsText.isEmpty()) {
-                return new JavadocDocument(parseText(summaryText));
+        List<String> cleanLines = cleanLines(commentContent);
+        int index = -1;
+        for (int i=0;i<cleanLines.size() && index == -1;i++) {
+            if (isABlockLine(cleanLines.get(i))) {
+                index = i;
             }
-            return new JavadocDocument(JavadocDescription.fromText(summaryText), JavadocDescription.fromText(detailsText));
-        }*/
+        }
+        List<String> blockLines = null;
+        String descriptionText = null;
+        if (index == -1) {
+            descriptionText = trimRight(String.join("\n", cleanLines));
+            blockLines = Collections.emptyList();
+        } else {
+            descriptionText = trimRight(String.join("\n", cleanLines.subList(0, index)));
+            blockLines = cleanLines.subList(index + 1, cleanLines.size());
+        }
+        JavadocDocument document = new JavadocDocument(JavadocDescription.fromText(descriptionText));
+        blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
+        return document;
+    }
+
+    private JavadocBlockTag parseBlockTag(String line) {
         throw new UnsupportedOperationException();
     }
 
-    /*private String trimRight(String string) {
+    private boolean isABlockLine(String line) {
+        return line.trim().startsWith("@");
+    }
+
+    private String trimRight(String string) {
         while (string.endsWith(" ") || string.endsWith("\t")) {
             string = string.substring(0, string.length() - 1);
         }
@@ -91,12 +105,14 @@ public class JavadocParser {
         if (!cleanedLines.get(0).isEmpty() && (cleanedLines.get(0).charAt(0) == ' ' || cleanedLines.get(0).charAt(0) == '\t')) {
             cleanedLines.set(0, cleanedLines.get(0).substring(1));
         }
-        // if the first line is empty, drop it
-        if (cleanedLines.get(0).trim().length() == 0) {
-            return cleanedLines.subList(1, cleanedLines.size());
-        } else {
-            return cleanedLines;
+        // drop empty lines at the beginning and at the end
+        while (cleanedLines.size() > 0 && cleanedLines.get(0).trim().isEmpty()) {
+            cleanedLines = cleanedLines.subList(1, cleanedLines.size());
         }
+        while (cleanedLines.size() > 0 && cleanedLines.get(cleanedLines.size() - 1).trim().isEmpty()) {
+            cleanedLines = cleanedLines.subList(0, cleanedLines.size() - 1);
+        }
+        return cleanedLines;
     }
 
     // Visible for testing
@@ -113,5 +129,5 @@ public class JavadocParser {
         } else {
             return -1;
         }
-    }*/
+    }
 }

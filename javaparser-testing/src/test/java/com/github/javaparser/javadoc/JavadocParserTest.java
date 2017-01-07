@@ -55,9 +55,9 @@ public class JavadocParserTest {
                 "   * Increment only if the <i>serialized</i> form of the\n" +
                 "   * class changes.\n" +
                 "   ";
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("The version identifier for this Serializable class."),
-                        JavadocDescription.fromText("Increment only if the <i>serialized</i> form of the\n" +
-                                "class changes.\n")),
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("The version identifier for this Serializable class.\n" +
+                        "Increment only if the <i>serialized</i> form of the\n" +
+                        "class changes.")),
                 new JavadocParser().parse(text));
     }
 
@@ -69,8 +69,8 @@ public class JavadocParserTest {
                 "   *    case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
                 "   *\n" +
                 "   * to the following switch statement. Then you can cast matchedToken";
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("Returns a new Token object, by default."),
-                        JavadocDescription.fromText("However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
+        assertEquals(new JavadocDocument(JavadocDescription.fromText("Returns a new Token object, by default.\n" +
+                        "However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
                                 "\n" +
                                 "   case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
                                 "\n" +
