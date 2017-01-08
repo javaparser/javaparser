@@ -25,11 +25,41 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 
 import java.util.Optional;
 
+/**
+ * A block tag.
+ * <p>
+ * Typically they are found at the end of Javadoc comments.
+ */
 public class JavadocBlockTag {
+
+    /**
+     * The type of tag: it could either correspond to a known tag (param, return, etc.) or represent
+     * an unknown tag.
+     */
     public enum Type {
+        AUTHOR,
+        DEPRECATED,
+        EXCEPTION,
         PARAM,
         RETURN,
-        UNKNOWN, SEE, DEPRECATED;
+        SEE,
+        SERIAL,
+        SERIAL_DATA("serialData"),
+        SERIAL_FIELD("serialField"),
+        SINCE,
+        THROWS,
+        VERSION,
+        UNKNOWN;
+
+        Type(String keyword) {
+            this.keyword = keyword;
+        }
+
+        Type() {
+            this.keyword = name().toLowerCase();
+        }
+
+        private String keyword;
 
         boolean hasName() {
             return this == PARAM;
@@ -37,7 +67,7 @@ public class JavadocBlockTag {
 
         static Type fromName(String tagName) {
             for (Type t : Type.values()) {
-                if (t.name().toLowerCase().equals(tagName)) {
+                if (t.keyword.equals(tagName)) {
                     return t;
                 }
             }

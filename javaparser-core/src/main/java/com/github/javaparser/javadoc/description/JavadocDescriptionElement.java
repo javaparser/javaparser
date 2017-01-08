@@ -21,6 +21,9 @@
 
 package com.github.javaparser.javadoc.description;
 
+/**
+ * An element of a description: either an inline tag or a piece of text.
+ */
 public interface JavadocDescriptionElement {
     String toText();
 }

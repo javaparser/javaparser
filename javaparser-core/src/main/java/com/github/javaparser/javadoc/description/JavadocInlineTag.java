@@ -21,7 +21,45 @@
 
 package com.github.javaparser.javadoc.description;
 
+import com.github.javaparser.javadoc.JavadocBlockTag;
+
 public class JavadocInlineTag implements JavadocDescriptionElement {
+
+    /**
+     * The type of tag: it could either correspond to a known tag (code, docRoot, etc.) or represent
+     * an unknown tag.
+     */
+    public enum Type {
+        CODE,
+        DOC_ROOT("docRoot"),
+        INHERIT_DOC("inheritDoc"),
+        LINK,
+        LINKPLAIN,
+        LITERAL,
+        VALUE,
+        UNKNOWN;
+
+        Type(String keyword) {
+            this.keyword = keyword;
+        }
+
+        Type() {
+            this.keyword = name().toLowerCase();
+        }
+
+        private String keyword;
+
+        static JavadocInlineTag.Type fromName(String tagName) {
+            for (JavadocInlineTag.Type t : JavadocInlineTag.Type.values()) {
+                if (t.keyword.equals(tagName)) {
+                    return t;
+                }
+            }
+            return UNKNOWN;
+        }
+
+    }
+
     @Override
     public String toText() {
         throw new UnsupportedOperationException();

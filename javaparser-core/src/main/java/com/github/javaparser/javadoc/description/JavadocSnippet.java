@@ -21,6 +21,9 @@
 
 package com.github.javaparser.javadoc.description;
 
+/**
+ * A piece of text inside a Javadoc description.
+ */
 public class JavadocSnippet implements JavadocDescriptionElement {
     private String text;
 
