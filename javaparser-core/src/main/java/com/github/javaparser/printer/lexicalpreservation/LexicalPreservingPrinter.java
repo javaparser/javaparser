@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
+import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -680,6 +681,9 @@ public class LexicalPreservingPrinter {
                 }
             }
         } else if (property.getObservableProperty() == ObservableProperty.ANNOTATIONS) {
+            if (property.getContainerClass().equals(ArrayCreationLevel.class)) {
+                return insertAtBeginning(InsertionMode.PLAIN);
+            }
             return insertAtBeginning(InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.getObservableProperty() == ObservableProperty.EXTENDED_TYPES) {
             SimpleName name = ((ClassOrInterfaceDeclaration)parent).getName();
