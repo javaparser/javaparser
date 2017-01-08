@@ -22,20 +22,15 @@
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast;
 
 import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.EnumSet;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Transforming ArrayCreationLevel and verifying the LexicalPreservation works as expected.
@@ -49,6 +44,27 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
     }
 
     // Dimension
+
+    @Test
+    public void addingDimension() throws IOException {
+        ArrayCreationLevel it = consider("[]");
+        it.setDimension(new IntegerLiteralExpr("10"));
+        assertTransformedToString("[10]", it);
+    }
+
+    @Test
+    public void removingDimension() throws IOException {
+        ArrayCreationLevel it = consider("[10]");
+        it.removeDimension();
+        assertTransformedToString("[]", it);
+    }
+
+    @Test
+    public void replacingDimension() throws IOException {
+        ArrayCreationLevel it = consider("[10]");
+        it.setDimension(new IntegerLiteralExpr("12"));
+        assertTransformedToString("[12]", it);
+    }
 
     // Annotations
 

@@ -228,6 +228,14 @@ public class LexicalPreservingPrinter {
                     }
                     return;
                 }
+                if (property == ObservableProperty.DIMENSION) {
+                    if (newValue == null) {
+                        nodeText.remove(byNode((Node)oldValue));
+                    } else {
+                        lpp.insertAfter(byTokenType(ASTParserConstants.LBRACKET), InsertionMode.PLAIN).insert(observedNode, (Node)newValue);
+                    }
+                    return;
+                }
                 throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
                         oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
             }
