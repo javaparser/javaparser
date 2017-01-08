@@ -1,11 +1,9 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -194,6 +192,28 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
         NodeText nodeText = lpp.getOrCreateNodeText(md);
         assertEquals(Arrays.asList("String[]", " ", "reviewers", "(", ")", ";"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedArrayCreationLevelWithoutExpression() throws IOException {
+        considerExpression("new int[]");
+
+        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression;
+        ArrayCreationLevel arrayCreationLevel = arrayCreationExpr.getLevels().get(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(arrayCreationLevel);
+        assertEquals(Arrays.asList("[", "]"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void checkNodeTextCreatedArrayCreationLevelWith() throws IOException {
+        considerExpression("new int[123]");
+
+        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression;
+        ArrayCreationLevel arrayCreationLevel = arrayCreationExpr.getLevels().get(0);
+        NodeText nodeText = lpp.getOrCreateNodeText(arrayCreationLevel);
+        assertEquals(Arrays.asList("[", "123", "]"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
     }
 

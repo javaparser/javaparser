@@ -27,6 +27,7 @@ import com.github.javaparser.Providers;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.utils.Pair;
 import org.junit.Before;
 
@@ -40,6 +41,7 @@ public abstract class AbstractLexicalPreservingTest {
 
     protected LexicalPreservingPrinter lpp;
     protected CompilationUnit cu;
+    protected Expression expression;
 
     @Before
     public void setup() {
@@ -51,6 +53,13 @@ public abstract class AbstractLexicalPreservingTest {
         Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> res = LexicalPreservingPrinter.setup(
                 ParseStart.COMPILATION_UNIT, Providers.provider(code));
         cu = res.a.getResult().get();
+        lpp = res.b;
+    }
+
+    protected void considerExpression(String code) {
+        Pair<ParseResult<Expression>, LexicalPreservingPrinter> res = LexicalPreservingPrinter.setup(
+                ParseStart.EXPRESSION, Providers.provider(code));
+        expression = res.a.getResult().get();
         lpp = res.b;
     }
 
@@ -78,15 +87,15 @@ public abstract class AbstractLexicalPreservingTest {
         return result.toString("UTF-8");
     }
 
-    protected void assertTransformed(String exampleName, CompilationUnit cu) throws IOException {
+    protected void assertTransformed(String exampleName, Node node) throws IOException {
         String expectedCode = readExample(exampleName + "_expected");
-        String actualCode = lpp.print(cu);
+        String actualCode = lpp.print(node);
         assertEquals(expectedCode, actualCode);
     }
 
     protected void assertUnchanged(String exampleName) throws IOException {
         String code = considerExample(exampleName + "_original");
-        assertEquals(code, lpp.print(cu));
+        assertEquals(code, lpp.print(cu != null ? cu : expression));
     }
 
     protected void assertTransformedToString(String expectedPartialCode, Node node) throws IOException {
