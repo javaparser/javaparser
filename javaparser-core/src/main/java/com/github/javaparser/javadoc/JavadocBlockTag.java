@@ -21,6 +21,8 @@
 
 package com.github.javaparser.javadoc;
 
+import com.github.javaparser.javadoc.description.JavadocDescription;
+
 import java.util.Optional;
 
 public class JavadocBlockTag {
@@ -45,7 +47,7 @@ public class JavadocBlockTag {
     }
 
     private Type type;
-    private String content;
+    private JavadocDescription content;
     private Optional<String> name = Optional.empty();
 
     public JavadocBlockTag(Type type, String content) {
@@ -54,7 +56,7 @@ public class JavadocBlockTag {
             this.name = Optional.of(JavadocParser.nextWord(content));
             content = content.substring(this.name.get().length()).trim();
         }
-        this.content = content;
+        this.content = JavadocDescription.fromText(content);
     }
 
     public JavadocBlockTag(String tagName, String content) {
@@ -69,7 +71,7 @@ public class JavadocBlockTag {
         return type;
     }
 
-    public String getContent() {
+    public JavadocDescription getContent() {
         return content;
     }
 

@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A text, potentially containing inline tags.
+ * A javadoc text, potentially containing inline tags.
  */
 public class JavadocDescription {
 

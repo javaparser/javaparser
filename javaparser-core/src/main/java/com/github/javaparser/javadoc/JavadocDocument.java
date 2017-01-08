@@ -21,7 +21,6 @@
 
 package com.github.javaparser.javadoc;
 
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 
 import java.util.LinkedList;
@@ -54,7 +53,7 @@ public class JavadocDocument {
         return addBlockTag(tagName, "");
     }
 
-    public JavadocComment toJavadocComment() {
+    public String toText() {
         throw new UnsupportedOperationException();
     }
 
