@@ -79,9 +79,11 @@ public class JavadocBlockTag {
     private Type type;
     private JavadocDescription content;
     private Optional<String> name = Optional.empty();
+    private String tagName;
 
     public JavadocBlockTag(Type type, String content) {
         this.type = type;
+        this.tagName = type.keyword;
         if (type.hasName()) {
             this.name = Optional.of(JavadocParser.nextWord(content));
             content = content.substring(this.name.get().length()).trim();
@@ -91,6 +93,7 @@ public class JavadocBlockTag {
 
     public JavadocBlockTag(String tagName, String content) {
         this(Type.fromName(tagName), content);
+        this.tagName = tagName;
     }
 
     public static JavadocBlockTag createParamBlockTag(String paramName, String content) {
@@ -109,6 +112,20 @@ public class JavadocBlockTag {
         return name;
     }
 
+    public String toText() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(tagName);
+        if (name.isPresent()) {
+            sb.append(" ");
+            sb.append(name.get());
+        }
+        if (!content.isEmpty()) {
+            sb.append(" ");
+            sb.append(content);
+        }
+        return sb.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,7 +136,6 @@ public class JavadocBlockTag {
         if (type != that.type) return false;
         if (!content.equals(that.content)) return false;
         return name.equals(that.name);
-
     }
 
     @Override

@@ -77,6 +77,10 @@ public class JavadocDescription {
         return sb.toString();
     }
 
+    public boolean isEmpty() {
+        return toText().isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,4 +103,5 @@ public class JavadocDescription {
                 "elements=" + elements +
                 '}';
     }
+
 }

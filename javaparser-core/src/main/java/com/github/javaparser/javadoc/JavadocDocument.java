@@ -53,8 +53,18 @@ public class JavadocDocument {
         return addBlockTag(tagName, "");
     }
 
+    /**
+     * Return the text content of the document. It does not containing trailing spaces and asteriks
+     * at the start of the line.
+     */
     public String toText() {
-        throw new UnsupportedOperationException();
+        StringBuffer sb = new StringBuffer();
+        if (!description.isEmpty()) {
+            sb.append(description.toText());
+            sb.append("\n");
+        }
+        blockTags.forEach(bt -> sb.append(bt.toText()));
+        return sb.toString();
     }
 
     @Override

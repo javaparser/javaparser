@@ -47,7 +47,7 @@ public class JavadocExtractorTest {
                 public void visit(JavadocComment n, Object arg) {
                     super.visit(n, arg);
                     new JavadocParser().parse(n);
-                    System.out.println("JAVADOC COMMENT <<<" + n.getContent()+">>>");
+                    //System.out.println("JAVADOC COMMENT <<<" + n.getContent()+">>>");
                 }
             }.visit(cu, null);
         } catch (ParseProblemException e) {
