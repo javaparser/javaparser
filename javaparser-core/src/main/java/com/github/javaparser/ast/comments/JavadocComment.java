@@ -25,12 +25,18 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
  *
  * @author Julio Vilmar Gesser
  */
 public final class JavadocComment extends Comment {
+
+    LinkedList<AnnotationPairs> annotations = new LinkedList<>();
+    String text;
 
     public JavadocComment() {
         this(null, "empty");
@@ -52,5 +58,28 @@ public final class JavadocComment extends Comment {
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
+    }
+
+    public String getText() {
+        String text = toString();
+        text = text.replaceFirst("/\\*\\*\n", "");
+        text = text.replaceAll("\n *\\*/.*\n", "");
+        text = text.replaceAll(" *\\* *", "");
+        this.text = text;
+        return text;
+    }
+
+    private class AnnotationPairs {
+        String annotation;
+        String text;
+
+        public AnnotationPairs(String annotation, String text) {
+            this.annotation = annotation;
+            this.text = text;
+        }
+
+        public String getAnnotation() {return annotation;}
+
+        public String getText() {return text;}
     }
 }
