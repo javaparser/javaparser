@@ -88,7 +88,7 @@ public class JavadocBlockTag {
             this.name = Optional.of(JavadocParser.nextWord(content));
             content = content.substring(this.name.get().length()).trim();
         }
-        this.content = JavadocDescription.fromText(content);
+        this.content = JavadocDescription.parseText(content);
     }
 
     public JavadocBlockTag(String tagName, String content) {

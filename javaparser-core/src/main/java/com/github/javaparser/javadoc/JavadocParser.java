@@ -55,7 +55,7 @@ public class JavadocParser {
             descriptionText = trimRight(String.join("\n", cleanLines.subList(0, index)));
             blockLines = cleanLines.subList(index, cleanLines.size());
         }
-        JavadocDocument document = new JavadocDocument(JavadocDescription.fromText(descriptionText));
+        JavadocDocument document = new JavadocDocument(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
         return document;
     }
@@ -87,7 +87,7 @@ public class JavadocParser {
     }
 
     private JavadocDescription parseText(String content) {
-        return JavadocDescription.fromText(content);
+        return JavadocDescription.parseText(content);
     }
 
     private List<String> cleanLines(String content) {

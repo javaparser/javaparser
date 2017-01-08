@@ -33,7 +33,7 @@ public class JavadocDescription {
 
     private List<JavadocDescriptionElement> elements;
 
-    public static JavadocDescription fromText(String text) {
+    public static JavadocDescription parseText(String text) {
         JavadocDescription instance = new JavadocDescription();
         int index = 0;
         Pair<Integer, Integer> nextInlineTagPos = null;

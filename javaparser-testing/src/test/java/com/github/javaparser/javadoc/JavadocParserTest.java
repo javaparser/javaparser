@@ -30,19 +30,19 @@ public class JavadocParserTest {
 
     @Test
     public void parseSimplestContent() {
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("A simple line of text")),
+        assertEquals(new JavadocDocument(JavadocDescription.parseText("A simple line of text")),
                 new JavadocParser().parse("A simple line of text"));
     }
 
     @Test
     public void parseSingleLineWithSpacing() {
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("The line number of the first character of this Token.")),
+        assertEquals(new JavadocDocument(JavadocDescription.parseText("The line number of the first character of this Token.")),
                 new JavadocParser().parse(" The line number of the first character of this Token. "));
     }
 
     @Test
     public void parseSingleLineWithNewLines() {
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("The string image of the token.")),
+        assertEquals(new JavadocDocument(JavadocDescription.parseText("The string image of the token.")),
                 new JavadocParser().parse("\n" +
                         "   * The string image of the token.\n" +
                         "   "));
@@ -55,7 +55,7 @@ public class JavadocParserTest {
                 "   * Increment only if the <i>serialized</i> form of the\n" +
                 "   * class changes.\n" +
                 "   ";
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("The version identifier for this Serializable class.\n" +
+        assertEquals(new JavadocDocument(JavadocDescription.parseText("The version identifier for this Serializable class.\n" +
                         "Increment only if the <i>serialized</i> form of the\n" +
                         "class changes.")),
                 new JavadocParser().parse(text));
@@ -69,7 +69,7 @@ public class JavadocParserTest {
                 "   *    case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
                 "   *\n" +
                 "   * to the following switch statement. Then you can cast matchedToken";
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("Returns a new Token object, by default.\n" +
+        assertEquals(new JavadocDocument(JavadocDescription.parseText("Returns a new Token object, by default.\n" +
                         "However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
                                 "\n" +
                                 "   case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
@@ -84,7 +84,7 @@ public class JavadocParserTest {
                 "   * @deprecated\n" +
                 "   * @see #getEndColumn\n" +
                 "   ";
-        assertEquals(new JavadocDocument(JavadocDescription.fromText(""))
+        assertEquals(new JavadocDocument(JavadocDescription.parseText(""))
                 .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.DEPRECATED, ""))
                 .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.SEE, "#getEndColumn")), new JavadocParser().parse(text));
     }
@@ -100,7 +100,7 @@ public class JavadocParserTest {
                 "     * @return the {@link FieldDeclaration} created\n" +
                 "     ";
         JavadocDocument res = new JavadocParser().parse(text);
-        assertEquals(new JavadocDocument(JavadocDescription.fromText("Add a field to this and automatically add the import of the type if needed"))
+        assertEquals(new JavadocDocument(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("modifiers", "the modifiers like {@link Modifier#PUBLIC}"))
