@@ -203,7 +203,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         ArrayCreationLevel arrayCreationLevel = arrayCreationExpr.getLevels().get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(arrayCreationLevel);
         assertEquals(Arrays.asList("[", "]"),
-                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+                nodeText.getElements().stream().map(TextElement::expand).filter(e -> !e.isEmpty()).collect(Collectors.toList()));
     }
 
     @Test
@@ -214,7 +214,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         ArrayCreationLevel arrayCreationLevel = arrayCreationExpr.getLevels().get(0);
         NodeText nodeText = lpp.getOrCreateNodeText(arrayCreationLevel);
         assertEquals(Arrays.asList("[", "123", "]"),
-                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+                nodeText.getElements().stream().map(TextElement::expand).filter(e -> !e.isEmpty()).collect(Collectors.toList()));
     }
 
     //
