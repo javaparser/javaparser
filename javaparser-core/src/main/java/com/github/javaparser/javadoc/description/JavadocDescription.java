@@ -21,6 +21,8 @@
 
 package com.github.javaparser.javadoc.description;
 
+import com.github.javaparser.utils.Pair;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,8 +35,32 @@ public class JavadocDescription {
 
     public static JavadocDescription fromText(String text) {
         JavadocDescription instance = new JavadocDescription();
-        instance.addElement(new JavadocSnippet(text));
+        int index = 0;
+        Pair<Integer, Integer> nextInlineTagPos = null;
+        while ((nextInlineTagPos = indexOfNextInlineTag(text, index)) != null) {
+            if (nextInlineTagPos.a != index) {
+                instance.addElement(new JavadocSnippet(text.substring(index, nextInlineTagPos.a)));
+            }
+            instance.addElement(JavadocInlineTag.fromText(text.substring(nextInlineTagPos.a, nextInlineTagPos.b + 1)));
+            index = nextInlineTagPos.b;
+        }
+        if (index < text.length()) {
+            instance.addElement(new JavadocSnippet(text.substring(index)));
+        }
         return instance;
+    }
+
+    private static Pair<Integer, Integer> indexOfNextInlineTag(String text, int start) {
+        int index = text.indexOf("{@", start);
+        if (index == -1) {
+            return null;
+        }
+        // we are interested only in complete inline tags
+        int closeIndex = text.indexOf("}", index);
+        if (closeIndex == -1) {
+            return null;
+        }
+        return new Pair<>(index, closeIndex);
     }
 
     public JavadocDescription() {

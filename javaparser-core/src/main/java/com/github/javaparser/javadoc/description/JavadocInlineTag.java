@@ -21,9 +21,23 @@
 
 package com.github.javaparser.javadoc.description;
 
-import com.github.javaparser.javadoc.JavadocBlockTag;
+import com.github.javaparser.javadoc.JavadocParser;
 
 public class JavadocInlineTag implements JavadocDescriptionElement {
+
+    public static JavadocDescriptionElement fromText(String text) {
+        if (!text.startsWith("{@")) {
+            throw new IllegalArgumentException(String.format("Expected to start with '{@'. Text '%s'", text));
+        }
+        if (!text.endsWith("}")) {
+            throw new IllegalArgumentException(String.format("Expected to end with '}'. Text '%s'", text));
+        }
+        text = text.substring(2, text.length() - 1);
+        String tagName = JavadocParser.nextWord(text);
+        Type type = Type.fromName(tagName);
+        String content = text.substring(tagName.length());
+        return new JavadocInlineTag(type, content);
+    }
 
     /**
      * The type of tag: it could either correspond to a known tag (code, docRoot, etc.) or represent
@@ -60,8 +74,43 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     }
 
+    private Type type;
+    private String content;
+
+    public JavadocInlineTag(Type type, String content) {
+        this.type = type;
+        this.content = content;
+    }
+
     @Override
     public String toText() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavadocInlineTag that = (JavadocInlineTag) o;
+
+        if (type != that.type) return false;
+        return content.equals(that.content);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + content.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "JavadocInlineTag{" +
+                "type=" + type +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

@@ -67,7 +67,7 @@ public class JavadocParser {
         return new JavadocBlockTag(tagName, rest);
     }
 
-    static String nextWord(String string) {
+    public static String nextWord(String string) {
         int index = 0;
         while (index < string.length() && !Character.isWhitespace(string.charAt(index))) {
             index++;
