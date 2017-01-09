@@ -837,7 +837,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         }
 
-        if (!objEquals(n1.getField(), n2.getField())) {
+        if (!objEquals(n1.getName(), n2.getName())) {
             return false;
         }
 

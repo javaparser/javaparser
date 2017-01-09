@@ -537,7 +537,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(FieldAccessExpr _n, Object _arg) {
         Expression scope_ = cloneNode(_n.getScope(), _arg);
         NodeList<Type> typeArguments_ = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        SimpleName fieldExpr_ = cloneNode(_n.getField(), _arg);
+        SimpleName fieldExpr_ = cloneNode(_n.getName(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
 
         FieldAccessExpr r = new FieldAccessExpr(
