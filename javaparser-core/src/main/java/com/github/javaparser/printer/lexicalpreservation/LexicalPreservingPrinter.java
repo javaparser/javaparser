@@ -28,7 +28,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -233,6 +232,14 @@ public class LexicalPreservingPrinter {
                         nodeText.remove(byNode((Node)oldValue));
                     } else {
                         lpp.insertAfter(byTokenType(ASTParserConstants.LBRACKET), InsertionMode.PLAIN).insert(observedNode, (Node)newValue);
+                    }
+                    return;
+                }
+                if (property == ObservableProperty.PACKAGE_DECLARATION) {
+                    if (newValue == null) {
+                        throw new UnsupportedOperationException();
+                    } else {
+                        lpp.atBeginning(InsertionMode.ON_ITS_OWN_LINE, TokenTextElement.newLine()).insert(observedNode, (Node)newValue);
                     }
                     return;
                 }
@@ -690,9 +697,9 @@ public class LexicalPreservingPrinter {
             }
         } else if (property.getObservableProperty() == ObservableProperty.ANNOTATIONS) {
             if (property.getContainerClass().equals(ArrayCreationLevel.class)) {
-                return insertAtBeginning(InsertionMode.PLAIN);
+                return atBeginning(InsertionMode.PLAIN);
             }
-            return insertAtBeginning(InsertionMode.ON_ITS_OWN_LINE);
+            return atBeginning(InsertionMode.ON_ITS_OWN_LINE);
         } else if (property.getObservableProperty() == ObservableProperty.EXTENDED_TYPES) {
             SimpleName name = ((ClassOrInterfaceDeclaration)parent).getName();
             return insertAfter(byNode(name), InsertionMode.PLAIN, new TextElement[]{space(), Tokens.create(EXTENDS), space()}, new TextElement[]{});
@@ -704,11 +711,19 @@ public class LexicalPreservingPrinter {
         }
     }
 
-    private Inserter insertAtBeginning(InsertionMode insertionMode) {
+    private Inserter atBeginning(InsertionMode insertionMode) {
+        return atBeginning(insertionMode, new TextElement[]{});
+    }
+
+    private Inserter atBeginning(InsertionMode insertionMode, TextElement... separators) {
         return (parent, child) -> {
-            getOrCreateNodeText(parent).addElement(0, new ChildTextElement(this, child));
+            int index = 0;
+            getOrCreateNodeText(parent).addElement(index++, new ChildTextElement(this, child));
             if (insertionMode == InsertionMode.ON_ITS_OWN_LINE) {
-                getOrCreateNodeText(parent).addElement(1, new TokenTextElement(3, "\n"));
+                getOrCreateNodeText(parent).addElement(index++, new TokenTextElement(3, "\n"));
+            }
+            for (TextElement e : separators) {
+                getOrCreateNodeText(parent).addElement(index++, e);
             }
         };
     }

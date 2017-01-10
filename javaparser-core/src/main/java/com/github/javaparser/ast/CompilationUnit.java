@@ -464,5 +464,9 @@ public final class CompilationUnit extends Node {
     public CompilationUnitMetaModel getMetaModel() {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }
+
+    public void removePackageDeclaration() {
+        setPackageDeclaration((PackageDeclaration)null);
+    }
 }
 

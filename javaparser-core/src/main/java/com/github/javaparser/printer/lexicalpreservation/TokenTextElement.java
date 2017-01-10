@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
 
@@ -28,6 +29,10 @@ class TokenTextElement extends TextElement {
 
     private int tokenKind;
     private String text;
+
+    public static TokenTextElement newLine() {
+        return new TokenTextElement(3, "\n");
+    }
 
     TokenTextElement(JavaToken token) {
         this(token.getKind(), token.getText());
