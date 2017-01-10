@@ -19,9 +19,12 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.javadoc;
+package com.github.javaparser;
 
+import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -30,7 +33,7 @@ public class JavadocParserTest {
 
     @Test
     public void parseSimplestContent() {
-        assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
+        Assert.assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
                 new JavadocParser().parse("A simple line of text"));
     }
 

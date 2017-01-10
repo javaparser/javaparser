@@ -19,9 +19,11 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.javadoc;
+package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 
 import java.util.Arrays;
@@ -29,16 +31,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.utils.Utils.nextWord;
+
 /**
  * The class responsible for parsing the content of JavadocComments and produce JavadocDocuments.
  */
-public class JavadocParser {
+class JavadocParser {
 
-    public Javadoc parse(JavadocComment comment) {
+    public static Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent());
     }
 
-    public Javadoc parse(String commentContent) {
+    public static Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(commentContent);
         int index = -1;
         for (int i=0;i<cleanLines.size() && index == -1;i++) {
@@ -60,37 +64,29 @@ public class JavadocParser {
         return document;
     }
 
-    private JavadocBlockTag parseBlockTag(String line) {
+    private static JavadocBlockTag parseBlockTag(String line) {
         line = line.trim().substring(1);
         String tagName = nextWord(line);
         String rest = line.substring(tagName.length()).trim();
         return new JavadocBlockTag(tagName, rest);
     }
 
-    public static String nextWord(String string) {
-        int index = 0;
-        while (index < string.length() && !Character.isWhitespace(string.charAt(index))) {
-            index++;
-        }
-        return string.substring(0, index);
-    }
-
-    private boolean isABlockLine(String line) {
+    private static boolean isABlockLine(String line) {
         return line.trim().startsWith("@");
     }
 
-    private String trimRight(String string) {
+    private static String trimRight(String string) {
         while (!string.isEmpty() && Character.isWhitespace(string.charAt(string.length() - 1))) {
             string = string.substring(0, string.length() - 1);
         }
         return string;
     }
 
-    private JavadocDescription parseText(String content) {
+    private static JavadocDescription parseText(String content) {
         return JavadocDescription.parseText(content);
     }
 
-    private List<String> cleanLines(String content) {
+    private static List<String> cleanLines(String content) {
         String[] lines = content.split("\n");
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
                     int asteriskIndex = startsWithAsterisk(l);

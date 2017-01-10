@@ -26,6 +26,8 @@ import com.github.javaparser.utils.Utils;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.nextWord;
+
 /**
  * A block tag.
  * <p>
@@ -87,7 +89,7 @@ public class JavadocBlockTag {
         this.type = type;
         this.tagName = type.keyword;
         if (type.hasName()) {
-            this.name = Optional.of(JavadocParser.nextWord(content));
+            this.name = Optional.of(nextWord(content));
             content = content.substring(this.name.get().length()).trim();
         }
         this.content = JavadocDescription.parseText(content);

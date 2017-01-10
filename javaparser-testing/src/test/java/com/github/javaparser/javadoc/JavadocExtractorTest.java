@@ -46,7 +46,7 @@ public class JavadocExtractorTest {
                 @Override
                 public void visit(JavadocComment n, Object arg) {
                     super.visit(n, arg);
-                    new JavadocParser().parse(n);
+                    n.parse();
                 }
             }.visit(cu, null);
         } catch (ParseProblemException e) {

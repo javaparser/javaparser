@@ -32,6 +32,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.javadoc.Javadoc;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -390,5 +391,16 @@ public final class JavaParser {
      */
     public static VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
         return simplifiedParse(VARIABLE_DECLARATION_EXPR, provider(declaration));
+    }
+
+    /**
+     * Parses the content of a JavadocComment and returns a {@link com.github.javaparser.javadoc.Javadoc} that represents it.
+     *
+     * @param content a variable declaration like <code>content of my javadoc\n * second line\n * third line</code>
+     * @return Javadoc representing the content of the comment
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Javadoc parseJavadoc(String content) {
+        return JavadocParser.parse(content);
     }
 }

@@ -115,4 +115,15 @@ public class Utils {
             return original.substring(0, 1).toUpperCase() + original.substring(1);
         }
     }
+
+    /**
+     * Return the next word of the string, in other words it stops when a space is encountered.
+     */
+    public static String nextWord(String string) {
+        int index = 0;
+        while (index < string.length() && !Character.isWhitespace(string.charAt(index))) {
+            index++;
+        }
+        return string.substring(0, index);
+    }
 }

@@ -21,10 +21,10 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
-import com.github.javaparser.javadoc.JavadocParser;
 
 /**
  * A node that can be documented with a Javadoc comment.
@@ -48,7 +48,7 @@ public interface NodeWithJavadoc<N extends Node> {
         if (javadocComment == null) {
             return null;
         } else {
-            return new JavadocParser().parse(javadocComment);
+            return javadocComment.parse();
         }
     }
 

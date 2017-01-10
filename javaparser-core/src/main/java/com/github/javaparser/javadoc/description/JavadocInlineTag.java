@@ -21,8 +21,9 @@
 
 package com.github.javaparser.javadoc.description;
 
-import com.github.javaparser.javadoc.JavadocParser;
 import com.github.javaparser.utils.Utils;
+
+import static com.github.javaparser.utils.Utils.nextWord;
 
 /**
  * An inline tag contained in a Javadoc description.
@@ -39,7 +40,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
             throw new IllegalArgumentException(String.format("Expected to end with '}'. Text '%s'", text));
         }
         text = text.substring(2, text.length() - 1);
-        String tagName = JavadocParser.nextWord(text);
+        String tagName = nextWord(text);
         Type type = Type.fromName(tagName);
         String content = text.substring(tagName.length());
         return new JavadocInlineTag(type, content);
