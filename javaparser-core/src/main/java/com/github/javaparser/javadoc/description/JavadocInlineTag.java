@@ -23,6 +23,11 @@ package com.github.javaparser.javadoc.description;
 
 import com.github.javaparser.javadoc.JavadocParser;
 
+/**
+ * An inline tag contained in a Javadoc description.
+ * <p>
+ * For example <code>{@link String}</code>
+ */
 public class JavadocInlineTag implements JavadocDescriptionElement {
 
     public static JavadocDescriptionElement fromText(String text) {

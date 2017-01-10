@@ -23,6 +23,8 @@ package com.github.javaparser.javadoc.description;
 
 /**
  * An element of a description: either an inline tag or a piece of text.
+ * <p>
+ * So for example <code>a text</code> or <code>{@link String}</code> could be valid description elements.
  */
 public interface JavadocDescriptionElement {
     String toText();

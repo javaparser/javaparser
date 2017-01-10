@@ -29,6 +29,11 @@ import java.util.Optional;
  * A block tag.
  * <p>
  * Typically they are found at the end of Javadoc comments.
+ * <p>
+ * Examples:
+ * <code>@see AnotherClass</code>
+ * <code>@since v0.0.1</code>
+ * <code>@author Jim O'Java</code>
  */
 public class JavadocBlockTag {
 

@@ -28,6 +28,8 @@ import java.util.List;
 
 /**
  * A javadoc text, potentially containing inline tags.
+ *
+ * For example <code>This class is totally unrelated to {@link com.github.javaparser.Range}</code>
  */
 public class JavadocDescription {
 

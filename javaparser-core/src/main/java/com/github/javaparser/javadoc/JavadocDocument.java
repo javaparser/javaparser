@@ -27,9 +27,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The structured content of a single Javadoc Comment.
+ * The structured content of a single Javadoc comment.
  * <p>
  * It is composed by a description and a list of block tags.
+ * <p>
+ * An example would be the text contained in this very Javadoc comment. At the moment
+ * of this writing this comment does not contain any block tags (such as <code>@see AnotherClass</code>)
  */
 public class JavadocDocument {
     private JavadocDescription description;
