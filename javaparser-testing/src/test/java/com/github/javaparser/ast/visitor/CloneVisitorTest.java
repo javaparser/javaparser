@@ -24,7 +24,6 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,30 +49,30 @@ public class CloneVisitorTest {
     public void cloneJavaDocTest() {
 
         NodeList<BodyDeclaration<?>> bodyDeclarationList = new NodeList<>();
-        bodyDeclarationList.add(new AnnotationMemberDeclaration().setJavaDocComment("javadoc"));
-        bodyDeclarationList.add(new ConstructorDeclaration().setJavaDocComment("javadoc"));
-        bodyDeclarationList.add(new EmptyMemberDeclaration().setJavaDocComment("javadoc"));
-        bodyDeclarationList.add(new EnumConstantDeclaration().setJavaDocComment("javadoc"));
-        bodyDeclarationList.add(new FieldDeclaration().setJavaDocComment("javadoc"));
-        bodyDeclarationList.add(new InitializerDeclaration().setJavaDocComment("javadoc"));
-        bodyDeclarationList.add(new MethodDeclaration().setJavaDocComment("javadoc"));
+        bodyDeclarationList.add(new AnnotationMemberDeclaration().setJavadocComment("javadoc"));
+        bodyDeclarationList.add(new ConstructorDeclaration().setJavadocComment("javadoc"));
+        bodyDeclarationList.add(new EmptyMemberDeclaration().setJavadocComment("javadoc"));
+        bodyDeclarationList.add(new EnumConstantDeclaration().setJavadocComment("javadoc"));
+        bodyDeclarationList.add(new FieldDeclaration().setJavadocComment("javadoc"));
+        bodyDeclarationList.add(new InitializerDeclaration().setJavadocComment("javadoc"));
+        bodyDeclarationList.add(new MethodDeclaration().setJavadocComment("javadoc"));
 
         NodeList<TypeDeclaration<?>> typeDeclarationList = new NodeList<>();
         AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration();
         annotationDeclaration.setName("nnotationDeclarationTest");
-        typeDeclarationList.add(annotationDeclaration.setJavaDocComment("javadoc"));
+        typeDeclarationList.add(annotationDeclaration.setJavadocComment("javadoc"));
 
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration2 = new ClassOrInterfaceDeclaration();
         classOrInterfaceDeclaration2.setName("emptyTypeDeclarationTest");
-        typeDeclarationList.add(classOrInterfaceDeclaration2.setJavaDocComment("javadoc"));
+        typeDeclarationList.add(classOrInterfaceDeclaration2.setJavadocComment("javadoc"));
 
         EnumDeclaration enumDeclaration = new EnumDeclaration();
         enumDeclaration.setName("enumDeclarationTest");
-        typeDeclarationList.add(enumDeclaration.setJavaDocComment("javadoc"));
+        typeDeclarationList.add(enumDeclaration.setJavadocComment("javadoc"));
 
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration();
         classOrInterfaceDeclaration.setName("classOrInterfaceDeclarationTest");
-        typeDeclarationList.add(classOrInterfaceDeclaration.setJavaDocComment("javadoc"));
+        typeDeclarationList.add(classOrInterfaceDeclaration.setJavadocComment("javadoc"));
 
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration1 = new ClassOrInterfaceDeclaration();
         classOrInterfaceDeclaration1.setName("emptyTypeDeclarationTest1");

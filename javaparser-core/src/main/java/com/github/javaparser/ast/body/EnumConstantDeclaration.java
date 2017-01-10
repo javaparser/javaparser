@@ -130,7 +130,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
+    public JavadocComment getJavadocComment() {
         if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }

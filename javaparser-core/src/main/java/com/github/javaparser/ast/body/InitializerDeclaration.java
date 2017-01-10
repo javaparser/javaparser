@@ -92,7 +92,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
+    public JavadocComment getJavadocComment() {
         if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }

@@ -21,6 +21,7 @@
 
 package com.github.javaparser.javadoc;
 
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 
 import java.util.LinkedList;
