@@ -24,7 +24,6 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
-import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
@@ -46,8 +45,7 @@ import java.util.Optional;
  */
 public class MethodReferenceExpr extends Expression implements
         NodeWithTypeArguments<MethodReferenceExpr>,
-        NodeWithIdentifier<MethodReferenceExpr>,
-        NodeWithOptionalScope<MethodReferenceExpr> {
+        NodeWithIdentifier<MethodReferenceExpr> {
 
     private Expression scope;
 
@@ -81,12 +79,10 @@ public class MethodReferenceExpr extends Expression implements
         v.visit(this, arg);
     }
 
-    @Override
-    public Optional<Expression> getScope() {
-        return Optional.ofNullable(scope);
+    public Expression getScope() {
+        return scope;
     }
 
-    @Override
     public MethodReferenceExpr setScope(Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;

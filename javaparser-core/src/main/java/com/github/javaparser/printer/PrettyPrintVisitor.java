@@ -1313,9 +1313,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(MethodReferenceExpr n, Void arg) {
         printJavaComment(n.getComment(), arg);
+        Expression scope = n.getScope();
         String identifier = n.getIdentifier();
-        n.getScope().ifPresent(expression ->
-                expression.accept(this, arg));
+        if (scope != null) {
+            n.getScope().accept(this, arg);
+        }
 
         printer.print("::");
         printTypeArgs(n, arg);

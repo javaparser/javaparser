@@ -786,8 +786,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
                 t.accept(this, arg);
             }
         }
-        if (n.getScope().isPresent()) {
-            n.getScope().get().accept(this, arg);
+        if (n.getScope() != null) {
+            n.getScope().accept(this, arg);
         }
     }
 

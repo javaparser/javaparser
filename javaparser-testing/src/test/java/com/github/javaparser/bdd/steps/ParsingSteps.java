@@ -205,7 +205,7 @@ public class ParsingSteps {
         ExpressionStmt statementUnderTest = (ExpressionStmt) getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
         assertEquals(1, statementUnderTest.getNodesByType(MethodReferenceExpr.class).size());
         MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getNodesByType(MethodReferenceExpr.class).get(0);
-        assertThat(methodReferenceUnderTest.getScope().get().toString(), is(expectedName));
+        assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
     }
 
     @Then("method reference in statement $statementPosition in method $methodPosition in class $classPosition identifier is $expectedName")
