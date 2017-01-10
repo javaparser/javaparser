@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -49,7 +50,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class ObjectCreationExpr extends Expression implements
         NodeWithTypeArguments<ObjectCreationExpr>,
         NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>,
-        NodeWithArguments<ObjectCreationExpr> {
+        NodeWithArguments<ObjectCreationExpr>,
+        NodeWithOptionalScope<ObjectCreationExpr> {
 
     private Expression scope;
 
@@ -124,6 +126,7 @@ public final class ObjectCreationExpr extends Expression implements
         return arguments;
     }
 
+    @Override
     public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
@@ -162,6 +165,7 @@ public final class ObjectCreationExpr extends Expression implements
      * @param scope the scope, can be null
      * @return this, the ObjectCreationExpr
      */
+    @Override
     public ObjectCreationExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;

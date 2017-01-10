@@ -793,8 +793,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final MethodReferenceExpr n, final A arg) {
         visitComment(n, arg);
         n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        if (n.getScope() != null) {
-            n.setScope((Expression) n.getScope().accept(this, arg));
+        if (n.getScope().isPresent()) {
+            n.setScope((Expression) n.getScope().get().accept(this, arg));
         }
         return n;
     }
