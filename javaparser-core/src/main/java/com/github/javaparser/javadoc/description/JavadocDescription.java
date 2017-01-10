@@ -72,7 +72,7 @@ public class JavadocDescription {
     }
 
     public String toText() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         elements.forEach(e -> sb.append(e.toText()));
         return sb.toString();
     }

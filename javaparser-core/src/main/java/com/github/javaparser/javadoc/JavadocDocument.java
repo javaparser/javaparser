@@ -58,7 +58,7 @@ public class JavadocDocument {
      * at the start of the line.
      */
     public String toText() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (!description.isEmpty()) {
             sb.append(description.toText());
             sb.append("\n");
