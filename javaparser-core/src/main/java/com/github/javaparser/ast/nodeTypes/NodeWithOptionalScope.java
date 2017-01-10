@@ -6,11 +6,12 @@ import com.github.javaparser.ast.expr.Expression;
 import java.util.Optional;
 
 /**
- * @author Artur Bosch
+ * Represents a node which can have a scope expression eg. method calls or
+ * field accesses (object.method(), object.field).
  */
 public interface NodeWithOptionalScope<N extends Node> {
 
-	Optional<Expression> getScope();
+    Optional<Expression> getScope();
 
-	N setScope(final Expression scope);
+    N setScope(final Expression scope);
 }
