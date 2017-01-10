@@ -34,11 +34,11 @@ import java.util.stream.Collectors;
  */
 public class JavadocParser {
 
-    public JavadocDocument parse(JavadocComment comment) {
+    public Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent());
     }
 
-    public JavadocDocument parse(String commentContent) {
+    public Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(commentContent);
         int index = -1;
         for (int i=0;i<cleanLines.size() && index == -1;i++) {
@@ -55,7 +55,7 @@ public class JavadocParser {
             descriptionText = trimRight(String.join("\n", cleanLines.subList(0, index)));
             blockLines = cleanLines.subList(index, cleanLines.size());
         }
-        JavadocDocument document = new JavadocDocument(JavadocDescription.parseText(descriptionText));
+        Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
         return document;
     }

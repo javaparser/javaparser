@@ -34,25 +34,25 @@ import java.util.List;
  * An example would be the text contained in this very Javadoc comment. At the moment
  * of this writing this comment does not contain any block tags (such as <code>@see AnotherClass</code>)
  */
-public class JavadocDocument {
+public class Javadoc {
     private JavadocDescription description;
     private List<JavadocBlockTag> blockTags;
 
-    public JavadocDocument(JavadocDescription description) {
+    public Javadoc(JavadocDescription description) {
         this.description = description;
         this.blockTags = new LinkedList<>();
     }
 
-    public JavadocDocument addBlockTag(JavadocBlockTag blockTag) {
+    public Javadoc addBlockTag(JavadocBlockTag blockTag) {
         this.blockTags.add(blockTag);
         return this;
     }
 
-    public JavadocDocument addBlockTag(String tagName, String content) {
+    public Javadoc addBlockTag(String tagName, String content) {
         return addBlockTag(new JavadocBlockTag(tagName, content));
     }
 
-    public JavadocDocument addBlockTag(String tagName) {
+    public Javadoc addBlockTag(String tagName) {
         return addBlockTag(tagName, "");
     }
 
@@ -75,7 +75,7 @@ public class JavadocDocument {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        JavadocDocument document = (JavadocDocument) o;
+        Javadoc document = (Javadoc) o;
 
         if (!description.equals(document.description)) return false;
         return blockTags.equals(document.blockTags);
@@ -91,7 +91,7 @@ public class JavadocDocument {
 
     @Override
     public String toString() {
-        return "JavadocDocument{" +
+        return "Javadoc{" +
                 "description=" + description +
                 ", blockTags=" + blockTags +
                 '}';
