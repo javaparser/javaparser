@@ -22,6 +22,7 @@
 package com.github.javaparser.javadoc.description;
 
 import com.github.javaparser.javadoc.JavadocParser;
+import com.github.javaparser.utils.Utils;
 
 /**
  * An inline tag contained in a Javadoc description.
@@ -50,20 +51,16 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
      */
     public enum Type {
         CODE,
-        DOC_ROOT("docRoot"),
-        INHERIT_DOC("inheritDoc"),
+        DOC_ROOT,
+        INHERIT_DOC,
         LINK,
         LINKPLAIN,
         LITERAL,
         VALUE,
         UNKNOWN;
 
-        Type(String keyword) {
-            this.keyword = keyword;
-        }
-
         Type() {
-            this.keyword = name().toLowerCase();
+            this.keyword = Utils.toCamelCase(name());
         }
 
         private String keyword;

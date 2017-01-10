@@ -22,6 +22,7 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.utils.Utils;
 
 import java.util.Optional;
 
@@ -49,19 +50,15 @@ public class JavadocBlockTag {
         RETURN,
         SEE,
         SERIAL,
-        SERIAL_DATA("serialData"),
-        SERIAL_FIELD("serialField"),
+        SERIAL_DATA,
+        SERIAL_FIELD,
         SINCE,
         THROWS,
         VERSION,
         UNKNOWN;
 
-        Type(String keyword) {
-            this.keyword = keyword;
-        }
-
         Type() {
-            this.keyword = name().toLowerCase();
+            this.keyword = Utils.toCamelCase(name());
         }
 
         private String keyword;
