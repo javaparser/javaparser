@@ -17,11 +17,11 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -79,24 +79,25 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look among statically imported values
         if (wrappedNode.getImports() != null) {
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl instanceof StaticImportOnDemandDeclaration) {
-                    ClassOrInterfaceType classOrInterfaceType = ((StaticImportOnDemandDeclaration) importDecl).getType();
-                    String qName = qName(classOrInterfaceType);
-                    com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(qName);
-                    SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
-                    if (ref.isSolved()) {
-                        return ref;
-                    }
-                } else if (importDecl instanceof SingleStaticImportDeclaration) {
-                    ClassOrInterfaceType classOrInterfaceType = ((SingleStaticImportDeclaration) importDecl).getType();
-                    String typeName = qName(classOrInterfaceType);
+                if(importDecl.isStatic()){
+                    if(importDecl.isAsterisk()) {
+                        String qName = importDecl.getNameAsString();
+                        com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(qName);
+                        SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
+                        if (ref.isSolved()) {
+                            return ref;
+                        }
+                    } else{
+                        String whole = importDecl.getNameAsString();
 
-                    // split in field/method name and type name
-                    String memberName = ((SingleStaticImportDeclaration) importDecl).getStaticMember();
+                        // split in field/method name and type name
+                        String memberName = getMember(whole);
+                        String typeName = getType(whole);
 
-                    if (memberName.equals(name)) {
-                        com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
-                        return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
+                        if (memberName.equals(name)) {
+                            com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
+                            return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
+                        }
                     }
                 }
             }
@@ -128,32 +129,33 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 prefix = name.substring(0, dotPos);
             }
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (importDecl instanceof SingleTypeImportDeclaration) {
-                    ClassOrInterfaceType importedType = ((SingleTypeImportDeclaration) importDecl).getType();
-                    String qName = qName(importedType);
-                    boolean found = qName.equals(name) || qName.endsWith("." + name);
-                    if (!found) {
-                        if (prefix != null) {
-                            found = qName.endsWith("." + prefix);
-                            if (found) {
-                                qName = qName + name.substring(dotPos);
+                if (!importDecl.isStatic()) {
+                    if (!importDecl.isAsterisk()) {
+                        String qName = importDecl.getNameAsString();
+                        boolean found = qName.equals(name) || qName.endsWith("." + name);
+                        if (!found) {
+                            if (prefix != null) {
+                                found = qName.endsWith("." + prefix);
+                                if (found) {
+                                    qName = qName + name.substring(dotPos);
+                                }
                             }
                         }
-                    }
-                    if (found) {
+                        if (found) {
+                            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                            if (ref.isSolved()) {
+                                return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+                            }
+                        }
+                    } else{
+                        String qName = importDecl.getNameAsString() + "." + name;
                         SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref.isSolved()) {
                             return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
                         }
                     }
-                } else if (importDecl instanceof TypeImportOnDemandDeclaration) {
-                    String packageName = qName(((TypeImportOnDemandDeclaration) importDecl).getName());
-                    String qName = packageName + "." + name;
-                    SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                    if (ref.isSolved()) {
-                        return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
-                    }
                 }
+
             }
         }
 
@@ -199,27 +201,25 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-            if (importDecl instanceof StaticImportOnDemandDeclaration) {
-                StaticImportOnDemandDeclaration staticImportOnDemandDeclaration = (StaticImportOnDemandDeclaration) importDecl;
+            if(importDecl.isStatic()){
+                if(importDecl.isAsterisk()){
+                    String importString = importDecl.getNameAsString();
 
-                String qName = qName(staticImportOnDemandDeclaration.getType());
-                com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(qName);
-                SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
-                if (method.isSolved()) {
-                    return method;
-                }
-            } else if (importDecl instanceof SingleStaticImportDeclaration) {
-                SingleStaticImportDeclaration staticImportOnDemandDeclaration = (SingleStaticImportDeclaration) importDecl;
-
-                String importedTypeName = qName(staticImportOnDemandDeclaration.getType());
-                String qName = importedTypeName + "." + staticImportOnDemandDeclaration.getStaticMember();
-
-                if (qName.equals(name) || qName.endsWith("." + name)) {
-                    String typeName = getType(qName);
-                    com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
+                    com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(importString);
                     SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
                     if (method.isSolved()) {
                         return method;
+                    }
+                } else{
+                    String qName = importDecl.getNameAsString();
+
+                    if (qName.equals(name) || qName.endsWith("." + name)) {
+                        String typeName = getType(qName);
+                        com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
+                        SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, typeSolver);
+                        if (method.isSolved()) {
+                            return method;
+                        }
                     }
                 }
             }

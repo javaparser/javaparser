@@ -156,10 +156,11 @@ public class JavaParserFacade {
 
         solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
 
-        ClassOrInterfaceDeclaration classNode = explicitConstructorInvocationStmt.getAncestorOfType(ClassOrInterfaceDeclaration.class);
-        if (classNode == null) {
+        Optional<ClassOrInterfaceDeclaration> optAncestor = explicitConstructorInvocationStmt.getAncestorOfType(ClassOrInterfaceDeclaration.class);
+        if (!optAncestor.isPresent()) {
             return SymbolReference.unsolved(ConstructorDeclaration.class);
         }
+        ClassOrInterfaceDeclaration classNode = optAncestor.get();
         TypeDeclaration typeDecl = null;
         if (!explicitConstructorInvocationStmt.isThis()) {
             Type classDecl = JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode);
