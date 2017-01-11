@@ -8,9 +8,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.model.ClassMetaModel;
-import com.github.javaparser.model.FieldMetaModel;
-import com.github.javaparser.model.JavaParserMetaModel;
+import com.github.javaparser.model.OldClassMetaModel;
+import com.github.javaparser.model.OldFieldMetaModel;
+import com.github.javaparser.model.OldJavaParserMetaModel;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,7 +20,7 @@ import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 
 public class VisitorGenerator {
-    private static JavaParserMetaModel javaParserMetaModel = new JavaParserMetaModel();
+    private static OldJavaParserMetaModel oldJavaParserMetaModel = new OldJavaParserMetaModel();
 
     public static void main(String[] args) throws IOException {
         final Path root = Paths.get(VisitorGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "..", "..", "..", "javaparser-core", "src", "main", "java");
@@ -29,7 +29,7 @@ public class VisitorGenerator {
 
         SourceRoot sourceRoot = new SourceRoot(root);
 
-        System.out.println(javaParserMetaModel);
+        System.out.println(oldJavaParserMetaModel);
         generateVoidVisitor(javaParser, sourceRoot);
         generateHashcodeVisitor(javaParser, sourceRoot);
 
@@ -42,25 +42,25 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getClassByName("HashCodeVisitor");
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (ClassMetaModel node : javaParserMetaModel.getClassMetaModels()) {
+        for (OldClassMetaModel node : oldJavaParserMetaModel.getOldClassMetaModels()) {
             if (!node.isAbstract()) {
                 MethodDeclaration visitMethod = voidVisitor.addMethod("visit", PUBLIC)
                         .addParameter(node.getClassName(), "n")
                         .addParameter("Void", "arg")
                         .setType(new ClassOrInterfaceType("Integer"));
                 BlockStmt body = visitMethod.getBody().get();
-                if (node.getFieldMetaModels().isEmpty()) {
+                if (node.getOldFieldMetaModels().isEmpty()) {
                     body.addStatement(parseStatement("return 0;"));
                 } else if (node.is(NodeList.class)) {
                     body.addStatement(parseStatement("return n.hashCode();"));
                 } else {
                     String bodyBuilder = "return";
                     String prefix = "";
-                    for (FieldMetaModel field : node.getFieldMetaModels()) {
+                    for (OldFieldMetaModel field : node.getOldFieldMetaModels()) {
 
                         final String getter = field.getter();
                         // Is this field another AST node? Visit it.
-                        if (javaParserMetaModel.getClassMetaModel(field.getType()).isPresent()) {
+                        if (oldJavaParserMetaModel.getClassMetaModel(field.getType()).isPresent()) {
                             if (field.isOptional()) {
                                 bodyBuilder += String.format("%s (n.%s.isPresent()? n.%s.get().accept(this, arg):0)", prefix, getter, getter);
                             } else {
@@ -88,7 +88,7 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getInterfaceByName("VoidVisitor");
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (ClassMetaModel node : javaParserMetaModel.getClassMetaModels()) {
+        for (OldClassMetaModel node : oldJavaParserMetaModel.getOldClassMetaModels()) {
             if (!node.isAbstract()) {
                 voidVisitor.addMethod("visit")
                         .addParameter(node.getClassName(), "n")
