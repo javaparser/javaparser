@@ -83,12 +83,12 @@ public class NodeWithAnnotationsBuildersTest {
     @Test
     public void testGetAnnotationByName() {
         NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
-        assertEquals(annotation, testClass.getAnnotationByName("hey"));
+        assertEquals(annotation, testClass.getAnnotationByName("hey").get());
     }
 
     @Test
     public void testGetAnnotationByClass() {
         NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
-        assertEquals(annotation, testClass.getAnnotationByClass(hey.class));
+        assertEquals(annotation, testClass.getAnnotationByClass(hey.class).get());
     }
 }

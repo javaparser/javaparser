@@ -27,6 +27,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * Abstract class for all AST nodes that represent comments.
  *
@@ -42,7 +44,7 @@ public abstract class Comment extends Node {
 
     public Comment(Range range, String content) {
         super(range);
-        this.content = content;
+        setContent(content);
     }
 
     /**
@@ -61,7 +63,7 @@ public abstract class Comment extends Node {
      */
     public Comment setContent(String content) {
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
-        this.content = content;
+        this.content = assertNotNull(content);
         return this;
     }
 
@@ -105,5 +107,19 @@ public abstract class Comment extends Node {
 
     public boolean isOrphan() {
         return this.commentedNode == null;
+    }
+
+    @Override
+    public boolean remove() {
+        // This is necessary only for the nodes associated to a node,
+        // the other are orphan comments and remove should work with them
+        if (this.commentedNode != null) {
+            this.commentedNode.setComment(null);
+            return true;
+        } else if (this.getParentNode().isPresent()){
+            return this.getParentNode().get().removeOrphanComment(this);
+        } else {
+            return false;
+        }
     }
 }

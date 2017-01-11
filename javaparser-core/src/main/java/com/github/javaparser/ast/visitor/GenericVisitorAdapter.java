@@ -28,7 +28,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -909,12 +908,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final MethodCallExpr n, final A arg) {
         visitComment(n, arg);
-        if (n.getScope() != null) {
-            {
-                R result = n.getScope().accept(this, arg);
-                if (result != null) {
-                    return result;
-                }
+        if (n.getScope().isPresent()) {
+            R result = n.getScope().get().accept(this, arg);
+            if (result != null) {
+                return result;
             }
         }
         if (n.getTypeArguments().isPresent()) {
@@ -1628,49 +1625,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(BadImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        return null;
-    }
-
-    @Override
-    public R visit(SingleStaticImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        {
-            R result = n.getType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(SingleTypeImportDeclaration n, A arg) {
-        visitComment(n, arg);
-        {
-            R result = n.getType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(StaticImportOnDemandDeclaration n, A arg) {
-        visitComment(n, arg);
-        {
-            R result = n.getType().accept(this, arg);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public R visit(TypeImportOnDemandDeclaration n, A arg) {
+    public R visit(final ImportDeclaration n, final A arg) {
         visitComment(n, arg);
         {
             R result = n.getName().accept(this, arg);

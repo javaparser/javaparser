@@ -102,21 +102,21 @@ public class CompilationUnitBuildersTest {
 
     @Test
     public void testGetClassByName() {
-        assertEquals(cu.addClass("test"), cu.getClassByName("test"));
+        assertEquals(cu.addClass("test"), cu.getClassByName("test").get());
     }
 
     @Test
     public void testGetInterfaceByName() {
-        assertEquals(cu.addInterface("test"), cu.getInterfaceByName("test"));
+        assertEquals(cu.addInterface("test"), cu.getInterfaceByName("test").get());
     }
 
     @Test
     public void testGetEnumByName() {
-        assertEquals(cu.addEnum("test"), cu.getEnumByName("test"));
+        assertEquals(cu.addEnum("test"), cu.getEnumByName("test").get());
     }
 
     @Test
     public void testGetAnnotationDeclarationByName() {
-        assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test"));
+        assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
     }
 }

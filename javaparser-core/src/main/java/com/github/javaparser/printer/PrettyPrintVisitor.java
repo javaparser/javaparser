@@ -28,7 +28,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.stmt.*;
@@ -420,15 +419,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Type commonType = getMaximumCommonType(n.getAncestorOfType(NodeWithVariables.class));
+        Type commonType = getMaximumCommonType(n.getAncestorOfType(NodeWithVariables.class).get());
 
         Type type = n.getType();
 
         ArrayType arrayType = null;
 
-        for (int i=commonType.getArrayLevel();i<type.getArrayLevel();i++){
+        for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
             if (arrayType == null) {
-                arrayType = (ArrayType)type;
+                arrayType = (ArrayType) type;
             } else {
                 arrayType = (ArrayType) arrayType.getComponentType();
             }
@@ -632,8 +631,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final MethodCallExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        if (n.getScope() != null) {
-            n.getScope().accept(this, arg);
+        if (n.getScope().isPresent()) {
+            n.getScope().get().accept(this, arg);
             printer.print(".");
         }
         printTypeArgs(n, arg);
@@ -809,7 +808,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printAnnotations(n.getAnnotations(), false, arg);
         printModifiers(n.getModifiers());
 
-        if(!n.getVariables().isEmpty()) {
+        if (!n.getVariables().isEmpty()) {
             getMaximumCommonType(n).accept(this, arg);
         }
         printer.print(" ");
@@ -1344,45 +1343,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(BadImportDeclaration n, Void arg) {
-        printer.println("???");
-    }
-
-    @Override
-    public void visit(SingleStaticImportDeclaration n, Void arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("import static ");
-        n.getType().accept(this, arg);
-        printer.print(".");
-        printer.print(n.getStaticMember());
-        printer.println(";");
-        printOrphanCommentsEnding(n);
-    }
-
-    @Override
-    public void visit(SingleTypeImportDeclaration n, Void arg) {
+    public void visit(final ImportDeclaration n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("import ");
-        n.getType().accept(this, arg);
-        printer.println(";");
-        printOrphanCommentsEnding(n);
-    }
-
-    @Override
-    public void visit(StaticImportOnDemandDeclaration n, Void arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("import static ");
-        n.getType().accept(this, arg);
-        printer.println(".*;");
-        printOrphanCommentsEnding(n);
-    }
-
-    @Override
-    public void visit(TypeImportOnDemandDeclaration n, Void arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("import ");
+        if (n.isStatic()) {
+            printer.print("static ");
+        }
         n.getName().accept(this, arg);
-        printer.println(".*;");
+        if (n.isAsterisk()) {
+            printer.print(".*");
+        }
+        printer.println(";");
+
         printOrphanCommentsEnding(n);
     }
 
@@ -1440,12 +1412,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     /**
      * Returns the type that maximum shared type between all variables.
      * The minimum common type does never include annotations on the array level.
-     *
+     * <p>
      * <br/>For <code>int a;</code> this is int.
      * <br/>For <code>int a,b,c,d;</code> this is also int.
      * <br/>For <code>int a,b[],c;</code> this is also int.
      * * <br/>For <code>int[] a[][],b[],c[][];</code> this is int[][].
-     *
+     * <p>
      * Visible for testing.
      */
     static Type getMaximumCommonType(NodeWithVariables<?> nodeWithVariables) {
@@ -1455,12 +1427,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             // From the implementation point of view we start from the actual type and we remove how many array
             // levels as needed to get the target level of arrays
             // It returns null if the type has less array levels then the desired target
-            Type toArrayLevel(Type type, int level) {
+            private Type toArrayLevel(Type type, int level) {
                 if (level > type.getArrayLevel()) {
                     return null;
                 }
-                for (int i=type.getArrayLevel();i>level;i--) {
-                    type = ((ArrayType)type).getComponentType();
+                for (int i = type.getArrayLevel(); i > level; i--) {
+                    type = ((ArrayType) type).getComponentType();
                 }
                 return type;
             }

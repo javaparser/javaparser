@@ -33,6 +33,7 @@ import com.github.javaparser.ast.type.VoidType;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Collections.unmodifiableList;
@@ -288,11 +289,12 @@ public interface NodeWithMembers<N extends Node> {
      * @param name the name of the field
      * @return null if not found, the FieldDeclaration otherwise
      */
-    default FieldDeclaration getFieldByName(String name) {
-        return (FieldDeclaration) getMembers().stream()
+    default Optional<FieldDeclaration> getFieldByName(String name) {
+        return getMembers().stream()
                 .filter(m -> m instanceof FieldDeclaration && ((FieldDeclaration) m).getVariables().stream()
                         .anyMatch(var -> var.getNameAsString().equals(name)))
-                .findFirst().orElse(null);
+                .findFirst()
+                .map(f -> (FieldDeclaration) f);
     }
 
     /**

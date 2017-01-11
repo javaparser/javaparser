@@ -28,7 +28,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -134,7 +133,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final BreakStmt n, final A arg) {
         visitComment(n.getComment(), arg);
-        n.getLabel().ifPresent(l-> l.accept(this, arg));
+        n.getLabel().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
@@ -247,7 +246,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final ContinueStmt n, final A arg) {
         visitComment(n.getComment(), arg);
-        n.getLabel().ifPresent(l-> l.accept(this, arg));
+        n.getLabel().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
@@ -447,8 +446,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final MethodCallExpr n, final A arg) {
         visitComment(n.getComment(), arg);
-        if (n.getScope() != null) {
-            n.getScope().accept(this, arg);
+        if (n.getScope().isPresent()) {
+            n.getScope().get().accept(this, arg);
         }
         if (n.getTypeArguments().isPresent()) {
             for (final Type t : n.getTypeArguments().get()) {
@@ -808,35 +807,11 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(BadImportDeclaration n, A arg) {
-        visitComment(n.getComment(), arg);
-
-    }
-
-    @Override
-    public void visit(SingleStaticImportDeclaration n, A arg) {
-        visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-    }
-
-    @Override
-    public void visit(SingleTypeImportDeclaration n, A arg) {
-        visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-    }
-
-    @Override
-    public void visit(StaticImportOnDemandDeclaration n, A arg) {
-        visitComment(n.getComment(), arg);
-        n.getType().accept(this, arg);
-    }
-
-    @Override
-    public void visit(TypeImportOnDemandDeclaration n, A arg) {
+    public void visit(final ImportDeclaration n, final A arg) {
         visitComment(n.getComment(), arg);
         n.getName().accept(this, arg);
     }
-
+    
     private void visitComment(final Comment n, final A arg) {
         if (n != null) {
             n.accept(this, arg);

@@ -24,7 +24,6 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -191,7 +190,9 @@ public interface VoidVisitor<A> {
 
     void visit(TypeExpr n, A arg);
 
-    void visit(TypeImportOnDemandDeclaration n, A arg);
+    void visit(NodeList n, A arg);
+
+    void visit(ImportDeclaration n, A arg);
 
     void visit(TypeParameter n, A arg);
 

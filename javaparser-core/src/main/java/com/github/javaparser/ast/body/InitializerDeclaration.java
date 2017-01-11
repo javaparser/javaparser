@@ -86,7 +86,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration setStatic(boolean isStatic) {
-        notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
+        notifyPropertyChange(ObservableProperty.IS_STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }
