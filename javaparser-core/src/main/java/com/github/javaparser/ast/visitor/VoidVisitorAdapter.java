@@ -345,7 +345,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         visitComment(n.getComment(), arg);
         if (n.getScope().isPresent())
             n.getScope().get().accept(this, arg);
-        n.getField().accept(this, arg);
+        n.getName().accept(this, arg);
     }
 
     @Override

@@ -551,7 +551,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getScope().isPresent())
             n.getScope().get().accept(this, arg);
         printer.print(".");
-        n.getField().accept(this, arg);
+        n.getName().accept(this, arg);
     }
 
     @Override

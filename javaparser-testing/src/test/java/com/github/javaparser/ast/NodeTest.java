@@ -260,7 +260,7 @@ public class NodeTest {
     public void hasJavaDocCommentPositiveCaseWithSetJavaDocComment() {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class),
                 false, "Foo");
-        decl.setJavaDocComment("A comment");
+        decl.setJavadocComment("A comment");
         assertEquals(true, decl.hasJavaDocComment());
     }
 

@@ -23,6 +23,8 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
@@ -39,28 +41,31 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements NodeWithTypeArguments<FieldAccessExpr> {
+public final class FieldAccessExpr extends Expression implements
+        NodeWithSimpleName<FieldAccessExpr>,
+        NodeWithTypeArguments<FieldAccessExpr>,
+        NodeWithOptionalScope<FieldAccessExpr> {
 
     private Expression scope;
 
     private NodeList<Type> typeArguments;
 
-    private SimpleName field;
+    private SimpleName name;
 
     public FieldAccessExpr() {
         this(null, new ThisExpr(), new NodeList<>(), new SimpleName());
     }
 
-    public FieldAccessExpr(final Expression scope, final String field) {
-        this(null, scope, new NodeList<>(), new SimpleName(field));
+    public FieldAccessExpr(final Expression scope, final String name) {
+        this(null, scope, new NodeList<>(), new SimpleName(name));
     }
 
     public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments,
-                           final SimpleName field) {
+                           final SimpleName name) {
         super(range);
         setScope(scope);
         setTypeArguments(typeArguments);
-        setFieldExpr(field);
+        setName(name);
     }
 
     @Override
@@ -73,24 +78,47 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
         v.visit(this, arg);
     }
 
-    public SimpleName getField() {
-        return field;
+    @Override
+    public SimpleName getName() {
+        return name;
     }
 
+    @Override
+    public FieldAccessExpr setName(SimpleName name) {
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        this.name = assertNotNull(name);
+        setAsParentNodeOf(this.name);
+        return this;
+    }
+
+    /**
+     * Use {@link #getName} instead.
+     */
+    @Deprecated
+    public SimpleName getField() {
+        return name;
+    }
+
+    @Override
     public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
 
+    /**
+     * Use {@link #setName} with new SimpleName(field) instead.
+     */
+    @Deprecated
     public FieldAccessExpr setField(final String field) {
-        setFieldExpr(new SimpleName(field));
+        setName(new SimpleName(field));
         return this;
     }
 
+    /**
+     * Use {@link #setName} instead.
+     */
+    @Deprecated
     public FieldAccessExpr setFieldExpr(SimpleName inner) {
-        notifyPropertyChange(ObservableProperty.FIELD, this.field, inner);
-        this.field = assertNotNull(inner);
-        setAsParentNodeOf(this.field);
-        return this;
+        return setName(inner);
     }
 
     /**
@@ -99,6 +127,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithTypeArg
      * @param scope the scope, can be null
      * @return this, the FieldAccessExpr
      */
+    @Override
     public FieldAccessExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;

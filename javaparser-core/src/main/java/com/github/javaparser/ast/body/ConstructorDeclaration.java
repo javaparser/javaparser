@@ -254,7 +254,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public JavadocComment getJavaDoc() {
+    public JavadocComment getJavadocComment() {
         if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
