@@ -67,6 +67,11 @@ public interface NodeWithJavadoc<N extends Node> {
         return (N) this;
     }
 
+    default N setJavadocComment(String indentation, Javadoc javadoc) {
+        JavadocComment comment = javadoc.toComment(indentation);
+        return setJavadocComment(comment);
+    }
+
     default boolean removeJavaDocComment() {
         Node thisNode = (Node) this;
         return thisNode.hasJavaDocComment() && thisNode.getComment().remove();

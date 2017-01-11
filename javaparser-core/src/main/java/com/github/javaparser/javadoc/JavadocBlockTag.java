@@ -118,6 +118,7 @@ public class JavadocBlockTag {
 
     public String toText() {
         StringBuffer sb = new StringBuffer();
+        sb.append("@");
         sb.append(tagName);
         if (name.isPresent()) {
             sb.append(" ");
@@ -125,7 +126,7 @@ public class JavadocBlockTag {
         }
         if (!content.isEmpty()) {
             sb.append(" ");
-            sb.append(content);
+            sb.append(content.toText());
         }
         return sb.toString();
     }

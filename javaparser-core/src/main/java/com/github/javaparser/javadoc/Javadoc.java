@@ -24,6 +24,7 @@ package com.github.javaparser.javadoc;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class Javadoc {
     }
 
     /**
-     * Return the text content of the document. It does not containing trailing spaces and asteriks
+     * Return the text content of the document. It does not containing trailing spaces and asterisks
      * at the start of the line.
      */
     public String toText() {
@@ -67,8 +68,38 @@ public class Javadoc {
             sb.append(description.toText());
             sb.append("\n");
         }
-        blockTags.forEach(bt -> sb.append(bt.toText()));
+        if (!blockTags.isEmpty()) {
+            sb.append("\n");
+        }
+        blockTags.forEach(bt -> {
+            sb.append(bt.toText());
+            sb.append("\n");
+        });
         return sb.toString();
+    }
+
+    /**
+     * Create a JavadocComment, by formatting the text of the Javadoc using the given indentation/
+     */
+    public JavadocComment toComment(String indentation) {
+        for (char c : indentation.toCharArray()) {
+            if (!Character.isWhitespace(c)) {
+                throw new IllegalArgumentException("The indentation string should be composed only by whitespace characters");
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        if (!toText().isEmpty()) {
+            for (String line : toText().split("\n")) {
+                sb.append(indentation);
+                sb.append(" * ");
+                sb.append(line);
+                sb.append("\n");
+            }
+        }
+        sb.append(indentation);
+        sb.append(" ");
+        return new JavadocComment(sb.toString());
     }
 
     @Override
@@ -97,4 +128,5 @@ public class Javadoc {
                 ", blockTags=" + blockTags +
                 '}';
     }
+
 }
