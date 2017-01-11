@@ -24,6 +24,7 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -44,7 +45,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public final class MethodCallExpr extends Expression implements
         NodeWithTypeArguments<MethodCallExpr>,
         NodeWithArguments<MethodCallExpr>,
-        NodeWithSimpleName<MethodCallExpr> {
+        NodeWithSimpleName<MethodCallExpr>,
+        NodeWithOptionalScope<MethodCallExpr> {
 
     private Expression scope;
 
@@ -105,6 +107,7 @@ public final class MethodCallExpr extends Expression implements
         return name;
     }
 
+    @Override
     public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
@@ -124,6 +127,7 @@ public final class MethodCallExpr extends Expression implements
         return this;
     }
 
+    @Override
     public MethodCallExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;

@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -40,7 +41,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr> {
+public final class FieldAccessExpr extends Expression implements
+        NodeWithSimpleName<FieldAccessExpr>,
+        NodeWithTypeArguments<FieldAccessExpr>,
+        NodeWithOptionalScope<FieldAccessExpr> {
 
     private Expression scope;
 
@@ -95,6 +99,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         return name;
     }
 
+    @Override
     public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
@@ -122,6 +127,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
      * @param scope the scope, can be null
      * @return this, the FieldAccessExpr
      */
+    @Override
     public FieldAccessExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
