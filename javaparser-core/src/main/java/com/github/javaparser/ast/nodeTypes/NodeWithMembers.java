@@ -239,7 +239,7 @@ public interface NodeWithMembers<N extends Node> {
                 .filter(m -> m instanceof MethodDeclaration && ((MethodDeclaration) m).getNameAsString().equals(name))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
-
+    
     /**
      * Find all methods in the members of this node.
      *

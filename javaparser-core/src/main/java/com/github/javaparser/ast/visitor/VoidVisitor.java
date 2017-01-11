@@ -52,8 +52,6 @@ public interface VoidVisitor<A> {
 
     void visit(AssignExpr n, A arg);
 
-    void visit(BadImportDeclaration n, A arg);
-
     void visit(BinaryExpr n, A arg);
 
     void visit(BlockComment n, A arg);
@@ -146,8 +144,6 @@ public interface VoidVisitor<A> {
 
     void visit(NameExpr n, A arg);
 
-    void visit(NodeList n, A arg);
-
     void visit(NormalAnnotationExpr n, A arg);
 
     void visit(NullLiteralExpr n, A arg);
@@ -165,12 +161,6 @@ public interface VoidVisitor<A> {
     void visit(SimpleName n, A arg);
 
     void visit(SingleMemberAnnotationExpr n, A arg);
-
-    void visit(SingleStaticImportDeclaration n, A arg);
-
-    void visit(SingleTypeImportDeclaration n, A arg);
-
-    void visit(StaticImportOnDemandDeclaration n, A arg);
 
     void visit(StringLiteralExpr n, A arg);
 

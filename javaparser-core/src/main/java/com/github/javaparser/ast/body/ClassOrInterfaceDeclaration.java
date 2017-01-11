@@ -38,6 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -165,6 +166,23 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} with no parameters by its name
+     *
+     * @return the methods found (multiple in case of polymorphism)
+     */
+    public Optional<ConstructorDeclaration> getDefaultConstructor() {
+        for (BodyDeclaration<?> bd : getMembers()) {
+            if (bd instanceof ConstructorDeclaration) {
+                ConstructorDeclaration cd = (ConstructorDeclaration) bd;
+                if (cd.getParameters().isEmpty()) {
+                    return Optional.of(cd);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     @Override

@@ -3,6 +3,10 @@ package com.github.javaparser.metamodel;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Meta-data about all classes in the AST.
+ * These are all Nodes, except NodeList.
+ */
 public class ClassMetaModel {
     public final Optional<ClassMetaModel> superClassMetaModel;
     public final JavaParserMetaModel javaParserMetaModel;

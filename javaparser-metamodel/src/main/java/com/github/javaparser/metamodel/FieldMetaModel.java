@@ -1,5 +1,8 @@
 package com.github.javaparser.metamodel;
 
+/**
+ * Meta-data about a field in a node in the AST.
+ */
 public class FieldMetaModel {
     public final ClassMetaModel classMetaModel;
     public final String getter;
