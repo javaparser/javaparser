@@ -145,7 +145,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void addingJavadoc() throws IOException {
         AnnotationMemberDeclaration it = consider("int foo();");
-        it.setJavaDocComment("Cool this annotation!");
+        it.setJavadocComment("Cool this annotation!");
         assertTransformedToString("@interface AD { /**Cool this annotation!*/\n" +
                 "int foo(); }", it.getParentNode().get());
     }
@@ -153,14 +153,14 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void removingJavadoc() throws IOException {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
-        assertTrue(it.getJavaDoc().remove());
+        assertTrue(it.getJavadocComment().remove());
         assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
     }
 
     @Test
     public void replacingJavadoc() throws IOException {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
-        it.setJavaDocComment("Super extra cool this annotation!!!");
+        it.setJavadocComment("Super extra cool this annotation!!!");
         assertTransformedToString("@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());
     }
 
