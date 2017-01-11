@@ -1,4 +1,4 @@
-package com.github.javaparser.model;
+package com.github.javaparser.bootstrap.metamodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;

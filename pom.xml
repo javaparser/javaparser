@@ -4,6 +4,7 @@
         <module>javaparser-core</module>
         <module>javaparser-testing</module>
         <module>javaparser-bootstrap</module>
+        <module>javaparser-metamodel</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>

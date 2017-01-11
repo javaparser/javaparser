@@ -1,4 +1,4 @@
-package com.github.javaparser.model;
+package com.github.javaparser.metamodel;
 
 import java.util.Collections;
 import java.util.HashSet;

@@ -8,9 +8,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.model.OldClassMetaModel;
-import com.github.javaparser.model.OldFieldMetaModel;
-import com.github.javaparser.model.OldJavaParserMetaModel;
+import com.github.javaparser.bootstrap.model.OldClassMetaModel;
+import com.github.javaparser.bootstrap.model.OldFieldMetaModel;
+import com.github.javaparser.bootstrap.model.OldJavaParserMetaModel;
 
 import java.io.IOException;
 import java.nio.file.Path;

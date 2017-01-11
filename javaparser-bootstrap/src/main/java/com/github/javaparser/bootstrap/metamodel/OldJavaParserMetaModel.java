@@ -1,4 +1,4 @@
-package com.github.javaparser.model;
+package com.github.javaparser.bootstrap.metamodel;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -7,7 +7,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.imports.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -86,12 +85,7 @@ public class OldJavaParserMetaModel {
         add(UnaryExpr.class);
         add(VariableDeclarationExpr.class);
 
-        add(BadImportDeclaration.class);
         add(ImportDeclaration.class);
-        add(SingleStaticImportDeclaration.class);
-        add(SingleTypeImportDeclaration.class);
-        add(StaticImportOnDemandDeclaration.class);
-        add(TypeImportOnDemandDeclaration.class);
 
         add(AssertStmt.class);
         add(BlockStmt.class);
