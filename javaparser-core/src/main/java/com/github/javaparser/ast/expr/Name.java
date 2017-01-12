@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -62,6 +63,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     public Name(Range range, Name qualifier, final String identifier) {
         super(range);
+        assertNonEmpty(identifier);
         setIdentifier(identifier);
         setQualifier(qualifier);
     }
@@ -76,11 +78,14 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         v.visit(this, arg);
     }
 
+    @Override
     public final String getIdentifier() {
         return identifier;
     }
 
+    @Override
     public Name setIdentifier(final String identifier) {
+        assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = assertNotNull(identifier);
         return this;
@@ -94,6 +99,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      * @return instanceof {@link Name}
      */
     public static Name parse(String qualifiedName) {
+        assertNonEmpty(qualifiedName);
         String[] split = qualifiedName.split("\\.");
         Name ret = new Name(split[0]);
         for (int i = 1; i < split.length; i++) {

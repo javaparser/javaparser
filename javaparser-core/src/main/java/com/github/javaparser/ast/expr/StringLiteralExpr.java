@@ -27,7 +27,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A literal string.
@@ -59,6 +59,7 @@ public class StringLiteralExpr extends LiteralExpr {
 
     public StringLiteralExpr(final Range range, final String value) {
         super(range);
+        assertNonEmpty(value);
         setValue(value);
     }
 
@@ -78,7 +79,7 @@ public class StringLiteralExpr extends LiteralExpr {
 
     public final StringLiteralExpr setValue(final String value) {
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        this.value = assertNotNull(value);
+        this.value = assertNonEmpty(value);
         if (value.contains("\n") || value.contains("\r")) {
             throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
         }

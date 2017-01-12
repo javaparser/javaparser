@@ -181,10 +181,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
-        if (parentClass.isPresent())
-            getter = parentClass.get().addMethod("get" + fieldNameUpper, PUBLIC);
-        else
-            getter = parentEnum.get().addMethod("get" + fieldNameUpper, PUBLIC);
+        getter = parentClass.map(clazz -> clazz.addMethod("get" + fieldNameUpper, PUBLIC))
+                .orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, PUBLIC));
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -214,10 +212,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
 
         final MethodDeclaration setter;
-        if (parentClass.isPresent())
-            setter = parentClass.get().addMethod("set" + fieldNameUpper, PUBLIC);
-        else
-            setter = parentEnum.get().addMethod("set" + fieldNameUpper, PUBLIC);
+        setter = parentClass.map(clazz -> clazz.addMethod("set" + fieldNameUpper, PUBLIC))
+                .orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, PUBLIC));
         setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
