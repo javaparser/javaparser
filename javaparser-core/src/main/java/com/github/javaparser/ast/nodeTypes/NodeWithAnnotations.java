@@ -28,8 +28,6 @@ import com.github.javaparser.ast.expr.*;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
-import static com.github.javaparser.ast.expr.Name.parse;
-
 /**
  * A node that can be annotated.
  *
@@ -66,7 +64,7 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                parse(name), new NodeList<>());
+                Name.parse(name), new NodeList<>());
         getAnnotations().add(normalAnnotationExpr);
         normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;

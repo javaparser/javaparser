@@ -63,7 +63,6 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     public Name(Range range, Name qualifier, final String identifier) {
         super(range);
-        assertNonEmpty(identifier);
         setIdentifier(identifier);
         setQualifier(qualifier);
     }
