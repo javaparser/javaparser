@@ -1,4 +1,4 @@
-package com.github.javaparser.bootstrap.metamodel;
+package com.github.javaparser.generator.metamodel;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;

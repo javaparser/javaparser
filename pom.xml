@@ -5,7 +5,7 @@
         <module>javaparser-testing</module>
         <module>javaparser-visitor-generator</module>
         <module>javaparser-metamodel</module>
-        <module>metamodel-generator</module>
+        <module>javaparser-metamodel-generator</module>
         <module>javaparser-generator-utils</module>
     </modules>
 

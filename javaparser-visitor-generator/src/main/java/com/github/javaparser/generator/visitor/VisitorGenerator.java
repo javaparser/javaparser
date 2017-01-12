@@ -1,4 +1,4 @@
-//package com.github.javaparser.bootstrap;
+package com.github.javaparser.generator.visitors;
 //
 //import com.github.javaparser.JavaParser;
 //import com.github.javaparser.ast.CompilationUnit;

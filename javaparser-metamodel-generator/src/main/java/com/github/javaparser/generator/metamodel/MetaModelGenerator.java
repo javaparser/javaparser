@@ -1,4 +1,4 @@
-package com.github.javaparser.bootstrap.metamodel;
+package com.github.javaparser.generator.metamodel;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.*;
@@ -131,7 +131,7 @@ public class MetaModelGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "..", "..", "..", "javaparser-metamodel", "src", "main", "java");
+        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "src/main", "..", "..", "javaparser-metamodel", "src", "main", "java");
 
         JavaParser javaParser = new JavaParser();
 
@@ -146,9 +146,9 @@ public class MetaModelGenerator {
         for (Class<?> c : ALL_MODEL_CLASSES) {
             String name = metaModelName(c.getSimpleName());
             mmClass.getFieldByName(name).ifPresent(Node::remove);
-            FieldDeclaration f = mmClass.addField("ClassMetaModel", name, PUBLIC, FINAL);
-            f.getVariable(0).setInitializer(parseExpression("new ClassMetaModel(null, this, null, null, null, null, false)"));
-            constructor.addStatement(parseStatement(f("classMetaModels.add(%s);", name)));
+            FieldDeclaration f = mmClass.addField("ClassMetaModel", name, Modifier.PUBLIC, Modifier.FINAL);
+            f.getVariable(0).setInitializer(JavaParser.parseExpression("new ClassMetaModel(null, this, null, null, null, null, false)"));
+            constructor.addStatement(JavaParser.parseStatement(f("classMetaModels.add(%s);", name)));
         }
 
 
