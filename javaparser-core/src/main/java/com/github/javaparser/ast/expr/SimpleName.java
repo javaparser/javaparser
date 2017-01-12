@@ -49,7 +49,6 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     public SimpleName(Range range, final String identifier) {
         super(range);
-        assertNonEmpty(identifier);
         setIdentifier(identifier);
     }
 
@@ -70,8 +69,9 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @Override
     public SimpleName setIdentifier(final String identifier) {
+        assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNonEmpty(identifier);
+        this.identifier = identifier;
         return this;
     }
 }

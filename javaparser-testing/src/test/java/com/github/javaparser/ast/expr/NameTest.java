@@ -37,4 +37,9 @@ public class NameTest {
         Name name = Name.parse("a.b.c");
         assertEquals("a.b.c", name.asString());
     }
+
+    @Test(expected = AssertionError.class)
+    public void parsingEmptyNameThrowsException() {
+        Name.parse("");
+    }
 }
