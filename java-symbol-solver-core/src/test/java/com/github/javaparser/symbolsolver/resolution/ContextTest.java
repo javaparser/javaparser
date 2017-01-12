@@ -387,7 +387,7 @@ public class ContextTest extends AbstractTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
         MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
-        Expression referenceToT = callToGetName.getScope();
+        Expression referenceToT = callToGetName.getScope().get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
