@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -56,9 +57,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
-        Optional<Type> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
-        return res;
+        if(wrappedNode.getScope().isPresent()){
+            Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
+            Optional<Type> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
+            return res;
+        } else{
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -68,11 +73,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        if (wrappedNode.getScope() != null) {
-
+        if (wrappedNode.getScope().isPresent()) {
+            Expression scope = wrappedNode.getScope().get();
             // Consider static method calls
-            if (wrappedNode.getScope() instanceof NameExpr) {
-                String className = ((NameExpr) wrappedNode.getScope()).getName().getId();
+            if (scope instanceof NameExpr) {
+                String className = ((NameExpr) scope).getName().getId();
                 SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                 if (ref.isSolved()) {
                     SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
@@ -87,7 +92,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
-            Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+            Type typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             // we can replace the parameter types from the scope into the typeParametersValues
 
             Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
@@ -126,11 +131,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        if (wrappedNode.getScope() != null) {
+        if (wrappedNode.getScope().isPresent()) {
+            Expression scope = wrappedNode.getScope().get();
 
             // consider static methods
-            if (wrappedNode.getScope() instanceof NameExpr) {
-                NameExpr scopeAsName = (NameExpr) wrappedNode.getScope();
+            if (scope instanceof NameExpr) {
+                NameExpr scopeAsName = (NameExpr) scope;
                 SymbolReference<TypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
@@ -140,7 +146,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
             Type typeOfScope = null;
             try {
-                typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope());
+                typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             } catch (Exception e) {
                 throw new RuntimeException(String.format("Issur calculating the type of the scope of " + this), e);
             }

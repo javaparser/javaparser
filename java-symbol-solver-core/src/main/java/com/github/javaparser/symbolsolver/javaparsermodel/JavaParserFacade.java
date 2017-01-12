@@ -392,12 +392,13 @@ public class JavaParserFacade {
                     //        the MethodDeclaration of filter is:
                     //        Stream<T> filter(Predicate<? super T> predicate)
                     //        but T in this case is equal to String
-                    if (callExpr.getScope() != null) {
+                    if (callExpr.getScope().isPresent()) {
+                        Expression scope = callExpr.getScope().get();
 
                         // If it is a static call we should not try to get the type of the scope
                         boolean staticCall = false;
-                        if (callExpr.getScope() instanceof NameExpr) {
-                            NameExpr nameExpr = (NameExpr) callExpr.getScope();
+                        if (scope instanceof NameExpr) {
+                            NameExpr nameExpr = (NameExpr) scope;
                             try {
                                 JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName().getId(), typeSolver);
                                 staticCall = true;
@@ -407,7 +408,7 @@ public class JavaParserFacade {
                         }
 
                         if (!staticCall) {
-                            Type scopeType = JavaParserFacade.get(typeSolver).getType(callExpr.getScope());
+                            Type scopeType = JavaParserFacade.get(typeSolver).getType(scope);
                             if (scopeType.isReferenceType()) {
                                 result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
                             }

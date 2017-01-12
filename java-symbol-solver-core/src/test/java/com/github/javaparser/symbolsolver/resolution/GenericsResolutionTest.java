@@ -260,7 +260,7 @@ public class GenericsResolutionTest extends AbstractResolutionTest {
         MethodCallExpr call = Navigator.findMethodCall(method, "cast");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Expression scope = call.getScope();
+        Expression scope = call.getScope().get();
         Type type = JavaParserFacade.get(typeSolver).getType(scope);
 
         //System.out.println(typeUsage);
