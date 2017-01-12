@@ -24,6 +24,7 @@ package com.github.javaparser.utils;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Any kind of utility.
@@ -96,5 +97,40 @@ public class Utils {
         List<T> list = new LinkedList<>();
         Collections.addAll(list, array);
         return list;
+    }
+
+    /**
+     * Transform a string to the camel case conversion.
+     * <p>
+     * For example "ABC_DEF" becomes "abcDef"
+     */
+    public static String toCamelCase(String original) {
+        StringBuilder sb = new StringBuilder();
+        String[] parts = original.toLowerCase().split("_");
+        for (int i=0; i< parts.length; i++) {
+            sb.append(i == 0 ? parts[i] : capitalize(parts[i]));
+        }
+        return sb.toString();
+    }
+
+    private static String capitalize(String original) {
+        if (original.length() < 1) {
+            throw new IllegalArgumentException("This string is empty");
+        } else if (original.length() == 1) {
+            return original.toUpperCase();
+        } else {
+            return original.substring(0, 1).toUpperCase() + original.substring(1);
+        }
+    }
+
+    /**
+     * Return the next word of the string, in other words it stops when a space is encountered.
+     */
+    public static String nextWord(String string) {
+        int index = 0;
+        while (index < string.length() && !Character.isWhitespace(string.charAt(index))) {
+            index++;
+        }
+        return string.substring(0, index);
     }
 }

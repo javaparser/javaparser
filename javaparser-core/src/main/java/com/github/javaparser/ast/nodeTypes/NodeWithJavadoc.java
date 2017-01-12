@@ -21,19 +21,36 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.javadoc.Javadoc;
 
 /**
  * A node that can be documented with a Javadoc comment.
  */
 public interface NodeWithJavadoc<N extends Node> {
+
     /**
-     * Gets the JavaDoc for this node. You can set the JavaDoc by calling setComment with a JavadocComment.
+     * Gets the JavadocComment for this node. You can set the JavadocComment by calling setJavadocComment passing a JavadocComment.
      *
-     * @return The JavaDoc for this node if it exists, null if it doesn't.
+     * @return The JavadocComment for this node if it exists, null if it doesn't.
      */
-    JavadocComment getJavaDoc();
+    JavadocComment getJavadocComment();
+
+    /**
+     * Gets the Javadoc for this node. You can set the Javadoc by calling setJavadocComment passing a Javadoc.
+     *
+     * @return The Javadoc for this node if it exists, null if it doesn't.
+     */
+    default Javadoc getJavadoc() {
+        JavadocComment javadocComment = getJavadocComment();
+        if (javadocComment == null) {
+            return null;
+        } else {
+            return javadocComment.parse();
+        }
+    }
 
     /**
      * Use this to store additional information to this node.
@@ -41,9 +58,18 @@ public interface NodeWithJavadoc<N extends Node> {
      * @param comment to be set
      */
     @SuppressWarnings("unchecked")
-    default N setJavaDocComment(String comment) {
-        ((Node) this).setComment(new JavadocComment(comment));
+    default N setJavadocComment(String comment) {
+        return setJavadocComment(new JavadocComment(comment));
+    }
+
+    default N setJavadocComment(JavadocComment comment) {
+        ((Node) this).setComment(comment);
         return (N) this;
+    }
+
+    default N setJavadocComment(String indentation, Javadoc javadoc) {
+        JavadocComment comment = javadoc.toComment(indentation);
+        return setJavadocComment(comment);
     }
 
     default boolean removeJavaDocComment() {

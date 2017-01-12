@@ -21,9 +21,11 @@
 
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.javadoc.Javadoc;
 
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
@@ -52,5 +54,9 @@ public final class JavadocComment extends Comment {
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
+    }
+
+    public Javadoc parse() {
+        return JavaParser.parseJavadoc(getContent());
     }
 }
