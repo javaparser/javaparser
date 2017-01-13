@@ -37,4 +37,13 @@ public class JavaParserTest {
         assertEquals(true, memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
+
+    @Test
+    public void rangeOfAnnotationMemberDeclarationWithArrayTypeIsCorrect() {
+        String code = "@interface AD { String[] foo(); }";
+        CompilationUnit cu = JavaParser.parse(code);
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        assertEquals(true, memberDeclaration.getRange().isPresent());
+        assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
+    }
 }
