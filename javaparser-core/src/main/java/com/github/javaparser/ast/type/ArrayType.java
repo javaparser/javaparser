@@ -91,7 +91,11 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    type = new ArrayType(pair.getRange().orElse(null), type, pair.getAnnotations());
+                    Range range = null;
+                    if (type.getRange().isPresent() && pair.getRange().isPresent()) {
+                        range = new Range(type.getBegin().get(), pair.getRange().get().end);
+                    }
+                    type = new ArrayType(range, type, pair.getAnnotations());
                 }
             }
         }
