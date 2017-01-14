@@ -1,17 +1,29 @@
-package com.github.javaparser.bootstrap;
+package com.github.javaparser.generator.utils;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.printer.PrettyPrinter;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 /**
  * A collection of files located in one directory and its subdirectories on the file system.
@@ -22,7 +34,7 @@ public class SourceRoot {
     };
 
     private final Path root;
-    private final Set<CompilationUnit> compilationUnits = new HashSet<>();
+    private final List<CompilationUnit> compilationUnits = new ArrayList<>();
     private final List<Problem> problems = new ArrayList<>();
 
     public SourceRoot(Path root) {
@@ -30,7 +42,7 @@ public class SourceRoot {
     }
 
     public void parse(String startPackage, JavaParser parser) throws IOException {
-        Path path = packagePath(startPackage);
+        Path path = packagePath(root, startPackage);
         compilationUnits.clear();
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
@@ -43,19 +55,10 @@ public class SourceRoot {
         });
     }
 
-    private Path fileInPackagePath(String startPackage, String file) {
-        startPackage = startPackage.replace(".", File.separator);
-        return Paths.get(root.toString(), startPackage, file).normalize();
-    }
-
-    private Path packagePath(String startPackage) {
-        startPackage = startPackage.replace(".", File.separator);
-        return Paths.get(root.toString(), startPackage).normalize();
-    }
-
     public void saveAll() throws FileNotFoundException, UnsupportedEncodingException {
         for (CompilationUnit cu : compilationUnits) {
             Path filename = cu.getData(ORIGINAL_LOCATION);
+            filename.getParent().toFile().mkdirs();
             String code = new PrettyPrinter().print(cu);
             try (PrintWriter out = new PrintWriter(filename.toFile(), UTF8.toString())) {
                 out.println(code);
@@ -67,12 +70,12 @@ public class SourceRoot {
         return problems;
     }
 
-    public Set<CompilationUnit> getCompilationUnits() {
+    public List<CompilationUnit> getCompilationUnits() {
         return compilationUnits;
     }
 
     public Optional<CompilationUnit> parse(String packag, String filename, JavaParser javaParser) throws IOException {
-        Path path = fileInPackagePath(packag, filename);
+        Path path = fileInPackagePath(root, packag, filename);
         System.out.println(path);
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
         if (result.isSuccessful()) {
@@ -83,5 +86,10 @@ public class SourceRoot {
             problems.addAll(result.getProblems());
         }
         return result.getResult();
+    }
+
+    public void add(String pkg, String filename, CompilationUnit compilationUnit) {
+        compilationUnits.add(compilationUnit);
+        compilationUnit.setData(ORIGINAL_LOCATION, root.resolve(packageToPath(pkg)).resolve(filename));
     }
 }

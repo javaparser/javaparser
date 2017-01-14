@@ -10,8 +10,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.bootstrap.SourceRoot;
-import com.github.javaparser.generator.utils.GeneratorUtils;
+import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,7 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.generator.utils.GeneratorUtils.*;
+import static com.github.javaparser.ast.Modifier.FINAL;
+import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
+import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 public class MetaModelGenerator {
     private static List<Class<?>> ALL_MODEL_CLASSES = new ArrayList<Class<?>>() {{
@@ -131,26 +133,34 @@ public class MetaModelGenerator {
         ALL_MODEL_CLASSES.sort(Comparator.comparing(Class::getSimpleName));
     }
 
+    public static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
+
     public static void main(String[] args) throws IOException {
-        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "src/main", "..", "..", "javaparser-core", "src", "main", "java");
+        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "..", "..", "..", "javaparser-core", "src", "main", "java");
 
         JavaParser javaParser = new JavaParser();
 
         SourceRoot sourceRoot = new SourceRoot(root);
 
-        CompilationUnit javaParserMetaModel = sourceRoot.parse("com.github.javaparser.metamodel", "JavaParserMetaModel.java", javaParser).get();
+        CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
 
         ClassOrInterfaceDeclaration mmClass = javaParserMetaModel.getClassByName("JavaParserMetaModel").get();
         BlockStmt constructor = mmClass.getDefaultConstructor().get().getBody();
         constructor.getStatements().clear();
 
         for (Class<?> c : ALL_MODEL_CLASSES) {
-            String className=c.getSimpleName() + "MetaModel";
-            String fieldName=decapitalize(className);
+            String className = c.getSimpleName() + "MetaModel";
+            String fieldName = decapitalize(className);
             mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
-            FieldDeclaration f = mmClass.addField("ClassMetaModel", fieldName, Modifier.PUBLIC, Modifier.FINAL);
-            f.getVariable(0).setInitializer(parseExpression(f("new %s(null, this, null, null, null, null, false)", className)));
+            FieldDeclaration f = mmClass.addField("ClassMetaModel", fieldName, PUBLIC, FINAL);
+            f.getVariable(0).setInitializer(parseExpression(f("new %s(this)", className)));
             constructor.addStatement(parseStatement(f("classMetaModels.add(%s);", fieldName)));
+
+            CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
+            sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
+            ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
+            classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
+            classMetaModelClass.addMember(parseClassBodyDeclaration(f("public %s(JavaParserMetaModel parent) { super(null, parent, null, null, null, null, false); }", className)));
         }
 
 

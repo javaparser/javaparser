@@ -134,192 +134,192 @@ public class JavaParserMetaModel {
         return b.toString();
     }
 
-    public final ClassMetaModel annotationDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel annotationDeclarationMetaModel = new AnnotationDeclarationMetaModel(this);
 
-    public final ClassMetaModel annotationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel annotationExprMetaModel = new AnnotationExprMetaModel(this);
 
-    public final ClassMetaModel annotationMemberDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel annotationMemberDeclarationMetaModel = new AnnotationMemberDeclarationMetaModel(this);
 
-    public final ClassMetaModel arrayAccessExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel arrayAccessExprMetaModel = new ArrayAccessExprMetaModel(this);
 
-    public final ClassMetaModel arrayCreationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel arrayCreationExprMetaModel = new ArrayCreationExprMetaModel(this);
 
-    public final ClassMetaModel arrayCreationLevelMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel arrayCreationLevelMetaModel = new ArrayCreationLevelMetaModel(this);
 
-    public final ClassMetaModel arrayInitializerExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel arrayInitializerExprMetaModel = new ArrayInitializerExprMetaModel(this);
 
-    public final ClassMetaModel arrayTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel arrayTypeMetaModel = new ArrayTypeMetaModel(this);
 
-    public final ClassMetaModel assertStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel assertStmtMetaModel = new AssertStmtMetaModel(this);
 
-    public final ClassMetaModel assignExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel assignExprMetaModel = new AssignExprMetaModel(this);
 
-    public final ClassMetaModel binaryExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel binaryExprMetaModel = new BinaryExprMetaModel(this);
 
-    public final ClassMetaModel blockCommentMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel blockCommentMetaModel = new BlockCommentMetaModel(this);
 
-    public final ClassMetaModel blockStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel blockStmtMetaModel = new BlockStmtMetaModel(this);
 
-    public final ClassMetaModel bodyDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel bodyDeclarationMetaModel = new BodyDeclarationMetaModel(this);
 
-    public final ClassMetaModel booleanLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel booleanLiteralExprMetaModel = new BooleanLiteralExprMetaModel(this);
 
-    public final ClassMetaModel breakStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel breakStmtMetaModel = new BreakStmtMetaModel(this);
 
-    public final ClassMetaModel castExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel castExprMetaModel = new CastExprMetaModel(this);
 
-    public final ClassMetaModel catchClauseMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel catchClauseMetaModel = new CatchClauseMetaModel(this);
 
-    public final ClassMetaModel charLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel charLiteralExprMetaModel = new CharLiteralExprMetaModel(this);
 
-    public final ClassMetaModel classExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel classExprMetaModel = new ClassExprMetaModel(this);
 
-    public final ClassMetaModel classOrInterfaceDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel classOrInterfaceDeclarationMetaModel = new ClassOrInterfaceDeclarationMetaModel(this);
 
-    public final ClassMetaModel classOrInterfaceTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel classOrInterfaceTypeMetaModel = new ClassOrInterfaceTypeMetaModel(this);
 
-    public final ClassMetaModel commentMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel commentMetaModel = new CommentMetaModel(this);
 
-    public final ClassMetaModel compilationUnitMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel compilationUnitMetaModel = new CompilationUnitMetaModel(this);
 
-    public final ClassMetaModel conditionalExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel conditionalExprMetaModel = new ConditionalExprMetaModel(this);
 
-    public final ClassMetaModel constructorDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel constructorDeclarationMetaModel = new ConstructorDeclarationMetaModel(this);
 
-    public final ClassMetaModel continueStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel continueStmtMetaModel = new ContinueStmtMetaModel(this);
 
-    public final ClassMetaModel doStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel doStmtMetaModel = new DoStmtMetaModel(this);
 
-    public final ClassMetaModel doubleLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel doubleLiteralExprMetaModel = new DoubleLiteralExprMetaModel(this);
 
-    public final ClassMetaModel emptyMemberDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel emptyMemberDeclarationMetaModel = new EmptyMemberDeclarationMetaModel(this);
 
-    public final ClassMetaModel emptyStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel emptyStmtMetaModel = new EmptyStmtMetaModel(this);
 
-    public final ClassMetaModel enclosedExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel enclosedExprMetaModel = new EnclosedExprMetaModel(this);
 
-    public final ClassMetaModel enumConstantDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel enumConstantDeclarationMetaModel = new EnumConstantDeclarationMetaModel(this);
 
-    public final ClassMetaModel enumDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel enumDeclarationMetaModel = new EnumDeclarationMetaModel(this);
 
-    public final ClassMetaModel explicitConstructorInvocationStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel explicitConstructorInvocationStmtMetaModel = new ExplicitConstructorInvocationStmtMetaModel(this);
 
-    public final ClassMetaModel expressionMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel expressionMetaModel = new ExpressionMetaModel(this);
 
-    public final ClassMetaModel expressionStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel expressionStmtMetaModel = new ExpressionStmtMetaModel(this);
 
-    public final ClassMetaModel fieldAccessExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel fieldAccessExprMetaModel = new FieldAccessExprMetaModel(this);
 
-    public final ClassMetaModel fieldDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel fieldDeclarationMetaModel = new FieldDeclarationMetaModel(this);
 
-    public final ClassMetaModel forStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel forStmtMetaModel = new ForStmtMetaModel(this);
 
-    public final ClassMetaModel foreachStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel foreachStmtMetaModel = new ForeachStmtMetaModel(this);
 
-    public final ClassMetaModel ifStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel ifStmtMetaModel = new IfStmtMetaModel(this);
 
-    public final ClassMetaModel importDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel importDeclarationMetaModel = new ImportDeclarationMetaModel(this);
 
-    public final ClassMetaModel initializerDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel initializerDeclarationMetaModel = new InitializerDeclarationMetaModel(this);
 
-    public final ClassMetaModel instanceOfExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel instanceOfExprMetaModel = new InstanceOfExprMetaModel(this);
 
-    public final ClassMetaModel integerLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel integerLiteralExprMetaModel = new IntegerLiteralExprMetaModel(this);
 
-    public final ClassMetaModel intersectionTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel intersectionTypeMetaModel = new IntersectionTypeMetaModel(this);
 
-    public final ClassMetaModel javadocCommentMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel javadocCommentMetaModel = new JavadocCommentMetaModel(this);
 
-    public final ClassMetaModel labeledStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel labeledStmtMetaModel = new LabeledStmtMetaModel(this);
 
-    public final ClassMetaModel lambdaExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel lambdaExprMetaModel = new LambdaExprMetaModel(this);
 
-    public final ClassMetaModel lineCommentMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel lineCommentMetaModel = new LineCommentMetaModel(this);
 
-    public final ClassMetaModel literalExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel literalExprMetaModel = new LiteralExprMetaModel(this);
 
-    public final ClassMetaModel localClassDeclarationStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel localClassDeclarationStmtMetaModel = new LocalClassDeclarationStmtMetaModel(this);
 
-    public final ClassMetaModel longLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel longLiteralExprMetaModel = new LongLiteralExprMetaModel(this);
 
-    public final ClassMetaModel markerAnnotationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel markerAnnotationExprMetaModel = new MarkerAnnotationExprMetaModel(this);
 
-    public final ClassMetaModel memberValuePairMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel memberValuePairMetaModel = new MemberValuePairMetaModel(this);
 
-    public final ClassMetaModel methodCallExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel methodCallExprMetaModel = new MethodCallExprMetaModel(this);
 
-    public final ClassMetaModel methodDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel methodDeclarationMetaModel = new MethodDeclarationMetaModel(this);
 
-    public final ClassMetaModel methodReferenceExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel methodReferenceExprMetaModel = new MethodReferenceExprMetaModel(this);
 
-    public final ClassMetaModel nameMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel nameMetaModel = new NameMetaModel(this);
 
-    public final ClassMetaModel nameExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel nameExprMetaModel = new NameExprMetaModel(this);
 
-    public final ClassMetaModel nodeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel nodeMetaModel = new NodeMetaModel(this);
 
-    public final ClassMetaModel nodeListMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel nodeListMetaModel = new NodeListMetaModel(this);
 
-    public final ClassMetaModel normalAnnotationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel normalAnnotationExprMetaModel = new NormalAnnotationExprMetaModel(this);
 
-    public final ClassMetaModel nullLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel nullLiteralExprMetaModel = new NullLiteralExprMetaModel(this);
 
-    public final ClassMetaModel objectCreationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel objectCreationExprMetaModel = new ObjectCreationExprMetaModel(this);
 
-    public final ClassMetaModel packageDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel packageDeclarationMetaModel = new PackageDeclarationMetaModel(this);
 
-    public final ClassMetaModel parameterMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel parameterMetaModel = new ParameterMetaModel(this);
 
-    public final ClassMetaModel primitiveTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel primitiveTypeMetaModel = new PrimitiveTypeMetaModel(this);
 
-    public final ClassMetaModel referenceTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel referenceTypeMetaModel = new ReferenceTypeMetaModel(this);
 
-    public final ClassMetaModel returnStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel returnStmtMetaModel = new ReturnStmtMetaModel(this);
 
-    public final ClassMetaModel simpleNameMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel simpleNameMetaModel = new SimpleNameMetaModel(this);
 
-    public final ClassMetaModel singleMemberAnnotationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(this);
 
-    public final ClassMetaModel statementMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel statementMetaModel = new StatementMetaModel(this);
 
-    public final ClassMetaModel stringLiteralExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel stringLiteralExprMetaModel = new StringLiteralExprMetaModel(this);
 
-    public final ClassMetaModel superExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel superExprMetaModel = new SuperExprMetaModel(this);
 
-    public final ClassMetaModel switchEntryStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel switchEntryStmtMetaModel = new SwitchEntryStmtMetaModel(this);
 
-    public final ClassMetaModel switchStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel switchStmtMetaModel = new SwitchStmtMetaModel(this);
 
-    public final ClassMetaModel synchronizedStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel synchronizedStmtMetaModel = new SynchronizedStmtMetaModel(this);
 
-    public final ClassMetaModel thisExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel thisExprMetaModel = new ThisExprMetaModel(this);
 
-    public final ClassMetaModel throwStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel throwStmtMetaModel = new ThrowStmtMetaModel(this);
 
-    public final ClassMetaModel tryStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel tryStmtMetaModel = new TryStmtMetaModel(this);
 
-    public final ClassMetaModel typeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel typeMetaModel = new TypeMetaModel(this);
 
-    public final ClassMetaModel typeDeclarationMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel typeDeclarationMetaModel = new TypeDeclarationMetaModel(this);
 
-    public final ClassMetaModel typeExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel typeExprMetaModel = new TypeExprMetaModel(this);
 
-    public final ClassMetaModel typeParameterMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel typeParameterMetaModel = new TypeParameterMetaModel(this);
 
-    public final ClassMetaModel unaryExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel unaryExprMetaModel = new UnaryExprMetaModel(this);
 
-    public final ClassMetaModel unionTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel unionTypeMetaModel = new UnionTypeMetaModel(this);
 
-    public final ClassMetaModel unknownTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel unknownTypeMetaModel = new UnknownTypeMetaModel(this);
 
-    public final ClassMetaModel variableDeclarationExprMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel variableDeclarationExprMetaModel = new VariableDeclarationExprMetaModel(this);
 
-    public final ClassMetaModel variableDeclaratorMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel variableDeclaratorMetaModel = new VariableDeclaratorMetaModel(this);
 
-    public final ClassMetaModel voidTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel voidTypeMetaModel = new VoidTypeMetaModel(this);
 
-    public final ClassMetaModel whileStmtMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel whileStmtMetaModel = new WhileStmtMetaModel(this);
 
-    public final ClassMetaModel wildcardTypeMetaModel = new ClassMetaModel(null, this, null, null, null, null, false);
+    public final ClassMetaModel wildcardTypeMetaModel = new WildcardTypeMetaModel(this);
 }
 
