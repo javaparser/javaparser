@@ -21,9 +21,14 @@
 
 package com.github.javaparser;
 
+import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
+import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,5 +41,44 @@ public class JavaParserTest {
         AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
         assertEquals(true, memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
+    }
+
+    @Test
+    public void rangeOfAnnotationMemberDeclarationWithArrayTypeIsCorrect() {
+        String code = "@interface AD { String[] foo(); }";
+        CompilationUnit cu = JavaParser.parse(code);
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration) cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        assertEquals(true, memberDeclaration.getRange().isPresent());
+        assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
+    }
+
+    @Test
+    public void rangeOfArrayCreationLevelWithExpressionIsCorrect() {
+        String code = "new int[123][456]";
+        ArrayCreationExpr expression = (ArrayCreationExpr)JavaParser.parseExpression(code);
+        Optional<Range> range;
+
+        range = expression.getLevels().get(0).getRange();
+        assertEquals(true, range.isPresent());
+        assertEquals(new Range(new Position(1, 8), new Position(1, 12)), range.get());
+
+        range = expression.getLevels().get(1).getRange();
+        assertEquals(true, range.isPresent());
+        assertEquals(new Range(new Position(1, 13), new Position(1, 17)), range.get());
+    }
+
+    @Test
+    public void rangeOfArrayCreationLevelWithoutExpressionIsCorrect() {
+        String code = "new int[][]";
+        ArrayCreationExpr expression = (ArrayCreationExpr)JavaParser.parseExpression(code);
+        Optional<Range> range;
+
+        range = expression.getLevels().get(0).getRange();
+        assertEquals(true, range.isPresent());
+        assertEquals(new Range(new Position(1, 8), new Position(1, 9)), range.get());
+
+        range = expression.getLevels().get(1).getRange();
+        assertEquals(true, range.isPresent());
+        assertEquals(new Range(new Position(1, 10), new Position(1, 11)), range.get());
     }
 }

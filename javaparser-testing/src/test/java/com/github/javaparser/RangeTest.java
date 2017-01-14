@@ -89,4 +89,12 @@ public class RangeTest {
         assertEquals(false, r2.strictlyContains(r1));
     }
 
+    @Test
+    public void containsConsiderLines() {
+        Range r1 = Range.range(22, 9, 22, 29);
+        Range r2 = Range.range(26, 19, 26, 28);
+        assertEquals(false, r1.contains(r2));
+        assertEquals(false, r2.contains(r1));
+    }
+
 }
