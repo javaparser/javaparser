@@ -22,6 +22,7 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.Test;
@@ -52,21 +53,41 @@ public class PrettyPrintVisitorTest {
         assertEquals("int[] @Foo [][]", getMaximumCommonType(vde2).toString());
     }
 
+    private String print(Node node) {
+        return new PrettyPrinter().print(node);
+    }
+
     @Test
     public void printSimpleClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo.class");
-        assertEquals("Foo.class", new PrettyPrinter().print(expr));
+        assertEquals("Foo.class", print(expr));
     }
 
     @Test
     public void printArrayClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo[].class");
-        assertEquals("Foo[].class", new PrettyPrinter().print(expr));
+        assertEquals("Foo[].class", print(expr));
     }
 
     @Test
     public void printGenericClassExpr() {
         ClassExpr expr = JavaParser.parseExpression("Foo<String>.class");
-        assertEquals("Foo<String>.class", new PrettyPrinter().print(expr));
+        assertEquals("Foo<String>.class", print(expr));
+    }
+
+    @Test
+    public void printSimplestClass() {
+        Node node = JavaParser.parse("class A {}");
+        assertEquals("class A {\n" +
+                "}\n", print(node));
+    }
+
+    @Test
+    public void printAClassWithField() {
+        Node node = JavaParser.parse("class A { int a; }");
+        assertEquals("class A {\n" +
+                "\n" +
+                "    int a;\n" +
+                "}\n", print(node));
     }
 }

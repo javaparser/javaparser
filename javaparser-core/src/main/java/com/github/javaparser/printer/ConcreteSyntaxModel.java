@@ -22,6 +22,7 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -328,6 +329,10 @@ public class ConcreteSyntaxModel {
         return new StringElement(32, " ");
     }
 
+    private static StringElement newline() {
+        return new StringElement(3, "\n");
+    }
+
     private static StringElement comma() {
         return new StringElement(ASTParserConstants.COMMA);
     }
@@ -361,6 +366,74 @@ public class ConcreteSyntaxModel {
                             sequence(string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
                             list(TYPE_ARGUMENTS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT)))
                     .build();
+        }
+        if (nodeClazz.equals(CompilationUnit.class)) {
+            return new Builder().comment()
+                    .child(ObservableProperty.PACKAGE_DECLARATION)
+                    .list(ObservableProperty.IMPORTS, newline())
+                    .list(TYPES, newline())
+                    .build();
+
+            // printOrphanCommentsEnding(n);
+        }
+        if (nodeClazz.equals(ClassOrInterfaceDeclaration.class)) {
+            return new Builder().comment()
+                    .list(ObservableProperty.ANNOTATIONS, newline(), null, newline())
+                    // TODO modifiers
+                    .ifThenElse(node -> ((ClassOrInterfaceDeclaration)node).isInterface(), string(ASTParserConstants.INTERFACE), string(ASTParserConstants.CLASS))
+                    .string(ASTParserConstants.IDENTIFIER, ObservableProperty.NAME)
+                    .space()
+                    .list(TYPE_ARGUMENTS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT))
+                    .child(ObservableProperty.PACKAGE_DECLARATION)
+                    .list(ObservableProperty.IMPORTS, newline())
+                    .list(TYPES, newline())
+                    .build();
+//            printJavaComment(n.getComment(), arg);
+//            printMemberAnnotations(n.getAnnotations(), arg);
+//            printModifiers(n.getModifiers());
+//
+//            if (n.isInterface()) {
+//                printer.print("interface ");
+//            } else {
+//                printer.print("class ");
+//            }
+//
+//            n.getName().accept(this, arg);
+//
+//            printTypeParameters(n.getTypeParameters(), arg);
+//
+//            if (!n.getExtendedTypes().isEmpty()) {
+//                printer.print(" extends ");
+//                for (final Iterator<ClassOrInterfaceType> i = n.getExtendedTypes().iterator(); i.hasNext(); ) {
+//                    final ClassOrInterfaceType c = i.next();
+//                    c.accept(this, arg);
+//                    if (i.hasNext()) {
+//                        printer.print(", ");
+//                    }
+//                }
+//            }
+//
+//            if (!n.getImplementedTypes().isEmpty()) {
+//                printer.print(" implements ");
+//                for (final Iterator<ClassOrInterfaceType> i = n.getImplementedTypes().iterator(); i.hasNext(); ) {
+//                    final ClassOrInterfaceType c = i.next();
+//                    c.accept(this, arg);
+//                    if (i.hasNext()) {
+//                        printer.print(", ");
+//                    }
+//                }
+//            }
+//
+//            printer.println(" {");
+//            printer.indent();
+//            if (!isNullOrEmpty(n.getMembers())) {
+//                printMembers(n.getMembers(), arg);
+//            }
+//
+//            printOrphanCommentsEnding(n);
+//
+//            printer.unindent();
+//            printer.print("}");
         }
 
         throw new UnsupportedOperationException("Class " + nodeClazz.getSimpleName());
