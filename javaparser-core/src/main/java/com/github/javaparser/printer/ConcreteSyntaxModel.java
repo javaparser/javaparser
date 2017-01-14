@@ -59,6 +59,14 @@ public class ConcreteSyntaxModel {
         public ChildElement(ObservableProperty property) {
             this.property = property;
         }
+
+        @Override
+        public void prettyPrint(Node node, SourcePrinter printer) {
+            Node child = property.singleValueFor(node);
+            if (child != null) {
+                genericPrettyPrint(child, printer);
+            }
+        }
     }
 
     private static class ListElement implements Element {

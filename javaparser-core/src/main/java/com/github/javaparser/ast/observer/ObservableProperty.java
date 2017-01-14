@@ -20,11 +20,108 @@
  */
 package com.github.javaparser.ast.observer;
 
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.utils.Utils;
+
+import java.lang.reflect.InvocationTargetException;
+
+import static com.github.javaparser.utils.Utils.capitalize;
+
 /**
  * Properties considered by the AstObserver
  */
 public enum ObservableProperty {
+    ANNOTATIONS,
+    ANONYMOUS_CLASS_BODY,
+    ARGUMENTS,
+    BLOCK,
+    BODY,
+    CATCH_CLAUSES,
+    CHECK,
+    CLASS_BODY,
+    CLASS_EXPR,
+    COMMENT,
+    COMMENTED_NODE,
+    COMPARE,
+    COMPONENT_TYPE,
+    CONDITION,
+    CONTENT,
+    DEFAULT_VALUE,
+    DIMENSION,
+    ELEMENTS,
+    ELSE_EXPR,
+    ELSE_STMT,
+    ENTRIES,
+    EXPRESSION,
+    EXTENDED_TYPES,
+    FIELD,
+    FINALLY_BLOCK,
+    IDENTIFIER,
+    IMPLEMENTED_TYPES,
+    IMPORTS,
+    INDEX,
+    INITIALIZER,
+    INNER,
+    IS_INTERFACE,
+    ITERABLE,
+    IS_THIS,
+    LABEL,
+    LEFT,
+    LEVELS,
+    MEMBERS,
+    MEMBER_VALUE,
+    MODIFIERS,
+    MESSAGE,
+    NAME,
+    OPERATOR,
+    PACKAGE_DECLARATION,
+    PAIRS,
+    PARAMETER,
+    PARAMETERS,
+    ENCLOSING_PARAMETERS,
+    QUALIFIER,
+    RANGE,
+    RESOURCES,
+    RIGHT,
+    SCOPE,
+    SELECTOR,
+    IS_ASTERISK,
+    IS_STATIC,
+    STATIC_MEMBER,
+    STATEMENT,
+    STATEMENTS,
+    SUPER,
+    TARGET,
+    THEN_EXPR,
+    THEN_STMT,
+    THROWN_TYPES,
+    TRY_BLOCK,
+    TYPE,
+    TYPES,
+    TYPE_ARGUMENTS,
+    TYPE_BOUND,
+    CLASS_DECLARATION,
+    TYPE_PARAMETERS,
+    UPDATE,
+    VALUE,
+    VALUES,
+    VARIABLE,
+    VARIABLES,
+    ELEMENT_TYPE,
+    VAR_ARGS;
 
-    ANNOTATIONS, ANONYMOUS_CLASS_BODY, ARGUMENTS, ASTERISK, BODY, CATCH_CLAUSES, CHECK, CLASS_BODY, CLASS_DECLARATION, CLASS_EXPR, COMMENT, COMPARE, COMPONENT_TYPE, CONDITION, CONTENT, DEFAULT, DEFAULT_VALUE, DIMENSION, ELEMENTS, ELEMENT_TYPE, ELSE_EXPR, ELSE_STMT, ENCLOSING_PARAMETERS, ENTRIES, EXPRESSION, EXTENDED_TYPES, FINALLY_BLOCK, IDENTIFIER, IMPLEMENTED_TYPES, IMPORTS, INDEX, INITIALIZATION, INITIALIZER, INNER, INTERFACE, ITERABLE, LABEL, LEFT, LEVELS, MEMBERS, MEMBER_VALUE, MESSAGE, MODIFIERS, NAME, OPERATOR, PACKAGE_DECLARATION, PAIRS, PARAMETER, PARAMETERS, QUALIFIER, RESOURCES, RIGHT, SCOPE, SELECTOR, STATEMENT, STATEMENTS, STATIC, SUPER_TYPES, TARGET, THEN_EXPR, THEN_STMT, THIS, THROWN_EXCEPTIONS, TRY_BLOCK, TYPE, TYPES, TYPE_ARGUMENTS, TYPE_BOUND, TYPE_PARAMETERS, UPDATE, VALUE, VALUES, VARIABLE, VARIABLES, VAR_ARGS, RANGE, COMMENTED_NODE
+    public String camelCaseName() {
+        return Utils.toCamelCase(name());
+    }
+
+    public Node singleValueFor(Node node) {
+        String getterName = "get" + Utils.capitalize(camelCaseName());
+        try {
+            return (Node)node.getClass().getMethod(getterName).invoke(node);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+        }
+    }
+
 }
 
