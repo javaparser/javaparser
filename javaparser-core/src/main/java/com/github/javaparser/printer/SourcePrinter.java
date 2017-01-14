@@ -49,7 +49,7 @@ public class SourcePrinter {
         }
     }
 
-    SourcePrinter print(final String arg) {
+    public SourcePrinter print(final String arg) {
         if (!indented) {
             makeIndent();
             indented = true;
@@ -58,13 +58,13 @@ public class SourcePrinter {
         return this;
     }
 
-    SourcePrinter println(final String arg) {
+    public SourcePrinter println(final String arg) {
         print(arg);
         println();
         return this;
     }
 
-    SourcePrinter println() {
+    public SourcePrinter println() {
         buf.append(EOL);
         indented = false;
         return this;
