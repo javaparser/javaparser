@@ -29,9 +29,11 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -273,6 +275,10 @@ public class ConcreteSyntaxModel {
             return add(new ListElement(listProperty, following));
         }
 
+        Builder list(ObservableProperty listProperty) {
+            return add(new ListElement(listProperty));
+        }
+
         Builder list(ObservableProperty property, Element separator, Element preceeding, Element following) {
             return add(new ListElement(property, separator, preceeding, following));
         }
@@ -339,7 +345,12 @@ public class ConcreteSyntaxModel {
                     .build();
         }
         if (nodeClazz.equals(ArrayType.class)) {
-
+            return new Builder()
+                    .child(ObservableProperty.COMPONENT_TYPE)
+                    .list(ObservableProperty.ANNOTATIONS)
+                    .string(ASTParserConstants.LBRACKET)
+                    .string(ASTParserConstants.RBRACKET)
+                    .build();
         }
         if (nodeClazz.equals(ClassOrInterfaceType.class)) {
             return new Builder().comment()
