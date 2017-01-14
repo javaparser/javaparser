@@ -111,4 +111,8 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(annotations);
     }
+
+    public void removeDimension() {
+        setDimension(null);
+    }
 }
