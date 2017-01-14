@@ -103,9 +103,11 @@ public class ConcreteSyntaxModel {
 
     private static class ListElement implements Element {
         private ObservableProperty property;
-        private StringElement separator;
+        private Element separator;
+        private Element preceeding;
+        private Element following;
 
-        public ListElement(ObservableProperty property, StringElement separator) {
+        public ListElement(ObservableProperty property, Element separator) {
             this.property = property;
             this.separator = separator;
         }
@@ -115,17 +117,30 @@ public class ConcreteSyntaxModel {
             this.separator = null;
         }
 
+        public ListElement(ObservableProperty property, Element separator, Element preceeding, Element following) {
+            this.property = property;
+            this.separator = separator;
+            this.preceeding = preceeding;
+            this.following = following;
+        }
+
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
             NodeList nodeList = property.listValueFor(node);
             if (nodeList == null) {
                 return;
             }
+            if (!nodeList.isEmpty() && preceeding != null) {
+                preceeding.prettyPrint(node, printer);
+            }
             for (int i=0;i<nodeList.size();i++) {
                 genericPrettyPrint(nodeList.get(i), printer);
                 if (separator != null && i != (nodeList.size() - 1)) {
                     separator.prettyPrint(node, printer);
                 }
+            }
+            if (!nodeList.isEmpty() && following != null) {
+                following.prettyPrint(node, printer);
             }
         }
     }
@@ -255,7 +270,11 @@ public class ConcreteSyntaxModel {
         }
 
         Builder list(ObservableProperty listProperty, Element following) {
-            return add(new SequenceElement(Arrays.asList(new ListElement(listProperty), following)));
+            return add(new ListElement(listProperty, following));
+        }
+
+        Builder list(ObservableProperty property, Element separator, Element preceeding, Element following) {
+            return add(new ListElement(property, separator, preceeding, following));
         }
 
         ConcreteSyntaxModel build() {
@@ -287,16 +306,24 @@ public class ConcreteSyntaxModel {
         return new ListElement(property);
     }
 
+    private static ListElement list(ObservableProperty property, Element separator, Element preceeding, Element following) {
+        return new ListElement(property, separator, preceeding, following);
+    }
+
     private static StringElement string(int tokenType, String content) {
         return new StringElement(tokenType, content);
     }
 
     private static StringElement string(int tokenType) {
-        return new StringElement(tokenType, ASTParserConstants.tokenImage[tokenType]);
+        return new StringElement(tokenType);
     }
 
     private static StringElement space() {
         return new StringElement(32, " ");
+    }
+
+    private static StringElement comma() {
+        return new StringElement(ASTParserConstants.COMMA);
     }
 
     public static ConcreteSyntaxModel forClass(Class<? extends Node> nodeClazz) {
@@ -321,28 +348,9 @@ public class ConcreteSyntaxModel {
                     .child(NAME)
                     .ifThenElse(node -> ((ClassOrInterfaceType)node).isUsingDiamondOperator(),
                             sequence(string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
-                            list(TYPE_ARGUMENTS))
+                            list(TYPE_ARGUMENTS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT)))
                     .build();
         }
-
-//        printJavaComment(n.getComment(), arg);
-//
-//        if (n.getScope().isPresent()) {
-//            n.getScope().get().accept(this, arg);
-//            printer.print(".");
-//        }
-//        for (AnnotationExpr ae : n.getAnnotations()) {
-//            ae.accept(this, arg);
-//            printer.print(" ");
-//        }
-//
-//        n.getName().accept(this, arg);
-//
-//        if (n.isUsingDiamondOperator()) {
-//            printer.print("<>");
-//        } else {
-//            printTypeArgs(n, arg);
-//        }
 
         throw new UnsupportedOperationException("Class " + nodeClazz.getSimpleName());
     }
