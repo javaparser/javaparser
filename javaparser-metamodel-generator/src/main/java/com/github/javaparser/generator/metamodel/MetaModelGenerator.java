@@ -11,6 +11,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.bootstrap.SourceRoot;
+import com.github.javaparser.generator.utils.GeneratorUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class MetaModelGenerator {
     private static List<Class<?>> ALL_MODEL_CLASSES = new ArrayList<Class<?>>() {{
@@ -131,7 +132,7 @@ public class MetaModelGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "src/main", "..", "..", "javaparser-metamodel", "src", "main", "java");
+        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "src/main", "..", "..", "javaparser-core", "src", "main", "java");
 
         JavaParser javaParser = new JavaParser();
 
@@ -144,23 +145,16 @@ public class MetaModelGenerator {
         constructor.getStatements().clear();
 
         for (Class<?> c : ALL_MODEL_CLASSES) {
-            String name = metaModelName(c.getSimpleName());
-            mmClass.getFieldByName(name).ifPresent(Node::remove);
-            FieldDeclaration f = mmClass.addField("ClassMetaModel", name, Modifier.PUBLIC, Modifier.FINAL);
-            f.getVariable(0).setInitializer(JavaParser.parseExpression("new ClassMetaModel(null, this, null, null, null, null, false)"));
-            constructor.addStatement(JavaParser.parseStatement(f("classMetaModels.add(%s);", name)));
+            String className=c.getSimpleName() + "MetaModel";
+            String fieldName=decapitalize(className);
+            mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
+            FieldDeclaration f = mmClass.addField("ClassMetaModel", fieldName, Modifier.PUBLIC, Modifier.FINAL);
+            f.getVariable(0).setInitializer(parseExpression(f("new %s(null, this, null, null, null, null, false)", className)));
+            constructor.addStatement(parseStatement(f("classMetaModels.add(%s);", fieldName)));
         }
 
 
         System.out.println(javaParserMetaModel);
         sourceRoot.saveAll();
-    }
-    
-    private static String f(String format, Object... params) {
-        return String.format(format, params);
-    }
-
-    private static String metaModelName(String s) {
-        return s.substring(0, 1).toLowerCase() + s.substring(1) + "MetaModel";
     }
 }

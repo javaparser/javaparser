@@ -11,12 +11,4 @@
 
     <artifactId>javaparser-bootstrap</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
 </project>
