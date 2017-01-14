@@ -23,13 +23,22 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
-import static com.github.javaparser.ast.observer.ObservableProperty.TYPE;
+import static com.github.javaparser.ast.observer.ObservableProperty.*;
 
 /**
  * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
@@ -46,15 +55,33 @@ public class ConcreteSyntaxModel {
     private static class StringElement implements Element {
         private int tokenType;
         private String content;
+        private ObservableProperty propertyContent;
+
+        public StringElement(int tokenType) {
+            this.tokenType = tokenType;
+            this.content = ASTParserConstants.tokenImage[tokenType];
+            if (content.startsWith("\"")) {
+                content = content.substring(1, content.length() - 1);
+            }
+        }
 
         public StringElement(int tokenType, String content) {
             this.tokenType = tokenType;
             this.content = content;
         }
 
+        public StringElement(int tokenType, ObservableProperty content) {
+            this.tokenType = tokenType;
+            this.propertyContent = content;
+        }
+
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            printer.print(content);
+            if (content != null) {
+                printer.print(content);
+            } else {
+                printer.print(propertyContent.singleStringValueFor(node));
+            }
         }
     }
 
@@ -78,9 +105,28 @@ public class ConcreteSyntaxModel {
         private ObservableProperty property;
         private StringElement separator;
 
+        public ListElement(ObservableProperty property, StringElement separator) {
+            this.property = property;
+            this.separator = separator;
+        }
+
+        public ListElement(ObservableProperty property) {
+            this.property = property;
+            this.separator = null;
+        }
+
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            throw new UnsupportedOperationException();
+            NodeList nodeList = property.listValueFor(node);
+            if (nodeList == null) {
+                return;
+            }
+            for (int i=0;i<nodeList.size();i++) {
+                genericPrettyPrint(nodeList.get(i), printer);
+                if (separator != null && i != (nodeList.size() - 1)) {
+                    separator.prettyPrint(node, printer);
+                }
+            }
         }
     }
 
@@ -90,6 +136,65 @@ public class ConcreteSyntaxModel {
             if (node.hasComment()) {
                 genericPrettyPrint(node.getComment(), printer);
             }
+        }
+    }
+
+    private static class IfElement implements Element {
+        Predicate<Node> predicateCondition;
+        private ObservableProperty condition;
+        private Element thenElement;
+        private Element elseElement;
+
+        public IfElement(Predicate<Node> condition, Element thenElement, Element elseElement) {
+            this.predicateCondition = condition;
+            this.thenElement = thenElement;
+            this.elseElement = elseElement;
+        }
+
+        public IfElement(ObservableProperty condition, Element thenElement, Element elseElement) {
+            this.condition = condition;
+            this.thenElement = thenElement;
+            this.elseElement = elseElement;
+        }
+
+        public IfElement(ObservableProperty condition, Element thenElement) {
+            this.condition = condition;
+            this.thenElement = thenElement;
+            this.elseElement = null;
+        }
+
+        @Override
+        public void prettyPrint(Node node, SourcePrinter printer) {
+            if (condition != null) {
+                if (condition.singleValueFor(node) != null) {
+                    thenElement.prettyPrint(node, printer);
+                } else {
+                    if (elseElement != null) {
+                        elseElement.prettyPrint(node, printer);
+                    }
+                }
+            } else {
+                if (predicateCondition.test(node)) {
+                    thenElement.prettyPrint(node, printer);
+                } else {
+                    if (elseElement != null) {
+                        elseElement.prettyPrint(node, printer);
+                    }
+                }
+            }
+        }
+    }
+
+    private static class SequenceElement implements Element {
+        private List<Element> elements;
+
+        public SequenceElement(List<Element> elements) {
+            this.elements = elements;
+        }
+
+        @Override
+        public void prettyPrint(Node node, SourcePrinter printer) {
+            elements.forEach(e -> e.prettyPrint(node, printer));
         }
     }
 
@@ -126,7 +231,31 @@ public class ConcreteSyntaxModel {
         }
 
         Builder string(int tokenType) {
-            return string(tokenType, ASTParserConstants.tokenImage[tokenType]);
+            return add(new StringElement(tokenType));
+        }
+
+        Builder string(int tokenType, ObservableProperty content) {
+            return add(new StringElement(tokenType, content));
+        }
+
+        Builder ifThen(ObservableProperty childCondition, Element thenElement) {
+            return add(new IfElement(childCondition, thenElement));
+        }
+
+        Builder ifThenElse(ObservableProperty childCondition, Element thenElement, Element elseElement) {
+            return add(new IfElement(childCondition, thenElement, elseElement));
+        }
+
+        Builder ifThenElse(Predicate<Node> predicate, Element thenElement, Element elseElement) {
+            return add(new IfElement(predicate, thenElement, elseElement));
+        }
+
+        Builder sequence(Element... elements) {
+            return add(new SequenceElement(Arrays.asList(elements)));
+        }
+
+        Builder list(ObservableProperty listProperty, Element following) {
+            return add(new SequenceElement(Arrays.asList(new ListElement(listProperty), following)));
         }
 
         ConcreteSyntaxModel build() {
@@ -140,6 +269,36 @@ public class ConcreteSyntaxModel {
         forClass(node.getClass()).prettyPrint(node, printer);
     }
 
+    public static String genericPrettyPrint(Node node) {
+        SourcePrinter sourcePrinter = new SourcePrinter("    ");
+        forClass(node.getClass()).prettyPrint(node, sourcePrinter);
+        return sourcePrinter.getSource();
+    }
+
+    private static SequenceElement sequence(Element... elements) {
+        return new SequenceElement(Arrays.asList(elements));
+    }
+
+    private static ChildElement child(ObservableProperty property) {
+        return new ChildElement(property);
+    }
+
+    private static ListElement list(ObservableProperty property) {
+        return new ListElement(property);
+    }
+
+    private static StringElement string(int tokenType, String content) {
+        return new StringElement(tokenType, content);
+    }
+
+    private static StringElement string(int tokenType) {
+        return new StringElement(tokenType, ASTParserConstants.tokenImage[tokenType]);
+    }
+
+    private static StringElement space() {
+        return new StringElement(32, " ");
+    }
+
     public static ConcreteSyntaxModel forClass(Class<? extends Node> nodeClazz) {
 
         if (nodeClazz.equals(ClassExpr.class)) {
@@ -148,15 +307,44 @@ public class ConcreteSyntaxModel {
                     .string(ASTParserConstants.CLASS)
                     .build();
         }
+        if (nodeClazz.equals(SimpleName.class)) {
+            return new Builder().string(ASTParserConstants.IDENTIFIER, ObservableProperty.IDENTIFIER)
+                    .build();
+        }
+        if (nodeClazz.equals(ArrayType.class)) {
 
-//        @Override
-//        public void visit(final ClassExpr n, final Void arg) {
-//            printJavaComment(n.getComment(), arg);
-//            n.getType().accept(this, arg);
-//            printer.print(".class");
+        }
+        if (nodeClazz.equals(ClassOrInterfaceType.class)) {
+            return new Builder().comment()
+                    .ifThen(SCOPE, sequence(child(SCOPE), string(ASTParserConstants.DOT)))
+                    .list(ANNOTATIONS, space())
+                    .child(NAME)
+                    .ifThenElse(node -> ((ClassOrInterfaceType)node).isUsingDiamondOperator(),
+                            sequence(string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
+                            list(TYPE_ARGUMENTS))
+                    .build();
+        }
+
+//        printJavaComment(n.getComment(), arg);
+//
+//        if (n.getScope().isPresent()) {
+//            n.getScope().get().accept(this, arg);
+//            printer.print(".");
+//        }
+//        for (AnnotationExpr ae : n.getAnnotations()) {
+//            ae.accept(this, arg);
+//            printer.print(" ");
+//        }
+//
+//        n.getName().accept(this, arg);
+//
+//        if (n.isUsingDiamondOperator()) {
+//            printer.print("<>");
+//        } else {
+//            printTypeArgs(n, arg);
 //        }
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Class " + nodeClazz.getSimpleName());
     }
 
 }
