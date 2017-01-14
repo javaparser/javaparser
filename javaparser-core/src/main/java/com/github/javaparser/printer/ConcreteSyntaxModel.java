@@ -51,6 +51,11 @@ public class ConcreteSyntaxModel {
             this.tokenType = tokenType;
             this.content = content;
         }
+
+        @Override
+        public void prettyPrint(Node node, SourcePrinter printer) {
+            printer.print(content);
+        }
     }
 
     private static class ChildElement implements Element {
@@ -72,6 +77,11 @@ public class ConcreteSyntaxModel {
     private static class ListElement implements Element {
         private ObservableProperty property;
         private StringElement separator;
+
+        @Override
+        public void prettyPrint(Node node, SourcePrinter printer) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private static class CommentElement implements Element {
