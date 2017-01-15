@@ -50,11 +50,11 @@ public class Utils {
         return o;
     }
 
-    public static String assertNonEmpty(String id) {
-        if (id == null || id.isEmpty()) {
-            throw new AssertionError("An identifier was unexpectedly empty.");
+    public static String assertNonEmpty(String string) {
+        if (string == null || string.isEmpty()) {
+            throw new AssertionError("A string was unexpectedly empty.");
         }
-        return id;
+        return string;
     }
 
     /**

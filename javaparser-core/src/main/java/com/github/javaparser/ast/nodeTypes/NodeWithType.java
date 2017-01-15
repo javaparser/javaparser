@@ -26,6 +26,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+
 /**
  * A node with a type.
  * <p>
@@ -64,6 +66,7 @@ public interface NodeWithType<N extends Node, T extends Type> {
 
     @SuppressWarnings("unchecked")
     default N setType(final String type) {
+        assertNonEmpty(type);
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
         return setType((T) classOrInterfaceType);
     }

@@ -141,6 +141,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumConstantDeclaration addEnumConstant(String name) {
+        assertNonEmpty(name);
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
         enumConstant.setParentNode(this);

@@ -31,7 +31,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -86,7 +85,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNotNull(identifier);
+        this.identifier = identifier;
         return this;
     }
 

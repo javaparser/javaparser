@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * Note that the field "identifier", indicating the word to the right of the ::, is not always a method name,
@@ -116,6 +118,7 @@ public class MethodReferenceExpr extends Expression implements
 
     @Override
     public MethodReferenceExpr setIdentifier(String identifier) {
+        assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
