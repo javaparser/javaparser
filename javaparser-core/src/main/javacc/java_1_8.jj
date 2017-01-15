@@ -192,11 +192,11 @@ final class ASTParser {
         return ret;
     }
     
-    private ArrayCreationExpr juggleArrayCreation(Range range, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr)  {
+    private ArrayCreationExpr juggleArrayCreation(Range range, List<Range> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr)  {
         NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
         
         for(int i = 0; i < arrayAnnotations.size(); i++){
-            levels.add(new ArrayCreationLevel(range, dimensions.get(i), arrayAnnotations.get(i)));
+            levels.add(new ArrayCreationLevel(levelRanges.get(i), dimensions.get(i), arrayAnnotations.get(i)));
         }
         return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
@@ -2717,17 +2717,19 @@ ArrayCreationExpr ArrayCreation(Position begin, Type type):
 	NodeList<Expression> inits = emptyList();
 	List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	Position arrayCreationLevelStart = null;
+	List<Range> levelRanges = new ArrayList<Range>();
 }
 { 
     ( LOOKAHEAD(2)
-        annotations = Annotations() 
-        "[" 
+        annotations = Annotations()
+        "[" { arrayCreationLevelStart = annotations.isEmpty() ? tokenBegin() : annotations.get(0).getRange().get().begin; }
         (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
-        "]" 
+        "]" { levelRanges.add(new Range(arrayCreationLevelStart,tokenEnd())); }
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
     {  
-        return juggleArrayCreation(range(begin, tokenEnd()), type, inits, accum, arrayInitializerExpr);
+        return juggleArrayCreation(range(begin, tokenEnd()), levelRanges, type, inits, accum, arrayInitializerExpr);
     }
 }
 
