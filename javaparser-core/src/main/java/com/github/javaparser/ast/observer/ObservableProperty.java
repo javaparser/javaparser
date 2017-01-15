@@ -25,7 +25,10 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Properties considered by the AstObserver
@@ -162,7 +165,7 @@ public enum ObservableProperty {
                 return null;
             }
             if (result instanceof NodeList) {
-                return (NodeList)result;
+                return (NodeList) result;
             } else {
                 Optional<NodeList> opt = (Optional<NodeList>)result;
                 if (opt.isPresent()) {
@@ -171,6 +174,19 @@ public enum ObservableProperty {
                     return null;
                 }
             }
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
+        }
+    }
+
+    public Collection<?> listPropertyFor(Node node) {
+        String getterName = "get" + Utils.capitalize(camelCaseName());
+        try {
+            Object result = node.getClass().getMethod(getterName).invoke(node);
+            if (result == null) {
+                return null;
+            }
+            return (Collection) result;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
