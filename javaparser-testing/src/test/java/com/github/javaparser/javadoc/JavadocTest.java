@@ -21,6 +21,7 @@
 
 package com.github.javaparser.javadoc;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import org.junit.Test;
@@ -67,6 +68,13 @@ public class JavadocTest {
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
         javadoc.addBlockTag("foo", "something useful");
         assertEquals(new JavadocComment("\n\t\t * first line\n\t\t * second line\n\t\t * \n\t\t * @foo something useful\n\t\t "), javadoc.toComment("\t\t"));
+    }
+
+    @Test
+    public void descriptionAndBlockTagsAreRetrievable() {
+        Javadoc javadoc = JavaParser.parseJavadoc("first line\nsecond line\n\n@param node a node\n@return result the result");
+        assertEquals(javadoc.getDescription().toText(), "first line\nsecond line");
+        assertEquals(javadoc.getBlockTags().size(), 2);
     }
 
 }
