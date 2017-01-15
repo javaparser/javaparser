@@ -1,3 +1,11 @@
+Version 3.0.1
+------------------
+* 699 433 325 Javadoc can now be parsed
+* 703 696 added NodeWithOptionalScope
+* 702 FieldAccessExpr now implements NodeWithSimpleName, *which means that "field" has been renamed to "name"*
+* 707 706 improve range of array types and levels
+* 709 smaller improvements and fixes
+
 Version 3.0.0
 ------------------
 * 695 697 689 680 693 691 682 690 677 679 688 684 683 smaller improvements and fixes
