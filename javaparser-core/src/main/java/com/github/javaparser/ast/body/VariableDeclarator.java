@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -133,7 +134,7 @@ public final class VariableDeclarator extends Node implements
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInitializer(String init) {
-        return setInitializer(new NameExpr(assertNotNull(init)));
+        return setInitializer(new NameExpr(assertNonEmpty(init)));
     }
 
     @Override

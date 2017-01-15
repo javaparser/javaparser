@@ -28,7 +28,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A name that consists of a single identifier.
@@ -69,8 +69,9 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @Override
     public SimpleName setIdentifier(final String identifier) {
+        assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNotNull(identifier);
+        this.identifier = identifier;
         return this;
     }
 }

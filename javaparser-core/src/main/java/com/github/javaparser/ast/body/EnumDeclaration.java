@@ -36,6 +36,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -109,12 +110,12 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return getEntries().get(i);
     }
 
-    public EnumDeclaration setEntry(int i, EnumConstantDeclaration element){
+    public EnumDeclaration setEntry(int i, EnumConstantDeclaration element) {
         getEntries().set(i, element);
         return this;
     }
 
-    public EnumDeclaration addEntry(EnumConstantDeclaration element){
+    public EnumDeclaration addEntry(EnumConstantDeclaration element) {
         getEntries().add(element);
         return this;
     }
@@ -140,7 +141,8 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     public EnumConstantDeclaration addEnumConstant(String name) {
-        EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(assertNotNull(name));
+        assertNonEmpty(name);
+        EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
         enumConstant.setParentNode(this);
         return enumConstant;

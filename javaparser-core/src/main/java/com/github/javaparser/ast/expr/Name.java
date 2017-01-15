@@ -30,7 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -76,13 +76,16 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         v.visit(this, arg);
     }
 
+    @Override
     public final String getIdentifier() {
         return identifier;
     }
 
+    @Override
     public Name setIdentifier(final String identifier) {
+        assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
-        this.identifier = assertNotNull(identifier);
+        this.identifier = identifier;
         return this;
     }
 
@@ -94,6 +97,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      * @return instanceof {@link Name}
      */
     public static Name parse(String qualifiedName) {
+        assertNonEmpty(qualifiedName);
         String[] split = qualifiedName.split("\\.");
         Name ret = new Name(split[0]);
         for (int i = 1; i < split.length; i++) {

@@ -24,6 +24,8 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.SimpleName;
 
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
+
 /**
  * A node with a name.
  * <p>
@@ -36,6 +38,7 @@ public interface NodeWithSimpleName<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N setName(String name) {
+        assertNonEmpty(name);
         return setName(new SimpleName(name));
     }
 
