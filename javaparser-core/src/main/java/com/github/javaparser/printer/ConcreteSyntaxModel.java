@@ -183,21 +183,21 @@ public class ConcreteSyntaxModel {
 
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
+            boolean test;
             if (condition != null) {
-                if (condition.singleValueFor(node) != null) {
-                    thenElement.prettyPrint(node, printer);
+                if (condition.isSingle()) {
+                    test = condition.singleValueFor(node) != null;
                 } else {
-                    if (elseElement != null) {
-                        elseElement.prettyPrint(node, printer);
-                    }
+                    test = condition.listValueFor(node) != null && !condition.listValueFor(node).isEmpty();
                 }
             } else {
-                if (predicateCondition.test(node)) {
-                    thenElement.prettyPrint(node, printer);
-                } else {
-                    if (elseElement != null) {
-                        elseElement.prettyPrint(node, printer);
-                    }
+                test = predicateCondition.test(node);
+            }
+            if (test) {
+                thenElement.prettyPrint(node, printer);
+            } else {
+                if (elseElement != null) {
+                    elseElement.prettyPrint(node, printer);
                 }
             }
         }
@@ -248,6 +248,14 @@ public class ConcreteSyntaxModel {
             return add(new StringElement(tokenType, content));
         }
 
+        Builder space() {
+            return add(ConcreteSyntaxModel.space());
+        }
+
+        Builder newline() {
+            return add(ConcreteSyntaxModel.newline());
+        }
+
         Builder string(int tokenType) {
             return add(new StringElement(tokenType));
         }
@@ -288,6 +296,14 @@ public class ConcreteSyntaxModel {
             ConcreteSyntaxModel instance = new ConcreteSyntaxModel();
             instance.elements = this.elements;
             return instance;
+        }
+
+        Builder indent() {
+            return this;
+        }
+
+        Builder unindent() {
+            return this;
         }
     }
 
@@ -381,12 +397,29 @@ public class ConcreteSyntaxModel {
                     .list(ObservableProperty.ANNOTATIONS, newline(), null, newline())
                     // TODO modifiers
                     .ifThenElse(node -> ((ClassOrInterfaceDeclaration)node).isInterface(), string(ASTParserConstants.INTERFACE), string(ASTParserConstants.CLASS))
-                    .string(ASTParserConstants.IDENTIFIER, ObservableProperty.NAME)
                     .space()
-                    .list(TYPE_ARGUMENTS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT))
-                    .child(ObservableProperty.PACKAGE_DECLARATION)
-                    .list(ObservableProperty.IMPORTS, newline())
-                    .list(TYPES, newline())
+                    .child(ObservableProperty.NAME)
+                    .list(TYPE_PARAMETERS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT))
+                    .ifThen(ObservableProperty.EXTENDED_TYPES, sequence(
+                        space(),
+                        string(ASTParserConstants.EXTENDS),
+                        space(),
+                        list(ObservableProperty.EXTENDED_TYPES, null, null, sequence(string(ASTParserConstants.COMMA), space()))
+                    ))
+                    .ifThen(ObservableProperty.IMPLEMENTED_TYPES, sequence(
+                            space(),
+                            string(ASTParserConstants.IMPLEMENTS),
+                            space(),
+                            list(ObservableProperty.IMPLEMENTED_TYPES, null, null, sequence(string(ASTParserConstants.COMMA), space()))
+                    ))
+                    .space()
+                    .string(ASTParserConstants.LBRACE)
+                    .newline()
+                    .indent()
+                    .list(ObservableProperty.MEMBERS, null, null, newline())
+                    .unindent()
+                    .string(ASTParserConstants.RBRACE)
+                    .newline()
                     .build();
 //            printJavaComment(n.getComment(), arg);
 //            printMemberAnnotations(n.getAnnotations(), arg);

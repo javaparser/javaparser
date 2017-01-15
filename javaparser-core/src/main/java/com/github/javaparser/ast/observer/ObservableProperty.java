@@ -27,18 +27,16 @@ import com.github.javaparser.utils.Utils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.capitalize;
-
 /**
  * Properties considered by the AstObserver
  */
 public enum ObservableProperty {
-    ANNOTATIONS,
+    ANNOTATIONS(true),
     ANONYMOUS_CLASS_BODY,
-    ARGUMENTS,
+    ARGUMENTS(true),
     BLOCK,
     BODY,
-    CATCH_CLAUSES,
+    CATCH_CLAUSES(true),
     CHECK,
     CLASS_BODY,
     CLASS_EXPR,
@@ -55,11 +53,11 @@ public enum ObservableProperty {
     ELSE_STMT,
     ENTRIES,
     EXPRESSION,
-    EXTENDED_TYPES,
+    EXTENDED_TYPES(true),
     FIELD,
     FINALLY_BLOCK,
     IDENTIFIER,
-    IMPLEMENTED_TYPES,
+    IMPLEMENTED_TYPES(true),
     IMPORTS,
     INDEX,
     INITIALIZER,
@@ -96,21 +94,39 @@ public enum ObservableProperty {
     TARGET,
     THEN_EXPR,
     THEN_STMT,
-    THROWN_TYPES,
+    THROWN_TYPES(true),
     TRY_BLOCK,
     TYPE,
     TYPES,
-    TYPE_ARGUMENTS,
+    TYPE_ARGUMENTS(true),
     TYPE_BOUND,
     CLASS_DECLARATION,
-    TYPE_PARAMETERS,
+    TYPE_PARAMETERS(true),
     UPDATE,
     VALUE,
     VALUES,
     VARIABLE,
     VARIABLES,
     ELEMENT_TYPE,
-    VAR_ARGS;
+    VAR_ARGS(true);
+
+    private boolean multiple;
+
+    ObservableProperty(boolean multiple) {
+        this.multiple = multiple;
+    }
+
+    ObservableProperty() {
+        this(false);
+    }
+
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    public boolean isSingle() {
+        return !isMultiple();
+    }
 
     public String camelCaseName() {
         return Utils.toCamelCase(name());
@@ -156,7 +172,7 @@ public enum ObservableProperty {
                 }
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node, e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
