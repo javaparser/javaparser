@@ -5,7 +5,7 @@ import java.util.Optional;
 public class ArrayCreationExprMetaModel extends ClassMetaModel {
 
     public ArrayCreationExprMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, null, null, null, null, false);
+        super(superClassMetaModel, parent, null, com.github.javaparser.ast.expr.ArrayCreationExpr.class, "ArrayCreationExpr", "com.github.javaparser.ast.expr.ArrayCreationExpr", "com.github.javaparser.ast.expr", false);
     }
 }
 

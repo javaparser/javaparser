@@ -5,7 +5,7 @@ import java.util.Optional;
 public class WhileStmtMetaModel extends ClassMetaModel {
 
     public WhileStmtMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, null, null, null, null, false);
+        super(superClassMetaModel, parent, null, com.github.javaparser.ast.stmt.WhileStmt.class, "WhileStmt", "com.github.javaparser.ast.stmt.WhileStmt", "com.github.javaparser.ast.stmt", false);
     }
 }
 

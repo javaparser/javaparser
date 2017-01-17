@@ -5,7 +5,7 @@ import java.util.Optional;
 public class MarkerAnnotationExprMetaModel extends ClassMetaModel {
 
     public MarkerAnnotationExprMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, null, null, null, null, false);
+        super(superClassMetaModel, parent, null, com.github.javaparser.ast.expr.MarkerAnnotationExpr.class, "MarkerAnnotationExpr", "com.github.javaparser.ast.expr.MarkerAnnotationExpr", "com.github.javaparser.ast.expr", false);
     }
 }
 

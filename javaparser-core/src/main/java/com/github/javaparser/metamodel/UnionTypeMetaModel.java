@@ -5,7 +5,7 @@ import java.util.Optional;
 public class UnionTypeMetaModel extends ClassMetaModel {
 
     public UnionTypeMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, null, null, null, null, false);
+        super(superClassMetaModel, parent, null, com.github.javaparser.ast.type.UnionType.class, "UnionType", "com.github.javaparser.ast.type.UnionType", "com.github.javaparser.ast.type", false);
     }
 }
 

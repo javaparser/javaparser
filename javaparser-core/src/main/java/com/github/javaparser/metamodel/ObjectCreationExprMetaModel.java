@@ -5,7 +5,7 @@ import java.util.Optional;
 public class ObjectCreationExprMetaModel extends ClassMetaModel {
 
     public ObjectCreationExprMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, null, null, null, null, false);
+        super(superClassMetaModel, parent, null, com.github.javaparser.ast.expr.ObjectCreationExpr.class, "ObjectCreationExpr", "com.github.javaparser.ast.expr.ObjectCreationExpr", "com.github.javaparser.ast.expr", false);
     }
 }
 

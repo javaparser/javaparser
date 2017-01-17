@@ -13,13 +13,11 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.Modifier.FINAL;
@@ -170,10 +168,7 @@ public class MetaModelGenerator {
             f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
             constructor.addStatement(parseStatement(f("classMetaModels.add(%s);", fieldName)));
 
-            
-            
-            
-            
+
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
             classMetaModelJavaFile.addImport("java.util.Optional");
             sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
@@ -194,11 +189,11 @@ public class MetaModelGenerator {
 //            oldFieldMetaModels.forEach(OldFieldMetaModel::initialize);
 
 
-            classMetaModelClass.addMember(parseClassBodyDeclaration(f("public %s(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) { super(superClassMetaModel, parent, null, null, null, null, null, false); }", className, superClassMetaModel)));
+            classMetaModelClass.addMember(parseClassBodyDeclaration(f("public %s(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) { super(superClassMetaModel, parent, null, %s.class, \"%s\", \"%s\", \"%s\", %s); }", className, c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
         }
 
-        constructor.getStatements().sort(Comparator.comparing(o -> ((NameExpr)((MethodCallExpr)((ExpressionStmt)o).getExpression()).getArgument(0)).getNameAsString()));
-        
+        constructor.getStatements().sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
+
         sourceRoot.saveAll();
     }
 
