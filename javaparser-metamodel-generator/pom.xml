@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>metamodel-generator</artifactId>
+    <artifactId>javaparser-metamodel-generator</artifactId>
 
     <dependencies>
         <dependency>

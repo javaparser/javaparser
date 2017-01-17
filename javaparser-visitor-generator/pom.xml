@@ -9,6 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-bootstrap</artifactId>
+    <artifactId>javaparser-visitor-generator</artifactId>
 
 </project>
