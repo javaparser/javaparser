@@ -23,23 +23,23 @@ package com.github.javaparser.ast.expr;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.TestCase.assertEquals;
 
-public class NameTest {
-    @Test
-    public void outerNameExprIsTheRightMostIdentifier() {
-        Name name = Name.parse("a.b.c");
-        assertEquals("c", name.getIdentifier());
-    }
+public class SimpleNameTest {
 
     @Test
-    public void parsingAndUnparsingWorks() {
-        Name name = Name.parse("a.b.c");
-        assertEquals("a.b.c", name.asString());
+    public void defaultConstructorSetsIdentifierToEmpty() {
+        assertEquals("empty", new SimpleName().getIdentifier());
     }
 
     @Test(expected = AssertionError.class)
-    public void parsingEmptyNameThrowsException() {
-        Name.parse("");
+    public void identifierMustNotBeEmpty() {
+        new SimpleName("");
     }
+
+    @Test(expected = AssertionError.class)
+    public void identifierMustNotBeNull() {
+        new SimpleName(null);
+    }
+
 }

@@ -50,6 +50,13 @@ public class Utils {
         return o;
     }
 
+    public static String assertNonEmpty(String string) {
+        if (string == null || string.isEmpty()) {
+            throw new AssertionError("A string was unexpectedly empty.");
+        }
+        return string;
+    }
+
     /**
      * @return string with ASCII characters 10 and 13 replaced by the text "\n" and "\r".
      */

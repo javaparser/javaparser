@@ -24,7 +24,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 
-import static com.github.javaparser.ast.expr.Name.parse;
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
  * A node with a (qualified) name.
@@ -40,7 +40,8 @@ public interface NodeWithName<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N setName(String name) {
-        return setName(parse(name));
+        assertNonEmpty(name);
+        return setName(Name.parse(name));
     }
 
     default String getNameAsString() {

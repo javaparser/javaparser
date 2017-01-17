@@ -24,7 +24,6 @@ package com.github.javaparser.javadoc;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +36,7 @@ import java.util.List;
  * of this writing this comment does not contain any block tags (such as <code>@see AnotherClass</code>)
  */
 public class Javadoc {
+
     private JavadocDescription description;
     private List<JavadocBlockTag> blockTags;
 
@@ -102,6 +102,14 @@ public class Javadoc {
         return new JavadocComment(sb.toString());
     }
 
+    public JavadocDescription getDescription() {
+        return description;
+    }
+
+    public List<JavadocBlockTag> getBlockTags() {
+        return blockTags;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,8 +117,7 @@ public class Javadoc {
 
         Javadoc document = (Javadoc) o;
 
-        if (!description.equals(document.description)) return false;
-        return blockTags.equals(document.blockTags);
+        return description.equals(document.description) && blockTags.equals(document.blockTags);
 
     }
 
