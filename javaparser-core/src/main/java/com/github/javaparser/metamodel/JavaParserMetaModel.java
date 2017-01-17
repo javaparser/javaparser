@@ -72,10 +72,10 @@ public class JavaParserMetaModel {
         classMetaModels.add(methodCallExprMetaModel);
         classMetaModels.add(methodDeclarationMetaModel);
         classMetaModels.add(methodReferenceExprMetaModel);
-        classMetaModels.add(nameMetaModel);
         classMetaModels.add(nameExprMetaModel);
-        classMetaModels.add(nodeMetaModel);
+        classMetaModels.add(nameMetaModel);
         classMetaModels.add(nodeListMetaModel);
+        classMetaModels.add(nodeMetaModel);
         classMetaModels.add(normalAnnotationExprMetaModel);
         classMetaModels.add(nullLiteralExprMetaModel);
         classMetaModels.add(objectCreationExprMetaModel);
@@ -95,9 +95,9 @@ public class JavaParserMetaModel {
         classMetaModels.add(thisExprMetaModel);
         classMetaModels.add(throwStmtMetaModel);
         classMetaModels.add(tryStmtMetaModel);
-        classMetaModels.add(typeMetaModel);
         classMetaModels.add(typeDeclarationMetaModel);
         classMetaModels.add(typeExprMetaModel);
+        classMetaModels.add(typeMetaModel);
         classMetaModels.add(typeParameterMetaModel);
         classMetaModels.add(unaryExprMetaModel);
         classMetaModels.add(unionTypeMetaModel);
@@ -134,192 +134,192 @@ public class JavaParserMetaModel {
         return b.toString();
     }
 
-    public final ClassMetaModel annotationDeclarationMetaModel = new AnnotationDeclarationMetaModel(this);
+    public final ClassMetaModel nodeListMetaModel = new NodeListMetaModel(this, Optional.empty());
 
-    public final ClassMetaModel annotationExprMetaModel = new AnnotationExprMetaModel(this);
+    public final ClassMetaModel nodeMetaModel = new NodeMetaModel(this, Optional.empty());
 
-    public final ClassMetaModel annotationMemberDeclarationMetaModel = new AnnotationMemberDeclarationMetaModel(this);
+    public final ClassMetaModel bodyDeclarationMetaModel = new BodyDeclarationMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel arrayAccessExprMetaModel = new ArrayAccessExprMetaModel(this);
+    public final ClassMetaModel statementMetaModel = new StatementMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel arrayCreationExprMetaModel = new ArrayCreationExprMetaModel(this);
+    public final ClassMetaModel expressionMetaModel = new ExpressionMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel arrayCreationLevelMetaModel = new ArrayCreationLevelMetaModel(this);
+    public final ClassMetaModel typeMetaModel = new TypeMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel arrayInitializerExprMetaModel = new ArrayInitializerExprMetaModel(this);
+    public final ClassMetaModel annotationExprMetaModel = new AnnotationExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel arrayTypeMetaModel = new ArrayTypeMetaModel(this);
+    public final ClassMetaModel typeDeclarationMetaModel = new TypeDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel assertStmtMetaModel = new AssertStmtMetaModel(this);
+    public final ClassMetaModel literalExprMetaModel = new LiteralExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel assignExprMetaModel = new AssignExprMetaModel(this);
+    public final ClassMetaModel referenceTypeMetaModel = new ReferenceTypeMetaModel(this, Optional.of(typeMetaModel));
 
-    public final ClassMetaModel binaryExprMetaModel = new BinaryExprMetaModel(this);
+    public final ClassMetaModel stringLiteralExprMetaModel = new StringLiteralExprMetaModel(this, Optional.of(literalExprMetaModel));
 
-    public final ClassMetaModel blockCommentMetaModel = new BlockCommentMetaModel(this);
+    public final ClassMetaModel arrayCreationLevelMetaModel = new ArrayCreationLevelMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel blockStmtMetaModel = new BlockStmtMetaModel(this);
+    public final ClassMetaModel compilationUnitMetaModel = new CompilationUnitMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel bodyDeclarationMetaModel = new BodyDeclarationMetaModel(this);
+    public final ClassMetaModel packageDeclarationMetaModel = new PackageDeclarationMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel booleanLiteralExprMetaModel = new BooleanLiteralExprMetaModel(this);
+    public final ClassMetaModel annotationDeclarationMetaModel = new AnnotationDeclarationMetaModel(this, Optional.of(typeDeclarationMetaModel));
 
-    public final ClassMetaModel breakStmtMetaModel = new BreakStmtMetaModel(this);
+    public final ClassMetaModel annotationMemberDeclarationMetaModel = new AnnotationMemberDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel castExprMetaModel = new CastExprMetaModel(this);
+    public final ClassMetaModel classOrInterfaceDeclarationMetaModel = new ClassOrInterfaceDeclarationMetaModel(this, Optional.of(typeDeclarationMetaModel));
 
-    public final ClassMetaModel catchClauseMetaModel = new CatchClauseMetaModel(this);
+    public final ClassMetaModel constructorDeclarationMetaModel = new ConstructorDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel charLiteralExprMetaModel = new CharLiteralExprMetaModel(this);
+    public final ClassMetaModel emptyMemberDeclarationMetaModel = new EmptyMemberDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel classExprMetaModel = new ClassExprMetaModel(this);
+    public final ClassMetaModel enumConstantDeclarationMetaModel = new EnumConstantDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel classOrInterfaceDeclarationMetaModel = new ClassOrInterfaceDeclarationMetaModel(this);
+    public final ClassMetaModel enumDeclarationMetaModel = new EnumDeclarationMetaModel(this, Optional.of(typeDeclarationMetaModel));
 
-    public final ClassMetaModel classOrInterfaceTypeMetaModel = new ClassOrInterfaceTypeMetaModel(this);
+    public final ClassMetaModel fieldDeclarationMetaModel = new FieldDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel commentMetaModel = new CommentMetaModel(this);
+    public final ClassMetaModel initializerDeclarationMetaModel = new InitializerDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel compilationUnitMetaModel = new CompilationUnitMetaModel(this);
+    public final ClassMetaModel methodDeclarationMetaModel = new MethodDeclarationMetaModel(this, Optional.of(bodyDeclarationMetaModel));
 
-    public final ClassMetaModel conditionalExprMetaModel = new ConditionalExprMetaModel(this);
+    public final ClassMetaModel parameterMetaModel = new ParameterMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel constructorDeclarationMetaModel = new ConstructorDeclarationMetaModel(this);
+    public final ClassMetaModel variableDeclaratorMetaModel = new VariableDeclaratorMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel continueStmtMetaModel = new ContinueStmtMetaModel(this);
+    public final ClassMetaModel commentMetaModel = new CommentMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel doStmtMetaModel = new DoStmtMetaModel(this);
+    public final ClassMetaModel blockCommentMetaModel = new BlockCommentMetaModel(this, Optional.of(commentMetaModel));
 
-    public final ClassMetaModel doubleLiteralExprMetaModel = new DoubleLiteralExprMetaModel(this);
+    public final ClassMetaModel javadocCommentMetaModel = new JavadocCommentMetaModel(this, Optional.of(commentMetaModel));
 
-    public final ClassMetaModel emptyMemberDeclarationMetaModel = new EmptyMemberDeclarationMetaModel(this);
+    public final ClassMetaModel lineCommentMetaModel = new LineCommentMetaModel(this, Optional.of(commentMetaModel));
 
-    public final ClassMetaModel emptyStmtMetaModel = new EmptyStmtMetaModel(this);
+    public final ClassMetaModel arrayAccessExprMetaModel = new ArrayAccessExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel enclosedExprMetaModel = new EnclosedExprMetaModel(this);
+    public final ClassMetaModel arrayCreationExprMetaModel = new ArrayCreationExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel enumConstantDeclarationMetaModel = new EnumConstantDeclarationMetaModel(this);
+    public final ClassMetaModel arrayInitializerExprMetaModel = new ArrayInitializerExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel enumDeclarationMetaModel = new EnumDeclarationMetaModel(this);
+    public final ClassMetaModel assignExprMetaModel = new AssignExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel explicitConstructorInvocationStmtMetaModel = new ExplicitConstructorInvocationStmtMetaModel(this);
+    public final ClassMetaModel binaryExprMetaModel = new BinaryExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel expressionMetaModel = new ExpressionMetaModel(this);
+    public final ClassMetaModel booleanLiteralExprMetaModel = new BooleanLiteralExprMetaModel(this, Optional.of(literalExprMetaModel));
 
-    public final ClassMetaModel expressionStmtMetaModel = new ExpressionStmtMetaModel(this);
+    public final ClassMetaModel castExprMetaModel = new CastExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel fieldAccessExprMetaModel = new FieldAccessExprMetaModel(this);
+    public final ClassMetaModel charLiteralExprMetaModel = new CharLiteralExprMetaModel(this, Optional.of(stringLiteralExprMetaModel));
 
-    public final ClassMetaModel fieldDeclarationMetaModel = new FieldDeclarationMetaModel(this);
+    public final ClassMetaModel classExprMetaModel = new ClassExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel forStmtMetaModel = new ForStmtMetaModel(this);
+    public final ClassMetaModel conditionalExprMetaModel = new ConditionalExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel foreachStmtMetaModel = new ForeachStmtMetaModel(this);
+    public final ClassMetaModel doubleLiteralExprMetaModel = new DoubleLiteralExprMetaModel(this, Optional.of(stringLiteralExprMetaModel));
 
-    public final ClassMetaModel ifStmtMetaModel = new IfStmtMetaModel(this);
+    public final ClassMetaModel enclosedExprMetaModel = new EnclosedExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel importDeclarationMetaModel = new ImportDeclarationMetaModel(this);
+    public final ClassMetaModel fieldAccessExprMetaModel = new FieldAccessExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel initializerDeclarationMetaModel = new InitializerDeclarationMetaModel(this);
+    public final ClassMetaModel instanceOfExprMetaModel = new InstanceOfExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel instanceOfExprMetaModel = new InstanceOfExprMetaModel(this);
+    public final ClassMetaModel integerLiteralExprMetaModel = new IntegerLiteralExprMetaModel(this, Optional.of(stringLiteralExprMetaModel));
 
-    public final ClassMetaModel integerLiteralExprMetaModel = new IntegerLiteralExprMetaModel(this);
+    public final ClassMetaModel lambdaExprMetaModel = new LambdaExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel intersectionTypeMetaModel = new IntersectionTypeMetaModel(this);
+    public final ClassMetaModel longLiteralExprMetaModel = new LongLiteralExprMetaModel(this, Optional.of(stringLiteralExprMetaModel));
 
-    public final ClassMetaModel javadocCommentMetaModel = new JavadocCommentMetaModel(this);
+    public final ClassMetaModel markerAnnotationExprMetaModel = new MarkerAnnotationExprMetaModel(this, Optional.of(annotationExprMetaModel));
 
-    public final ClassMetaModel labeledStmtMetaModel = new LabeledStmtMetaModel(this);
+    public final ClassMetaModel memberValuePairMetaModel = new MemberValuePairMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel lambdaExprMetaModel = new LambdaExprMetaModel(this);
+    public final ClassMetaModel methodCallExprMetaModel = new MethodCallExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel lineCommentMetaModel = new LineCommentMetaModel(this);
+    public final ClassMetaModel methodReferenceExprMetaModel = new MethodReferenceExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel literalExprMetaModel = new LiteralExprMetaModel(this);
+    public final ClassMetaModel nameExprMetaModel = new NameExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel localClassDeclarationStmtMetaModel = new LocalClassDeclarationStmtMetaModel(this);
+    public final ClassMetaModel nameMetaModel = new NameMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel longLiteralExprMetaModel = new LongLiteralExprMetaModel(this);
+    public final ClassMetaModel normalAnnotationExprMetaModel = new NormalAnnotationExprMetaModel(this, Optional.of(annotationExprMetaModel));
 
-    public final ClassMetaModel markerAnnotationExprMetaModel = new MarkerAnnotationExprMetaModel(this);
+    public final ClassMetaModel nullLiteralExprMetaModel = new NullLiteralExprMetaModel(this, Optional.of(literalExprMetaModel));
 
-    public final ClassMetaModel memberValuePairMetaModel = new MemberValuePairMetaModel(this);
+    public final ClassMetaModel objectCreationExprMetaModel = new ObjectCreationExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel methodCallExprMetaModel = new MethodCallExprMetaModel(this);
+    public final ClassMetaModel simpleNameMetaModel = new SimpleNameMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel methodDeclarationMetaModel = new MethodDeclarationMetaModel(this);
+    public final ClassMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(this, Optional.of(annotationExprMetaModel));
 
-    public final ClassMetaModel methodReferenceExprMetaModel = new MethodReferenceExprMetaModel(this);
+    public final ClassMetaModel superExprMetaModel = new SuperExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel nameMetaModel = new NameMetaModel(this);
+    public final ClassMetaModel thisExprMetaModel = new ThisExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel nameExprMetaModel = new NameExprMetaModel(this);
+    public final ClassMetaModel typeExprMetaModel = new TypeExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel nodeMetaModel = new NodeMetaModel(this);
+    public final ClassMetaModel unaryExprMetaModel = new UnaryExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel nodeListMetaModel = new NodeListMetaModel(this);
+    public final ClassMetaModel variableDeclarationExprMetaModel = new VariableDeclarationExprMetaModel(this, Optional.of(expressionMetaModel));
 
-    public final ClassMetaModel normalAnnotationExprMetaModel = new NormalAnnotationExprMetaModel(this);
+    public final ClassMetaModel importDeclarationMetaModel = new ImportDeclarationMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel nullLiteralExprMetaModel = new NullLiteralExprMetaModel(this);
+    public final ClassMetaModel assertStmtMetaModel = new AssertStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel objectCreationExprMetaModel = new ObjectCreationExprMetaModel(this);
+    public final ClassMetaModel blockStmtMetaModel = new BlockStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel packageDeclarationMetaModel = new PackageDeclarationMetaModel(this);
+    public final ClassMetaModel breakStmtMetaModel = new BreakStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel parameterMetaModel = new ParameterMetaModel(this);
+    public final ClassMetaModel catchClauseMetaModel = new CatchClauseMetaModel(this, Optional.of(nodeMetaModel));
 
-    public final ClassMetaModel primitiveTypeMetaModel = new PrimitiveTypeMetaModel(this);
+    public final ClassMetaModel continueStmtMetaModel = new ContinueStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel referenceTypeMetaModel = new ReferenceTypeMetaModel(this);
+    public final ClassMetaModel doStmtMetaModel = new DoStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel returnStmtMetaModel = new ReturnStmtMetaModel(this);
+    public final ClassMetaModel emptyStmtMetaModel = new EmptyStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel simpleNameMetaModel = new SimpleNameMetaModel(this);
+    public final ClassMetaModel explicitConstructorInvocationStmtMetaModel = new ExplicitConstructorInvocationStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel singleMemberAnnotationExprMetaModel = new SingleMemberAnnotationExprMetaModel(this);
+    public final ClassMetaModel expressionStmtMetaModel = new ExpressionStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel statementMetaModel = new StatementMetaModel(this);
+    public final ClassMetaModel foreachStmtMetaModel = new ForeachStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel stringLiteralExprMetaModel = new StringLiteralExprMetaModel(this);
+    public final ClassMetaModel forStmtMetaModel = new ForStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel superExprMetaModel = new SuperExprMetaModel(this);
+    public final ClassMetaModel ifStmtMetaModel = new IfStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel switchEntryStmtMetaModel = new SwitchEntryStmtMetaModel(this);
+    public final ClassMetaModel labeledStmtMetaModel = new LabeledStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel switchStmtMetaModel = new SwitchStmtMetaModel(this);
+    public final ClassMetaModel returnStmtMetaModel = new ReturnStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel synchronizedStmtMetaModel = new SynchronizedStmtMetaModel(this);
+    public final ClassMetaModel switchEntryStmtMetaModel = new SwitchEntryStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel thisExprMetaModel = new ThisExprMetaModel(this);
+    public final ClassMetaModel switchStmtMetaModel = new SwitchStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel throwStmtMetaModel = new ThrowStmtMetaModel(this);
+    public final ClassMetaModel synchronizedStmtMetaModel = new SynchronizedStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel tryStmtMetaModel = new TryStmtMetaModel(this);
+    public final ClassMetaModel throwStmtMetaModel = new ThrowStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel typeMetaModel = new TypeMetaModel(this);
+    public final ClassMetaModel tryStmtMetaModel = new TryStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel typeDeclarationMetaModel = new TypeDeclarationMetaModel(this);
+    public final ClassMetaModel localClassDeclarationStmtMetaModel = new LocalClassDeclarationStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel typeExprMetaModel = new TypeExprMetaModel(this);
+    public final ClassMetaModel whileStmtMetaModel = new WhileStmtMetaModel(this, Optional.of(statementMetaModel));
 
-    public final ClassMetaModel typeParameterMetaModel = new TypeParameterMetaModel(this);
+    public final ClassMetaModel arrayTypeMetaModel = new ArrayTypeMetaModel(this, Optional.of(referenceTypeMetaModel));
 
-    public final ClassMetaModel unaryExprMetaModel = new UnaryExprMetaModel(this);
+    public final ClassMetaModel classOrInterfaceTypeMetaModel = new ClassOrInterfaceTypeMetaModel(this, Optional.of(referenceTypeMetaModel));
 
-    public final ClassMetaModel unionTypeMetaModel = new UnionTypeMetaModel(this);
+    public final ClassMetaModel intersectionTypeMetaModel = new IntersectionTypeMetaModel(this, Optional.of(typeMetaModel));
 
-    public final ClassMetaModel unknownTypeMetaModel = new UnknownTypeMetaModel(this);
+    public final ClassMetaModel primitiveTypeMetaModel = new PrimitiveTypeMetaModel(this, Optional.of(typeMetaModel));
 
-    public final ClassMetaModel variableDeclarationExprMetaModel = new VariableDeclarationExprMetaModel(this);
+    public final ClassMetaModel typeParameterMetaModel = new TypeParameterMetaModel(this, Optional.of(referenceTypeMetaModel));
 
-    public final ClassMetaModel variableDeclaratorMetaModel = new VariableDeclaratorMetaModel(this);
+    public final ClassMetaModel unionTypeMetaModel = new UnionTypeMetaModel(this, Optional.of(typeMetaModel));
 
-    public final ClassMetaModel voidTypeMetaModel = new VoidTypeMetaModel(this);
+    public final ClassMetaModel unknownTypeMetaModel = new UnknownTypeMetaModel(this, Optional.of(typeMetaModel));
 
-    public final ClassMetaModel whileStmtMetaModel = new WhileStmtMetaModel(this);
+    public final ClassMetaModel voidTypeMetaModel = new VoidTypeMetaModel(this, Optional.of(typeMetaModel));
 
-    public final ClassMetaModel wildcardTypeMetaModel = new WildcardTypeMetaModel(this);
+    public final ClassMetaModel wildcardTypeMetaModel = new WildcardTypeMetaModel(this, Optional.of(typeMetaModel));
 }
 

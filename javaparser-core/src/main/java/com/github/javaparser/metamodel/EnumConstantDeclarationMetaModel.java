@@ -1,9 +1,11 @@
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+
 public class EnumConstantDeclarationMetaModel extends ClassMetaModel {
 
-    public EnumConstantDeclarationMetaModel(JavaParserMetaModel parent) {
-        super(null, parent, null, null, null, null, false);
+    public EnumConstantDeclarationMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+        super(superClassMetaModel, parent, null, null, null, null, null, false);
     }
 }
 

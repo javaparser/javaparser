@@ -13,11 +13,13 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.Modifier.FINAL;
@@ -27,15 +29,29 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 public class MetaModelGenerator {
     private static List<Class<?>> ALL_MODEL_CLASSES = new ArrayList<Class<?>>() {{
+        add(NodeList.class);
+
+        // Base classes go first.
+        add(Node.class);
+
+        add(BodyDeclaration.class);
+        add(Statement.class);
+        add(Expression.class);
+        add(Type.class);
+
+        add(AnnotationExpr.class);
+        add(TypeDeclaration.class);
+        add(LiteralExpr.class);
+        add(ReferenceType.class);
+        add(StringLiteralExpr.class);
+
+        //
         add(ArrayCreationLevel.class);
         add(CompilationUnit.class);
-        add(Node.class);
         add(PackageDeclaration.class);
-        add(NodeList.class);
 
         add(AnnotationDeclaration.class);
         add(AnnotationMemberDeclaration.class);
-        add(BodyDeclaration.class);
         add(ClassOrInterfaceDeclaration.class);
         add(ConstructorDeclaration.class);
         add(EmptyMemberDeclaration.class);
@@ -45,15 +61,13 @@ public class MetaModelGenerator {
         add(InitializerDeclaration.class);
         add(MethodDeclaration.class);
         add(Parameter.class);
-        add(TypeDeclaration.class);
         add(VariableDeclarator.class);
 
-        add(BlockComment.class);
         add(Comment.class);
+        add(BlockComment.class);
         add(JavadocComment.class);
         add(LineComment.class);
 
-        add(AnnotationExpr.class);
         add(ArrayAccessExpr.class);
         add(ArrayCreationExpr.class);
         add(ArrayInitializerExpr.class);
@@ -66,12 +80,10 @@ public class MetaModelGenerator {
         add(ConditionalExpr.class);
         add(DoubleLiteralExpr.class);
         add(EnclosedExpr.class);
-        add(Expression.class);
         add(FieldAccessExpr.class);
         add(InstanceOfExpr.class);
         add(IntegerLiteralExpr.class);
         add(LambdaExpr.class);
-        add(LiteralExpr.class);
         add(LongLiteralExpr.class);
         add(MarkerAnnotationExpr.class);
         add(MemberValuePair.class);
@@ -84,7 +96,6 @@ public class MetaModelGenerator {
         add(ObjectCreationExpr.class);
         add(SimpleName.class);
         add(SingleMemberAnnotationExpr.class);
-        add(StringLiteralExpr.class);
         add(SuperExpr.class);
         add(ThisExpr.class);
         add(TypeExpr.class);
@@ -107,7 +118,6 @@ public class MetaModelGenerator {
         add(IfStmt.class);
         add(LabeledStmt.class);
         add(ReturnStmt.class);
-        add(Statement.class);
         add(SwitchEntryStmt.class);
         add(SwitchStmt.class);
         add(SynchronizedStmt.class);
@@ -120,18 +130,12 @@ public class MetaModelGenerator {
         add(ClassOrInterfaceType.class);
         add(IntersectionType.class);
         add(PrimitiveType.class);
-        add(ReferenceType.class);
-        add(Type.class);
         add(TypeParameter.class);
         add(UnionType.class);
         add(UnknownType.class);
         add(VoidType.class);
         add(WildcardType.class);
     }};
-
-    static {
-        ALL_MODEL_CLASSES.sort(Comparator.comparing(Class::getSimpleName));
-    }
 
     public static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
@@ -149,22 +153,56 @@ public class MetaModelGenerator {
         constructor.getStatements().clear();
 
         for (Class<?> c : ALL_MODEL_CLASSES) {
-            String className = c.getSimpleName() + "MetaModel";
+            String className = metaModelName(c);
             String fieldName = decapitalize(className);
             mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
             FieldDeclaration f = mmClass.addField("ClassMetaModel", fieldName, PUBLIC, FINAL);
-            f.getVariable(0).setInitializer(parseExpression(f("new %s(this)", className)));
+
+            Class<?> superclass = c.getSuperclass();
+            final String superClassMetaModel;
+            if (Node.class.isAssignableFrom(superclass)) {
+                superClassMetaModel = f("Optional.of(%s)", decapitalize(metaModelName(superclass)));
+            } else {
+                superClassMetaModel = "Optional.empty()";
+            }
+
+
+            f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
             constructor.addStatement(parseStatement(f("classMetaModels.add(%s);", fieldName)));
 
+            
+            
+            
+            
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
+            classMetaModelJavaFile.addImport("java.util.Optional");
             sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
             classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
-            classMetaModelClass.addMember(parseClassBodyDeclaration(f("public %s(JavaParserMetaModel parent) { super(null, parent, null, null, null, null, false); }", className)));
+
+//            for (Field field : c.getDeclaredFields()) {
+//                        
+//                OldFieldMetaModel oldFieldMetaModel = new OldFieldMetaModel(this, field);
+//                if (oldFieldMetaModel.isPartOfModel()) {
+//                    oldFieldMetaModels.add(oldFieldMetaModel);
+//                }
+//            }
+
+//            oldFieldMetaModels.sort(Comparator.comparing(OldFieldMetaModel::getName));
+
+
+//            oldFieldMetaModels.forEach(OldFieldMetaModel::initialize);
+
+
+            classMetaModelClass.addMember(parseClassBodyDeclaration(f("public %s(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) { super(superClassMetaModel, parent, null, null, null, null, null, false); }", className, superClassMetaModel)));
         }
 
-
-        System.out.println(javaParserMetaModel);
+        constructor.getStatements().sort(Comparator.comparing(o -> ((NameExpr)((MethodCallExpr)((ExpressionStmt)o).getExpression()).getArgument(0)).getNameAsString()));
+        
         sourceRoot.saveAll();
+    }
+
+    private static String metaModelName(Class<?> c) {
+        return c.getSimpleName() + "MetaModel";
     }
 }

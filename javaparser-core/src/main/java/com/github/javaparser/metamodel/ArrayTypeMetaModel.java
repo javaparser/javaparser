@@ -1,9 +1,11 @@
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+
 public class ArrayTypeMetaModel extends ClassMetaModel {
 
-    public ArrayTypeMetaModel(JavaParserMetaModel parent) {
-        super(null, parent, null, null, null, null, false);
+    public ArrayTypeMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+        super(superClassMetaModel, parent, null, null, null, null, null, false);
     }
 }
 

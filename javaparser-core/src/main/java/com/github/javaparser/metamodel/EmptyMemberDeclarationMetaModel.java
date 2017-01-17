@@ -1,9 +1,11 @@
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+
 public class EmptyMemberDeclarationMetaModel extends ClassMetaModel {
 
-    public EmptyMemberDeclarationMetaModel(JavaParserMetaModel parent) {
-        super(null, parent, null, null, null, null, false);
+    public EmptyMemberDeclarationMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+        super(superClassMetaModel, parent, null, null, null, null, null, false);
     }
 }
 

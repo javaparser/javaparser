@@ -1,9 +1,11 @@
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+
 public class ForeachStmtMetaModel extends ClassMetaModel {
 
-    public ForeachStmtMetaModel(JavaParserMetaModel parent) {
-        super(null, parent, null, null, null, null, false);
+    public ForeachStmtMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+        super(superClassMetaModel, parent, null, null, null, null, null, false);
     }
 }
 
