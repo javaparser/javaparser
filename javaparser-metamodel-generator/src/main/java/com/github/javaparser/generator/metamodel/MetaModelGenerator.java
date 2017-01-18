@@ -17,6 +17,7 @@ import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -141,11 +142,11 @@ public class MetaModelGenerator {
 
     public static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NoSuchMethodException {
         new MetaModelGenerator().run();
     }
 
-    private void run() throws IOException {
+    private void run() throws IOException, NoSuchMethodException {
         String path = MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         if (path.charAt(2) == ':') {
             path = path.substring(1);
@@ -207,7 +208,8 @@ public class MetaModelGenerator {
 
                 boolean ignore = false;
 
-                java.lang.reflect.Type fieldType = field.getGenericType();
+                java.lang.reflect.Type fieldType = c.getMethod(getter(field)).getGenericReturnType();
+
                 while (fieldType instanceof ParameterizedType) {
                     ParameterizedType t = (ParameterizedType) fieldType;
                     java.lang.reflect.Type currentOuterType = t.getRawType();
@@ -232,8 +234,8 @@ public class MetaModelGenerator {
                 }
 
                 String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, null, true, %s, %s, %s));",
-                        getter(field.getName()),
-                        setter(field.getName()),
+                        getter(field),
+                        setter(field),
                         field.getName(),
                         "int",
                         isOptional,
@@ -242,15 +244,6 @@ public class MetaModelGenerator {
 
                 classMMConstructor.getBody().addStatement(fieldAddition);
             }
-//
-//                OldFieldMetaModel oldFieldMetaModel = new OldFieldMetaModel(this, field);
-//                if (oldFieldMetaModel.isPartOfModel()) {
-//                    oldFieldMetaModels.add(oldFieldMetaModel);
-//                }
-//            }
-
-//            oldFieldMetaModels.forEach(OldFieldMetaModel::initialize);
-
         }
 
         constructor.getStatements().sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
@@ -258,11 +251,17 @@ public class MetaModelGenerator {
         sourceRoot.saveAll();
     }
 
-    private String setter(String name) {
-        return "set" + capitalize(name);
+    private String setter(Field field) {
+        return "set" + capitalize(field.getName());
     }
 
-    private String getter(String name) {
+    private String getter(Field field) {
+        String name = field.getName();
+        if (field.getName().startsWith("is")) {
+            return field.getName();
+        } else if (field.getType().equals(Boolean.class)) {
+            return "is" + capitalize(name);
+        }
         return "get" + capitalize(name);
     }
 
