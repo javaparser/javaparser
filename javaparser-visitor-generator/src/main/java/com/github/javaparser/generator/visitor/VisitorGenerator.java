@@ -16,6 +16,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
@@ -50,14 +52,22 @@ public class VisitorGenerator {
                         .addParameter("Void", "arg")
                         .setType(new ClassOrInterfaceType("Integer"));
                 BlockStmt body = visitMethod.getBody().get();
-                if (node.fieldMetaModels.isEmpty()) {
+
+                List<FieldMetaModel> allFieldMetaModels = new ArrayList<>(node.fieldMetaModels);
+                ClassMetaModel walkNode = node;
+                while (walkNode.superClassMetaModel.isPresent()) {
+                    walkNode = walkNode.superClassMetaModel.get();
+                    allFieldMetaModels.addAll(walkNode.fieldMetaModels);
+                }
+                
+                if (allFieldMetaModels.isEmpty()) {
                     body.addStatement(parseStatement("return 0;"));
                 } else if (node.is(NodeList.class)) {
                     body.addStatement(parseStatement("return n.hashCode();"));
                 } else {
                     String bodyBuilder = "return";
                     String prefix = "";
-                    for (FieldMetaModel field : node.fieldMetaModels) {
+                    for (FieldMetaModel field : allFieldMetaModels) {
 
                         final String getter = field.getter + "()";
                         // Is this field another AST node? Visit it.
