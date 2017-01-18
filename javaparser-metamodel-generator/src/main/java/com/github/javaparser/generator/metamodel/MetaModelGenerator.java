@@ -134,7 +134,7 @@ public class MetaModelGenerator {
         add(WildcardType.class);
     }};
 
-    public static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
+    private static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException {
         new MetaModelGenerator().run();
@@ -287,7 +287,7 @@ public class MetaModelGenerator {
         return c.getSimpleName() + "MetaModel";
     }
 
-    boolean isPartOfModel(Field reflectionField) {
+    private boolean isPartOfModel(Field reflectionField) {
         if (java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers())) {
             return false;
         }
