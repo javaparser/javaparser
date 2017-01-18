@@ -23,32 +23,21 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
-import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.*;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
@@ -107,9 +96,25 @@ public class ConcreteSyntaxModel {
 
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            Node child = property.singleValueFor(node);
+            Node child = property.singlePropertyFor(node);
             if (child != null) {
                 genericPrettyPrint(child, printer);
+            }
+        }
+    }
+
+    private static class ValueElement implements Element {
+        private ObservableProperty property;
+
+        public ValueElement(ObservableProperty property) {
+            this.property = property;
+        }
+
+        @Override
+        public void prettyPrint(Node node, SourcePrinter printer) {
+            Object value = property.singleValueFor(node);
+            if (value != null) {
+                printer.print(value.toString());
             }
         }
     }
@@ -139,21 +144,40 @@ public class ConcreteSyntaxModel {
 
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            NodeList nodeList = property.listValueFor(node);
-            if (nodeList == null) {
-                return;
-            }
-            if (!nodeList.isEmpty() && preceeding != null) {
-                preceeding.prettyPrint(node, printer);
-            }
-            for (int i=0;i<nodeList.size();i++) {
-                genericPrettyPrint(nodeList.get(i), printer);
-                if (separator != null && i != (nodeList.size() - 1)) {
-                    separator.prettyPrint(node, printer);
+            if (property.isAboutNodes()) {
+                NodeList nodeList = property.listValueFor(node);
+                if (nodeList == null) {
+                    return;
                 }
-            }
-            if (!nodeList.isEmpty() && following != null) {
-                following.prettyPrint(node, printer);
+                if (!nodeList.isEmpty() && preceeding != null) {
+                    preceeding.prettyPrint(node, printer);
+                }
+                for (int i = 0; i < nodeList.size(); i++) {
+                    genericPrettyPrint(nodeList.get(i), printer);
+                    if (separator != null && i != (nodeList.size() - 1)) {
+                        separator.prettyPrint(node, printer);
+                    }
+                }
+                if (!nodeList.isEmpty() && following != null) {
+                    following.prettyPrint(node, printer);
+                }
+            } else {
+                Collection<?> values = property.listPropertyFor(node);
+                if (values == null) {
+                    return;
+                }
+                if (!values.isEmpty() && preceeding != null) {
+                    preceeding.prettyPrint(node, printer);
+                }
+                for (Iterator it = values.iterator(); it.hasNext(); ) {
+                    printer.print(it.next().toString());
+                    if (separator != null && it.hasNext()) {
+                        separator.prettyPrint(node, printer);
+                    }
+                }
+                if (!values.isEmpty() && following != null) {
+                    following.prettyPrint(node, printer);
+                }
             }
         }
     }
@@ -196,7 +220,7 @@ public class ConcreteSyntaxModel {
             boolean test;
             if (condition != null) {
                 if (condition.isSingle()) {
-                    test = condition.singleValueFor(node) != null;
+                    test = condition.singlePropertyFor(node) != null;
                 } else {
                     test = condition.listValueFor(node) != null && !condition.listValueFor(node).isEmpty();
                 }
@@ -252,6 +276,10 @@ public class ConcreteSyntaxModel {
 
         Builder child(ObservableProperty property) {
             return add(new ChildElement(property));
+        }
+
+        Builder value(ObservableProperty property) {
+            return add(new ValueElement(property));
         }
 
         Builder string(int tokenType, String content) {
@@ -328,8 +356,7 @@ public class ConcreteSyntaxModel {
         }
 
         Builder annotations() {
-            //return list(ObservableProperty.ANNOTATIONS, newline(), null, newline());
-            throw new UnsupportedOperationException();
+            return add(ConcreteSyntaxModel.list(ObservableProperty.ANNOTATIONS, ConcreteSyntaxModel.newline(), null, ConcreteSyntaxModel.newline()));
         }
 
         Builder modifiers() {
@@ -388,8 +415,8 @@ public class ConcreteSyntaxModel {
         return new ChildElement(property);
     }
 
-    private static ChildElement child(Node node) {
-        throw new UnsupportedOperationException();
+    private static Element child(Node child) {
+        return (node, printer) -> genericPrettyPrint(child, printer);
     }
 
     private static ListElement list(ObservableProperty property) {
@@ -499,6 +526,45 @@ public class ConcreteSyntaxModel {
                     .list(ObservableProperty.VARIABLES, null, null, sequence(comma(), space()))
                     .semicolon()
                     .build();
+        }
+        if (nodeClazz.equals(PrimitiveType.class)) {
+            return new Builder()
+                    .comment()
+                    .annotations()
+                    .value(ObservableProperty.TYPE)
+                    .build();
+        }
+        if (nodeClazz.equals(VariableDeclarator.class)) {
+            return new Builder()
+                    .comment()
+                    .child(ObservableProperty.NAME)
+                    .annotations()
+                    .value(ObservableProperty.TYPE)
+                    .build();
+
+//            printJavaComment(n.getComment(), arg);
+//            n.getName().accept(this, arg);
+//
+//            Type commonType = getMaximumCommonType(n.getAncestorOfType(NodeWithVariables.class).get());
+//
+//            Type type = n.getType();
+//
+//            ArrayType arrayType = null;
+//
+//            for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
+//                if (arrayType == null) {
+//                    arrayType = (ArrayType) type;
+//                } else {
+//                    arrayType = (ArrayType) arrayType.getComponentType();
+//                }
+//                printAnnotations(arrayType.getAnnotations(), true, arg);
+//                printer.print("[]");
+//            }
+//
+//            if (n.getInitializer().isPresent()) {
+//                printer.print(" = ");
+//                n.getInitializer().get().accept(this, arg);
+//            }
         }
 
         throw new UnsupportedOperationException("Class " + nodeClazz.getSimpleName());
