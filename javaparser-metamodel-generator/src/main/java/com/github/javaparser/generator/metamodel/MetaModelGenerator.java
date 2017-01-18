@@ -204,23 +204,19 @@ public class MetaModelGenerator {
         List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
         fields.sort(Comparator.comparing(Field::getName));
         for (Field field : fields) {
-            if (!isPartOfModel(field)) {
+            if (fieldShouldBeIgnored(field)) {
                 continue;
             }
             boolean isOptional = false;
             boolean isEnumSet = false;
             boolean isNodeList = false;
             boolean hasWildcard = false;
-            boolean ignore = false;
 
             java.lang.reflect.Type fieldType = c.getMethod(getter(field)).getGenericReturnType();
 
             while (fieldType instanceof ParameterizedType) {
                 ParameterizedType t = (ParameterizedType) fieldType;
                 java.lang.reflect.Type currentOuterType = t.getRawType();
-                if (currentOuterType == List.class) {
-                    ignore = true;
-                }
                 if (currentOuterType == NodeList.class) {
                     isNodeList = true;
                 }
@@ -237,10 +233,6 @@ public class MetaModelGenerator {
                     break;
                 }
                 fieldType = t.getActualTypeArguments()[0];
-            }
-
-            if (ignore) {
-                continue;
             }
 
             String typeName = fieldType.getTypeName().replace('$', '.');
@@ -280,9 +272,9 @@ public class MetaModelGenerator {
         return c.getSimpleName() + "MetaModel";
     }
 
-    private boolean isPartOfModel(Field reflectionField) {
+    private boolean fieldShouldBeIgnored(Field reflectionField) {
         if (java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers())) {
-            return false;
+            return true;
         }
         String name = reflectionField.getName();
         switch (name) {
@@ -293,9 +285,9 @@ public class MetaModelGenerator {
             case "range":
             case "childNodes":
             case "orphanComments":
-                return false;
+                return true;
         }
-        return true;
+        return false;
     }
 
 }
