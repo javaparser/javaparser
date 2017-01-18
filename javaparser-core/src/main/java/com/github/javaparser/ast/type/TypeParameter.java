@@ -25,6 +25,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -44,11 +45,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter> {
+public final class TypeParameter extends ReferenceType<TypeParameter> implements 
+        NodeWithSimpleName<TypeParameter>, 
+        NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
-
-    private NodeList<AnnotationExpr> annotations;
 
     private NodeList<ClassOrInterfaceType> typeBound;
 
@@ -133,15 +134,8 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
-    public NodeList<AnnotationExpr> getAnnotations() {
-        return annotations;
-    }
-
-    @Override
     public TypeParameter setAnnotations(NodeList<AnnotationExpr> annotations) {
-        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        this.annotations = assertNotNull(annotations);
-        setAsParentNodeOf(this.annotations);
+        super.setAnnotations(annotations);
         return this;
     }
 }
