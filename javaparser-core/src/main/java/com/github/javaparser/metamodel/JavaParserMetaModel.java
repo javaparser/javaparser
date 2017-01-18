@@ -125,10 +125,10 @@ public class JavaParserMetaModel {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        for (ClassMetaModel oldClassMetaModel : getClassMetaModels()) {
-            b.append(oldClassMetaModel).append("\n");
-            for (FieldMetaModel oldFieldMetaModel : oldClassMetaModel.fieldMetaModels) {
-                b.append("\t").append(oldFieldMetaModel).append("\n");
+        for (ClassMetaModel classMetaModel : getClassMetaModels()) {
+            b.append(classMetaModel).append("\n");
+            for (FieldMetaModel fieldMetaModel : classMetaModel.fieldMetaModels) {
+                b.append("\t").append(fieldMetaModel).append("\n");
             }
         }
         return b.toString();

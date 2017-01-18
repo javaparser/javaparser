@@ -11,5 +11,6 @@ public class JavaParserMetaModelTest {
                 System.out.println(classMetaModel.name + "." + fieldMetaModel.name);
             }
         }
+        System.out.println(javaParserMetaModel);
     }
 }

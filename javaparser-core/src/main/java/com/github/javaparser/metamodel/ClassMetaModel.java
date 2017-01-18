@@ -33,25 +33,25 @@ public class ClassMetaModel {
         return reflectionClass.equals(c);
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        OldClassMetaModel oldClassMetaModel = (OldClassMetaModel) o;
-//
-//        if (!reflectionClass.equals(oldClassMetaModel.reflectionClass)) return false;
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return reflectionClass.hashCode();
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return getClassName();
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClassMetaModel classMetaModel = (ClassMetaModel) o;
+
+        if (!reflectionClass.equals(classMetaModel.reflectionClass)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return reflectionClass.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

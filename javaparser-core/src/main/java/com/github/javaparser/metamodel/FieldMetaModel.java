@@ -41,31 +41,25 @@ public class FieldMetaModel {
         return name.equals(fieldName);
     }
 
-//    public boolean is(Class<?> c, String fieldName) {
-//        return getOldClassMetaModel().is(c) && getName().equals(fieldName);
-//    }
-//
-//    public boolean is(String fieldName) {
-//        return getName().equals(fieldName);
-//    }
+    @Override
+    public String toString() {
+        return "(" + type.getSimpleName() + ")\t" + classMetaModel + "#" + name;
+    }
 
-//    @Override
-//    public String toString() {
-//        return "(" + getType().getSimpleName() + ")\t" + oldClassMetaModel.toString() + "#" + getName();
-//    }
-//    @Override
-//    public int hashCode() {
-//        return reflectionField.hashCode();
-//    }
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        OldFieldMetaModel that = (OldFieldMetaModel) o;
-//
-//        if (!reflectionField.equals(that.reflectionField)) return false;
-//
-//        return true;
-//    }
+    @Override
+    public int hashCode() {
+        return reflectionField.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FieldMetaModel that = (FieldMetaModel) o;
+
+        if (!reflectionField.equals(that.reflectionField)) return false;
+
+        return true;
+    }
 }
