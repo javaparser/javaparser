@@ -70,4 +70,17 @@ public class GeneratorUtils {
         return packagePath(root.toString(), pkg);
     }
 
+    /**
+     * For generators that are inside the JavaParser project, this will get the root path of the project.
+     */
+    public static Path getJavaParserBasePath() {
+        String path = GeneratorUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        // Silly Windows fix
+        if (path.charAt(2) == ':') {
+            path = path.substring(1);
+        }
+        return Paths.get(path, "..", "..", "..");
+    }
+
+
 }

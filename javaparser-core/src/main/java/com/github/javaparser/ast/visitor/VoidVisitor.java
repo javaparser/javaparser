@@ -110,6 +110,8 @@ public interface VoidVisitor<A> {
 
     void visit(IfStmt n, A arg);
 
+    void visit(ImportDeclaration n, A arg);
+
     void visit(InitializerDeclaration n, A arg);
 
     void visit(InstanceOfExpr n, A arg);
@@ -140,9 +142,11 @@ public interface VoidVisitor<A> {
 
     void visit(MethodReferenceExpr n, A arg);
 
+    void visit(NameExpr n, A arg);
+
     void visit(Name n, A arg);
 
-    void visit(NameExpr n, A arg);
+    void visit(NodeList n, A arg);
 
     void visit(NormalAnnotationExpr n, A arg);
 
@@ -179,10 +183,6 @@ public interface VoidVisitor<A> {
     void visit(TryStmt n, A arg);
 
     void visit(TypeExpr n, A arg);
-
-    void visit(NodeList n, A arg);
-
-    void visit(ImportDeclaration n, A arg);
 
     void visit(TypeParameter n, A arg);
 

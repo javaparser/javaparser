@@ -141,11 +141,7 @@ public class MetaModelGenerator {
     }
 
     private void run() throws IOException, NoSuchMethodException {
-        String path = MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        if (path.charAt(2) == ':') {
-            path = path.substring(1);
-        }
-        final Path root = Paths.get(path, "..", "..", "..", "javaparser-core", "src", "main", "java");
+        final Path root = getJavaParserBasePath().resolve(Paths.get("javaparser-core", "src", "main", "java"));
 
         JavaParser javaParser = new JavaParser();
 
