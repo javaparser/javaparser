@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 public class VisitorGenerator {
     private static JavaParserMetaModel javaParserMetaModel = new JavaParserMetaModel();
@@ -32,7 +33,6 @@ public class VisitorGenerator {
 
         SourceRoot sourceRoot = new SourceRoot(root);
 
-        System.out.println(javaParserMetaModel);
         generateVoidVisitor(javaParser, sourceRoot);
         generateHashcodeVisitor(javaParser, sourceRoot);
 
@@ -45,7 +45,7 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getClassByName("HashCodeVisitor").get();
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (ClassMetaModel node : javaParserMetaModel.getClassMetaModels()) {
+        for (ClassMetaModel node : javaParserMetaModel.classMetaModels) {
             if (!node.isAbstract) {
                 MethodDeclaration visitMethod = voidVisitor.addMethod("visit", PUBLIC)
                         .addParameter(node.name, "n")
@@ -73,16 +73,16 @@ public class VisitorGenerator {
                         // Is this field another AST node? Visit it.
                         if (javaParserMetaModel.getClassMetaModel(field.type).isPresent()) {
                             if (field.isOptional) {
-                                bodyBuilder += String.format("%s (n.%s.isPresent()? n.%s.get().accept(this, arg):0)", prefix, getter, getter);
+                                bodyBuilder += f("%s (n.%s.isPresent()? n.%s.get().accept(this, arg):0)", prefix, getter, getter);
                             } else {
-                                bodyBuilder += String.format("%s (n.%s.accept(this, arg))", prefix, getter);
+                                bodyBuilder += f("%s (n.%s.accept(this, arg))", prefix, getter);
                             }
                         } else if (field.type.equals(boolean.class)) {
-                            bodyBuilder += String.format("%s (n.%s?1:0)", prefix, getter);
+                            bodyBuilder += f("%s (n.%s?1:0)", prefix, getter);
                         } else if (field.type.equals(int.class)) {
-                            bodyBuilder += String.format("%s n.%s", prefix, getter);
+                            bodyBuilder += f("%s n.%s", prefix, getter);
                         } else {
-                            bodyBuilder += String.format("%s (n.%s.hashCode())", prefix, getter);
+                            bodyBuilder += f("%s (n.%s.hashCode())", prefix, getter);
                         }
                         prefix = "* 31 +";
                     }
@@ -99,7 +99,7 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getInterfaceByName("VoidVisitor").get();
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (ClassMetaModel node : javaParserMetaModel.getClassMetaModels()) {
+        for (ClassMetaModel node : javaParserMetaModel.classMetaModels) {
             if (!node.isAbstract) {
                 voidVisitor.addMethod("visit")
                         .addParameter(node.name, "n")

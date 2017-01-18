@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public class JavaParserMetaModel {
 
-    private List<ClassMetaModel> classMetaModels = new ArrayList<>();
+    public final List<ClassMetaModel> classMetaModels = new ArrayList<>();
 
     public JavaParserMetaModel() {
         initializeClassMetaModels();
@@ -291,10 +291,6 @@ public class JavaParserMetaModel {
         wildcardTypeMetaModel.fieldMetaModels.add(new FieldMetaModel(wildcardTypeMetaModel, "getSuperTypes", "setSuperTypes", "superTypes", com.github.javaparser.ast.type.ReferenceType.class, getField(WildcardType.class, "superTypes"), true, true, false, false, false));
     }
 
-    public List<ClassMetaModel> getClassMetaModels() {
-        return classMetaModels;
-    }
-
     public Optional<ClassMetaModel> getClassMetaModel(Class<?> c) {
         for (ClassMetaModel oldClassMetaModel : classMetaModels) {
             if (oldClassMetaModel.name.equals(c.getSimpleName())) {
@@ -307,7 +303,7 @@ public class JavaParserMetaModel {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        for (ClassMetaModel classMetaModel : getClassMetaModels()) {
+        for (ClassMetaModel classMetaModel : classMetaModels) {
             b.append(classMetaModel).append("\n");
             for (FieldMetaModel fieldMetaModel : classMetaModel.fieldMetaModels) {
                 b.append("\t").append(fieldMetaModel).append("\n");
