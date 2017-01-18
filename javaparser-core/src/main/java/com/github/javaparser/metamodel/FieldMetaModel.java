@@ -16,9 +16,10 @@ public class FieldMetaModel {
     public final boolean isOptional;
     public final boolean isNodeList;
     public final boolean isSet;
+    public final boolean hasWildcard;
     public final Flags flags = new Flags();
 
-    public FieldMetaModel(ClassMetaModel classMetaModel, String getter, String setter, String name, Class<?> type, Field reflectionField, boolean isNode, boolean isOptional, boolean isNodeList, boolean isEnumSet) {
+    public FieldMetaModel(ClassMetaModel classMetaModel, String getter, String setter, String name, Class<?> type, Field reflectionField, boolean isNode, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
         this.classMetaModel = classMetaModel;
         this.getter = getter;
         this.setter = setter;
@@ -29,6 +30,7 @@ public class FieldMetaModel {
         this.isOptional = isOptional;
         this.isNodeList = isNodeList;
         this.isSet = isEnumSet;
+        this.hasWildcard = hasWildcard;
     }
 
     public boolean is(Class<?> c, String fieldName) {

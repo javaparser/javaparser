@@ -184,6 +184,7 @@ public class MetaModelGenerator {
 
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
             classMetaModelJavaFile.addImport("java.util.Optional");
+            classMetaModelJavaFile.addImport("java.lang.reflect.Field");
             sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
             classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
@@ -196,6 +197,14 @@ public class MetaModelGenerator {
                     .getBody()
                     .addStatement(parseExplicitConstructorInvocationStmt(f("super(superClassMetaModel, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);", c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
 
+            classMetaModelClass.addMember(parseClassBodyDeclaration(f("private Field getField(String name) {\n" +
+                    "        try {\n" +
+                    "            return %s.class.getField(name);\n" +
+                    "        } catch (NoSuchFieldException e) {\n" +
+                    "            throw new RuntimeException(e);\n" +
+                    "        }\n" +
+                    "    }\n", className)));
+
             List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
             fields.sort(Comparator.comparing(Field::getName));
             for (Field field : fields) {
@@ -205,7 +214,7 @@ public class MetaModelGenerator {
                 boolean isOptional = false;
                 boolean isEnumSet = false;
                 boolean isNodeList = false;
-
+                boolean hasWildcard = false;
                 boolean ignore = false;
 
                 java.lang.reflect.Type fieldType = c.getMethod(getter(field)).getGenericReturnType();
@@ -226,6 +235,11 @@ public class MetaModelGenerator {
                         isEnumSet = true;
                     }
 
+                    if (t.getActualTypeArguments()[0] instanceof java.lang.reflect.WildcardType) {
+                        fieldType = t.getRawType();
+                        hasWildcard = true;
+                        break;
+                    }
                     fieldType = t.getActualTypeArguments()[0];
                 }
 
@@ -233,14 +247,15 @@ public class MetaModelGenerator {
                     continue;
                 }
 
-                String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, null, true, %s, %s, %s));",
+                String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, null, true, %s, %s, %s, %s));",
                         getter(field),
                         setter(field),
                         field.getName(),
-                        "int",
+                        fieldType.getTypeName().replace('$', '.'),
                         isOptional,
                         isNodeList,
-                        isEnumSet);
+                        isEnumSet,
+                        hasWildcard);
 
                 classMMConstructor.getBody().addStatement(fieldAddition);
             }

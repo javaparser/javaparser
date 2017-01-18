@@ -1,13 +1,22 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
+import java.lang.reflect.Field;
 
 public class ArrayCreationLevelMetaModel extends ClassMetaModel {
 
     ArrayCreationLevelMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
         super(superClassMetaModel, parent, com.github.javaparser.ast.ArrayCreationLevel.class, "ArrayCreationLevel", "com.github.javaparser.ast.ArrayCreationLevel", "com.github.javaparser.ast", false);
-        fieldMetaModels.add(new FieldMetaModel(this, "getAnnotations", "setAnnotations", "annotations", int.class, null, true, false, true, false));
-        fieldMetaModels.add(new FieldMetaModel(this, "getDimension", "setDimension", "dimension", int.class, null, true, true, false, false));
+        fieldMetaModels.add(new FieldMetaModel(this, "getAnnotations", "setAnnotations", "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, null, true, false, true, false, false));
+        fieldMetaModels.add(new FieldMetaModel(this, "getDimension", "setDimension", "dimension", com.github.javaparser.ast.expr.Expression.class, null, true, true, false, false, false));
+    }
+
+    private Field getField(String name) {
+        try {
+            return ArrayCreationLevelMetaModel.class.getField(name);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
