@@ -58,6 +58,7 @@ public class SourceRoot {
     public void saveAll() throws FileNotFoundException, UnsupportedEncodingException {
         for (CompilationUnit cu : compilationUnits) {
             Path filename = cu.getData(ORIGINAL_LOCATION);
+            System.out.println("Saving " + filename);
             filename.getParent().toFile().mkdirs();
             String code = new PrettyPrinter().print(cu);
             try (PrintWriter out = new PrintWriter(filename.toFile(), UTF8.toString())) {
@@ -76,7 +77,7 @@ public class SourceRoot {
 
     public Optional<CompilationUnit> parse(String packag, String filename, JavaParser javaParser) throws IOException {
         Path path = fileInPackagePath(root, packag, filename);
-        System.out.println(path);
+        System.out.println("Loading " + path);
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
         if (result.isSuccessful()) {
             CompilationUnit cu = result.getResult().get();
