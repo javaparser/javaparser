@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class DoubleLiteralExprMetaModel extends ClassMetaModel {
 
-    public DoubleLiteralExprMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, com.github.javaparser.ast.expr.DoubleLiteralExpr.class, "DoubleLiteralExpr", "com.github.javaparser.ast.expr.DoubleLiteralExpr", "com.github.javaparser.ast.expr", false);
+    DoubleLiteralExprMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+        super(superClassMetaModel, parent, com.github.javaparser.ast.expr.DoubleLiteralExpr.class, "DoubleLiteralExpr", "com.github.javaparser.ast.expr.DoubleLiteralExpr", "com.github.javaparser.ast.expr", false);
     }
 }
 

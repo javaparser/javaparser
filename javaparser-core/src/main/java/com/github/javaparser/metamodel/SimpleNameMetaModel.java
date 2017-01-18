@@ -4,8 +4,9 @@ import java.util.Optional;
 
 public class SimpleNameMetaModel extends ClassMetaModel {
 
-    public SimpleNameMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, null, com.github.javaparser.ast.expr.SimpleName.class, "SimpleName", "com.github.javaparser.ast.expr.SimpleName", "com.github.javaparser.ast.expr", false);
+    SimpleNameMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+        super(superClassMetaModel, parent, com.github.javaparser.ast.expr.SimpleName.class, "SimpleName", "com.github.javaparser.ast.expr.SimpleName", "com.github.javaparser.ast.expr", false);
+        fieldMetaModels.add(new FieldMetaModel(this, "getIdentifier", "setIdentifier", "identifier", int.class, null, true, false, false, false));
     }
 }
 

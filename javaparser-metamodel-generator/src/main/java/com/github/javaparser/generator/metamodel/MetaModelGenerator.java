@@ -3,6 +3,7 @@ package com.github.javaparser.generator.metamodel;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -10,18 +11,21 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.generator.utils.GeneratorUtils.capitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
@@ -138,7 +142,15 @@ public class MetaModelGenerator {
     public static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     public static void main(String[] args) throws IOException {
-        final Path root = Paths.get(MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "..", "..", "..", "javaparser-core", "src", "main", "java");
+        new MetaModelGenerator().run();
+    }
+
+    private void run() throws IOException {
+        String path = MetaModelGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        if (path.charAt(2) == ':') {
+            path = path.substring(1);
+        }
+        final Path root = Paths.get(path, "..", "..", "..", "javaparser-core", "src", "main", "java");
 
         JavaParser javaParser = new JavaParser();
 
@@ -175,21 +187,70 @@ public class MetaModelGenerator {
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
             classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
 
-//            for (Field field : c.getDeclaredFields()) {
-//                        
+            ConstructorDeclaration classMMConstructor = classMetaModelClass
+                    .addConstructor()
+                    .addParameter("JavaParserMetaModel", "parent")
+                    .addParameter("Optional<ClassMetaModel>", "superClassMetaModel");
+            classMMConstructor
+                    .getBody()
+                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(superClassMetaModel, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);", c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
+
+            List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
+            fields.sort(Comparator.comparing(Field::getName));
+            for (Field field : fields) {
+                if (!isPartOfModel(field)) {
+                    continue;
+                }
+                boolean isOptional = false;
+                boolean isEnumSet = false;
+                boolean isNodeList = false;
+
+                boolean ignore = false;
+
+                java.lang.reflect.Type fieldType = field.getGenericType();
+                while (fieldType instanceof ParameterizedType) {
+                    ParameterizedType t = (ParameterizedType) fieldType;
+                    java.lang.reflect.Type currentOuterType = t.getRawType();
+                    if (currentOuterType == java.util.List.class) {
+                        ignore = true;
+                    }
+                    if (currentOuterType == NodeList.class) {
+                        isNodeList = true;
+                    }
+                    if (currentOuterType == Optional.class) {
+                        isOptional = true;
+                    }
+                    if (currentOuterType == EnumSet.class) {
+                        isEnumSet = true;
+                    }
+
+                    fieldType = t.getActualTypeArguments()[0];
+                }
+
+                if (ignore) {
+                    continue;
+                }
+
+                String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, null, true, %s, %s, %s));",
+                        getter(field.getName()),
+                        setter(field.getName()),
+                        field.getName(),
+                        "int",
+                        isOptional,
+                        isNodeList,
+                        isEnumSet);
+
+                classMMConstructor.getBody().addStatement(fieldAddition);
+            }
+//
 //                OldFieldMetaModel oldFieldMetaModel = new OldFieldMetaModel(this, field);
 //                if (oldFieldMetaModel.isPartOfModel()) {
 //                    oldFieldMetaModels.add(oldFieldMetaModel);
 //                }
 //            }
 
-//            oldFieldMetaModels.sort(Comparator.comparing(OldFieldMetaModel::getName));
-
-
 //            oldFieldMetaModels.forEach(OldFieldMetaModel::initialize);
 
-
-            classMetaModelClass.addMember(parseClassBodyDeclaration(f("public %s(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) { super(superClassMetaModel, parent, null, %s.class, \"%s\", \"%s\", \"%s\", %s); }", className, c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
         }
 
         constructor.getStatements().sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
@@ -197,7 +258,34 @@ public class MetaModelGenerator {
         sourceRoot.saveAll();
     }
 
+    private String setter(String name) {
+        return "set" + capitalize(name);
+    }
+
+    private String getter(String name) {
+        return "get" + capitalize(name);
+    }
+
     private static String metaModelName(Class<?> c) {
         return c.getSimpleName() + "MetaModel";
     }
+
+    boolean isPartOfModel(Field reflectionField) {
+        if (java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers())) {
+            return false;
+        }
+        String name = reflectionField.getName();
+        switch (name) {
+            case "parentNode":
+            case "observers":
+            case "innerList":
+            case "data":
+            case "range":
+            case "childNodes":
+            case "orphanComments":
+                return false;
+        }
+        return true;
+    }
+
 }
