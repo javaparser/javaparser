@@ -1,9 +1,6 @@
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Node;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
 
 public class JavaParserMetaModelTest {
     @Test

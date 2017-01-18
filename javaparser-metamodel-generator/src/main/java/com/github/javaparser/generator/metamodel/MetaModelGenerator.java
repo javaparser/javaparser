@@ -184,8 +184,6 @@ public class MetaModelGenerator {
 
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
             classMetaModelJavaFile.addImport("java.util.Optional");
-            classMetaModelJavaFile.addImport("java.lang.reflect.Field");
-            classMetaModelJavaFile.addImport(c);
             sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
             classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
@@ -198,16 +196,10 @@ public class MetaModelGenerator {
                     .getBody()
                     .addStatement(parseExplicitConstructorInvocationStmt(f("super(superClassMetaModel, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);", c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
 
-            classMetaModelClass.addMember(parseClassBodyDeclaration(f("private Field getField(String name) {\n" +
-                    "        try {\n" +
-                    "            return %s.class.getDeclaredField(name);\n" +
-                    "        } catch (NoSuchFieldException e) {\n" +
-                    "            throw new RuntimeException(e);\n" +
-                    "        }\n" +
-                    "    }\n", c.getSimpleName())));
-
+            // FIXME parent's fields too!!!
             List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
             fields.sort(Comparator.comparing(Field::getName));
+            boolean anyFieldsGenerated = false;
             for (Field field : fields) {
                 if (!isPartOfModel(field)) {
                     continue;
@@ -260,6 +252,18 @@ public class MetaModelGenerator {
                         hasWildcard);
 
                 classMMConstructor.getBody().addStatement(fieldAddition);
+                anyFieldsGenerated = true;
+            }
+            if (anyFieldsGenerated) {
+                classMetaModelJavaFile.addImport("java.lang.reflect.Field");
+                classMetaModelJavaFile.addImport(c);
+                classMetaModelClass.addMember(parseClassBodyDeclaration(f("private Field getField(String name) {\n" +
+                        "        try {\n" +
+                        "            return %s.class.getDeclaredField(name);\n" +
+                        "        } catch (NoSuchFieldException e) {\n" +
+                        "            throw new RuntimeException(e);\n" +
+                        "        }\n" +
+                        "    }\n", c.getSimpleName())));
             }
         }
 
