@@ -6,6 +6,11 @@ import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.metamodel.grammar.FieldReference;
+import com.github.javaparser.metamodel.grammar.LiteralSyntax;
+import com.github.javaparser.metamodel.grammar.Whitespace;
+import com.github.javaparser.metamodel.grammar.SuggestedLineBreak;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,17 @@ public class JavaParserMetaModel {
     public JavaParserMetaModel() {
         initializeClassMetaModels();
         initializeFieldMetaModels();
+        initializeSyntax();
+    }
+
+    private void initializeSyntax() {
+        packageDeclarationMetaModel.syntax.add(new FieldReference(commentMetaModel.commentFieldMetaModel));
+        packageDeclarationMetaModel.syntax.add(new FieldReference(packageDeclarationMetaModel.annotationsFieldMetaModel));
+        packageDeclarationMetaModel.syntax.add(new LiteralSyntax("package"));
+        packageDeclarationMetaModel.syntax.add(new Whitespace());
+        packageDeclarationMetaModel.syntax.add(new FieldReference(packageDeclarationMetaModel.nameFieldMetaModel));
+        packageDeclarationMetaModel.syntax.add(new SuggestedLineBreak());
+        packageDeclarationMetaModel.syntax.add(new FieldReference(nodeMetaModel.orphanComments));
     }
 
     private void initializeClassMetaModels() {
