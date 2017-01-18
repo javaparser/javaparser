@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 
 public class AnnotationDeclarationMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class AnnotationDeclarationMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return AnnotationDeclarationMetaModel.class.getField(name);
+            return AnnotationDeclaration.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

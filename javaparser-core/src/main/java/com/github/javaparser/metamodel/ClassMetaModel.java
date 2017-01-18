@@ -13,17 +13,17 @@ public class ClassMetaModel {
     public final JavaParserMetaModel javaParserMetaModel;
     public final List<FieldMetaModel> fieldMetaModels = new ArrayList<>();
     public final Class<?> reflectionClass;
-    public final String className;
+    public final String name;
     public final String qualifiedClassName;
     public final String packageName;
     public final boolean isAbstract;
     public final Flags flags = new Flags();
 
-    public ClassMetaModel(Optional<ClassMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String className, String qualifiedClassName, String packageName, boolean isAbstract) {
+    public ClassMetaModel(Optional<ClassMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String qualifiedClassName, String packageName, boolean isAbstract) {
         this.superClassMetaModel = superClassMetaModel;
         this.javaParserMetaModel = javaParserMetaModel;
         this.reflectionClass = reflectionClass;
-        this.className = className;
+        this.name = name;
         this.qualifiedClassName = qualifiedClassName;
         this.packageName = packageName;
         this.isAbstract = isAbstract;

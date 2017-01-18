@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.type.VoidType;
 
 public class VoidTypeMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class VoidTypeMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return VoidTypeMetaModel.class.getField(name);
+            return VoidType.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

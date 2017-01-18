@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.type.ReferenceType;
 
 public class ReferenceTypeMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class ReferenceTypeMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return ReferenceTypeMetaModel.class.getField(name);
+            return ReferenceType.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

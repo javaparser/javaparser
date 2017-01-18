@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 
 public class MarkerAnnotationExprMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class MarkerAnnotationExprMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return MarkerAnnotationExprMetaModel.class.getField(name);
+            return MarkerAnnotationExpr.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

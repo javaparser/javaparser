@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.NodeList;
 
 public class NodeListMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class NodeListMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return NodeListMetaModel.class.getField(name);
+            return NodeList.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 
 public class IntegerLiteralExprMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class IntegerLiteralExprMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return IntegerLiteralExprMetaModel.class.getField(name);
+            return IntegerLiteralExpr.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

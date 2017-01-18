@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.comments.LineComment;
 
 public class LineCommentMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class LineCommentMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return LineCommentMetaModel.class.getField(name);
+            return LineComment.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

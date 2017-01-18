@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.expr.Expression;
 
 public class ExpressionMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class ExpressionMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return ExpressionMetaModel.class.getField(name);
+            return Expression.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

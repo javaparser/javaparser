@@ -185,6 +185,7 @@ public class MetaModelGenerator {
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
             classMetaModelJavaFile.addImport("java.util.Optional");
             classMetaModelJavaFile.addImport("java.lang.reflect.Field");
+            classMetaModelJavaFile.addImport(c);
             sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
             classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
@@ -199,11 +200,11 @@ public class MetaModelGenerator {
 
             classMetaModelClass.addMember(parseClassBodyDeclaration(f("private Field getField(String name) {\n" +
                     "        try {\n" +
-                    "            return %s.class.getField(name);\n" +
+                    "            return %s.class.getDeclaredField(name);\n" +
                     "        } catch (NoSuchFieldException e) {\n" +
                     "            throw new RuntimeException(e);\n" +
                     "        }\n" +
-                    "    }\n", className)));
+                    "    }\n", c.getSimpleName())));
 
             List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
             fields.sort(Comparator.comparing(Field::getName));
@@ -247,11 +248,12 @@ public class MetaModelGenerator {
                     continue;
                 }
 
-                String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, null, true, %s, %s, %s, %s));",
+                String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, getField(\"%s\"), true, %s, %s, %s, %s));",
                         getter(field),
                         setter(field),
                         field.getName(),
                         fieldType.getTypeName().replace('$', '.'),
+                        field.getName(),
                         isOptional,
                         isNodeList,
                         isEnumSet,

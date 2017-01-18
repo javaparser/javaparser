@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.stmt.Statement;
 
 public class StatementMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class StatementMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return StatementMetaModel.class.getField(name);
+            return Statement.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 import java.lang.reflect.Field;
+import com.github.javaparser.ast.expr.DoubleLiteralExpr;
 
 public class DoubleLiteralExprMetaModel extends ClassMetaModel {
 
@@ -11,7 +12,7 @@ public class DoubleLiteralExprMetaModel extends ClassMetaModel {
 
     private Field getField(String name) {
         try {
-            return DoubleLiteralExprMetaModel.class.getField(name);
+            return DoubleLiteralExpr.class.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }

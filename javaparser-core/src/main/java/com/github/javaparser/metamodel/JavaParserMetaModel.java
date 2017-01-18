@@ -115,7 +115,7 @@ public class JavaParserMetaModel {
 
     public Optional<ClassMetaModel> getClassMetaModel(Class<?> c) {
         for (ClassMetaModel oldClassMetaModel : classMetaModels) {
-            if (oldClassMetaModel.className.equals(c.getSimpleName())) {
+            if (oldClassMetaModel.name.equals(c.getSimpleName())) {
                 return Optional.of(oldClassMetaModel);
             }
         }
