@@ -150,15 +150,17 @@ public class MetaModelGenerator {
         CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
 
 
-        generateClassMetaModel(javaParserMetaModel, sourceRoot);
+        generateClassMetaModels(javaParserMetaModel, sourceRoot);
 
         sourceRoot.saveAll();
     }
 
-    private void generateClassMetaModel(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
+    private void generateClassMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
         ClassOrInterfaceDeclaration mmClass = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
-        BlockStmt constructor = mmClass.getDefaultConstructor().get().getBody();
-        constructor.getStatements().clear();
+        NodeList<Statement> initializeClassMetaModelsStatements = mmClass.getMethodsByName("initializeClassMetaModels").get(0).getBody().get().getStatements();
+        NodeList<Statement> initializeFieldMetaModelsStatements = mmClass.getMethodsByName("initializeFieldMetaModels").get(0).getBody().get().getStatements();
+        initializeClassMetaModelsStatements.clear();
+        initializeFieldMetaModelsStatements.clear();
 
         for (Class<?> c : ALL_MODEL_CLASSES) {
             String className = metaModelName(c);
@@ -175,7 +177,7 @@ public class MetaModelGenerator {
             }
 
             f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
-            constructor.addStatement(parseStatement(f("classMetaModels.add(%s);", fieldName)));
+            initializeClassMetaModelsStatements.add(parseStatement(f("classMetaModels.add(%s);", fieldName)));
 
 
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
@@ -191,17 +193,16 @@ public class MetaModelGenerator {
             classMMConstructor
                     .getBody()
                     .addStatement(parseExplicitConstructorInvocationStmt(f("super(superClassMetaModel, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);", c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
-            generateFieldMetaModels(c, classMetaModelJavaFile, classMetaModelClass, classMMConstructor);
 
-
-            constructor.getStatements().sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
+            generateFieldMetaModels(c, fieldName, initializeFieldMetaModelsStatements);
         }
+
+        initializeClassMetaModelsStatements.sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
     }
 
-    private void generateFieldMetaModels(Class<?> c, CompilationUnit classMetaModelJavaFile, ClassOrInterfaceDeclaration classMetaModelClass, ConstructorDeclaration classMMConstructor) throws NoSuchMethodException {
+    private void generateFieldMetaModels(Class<?> c, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
         List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
         fields.sort(Comparator.comparing(Field::getName));
-        boolean anyFieldsGenerated = false;
         for (Field field : fields) {
             if (!isPartOfModel(field)) {
                 continue;
@@ -242,30 +243,22 @@ public class MetaModelGenerator {
                 continue;
             }
 
-            String fieldAddition = f("fieldMetaModels.add(new FieldMetaModel(this, \"%s\", \"%s\", \"%s\", %s.class, getField(\"%s\"), true, %s, %s, %s, %s));",
+            String typeName = fieldType.getTypeName().replace('$', '.');
+            String fieldAddition = f("%s.fieldMetaModels.add(new FieldMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s));",
+                    classMetaModelFieldName,
+                    classMetaModelFieldName,
                     getter(field),
                     setter(field),
                     field.getName(),
-                    fieldType.getTypeName().replace('$', '.'),
+                    typeName,
+                    c.getSimpleName(),
                     field.getName(),
                     isOptional,
                     isNodeList,
                     isEnumSet,
                     hasWildcard);
 
-            classMMConstructor.getBody().addStatement(fieldAddition);
-            anyFieldsGenerated = true;
-        }
-        if (anyFieldsGenerated) {
-            classMetaModelJavaFile.addImport("java.lang.reflect.Field");
-            classMetaModelJavaFile.addImport(c);
-            classMetaModelClass.addMember(parseClassBodyDeclaration(f("private Field getField(String name) {\n" +
-                    "        try {\n" +
-                    "            return %s.class.getDeclaredField(name);\n" +
-                    "        } catch (NoSuchFieldException e) {\n" +
-                    "            throw new RuntimeException(e);\n" +
-                    "        }\n" +
-                    "    }\n", c.getSimpleName())));
+            initializeFieldMetaModelsStatements.add(parseStatement(fieldAddition));
         }
     }
 
