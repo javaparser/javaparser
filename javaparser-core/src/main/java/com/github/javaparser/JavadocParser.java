@@ -25,6 +25,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.utils.Utils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,20 +45,21 @@ class JavadocParser {
 
     public static Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(commentContent);
-        int index = -1;
-        for (int i = 0; i < cleanLines.size() && index == -1; i++) {
-            if (isABlockLine(cleanLines.get(i))) {
-                index = i;
-            }
-        }
+        int indexOfFirstBlockTag = cleanLines.stream()
+                .filter(JavadocParser::isABlockLine)
+                .map(cleanLines::indexOf)
+                .findFirst()
+                .orElse(-1);
         List<String> blockLines;
         String descriptionText;
-        if (index == -1) {
+        if (indexOfFirstBlockTag == -1) {
             descriptionText = trimRight(String.join("\n", cleanLines));
             blockLines = Collections.emptyList();
         } else {
-            descriptionText = trimRight(String.join("\n", cleanLines.subList(0, index)));
-            blockLines = cleanLines.subList(index, cleanLines.size());
+            descriptionText = trimRight(String.join("\n", cleanLines.subList(0, indexOfFirstBlockTag)));
+            blockLines = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream()
+                    .filter(Utils.STRING_NOT_EMPTY)
+                    .collect(Collectors.toList());
         }
         Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
