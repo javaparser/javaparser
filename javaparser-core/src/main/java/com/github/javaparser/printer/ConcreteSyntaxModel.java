@@ -807,51 +807,6 @@ public class ConcreteSyntaxModel {
         return sourcePrinter.getSource();
     }
 
-    private static CsmSequence sequence(Element... elements) {
-        return new CsmSequence(Arrays.asList(elements));
-    }
-
-    private static CsmChild child(ObservableProperty property) {
-        return new CsmChild(property);
-    }
-
-    private static Element child(Node child) {
-        return (node, printer) -> genericPrettyPrint(child, printer);
-    }
-
-    private static CsmList list(ObservableProperty property) {
-        return new CsmList(property);
-    }
-
-    private static CsmList list(ObservableProperty property, Element separator, Element preceeding, Element following) {
-        return new CsmList(property, separator, preceeding, following);
-    }
-
-    private static CsmToken string(int tokenType, String content) {
-        return new CsmToken(tokenType, content);
-    }
-
-    private static CsmToken string(int tokenType) {
-        return new CsmToken(tokenType);
-    }
-
-    private static CsmToken space() {
-        return new CsmToken(32, " ");
-    }
-
-    private static CsmToken semicolon() {
-        return new CsmToken(ASTParserConstants.SEMICOLON);
-    }
-
-    private static CsmToken newline() {
-        return new CsmToken(3, "\n");
-    }
-
-    private static CsmToken comma() {
-        return new CsmToken(ASTParserConstants.COMMA);
-    }
-
-
     public static ConcreteSyntaxModel forClass(Class<? extends Node> nodeClazz) {
         if (!concreteSyntaxModelByClass.containsKey(nodeClazz)) {
             throw new UnsupportedOperationException(nodeClazz.getSimpleName());
