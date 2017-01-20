@@ -2,9 +2,9 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-public class WhileStmtMetaModel extends ClassMetaModel {
+public class WhileStmtMetaModel extends BaseNodeMetaModel {
 
-    WhileStmtMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+    WhileStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superClassMetaModel) {
         super(superClassMetaModel, parent, com.github.javaparser.ast.stmt.WhileStmt.class, "WhileStmt", "com.github.javaparser.ast.stmt.WhileStmt", "com.github.javaparser.ast.stmt", false);
     }
 }

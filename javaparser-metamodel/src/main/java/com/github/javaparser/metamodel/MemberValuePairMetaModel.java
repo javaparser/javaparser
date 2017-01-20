@@ -2,9 +2,9 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-public class MemberValuePairMetaModel extends ClassMetaModel {
+public class MemberValuePairMetaModel extends BaseNodeMetaModel {
 
-    MemberValuePairMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+    MemberValuePairMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superClassMetaModel) {
         super(superClassMetaModel, parent, com.github.javaparser.ast.expr.MemberValuePair.class, "MemberValuePair", "com.github.javaparser.ast.expr.MemberValuePair", "com.github.javaparser.ast.expr", false);
     }
 }

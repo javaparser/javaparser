@@ -2,9 +2,9 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-public class VoidTypeMetaModel extends ClassMetaModel {
+public class VoidTypeMetaModel extends BaseNodeMetaModel {
 
-    VoidTypeMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+    VoidTypeMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superClassMetaModel) {
         super(superClassMetaModel, parent, com.github.javaparser.ast.type.VoidType.class, "VoidType", "com.github.javaparser.ast.type.VoidType", "com.github.javaparser.ast.type", false);
     }
 }

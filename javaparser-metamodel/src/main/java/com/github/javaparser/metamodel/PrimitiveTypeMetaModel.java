@@ -2,9 +2,9 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-public class PrimitiveTypeMetaModel extends ClassMetaModel {
+public class PrimitiveTypeMetaModel extends BaseNodeMetaModel {
 
-    PrimitiveTypeMetaModel(JavaParserMetaModel parent, Optional<ClassMetaModel> superClassMetaModel) {
+    PrimitiveTypeMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superClassMetaModel) {
         super(superClassMetaModel, parent, com.github.javaparser.ast.type.PrimitiveType.class, "PrimitiveType", "com.github.javaparser.ast.type.PrimitiveType", "com.github.javaparser.ast.type", false);
     }
 }

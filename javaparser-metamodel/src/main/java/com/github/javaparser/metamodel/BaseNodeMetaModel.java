@@ -8,18 +8,17 @@ import java.util.Optional;
  * Meta-data about all classes in the AST.
  * These are all Nodes, except NodeList.
  */
-public class ClassMetaModel {
-    public final Optional<ClassMetaModel> superClassMetaModel;
+public class BaseNodeMetaModel {
+    public final Optional<BaseNodeMetaModel> superClassMetaModel;
     public final JavaParserMetaModel javaParserMetaModel;
-    public final List<FieldMetaModel> fieldMetaModels = new ArrayList<>();
+    public final List<PropertyMetaModel> propertyMetaModels = new ArrayList<>();
     public final Class<?> reflectionClass;
     public final String name;
     public final String qualifiedClassName;
     public final String packageName;
     public final boolean isAbstract;
-    public final Flags flags = new Flags();
 
-    public ClassMetaModel(Optional<ClassMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String qualifiedClassName, String packageName, boolean isAbstract) {
+    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String qualifiedClassName, String packageName, boolean isAbstract) {
         this.superClassMetaModel = superClassMetaModel;
         this.javaParserMetaModel = javaParserMetaModel;
         this.reflectionClass = reflectionClass;
@@ -38,7 +37,7 @@ public class ClassMetaModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ClassMetaModel classMetaModel = (ClassMetaModel) o;
+        BaseNodeMetaModel classMetaModel = (BaseNodeMetaModel) o;
 
         if (!reflectionClass.equals(classMetaModel.reflectionClass)) return false;
 
