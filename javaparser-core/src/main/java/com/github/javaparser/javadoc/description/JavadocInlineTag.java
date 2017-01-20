@@ -97,8 +97,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
         JavadocInlineTag that = (JavadocInlineTag) o;
 
-        if (type != that.type) return false;
-        return content.equals(that.content);
+        return type == that.type && content.equals(that.content);
 
     }
 
