@@ -45,13 +45,13 @@ class JavadocParser {
     public static Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(commentContent);
         int index = -1;
-        for (int i=0;i<cleanLines.size() && index == -1;i++) {
+        for (int i = 0; i < cleanLines.size() && index == -1; i++) {
             if (isABlockLine(cleanLines.get(i))) {
                 index = i;
             }
         }
-        List<String> blockLines = null;
-        String descriptionText = null;
+        List<String> blockLines;
+        String descriptionText;
         if (index == -1) {
             descriptionText = trimRight(String.join("\n", cleanLines));
             blockLines = Collections.emptyList();
@@ -82,29 +82,25 @@ class JavadocParser {
         return string;
     }
 
-    private static JavadocDescription parseText(String content) {
-        return JavadocDescription.parseText(content);
-    }
-
     private static List<String> cleanLines(String content) {
         String[] lines = content.split("\n");
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
-                    int asteriskIndex = startsWithAsterisk(l);
-                    if (asteriskIndex == -1) {
-                        return l;
-                    } else {
-                        // if a line starts with space followed by an asterisk drop to the asterisk
-                        // if there is a space immediately after the asterisk drop it also
-                        if (l.length() > (asteriskIndex + 1)) {
+            int asteriskIndex = startsWithAsterisk(l);
+            if (asteriskIndex == -1) {
+                return l;
+            } else {
+                // if a line starts with space followed by an asterisk drop to the asterisk
+                // if there is a space immediately after the asterisk drop it also
+                if (l.length() > (asteriskIndex + 1)) {
 
-                            char c = l.charAt(asteriskIndex + 1);
-                            if (c == ' ' || c == '\t') {
-                                return l.substring(asteriskIndex + 2);
-                            }
-                        }
-                        return l.substring(asteriskIndex + 1);
+                    char c = l.charAt(asteriskIndex + 1);
+                    if (c == ' ' || c == '\t') {
+                        return l.substring(asteriskIndex + 2);
                     }
-                }).collect(Collectors.toList());
+                }
+                return l.substring(asteriskIndex + 1);
+            }
+        }).collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines
         cleanedLines = cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
         // if the first starts with a space, remove it
