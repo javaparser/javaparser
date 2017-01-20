@@ -88,7 +88,7 @@ public class JavadocTest {
                         "@return the filenames\n" +
                         "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID.\n";
         String javadoc = JavaParser.parseJavadoc(docText).toText();
-        assertTrue(javadoc.contains("@link"));
+        assertTrue(javadoc.contains("{@link TOVersion}"));
     }
 
 }
