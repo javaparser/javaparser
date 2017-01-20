@@ -7,5 +7,7 @@ public class EnclosedExprMetaModel extends BaseNodeMetaModel {
     EnclosedExprMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.expr.EnclosedExpr.class, "EnclosedExpr", "com.github.javaparser.ast.expr.EnclosedExpr", "com.github.javaparser.ast.expr", false);
     }
+
+    public PropertyMetaModel innerPropertyMetaModel;
 }
 

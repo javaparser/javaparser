@@ -7,5 +7,9 @@ public class LabeledStmtMetaModel extends BaseNodeMetaModel {
     LabeledStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.LabeledStmt.class, "LabeledStmt", "com.github.javaparser.ast.stmt.LabeledStmt", "com.github.javaparser.ast.stmt", false);
     }
+
+    public PropertyMetaModel labelPropertyMetaModel;
+
+    public PropertyMetaModel statementPropertyMetaModel;
 }
 

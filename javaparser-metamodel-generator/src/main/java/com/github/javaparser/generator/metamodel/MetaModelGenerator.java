@@ -197,13 +197,13 @@ public class MetaModelGenerator {
                             c.getPackage().getName(),
                             java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
 
-            generateFieldMetaModels(c, fieldName, initializeFieldMetaModelsStatements);
+            generateFieldMetaModels(c, classMetaModelClass, fieldName, initializeFieldMetaModelsStatements);
         }
 
         initializeNodeMetaModelsStatements.sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
     }
 
-    private void generateFieldMetaModels(Class<?> c, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
+    private void generateFieldMetaModels(Class<?> c, ClassOrInterfaceDeclaration classMetaModelClass, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
         List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
         fields.sort(Comparator.comparing(Field::getName));
         for (Field field : fields) {
@@ -239,6 +239,8 @@ public class MetaModelGenerator {
             }
 
             String typeName = fieldType.getTypeName().replace('$', '.');
+            String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
+            classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
             String fieldAddition = f("%s.propertyMetaModels.add(new PropertyMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s));",
                     classMetaModelFieldName,
                     classMetaModelFieldName,
