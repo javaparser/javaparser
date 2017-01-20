@@ -25,6 +25,7 @@ import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class MetaModelGenerator {
+    public static final String NODE_META_MODEL = "BaseNodeMetaModel";
     private static List<Class<? extends Node>> ALL_MODEL_CLASSES = new ArrayList<Class<? extends Node>>() {{
         // Base classes go first.
         add(Node.class);
@@ -155,16 +156,16 @@ public class MetaModelGenerator {
 
     private void generateClassMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
         ClassOrInterfaceDeclaration mmClass = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
-        NodeList<Statement> initializeClassMetaModelsStatements = mmClass.getMethodsByName("initializeClassMetaModels").get(0).getBody().get().getStatements();
+        NodeList<Statement> initializeNodeMetaModelsStatements = mmClass.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
         NodeList<Statement> initializeFieldMetaModelsStatements = mmClass.getMethodsByName("initializeFieldMetaModels").get(0).getBody().get().getStatements();
-        initializeClassMetaModelsStatements.clear();
+        initializeNodeMetaModelsStatements.clear();
         initializeFieldMetaModelsStatements.clear();
 
         for (Class<?> c : ALL_MODEL_CLASSES) {
             String className = metaModelName(c);
             String fieldName = decapitalize(className);
             mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
-            FieldDeclaration f = mmClass.addField("ClassMetaModel", fieldName, PUBLIC, FINAL);
+            FieldDeclaration f = mmClass.addField(NODE_META_MODEL, fieldName, PUBLIC, FINAL);
 
             Class<?> superclass = c.getSuperclass();
             final String superClassMetaModel;
@@ -175,27 +176,33 @@ public class MetaModelGenerator {
             }
 
             f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
-            initializeClassMetaModelsStatements.add(parseStatement(f("classMetaModels.add(%s);", fieldName)));
+            initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", fieldName)));
 
 
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
             classMetaModelJavaFile.addImport("java.util.Optional");
             sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
-            classMetaModelClass.addExtendedType(new ClassOrInterfaceType("ClassMetaModel"));
+            classMetaModelClass.addExtendedType(new ClassOrInterfaceType(NODE_META_MODEL));
 
             ConstructorDeclaration classMMConstructor = classMetaModelClass
                     .addConstructor()
                     .addParameter("JavaParserMetaModel", "parent")
-                    .addParameter("Optional<ClassMetaModel>", "superClassMetaModel");
+                    .addParameter("Optional<" + NODE_META_MODEL + ">", "super" + NODE_META_MODEL);
             classMMConstructor
                     .getBody()
-                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(superClassMetaModel, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);", c.getName(), c.getSimpleName(), c.getName(), c.getPackage().getName(), java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
+                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);",
+                            NODE_META_MODEL,
+                            c.getName(),
+                            c.getSimpleName(),
+                            c.getName(),
+                            c.getPackage().getName(),
+                            java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
 
             generateFieldMetaModels(c, fieldName, initializeFieldMetaModelsStatements);
         }
 
-        initializeClassMetaModelsStatements.sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
+        initializeNodeMetaModelsStatements.sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
     }
 
     private void generateFieldMetaModels(Class<?> c, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
@@ -234,7 +241,7 @@ public class MetaModelGenerator {
             }
 
             String typeName = fieldType.getTypeName().replace('$', '.');
-            String fieldAddition = f("%s.fieldMetaModels.add(new FieldMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s));",
+            String fieldAddition = f("%s.propertyMetaModels.add(new PropertyMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s));",
                     classMetaModelFieldName,
                     classMetaModelFieldName,
                     getter(field),

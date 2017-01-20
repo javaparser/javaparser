@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class EmptyStmtMetaModel extends BaseNodeMetaModel {
 
-    EmptyStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superClassMetaModel) {
-        super(superClassMetaModel, parent, com.github.javaparser.ast.stmt.EmptyStmt.class, "EmptyStmt", "com.github.javaparser.ast.stmt.EmptyStmt", "com.github.javaparser.ast.stmt", false);
+    EmptyStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.EmptyStmt.class, "EmptyStmt", "com.github.javaparser.ast.stmt.EmptyStmt", "com.github.javaparser.ast.stmt", false);
     }
 }
 

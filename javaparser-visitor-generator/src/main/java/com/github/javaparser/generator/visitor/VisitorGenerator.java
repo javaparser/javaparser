@@ -45,7 +45,7 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getClassByName("HashCodeVisitor").get();
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (BaseNodeMetaModel node : javaParserMetaModel.classMetaModels) {
+        for (BaseNodeMetaModel node : javaParserMetaModel.nodeMetaModels) {
             if (!node.isAbstract) {
                 MethodDeclaration visitMethod = voidVisitor.addMethod("visit", PUBLIC)
                         .addParameter(node.name, "n")
@@ -99,7 +99,7 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getInterfaceByName("VoidVisitor").get();
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (BaseNodeMetaModel node : javaParserMetaModel.classMetaModels) {
+        for (BaseNodeMetaModel node : javaParserMetaModel.nodeMetaModels) {
             if (!node.isAbstract) {
                 voidVisitor.addMethod("visit")
                         .addParameter(node.name, "n")

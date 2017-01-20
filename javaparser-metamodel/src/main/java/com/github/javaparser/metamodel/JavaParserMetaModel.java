@@ -6,7 +6,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,112 +13,110 @@ import java.util.Optional;
 
 /**
  * The model contains meta-data about all nodes in the AST.
- * You can base source code generators on it.
  */
 public class JavaParserMetaModel {
 
-    public final List<BaseNodeMetaModel> classMetaModels = new ArrayList<>();
+    public final List<BaseNodeMetaModel> nodeMetaModels = new ArrayList<>();
 
     public JavaParserMetaModel() {
-        initializeClassMetaModels();
+        initializeNodeMetaModels();
         initializeFieldMetaModels();
     }
 
-    private void initializeClassMetaModels() {
-        classMetaModels.add(annotationDeclarationMetaModel);
-        classMetaModels.add(annotationExprMetaModel);
-        classMetaModels.add(annotationMemberDeclarationMetaModel);
-        classMetaModels.add(arrayAccessExprMetaModel);
-        classMetaModels.add(arrayCreationExprMetaModel);
-        classMetaModels.add(arrayCreationLevelMetaModel);
-        classMetaModels.add(arrayInitializerExprMetaModel);
-        classMetaModels.add(arrayTypeMetaModel);
-        classMetaModels.add(assertStmtMetaModel);
-        classMetaModels.add(assignExprMetaModel);
-        classMetaModels.add(binaryExprMetaModel);
-        classMetaModels.add(blockCommentMetaModel);
-        classMetaModels.add(blockStmtMetaModel);
-        classMetaModels.add(bodyDeclarationMetaModel);
-        classMetaModels.add(booleanLiteralExprMetaModel);
-        classMetaModels.add(breakStmtMetaModel);
-        classMetaModels.add(castExprMetaModel);
-        classMetaModels.add(catchClauseMetaModel);
-        classMetaModels.add(charLiteralExprMetaModel);
-        classMetaModels.add(classExprMetaModel);
-        classMetaModels.add(classOrInterfaceDeclarationMetaModel);
-        classMetaModels.add(classOrInterfaceTypeMetaModel);
-        classMetaModels.add(commentMetaModel);
-        classMetaModels.add(compilationUnitMetaModel);
-        classMetaModels.add(conditionalExprMetaModel);
-        classMetaModels.add(constructorDeclarationMetaModel);
-        classMetaModels.add(continueStmtMetaModel);
-        classMetaModels.add(doStmtMetaModel);
-        classMetaModels.add(doubleLiteralExprMetaModel);
-        classMetaModels.add(emptyMemberDeclarationMetaModel);
-        classMetaModels.add(emptyStmtMetaModel);
-        classMetaModels.add(enclosedExprMetaModel);
-        classMetaModels.add(enumConstantDeclarationMetaModel);
-        classMetaModels.add(enumDeclarationMetaModel);
-        classMetaModels.add(explicitConstructorInvocationStmtMetaModel);
-        classMetaModels.add(expressionMetaModel);
-        classMetaModels.add(expressionStmtMetaModel);
-        classMetaModels.add(fieldAccessExprMetaModel);
-        classMetaModels.add(fieldDeclarationMetaModel);
-        classMetaModels.add(forStmtMetaModel);
-        classMetaModels.add(foreachStmtMetaModel);
-        classMetaModels.add(ifStmtMetaModel);
-        classMetaModels.add(importDeclarationMetaModel);
-        classMetaModels.add(initializerDeclarationMetaModel);
-        classMetaModels.add(instanceOfExprMetaModel);
-        classMetaModels.add(integerLiteralExprMetaModel);
-        classMetaModels.add(intersectionTypeMetaModel);
-        classMetaModels.add(javadocCommentMetaModel);
-        classMetaModels.add(labeledStmtMetaModel);
-        classMetaModels.add(lambdaExprMetaModel);
-        classMetaModels.add(lineCommentMetaModel);
-        classMetaModels.add(literalExprMetaModel);
-        classMetaModels.add(localClassDeclarationStmtMetaModel);
-        classMetaModels.add(longLiteralExprMetaModel);
-        classMetaModels.add(markerAnnotationExprMetaModel);
-        classMetaModels.add(memberValuePairMetaModel);
-        classMetaModels.add(methodCallExprMetaModel);
-        classMetaModels.add(methodDeclarationMetaModel);
-        classMetaModels.add(methodReferenceExprMetaModel);
-        classMetaModels.add(nameExprMetaModel);
-        classMetaModels.add(nameMetaModel);
-        classMetaModels.add(nodeListMetaModel);
-        classMetaModels.add(nodeMetaModel);
-        classMetaModels.add(normalAnnotationExprMetaModel);
-        classMetaModels.add(nullLiteralExprMetaModel);
-        classMetaModels.add(objectCreationExprMetaModel);
-        classMetaModels.add(packageDeclarationMetaModel);
-        classMetaModels.add(parameterMetaModel);
-        classMetaModels.add(primitiveTypeMetaModel);
-        classMetaModels.add(referenceTypeMetaModel);
-        classMetaModels.add(returnStmtMetaModel);
-        classMetaModels.add(simpleNameMetaModel);
-        classMetaModels.add(singleMemberAnnotationExprMetaModel);
-        classMetaModels.add(statementMetaModel);
-        classMetaModels.add(stringLiteralExprMetaModel);
-        classMetaModels.add(superExprMetaModel);
-        classMetaModels.add(switchEntryStmtMetaModel);
-        classMetaModels.add(switchStmtMetaModel);
-        classMetaModels.add(synchronizedStmtMetaModel);
-        classMetaModels.add(thisExprMetaModel);
-        classMetaModels.add(throwStmtMetaModel);
-        classMetaModels.add(tryStmtMetaModel);
-        classMetaModels.add(typeDeclarationMetaModel);
-        classMetaModels.add(typeExprMetaModel);
-        classMetaModels.add(typeMetaModel);
-        classMetaModels.add(typeParameterMetaModel);
-        classMetaModels.add(unaryExprMetaModel);
-        classMetaModels.add(unionTypeMetaModel);
-        classMetaModels.add(unknownTypeMetaModel);
-        classMetaModels.add(variableDeclarationExprMetaModel);
-        classMetaModels.add(variableDeclaratorMetaModel);
-        classMetaModels.add(voidTypeMetaModel);
-        classMetaModels.add(whileStmtMetaModel);
-        classMetaModels.add(wildcardTypeMetaModel);
+    private void initializeNodeMetaModels() {
+        nodeMetaModels.add(annotationDeclarationMetaModel);
+        nodeMetaModels.add(annotationExprMetaModel);
+        nodeMetaModels.add(annotationMemberDeclarationMetaModel);
+        nodeMetaModels.add(arrayAccessExprMetaModel);
+        nodeMetaModels.add(arrayCreationExprMetaModel);
+        nodeMetaModels.add(arrayCreationLevelMetaModel);
+        nodeMetaModels.add(arrayInitializerExprMetaModel);
+        nodeMetaModels.add(arrayTypeMetaModel);
+        nodeMetaModels.add(assertStmtMetaModel);
+        nodeMetaModels.add(assignExprMetaModel);
+        nodeMetaModels.add(binaryExprMetaModel);
+        nodeMetaModels.add(blockCommentMetaModel);
+        nodeMetaModels.add(blockStmtMetaModel);
+        nodeMetaModels.add(bodyDeclarationMetaModel);
+        nodeMetaModels.add(booleanLiteralExprMetaModel);
+        nodeMetaModels.add(breakStmtMetaModel);
+        nodeMetaModels.add(castExprMetaModel);
+        nodeMetaModels.add(catchClauseMetaModel);
+        nodeMetaModels.add(charLiteralExprMetaModel);
+        nodeMetaModels.add(classExprMetaModel);
+        nodeMetaModels.add(classOrInterfaceDeclarationMetaModel);
+        nodeMetaModels.add(classOrInterfaceTypeMetaModel);
+        nodeMetaModels.add(commentMetaModel);
+        nodeMetaModels.add(compilationUnitMetaModel);
+        nodeMetaModels.add(conditionalExprMetaModel);
+        nodeMetaModels.add(constructorDeclarationMetaModel);
+        nodeMetaModels.add(continueStmtMetaModel);
+        nodeMetaModels.add(doStmtMetaModel);
+        nodeMetaModels.add(doubleLiteralExprMetaModel);
+        nodeMetaModels.add(emptyMemberDeclarationMetaModel);
+        nodeMetaModels.add(emptyStmtMetaModel);
+        nodeMetaModels.add(enclosedExprMetaModel);
+        nodeMetaModels.add(enumConstantDeclarationMetaModel);
+        nodeMetaModels.add(enumDeclarationMetaModel);
+        nodeMetaModels.add(explicitConstructorInvocationStmtMetaModel);
+        nodeMetaModels.add(expressionMetaModel);
+        nodeMetaModels.add(expressionStmtMetaModel);
+        nodeMetaModels.add(fieldAccessExprMetaModel);
+        nodeMetaModels.add(fieldDeclarationMetaModel);
+        nodeMetaModels.add(forStmtMetaModel);
+        nodeMetaModels.add(foreachStmtMetaModel);
+        nodeMetaModels.add(ifStmtMetaModel);
+        nodeMetaModels.add(importDeclarationMetaModel);
+        nodeMetaModels.add(initializerDeclarationMetaModel);
+        nodeMetaModels.add(instanceOfExprMetaModel);
+        nodeMetaModels.add(integerLiteralExprMetaModel);
+        nodeMetaModels.add(intersectionTypeMetaModel);
+        nodeMetaModels.add(javadocCommentMetaModel);
+        nodeMetaModels.add(labeledStmtMetaModel);
+        nodeMetaModels.add(lambdaExprMetaModel);
+        nodeMetaModels.add(lineCommentMetaModel);
+        nodeMetaModels.add(literalExprMetaModel);
+        nodeMetaModels.add(localClassDeclarationStmtMetaModel);
+        nodeMetaModels.add(longLiteralExprMetaModel);
+        nodeMetaModels.add(markerAnnotationExprMetaModel);
+        nodeMetaModels.add(memberValuePairMetaModel);
+        nodeMetaModels.add(methodCallExprMetaModel);
+        nodeMetaModels.add(methodDeclarationMetaModel);
+        nodeMetaModels.add(methodReferenceExprMetaModel);
+        nodeMetaModels.add(nameExprMetaModel);
+        nodeMetaModels.add(nameMetaModel);
+        nodeMetaModels.add(nodeMetaModel);
+        nodeMetaModels.add(normalAnnotationExprMetaModel);
+        nodeMetaModels.add(nullLiteralExprMetaModel);
+        nodeMetaModels.add(objectCreationExprMetaModel);
+        nodeMetaModels.add(packageDeclarationMetaModel);
+        nodeMetaModels.add(parameterMetaModel);
+        nodeMetaModels.add(primitiveTypeMetaModel);
+        nodeMetaModels.add(referenceTypeMetaModel);
+        nodeMetaModels.add(returnStmtMetaModel);
+        nodeMetaModels.add(simpleNameMetaModel);
+        nodeMetaModels.add(singleMemberAnnotationExprMetaModel);
+        nodeMetaModels.add(statementMetaModel);
+        nodeMetaModels.add(stringLiteralExprMetaModel);
+        nodeMetaModels.add(superExprMetaModel);
+        nodeMetaModels.add(switchEntryStmtMetaModel);
+        nodeMetaModels.add(switchStmtMetaModel);
+        nodeMetaModels.add(synchronizedStmtMetaModel);
+        nodeMetaModels.add(thisExprMetaModel);
+        nodeMetaModels.add(throwStmtMetaModel);
+        nodeMetaModels.add(tryStmtMetaModel);
+        nodeMetaModels.add(typeDeclarationMetaModel);
+        nodeMetaModels.add(typeExprMetaModel);
+        nodeMetaModels.add(typeMetaModel);
+        nodeMetaModels.add(typeParameterMetaModel);
+        nodeMetaModels.add(unaryExprMetaModel);
+        nodeMetaModels.add(unionTypeMetaModel);
+        nodeMetaModels.add(unknownTypeMetaModel);
+        nodeMetaModels.add(variableDeclarationExprMetaModel);
+        nodeMetaModels.add(variableDeclaratorMetaModel);
+        nodeMetaModels.add(voidTypeMetaModel);
+        nodeMetaModels.add(whileStmtMetaModel);
+        nodeMetaModels.add(wildcardTypeMetaModel);
     }
 
     private void initializeFieldMetaModels() {
@@ -293,7 +290,7 @@ public class JavaParserMetaModel {
     }
 
     public Optional<BaseNodeMetaModel> getClassMetaModel(Class<?> c) {
-        for (BaseNodeMetaModel oldClassMetaModel : classMetaModels) {
+        for (BaseNodeMetaModel oldClassMetaModel : nodeMetaModels) {
             if (oldClassMetaModel.name.equals(c.getSimpleName())) {
                 return Optional.of(oldClassMetaModel);
             }
@@ -304,7 +301,7 @@ public class JavaParserMetaModel {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        for (BaseNodeMetaModel classMetaModel : classMetaModels) {
+        for (BaseNodeMetaModel classMetaModel : nodeMetaModels) {
             b.append(classMetaModel).append("\n");
             for (PropertyMetaModel propertyMetaModel : classMetaModel.propertyMetaModels) {
                 b.append("\t").append(propertyMetaModel).append("\n");
@@ -320,8 +317,6 @@ public class JavaParserMetaModel {
             throw new RuntimeException(e);
         }
     }
-
-    public final BaseNodeMetaModel nodeListMetaModel = new NodeListMetaModel(this, Optional.empty());
 
     public final BaseNodeMetaModel nodeMetaModel = new NodeMetaModel(this, Optional.empty());
 
