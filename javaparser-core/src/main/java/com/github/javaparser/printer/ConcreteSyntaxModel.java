@@ -22,12 +22,18 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ASTParserConstants;
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
@@ -43,7 +49,7 @@ import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
  */
 public class ConcreteSyntaxModel {
 
-    List<Element> elements;
+    List<CsmElement> elements;
 
     static Map<Class, ConcreteSyntaxModel> concreteSyntaxModelByClass = new HashMap<>();
 
