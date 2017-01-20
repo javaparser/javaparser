@@ -28,21 +28,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.MULTIPLE_NODES;
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.MULTIPLE_PROPERTIES;
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.SINGLE_PROPERTY;
+import static com.github.javaparser.ast.observer.ObservableProperty.Type.MULTIPLE_REFERENCE;
+import static com.github.javaparser.ast.observer.ObservableProperty.Type.MULTIPLE_ATTRIBUTE;
+import static com.github.javaparser.ast.observer.ObservableProperty.Type.SINGLE_ATTRIBUTE;
 
 /**
  * Properties considered by the AstObserver
  */
 public enum ObservableProperty {
-    ANNOTATIONS(MULTIPLE_NODES),
+    ANNOTATIONS(MULTIPLE_REFERENCE),
     ANONYMOUS_CLASS_BODY,
-    ARGUMENTS(MULTIPLE_NODES),
+    ARGUMENTS(MULTIPLE_REFERENCE),
     IS_ASTERISK,
     BLOCK,
     BODY,
-    CATCH_CLAUSES(MULTIPLE_NODES),
+    CATCH_CLAUSES(MULTIPLE_REFERENCE),
     CHECK,
     CLASS_BODY,
     CLASS_DECLARATION,
@@ -61,11 +61,11 @@ public enum ObservableProperty {
     ENCLOSING_PARAMETERS,
     ENTRIES,
     EXPRESSION,
-    EXTENDED_TYPES(MULTIPLE_NODES),
+    EXTENDED_TYPES(MULTIPLE_REFERENCE),
     FIELD,
     FINALLY_BLOCK,
     IDENTIFIER,
-    IMPLEMENTED_TYPES(MULTIPLE_NODES),
+    IMPLEMENTED_TYPES(MULTIPLE_REFERENCE),
     IMPORTS,
     INDEX,
     INITIALIZER,
@@ -78,7 +78,7 @@ public enum ObservableProperty {
     LEVELS,
     MEMBERS,
     MEMBER_VALUE,
-    MODIFIERS(MULTIPLE_PROPERTIES),
+    MODIFIERS(MULTIPLE_ATTRIBUTE),
     MESSAGE,
     NAME,
     OPERATOR,
@@ -100,27 +100,27 @@ public enum ObservableProperty {
     TARGET,
     THEN_EXPR,
     THEN_STMT,
-    THROWN_TYPES(MULTIPLE_NODES),
+    THROWN_TYPES(MULTIPLE_REFERENCE),
     TRY_BLOCK,
-    TYPE(SINGLE_PROPERTY),
+    TYPE(SINGLE_ATTRIBUTE),
     TYPES,
-    TYPE_ARGUMENTS(MULTIPLE_NODES),
+    TYPE_ARGUMENTS(MULTIPLE_REFERENCE),
     TYPE_BOUND,
-    TYPE_PARAMETERS(MULTIPLE_NODES),
+    TYPE_PARAMETERS(MULTIPLE_REFERENCE),
     UPDATE,
     VALUE,
     VALUES,
     VARIABLE,
-    VARIABLES(MULTIPLE_NODES),
+    VARIABLES(MULTIPLE_REFERENCE),
     ELEMENT_TYPE,
-    VAR_ARGS(MULTIPLE_NODES),
+    VAR_ARGS(MULTIPLE_REFERENCE),
     MAXIMUM_COMMON_TYPE();
 
     enum Type {
-        SINGLE_PROPERTY(false, false),
-        SINGLE_NODE(false, true),
-        MULTIPLE_PROPERTIES(true, false),
-        MULTIPLE_NODES(true, true);
+        SINGLE_ATTRIBUTE(false, false),
+        SINGLE_REFERENCE(false, true),
+        MULTIPLE_ATTRIBUTE(true, false),
+        MULTIPLE_REFERENCE(true, true);
 
         private boolean multiple;
         private boolean node;
@@ -138,7 +138,7 @@ public enum ObservableProperty {
     }
 
     ObservableProperty() {
-        this(Type.SINGLE_NODE);
+        this(Type.SINGLE_REFERENCE);
     }
 
     public boolean isAboutNodes() {

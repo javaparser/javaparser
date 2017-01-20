@@ -26,10 +26,12 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmComment implements CsmElement{
+
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (node.hasComment()) {
             ConcreteSyntaxModel.genericPrettyPrint(node.getComment(), printer);
         }
     }
+
 }

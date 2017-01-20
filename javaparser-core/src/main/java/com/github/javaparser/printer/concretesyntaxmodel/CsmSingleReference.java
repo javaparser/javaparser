@@ -27,10 +27,10 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 
-class CsmChild implements CsmElement {
+class CsmSingleReference implements CsmElement {
     private ObservableProperty property;
 
-    public CsmChild(ObservableProperty property) {
+    public CsmSingleReference(ObservableProperty property) {
         this.property = property;
     }
 

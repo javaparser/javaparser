@@ -49,7 +49,7 @@ import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
  */
 public class ConcreteSyntaxModel {
 
-    List<CsmElement> elements;
+    CsmElement topElement;
 
     static Map<Class, ConcreteSyntaxModel> concreteSyntaxModelByClass = new HashMap<>();
 
@@ -644,7 +644,7 @@ public class ConcreteSyntaxModel {
 
     }
 
-    public List<CsmElement> getElements() {
+    public CsmElement getTopElement() {
         throw new UnsupportedOperationException();
     }
 
@@ -851,9 +851,6 @@ public class ConcreteSyntaxModel {
         return new CsmToken(ASTParserConstants.COMMA);
     }
 
-    private static Element function(Function<Node, Element> function) {
-        return (node, printer) -> function.apply(node).prettyPrint(node, printer);
-    }
 
     public static ConcreteSyntaxModel forClass(Class<? extends Node> nodeClazz) {
         if (!concreteSyntaxModelByClass.containsKey(nodeClazz)) {

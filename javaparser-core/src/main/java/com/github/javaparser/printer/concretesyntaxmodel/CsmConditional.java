@@ -29,32 +29,30 @@ import com.github.javaparser.printer.SourcePrinter;
 import java.util.function.Predicate;
 
 public class CsmConditional implements CsmElement {
-    Predicate<Node> predicateCondition;
-    private ObservableProperty condition;
+    private Condition condition;
+    private ObservableProperty property;
     private CsmElement thenElement;
     private CsmElement elseElement;
 
-    public CsmConditional(Predicate<Node> condition, CsmElement thenElement, CsmElement elseElement) {
-        this.predicateCondition = condition;
-        this.thenElement = thenElement;
-        this.elseElement = elseElement;
+    public enum Condition {
+        IS_EMPTY,
+        IS_PRESENT
     }
 
-    public CsmConditional(ObservableProperty condition, CsmElement thenElement, CsmElement elseElement) {
+    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        this.property = property;
         this.condition = condition;
         this.thenElement = thenElement;
         this.elseElement = elseElement;
     }
 
-    public CsmConditional(ObservableProperty condition, CsmElement thenElement) {
-        this.condition = condition;
-        this.thenElement = thenElement;
-        this.elseElement = null;
+    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement) {
+        this(property, condition, thenElement, new CsmNone());
     }
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        boolean test;
+        /*boolean test;
         if (condition != null) {
             if (condition.isSingle()) {
                 test = condition.singlePropertyFor(node) != null;
@@ -70,6 +68,7 @@ public class CsmConditional implements CsmElement {
             if (elseElement != null) {
                 elseElement.prettyPrint(node, printer);
             }
-        }
+        }*/
+        throw new UnsupportedOperationException();
     }
 }

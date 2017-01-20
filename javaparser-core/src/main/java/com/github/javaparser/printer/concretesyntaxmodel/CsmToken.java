@@ -31,8 +31,6 @@ import com.github.javaparser.printer.SourcePrinter;
 public class CsmToken implements CsmElement {
     private int tokenType;
     private String content;
-    private ObservableProperty propertyContent;
-
     public CsmToken(int tokenType) {
         this.tokenType = tokenType;
         this.content = ASTParserConstants.tokenImage[tokenType];
@@ -46,17 +44,9 @@ public class CsmToken implements CsmElement {
         this.content = content;
     }
 
-    public CsmToken(int tokenType, ObservableProperty content) {
-        this.tokenType = tokenType;
-        this.propertyContent = content;
-    }
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        if (content != null) {
-            printer.print(content);
-        } else {
-            printer.print(propertyContent.singleStringValueFor(node));
-        }
+        printer.print(content);
     }
 }
