@@ -29,6 +29,7 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavadocTest {
 
@@ -75,6 +76,19 @@ public class JavadocTest {
         Javadoc javadoc = JavaParser.parseJavadoc("first line\nsecond line\n\n@param node a node\n@return result the result");
         assertEquals(javadoc.getDescription().toText(), "first line\nsecond line");
         assertEquals(javadoc.getBlockTags().size(), 2);
+    }
+
+    @Test
+    public void inlineTagsAreParsable() {
+        String docText =
+                "Returns the {@link TOFilename}s of all files that existed during the requested\n" +
+                        "{@link TOVersion}.\n" +
+                        "\n" +
+                        "@param versionID the id of the {@link TOVersion}.\n" +
+                        "@return the filenames\n" +
+                        "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID.\n";
+        String javadoc = JavaParser.parseJavadoc(docText).toText();
+        assertTrue(javadoc.contains("@link"));
     }
 
 }
