@@ -113,7 +113,8 @@ public enum ObservableProperty {
     VARIABLE,
     VARIABLES(MULTIPLE_NODES),
     ELEMENT_TYPE,
-    VAR_ARGS(MULTIPLE_NODES);
+    VAR_ARGS(MULTIPLE_NODES),
+    MAXIMUM_COMMON_TYPE();
 
     enum Type {
         SINGLE_PROPERTY(false, false),

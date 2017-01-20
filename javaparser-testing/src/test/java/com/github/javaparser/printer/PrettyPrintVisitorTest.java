@@ -27,7 +27,6 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.Test;
 
-import static com.github.javaparser.printer.PrettyPrintVisitor.getMaximumCommonType;
 import static org.junit.Assert.assertEquals;
 
 public class PrettyPrintVisitorTest {
@@ -35,22 +34,22 @@ public class PrettyPrintVisitorTest {
     @Test
     public void getMaximumCommonTypeWithoutAnnotations() {
         VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a[], b[]");
-        assertEquals("int[]", getMaximumCommonType(vde1).toString());
+        assertEquals("int[]", vde1.getMaximumCommonType().toString());
 
         VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[][] a[], b[]");
-        assertEquals("int[][][]", getMaximumCommonType(vde2).toString());
+        assertEquals("int[][][]", vde2.getMaximumCommonType().toString());
 
         VariableDeclarationExpr vde3 = JavaParser.parseVariableDeclarationExpr("int[][] a, b[]");
-        assertEquals("int[][]", getMaximumCommonType(vde3).toString());
+        assertEquals("int[][]", vde3.getMaximumCommonType().toString());
     }
 
     @Test
     public void getMaximumCommonTypeWithAnnotations() {
         VariableDeclarationExpr vde1 = JavaParser.parseVariableDeclarationExpr("int a @Foo [], b[]");
-        assertEquals("int", getMaximumCommonType(vde1).toString());
+        assertEquals("int", vde1.getMaximumCommonType().toString());
 
         VariableDeclarationExpr vde2 = JavaParser.parseVariableDeclarationExpr("int[]@Foo [] a[], b[]");
-        assertEquals("int[] @Foo [][]", getMaximumCommonType(vde2).toString());
+        assertEquals("int[] @Foo [][]", vde2.getMaximumCommonType().toString());
     }
 
     private String print(Node node) {

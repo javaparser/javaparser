@@ -173,16 +173,15 @@ public class ConcreteSyntaxModel {
                     .comment()
                     .annotations()
                     .modifiers()
-                    .ifThen(ObservableProperty.VARIABLES, function(node -> child(PrettyPrintVisitor.getMaximumCommonType((NodeWithVariables)node))))
+                    .ifThen(ObservableProperty.VARIABLES, function(node -> child(ObservableProperty.MAXIMUM_COMMON_TYPE)))
                     .space()
-                    .list(ObservableProperty.VARIABLES, null, null, sequence(comma(), space()))
+                    //.list(ObservableProperty.VARIABLES, null, null, sequence(comma(), space()))
                     .semicolon()
                     .build());
 
         concreteSyntaxModelByClass.put(VariableDeclarator.class, new Builder()
                     .comment()
                     .child(ObservableProperty.NAME)
-                    .annotations()
                     .value(ObservableProperty.TYPE)
                     .build());
 //
