@@ -87,7 +87,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     @Override
     public String toText() {
-        throw new UnsupportedOperationException();
+        return "{@" + type.keyword + this.content;
     }
 
     @Override
