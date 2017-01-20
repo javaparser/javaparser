@@ -24,15 +24,11 @@ package com.github.javaparser.printer;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -175,14 +171,13 @@ public class ConcreteSyntaxModel {
                     .modifiers()
                     .ifThen(ObservableProperty.VARIABLES, function(node -> child(ObservableProperty.MAXIMUM_COMMON_TYPE)))
                     .space()
-                    //.list(ObservableProperty.VARIABLES, null, null, sequence(comma(), space()))
+                    .list(ObservableProperty.VARIABLES, sequence(comma(), space(), null, null))
                     .semicolon()
                     .build());
 
         concreteSyntaxModelByClass.put(VariableDeclarator.class, new Builder()
                     .comment()
                     .child(ObservableProperty.NAME)
-                    .value(ObservableProperty.TYPE)
                     .build());
 //
 //        concreteSyntaxModelByClass.put(ArrayInitializerExpr.class, new Builder()
@@ -643,207 +638,7 @@ public class ConcreteSyntaxModel {
 
     }
 
-    interface Element {
-        void prettyPrint(Node node, SourcePrinter printer);
-    }
-
-    private static class StringElement implements Element {
-        private int tokenType;
-        private String content;
-        private ObservableProperty propertyContent;
-
-        public StringElement(int tokenType) {
-            this.tokenType = tokenType;
-            this.content = ASTParserConstants.tokenImage[tokenType];
-            if (content.startsWith("\"")) {
-                content = content.substring(1, content.length() - 1);
-            }
-        }
-
-        public StringElement(int tokenType, String content) {
-            this.tokenType = tokenType;
-            this.content = content;
-        }
-
-        public StringElement(int tokenType, ObservableProperty content) {
-            this.tokenType = tokenType;
-            this.propertyContent = content;
-        }
-
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            if (content != null) {
-                printer.print(content);
-            } else {
-                printer.print(propertyContent.singleStringValueFor(node));
-            }
-        }
-    }
-
-    private static class ChildElement implements Element {
-        private ObservableProperty property;
-
-        public ChildElement(ObservableProperty property) {
-            this.property = property;
-        }
-
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            Node child = property.singlePropertyFor(node);
-            if (child != null) {
-                genericPrettyPrint(child, printer);
-            }
-        }
-    }
-
-    private static class ValueElement implements Element {
-        private ObservableProperty property;
-
-        public ValueElement(ObservableProperty property) {
-            this.property = property;
-        }
-
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            Object value = property.singleValueFor(node);
-            if (value != null) {
-                printer.print(value.toString());
-            }
-        }
-    }
-
-    private static class ListElement implements Element {
-        private ObservableProperty property;
-        private Element separator;
-        private Element preceeding;
-        private Element following;
-
-        public ListElement(ObservableProperty property, Element separator) {
-            this.property = property;
-            this.separator = separator;
-        }
-
-        public ListElement(ObservableProperty property) {
-            this.property = property;
-            this.separator = null;
-        }
-
-        public ListElement(ObservableProperty property, Element separator, Element preceeding, Element following) {
-            this.property = property;
-            this.separator = separator;
-            this.preceeding = preceeding;
-            this.following = following;
-        }
-
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            if (property.isAboutNodes()) {
-                NodeList nodeList = property.listValueFor(node);
-                if (nodeList == null) {
-                    return;
-                }
-                if (!nodeList.isEmpty() && preceeding != null) {
-                    preceeding.prettyPrint(node, printer);
-                }
-                for (int i = 0; i < nodeList.size(); i++) {
-                    genericPrettyPrint(nodeList.get(i), printer);
-                    if (separator != null && i != (nodeList.size() - 1)) {
-                        separator.prettyPrint(node, printer);
-                    }
-                }
-                if (!nodeList.isEmpty() && following != null) {
-                    following.prettyPrint(node, printer);
-                }
-            } else {
-                Collection<?> values = property.listPropertyFor(node);
-                if (values == null) {
-                    return;
-                }
-                if (!values.isEmpty() && preceeding != null) {
-                    preceeding.prettyPrint(node, printer);
-                }
-                for (Iterator it = values.iterator(); it.hasNext(); ) {
-                    printer.print(it.next().toString());
-                    if (separator != null && it.hasNext()) {
-                        separator.prettyPrint(node, printer);
-                    }
-                }
-                if (!values.isEmpty() && following != null) {
-                    following.prettyPrint(node, printer);
-                }
-            }
-        }
-    }
-
-    private static class CommentElement implements Element {
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            if (node.hasComment()) {
-                genericPrettyPrint(node.getComment(), printer);
-            }
-        }
-    }
-
-    private static class IfElement implements Element {
-        Predicate<Node> predicateCondition;
-        private ObservableProperty condition;
-        private Element thenElement;
-        private Element elseElement;
-
-        public IfElement(Predicate<Node> condition, Element thenElement, Element elseElement) {
-            this.predicateCondition = condition;
-            this.thenElement = thenElement;
-            this.elseElement = elseElement;
-        }
-
-        public IfElement(ObservableProperty condition, Element thenElement, Element elseElement) {
-            this.condition = condition;
-            this.thenElement = thenElement;
-            this.elseElement = elseElement;
-        }
-
-        public IfElement(ObservableProperty condition, Element thenElement) {
-            this.condition = condition;
-            this.thenElement = thenElement;
-            this.elseElement = null;
-        }
-
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            boolean test;
-            if (condition != null) {
-                if (condition.isSingle()) {
-                    test = condition.singlePropertyFor(node) != null;
-                } else {
-                    test = condition.listValueFor(node) != null && !condition.listValueFor(node).isEmpty();
-                }
-            } else {
-                test = predicateCondition.test(node);
-            }
-            if (test) {
-                thenElement.prettyPrint(node, printer);
-            } else {
-                if (elseElement != null) {
-                    elseElement.prettyPrint(node, printer);
-                }
-            }
-        }
-    }
-
-    private static class SequenceElement implements Element {
-        private List<Element> elements;
-
-        public SequenceElement(List<Element> elements) {
-            this.elements = elements;
-        }
-
-        @Override
-        public void prettyPrint(Node node, SourcePrinter printer) {
-            elements.forEach(e -> e.prettyPrint(node, printer));
-        }
-    }
-
-    public List<Element> getElements() {
+    public List<CsmElement> getElements() {
         throw new UnsupportedOperationException();
     }
 
@@ -856,35 +651,35 @@ public class ConcreteSyntaxModel {
     }
 
     private static class Builder {
-        List<Element> elements = new LinkedList<>();
+        List<CsmElement> elements = new LinkedList<>();
 
-        Builder add(Element e) {
+        Builder add(CsmElement e) {
             elements.add(e);
             return this;
         }
 
         Builder comment() {
-            return add(new CommentElement());
+            return add(new CsmComment());
         }
 
         Builder child(ObservableProperty property) {
-            return add(new ChildElement(property));
+            return add(new CsmChild(property));
         }
 
         Builder property(ObservableProperty property) {
-            return add(new ChildElement(property));
+            return add(new CsmChild(property));
         }
 
         Builder value(ObservableProperty property) {
-            return add(new ValueElement(property));
+            return add(new CsmAttribute(property));
         }
 
         Builder string(int tokenType, String content) {
-            return add(new StringElement(tokenType, content));
+            return add(new CsmToken(tokenType, content));
         }
 
         Builder token(int tokenType, String content) {
-            return add(new StringElement(tokenType, content));
+            return add(new CsmToken(tokenType, content));
         }
 
         Builder space() {
@@ -900,39 +695,39 @@ public class ConcreteSyntaxModel {
         }
 
         Builder string(int tokenType) {
-            return add(new StringElement(tokenType));
+            return add(new CsmToken(tokenType));
         }
 
         Builder string(int tokenType, ObservableProperty content) {
-            return add(new StringElement(tokenType, content));
+            return add(new CsmToken(tokenType, content));
         }
 
         Builder ifThen(ObservableProperty childCondition, Element thenElement) {
-            return add(new IfElement(childCondition, thenElement));
+            return add(new CsmConditional(childCondition, thenElement));
         }
 
         Builder ifThenElse(ObservableProperty childCondition, Element thenElement, Element elseElement) {
-            return add(new IfElement(childCondition, thenElement, elseElement));
+            return add(new CsmConditional(childCondition, thenElement, elseElement));
         }
 
         Builder ifThenElse(Predicate<Node> predicate, Element thenElement, Element elseElement) {
-            return add(new IfElement(predicate, thenElement, elseElement));
+            return add(new CsmConditional(predicate, thenElement, elseElement));
         }
 
         Builder sequence(Element... elements) {
-            return add(new SequenceElement(Arrays.asList(elements)));
+            return add(new CsmSequence(Arrays.asList(elements)));
         }
 
         Builder list(ObservableProperty listProperty, Element following) {
-            return add(new ListElement(listProperty, following));
+            return add(new CsmList(listProperty, following));
         }
 
         Builder list(ObservableProperty listProperty) {
-            return add(new ListElement(listProperty));
+            return add(new CsmList(listProperty));
         }
 
         Builder list(ObservableProperty property, Element separator, Element preceeding, Element following) {
-            return add(new ListElement(property, separator, preceeding, following));
+            return add(new CsmList(property, separator, preceeding, following));
         }
 
         ConcreteSyntaxModel build() {
@@ -942,13 +737,11 @@ public class ConcreteSyntaxModel {
         }
 
         Builder indent() {
-            //throw new UnsupportedOperationException();
-            return this;
+            return add(new CsmIndent());
         }
 
         Builder unindent() {
-            //throw new UnsupportedOperationException();
-            return this;
+            return add(new CsmUnindent());
         }
 
         Builder orphanCommentsBeforeThis() {
@@ -1008,48 +801,48 @@ public class ConcreteSyntaxModel {
         return sourcePrinter.getSource();
     }
 
-    private static SequenceElement sequence(Element... elements) {
-        return new SequenceElement(Arrays.asList(elements));
+    private static CsmSequence sequence(Element... elements) {
+        return new CsmSequence(Arrays.asList(elements));
     }
 
-    private static ChildElement child(ObservableProperty property) {
-        return new ChildElement(property);
+    private static CsmChild child(ObservableProperty property) {
+        return new CsmChild(property);
     }
 
     private static Element child(Node child) {
         return (node, printer) -> genericPrettyPrint(child, printer);
     }
 
-    private static ListElement list(ObservableProperty property) {
-        return new ListElement(property);
+    private static CsmList list(ObservableProperty property) {
+        return new CsmList(property);
     }
 
-    private static ListElement list(ObservableProperty property, Element separator, Element preceeding, Element following) {
-        return new ListElement(property, separator, preceeding, following);
+    private static CsmList list(ObservableProperty property, Element separator, Element preceeding, Element following) {
+        return new CsmList(property, separator, preceeding, following);
     }
 
-    private static StringElement string(int tokenType, String content) {
-        return new StringElement(tokenType, content);
+    private static CsmToken string(int tokenType, String content) {
+        return new CsmToken(tokenType, content);
     }
 
-    private static StringElement string(int tokenType) {
-        return new StringElement(tokenType);
+    private static CsmToken string(int tokenType) {
+        return new CsmToken(tokenType);
     }
 
-    private static StringElement space() {
-        return new StringElement(32, " ");
+    private static CsmToken space() {
+        return new CsmToken(32, " ");
     }
 
-    private static StringElement semicolon() {
-        return new StringElement(ASTParserConstants.SEMICOLON);
+    private static CsmToken semicolon() {
+        return new CsmToken(ASTParserConstants.SEMICOLON);
     }
 
-    private static StringElement newline() {
-        return new StringElement(3, "\n");
+    private static CsmToken newline() {
+        return new CsmToken(3, "\n");
     }
 
-    private static StringElement comma() {
-        return new StringElement(ASTParserConstants.COMMA);
+    private static CsmToken comma() {
+        return new CsmToken(ASTParserConstants.COMMA);
     }
 
     private static Element function(Function<Node, Element> function) {
@@ -1061,118 +854,6 @@ public class ConcreteSyntaxModel {
             throw new UnsupportedOperationException(nodeClazz.getSimpleName());
         }
         return concreteSyntaxModelByClass.get(nodeClazz);
-
-//        if (nodeClazz.equals(ClassExpr.class)) {
-//            return new Builder().comment().child(TYPE)
-//                    .string(ASTParserConstants.DOT)
-//                    .string(ASTParserConstants.CLASS)
-//                    .build();
-//        }
-//        if (nodeClazz.equals(SimpleName.class)) {
-//            return new Builder().string(ASTParserConstants.IDENTIFIER, ObservableProperty.IDENTIFIER)
-//                    .build();
-//        }
-//        if (nodeClazz.equals(ArrayType.class)) {
-//            return new Builder()
-//                    .child(ObservableProperty.COMPONENT_TYPE)
-//                    .list(ObservableProperty.ANNOTATIONS)
-//                    .string(ASTParserConstants.LBRACKET)
-//                    .string(ASTParserConstants.RBRACKET)
-//                    .build();
-//        }
-//        if (nodeClazz.equals(ClassOrInterfaceType.class)) {
-//            return new Builder().comment()
-//                    .ifThen(SCOPE, sequence(child(SCOPE), string(ASTParserConstants.DOT)))
-//                    .list(ANNOTATIONS, space())
-//                    .child(NAME)
-//                    .ifThenElse(node -> ((ClassOrInterfaceType)node).isUsingDiamondOperator(),
-//                            sequence(string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
-//                            list(TYPE_ARGUMENTS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT)))
-//                    .build();
-//        }
-//        if (nodeClazz.equals(CompilationUnit.class)) {
-//            return new Builder().comment()
-//                    .child(ObservableProperty.PACKAGE_DECLARATION)
-//                    .list(ObservableProperty.IMPORTS, newline())
-//                    .list(TYPES, newline())
-//                    .orphanCommentsEnding()
-//                    .build();
-//
-//        }
-//        if (nodeClazz.equals(ClassOrInterfaceDeclaration.class)) {
-//            return new Builder().comment()
-//                    .list(ObservableProperty.ANNOTATIONS, newline(), null, newline())
-//                    .modifiers()
-//                    .ifThenElse(node -> ((ClassOrInterfaceDeclaration)node).isInterface(), string(ASTParserConstants.INTERFACE), string(ASTParserConstants.CLASS))
-//                    .space()
-//                    .child(ObservableProperty.NAME)
-//                    .list(TYPE_PARAMETERS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT))
-//                    .list(ObservableProperty.EXTENDED_TYPES, sequence(
-//                            space(),
-//                            string(ASTParserConstants.EXTENDS),
-//                            space()), null, sequence(string(ASTParserConstants.COMMA), space()))
-//                    .list(ObservableProperty.IMPLEMENTED_TYPES, sequence(
-//                            space(),
-//                            string(ASTParserConstants.IMPLEMENTS),
-//                            space()), null, sequence(string(ASTParserConstants.COMMA), space()))
-//                    .space()
-//                    .block(list(ObservableProperty.MEMBERS, null, null, newline()))
-//                    .newline()
-//                    .build();
-//        }
-//        if (nodeClazz.equals(FieldDeclaration.class)) {
-//            return new Builder()
-//                    .orphanCommentsBeforeThis()
-//                    .comment()
-//                    .annotations()
-//                    .modifiers()
-//                    .ifThen(ObservableProperty.VARIABLES, function(node -> child(PrettyPrintVisitor.getMaximumCommonType((NodeWithVariables)node))))
-//                    .space()
-//                    .list(ObservableProperty.VARIABLES, null, null, sequence(comma(), space()))
-//                    .semicolon()
-//                    .build();
-//        }
-//        if (nodeClazz.equals(PrimitiveType.class)) {
-//            return new Builder()
-//                    .comment()
-//                    .annotations()
-//                    .value(ObservableProperty.TYPE)
-//                    .build();
-//        }
-//        if (nodeClazz.equals(VariableDeclarator.class)) {
-//            return new Builder()
-//                    .comment()
-//                    .child(ObservableProperty.NAME)
-//                    .annotations()
-//                    .value(ObservableProperty.TYPE)
-//                    .build();
-
-//            printJavaComment(n.getComment(), arg);
-//            n.getName().accept(this, arg);
-//
-//            Type commonType = getMaximumCommonType(n.getAncestorOfType(NodeWithVariables.class).get());
-//
-//            Type type = n.getType();
-//
-//            ArrayType arrayType = null;
-//
-//            for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
-//                if (arrayType == null) {
-//                    arrayType = (ArrayType) type;
-//                } else {
-//                    arrayType = (ArrayType) arrayType.getComponentType();
-//                }
-//                printAnnotations(arrayType.getAnnotations(), true, arg);
-//                printer.print("[]");
-//            }
-//
-//            if (n.getInitializer().isPresent()) {
-//                printer.print(" = ");
-//                n.getInitializer().get().accept(this, arg);
-//            }
-        //}
-
-        //throw new UnsupportedOperationException("Class " + nodeClazz.getSimpleName());
     }
 
 }

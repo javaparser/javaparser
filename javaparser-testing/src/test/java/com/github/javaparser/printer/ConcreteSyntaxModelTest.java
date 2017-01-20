@@ -27,7 +27,6 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.Test;
 
-import static com.github.javaparser.printer.PrettyPrintVisitor.getMaximumCommonType;
 import static org.junit.Assert.assertEquals;
 
 public class ConcreteSyntaxModelTest {
