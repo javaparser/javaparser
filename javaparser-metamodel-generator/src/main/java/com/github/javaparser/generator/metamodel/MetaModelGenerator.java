@@ -25,9 +25,7 @@ import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class MetaModelGenerator {
-    private static List<Class<?>> ALL_MODEL_CLASSES = new ArrayList<Class<?>>() {{
-        add(NodeList.class);
-
+    private static List<Class<? extends Node>> ALL_MODEL_CLASSES = new ArrayList<Class<? extends Node>>() {{
         // Base classes go first.
         add(Node.class);
 
@@ -141,7 +139,7 @@ public class MetaModelGenerator {
     }
 
     private void run() throws IOException, NoSuchMethodException {
-        final Path root = getJavaParserBasePath().resolve(Paths.get("javaparser-core", "src", "main", "java"));
+        final Path root = getJavaParserBasePath().resolve(Paths.get("javaparser-metamodel", "src", "main", "java"));
 
         JavaParser javaParser = new JavaParser();
 

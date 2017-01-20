@@ -9,18 +9,20 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-visitor-generator</artifactId>
+    <artifactId>javaparser-metamodel</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-metamodel</artifactId>
-            <version>${project.version}</version>
+            <artifactId>javaparser-core</artifactId>
+            <version>3.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-generator-utils</artifactId>
-            <version>${project.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>

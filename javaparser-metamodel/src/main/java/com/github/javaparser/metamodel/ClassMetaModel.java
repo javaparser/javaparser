@@ -1,7 +1,5 @@
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.metamodel.grammar.Syntax;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +17,6 @@ public class ClassMetaModel {
     public final String qualifiedClassName;
     public final String packageName;
     public final boolean isAbstract;
-    public final List<Syntax> syntax = new ArrayList<>();
     public final Flags flags = new Flags();
 
     public ClassMetaModel(Optional<ClassMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String qualifiedClassName, String packageName, boolean isAbstract) {
