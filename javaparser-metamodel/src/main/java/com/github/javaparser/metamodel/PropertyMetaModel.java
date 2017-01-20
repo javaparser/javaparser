@@ -1,6 +1,7 @@
 package com.github.javaparser.metamodel;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 /**
  * Meta-data about a field in a node in the AST.
@@ -11,6 +12,8 @@ public class PropertyMetaModel {
     public final String setter;
     public final String name;
     public final Class<?> type;
+//    public Optional<CommentMetaModel> typeReference;
+//    public Optional<Class<Integer>> tpe;
     public final Field reflectionField;
     public final boolean isNode;
     public final boolean isOptional;

@@ -148,7 +148,6 @@ public class MetaModelGenerator {
 
         CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
 
-
         generateClassMetaModels(javaParserMetaModel, sourceRoot);
 
         sourceRoot.saveAll();
@@ -165,7 +164,7 @@ public class MetaModelGenerator {
             String className = metaModelName(c);
             String fieldName = decapitalize(className);
             mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
-            FieldDeclaration f = mmClass.addField(NODE_META_MODEL, fieldName, PUBLIC, FINAL);
+            FieldDeclaration f = mmClass.addField(className, fieldName, PUBLIC, FINAL);
 
             Class<?> superclass = c.getSuperclass();
             final String superClassMetaModel;
@@ -177,7 +176,6 @@ public class MetaModelGenerator {
 
             f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
             initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", fieldName)));
-
 
             CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
             classMetaModelJavaFile.addImport("java.util.Optional");
