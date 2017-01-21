@@ -81,7 +81,7 @@ public class CsmList implements CsmElement {
                 preceeding.prettyPrint(node, printer);
             }
             for (Iterator it = values.iterator(); it.hasNext(); ) {
-                printer.print(it.next().toString());
+                printer.print(PrintingHelper.printToString(it.next()));
                 if (separator != null && it.hasNext()) {
                     separator.prettyPrint(node, printer);
                 }

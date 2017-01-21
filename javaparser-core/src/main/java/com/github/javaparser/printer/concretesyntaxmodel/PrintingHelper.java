@@ -21,21 +21,16 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.SourcePrinter;
+class PrintingHelper {
 
-public class CsmAttribute implements CsmElement {
-    private ObservableProperty property;
-
-    public CsmAttribute(ObservableProperty property) {
-        this.property = property;
-    }
-
-    @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
-        Object value = property.singleValueFor(node);
-        printer.print(PrintingHelper.printToString(value));
+    static String printToString(Object value) {
+        if (value instanceof Enum) {
+            return ((Enum) value).name().toLowerCase();
+        } else {
+            if (value != null) {
+                return value.toString();
+            }
+        }
+        return "";
     }
 }

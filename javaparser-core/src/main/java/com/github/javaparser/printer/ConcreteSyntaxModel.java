@@ -51,6 +51,10 @@ public class ConcreteSyntaxModel {
 
     static Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
 
+    private static CsmElement modifiers() {
+        return list(ObservableProperty.MODIFIERS, space(), none(), space());
+    }
+
     static {
         concreteSyntaxModelByClass.put(CompilationUnit.class, sequence(
                     comment(),
@@ -64,7 +68,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(ClassOrInterfaceDeclaration.class, sequence(
                     comment(),
                     list(ObservableProperty.ANNOTATIONS, newline(), null, newline()),
-                    list(ObservableProperty.MODIFIERS, space()),
+                    modifiers(),
                     conditional(ObservableProperty.IS_INTERFACE, FLAG, token(ASTParserConstants.INTERFACE), token(ASTParserConstants.CLASS)),
                     space(),
                     child(ObservableProperty.NAME),
@@ -104,7 +108,7 @@ public class ConcreteSyntaxModel {
                     orphanCommentsBeforeThis(),
                     comment(),
                     list(ObservableProperty.ANNOTATIONS),
-                    list(ObservableProperty.MODIFIERS),
+                    modifiers(),
                     conditional(ObservableProperty.VARIABLES, IS_NOT_EMPTY, child(ObservableProperty.MAXIMUM_COMMON_TYPE)),
                     space(),
                     list(ObservableProperty.VARIABLES, sequence(comma(), space(), null, null)),

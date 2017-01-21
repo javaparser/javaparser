@@ -44,7 +44,6 @@ public class CsmToken implements CsmElement {
         this.content = content;
     }
 
-
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (tokenType == 3) {
