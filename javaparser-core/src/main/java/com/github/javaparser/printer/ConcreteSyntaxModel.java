@@ -27,7 +27,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -37,12 +36,9 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.FLAG;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_EMPTY;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_NOT_EMPTY;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
@@ -89,7 +85,7 @@ public class ConcreteSyntaxModel {
                     conditional(SCOPE, CsmConditional.Condition.IS_PRESENT, sequence(child(SCOPE), string(ASTParserConstants.DOT))),
                     list(ANNOTATIONS, space()),
                     child(NAME),
-                    conditional(ObservableProperty.DIAMOND_OPERATOR, FLAG,
+                    conditional(ObservableProperty.USING_DIAMOND_OPERATOR, FLAG,
                             sequence(string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
                             list(TYPE_ARGUMENTS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT)))));
 

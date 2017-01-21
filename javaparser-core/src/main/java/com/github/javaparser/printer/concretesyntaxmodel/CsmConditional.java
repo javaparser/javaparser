@@ -38,7 +38,23 @@ public class CsmConditional implements CsmElement {
         IS_EMPTY,
         IS_NOT_EMPTY,
         IS_PRESENT,
-        FLAG
+        FLAG;
+
+        boolean evaluate(Node node, ObservableProperty property){
+            if (this == IS_PRESENT) {
+                return !property.isNull(node);
+            }
+            if (this == FLAG) {
+                return (Boolean)property.singleValueFor(node);
+            }
+            if (this == IS_EMPTY) {
+                return property.listValueFor(node).isEmpty();
+            }
+            if (this == IS_NOT_EMPTY) {
+                return property.listValueFor(node).isEmpty();
+            }
+            throw new UnsupportedOperationException(name());
+        }
     }
 
     public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
@@ -54,23 +70,11 @@ public class CsmConditional implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        /*boolean test;
-        if (condition != null) {
-            if (condition.isSingle()) {
-                test = condition.singlePropertyFor(node) != null;
-            } else {
-                test = condition.listValueFor(node) != null && !condition.listValueFor(node).isEmpty();
-            }
-        } else {
-            test = predicateCondition.test(node);
-        }
+        boolean test = condition.evaluate(node, property);
         if (test) {
             thenElement.prettyPrint(node, printer);
         } else {
-            if (elseElement != null) {
-                elseElement.prettyPrint(node, printer);
-            }
-        }*/
-        throw new UnsupportedOperationException();
+            elseElement.prettyPrint(node, printer);
+        }
     }
 }
