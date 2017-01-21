@@ -114,7 +114,8 @@ public enum ObservableProperty {
     VARIABLES(MULTIPLE_REFERENCE),
     ELEMENT_TYPE,
     VAR_ARGS(MULTIPLE_REFERENCE),
-    MAXIMUM_COMMON_TYPE();
+    MAXIMUM_COMMON_TYPE(),
+    DIAMOND_OPERATOR;
 
     enum Type {
         SINGLE_ATTRIBUTE(false, false),

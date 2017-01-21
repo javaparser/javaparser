@@ -24,6 +24,7 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.Arrays;
@@ -35,6 +36,10 @@ public interface CsmElement {
 
     static CsmElement child(ObservableProperty property) {
         return new CsmSingleReference(property);
+    }
+
+    static CsmElement attribute(ObservableProperty property) {
+        return new CsmAttribute(property);
     }
 
     static CsmElement sequence(CsmElement... elements) {
@@ -49,6 +54,18 @@ public interface CsmElement {
         return new CsmToken(tokenType);
     }
 
+    static CsmElement token(int tokenType) {
+        return new CsmToken(tokenType);
+    }
+
+    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
+        return new CsmConditional(property, condition, thenElement);
+    }
+
+    static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        return new CsmConditional(property, condition, thenElement, elseElement);
+    }
+
     static CsmElement space() {
         return new CsmToken(32, " ");
     }
@@ -56,6 +73,8 @@ public interface CsmElement {
     static CsmElement semicolon() {
         return new CsmToken(ASTParserConstants.SEMICOLON);
     }
+
+    static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
         return new CsmToken(3, "\n");
@@ -65,15 +84,37 @@ public interface CsmElement {
         return new CsmToken(ASTParserConstants.COMMA);
     }
 
-    static CsmElement child(Node child) {
-        return (node, printer) -> genericPrettyPrint(child, printer);
-    }
-
     static CsmElement list(ObservableProperty property) {
         return new CsmList(property);
     }
 
+    static CsmElement list(ObservableProperty property, CsmElement separator) {
+        return new CsmList(property, separator, new CsmNone(), new CsmNone());
+    }
+
     static CsmElement list(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
         return new CsmList(property, separator, preceeding, following);
+    }
+
+    static CsmElement orphanCommentsEnding() {
+        // FIXME
+        return new CsmNone();
+    }
+
+    static CsmElement orphanCommentsBeforeThis() {
+        // FIXME
+        return new CsmNone();
+    }
+
+    static CsmElement indent() {
+        return new CsmIndent();
+    }
+
+    static CsmElement unindent() {
+        return new CsmUnindent();
+    }
+
+    static CsmElement block(CsmElement content) {
+        return sequence(token(ASTParserConstants.LBRACE), indent(), content, unindent(), token(ASTParserConstants.RBRACE));
     }
 }

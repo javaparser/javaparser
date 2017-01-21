@@ -36,7 +36,9 @@ public class CsmConditional implements CsmElement {
 
     public enum Condition {
         IS_EMPTY,
-        IS_PRESENT
+        IS_NOT_EMPTY,
+        IS_PRESENT,
+        FLAG
     }
 
     public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
