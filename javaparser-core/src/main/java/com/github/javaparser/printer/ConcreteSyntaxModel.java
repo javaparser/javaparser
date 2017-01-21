@@ -78,7 +78,7 @@ public class ConcreteSyntaxModel {
                             string(ASTParserConstants.IMPLEMENTS),
                             space()), null, sequence(string(ASTParserConstants.COMMA), space())),
                     space(),
-                    block(list(ObservableProperty.MEMBERS, null, null, newline())),
+                    block(sequence(newline(), newline(), list(ObservableProperty.MEMBERS, newline(), none(), newline()))),
                     newline()));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),

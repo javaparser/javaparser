@@ -80,6 +80,10 @@ public interface CsmElement {
         return new CsmToken(3, "\n");
     }
 
+    static CsmElement none() {
+        return new CsmNone();
+    }
+
     static CsmElement comma() {
         return new CsmToken(ASTParserConstants.COMMA);
     }
