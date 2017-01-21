@@ -29,10 +29,6 @@ public final class GeneratorUtils {
         return string.substring(0, 1).toLowerCase() + string.substring(1);
     }
 
-    public static String getterName(Field reflectionField) {
-        return getterName(reflectionField.getType(), reflectionField.getName());
-    }
-
     public static String getterName(Class<?> type, String name) {
         if (name.startsWith("is")) {
             return name;
@@ -42,10 +38,17 @@ public final class GeneratorUtils {
         return "get" + capitalize(name);
     }
 
-    public static String setterName(Field reflectionField) {
-        return "set" + capitalize(reflectionField.getName());
+    public static String setterName(String fieldName) {
+        return "set" + capitalize(fieldName);
     }
-
+    
+    public static String optionalOf(String text, boolean isOptional) {
+        if (isOptional) {
+            return f("Optional.of(%s)", text);
+        } else {
+            return "Optional.empty()";
+        }
+    }
 
     /**
      * A shortcut to String.format.

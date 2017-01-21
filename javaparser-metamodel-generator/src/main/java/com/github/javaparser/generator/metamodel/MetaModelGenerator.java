@@ -14,10 +14,12 @@ import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.ast.Modifier.FINAL;
@@ -169,12 +171,7 @@ public class MetaModelGenerator {
             FieldDeclaration f = mmClass.addField(className, fieldName, PUBLIC, FINAL);
 
             Class<?> superclass = c.getSuperclass();
-            final String superClassMetaModel;
-            if (Node.class.isAssignableFrom(superclass)) {
-                superClassMetaModel = f("Optional.of(%s)", decapitalize(metaModelName(superclass)));
-            } else {
-                superClassMetaModel = "Optional.empty()";
-            }
+            final String superClassMetaModel = optionalOf(decapitalize(metaModelName(superclass)), isNode(superclass));
 
             f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
             initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", fieldName)));
@@ -185,23 +182,30 @@ public class MetaModelGenerator {
             ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
             classMetaModelClass.addExtendedType(new ClassOrInterfaceType(NODE_META_MODEL));
 
+            AstTypeAnalysis typeAnalysis = new AstTypeAnalysis(c);
+
             ConstructorDeclaration classMMConstructor = classMetaModelClass
                     .addConstructor()
                     .addParameter("JavaParserMetaModel", "parent")
                     .addParameter("Optional<" + NODE_META_MODEL + ">", "super" + NODE_META_MODEL);
             classMMConstructor
                     .getBody()
-                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", %s);",
+                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", %s, %s);",
                             NODE_META_MODEL,
                             c.getName(),
                             c.getSimpleName(),
                             c.getPackage().getName(),
-                            java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
+                            typeAnalysis.isAbstract,
+                            typeAnalysis.isSelfType)));
 
             generateFieldMetaModels(c, classMetaModelClass, fieldName, initializeFieldMetaModelsStatements);
         }
 
         initializeNodeMetaModelsStatements.sort(Comparator.comparing(Node::toString));
+    }
+
+    private boolean isNode(Class<?> c) {
+        return Node.class.isAssignableFrom(c);
     }
 
     private void generateFieldMetaModels(Class<?> c, ClassOrInterfaceDeclaration classMetaModelClass, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
@@ -211,47 +215,21 @@ public class MetaModelGenerator {
             if (fieldShouldBeIgnored(field)) {
                 continue;
             }
-            boolean isOptional = false;
-            boolean isEnumSet = false;
-            boolean isNodeList = false;
-            boolean hasWildcard = false;
 
-            java.lang.reflect.Type fieldType = c.getMethod(getter(field)).getGenericReturnType();
+            AstTypeAnalysis fieldAnalysis = new AstTypeAnalysis(c.getMethod(getter(field)).getGenericReturnType());
 
-            while (fieldType instanceof ParameterizedType) {
-                ParameterizedType t = (ParameterizedType) fieldType;
-                java.lang.reflect.Type currentOuterType = t.getRawType();
-                if (currentOuterType == NodeList.class) {
-                    isNodeList = true;
-                }
-                if (currentOuterType == Optional.class) {
-                    isOptional = true;
-                }
-                if (currentOuterType == EnumSet.class) {
-                    isEnumSet = true;
-                }
-
-                if (t.getActualTypeArguments()[0] instanceof java.lang.reflect.WildcardType) {
-                    fieldType = t.getRawType();
-                    hasWildcard = true;
-                    break;
-                }
-                fieldType = t.getActualTypeArguments()[0];
-            }
-
-            String typeName = fieldType.getTypeName().replace('$', '.');
+            String typeName = fieldAnalysis.innerType.getTypeName().replace('$', '.');
             String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
             classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s)",
+            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s)",
                     classMetaModelFieldName,
                     field.getName(),
                     typeName,
-                    c.getSimpleName(),
-                    field.getName(),
-                    isOptional,
-                    isNodeList,
-                    isEnumSet,
-                    hasWildcard);
+                    optionalOf(classMetaModelFieldName, isNode(c)),
+                    fieldAnalysis.isOptional,
+                    fieldAnalysis.isNodeList,
+                    fieldAnalysis.isEnumSet,
+                    fieldAnalysis.isSelfType);
             String fieldSetting = f("%s.%s=%s;", classMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
             String fieldAddition = f("%s.getPropertyMetaModels().add(%s.%s);", classMetaModelFieldName, classMetaModelFieldName, propertyMetaModelFieldName);
 
@@ -260,18 +238,8 @@ public class MetaModelGenerator {
         }
     }
 
-    private String setter(Field field) {
-        return "set" + capitalize(field.getName());
-    }
-
     private String getter(Field field) {
-        String name = field.getName();
-        if (field.getName().startsWith("is")) {
-            return field.getName();
-        } else if (field.getType().equals(Boolean.class)) {
-            return "is" + capitalize(name);
-        }
-        return "get" + capitalize(name);
+        return getterName(field.getType(), field.getName());
     }
 
     private static String metaModelName(Class<?> c) {

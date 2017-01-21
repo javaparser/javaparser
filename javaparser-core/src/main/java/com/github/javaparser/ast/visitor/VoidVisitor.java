@@ -146,8 +146,6 @@ public interface VoidVisitor<A> {
 
     void visit(Name n, A arg);
 
-    void visit(NodeList n, A arg);
-
     void visit(NormalAnnotationExpr n, A arg);
 
     void visit(NullLiteralExpr n, A arg);

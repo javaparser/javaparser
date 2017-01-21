@@ -5,7 +5,7 @@ import java.util.Optional;
 public class IfStmtMetaModel extends BaseNodeMetaModel {
 
     IfStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.IfStmt.class, "IfStmt", "com.github.javaparser.ast.stmt", false);
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.IfStmt.class, "IfStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
     public PropertyMetaModel conditionPropertyMetaModel;

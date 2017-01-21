@@ -1,6 +1,8 @@
 package com.github.javaparser.metamodel;
 
-import java.lang.reflect.Field;
+import com.github.javaparser.ast.Node;
+
+import java.util.Optional;
 
 import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
@@ -9,34 +11,36 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
  * Meta-data about a property of a node in the AST.
  */
 public class PropertyMetaModel {
-    private final BaseNodeMetaModel nodeMetaModel;
+    private final BaseNodeMetaModel containingNodeMetaModel;
     private final String name;
     private final Class<?> type;
-    //    public Optional<CommentMetaModel> typeReference;
-//    public Optional<Class<Integer>> tpe;
-    private final Field reflectionField;
-    private final boolean isNode;
+    private final Optional<BaseNodeMetaModel> nodeReference;
     private final boolean isOptional;
     private final boolean isNodeList;
     private final boolean isEnumSet;
     private final boolean hasWildcard;
 
-    public PropertyMetaModel(BaseNodeMetaModel nodeMetaModel, String name, Class<?> type, Field reflectionField, boolean isNode, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
-        this.nodeMetaModel = nodeMetaModel;
+    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
+        this.containingNodeMetaModel = containingNodeMetaModel;
         this.name = name;
         this.type = type;
-        this.reflectionField = reflectionField;
-        this.isNode = isNode;
+        this.nodeReference = nodeReference;
         this.isOptional = isOptional;
         this.isNodeList = isNodeList;
         this.isEnumSet = isEnumSet;
         this.hasWildcard = hasWildcard;
     }
 
-    public boolean is(Class<?> c, String fieldName) {
-        return nodeMetaModel.is(c) && name.equals(fieldName);
+    /**
+     * @return is this the field fieldName on class c?
+     */
+    public boolean is(Class<? extends Node> c, String fieldName) {
+        return containingNodeMetaModel.is(c) && name.equals(fieldName);
     }
 
+    /**
+     * @return is this fields called fieldName?
+     */
     public boolean is(String fieldName) {
         return name.equals(fieldName);
     }
@@ -45,61 +49,75 @@ public class PropertyMetaModel {
      * @return the name used in the AST for the setter
      */
     public String getSetterMethodName() {
-        return setterName(reflectionField);
+        return setterName(name);
     }
 
     /**
      * @return the name used in the AST for the getter
      */
     public String getGetterMethodName() {
-        return getterName(reflectionField);
+        return getterName(type, name);
     }
 
-    public BaseNodeMetaModel getNodeMetaModel() {
-        return nodeMetaModel;
+    /**
+     * @return the NodeMetaModel that "has" this property.
+     */
+    public BaseNodeMetaModel getContainingNodeMetaModel() {
+        return containingNodeMetaModel;
     }
 
+    /**
+     * @return the name of the property. This is equal to the name of the field in the AST.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the class of the field.
+     */
     public Class<?> getType() {
         return type;
     }
 
-    public Field getReflectionField() {
-        return reflectionField;
+    /**
+     * @return if this property is a Node, this will get the node meta model.
+     */
+    public Optional<BaseNodeMetaModel> getNodeReference() {
+        return nodeReference;
     }
 
-    @Deprecated
-    public boolean isNode() {
-        return isNode;
-    }
-
+    /**
+     * @return whether this property is optional.
+     */
     public boolean isOptional() {
         return isOptional;
     }
 
+    /**
+     * @return whether this property is contained in a NodeList.
+     */
     public boolean isNodeList() {
         return isNodeList;
     }
 
+    /**
+     * @return whether this property is contained in an EnumSet.
+     */
     public boolean isEnumSet() {
         return isEnumSet;
     }
 
+    /**
+     * @return whether this property has a wildcard following it, like BodyDeclaration&lt;?&gt;.
+     */
     public boolean hasWildcard() {
         return hasWildcard;
     }
 
     @Override
     public String toString() {
-        return "(" + type.getSimpleName() + ")\t" + nodeMetaModel + "#" + name;
-    }
-
-    @Override
-    public int hashCode() {
-        return reflectionField.hashCode();
+        return "(" + getTypeName() + ")\t" + containingNodeMetaModel + "#" + name;
     }
 
     @Override
@@ -109,36 +127,56 @@ public class PropertyMetaModel {
 
         PropertyMetaModel that = (PropertyMetaModel) o;
 
-        if (!reflectionField.equals(that.reflectionField)) return false;
+        if (!name.equals(that.name)) return false;
+        if (!type.equals(that.type)) return false;
 
         return true;
     }
 
-    public String getTypeName() {
-        if (hasWildcard) {
-            return getRawTypeName() + "<?>";
-        }
-        return getRawTypeName();
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + type.hashCode();
+        return result;
     }
 
-    public String getRawTypeName() {
+    /**
+     * @return the type of a single element of this property, so no Optional or NodeList or EnumSet.
+     */
+    public String getTypeNameGenericsed() {
+        if (hasWildcard) {
+            return getTypeName() + "<?>";
+        }
+        return getTypeName();
+    }
+
+    /**
+     * @return the raw type of a single element of this property, so nothing but the name.
+     */
+    public String getTypeName() {
         return type.getSimpleName();
     }
 
-    public String getFullTypeNameForGetter() {
+    /**
+     * @return the type that is returned from getters in the AST.
+     */
+    public String getTypeNameForGetter() {
         if (isOptional) {
-            return "Optional<" + getFullTypeNameForSetter() + ">";
+            return "Optional<" + getTypeNameForSetter() + ">";
         }
-        return getFullTypeNameForSetter();
+        return getTypeNameForSetter();
     }
 
-    public String getFullTypeNameForSetter() {
+    /**
+     * @return the type that is passed to setters in the AST.
+     */
+    public String getTypeNameForSetter() {
         if (isNodeList) {
-            return "NodeList<" + getTypeName() + ">";
+            return "NodeList<" + getTypeNameGenericsed() + ">";
         }
         if (isEnumSet) {
-            return "EnumSet<" + getTypeName() + ">";
+            return "EnumSet<" + getTypeNameGenericsed() + ">";
         }
-        return getTypeName();
+        return getTypeNameGenericsed();
     }
 }

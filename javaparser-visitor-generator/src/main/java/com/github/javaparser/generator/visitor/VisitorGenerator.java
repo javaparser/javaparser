@@ -10,8 +10,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -43,14 +43,10 @@ public class VisitorGenerator {
         CompilationUnit voidVisitorCu = sourceRoot.parse("com.github.javaparser.ast.visitor", "HashCodeVisitor.java", javaParser).get();
 
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getClassByName("HashCodeVisitor").get();
-        voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
         for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
             if (!node.isAbstract()) {
-                MethodDeclaration visitMethod = voidVisitor.addMethod("visit", PUBLIC)
-                        .addParameter(node.getName(), "n")
-                        .addParameter("Void", "arg")
-                        .setType(new ClassOrInterfaceType("Integer"));
+                MethodDeclaration visitMethod = voidVisitor.getMethodsByParameterTypes(node.getTypeNameGenericsed(), "Void").get(0);
                 BlockStmt body = visitMethod.getBody().get();
 
                 List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getPropertyMetaModels());
@@ -59,11 +55,9 @@ public class VisitorGenerator {
                     walkNode = walkNode.getSuperNodeMetaModel().get();
                     allPropertyMetaModels.addAll(walkNode.getPropertyMetaModels());
                 }
-                
+
                 if (allPropertyMetaModels.isEmpty()) {
                     body.addStatement(parseStatement("return 0;"));
-                } else if (node.is(NodeList.class)) {
-                    body.addStatement(parseStatement("return n.hashCode();"));
                 } else {
                     String bodyBuilder = "return";
                     String prefix = "";
@@ -71,18 +65,21 @@ public class VisitorGenerator {
 
                         final String getter = field.getGetterMethodName() + "()";
                         // Is this field another AST node? Visit it.
-                        if (field.isNode()) {
+                        if (field.getNodeReference().isPresent()) {
                             if (field.isOptional()) {
                                 bodyBuilder += f("%s (n.%s.isPresent()? n.%s.get().accept(this, arg):0)", prefix, getter, getter);
                             } else {
                                 bodyBuilder += f("%s (n.%s.accept(this, arg))", prefix, getter);
                             }
-                        } else if (field.getType().equals(boolean.class)) {
-                            bodyBuilder += f("%s (n.%s?1:0)", prefix, getter);
-                        } else if (field.getType().equals(int.class)) {
-                            bodyBuilder += f("%s n.%s", prefix, getter);
                         } else {
-                            bodyBuilder += f("%s (n.%s.hashCode())", prefix, getter);
+                            Class<?> type = field.getType();
+                            if (type.equals(boolean.class)) {
+                                bodyBuilder += f("%s (n.%s?1:0)", prefix, getter);
+                            } else if (type.equals(int.class)) {
+                                bodyBuilder += f("%s n.%s", prefix, getter);
+                            } else {
+                                bodyBuilder += f("%s (n.%s.hashCode())", prefix, getter);
+                            }
                         }
                         prefix = "* 31 +";
                     }
@@ -102,7 +99,7 @@ public class VisitorGenerator {
         for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
             if (!node.isAbstract()) {
                 voidVisitor.addMethod("visit")
-                        .addParameter(node.getName(), "n")
+                        .addParameter(node.getTypeNameGenericsed(), "n")
                         .addParameter("A", "arg")
                         .setBody(null);
             }
