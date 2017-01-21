@@ -5,7 +5,7 @@ import java.util.Optional;
 public class WhileStmtMetaModel extends BaseNodeMetaModel {
 
     WhileStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.WhileStmt.class, "WhileStmt", "com.github.javaparser.ast.stmt.WhileStmt", "com.github.javaparser.ast.stmt", false);
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.WhileStmt.class, "WhileStmt", "com.github.javaparser.ast.stmt", false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

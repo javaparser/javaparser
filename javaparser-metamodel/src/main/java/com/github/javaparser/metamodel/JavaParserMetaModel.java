@@ -6,6 +6,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import javax.annotation.Generated;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

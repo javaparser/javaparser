@@ -40,11 +40,11 @@ public class PropertyMetaModel {
         return name.equals(fieldName);
     }
 
-    private String getSetterMethodName() {
+    public String getSetterMethodName() {
         return "set" + capitalize(reflectionField.getName());
     }
 
-    private String getGetterMethodName() {
+    public String getGetterMethodName() {
         String name = reflectionField.getName();
         if (name.startsWith("is")) {
             return name;

@@ -14,22 +14,24 @@ public class BaseNodeMetaModel {
     public final List<PropertyMetaModel> propertyMetaModels = new ArrayList<>();
     public final Class<?> reflectionClass;
     public final String name;
-    public final String qualifiedClassName;
     public final String packageName;
     public final boolean isAbstract;
 
-    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String qualifiedClassName, String packageName, boolean isAbstract) {
+    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String packageName, boolean isAbstract) {
         this.superClassMetaModel = superClassMetaModel;
         this.javaParserMetaModel = javaParserMetaModel;
         this.reflectionClass = reflectionClass;
         this.name = name;
-        this.qualifiedClassName = qualifiedClassName;
         this.packageName = packageName;
         this.isAbstract = isAbstract;
     }
 
     public boolean is(Class<?> c) {
         return reflectionClass.equals(c);
+    }
+
+    public String getQualifiedClassName() {
+        return packageName + "." + name;
     }
 
     @Override

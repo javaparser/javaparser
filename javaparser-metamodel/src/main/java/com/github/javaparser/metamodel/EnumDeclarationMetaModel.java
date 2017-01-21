@@ -5,7 +5,7 @@ import java.util.Optional;
 public class EnumDeclarationMetaModel extends BaseNodeMetaModel {
 
     EnumDeclarationMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.body.EnumDeclaration.class, "EnumDeclaration", "com.github.javaparser.ast.body.EnumDeclaration", "com.github.javaparser.ast.body", false);
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.body.EnumDeclaration.class, "EnumDeclaration", "com.github.javaparser.ast.body", false);
     }
 
     public PropertyMetaModel entriesPropertyMetaModel;

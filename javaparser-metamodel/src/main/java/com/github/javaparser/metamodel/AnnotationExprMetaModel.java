@@ -5,7 +5,7 @@ import java.util.Optional;
 public class AnnotationExprMetaModel extends BaseNodeMetaModel {
 
     AnnotationExprMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.expr.AnnotationExpr.class, "AnnotationExpr", "com.github.javaparser.ast.expr.AnnotationExpr", "com.github.javaparser.ast.expr", true);
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.expr.AnnotationExpr.class, "AnnotationExpr", "com.github.javaparser.ast.expr", true);
     }
 
     public PropertyMetaModel namePropertyMetaModel;

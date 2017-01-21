@@ -69,7 +69,7 @@ public class VisitorGenerator {
                     String prefix = "";
                     for (PropertyMetaModel field : allPropertyMetaModels) {
 
-                        final String getter = field.getter + "()";
+                        final String getter = field.getGetterMethodName() + "()";
                         // Is this field another AST node? Visit it.
                         if (javaParserMetaModel.getClassMetaModel(field.type).isPresent()) {
                             if (field.isOptional) {

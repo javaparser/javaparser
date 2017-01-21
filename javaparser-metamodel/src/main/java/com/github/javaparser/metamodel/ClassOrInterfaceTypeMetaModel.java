@@ -5,7 +5,7 @@ import java.util.Optional;
 public class ClassOrInterfaceTypeMetaModel extends BaseNodeMetaModel {
 
     ClassOrInterfaceTypeMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.type.ClassOrInterfaceType.class, "ClassOrInterfaceType", "com.github.javaparser.ast.type.ClassOrInterfaceType", "com.github.javaparser.ast.type", false);
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.type.ClassOrInterfaceType.class, "ClassOrInterfaceType", "com.github.javaparser.ast.type", false);
     }
 
     public PropertyMetaModel namePropertyMetaModel;

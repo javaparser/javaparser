@@ -25,9 +25,11 @@ import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class MetaModelGenerator {
-    public static final String NODE_META_MODEL = "BaseNodeMetaModel";
+    private static final String NODE_META_MODEL = "BaseNodeMetaModel";
     private static List<Class<? extends Node>> ALL_MODEL_CLASSES = new ArrayList<Class<? extends Node>>() {{
-        // Base classes go first.
+        /* Base classes go first, so we don't have to do any sorting to make sure
+         generated classes can refer to their base generated classes without
+         being afraid those are not initialized yet. */
         add(Node.class);
 
         add(BodyDeclaration.class);
@@ -189,18 +191,17 @@ public class MetaModelGenerator {
                     .addParameter("Optional<" + NODE_META_MODEL + ">", "super" + NODE_META_MODEL);
             classMMConstructor
                     .getBody()
-                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", \"%s\", %s);",
+                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", %s);",
                             NODE_META_MODEL,
                             c.getName(),
                             c.getSimpleName(),
-                            c.getName(),
                             c.getPackage().getName(),
                             java.lang.reflect.Modifier.isAbstract(c.getModifiers()))));
 
             generateFieldMetaModels(c, classMetaModelClass, fieldName, initializeFieldMetaModelsStatements);
         }
 
-        initializeNodeMetaModelsStatements.sort(Comparator.comparing(o -> ((NameExpr) ((MethodCallExpr) ((ExpressionStmt) o).getExpression()).getArgument(0)).getNameAsString()));
+        initializeNodeMetaModelsStatements.sort(Comparator.comparing(Node::toString));
     }
 
     private void generateFieldMetaModels(Class<?> c, ClassOrInterfaceDeclaration classMetaModelClass, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
@@ -241,7 +242,7 @@ public class MetaModelGenerator {
             String typeName = fieldType.getTypeName().replace('$', '.');
             String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
             classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s)", 
+            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s)",
                     classMetaModelFieldName,
                     field.getName(),
                     typeName,

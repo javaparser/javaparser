@@ -5,7 +5,7 @@ import java.util.Optional;
 public class AssertStmtMetaModel extends BaseNodeMetaModel {
 
     AssertStmtMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.AssertStmt.class, "AssertStmt", "com.github.javaparser.ast.stmt.AssertStmt", "com.github.javaparser.ast.stmt", false);
+        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.AssertStmt.class, "AssertStmt", "com.github.javaparser.ast.stmt", false);
     }
 
     public PropertyMetaModel checkPropertyMetaModel;
