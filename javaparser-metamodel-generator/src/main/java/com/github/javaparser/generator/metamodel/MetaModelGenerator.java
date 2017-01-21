@@ -218,14 +218,15 @@ public class MetaModelGenerator {
 
             AstTypeAnalysis fieldAnalysis = new AstTypeAnalysis(c.getMethod(getter(field)).getGenericReturnType());
 
-            String typeName = fieldAnalysis.innerType.getTypeName().replace('$', '.');
+            Class<?> fieldType = fieldAnalysis.innerType;
+            String typeName = fieldType.getTypeName().replace('$', '.');
             String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
             classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
             String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s)",
                     classMetaModelFieldName,
                     field.getName(),
                     typeName,
-                    optionalOf(classMetaModelFieldName, isNode(c)),
+                    optionalOf(decapitalize(metaModelName(fieldType)), isNode(fieldType)),
                     fieldAnalysis.isOptional,
                     fieldAnalysis.isNodeList,
                     fieldAnalysis.isEnumSet,

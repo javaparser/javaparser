@@ -2,107 +2,54 @@ package com.github.javaparser.generator.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.parseStatement;
-import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
-public class VisitorGenerator {
-    private static JavaParserMetaModel javaParserMetaModel = new JavaParserMetaModel();
+public abstract class VisitorGenerator {
+    protected final JavaParser javaParser;
+    protected final SourceRoot sourceRoot;
+    private final String pkg;
+    private final String visitorClassName;
+    protected final JavaParserMetaModel javaParserMetaModel;
 
-    public static void main(String[] args) throws IOException {
-        final Path root = Paths.get(VisitorGenerator.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "..", "..", "..", "javaparser-core", "src", "main", "java");
-
-        JavaParser javaParser = new JavaParser();
-
-        SourceRoot sourceRoot = new SourceRoot(root);
-
-        generateVoidVisitor(javaParser, sourceRoot);
-        generateHashcodeVisitor(javaParser, sourceRoot);
-
-        sourceRoot.saveAll();
+    public VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, JavaParserMetaModel javaParserMetaModel) {
+        this.javaParser = javaParser;
+        this.sourceRoot = sourceRoot;
+        this.pkg = pkg;
+        this.visitorClassName = visitorClassName;
+        this.javaParserMetaModel = javaParserMetaModel;
     }
 
-    private static void generateHashcodeVisitor(JavaParser javaParser, SourceRoot sourceRoot) throws IOException {
-        CompilationUnit voidVisitorCu = sourceRoot.parse("com.github.javaparser.ast.visitor", "HashCodeVisitor.java", javaParser).get();
+    public void generate() throws IOException {
+        CompilationUnit voidVisitorCu = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
 
-        ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getClassByName("HashCodeVisitor").get();
+        Optional<ClassOrInterfaceDeclaration> visitorClassOptional = voidVisitorCu.getClassByName(visitorClassName);
+        if (!visitorClassOptional.isPresent()) {
+            visitorClassOptional = voidVisitorCu.getInterfaceByName(visitorClassName);
+        }
+        ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
 
         for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
             if (!node.isAbstract()) {
-                MethodDeclaration visitMethod = voidVisitor.getMethodsByParameterTypes(node.getTypeNameGenericsed(), "Void").get(0);
-                BlockStmt body = visitMethod.getBody().get();
-
-                List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getPropertyMetaModels());
-                BaseNodeMetaModel walkNode = node;
-                while (walkNode.getSuperNodeMetaModel().isPresent()) {
-                    walkNode = walkNode.getSuperNodeMetaModel().get();
-                    allPropertyMetaModels.addAll(walkNode.getPropertyMetaModels());
-                }
-
-                if (allPropertyMetaModels.isEmpty()) {
-                    body.addStatement(parseStatement("return 0;"));
-                } else {
-                    String bodyBuilder = "return";
-                    String prefix = "";
-                    for (PropertyMetaModel field : allPropertyMetaModels) {
-
-                        final String getter = field.getGetterMethodName() + "()";
-                        // Is this field another AST node? Visit it.
-                        if (field.getNodeReference().isPresent()) {
-                            if (field.isOptional()) {
-                                bodyBuilder += f("%s (n.%s.isPresent()? n.%s.get().accept(this, arg):0)", prefix, getter, getter);
-                            } else {
-                                bodyBuilder += f("%s (n.%s.accept(this, arg))", prefix, getter);
-                            }
-                        } else {
-                            Class<?> type = field.getType();
-                            if (type.equals(boolean.class)) {
-                                bodyBuilder += f("%s (n.%s?1:0)", prefix, getter);
-                            } else if (type.equals(int.class)) {
-                                bodyBuilder += f("%s n.%s", prefix, getter);
-                            } else {
-                                bodyBuilder += f("%s (n.%s.hashCode())", prefix, getter);
-                            }
-                        }
-                        prefix = "* 31 +";
-                    }
-                    Statement returnStatement = parseStatement(bodyBuilder + ";");
-                    body.addStatement(returnStatement);
+                Optional<MethodDeclaration> visitMethod = visitorClass.getMethods().stream()
+                        .filter(m -> m.getNameAsString().equals("visit"))
+                        .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
+                        .findFirst();
+                visitMethod.ifPresent(m -> generateVisitorFor(node, m, voidVisitorCu));
+                if (!visitMethod.isPresent()) {
+                    System.out.println(f("No visit method found for type %s", node));
                 }
             }
         }
     }
 
-    private static void generateVoidVisitor(JavaParser javaParser, SourceRoot sourceRoot) throws IOException {
-        CompilationUnit voidVisitorCu = sourceRoot.parse("com.github.javaparser.ast.visitor", "VoidVisitor.java", javaParser).get();
-
-        ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getInterfaceByName("VoidVisitor").get();
-        voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
-
-        for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
-            if (!node.isAbstract()) {
-                voidVisitor.addMethod("visit")
-                        .addParameter(node.getTypeNameGenericsed(), "n")
-                        .addParameter("A", "arg")
-                        .setBody(null);
-            }
-        }
-    }
+    protected abstract void generateVisitorFor(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit voidVisitorCu);
 }
