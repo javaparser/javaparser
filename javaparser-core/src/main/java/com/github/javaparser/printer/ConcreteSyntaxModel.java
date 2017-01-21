@@ -29,9 +29,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.*;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 
@@ -104,7 +102,12 @@ public class ConcreteSyntaxModel {
                 newline(),
                 orphanCommentsEnding()));
 
-        concreteSyntaxModelByClass.put(Name.class, attribute(IDENTIFIER));
+        concreteSyntaxModelByClass.put(Name.class, sequence(
+                comment(),
+                conditional(ObservableProperty.QUALIFIER, IS_PRESENT, sequence(child(ObservableProperty.QUALIFIER), token(ASTParserConstants.DOT))),
+                attribute(IDENTIFIER),
+                orphanCommentsEnding()
+        ));
 
         concreteSyntaxModelByClass.put(ImportDeclaration.class, sequence(
                 comment(),
@@ -280,6 +283,21 @@ public class ConcreteSyntaxModel {
                 list(ObservableProperty.SUPER_TYPES, sequence(space(), token(ASTParserConstants.SUPER), space()), none(), sequence(comma(), space()))));
 
         concreteSyntaxModelByClass.put(MarkerAnnotationExpr.class, sequence(comment(), token(ASTParserConstants.AT), attribute(ObservableProperty.NAME)));
+
+        concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(comment(), token(ASTParserConstants.RETURN),
+                conditional(ObservableProperty.EXPRESSION, IS_PRESENT, sequence(space(), child(ObservableProperty.EXPRESSION))),
+                semicolon()));
+
+        concreteSyntaxModelByClass.put(IfStmt.class, none());
+        concreteSyntaxModelByClass.put(ForeachStmt.class, none());
+        concreteSyntaxModelByClass.put(VariableDeclarationExpr.class, none());
+        concreteSyntaxModelByClass.put(StringLiteralExpr.class, none());
+        concreteSyntaxModelByClass.put(ThisExpr.class, none());
+        concreteSyntaxModelByClass.put(ForStmt.class, none());
+        concreteSyntaxModelByClass.put(BooleanLiteralExpr.class, none());
+        concreteSyntaxModelByClass.put(WhileStmt.class, none());
+        concreteSyntaxModelByClass.put(LambdaExpr.class, none());
+        concreteSyntaxModelByClass.put(CharLiteralExpr.class, none());
     }
 
     private ConcreteSyntaxModel() {

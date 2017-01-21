@@ -37,11 +37,11 @@ public class CsmComment implements CsmElement{
             if (comment instanceof BlockComment) {
                 printer.print("/*");
                 printer.print(comment.getContent());
-                printer.print("*/");
+                printer.print("*/\n");
             } else if (comment instanceof JavadocComment) {
                 printer.print("/**");
                 printer.print(comment.getContent());
-                printer.print("*/");
+                printer.print("*/\n");
             } else {
                 throw new UnsupportedOperationException(comment.getClass().getSimpleName());
             }

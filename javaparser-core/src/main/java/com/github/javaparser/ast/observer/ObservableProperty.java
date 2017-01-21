@@ -274,7 +274,17 @@ public enum ObservableProperty {
     public boolean isNull(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         try {
-            return null != node.getClass().getMethod(getterName).invoke(node);
+            return null == node.getClass().getMethod(getterName).invoke(node);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+        }
+    }
+
+    public boolean isNullOrEmpty(Node node) {
+        String getterName = "get" + Utils.capitalize(camelCaseName());
+        try {
+            Object result = node.getClass().getMethod(getterName).invoke(node);
+            return null == result || ((result instanceof Optional) && !((Optional)result).isPresent());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
         }

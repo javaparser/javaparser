@@ -43,7 +43,7 @@ public class CsmConditional implements CsmElement {
 
         boolean evaluate(Node node, ObservableProperty property){
             if (this == IS_PRESENT) {
-                return !property.isNull(node);
+                return !property.isNullOrEmpty(node);
             }
             if (this == FLAG) {
                 return (Boolean)property.singleValueFor(node);
