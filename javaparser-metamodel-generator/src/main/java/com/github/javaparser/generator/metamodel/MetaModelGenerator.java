@@ -238,12 +238,14 @@ public class MetaModelGenerator {
                 fieldType = t.getActualTypeArguments()[0];
             }
 
+//            nodeMetaModel.commentPropertyMetaModel=new PropertyMetaModel(nodeMetaModel, "getComment", "setComment", "comment", com.github.javaparser.ast.comments.Comment.class, getField(Node.class, "comment"), true, false, false, false, false);
+//            nodeMetaModel.propertyMetaModels.add(nodeMetaModel.commentPropertyMetaModel);
+
+
             String typeName = fieldType.getTypeName().replace('$', '.');
             String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
             classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-            String fieldAddition = f("%s.propertyMetaModels.add(new PropertyMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s));",
-                    classMetaModelFieldName,
-                    classMetaModelFieldName,
+            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s)", classMetaModelFieldName,
                     getter(field),
                     setter(field),
                     field.getName(),
@@ -254,7 +256,10 @@ public class MetaModelGenerator {
                     isNodeList,
                     isEnumSet,
                     hasWildcard);
+            String fieldSetting = f("%s.%s=%s;", classMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
+            String fieldAddition = f("%s.propertyMetaModels.add(%s.%s);", classMetaModelFieldName, classMetaModelFieldName, propertyMetaModelFieldName);
 
+            initializeFieldMetaModelsStatements.add(parseStatement(fieldSetting));
             initializeFieldMetaModelsStatements.add(parseStatement(fieldAddition));
         }
     }
