@@ -56,7 +56,7 @@ public class ConcreteSyntaxModelTest {
     @Test
     public void printSimplestClass() {
         Node node = JavaParser.parse("class A {}");
-        assertEquals("class A {\n" +
+        assertEquals("class A {\n\n" +
                 "}\n", print(node));
     }
 

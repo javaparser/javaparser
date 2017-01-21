@@ -51,7 +51,7 @@ public class CsmConditional implements CsmElement {
                 return property.listValueFor(node).isEmpty();
             }
             if (this == IS_NOT_EMPTY) {
-                return property.listValueFor(node).isEmpty();
+                return !property.listValueFor(node).isEmpty();
             }
             throw new UnsupportedOperationException(name());
         }
