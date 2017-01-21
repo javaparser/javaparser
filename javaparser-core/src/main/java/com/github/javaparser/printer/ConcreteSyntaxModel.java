@@ -31,6 +31,9 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -138,6 +141,24 @@ public class ConcreteSyntaxModel {
                 conditional(ObservableProperty.VAR_ARGS, FLAG, token(ASTParserConstants.ELLIPSIS)),
                 space(),
                 child(ObservableProperty.NAME)));
+
+        concreteSyntaxModelByClass.put(BlockStmt.class, sequence(
+                orphanCommentsBeforeThis(),
+                comment(),
+                token(ASTParserConstants.LBRACE),
+                newline(),
+                list(ObservableProperty.STATEMENTS, indent(), sequence(newline(), unindent()), newline()),
+                orphanCommentsEnding(),
+                token(ASTParserConstants.RBRACE)
+        ));
+
+        concreteSyntaxModelByClass.put(ExpressionStmt.class, sequence(
+
+        ));
+
+        concreteSyntaxModelByClass.put(MethodDeclaration.class, sequence(
+
+        ));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceDeclaration.class, sequence(
                     comment(),
