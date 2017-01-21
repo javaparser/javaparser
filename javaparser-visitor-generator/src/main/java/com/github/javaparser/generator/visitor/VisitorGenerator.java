@@ -55,8 +55,8 @@ public class VisitorGenerator {
 
                 List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getPropertyMetaModels());
                 BaseNodeMetaModel walkNode = node;
-                while (walkNode.getSuperClassMetaModel().isPresent()) {
-                    walkNode = walkNode.getSuperClassMetaModel().get();
+                while (walkNode.getSuperNodeMetaModel().isPresent()) {
+                    walkNode = walkNode.getSuperNodeMetaModel().get();
                     allPropertyMetaModels.addAll(walkNode.getPropertyMetaModels());
                 }
                 

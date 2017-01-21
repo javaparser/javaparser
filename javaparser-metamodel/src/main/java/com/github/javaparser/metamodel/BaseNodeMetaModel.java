@@ -9,7 +9,7 @@ import java.util.Optional;
  * These are all Nodes, except NodeList.
  */
 public class BaseNodeMetaModel {
-    private final Optional<BaseNodeMetaModel> superClassMetaModel;
+    private final Optional<BaseNodeMetaModel> superNodeMetaModel;
     private final JavaParserMetaModel javaParserMetaModel;
     private final List<PropertyMetaModel> propertyMetaModels = new ArrayList<>();
     private final Class<?> reflectionClass;
@@ -17,8 +17,8 @@ public class BaseNodeMetaModel {
     private final String packageName;
     private final boolean isAbstract;
 
-    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String packageName, boolean isAbstract) {
-        this.superClassMetaModel = superClassMetaModel;
+    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String packageName, boolean isAbstract) {
+        this.superNodeMetaModel = superNodeMetaModel;
         this.javaParserMetaModel = javaParserMetaModel;
         this.reflectionClass = reflectionClass;
         this.name = name;
@@ -34,8 +34,8 @@ public class BaseNodeMetaModel {
         return packageName + "." + name;
     }
 
-    public Optional<BaseNodeMetaModel> getSuperClassMetaModel() {
-        return superClassMetaModel;
+    public Optional<BaseNodeMetaModel> getSuperNodeMetaModel() {
+        return superNodeMetaModel;
     }
 
     public JavaParserMetaModel getJavaParserMetaModel() {
