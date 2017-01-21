@@ -1,10 +1,14 @@
 package com.github.javaparser.generator.utils;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class GeneratorUtils {
+public final class GeneratorUtils {
+    private GeneratorUtils() {
+    }
+
     /**
      * Capitalizes the first character in the string.
      */
@@ -24,6 +28,24 @@ public class GeneratorUtils {
         }
         return string.substring(0, 1).toLowerCase() + string.substring(1);
     }
+
+    public static String getterName(Field reflectionField) {
+        return getterName(reflectionField.getType(), reflectionField.getName());
+    }
+
+    public static String getterName(Class<?> type, String name) {
+        if (name.startsWith("is")) {
+            return name;
+        } else if (type.equals(Boolean.class)) {
+            return "is" + capitalize(name);
+        }
+        return "get" + capitalize(name);
+    }
+
+    public static String setterName(Field reflectionField) {
+        return "set" + capitalize(reflectionField.getName());
+    }
+
 
     /**
      * A shortcut to String.format.

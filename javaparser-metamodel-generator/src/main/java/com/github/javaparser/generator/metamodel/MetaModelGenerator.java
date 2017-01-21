@@ -253,7 +253,7 @@ public class MetaModelGenerator {
                     isEnumSet,
                     hasWildcard);
             String fieldSetting = f("%s.%s=%s;", classMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
-            String fieldAddition = f("%s.propertyMetaModels.add(%s.%s);", classMetaModelFieldName, classMetaModelFieldName, propertyMetaModelFieldName);
+            String fieldAddition = f("%s.getPropertyMetaModels().add(%s.%s);", classMetaModelFieldName, classMetaModelFieldName, propertyMetaModelFieldName);
 
             initializeFieldMetaModelsStatements.add(parseStatement(fieldSetting));
             initializeFieldMetaModelsStatements.add(parseStatement(fieldAddition));

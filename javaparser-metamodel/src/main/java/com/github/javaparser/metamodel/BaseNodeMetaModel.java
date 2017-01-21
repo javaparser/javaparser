@@ -9,13 +9,13 @@ import java.util.Optional;
  * These are all Nodes, except NodeList.
  */
 public class BaseNodeMetaModel {
-    public final Optional<BaseNodeMetaModel> superClassMetaModel;
-    public final JavaParserMetaModel javaParserMetaModel;
-    public final List<PropertyMetaModel> propertyMetaModels = new ArrayList<>();
-    public final Class<?> reflectionClass;
-    public final String name;
-    public final String packageName;
-    public final boolean isAbstract;
+    private final Optional<BaseNodeMetaModel> superClassMetaModel;
+    private final JavaParserMetaModel javaParserMetaModel;
+    private final List<PropertyMetaModel> propertyMetaModels = new ArrayList<>();
+    private final Class<?> reflectionClass;
+    private final String name;
+    private final String packageName;
+    private final boolean isAbstract;
 
     public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superClassMetaModel, JavaParserMetaModel javaParserMetaModel, Class<?> reflectionClass, String name, String packageName, boolean isAbstract) {
         this.superClassMetaModel = superClassMetaModel;
@@ -32,6 +32,34 @@ public class BaseNodeMetaModel {
 
     public String getQualifiedClassName() {
         return packageName + "." + name;
+    }
+
+    public Optional<BaseNodeMetaModel> getSuperClassMetaModel() {
+        return superClassMetaModel;
+    }
+
+    public JavaParserMetaModel getJavaParserMetaModel() {
+        return javaParserMetaModel;
+    }
+
+    public List<PropertyMetaModel> getPropertyMetaModels() {
+        return propertyMetaModels;
+    }
+
+    public Class<?> getReflectionClass() {
+        return reflectionClass;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public boolean isAbstract() {
+        return isAbstract;
     }
 
     @Override

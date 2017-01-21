@@ -6,9 +6,9 @@ public class JavaParserMetaModelTest {
     @Test
     public void outputEverythingWithoutFailure() {
         JavaParserMetaModel javaParserMetaModel = new JavaParserMetaModel();
-        for (BaseNodeMetaModel classMetaModel : javaParserMetaModel.nodeMetaModels) {
-            for (PropertyMetaModel propertyMetaModel : classMetaModel.propertyMetaModels) {
-                System.out.println(classMetaModel.name + "." + propertyMetaModel.name);
+        for (BaseNodeMetaModel classMetaModel : javaParserMetaModel.getNodeMetaModels()) {
+            for (PropertyMetaModel propertyMetaModel : classMetaModel.getPropertyMetaModels()) {
+                System.out.println(classMetaModel.getName() + "." + propertyMetaModel.getName());
             }
         }
         System.out.println(javaParserMetaModel);

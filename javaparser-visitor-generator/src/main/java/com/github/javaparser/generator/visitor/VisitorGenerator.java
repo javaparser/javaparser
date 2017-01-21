@@ -45,19 +45,19 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getClassByName("HashCodeVisitor").get();
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (BaseNodeMetaModel node : javaParserMetaModel.nodeMetaModels) {
-            if (!node.isAbstract) {
+        for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
+            if (!node.isAbstract()) {
                 MethodDeclaration visitMethod = voidVisitor.addMethod("visit", PUBLIC)
-                        .addParameter(node.name, "n")
+                        .addParameter(node.getName(), "n")
                         .addParameter("Void", "arg")
                         .setType(new ClassOrInterfaceType("Integer"));
                 BlockStmt body = visitMethod.getBody().get();
 
-                List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.propertyMetaModels);
+                List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getPropertyMetaModels());
                 BaseNodeMetaModel walkNode = node;
-                while (walkNode.superClassMetaModel.isPresent()) {
-                    walkNode = walkNode.superClassMetaModel.get();
-                    allPropertyMetaModels.addAll(walkNode.propertyMetaModels);
+                while (walkNode.getSuperClassMetaModel().isPresent()) {
+                    walkNode = walkNode.getSuperClassMetaModel().get();
+                    allPropertyMetaModels.addAll(walkNode.getPropertyMetaModels());
                 }
                 
                 if (allPropertyMetaModels.isEmpty()) {
@@ -71,15 +71,15 @@ public class VisitorGenerator {
 
                         final String getter = field.getGetterMethodName() + "()";
                         // Is this field another AST node? Visit it.
-                        if (javaParserMetaModel.getClassMetaModel(field.type).isPresent()) {
-                            if (field.isOptional) {
+                        if (field.isNode()) {
+                            if (field.isOptional()) {
                                 bodyBuilder += f("%s (n.%s.isPresent()? n.%s.get().accept(this, arg):0)", prefix, getter, getter);
                             } else {
                                 bodyBuilder += f("%s (n.%s.accept(this, arg))", prefix, getter);
                             }
-                        } else if (field.type.equals(boolean.class)) {
+                        } else if (field.getType().equals(boolean.class)) {
                             bodyBuilder += f("%s (n.%s?1:0)", prefix, getter);
-                        } else if (field.type.equals(int.class)) {
+                        } else if (field.getType().equals(int.class)) {
                             bodyBuilder += f("%s n.%s", prefix, getter);
                         } else {
                             bodyBuilder += f("%s (n.%s.hashCode())", prefix, getter);
@@ -99,10 +99,10 @@ public class VisitorGenerator {
         ClassOrInterfaceDeclaration voidVisitor = voidVisitorCu.getInterfaceByName("VoidVisitor").get();
         voidVisitor.getMethods().forEach(m -> voidVisitor.getMembers().remove(m));
 
-        for (BaseNodeMetaModel node : javaParserMetaModel.nodeMetaModels) {
-            if (!node.isAbstract) {
+        for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
+            if (!node.isAbstract()) {
                 voidVisitor.addMethod("visit")
-                        .addParameter(node.name, "n")
+                        .addParameter(node.getName(), "n")
                         .addParameter("A", "arg")
                         .setBody(null);
             }
