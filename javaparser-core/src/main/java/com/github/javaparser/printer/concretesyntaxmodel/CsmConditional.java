@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
@@ -51,7 +52,8 @@ public class CsmConditional implements CsmElement {
                 return property.listValueFor(node).isEmpty();
             }
             if (this == IS_NOT_EMPTY) {
-                return !property.listValueFor(node).isEmpty();
+                NodeList value = property.listValueFor(node);
+                return value != null && !value.isEmpty();
             }
             throw new UnsupportedOperationException(name());
         }

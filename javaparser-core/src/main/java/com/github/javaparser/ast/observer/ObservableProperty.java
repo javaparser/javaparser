@@ -116,7 +116,9 @@ public enum ObservableProperty {
     VAR_ARGS(MULTIPLE_REFERENCE),
     MAXIMUM_COMMON_TYPE(),
     USING_DIAMOND_OPERATOR,
-    IS_GENERIC;
+    IS_GENERIC,
+    IS_DEFAULT,
+    SUPER_TYPES;
 
     enum Type {
         SINGLE_ATTRIBUTE(false, false),
