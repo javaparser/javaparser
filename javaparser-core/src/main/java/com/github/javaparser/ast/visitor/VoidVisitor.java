@@ -36,9 +36,9 @@ import com.github.javaparser.ast.type.*;
  */
 public interface VoidVisitor<A> {
 
-    void visit(AnnotationDeclaration n, A arg);
-
     void visit(NodeList n, A arg);
+
+    void visit(AnnotationDeclaration n, A arg);
 
     void visit(AnnotationMemberDeclaration n, A arg);
 

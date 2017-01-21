@@ -13,7 +13,17 @@ public class VoidVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitorFor(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit voidVisitorCu) {
+    protected String getReturnType() {
+        return "void";
+    }
+
+    @Override
+    protected String getArgumentType() {
+        return "A";
+    }
+
+    @Override
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.setBody(null);
     }
 }

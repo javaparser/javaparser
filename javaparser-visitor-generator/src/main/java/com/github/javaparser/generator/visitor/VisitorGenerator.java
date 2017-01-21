@@ -4,14 +4,13 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 import java.io.IOException;
 import java.util.Optional;
-
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 public abstract class VisitorGenerator {
     protected final JavaParser javaParser;
@@ -29,11 +28,11 @@ public abstract class VisitorGenerator {
     }
 
     public void generate() throws IOException {
-        CompilationUnit voidVisitorCu = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
+        CompilationUnit compilationUnit = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
 
-        Optional<ClassOrInterfaceDeclaration> visitorClassOptional = voidVisitorCu.getClassByName(visitorClassName);
+        Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
         if (!visitorClassOptional.isPresent()) {
-            visitorClassOptional = voidVisitorCu.getInterfaceByName(visitorClassName);
+            visitorClassOptional = compilationUnit.getInterfaceByName(visitorClassName);
         }
         ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
 
@@ -43,13 +42,23 @@ public abstract class VisitorGenerator {
                         .filter(m -> m.getNameAsString().equals("visit"))
                         .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
                         .findFirst();
-                visitMethod.ifPresent(m -> generateVisitorFor(node, m, voidVisitorCu));
-                if (!visitMethod.isPresent()) {
-                    System.out.println(f("No visit method found for type %s", node));
+                
+                if (visitMethod.isPresent()) {
+                    generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
+                } else {
+                    MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
+                            .addParameter(node.getTypeNameGenericsed(), "n")
+                            .addParameter(getArgumentType(), "arg")
+                            .setType(getReturnType());
+                    generateVisitMethodBody(node, methodDeclaration, compilationUnit);
                 }
             }
         }
     }
 
-    protected abstract void generateVisitorFor(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit voidVisitorCu);
+    protected abstract String getReturnType();
+
+    protected abstract String getArgumentType();
+
+    protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);
 }

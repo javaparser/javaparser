@@ -22,7 +22,17 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitorFor(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit voidVisitorCu) {
+    protected String getReturnType() {
+        return "Integer";
+    }
+
+    @Override
+    protected String getArgumentType() {
+        return "Void";
+    }
+
+    @Override
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
@@ -64,4 +74,5 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
             body.addStatement(returnStatement);
         }
     }
+
 }
