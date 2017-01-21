@@ -68,4 +68,20 @@ public class ConcreteSyntaxModelTest {
                 "    int a;\n" +
                 "}\n", print(node));
     }
+
+    @Test
+    public void printAnEmptyInterface() {
+        Node node = JavaParser.parse("interface A {}");
+        assertEquals("interface A {\n" +
+                "\n" +
+                "}\n", print(node));
+    }
+
+    @Test
+    public void printAnEmptyInterfaceWithModifier() {
+        Node node = JavaParser.parse("public interface A {}");
+        assertEquals("public interface A {\n" +
+                "\n" +
+                "}\n", print(node));
+    }
 }

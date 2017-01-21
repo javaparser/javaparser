@@ -23,13 +23,14 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.observer.*;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
@@ -41,6 +42,8 @@ import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.FLAG;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_NOT_EMPTY;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.conditional;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.list;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 /**
@@ -55,7 +58,29 @@ public class ConcreteSyntaxModel {
         return list(ObservableProperty.MODIFIERS, space(), none(), space());
     }
 
+    private static CsmElement memberAnnotations() {
+        return list(ObservableProperty.ANNOTATIONS, none(), none(), newline());
+    }
+
+    private static CsmElement annotations() {
+        return list(ObservableProperty.ANNOTATIONS, none(), none(), newline());
+    }
+
+    private static CsmElement typeParameters() {
+        return list(ObservableProperty.TYPE_PARAMETERS, none(), space(), space());
+    }
+
     static {
+
+        ///
+        /// Comments
+        ///
+
+
+        ///
+        /// Top Level
+        ///
+
         concreteSyntaxModelByClass.put(CompilationUnit.class, sequence(
                     comment(),
                     child(ObservableProperty.PACKAGE_DECLARATION),
@@ -63,7 +88,56 @@ public class ConcreteSyntaxModel {
                     list(TYPES, newline()),
                     orphanCommentsEnding()));
 
+        concreteSyntaxModelByClass.put(PackageDeclaration.class, sequence(
+                comment(),
+                list(ObservableProperty.ANNOTATIONS),
+                token(ASTParserConstants.PACKAGE),
+                space(),
+                child(ObservableProperty.NAME),
+                semicolon(),
+                newline(),
+                newline(),
+                orphanCommentsEnding()));
+
+        concreteSyntaxModelByClass.put(Name.class, attribute(IDENTIFIER));
+
+        concreteSyntaxModelByClass.put(ImportDeclaration.class, sequence(
+                comment(),
+                token(ASTParserConstants.IMPORT),
+                space(),
+                conditional(IS_STATIC, FLAG, sequence(token(ASTParserConstants.STATIC), space())),
+                child(ObservableProperty.NAME),
+                conditional(IS_ASTERISK, FLAG, sequence(token(ASTParserConstants.DOT), token(ASTParserConstants.STAR))),
+                semicolon(),
+                newline(),
+                orphanCommentsEnding()
+        ));
+
         concreteSyntaxModelByClass.put(SimpleName.class, attribute(ObservableProperty.IDENTIFIER));
+
+        concreteSyntaxModelByClass.put(ConstructorDeclaration.class, sequence(
+                comment(),
+                memberAnnotations(),
+                modifiers(),
+                typeParameters(),
+                conditional(ObservableProperty.IS_GENERIC, FLAG, space()),
+                child(ObservableProperty.NAME),
+                token(ASTParserConstants.LPAREN),
+                list(ObservableProperty.PARAMETERS, none(), none(), sequence(comma(), space())),
+                token(ASTParserConstants.RPAREN),
+                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(space(), token(ASTParserConstants.THROWS), space()), none(), sequence(comma(), space())),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
+
+        concreteSyntaxModelByClass.put(Parameter.class, sequence(
+                comment(),
+                annotations(),
+                modifiers(),
+                child(ObservableProperty.TYPE),
+                conditional(ObservableProperty.VAR_ARGS, FLAG, token(ASTParserConstants.ELLIPSIS)),
+                space(),
+                child(ObservableProperty.NAME)));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceDeclaration.class, sequence(
                     comment(),

@@ -22,6 +22,9 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
@@ -30,7 +33,18 @@ public class CsmComment implements CsmElement{
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (node.hasComment()) {
-            ConcreteSyntaxModel.genericPrettyPrint(node.getComment(), printer);
+            Comment comment = node.getComment();
+            if (comment instanceof BlockComment) {
+                printer.print("/*");
+                printer.print(comment.getContent());
+                printer.print("*/");
+            } else if (comment instanceof JavadocComment) {
+                printer.print("/**");
+                printer.print(comment.getContent());
+                printer.print("*/");
+            } else {
+                throw new UnsupportedOperationException(comment.getClass().getSimpleName());
+            }
         }
     }
 
