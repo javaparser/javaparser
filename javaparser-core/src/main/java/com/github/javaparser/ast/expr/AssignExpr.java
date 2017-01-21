@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.Printable;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -40,9 +41,19 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public final class AssignExpr extends Expression {
 
-    public enum Operator {
-
-        ASSIGN("="), PLUS("+="), MINUS("-="), MULTIPLY("*="), DIVIDE("/="), AND("&="), OR("|="), XOR("^="), REMAINDER("%="), LEFT_SHIFT("<<="), SIGNED_RIGHT_SHIFT(">>="), UNSIGNED_RIGHT_SHIFT(">>>=");
+    public enum Operator implements Printable {
+        ASSIGN("="),
+        PLUS("+="),
+        MINUS("-="),
+        MULTIPLY("*="),
+        DIVIDE("/="),
+        AND("&="),
+        OR("|="),
+        XOR("^="),
+        REMAINDER("%="),
+        LEFT_SHIFT("<<="),
+        SIGNED_RIGHT_SHIFT(">>="),
+        UNSIGNED_RIGHT_SHIFT(">>>=");
 
         private final String codeRepresentation;
 

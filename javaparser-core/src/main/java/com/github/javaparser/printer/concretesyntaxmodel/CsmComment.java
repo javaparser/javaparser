@@ -25,6 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
@@ -42,6 +43,10 @@ public class CsmComment implements CsmElement{
                 printer.print("/**");
                 printer.print(comment.getContent());
                 printer.print("*/\n");
+            } else if (comment instanceof LineComment) {
+                printer.print("//");
+                printer.print(comment.getContent());
+                printer.println();
             } else {
                 throw new UnsupportedOperationException(comment.getClass().getSimpleName());
             }

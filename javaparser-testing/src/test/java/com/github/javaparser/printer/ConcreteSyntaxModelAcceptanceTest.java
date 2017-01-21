@@ -50,7 +50,7 @@ public class ConcreteSyntaxModelAcceptanceTest {
     @Test
     public void printingExamplePrettyPrintVisitor() throws IOException {
         CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/PrettyPrintVisitor.java");
-        assertEquals(prettyPrint(cu), prettyPrintedExpectation("PrettyPrintVisitor"));
+        assertEquals(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
 }
