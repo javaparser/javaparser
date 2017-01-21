@@ -1,18 +1,17 @@
 package com.github.javaparser.metamodel;
 
 import java.lang.reflect.Field;
-import java.util.Optional;
+
+import static com.github.javaparser.utils.Utils.capitalize;
 
 /**
- * Meta-data about a field in a node in the AST.
+ * Meta-data about a property of a node in the AST.
  */
 public class PropertyMetaModel {
     public final BaseNodeMetaModel classMetaModel;
-    public final String getter;
-    public final String setter;
     public final String name;
     public final Class<?> type;
-//    public Optional<CommentMetaModel> typeReference;
+    //    public Optional<CommentMetaModel> typeReference;
 //    public Optional<Class<Integer>> tpe;
     public final Field reflectionField;
     public final boolean isNode;
@@ -21,10 +20,8 @@ public class PropertyMetaModel {
     public final boolean isSet;
     public final boolean hasWildcard;
 
-    public PropertyMetaModel(BaseNodeMetaModel classMetaModel, String getter, String setter, String name, Class<?> type, Field reflectionField, boolean isNode, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
+    public PropertyMetaModel(BaseNodeMetaModel classMetaModel, String name, Class<?> type, Field reflectionField, boolean isNode, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
         this.classMetaModel = classMetaModel;
-        this.getter = getter;
-        this.setter = setter;
         this.name = name;
         this.type = type;
         this.reflectionField = reflectionField;
@@ -41,6 +38,20 @@ public class PropertyMetaModel {
 
     public boolean is(String fieldName) {
         return name.equals(fieldName);
+    }
+
+    private String getSetterMethodName() {
+        return "set" + capitalize(reflectionField.getName());
+    }
+
+    private String getGetterMethodName() {
+        String name = reflectionField.getName();
+        if (name.startsWith("is")) {
+            return name;
+        } else if (reflectionField.getType().equals(Boolean.class)) {
+            return "is" + capitalize(name);
+        }
+        return "get" + capitalize(name);
     }
 
     @Override

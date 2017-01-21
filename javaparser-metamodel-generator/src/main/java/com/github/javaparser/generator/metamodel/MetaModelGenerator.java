@@ -238,16 +238,11 @@ public class MetaModelGenerator {
                 fieldType = t.getActualTypeArguments()[0];
             }
 
-//            nodeMetaModel.commentPropertyMetaModel=new PropertyMetaModel(nodeMetaModel, "getComment", "setComment", "comment", com.github.javaparser.ast.comments.Comment.class, getField(Node.class, "comment"), true, false, false, false, false);
-//            nodeMetaModel.propertyMetaModels.add(nodeMetaModel.commentPropertyMetaModel);
-
-
             String typeName = fieldType.getTypeName().replace('$', '.');
             String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
             classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", \"%s\", \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s)", classMetaModelFieldName,
-                    getter(field),
-                    setter(field),
+            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, getField(%s.class, \"%s\"), true, %s, %s, %s, %s)", 
+                    classMetaModelFieldName,
                     field.getName(),
                     typeName,
                     c.getSimpleName(),
