@@ -131,8 +131,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     @Override
     public JavadocComment getJavadocComment() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
+        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
+            return (JavadocComment) getComment().get();
         }
         return null;
     }

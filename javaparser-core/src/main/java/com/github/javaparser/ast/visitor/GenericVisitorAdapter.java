@@ -1657,11 +1657,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     private void visitComment(Node n, A arg) {
-        if (n.getComment() != null) {
-            Comment result = (Comment) n.getComment().accept(this, arg);
+        n.getComment().ifPresent(c -> {
+            Comment result = (Comment) c.accept(this, arg);
             if (result != null) {
                 n.setComment(result);
             }
-        }
+        });
     }
 }

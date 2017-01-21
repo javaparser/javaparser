@@ -10,45 +10,30 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
+/**
+ * Generates JavaParser's HashCodeVisitor.
+ */
 public class HashCodeVisitorGenerator extends VisitorGenerator {
     public HashCodeVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", javaParserMetaModel);
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true, javaParserMetaModel);
     }
 
     @Override
-    protected String getReturnType() {
-        return "Integer";
-    }
-
-    @Override
-    protected String getArgumentType() {
-        return "Void";
-    }
-
-    @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, List<PropertyMetaModel> propertyMetaModels, CompilationUnit compilationUnit) {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getPropertyMetaModels());
-        BaseNodeMetaModel walkNode = node;
-        while (walkNode.getSuperNodeMetaModel().isPresent()) {
-            walkNode = walkNode.getSuperNodeMetaModel().get();
-            allPropertyMetaModels.addAll(walkNode.getPropertyMetaModels());
-        }
-
-        if (allPropertyMetaModels.isEmpty()) {
+        if (propertyMetaModels.isEmpty()) {
             body.addStatement(parseStatement("return 0;"));
         } else {
             String bodyBuilder = "return";
             String prefix = "";
-            for (PropertyMetaModel field : allPropertyMetaModels) {
+            for (PropertyMetaModel field : propertyMetaModels) {
 
                 final String getter = field.getGetterMethodName() + "()";
                 // Is this field another AST node? Visit it.
@@ -74,5 +59,4 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
             body.addStatement(returnStatement);
         }
     }
-
 }

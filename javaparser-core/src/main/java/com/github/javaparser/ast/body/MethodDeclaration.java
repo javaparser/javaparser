@@ -363,8 +363,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public JavadocComment getJavadocComment() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
+        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
+            return (JavadocComment) getComment().get();
         }
         return null;
     }

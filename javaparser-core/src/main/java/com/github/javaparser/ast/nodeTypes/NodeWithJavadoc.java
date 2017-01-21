@@ -74,6 +74,6 @@ public interface NodeWithJavadoc<N extends Node> {
 
     default boolean removeJavaDocComment() {
         Node thisNode = (Node) this;
-        return thisNode.hasJavaDocComment() && thisNode.getComment().remove();
+        return thisNode.hasJavaDocComment() && thisNode.getComment().get().remove();
     }
 }

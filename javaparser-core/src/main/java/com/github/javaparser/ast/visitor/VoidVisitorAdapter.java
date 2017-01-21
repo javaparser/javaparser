@@ -32,6 +32,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
+import java.util.Optional;
+
 /**
  * @author Julio Vilmar Gesser
  */
@@ -812,10 +814,8 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getName().accept(this, arg);
     }
     
-    private void visitComment(final Comment n, final A arg) {
-        if (n != null) {
-            n.accept(this, arg);
-        }
+    private void visitComment(final Optional<Comment> n, final A arg) {
+        n.ifPresent(n2 -> n2.accept(this, arg));
     }
 
     private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
