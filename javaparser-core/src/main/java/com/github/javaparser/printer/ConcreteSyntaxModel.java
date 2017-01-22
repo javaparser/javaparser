@@ -337,7 +337,10 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(NullLiteralExpr.class, none());
-        concreteSyntaxModelByClass.put(TypeExpr.class, none());
+        concreteSyntaxModelByClass.put(TypeExpr.class, sequence(
+                comment(),
+                child(ObservableProperty.TYPE)
+        ));
     }
 
     private ConcreteSyntaxModel() {
