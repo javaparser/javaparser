@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javaparser-metamodel</artifactId>
+    <description>A description of all the types nodes that can appear in the AST</description>
 
     <dependencies>
         <dependency>

@@ -8,6 +8,7 @@
 
     <artifactId>javaparser-core</artifactId>
     <packaging>jar</packaging>
+    <description>The core parser functionality. This may be all you need.</description>
 
     <licenses>
         <license>

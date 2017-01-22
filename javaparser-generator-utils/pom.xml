@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>javaparser-generator-utils</artifactId>
+    <description>A collection of tools that help writing code generators.</description>
 
     <dependencies>
         <dependency>

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javaparser-metamodel-generator</artifactId>
+    <description>The tool that generates the code in the javaparser-metamodel module</description>
 
     <dependencies>
         <dependency>
