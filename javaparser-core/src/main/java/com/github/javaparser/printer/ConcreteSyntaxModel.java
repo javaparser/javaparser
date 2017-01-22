@@ -196,7 +196,7 @@ public class ConcreteSyntaxModel {
                             token(ASTParserConstants.IMPLEMENTS),
                             space()), none()),
                     space(),
-                    block(sequence(newline(), newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), none(), none()))),
+                    block(sequence(newline(), newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), none(), newline()))),
                     newline()));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),
@@ -228,33 +228,13 @@ public class ConcreteSyntaxModel {
                     list(ObservableProperty.VARIABLES, sequence(comma(), space(), null, null)),
                     semicolon()));
 
+        // FIXME array levels
         concreteSyntaxModelByClass.put(VariableDeclarator.class, sequence(
                     comment(),
-                    child(ObservableProperty.NAME)));
-
-//        printJavaComment(n.getComment(), arg);
-//        n.getName().accept(this, arg);
-//
-//        Type commonType = n.getAncestorOfType(NodeWithVariables.class).get().getMaximumCommonType();
-//
-//        Type type = n.getType();
-//
-//        ArrayType arrayType = null;
-//
-//        for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
-//            if (arrayType == null) {
-//                arrayType = (ArrayType) type;
-//            } else {
-//                arrayType = (ArrayType) arrayType.getComponentType();
-//            }
-//            printAnnotations(arrayType.getAnnotations(), true, arg);
-//            printer.print("[]");
-//        }
-//
-//        if (n.getInitializer().isPresent()) {
-//            printer.print(" = ");
-//            n.getInitializer().get().accept(this, arg);
-//        }
+                    child(ObservableProperty.NAME),
+                    conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(ASTParserConstants.ASSIGN), space(),
+                            child(ObservableProperty.INITIALIZER)))
+        ));
 
         concreteSyntaxModelByClass.put(ClassExpr.class, sequence(
                 comment(), child(ObservableProperty.TYPE), token(ASTParserConstants.DOT), token(ASTParserConstants.CLASS)));
@@ -468,6 +448,7 @@ public class ConcreteSyntaxModel {
                 token(ASTParserConstants.LPAREN),
                 child(ObservableProperty.TYPE),
                 token(ASTParserConstants.RPAREN),
+                space(),
                 child(ObservableProperty.EXPRESSION)
         ));
         concreteSyntaxModelByClass.put(UnknownType.class, none());

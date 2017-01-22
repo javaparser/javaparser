@@ -22,38 +22,38 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
-public class CsmComment implements CsmElement{
+import java.util.LinkedList;
+import java.util.List;
 
-    static void process(Comment comment, SourcePrinter printer) {
-        if (comment instanceof BlockComment) {
-            printer.print("/*");
-            printer.print(comment.getContent());
-            printer.print("*/\n");
-        } else if (comment instanceof JavadocComment) {
-            printer.print("/**");
-            printer.print(comment.getContent());
-            printer.print("*/\n");
-        } else if (comment instanceof LineComment) {
-            printer.print("//");
-            printer.print(comment.getContent());
-            printer.println();
-        } else {
-            throw new UnsupportedOperationException(comment.getClass().getSimpleName());
-        }
-    }
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+
+public class CsmOrphanCommentsEnding implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        if (node.hasComment()) {
-            Comment comment = node.getComment();
-            process(comment, printer);
+        List<Node> everything = new LinkedList<>();
+        everything.addAll(node.getChildNodes());
+        sortByBeginPosition(everything);
+        if (everything.isEmpty()) {
+            return;
+        }
+
+        int commentsAtEnd = 0;
+        boolean findingComments = true;
+        while (findingComments && commentsAtEnd < everything.size()) {
+            Node last = everything.get(everything.size() - 1 - commentsAtEnd);
+            findingComments = (last instanceof Comment);
+            if (findingComments) {
+                commentsAtEnd++;
+            }
+        }
+        for (int i = 0; i < commentsAtEnd; i++) {
+            Comment c = (Comment)everything.get(everything.size() - commentsAtEnd + i);
+            CsmComment.process(c, printer);
         }
     }
 

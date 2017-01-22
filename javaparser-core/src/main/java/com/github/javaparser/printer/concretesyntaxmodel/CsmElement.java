@@ -109,8 +109,7 @@ public interface CsmElement {
     }
 
     static CsmElement orphanCommentsEnding() {
-        // FIXME
-        return new CsmNone();
+        return new CsmOrphanCommentsEnding();
     }
 
     static CsmElement orphanCommentsBeforeThis() {
