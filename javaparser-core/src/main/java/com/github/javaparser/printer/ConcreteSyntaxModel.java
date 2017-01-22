@@ -175,7 +175,7 @@ public class ConcreteSyntaxModel {
                 space(),
                 child(ObservableProperty.NAME),
                 token(ASTParserConstants.LPAREN),
-                list(ObservableProperty.PARAMETERS, none(), none(), sequence(comma(), space())),
+                list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
                 token(ASTParserConstants.RPAREN),
                 list(ObservableProperty.THROWN_EXCEPTIONS, sequence(space(), token(ASTParserConstants.THROWS), space()), none(), sequence(comma(), space())),
                 conditional(ObservableProperty.BODY, IS_PRESENT, sequence(space(), child(ObservableProperty.BODY)), semicolon())
@@ -260,7 +260,9 @@ public class ConcreteSyntaxModel {
             list(ObservableProperty.TYPE_ARGUMENTS),
             conditional(ObservableProperty.TYPE_ARGUMENTS, IS_NOT_EMPTY, space()),
             child(ObservableProperty.TYPE),
+            token(ASTParserConstants.LPAREN),
             list(ObservableProperty.ARGUMENTS, sequence(comma(), space()), none(), none()),
+            token(ASTParserConstants.RPAREN),
             conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT, sequence(
                     space(),
                     child(ObservableProperty.ANONYMOUS_CLASS_BODY)))
@@ -295,6 +297,7 @@ public class ConcreteSyntaxModel {
                 token(ASTParserConstants.LPAREN),
                 child(ObservableProperty.CONDITION),
                 token(ASTParserConstants.RPAREN),
+                space(),
                 child(ObservableProperty.THEN_STMT),
                 conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, sequence(space(), token(ASTParserConstants.ELSE), space(), child(ObservableProperty.ELSE_STMT)))
         ));
@@ -308,11 +311,33 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(WhileStmt.class, none());
         concreteSyntaxModelByClass.put(LambdaExpr.class, none());
         concreteSyntaxModelByClass.put(CharLiteralExpr.class, none());
-        concreteSyntaxModelByClass.put(BinaryExpr.class, none());
+        concreteSyntaxModelByClass.put(BinaryExpr.class, sequence(
+                comment(),
+                child(ObservableProperty.LEFT),
+                space(),
+                attribute(ObservableProperty.OPERATOR),
+                space(),
+                child(ObservableProperty.RIGHT)
+        ));
+
         concreteSyntaxModelByClass.put(UnaryExpr.class, none());
         concreteSyntaxModelByClass.put(InstanceOfExpr.class, none());
         concreteSyntaxModelByClass.put(EnclosedExpr.class, none());
         concreteSyntaxModelByClass.put(ThrowStmt.class, none());
+        concreteSyntaxModelByClass.put(IntegerLiteralExpr.class, sequence(
+                comment(),
+                attribute(ObservableProperty.VALUE)
+        ));
+        concreteSyntaxModelByClass.put(MethodReferenceExpr.class, sequence(
+                comment(),
+                child(ObservableProperty.SCOPE),
+                token(ASTParserConstants.DOUBLECOLON),
+                typeArguments(),
+                attribute(ObservableProperty.IDENTIFIER)
+        ));
+
+        concreteSyntaxModelByClass.put(NullLiteralExpr.class, none());
+        concreteSyntaxModelByClass.put(TypeExpr.class, none());
     }
 
     private ConcreteSyntaxModel() {

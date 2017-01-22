@@ -1319,7 +1319,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (identifier != null) {
             printer.print(identifier);
         }
-
     }
 
     @Override
