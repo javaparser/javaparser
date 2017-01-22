@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.Printable;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -44,9 +45,15 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public final class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
 
-    public enum Operator {
-
-        PLUS("+", false), MINUS("-", false), PREFIX_INCREMENT("++", false), PREFIX_DECREMENT("--", false), LOGICAL_COMPLEMENT("!", false), BITWISE_COMPLEMENT("~", false), POSTFIX_INCREMENT("++", true), POSTFIX_DECREMENT("--", true);
+    public enum Operator implements Printable {
+        PLUS("+", false),
+        MINUS("-", false),
+        PREFIX_INCREMENT("++", false),
+        PREFIX_DECREMENT("--", false),
+        LOGICAL_COMPLEMENT("!", false),
+        BITWISE_COMPLEMENT("~", false),
+        POSTFIX_INCREMENT("++", true),
+        POSTFIX_DECREMENT("--", true);
 
         private final String codeRepresentation;
 
@@ -126,6 +133,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return this;
     }
 
+<<<<<<< HEAD
     @Override
     public boolean remove(Node node) {
         if (node == null)
@@ -141,6 +149,14 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     @Override
     public UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
+=======
+    public boolean isPostfix() {
+        return operator.isPostfix();
+    }
+
+    public boolean isPrefix() {
+        return !isPostfix();
+>>>>>>> issue705: changes necessary to support UnaryExpr
     }
 }
 

@@ -58,6 +58,10 @@ public interface CsmElement {
         return new CsmString(property);
     }
 
+    static CsmElement charToken(ObservableProperty property) {
+        return new CsmChar(property);
+    }
+
     static CsmElement token(int tokenType) {
         return new CsmToken(tokenType);
     }
