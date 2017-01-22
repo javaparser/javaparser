@@ -259,6 +259,7 @@ public class MetaModelGenerator {
             case "data":
             case "range":
             case "childNodes":
+            case "commentedNode":
             case "orphanComments":
                 return true;
         }

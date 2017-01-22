@@ -85,7 +85,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(BlockComment n, Void arg) {
-        return (n.getCommentedNode().isPresent() ? n.getCommentedNode().get().accept(this, arg) : 0) * 31 + (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(BlockStmt n, Void arg) {
@@ -217,7 +217,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(JavadocComment n, Void arg) {
-        return (n.getCommentedNode().isPresent() ? n.getCommentedNode().get().accept(this, arg) : 0) * 31 + (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(LabeledStmt n, Void arg) {
@@ -229,7 +229,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(LineComment n, Void arg) {
-        return (n.getCommentedNode().isPresent() ? n.getCommentedNode().get().accept(this, arg) : 0) * 31 + (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     public Integer visit(LocalClassDeclarationStmt n, Void arg) {
@@ -269,7 +269,11 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(NodeList n, Void arg) {
-        return 0;
+        int result = 0;
+        for (Object node : n) {
+            result += 31 * ((Visitable) node).accept(this, arg);
+        }
+        return result;
     }
 
     public Integer visit(NormalAnnotationExpr n, Void arg) {

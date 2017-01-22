@@ -8,8 +8,6 @@ public class CommentMetaModel extends BaseNodeMetaModel {
         super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.comments.Comment.class, "Comment", "com.github.javaparser.ast.comments", true, false);
     }
 
-    public PropertyMetaModel commentedNodePropertyMetaModel;
-
     public PropertyMetaModel contentPropertyMetaModel;
 }
 
