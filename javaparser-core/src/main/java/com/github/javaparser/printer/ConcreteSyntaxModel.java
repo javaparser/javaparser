@@ -22,10 +22,7 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.ASTParserConstants;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.*;
@@ -302,13 +299,40 @@ public class ConcreteSyntaxModel {
                 conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, sequence(space(), token(ASTParserConstants.ELSE), space(), child(ObservableProperty.ELSE_STMT)))
         ));
 
-        concreteSyntaxModelByClass.put(ForeachStmt.class, none());
-        concreteSyntaxModelByClass.put(VariableDeclarationExpr.class, none());
+        concreteSyntaxModelByClass.put(ForeachStmt.class, sequence(
+                comment(),
+                token(ASTParserConstants.FOR),
+                space(),
+                token(ASTParserConstants.LPAREN),
+                child(ObservableProperty.VARIABLE),
+                space(),
+                token(ASTParserConstants.COLON),
+                space(),
+                child(ObservableProperty.ITERABLE),
+                token(ASTParserConstants.RPAREN),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
+
+        concreteSyntaxModelByClass.put(VariableDeclarationExpr.class, sequence(
+                comment(),
+                annotations(),
+                modifiers(),
+                child(ObservableProperty.MAXIMUM_COMMON_TYPE),
+                space(),
+                list(ObservableProperty.VARIABLES, sequence(comma(), space()))
+        ));
+
         concreteSyntaxModelByClass.put(StringLiteralExpr.class, sequence(
                 comment(),
                 stringToken(ObservableProperty.VALUE)
         ));
-        concreteSyntaxModelByClass.put(ThisExpr.class, none());
+        concreteSyntaxModelByClass.put(ThisExpr.class, sequence(
+                comment(),
+                conditional(ObservableProperty.CLASS_EXPR, IS_PRESENT, sequence(child(CLASS_EXPR), token(ASTParserConstants.DOT))),
+                token(ASTParserConstants.THIS)
+        ));
+
         concreteSyntaxModelByClass.put(ForStmt.class, sequence(
                 comment(),
                 token(ASTParserConstants.FOR),
@@ -321,39 +345,36 @@ public class ConcreteSyntaxModel {
                 semicolon(),
                 space(),
                 list(ObservableProperty.UPDATE, sequence(comma(), space())),
+                token(ASTParserConstants.RPAREN),
+                space(),
+                child(ObservableProperty.BODY)
         ));
 
-//        printJavaComment(n.getComment(), arg);
-//        printer.print("for (");
-//        if (n.getInitialization() != null) {
-//            for (final Iterator<Expression> i = n.getInitialization().iterator(); i.hasNext(); ) {
-//                final Expression e = i.next();
-//                e.accept(this, arg);
-//                if (i.hasNext()) {
-//                    printer.print(", ");
-//                }
-//            }
-//        }
-//        printer.print("; ");
-//        if (n.getCompare().isPresent()) {
-//            n.getCompare().get().accept(this, arg);
-//        }
-//        printer.print("; ");
-//        if (n.getUpdate() != null) {
-//            for (final Iterator<Expression> i = n.getUpdate().iterator(); i.hasNext(); ) {
-//                final Expression e = i.next();
-//                e.accept(this, arg);
-//                if (i.hasNext()) {
-//                    printer.print(", ");
-//                }
-//            }
-//        }
-//        printer.print(") ");
-//        n.getBody().accept(this, arg);
+        concreteSyntaxModelByClass.put(BooleanLiteralExpr.class, sequence(
+                comment(), attribute(VALUE)
+        ));
+        concreteSyntaxModelByClass.put(WhileStmt.class, sequence(
+                comment(),
+                token(ASTParserConstants.WHILE),
+                space(),
+                token(ASTParserConstants.LPAREN),
+                child(ObservableProperty.CONDITION),
+                token(ASTParserConstants.RPAREN),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
 
-        concreteSyntaxModelByClass.put(BooleanLiteralExpr.class, none());
-        concreteSyntaxModelByClass.put(WhileStmt.class, none());
-        concreteSyntaxModelByClass.put(LambdaExpr.class, none());
+        concreteSyntaxModelByClass.put(LambdaExpr.class, sequence(
+                comment(),
+                conditional(ObservableProperty.ENCLOSING_PARAMETERS, FLAG, token(ASTParserConstants.LPAREN)),
+                list(ObservableProperty.PARAMETERS, sequence(comma(), space())),
+                conditional(ObservableProperty.ENCLOSING_PARAMETERS, FLAG, token(ASTParserConstants.RPAREN)),
+                space(),
+                token(ASTParserConstants.ARROW),
+                space(),
+                child(ObservableProperty.BODY)
+        ));
+
         concreteSyntaxModelByClass.put(CharLiteralExpr.class, none());
         concreteSyntaxModelByClass.put(BinaryExpr.class, sequence(
                 comment(),
@@ -385,6 +406,8 @@ public class ConcreteSyntaxModel {
                 comment(),
                 child(ObservableProperty.TYPE)
         ));
+        concreteSyntaxModelByClass.put(CastExpr.class, none());
+        concreteSyntaxModelByClass.put(UnknownType.class, none());
     }
 
     private ConcreteSyntaxModel() {
