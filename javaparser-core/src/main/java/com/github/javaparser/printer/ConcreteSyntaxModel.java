@@ -304,9 +304,53 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ForeachStmt.class, none());
         concreteSyntaxModelByClass.put(VariableDeclarationExpr.class, none());
-        concreteSyntaxModelByClass.put(StringLiteralExpr.class, none());
+        concreteSyntaxModelByClass.put(StringLiteralExpr.class, sequence(
+                comment(),
+                stringToken(ObservableProperty.VALUE)
+        ));
         concreteSyntaxModelByClass.put(ThisExpr.class, none());
-        concreteSyntaxModelByClass.put(ForStmt.class, none());
+        concreteSyntaxModelByClass.put(ForStmt.class, sequence(
+                comment(),
+                token(ASTParserConstants.FOR),
+                space(),
+                token(ASTParserConstants.LPAREN),
+                list(ObservableProperty.INITIALIZATION, sequence(comma(), space())),
+                semicolon(),
+                space(),
+                child(ObservableProperty.COMPARE),
+                semicolon(),
+                space(),
+                list(ObservableProperty.UPDATE, sequence(comma(), space())),
+        ));
+
+//        printJavaComment(n.getComment(), arg);
+//        printer.print("for (");
+//        if (n.getInitialization() != null) {
+//            for (final Iterator<Expression> i = n.getInitialization().iterator(); i.hasNext(); ) {
+//                final Expression e = i.next();
+//                e.accept(this, arg);
+//                if (i.hasNext()) {
+//                    printer.print(", ");
+//                }
+//            }
+//        }
+//        printer.print("; ");
+//        if (n.getCompare().isPresent()) {
+//            n.getCompare().get().accept(this, arg);
+//        }
+//        printer.print("; ");
+//        if (n.getUpdate() != null) {
+//            for (final Iterator<Expression> i = n.getUpdate().iterator(); i.hasNext(); ) {
+//                final Expression e = i.next();
+//                e.accept(this, arg);
+//                if (i.hasNext()) {
+//                    printer.print(", ");
+//                }
+//            }
+//        }
+//        printer.print(") ");
+//        n.getBody().accept(this, arg);
+
         concreteSyntaxModelByClass.put(BooleanLiteralExpr.class, none());
         concreteSyntaxModelByClass.put(WhileStmt.class, none());
         concreteSyntaxModelByClass.put(LambdaExpr.class, none());
