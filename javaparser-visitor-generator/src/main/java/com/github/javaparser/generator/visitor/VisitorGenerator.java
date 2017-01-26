@@ -49,25 +49,27 @@ public abstract class VisitorGenerator {
         }
         ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
 
-        for (BaseNodeMetaModel node : javaParserMetaModel.getNodeMetaModels()) {
-            if (!node.isAbstract()) {
-                List<PropertyMetaModel> allPropertyMetaModels = collectAllPropertyMetaModels(node);
+        javaParserMetaModel.getNodeMetaModels().stream()
+                .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
+                .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
+    }
 
-                Optional<MethodDeclaration> visitMethod = visitorClass.getMethods().stream()
-                        .filter(m -> m.getNameAsString().equals("visit"))
-                        .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
-                        .findFirst();
+    private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
+        List<PropertyMetaModel> allPropertyMetaModels = collectAllPropertyMetaModels(node);
 
-                if (visitMethod.isPresent()) {
-                    generateVisitMethodBody(node, visitMethod.get(), allPropertyMetaModels, compilationUnit);
-                } else if (createMissingVisitMethods) {
-                    MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
-                            .addParameter(node.getTypeNameGenericsed(), "n")
-                            .addParameter(argumentType, "arg")
-                            .setType(returnType);
-                    generateVisitMethodBody(node, methodDeclaration, allPropertyMetaModels, compilationUnit);
-                }
-            }
+        Optional<MethodDeclaration> visitMethod = visitorClass.getMethods().stream()
+                .filter(m -> m.getNameAsString().equals("visit"))
+                .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
+                .findFirst();
+
+        if (visitMethod.isPresent()) {
+            generateVisitMethodBody(node, visitMethod.get(), allPropertyMetaModels, compilationUnit);
+        } else if (createMissingVisitMethods) {
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
+                    .addParameter(node.getTypeNameGenerified(), "n")
+                    .addParameter(argumentType, "arg")
+                    .setType(returnType);
+            generateVisitMethodBody(node, methodDeclaration, allPropertyMetaModels, compilationUnit);
         }
     }
 

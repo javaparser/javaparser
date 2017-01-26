@@ -8,7 +8,7 @@ public class JavaParserMetaModelTest {
         JavaParserMetaModel javaParserMetaModel = new JavaParserMetaModel();
         for (BaseNodeMetaModel classMetaModel : javaParserMetaModel.getNodeMetaModels()) {
             for (PropertyMetaModel propertyMetaModel : classMetaModel.getPropertyMetaModels()) {
-                System.out.println(classMetaModel.getTypeNameGenericsed() + "." + propertyMetaModel.getName());
+                System.out.println(classMetaModel.getTypeNameGenerified() + "." + propertyMetaModel.getName());
             }
         }
         System.out.println(javaParserMetaModel);

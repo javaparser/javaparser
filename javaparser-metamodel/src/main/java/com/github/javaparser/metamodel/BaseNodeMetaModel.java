@@ -119,7 +119,7 @@ public abstract class BaseNodeMetaModel {
     /**
      * @return the type name, with generics.
      */
-    public String getTypeNameGenericsed() {
+    public String getTypeNameGenerified() {
         if (hasWildcard) {
             return getTypeName() + "<?>";
         }

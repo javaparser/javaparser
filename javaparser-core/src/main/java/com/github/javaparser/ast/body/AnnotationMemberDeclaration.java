@@ -180,12 +180,4 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setAsParentNodeOf(type);
         return this;
     }
-
-    @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
-            return (JavadocComment) getComment().get();
-        }
-        return null;
-    }
 }

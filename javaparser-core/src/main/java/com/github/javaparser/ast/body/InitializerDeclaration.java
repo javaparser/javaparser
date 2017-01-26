@@ -31,6 +31,8 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -89,13 +91,5 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         notifyPropertyChange(ObservableProperty.IS_STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
-    }
-
-    @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
-            return (JavadocComment) getComment().get();
-        }
-        return null;
     }
 }

@@ -174,15 +174,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @return the methods found (multiple in case of polymorphism)
      */
     public Optional<ConstructorDeclaration> getDefaultConstructor() {
-        for (BodyDeclaration<?> bd : getMembers()) {
-            if (bd instanceof ConstructorDeclaration) {
-                ConstructorDeclaration cd = (ConstructorDeclaration) bd;
-                if (cd.getParameters().isEmpty()) {
-                    return Optional.of(cd);
-                }
-            }
-        }
-        return Optional.empty();
+        return getMembers().stream()
+                .filter(bd -> bd instanceof ConstructorDeclaration)
+                .map(bd -> (ConstructorDeclaration) bd)
+                .filter(cd -> cd.getParameters().isEmpty())
+                .findFirst();
     }
 
     @Override

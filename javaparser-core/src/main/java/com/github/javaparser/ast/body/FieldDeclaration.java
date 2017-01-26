@@ -152,14 +152,6 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return this;
     }
 
-    @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
-            return (JavadocComment) getComment().get();
-        }
-        return null;
-    }
-
     /**
      * Create a getter for this field, <b>will only work if this field declares only 1 identifier and if this field is
      * already added to a ClassOrInterfaceDeclaration</b>

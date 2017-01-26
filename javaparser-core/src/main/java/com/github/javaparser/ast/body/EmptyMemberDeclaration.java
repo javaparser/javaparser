@@ -55,12 +55,4 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
-
-    @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
-            return (JavadocComment) getComment().get();
-        }
-        return null;
-    }
 }

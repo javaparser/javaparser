@@ -254,14 +254,6 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment().isPresent() && getComment().get() instanceof JavadocComment) {
-            return (JavadocComment) getComment().get();
-        }
-        return null;
-    }
-
-    @Override
     public BlockStmt getBody() {
         return body;
     }

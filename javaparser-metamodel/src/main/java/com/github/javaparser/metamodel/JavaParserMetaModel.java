@@ -1,9 +1,6 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.Name;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -458,7 +455,7 @@ public class JavaParserMetaModel {
 
     public Optional<BaseNodeMetaModel> getNodeMetaModel(Class<? extends Node> c) {
         for (BaseNodeMetaModel nodeMetaModel : nodeMetaModels) {
-            if (nodeMetaModel.getTypeNameGenericsed().equals(c.getSimpleName())) {
+            if (nodeMetaModel.getTypeNameGenerified().equals(c.getSimpleName())) {
                 return Optional.of(nodeMetaModel);
             }
         }
