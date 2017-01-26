@@ -42,8 +42,8 @@ public interface NodeWithJavadoc<N extends Node> {
      *
      * @return The JavadocComment for this node if it exists, null if it doesn't.
      */
-    default JavadocComment getJavadocComment() {
-        return getComment().flatMap(c -> Optional.of((JavadocComment) c)).orElse(null);
+    default Optional<JavadocComment> getJavadocComment() {
+        return getComment().flatMap(c -> Optional.of((JavadocComment) c));
     }
 
     /**
@@ -51,13 +51,8 @@ public interface NodeWithJavadoc<N extends Node> {
      *
      * @return The Javadoc for this node if it exists, null if it doesn't.
      */
-    default Javadoc getJavadoc() {
-        JavadocComment javadocComment = getJavadocComment();
-        if (javadocComment == null) {
-            return null;
-        } else {
-            return javadocComment.parse();
-        }
+    default Optional<Javadoc> getJavadoc() {
+        return getJavadocComment().flatMap(c -> Optional.of(c.parse()));
     }
 
     /**

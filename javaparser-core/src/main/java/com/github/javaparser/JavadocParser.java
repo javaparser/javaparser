@@ -50,8 +50,8 @@ class JavadocParser {
                 index = i;
             }
         }
-        List<String> blockLines = null;
-        String descriptionText = null;
+        List<String> blockLines;
+        String descriptionText;
         if (index == -1) {
             descriptionText = trimRight(String.join("\n", cleanLines));
             blockLines = Collections.emptyList();
