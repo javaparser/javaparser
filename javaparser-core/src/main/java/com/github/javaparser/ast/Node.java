@@ -218,10 +218,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return this;
     }
 
-    public boolean hasJavaDocComment() {
-        return hasComment() && getComment().get() instanceof JavadocComment;
-    }
-
     /**
      * Use this to store additional information to this node.
      *
