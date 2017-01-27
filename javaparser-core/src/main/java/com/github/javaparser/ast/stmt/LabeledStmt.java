@@ -50,6 +50,10 @@ public final class LabeledStmt extends Statement {
     }
 
     @AllFieldsConstructor
+    public LabeledStmt(final SimpleName label, final Statement statement) {
+        this(null, label, statement);
+    }
+
     public LabeledStmt(Range range, final SimpleName label, final Statement statement) {
         super(range);
         setLabel(label);

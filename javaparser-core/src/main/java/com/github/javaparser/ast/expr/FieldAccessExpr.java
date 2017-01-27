@@ -57,9 +57,14 @@ public final class FieldAccessExpr extends Expression implements
         this(null, new ThisExpr(), new NodeList<>(), new SimpleName());
     }
 
-    @AllFieldsConstructor
     public FieldAccessExpr(final Expression scope, final String name) {
         this(null, scope, new NodeList<>(), new SimpleName(name));
+    }
+
+    @AllFieldsConstructor
+    public FieldAccessExpr(final Expression scope, final NodeList<Type> typeArguments,
+                           final SimpleName name) {
+        this(null, scope, typeArguments, name);
     }
 
     public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments,

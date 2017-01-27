@@ -49,13 +49,8 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     private BlockStmt body;
 
-    @AllFieldsConstructor
     public CatchClause() {
         this(null, new Parameter(), new BlockStmt());
-    }
-
-    public CatchClause(final Parameter parameter, final BlockStmt body) {
-        this(null, parameter, body);
     }
 
     public CatchClause(final EnumSet<Modifier> exceptModifier,
@@ -71,6 +66,11 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
                         false,
                         exceptName),
                 body);
+    }
+
+    @AllFieldsConstructor
+    public CatchClause(final Parameter parameter, final BlockStmt body) {
+        this(null, parameter, body);
     }
 
     public CatchClause(final Range range,

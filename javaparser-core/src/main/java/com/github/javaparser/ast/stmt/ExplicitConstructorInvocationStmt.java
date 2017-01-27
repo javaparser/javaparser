@@ -58,10 +58,15 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         this(null, new NodeList<>(), true, null, new NodeList<>());
     }
 
-    @AllFieldsConstructor
     public ExplicitConstructorInvocationStmt(final boolean isThis,
                                              final Expression expression, final NodeList<Expression> arguments) {
         this(null, new NodeList<>(), isThis, expression, arguments);
+    }
+
+    @AllFieldsConstructor
+    public ExplicitConstructorInvocationStmt(final NodeList<Type> typeArguments, final boolean isThis,
+                                             final Expression expression, final NodeList<Expression> arguments) {
+        this(null, typeArguments, isThis, expression, arguments);
     }
 
     public ExplicitConstructorInvocationStmt(Range range,

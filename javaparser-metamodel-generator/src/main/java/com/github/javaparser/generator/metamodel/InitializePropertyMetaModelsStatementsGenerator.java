@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
-import static com.github.javaparser.generator.metamodel.MetaModelGenerator.metaModelName;
+import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class InitializePropertyMetaModelsStatementsGenerator {
@@ -25,7 +25,7 @@ public class InitializePropertyMetaModelsStatementsGenerator {
                 nodeMetaModelFieldName,
                 field.getName(),
                 typeName,
-                optionalOf(decapitalize(metaModelName(fieldType)), isNode(fieldType)),
+                optionalOf(decapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
                 fieldAnalysis.isOptional,
                 fieldAnalysis.isNodeList,
                 fieldAnalysis.isEnumSet,

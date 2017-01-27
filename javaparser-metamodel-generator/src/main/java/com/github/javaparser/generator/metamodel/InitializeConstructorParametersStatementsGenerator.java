@@ -12,8 +12,7 @@ import java.lang.reflect.Field;
 
 import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
-import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
-import static com.github.javaparser.generator.metamodel.MetaModelGenerator.metaModelName;
+import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
 import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class InitializeConstructorParametersStatementsGenerator {
@@ -23,13 +22,13 @@ public class InitializeConstructorParametersStatementsGenerator {
 
         Class<?> fieldType = fieldAnalysis.innerType;
         String typeName = fieldType.getTypeName().replace('$', '.');
-        String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
+        String propertyMetaModelFieldName = propertyMetaModelFieldName(field);
         nodeMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
         String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s)",
                 nodeMetaModelFieldName,
                 field.getName(),
                 typeName,
-                optionalOf(decapitalize(metaModelName(fieldType)), isNode(fieldType)),
+                optionalOf(decapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
                 fieldAnalysis.isOptional,
                 fieldAnalysis.isNodeList,
                 fieldAnalysis.isEnumSet,
@@ -49,7 +48,13 @@ public class InitializeConstructorParametersStatementsGenerator {
         Constructor<?> constructor = findAllFieldsConstructor(nodeClass);
         for (java.lang.reflect.Parameter parameter : constructor.getParameters()) {
             Field field = findFieldInClass(nodeClass, parameter.getName());
-            
+
+            String addFieldStatement = f("%s.getConstructorParameters().add(%s.%s);",
+                    nodeMetaModelFieldName(nodeClass),
+                    nodeMetaModelFieldName(field.getDeclaringClass()),
+                    propertyMetaModelFieldName(field));
+
+            initializeConstructorParametersStatements.add(parseStatement(addFieldStatement));
         }
     }
 

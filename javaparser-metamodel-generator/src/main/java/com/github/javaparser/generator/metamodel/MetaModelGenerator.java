@@ -13,12 +13,14 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.getJavaParserBasePath;
 
 public class MetaModelGenerator {
@@ -173,8 +175,16 @@ public class MetaModelGenerator {
         return Node.class.isAssignableFrom(c);
     }
 
-    static String metaModelName(Class<?> c) {
+    static String nodeMetaModelName(Class<?> c) {
         return c.getSimpleName() + "MetaModel";
+    }
+
+    static String propertyMetaModelFieldName(Field field) {
+        return field.getName() + "PropertyMetaModel";
+    }
+
+    static String nodeMetaModelFieldName(Class<?> nodeClass) {
+        return decapitalize(nodeMetaModelName(nodeClass));
     }
 
 }

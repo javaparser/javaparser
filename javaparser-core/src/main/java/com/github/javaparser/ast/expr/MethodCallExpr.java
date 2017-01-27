@@ -73,13 +73,17 @@ public final class MethodCallExpr extends Expression implements
                 new NodeList<>());
     }
 
-    @AllFieldsConstructor
     public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
         this(null,
                 scope,
                 new NodeList<>(),
                 name,
                 arguments);
+    }
+
+    @AllFieldsConstructor
+    public MethodCallExpr(final Expression scope, final NodeList<Type> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
+        this(null, scope, typeArguments, name, arguments);
     }
 
     public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {

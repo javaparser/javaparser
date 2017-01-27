@@ -111,6 +111,14 @@ public final class Parameter extends Node implements
     }
 
     @AllFieldsConstructor
+    public Parameter(EnumSet<Modifier> modifiers,
+                     NodeList<AnnotationExpr> annotations,
+                     Type type,
+                     boolean isVarArgs,
+                     SimpleName name) {
+        this(null, modifiers, annotations, type, isVarArgs, name);
+    }
+
     public Parameter(final Range range,
                      EnumSet<Modifier> modifiers,
                      NodeList<AnnotationExpr> annotations,

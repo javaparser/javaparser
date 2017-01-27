@@ -69,7 +69,6 @@ public final class TryStmt extends Statement {
                 null);
     }
 
-    @AllFieldsConstructor
     public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses,
                    final BlockStmt finallyBlock) {
         this(null,
@@ -77,6 +76,12 @@ public final class TryStmt extends Statement {
                 tryBlock,
                 catchClauses,
                 finallyBlock);
+    }
+
+    @AllFieldsConstructor
+    public TryStmt(NodeList<VariableDeclarationExpr> resources,
+                   final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+        this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
     public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources,
