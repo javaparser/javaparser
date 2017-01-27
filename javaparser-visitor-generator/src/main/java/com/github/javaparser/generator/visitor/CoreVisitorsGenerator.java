@@ -21,6 +21,7 @@ public class CoreVisitorsGenerator {
 
         final SourceRoot sourceRoot = new SourceRoot(root);
 
+        new VoidVisitorAdapterGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
         new VoidVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
         new GenericVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
         new HashCodeVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();

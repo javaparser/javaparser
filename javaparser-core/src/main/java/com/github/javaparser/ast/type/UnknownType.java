@@ -56,6 +56,7 @@ public final class UnknownType extends Type {
         if (annotations.size() > 0) {
             throw new IllegalStateException("Inferred lambda types cannot be annotated.");
         }
-        return this;
+
+        return (UnknownType) super.setAnnotations(annotations);
     }
 }

@@ -122,6 +122,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements
     public ClassOrInterfaceType setName(final SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

@@ -46,7 +46,7 @@ public class ToUpperClass {
     }
 }
 When the CompilationUnit is visited by the variable name collector visitor
-Then the collected variable name is "zero;exception;"
+Then the collected variable name is "exception;zero;"
 
 
 Scenario: A class with a try statement is visited using by a GenericVisitorAdapter
