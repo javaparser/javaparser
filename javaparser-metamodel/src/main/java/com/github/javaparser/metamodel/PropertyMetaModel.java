@@ -143,7 +143,7 @@ public class PropertyMetaModel {
     /**
      * @return the type of a single element of this property, so no Optional or NodeList or EnumSet.
      */
-    public String getTypeNameGenericsed() {
+    public String getTypeNameGenerified() {
         if (hasWildcard) {
             return getTypeName() + "<?>";
         }
@@ -172,11 +172,11 @@ public class PropertyMetaModel {
      */
     public String getTypeNameForSetter() {
         if (isNodeList) {
-            return "NodeList<" + getTypeNameGenericsed() + ">";
+            return "NodeList<" + getTypeNameGenerified() + ">";
         }
         if (isEnumSet) {
-            return "EnumSet<" + getTypeNameGenericsed() + ">";
+            return "EnumSet<" + getTypeNameGenerified() + ">";
         }
-        return getTypeNameGenericsed();
+        return getTypeNameGenerified();
     }
 }

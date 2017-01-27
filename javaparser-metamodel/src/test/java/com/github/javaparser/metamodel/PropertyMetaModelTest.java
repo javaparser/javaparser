@@ -13,7 +13,7 @@ public class PropertyMetaModelTest {
     public void whenPropertyIsVerySimpleThenTypeInfoIsCorrect() {
         PropertyMetaModel bert = new PropertyMetaModel(null, "bert", int.class, Optional.empty(), false, false, false, false);
         assertEquals("int", bert.getTypeName());
-        assertEquals("int", bert.getTypeNameGenericsed());
+        assertEquals("int", bert.getTypeNameGenerified());
         assertEquals("int", bert.getTypeNameForGetter());
         assertEquals("int", bert.getTypeNameForSetter());
     }
@@ -22,7 +22,7 @@ public class PropertyMetaModelTest {
     public void whenPropertyIsVeryComplexThenTypeInfoIsCorrect() {
         PropertyMetaModel bert = new PropertyMetaModel(null, "bert", BodyDeclaration.class, Optional.empty(), true, true, false, true);
         assertEquals("BodyDeclaration", bert.getTypeName());
-        assertEquals("BodyDeclaration<?>", bert.getTypeNameGenericsed());
+        assertEquals("BodyDeclaration<?>", bert.getTypeNameGenerified());
         assertEquals("Optional<NodeList<BodyDeclaration<?>>>", bert.getTypeNameForGetter());
         assertEquals("NodeList<BodyDeclaration<?>>", bert.getTypeNameForSetter());
     }
@@ -31,7 +31,7 @@ public class PropertyMetaModelTest {
     public void whenPropertyIsAnEnumThenTypeInfoIsCorrect() {
         PropertyMetaModel bert = new PropertyMetaModel(null, "bert", Modifier.class, Optional.empty(), false, false, true, false);
         assertEquals("Modifier", bert.getTypeName());
-        assertEquals("Modifier", bert.getTypeNameGenericsed());
+        assertEquals("Modifier", bert.getTypeNameGenerified());
         assertEquals("EnumSet<Modifier>", bert.getTypeNameForGetter());
         assertEquals("EnumSet<Modifier>", bert.getTypeNameForSetter());
     }
