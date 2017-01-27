@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
@@ -38,7 +37,6 @@ import com.github.javaparser.ast.type.*;
 public interface GenericVisitor<R, A> {
 
     //- Compilation Unit ----------------------------------
-
     R visit(CompilationUnit n, A arg);
 
     R visit(PackageDeclaration n, A arg);
@@ -50,7 +48,6 @@ public interface GenericVisitor<R, A> {
     R visit(BlockComment n, A arg);
 
     //- Body ----------------------------------------------
-
     R visit(ClassOrInterfaceDeclaration n, A arg);
 
     R visit(EnumDeclaration n, A arg);
@@ -78,7 +75,6 @@ public interface GenericVisitor<R, A> {
     R visit(JavadocComment n, A arg);
 
     //- Type ----------------------------------------------
-
     R visit(ClassOrInterfaceType n, A arg);
 
     R visit(PrimitiveType n, A arg);
@@ -98,7 +94,6 @@ public interface GenericVisitor<R, A> {
     R visit(UnknownType n, A arg);
 
     //- Expression ----------------------------------------
-
     R visit(ArrayAccessExpr n, A arg);
 
     R visit(ArrayCreationExpr n, A arg);
@@ -158,7 +153,6 @@ public interface GenericVisitor<R, A> {
     R visit(MemberValuePair n, A arg);
 
     //- Statements ----------------------------------------
-
     R visit(ExplicitConstructorInvocationStmt n, A arg);
 
     R visit(LocalClassDeclarationStmt n, A arg);
@@ -215,3 +209,4 @@ public interface GenericVisitor<R, A> {
 
     R visit(ImportDeclaration n, A arg);
 }
+
