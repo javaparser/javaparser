@@ -32,6 +32,10 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 /**
+ * A visitor that has a return value (R), and has a default implementation for all its visit
+ * methods that visits their children in an unspecified order, and the first visit method
+ * that returns a value will stop the visitation and be the end result.
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A> {

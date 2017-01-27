@@ -30,7 +30,8 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
 /**
- * Visits an AST and returns a hash code
+ * A visitor that calculates a deep hash code for a node by using the hash codes of all its properties,
+ * and the hash codes of all its child nodes (by visiting those too.)
  */
 public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 

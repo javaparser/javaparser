@@ -33,6 +33,9 @@ import com.github.javaparser.ast.type.*;
 
 import java.util.Optional;
 
+/**
+ * A visitor that clones (copies) a node and all its children.
+ */
 public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override

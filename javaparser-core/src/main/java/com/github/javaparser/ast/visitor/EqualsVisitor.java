@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
+ *
  * @author Julio Vilmar Gesser
  */
 public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {

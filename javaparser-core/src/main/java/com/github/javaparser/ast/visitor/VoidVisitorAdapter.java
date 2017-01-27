@@ -22,17 +22,15 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import java.util.Optional;
 
 /**
+ * A visitor that returns nothing, and has a default implementation for all its visit
+ * methods that simply visit their children in an unspecified order.
+ * 
  * @author Julio Vilmar Gesser
  */
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
@@ -620,16 +618,6 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final ImportDeclaration n, final A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent( l -> l.accept(this, arg));
-    }
-
-    private void visitComment(final Optional<Comment> n, final A arg) {
-        n.ifPresent( n2 -> n2.accept(this, arg));
-    }
-
-    private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
-        for (AnnotationExpr annotation : n.getAnnotations()) {
-            annotation.accept(this, arg);
-        }
     }
 }
 
