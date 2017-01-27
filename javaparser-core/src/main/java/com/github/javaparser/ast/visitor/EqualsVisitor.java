@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
@@ -29,7 +28,6 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +45,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     private EqualsVisitor() {
-        // hide constructor
+    // hide constructor
     }
 
     /**
@@ -133,1360 +131,1056 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final CompilationUnit n1, final Visitable arg) {
         final CompilationUnit n2 = (CompilationUnit) arg;
-
-        if (!nodeEquals(n1.getPackageDeclaration(), n2.getPackageDeclaration())) {
+        if (!nodesEquals(n1.getImports(), n2.getImports()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getImports(), n2.getImports())) {
+        if (!nodeEquals(n1.getPackageDeclaration(), n2.getPackageDeclaration()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypes(), n2.getTypes())) {
+        if (!nodesEquals(n1.getTypes(), n2.getTypes()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getComments(), n2.getComments())) {
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
             return false;
-        }
-
         return true;
     }
 
     @Override
     public Boolean visit(final PackageDeclaration n1, final Visitable arg) {
         final PackageDeclaration n2 = (PackageDeclaration) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final TypeParameter n1, final Visitable arg) {
         final TypeParameter n2 = (TypeParameter) arg;
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeBound(), n2.getTypeBound())) {
+        if (!nodesEquals(n1.getTypeBound(), n2.getTypeBound()))
             return false;
-        }
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final LineComment n1, final Visitable arg) {
         final LineComment n2 = (LineComment) arg;
-
-        if (!objEquals(n1.getContent(), n2.getContent())) {
+        if (!objEquals(n1.getContent(), n2.getContent()))
             return false;
-        }
-
-        if (!objEquals(n1.getRange(), n2.getRange())) {
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
             return false;
-        }
-
         return true;
     }
 
     @Override
     public Boolean visit(final BlockComment n1, final Visitable arg) {
         final BlockComment n2 = (BlockComment) arg;
-
-        if (!objEquals(n1.getContent(), n2.getContent())) {
+        if (!objEquals(n1.getContent(), n2.getContent()))
             return false;
-        }
-
-        if (!objEquals(n1.getRange(), n2.getRange())) {
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
             return false;
-        }
-
         return true;
     }
 
     @Override
     public Boolean visit(final ClassOrInterfaceDeclaration n1, final Visitable arg) {
         final ClassOrInterfaceDeclaration n2 = (ClassOrInterfaceDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodesEquals(n1.getExtendedTypes(), n2.getExtendedTypes()))
             return false;
-        }
-
-        if (n1.isInterface() != n2.isInterface()) {
+        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.isInterface(), n2.isInterface()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
+        if (!nodesEquals(n1.getMembers(), n2.getMembers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getExtendedTypes(), n2.getExtendedTypes())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getMembers(), n2.getMembers())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final EnumDeclaration n1, final Visitable arg) {
         final EnumDeclaration n2 = (EnumDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodesEquals(n1.getEntries(), n2.getEntries()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getMembers(), n2.getMembers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getImplementedTypes(), n2.getImplementedTypes())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getEntries(), n2.getEntries())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getMembers(), n2.getMembers())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final EnumConstantDeclaration n1, final Visitable arg) {
         final EnumConstantDeclaration n2 = (EnumConstantDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodesEquals(n1.getArguments(), n2.getArguments()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getClassBody(), n2.getClassBody()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getArguments(), n2.getArguments())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getClassBody(), n2.getClassBody())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final AnnotationDeclaration n1, final Visitable arg) {
         final AnnotationDeclaration n2 = (AnnotationDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodesEquals(n1.getMembers(), n2.getMembers()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getMembers(), n2.getMembers())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final AnnotationMemberDeclaration n1, final Visitable arg) {
         final AnnotationMemberDeclaration n2 = (AnnotationMemberDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodeEquals(n1.getDefaultValue(), n2.getDefaultValue()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getDefaultValue(), n2.getDefaultValue())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final FieldDeclaration n1, final Visitable arg) {
         final FieldDeclaration n2 = (FieldDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getVariables(), n2.getVariables()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getVariables(), n2.getVariables())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final VariableDeclarator n1, final Visitable arg) {
         final VariableDeclarator n2 = (VariableDeclarator) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getInitializer(), n2.getInitializer()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getInitializer(), n2.getInitializer())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ConstructorDeclaration n1, final Visitable arg) {
         final ConstructorDeclaration n2 = (ConstructorDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodesEquals(n1.getParameters(), n2.getParameters()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getParameters(), n2.getParameters())) {
+        if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions())) {
+        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final MethodDeclaration n1, final Visitable arg) {
         final MethodDeclaration n2 = (MethodDeclaration) arg;
-
-        // javadoc are checked at CompilationUnit
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.isDefault(), n2.isDefault()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodesEquals(n1.getParameters(), n2.getParameters()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getParameters(), n2.getParameters())) {
+        if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters())) {
+        if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()))
             return false;
-        }
-        if (n1.isDefault() != n2.isDefault()) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final Parameter n1, final Visitable arg) {
         final Parameter n2 = (Parameter) arg;
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!objEquals(n1.isVarArgs(), n2.isVarArgs()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getType(), n2.getType()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final EmptyMemberDeclaration n1, final Visitable arg) {
+        final EmptyMemberDeclaration n2 = (EmptyMemberDeclaration) arg;
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final InitializerDeclaration n1, final Visitable arg) {
         final InitializerDeclaration n2 = (InitializerDeclaration) arg;
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!objEquals(n1.isStatic(), n2.isStatic()))
             return false;
-        }
-
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final JavadocComment n1, final Visitable arg) {
         final JavadocComment n2 = (JavadocComment) arg;
-
-        if (!objEquals(n1.getContent(), n2.getContent())) {
+        if (!objEquals(n1.getContent(), n2.getContent()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ClassOrInterfaceType n1, final Visitable arg) {
         final ClassOrInterfaceType n2 = (ClassOrInterfaceType) arg;
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getScope(), n2.getScope())) {
+        if (!nodeEquals(n1.getScope(), n2.getScope()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final PrimitiveType n1, final Visitable arg) {
         final PrimitiveType n2 = (PrimitiveType) arg;
-
-        if (n1.getType() != n2.getType()) {
+        if (!objEquals(n1.getType(), n2.getType()))
             return false;
-        }
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(ArrayType n1, Visitable arg) {
         final ArrayType n2 = (ArrayType) arg;
-
-        if (!nodeEquals(n1.getComponentType(), n2.getComponentType())) {
+        if (!nodeEquals(n1.getComponentType(), n2.getComponentType()))
             return false;
-        }
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(ArrayCreationLevel n1, Visitable arg) {
         final ArrayCreationLevel n2 = (ArrayCreationLevel) arg;
-
-        if (!nodeEquals(n1.getDimension(), n2.getDimension())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodeEquals(n1.getDimension(), n2.getDimension()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final IntersectionType n1, final Visitable arg) {
         final IntersectionType n2 = (IntersectionType) arg;
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getElements(), n2.getElements()))
             return false;
-        }
-
-        NodeList<ReferenceType> n1Elements = n1.getElements();
-        NodeList<ReferenceType> n2Elements = n2.getElements();
-
-        if (n1Elements != null && n2Elements != null) {
-            if (n1Elements.size() != n2Elements.size()) {
-                return false;
-            } else {
-                int i = 0;
-                for (ReferenceType aux : n1Elements) {
-                    if (aux.accept(this, n2Elements.get(i))) {
-                        return false;
-                    }
-                    i++;
-                }
-            }
-        } else if (n1Elements != n2Elements) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final UnionType n1, final Visitable arg) {
         final UnionType n2 = (UnionType) arg;
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getElements(), n2.getElements()))
             return false;
-        }
-
-        NodeList<ReferenceType> n1Elements = n1.getElements();
-        NodeList<ReferenceType> n2Elements = n2.getElements();
-
-        if (n1Elements != null && n2Elements != null) {
-            if (n1Elements.size() != n2Elements.size()) {
-                return false;
-            } else {
-                int i = 0;
-                for (ReferenceType aux : n1Elements) {
-                    if (aux.accept(this, n2Elements.get(i))) {
-                        return false;
-                    }
-                    i++;
-                }
-            }
-        } else if (n1Elements != n2Elements) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(VoidType n1, Visitable arg) {
-        VoidType n2 = (VoidType) arg;
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        final VoidType n2 = (VoidType) arg;
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final WildcardType n1, final Visitable arg) {
         final WildcardType n2 = (WildcardType) arg;
-
-        if (!nodeEquals(n1.getExtendedTypes(), n2.getExtendedTypes())) {
+        if (!nodeEquals(n1.getExtendedTypes(), n2.getExtendedTypes()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getSuperTypes(), n2.getSuperTypes())) {
+        if (!nodeEquals(n1.getSuperTypes(), n2.getSuperTypes()))
             return false;
-        }
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final UnknownType n1, final Visitable arg) {
+        final UnknownType n2 = (UnknownType) arg;
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ArrayAccessExpr n1, final Visitable arg) {
         final ArrayAccessExpr n2 = (ArrayAccessExpr) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getIndex(), n2.getIndex()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getIndex(), n2.getIndex())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ArrayCreationExpr n1, final Visitable arg) {
         final ArrayCreationExpr n2 = (ArrayCreationExpr) arg;
-
-        if (!nodeEquals(n1.getElementType(), n2.getElementType())) {
+        if (!nodeEquals(n1.getElementType(), n2.getElementType()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getLevels(), n2.getLevels())) {
+        if (!nodeEquals(n1.getInitializer(), n2.getInitializer()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getInitializer(), n2.getInitializer())) {
+        if (!nodesEquals(n1.getLevels(), n2.getLevels()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ArrayInitializerExpr n1, final Visitable arg) {
         final ArrayInitializerExpr n2 = (ArrayInitializerExpr) arg;
-
-        if (!nodesEquals(n1.getValues(), n2.getValues())) {
+        if (!nodesEquals(n1.getValues(), n2.getValues()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final AssignExpr n1, final Visitable arg) {
         final AssignExpr n2 = (AssignExpr) arg;
-
-        if (n1.getOperator() != n2.getOperator()) {
+        if (!objEquals(n1.getOperator(), n2.getOperator()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getTarget(), n2.getTarget())) {
+        if (!nodeEquals(n1.getTarget(), n2.getTarget()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getValue(), n2.getValue())) {
+        if (!nodeEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final BinaryExpr n1, final Visitable arg) {
         final BinaryExpr n2 = (BinaryExpr) arg;
-
-        if (n1.getOperator() != n2.getOperator()) {
+        if (!nodeEquals(n1.getLeft(), n2.getLeft()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getLeft(), n2.getLeft())) {
+        if (!objEquals(n1.getOperator(), n2.getOperator()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getRight(), n2.getRight())) {
+        if (!nodeEquals(n1.getRight(), n2.getRight()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final CastExpr n1, final Visitable arg) {
         final CastExpr n2 = (CastExpr) arg;
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ClassExpr n1, final Visitable arg) {
         final ClassExpr n2 = (ClassExpr) arg;
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ConditionalExpr n1, final Visitable arg) {
         final ConditionalExpr n2 = (ConditionalExpr) arg;
-
-        if (!nodeEquals(n1.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n1.getCondition(), n2.getCondition()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getThenExpr(), n2.getThenExpr())) {
+        if (!nodeEquals(n1.getElseExpr(), n2.getElseExpr()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getElseExpr(), n2.getElseExpr())) {
+        if (!nodeEquals(n1.getThenExpr(), n2.getThenExpr()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final EnclosedExpr n1, final Visitable arg) {
         final EnclosedExpr n2 = (EnclosedExpr) arg;
-
-        if (!nodeEquals(n1.getInner(), n2.getInner())) {
+        if (!nodeEquals(n1.getInner(), n2.getInner()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final FieldAccessExpr n1, final Visitable arg) {
         final FieldAccessExpr n2 = (FieldAccessExpr) arg;
-
-        if (!nodeEquals(n1.getScope(), n2.getScope())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getScope(), n2.getScope()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final InstanceOfExpr n1, final Visitable arg) {
         final InstanceOfExpr n2 = (InstanceOfExpr) arg;
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final StringLiteralExpr n1, final Visitable arg) {
         final StringLiteralExpr n2 = (StringLiteralExpr) arg;
-
-        if (!objEquals(n1.getValue(), n2.getValue())) {
+        if (!objEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final IntegerLiteralExpr n1, final Visitable arg) {
         final IntegerLiteralExpr n2 = (IntegerLiteralExpr) arg;
-
-        if (!objEquals(n1.getValue(), n2.getValue())) {
+        if (!objEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final LongLiteralExpr n1, final Visitable arg) {
         final LongLiteralExpr n2 = (LongLiteralExpr) arg;
-
-        if (!objEquals(n1.getValue(), n2.getValue())) {
+        if (!objEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final CharLiteralExpr n1, final Visitable arg) {
         final CharLiteralExpr n2 = (CharLiteralExpr) arg;
-
-        if (!objEquals(n1.getValue(), n2.getValue())) {
+        if (!objEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final DoubleLiteralExpr n1, final Visitable arg) {
         final DoubleLiteralExpr n2 = (DoubleLiteralExpr) arg;
-
-        if (!objEquals(n1.getValue(), n2.getValue())) {
+        if (!objEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final BooleanLiteralExpr n1, final Visitable arg) {
         final BooleanLiteralExpr n2 = (BooleanLiteralExpr) arg;
-
-        if (n1.getValue() != n2.getValue()) {
+        if (!objEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final NullLiteralExpr n1, final Visitable arg) {
+        final NullLiteralExpr n2 = (NullLiteralExpr) arg;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final MethodCallExpr n1, final Visitable arg) {
         final MethodCallExpr n2 = (MethodCallExpr) arg;
-
-        if (!nodeEquals(n1.getScope(), n2.getScope())) {
+        if (!nodesEquals(n1.getArguments(), n2.getArguments()))
             return false;
-        }
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getArguments(), n2.getArguments())) {
+        if (!nodeEquals(n1.getScope(), n2.getScope()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final NameExpr n1, final Visitable arg) {
         final NameExpr n2 = (NameExpr) arg;
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ObjectCreationExpr n1, final Visitable arg) {
         final ObjectCreationExpr n2 = (ObjectCreationExpr) arg;
-
-        if (!nodeEquals(n1.getScope(), n2.getScope())) {
+        if (!nodesEquals(n1.getAnonymousClassBody(), n2.getAnonymousClassBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getType(), n2.getType())) {
+        if (!nodesEquals(n1.getArguments(), n2.getArguments()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnonymousClassBody(), n2.getAnonymousClassBody())) {
+        if (!nodeEquals(n1.getScope(), n2.getScope()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getArguments(), n2.getArguments())) {
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final Name n1, final Visitable arg) {
         final Name n2 = (Name) arg;
-
-        if (!nodeEquals(n1.getQualifier(), n2.getQualifier())) {
+        if (!objEquals(n1.getIdentifier(), n2.getIdentifier()))
             return false;
-        }
-
-        if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
+        if (!nodeEquals(n1.getQualifier(), n2.getQualifier()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
-    public Boolean visit(SimpleName n, Visitable arg) {
+    public Boolean visit(SimpleName n1, Visitable arg) {
         final SimpleName n2 = (SimpleName) arg;
-
-        return objEquals(n.getIdentifier(), n2.getIdentifier());
+        if (!objEquals(n1.getIdentifier(), n2.getIdentifier()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
+        return true;
     }
 
     @Override
     public Boolean visit(final ThisExpr n1, final Visitable arg) {
         final ThisExpr n2 = (ThisExpr) arg;
-
-        if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {
+        if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final SuperExpr n1, final Visitable arg) {
         final SuperExpr n2 = (SuperExpr) arg;
-
-        if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr())) {
+        if (!nodeEquals(n1.getClassExpr(), n2.getClassExpr()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final UnaryExpr n1, final Visitable arg) {
         final UnaryExpr n2 = (UnaryExpr) arg;
-
-        if (n1.getOperator() != n2.getOperator()) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!objEquals(n1.getOperator(), n2.getOperator()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final VariableDeclarationExpr n1, final Visitable arg) {
         final VariableDeclarationExpr n2 = (VariableDeclarationExpr) arg;
-
-        if (!n1.getModifiers().equals(n2.getModifiers())) {
+        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations())) {
+        if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getVariables(), n2.getVariables())) {
+        if (!nodesEquals(n1.getVariables(), n2.getVariables()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final MarkerAnnotationExpr n1, final Visitable arg) {
         final MarkerAnnotationExpr n2 = (MarkerAnnotationExpr) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final SingleMemberAnnotationExpr n1, final Visitable arg) {
         final SingleMemberAnnotationExpr n2 = (SingleMemberAnnotationExpr) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getMemberValue(), n2.getMemberValue()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getMemberValue(), n2.getMemberValue())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final NormalAnnotationExpr n1, final Visitable arg) {
         final NormalAnnotationExpr n2 = (NormalAnnotationExpr) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!nodesEquals(n1.getPairs(), n2.getPairs()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getPairs(), n2.getPairs())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final MemberValuePair n1, final Visitable arg) {
         final MemberValuePair n2 = (MemberValuePair) arg;
-
-        if (!objEquals(n1.getName(), n2.getName())) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getValue(), n2.getValue())) {
+        if (!nodeEquals(n1.getValue(), n2.getValue()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ExplicitConstructorInvocationStmt n1, final Visitable arg) {
         final ExplicitConstructorInvocationStmt n2 = (ExplicitConstructorInvocationStmt) arg;
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodesEquals(n1.getArguments(), n2.getArguments()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getArguments(), n2.getArguments())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
+        if (!objEquals(n1.isThis(), n2.isThis()))
             return false;
-        }
-
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final LocalClassDeclarationStmt n1, final Visitable arg) {
         final LocalClassDeclarationStmt n2 = (LocalClassDeclarationStmt) arg;
-
-        if (!nodeEquals(n1.getClassDeclaration(), n2.getClassDeclaration())) {
+        if (!nodeEquals(n1.getClassDeclaration(), n2.getClassDeclaration()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final AssertStmt n1, final Visitable arg) {
         final AssertStmt n2 = (AssertStmt) arg;
-
-        if (!nodeEquals(n1.getCheck(), n2.getCheck())) {
+        if (!nodeEquals(n1.getCheck(), n2.getCheck()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getMessage(), n2.getMessage())) {
+        if (!nodeEquals(n1.getMessage(), n2.getMessage()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final BlockStmt n1, final Visitable arg) {
         final BlockStmt n2 = (BlockStmt) arg;
-
-        if (!nodesEquals(n1.getStatements(), n2.getStatements())) {
+        if (!nodesEquals(n1.getStatements(), n2.getStatements()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final LabeledStmt n1, final Visitable arg) {
         final LabeledStmt n2 = (LabeledStmt) arg;
-
-        if (!nodeEquals(n1.getStatement(), n2.getStatement())) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getStatement(), n2.getStatement()))
+            return false;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final EmptyStmt n1, final Visitable arg) {
+        final EmptyStmt n2 = (EmptyStmt) arg;
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ExpressionStmt n1, final Visitable arg) {
         final ExpressionStmt n2 = (ExpressionStmt) arg;
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final SwitchStmt n1, final Visitable arg) {
         final SwitchStmt n2 = (SwitchStmt) arg;
-
-        if (!nodeEquals(n1.getSelector(), n2.getSelector())) {
+        if (!nodesEquals(n1.getEntries(), n2.getEntries()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getEntries(), n2.getEntries())) {
+        if (!nodeEquals(n1.getSelector(), n2.getSelector()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final SwitchEntryStmt n1, final Visitable arg) {
         final SwitchEntryStmt n2 = (SwitchEntryStmt) arg;
-
-        if (!nodeEquals(n1.getLabel(), n2.getLabel())) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getStatements(), n2.getStatements())) {
+        if (!nodesEquals(n1.getStatements(), n2.getStatements()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final BreakStmt n1, final Visitable arg) {
         final BreakStmt n2 = (BreakStmt) arg;
-
-        if (!nodeEquals(n1.getLabel(), n2.getLabel())) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ReturnStmt n1, final Visitable arg) {
         final ReturnStmt n2 = (ReturnStmt) arg;
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final IfStmt n1, final Visitable arg) {
         final IfStmt n2 = (IfStmt) arg;
-
-        if (!nodeEquals(n1.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n1.getCondition(), n2.getCondition()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getThenStmt(), n2.getThenStmt())) {
+        if (!nodeEquals(n1.getElseStmt(), n2.getElseStmt()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getElseStmt(), n2.getElseStmt())) {
+        if (!nodeEquals(n1.getThenStmt(), n2.getThenStmt()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final WhileStmt n1, final Visitable arg) {
         final WhileStmt n2 = (WhileStmt) arg;
-
-        if (!nodeEquals(n1.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodeEquals(n1.getCondition(), n2.getCondition()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ContinueStmt n1, final Visitable arg) {
         final ContinueStmt n2 = (ContinueStmt) arg;
-
-        if (!nodeEquals(n1.getLabel(), n2.getLabel())) {
+        if (!nodeEquals(n1.getLabel(), n2.getLabel()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final DoStmt n1, final Visitable arg) {
         final DoStmt n2 = (DoStmt) arg;
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getCondition(), n2.getCondition())) {
+        if (!nodeEquals(n1.getCondition(), n2.getCondition()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ForeachStmt n1, final Visitable arg) {
         final ForeachStmt n2 = (ForeachStmt) arg;
-
-        if (!nodeEquals(n1.getVariable(), n2.getVariable())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getIterable(), n2.getIterable())) {
+        if (!nodeEquals(n1.getIterable(), n2.getIterable()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodeEquals(n1.getVariable(), n2.getVariable()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ForStmt n1, final Visitable arg) {
         final ForStmt n2 = (ForStmt) arg;
-
-        if (!nodesEquals(n1.getInitialization(), n2.getInitialization())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getCompare(), n2.getCompare())) {
+        if (!nodeEquals(n1.getCompare(), n2.getCompare()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getUpdate(), n2.getUpdate())) {
+        if (!nodesEquals(n1.getInitialization(), n2.getInitialization()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodesEquals(n1.getUpdate(), n2.getUpdate()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ThrowStmt n1, final Visitable arg) {
         final ThrowStmt n2 = (ThrowStmt) arg;
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final SynchronizedStmt n1, final Visitable arg) {
         final SynchronizedStmt n2 = (SynchronizedStmt) arg;
-
-        if (!nodeEquals(n1.getExpression(), n2.getExpression())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodeEquals(n1.getExpression(), n2.getExpression()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final TryStmt n1, final Visitable arg) {
         final TryStmt n2 = (TryStmt) arg;
-
-        if (!nodeEquals(n1.getTryBlock(), n2.getTryBlock())) {
+        if (!nodesEquals(n1.getCatchClauses(), n2.getCatchClauses()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getCatchClauses(), n2.getCatchClauses())) {
+        if (!nodeEquals(n1.getFinallyBlock(), n2.getFinallyBlock()))
             return false;
-        }
-
-        if (!nodesEquals(n1.getResources(), n2.getResources())) {
+        if (!nodesEquals(n1.getResources(), n2.getResources()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getFinallyBlock(), n2.getFinallyBlock())) {
+        if (!nodeEquals(n1.getTryBlock(), n2.getTryBlock()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final CatchClause n1, final Visitable arg) {
         final CatchClause n2 = (CatchClause) arg;
-
-        if (!nodeEquals(n1.getParameter(), n2.getParameter())) {
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodeEquals(n1.getParameter(), n2.getParameter()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(LambdaExpr n1, Visitable arg) {
-        LambdaExpr n2 = (LambdaExpr) arg;
-        if (!nodesEquals(n1.getParameters(), n2.getParameters())) {
+        final LambdaExpr n2 = (LambdaExpr) arg;
+        if (!nodeEquals(n1.getBody(), n2.getBody()))
             return false;
-        }
-        if (n1.isEnclosingParameters() != n2.isEnclosingParameters()) {
+        if (!objEquals(n1.isEnclosingParameters(), n2.isEnclosingParameters()))
             return false;
-        }
-        if (!nodeEquals(n1.getBody(), n2.getBody())) {
+        if (!nodesEquals(n1.getParameters(), n2.getParameters()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(MethodReferenceExpr n1, Visitable arg) {
-        MethodReferenceExpr n2 = (MethodReferenceExpr) arg;
-        if (!nodeEquals(n1.getScope(), n2.getScope())) {
+        final MethodReferenceExpr n2 = (MethodReferenceExpr) arg;
+        if (!objEquals(n1.getIdentifier(), n2.getIdentifier()))
             return false;
-        }
-        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments())) {
+        if (!nodeEquals(n1.getScope(), n2.getScope()))
             return false;
-        }
-        if (!objEquals(n1.getIdentifier(), n2.getIdentifier())) {
+        if (!nodesEquals(n1.getTypeArguments(), n2.getTypeArguments()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
-    public Boolean visit(TypeExpr n, Visitable arg) {
-        TypeExpr n2 = (TypeExpr) arg;
-        if (!nodeEquals(n.getType(), n2.getType())) {
+    public Boolean visit(TypeExpr n1, Visitable arg) {
+        final TypeExpr n2 = (TypeExpr) arg;
+        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
-        }
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
     @Override
     public Boolean visit(final ImportDeclaration n1, final Visitable arg) {
         final ImportDeclaration n2 = (ImportDeclaration) arg;
-
-        if (!nodeEquals(n1.getName(), n2.getName())) {
+        if (!objEquals(n1.isAsterisk(), n2.isAsterisk()))
             return false;
-        }
-
-        if (n1.isAsterisk() != n2.isAsterisk()) {
+        if (!objEquals(n1.isStatic(), n2.isStatic()))
             return false;
-        }
-
-        if (n1.isStatic() != n2.isStatic()) {
+        if (!nodeEquals(n1.getName(), n2.getName()))
             return false;
-        }
-
+        if (!nodeEquals(n1.getComment(), n2.getComment()))
+            return false;
         return true;
     }
 
@@ -1495,3 +1189,4 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         return nodesEquals((NodeList<Node>) n, (NodeList<Node>) arg);
     }
 }
+
