@@ -13,7 +13,8 @@ import java.util.Optional;
 public abstract class BaseNodeMetaModel {
     private final Optional<BaseNodeMetaModel> superNodeMetaModel;
     private final JavaParserMetaModel javaParserMetaModel;
-    private final List<PropertyMetaModel> propertyMetaModels = new ArrayList<>();
+    private final List<PropertyMetaModel> declaredPropertyMetaModels = new ArrayList<>();
+    private final List<PropertyMetaModel> constructorParameters = new ArrayList<>();
     private final Class<? extends Node> type;
     private final String name;
     private final String packageName;
@@ -60,10 +61,19 @@ public abstract class BaseNodeMetaModel {
     }
 
     /**
-     * @return a list of all properties. These are also available as fields.
+     * @return a list of all properties declared directly in this node (not its parent nodes.) These are also available
+     * as fields.
      */
-    public List<PropertyMetaModel> getPropertyMetaModels() {
-        return propertyMetaModels;
+    public List<PropertyMetaModel> getDeclaredPropertyMetaModels() {
+        return declaredPropertyMetaModels;
+    }
+
+    /**
+     * @return a list of all properties that describe the parameters to the all-fields (but not "range" and "comment")
+     * constructor, in the order of appearance in the constructor parameter list.
+     */
+    public List<PropertyMetaModel> getConstructorParameters() {
+        return constructorParameters;
     }
 
     /**

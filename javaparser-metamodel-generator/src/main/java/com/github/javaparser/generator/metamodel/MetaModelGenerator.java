@@ -13,21 +13,16 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.ast.Modifier.FINAL;
-import static com.github.javaparser.ast.Modifier.PUBLIC;
-import static com.github.javaparser.generator.utils.GeneratorUtils.*;
+import static com.github.javaparser.generator.utils.GeneratorUtils.getJavaParserBasePath;
 
 public class MetaModelGenerator {
-    private static final String NODE_META_MODEL = "BaseNodeMetaModel";
+    static final String NODE_META_MODEL = "BaseNodeMetaModel";
     private static List<Class<? extends Node>> ALL_MODEL_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without
@@ -137,7 +132,7 @@ public class MetaModelGenerator {
         add(WildcardType.class);
     }};
 
-    private static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
+    static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException {
         new MetaModelGenerator().run();
@@ -152,118 +147,34 @@ public class MetaModelGenerator {
 
         CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
 
-        generateClassMetaModels(javaParserMetaModel, sourceRoot);
+        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
 
         sourceRoot.saveAll();
     }
 
-    private void generateClassMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
+    private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
         ClassOrInterfaceDeclaration mmClass = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
         NodeList<Statement> initializeNodeMetaModelsStatements = mmClass.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializeFieldMetaModelsStatements = mmClass.getMethodsByName("initializeFieldMetaModels").get(0).getBody().get().getStatements();
+        NodeList<Statement> initializePropertyMetaModelsStatements = mmClass.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
+        NodeList<Statement> initializeConstructorParametersStatements = mmClass.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
         initializeNodeMetaModelsStatements.clear();
-        initializeFieldMetaModelsStatements.clear();
+        initializePropertyMetaModelsStatements.clear();
+        initializeConstructorParametersStatements.clear();
 
-        for (Class<?> c : ALL_MODEL_CLASSES) {
-            String className = metaModelName(c);
-            String fieldName = decapitalize(className);
-            mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
-            FieldDeclaration f = mmClass.addField(className, fieldName, PUBLIC, FINAL);
-
-            Class<?> superclass = c.getSuperclass();
-            final String superClassMetaModel = optionalOf(decapitalize(metaModelName(superclass)), isNode(superclass));
-
-            f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
-            initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", fieldName)));
-
-            CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
-            classMetaModelJavaFile.addImport("java.util.Optional");
-            sourceRoot.add(METAMODEL_PACKAGE, className + ".java", classMetaModelJavaFile);
-            ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
-            classMetaModelClass.addExtendedType(new ClassOrInterfaceType(NODE_META_MODEL));
-
-            AstTypeAnalysis typeAnalysis = new AstTypeAnalysis(c);
-
-            ConstructorDeclaration classMMConstructor = classMetaModelClass
-                    .addConstructor()
-                    .addParameter("JavaParserMetaModel", "parent")
-                    .addParameter("Optional<" + NODE_META_MODEL + ">", "super" + NODE_META_MODEL);
-            classMMConstructor
-                    .getBody()
-                    .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", %s, %s);",
-                            NODE_META_MODEL,
-                            c.getName(),
-                            c.getSimpleName(),
-                            c.getPackage().getName(),
-                            typeAnalysis.isAbstract,
-                            typeAnalysis.isSelfType)));
-
-            generateFieldMetaModels(c, classMetaModelClass, fieldName, initializeFieldMetaModelsStatements);
+        final NodeMetaModelGenerator nodeMetaModelGenerator = new NodeMetaModelGenerator();
+        for (Class<? extends Node> c : ALL_MODEL_CLASSES) {
+            nodeMetaModelGenerator.generate(c, mmClass, initializeNodeMetaModelsStatements, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements, sourceRoot);
         }
 
         initializeNodeMetaModelsStatements.sort(Comparator.comparing(Node::toString));
     }
 
-    private boolean isNode(Class<?> c) {
+    static boolean isNode(Class<?> c) {
         return Node.class.isAssignableFrom(c);
     }
 
-    private void generateFieldMetaModels(Class<?> c, ClassOrInterfaceDeclaration classMetaModelClass, String classMetaModelFieldName, NodeList<Statement> initializeFieldMetaModelsStatements) throws NoSuchMethodException {
-        List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
-        fields.sort(Comparator.comparing(Field::getName));
-        for (Field field : fields) {
-            if (fieldShouldBeIgnored(field)) {
-                continue;
-            }
-
-            AstTypeAnalysis fieldAnalysis = new AstTypeAnalysis(c.getMethod(getter(field)).getGenericReturnType());
-
-            Class<?> fieldType = fieldAnalysis.innerType;
-            String typeName = fieldType.getTypeName().replace('$', '.');
-            String propertyMetaModelFieldName = field.getName() + "PropertyMetaModel";
-            classMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-            String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s)",
-                    classMetaModelFieldName,
-                    field.getName(),
-                    typeName,
-                    optionalOf(decapitalize(metaModelName(fieldType)), isNode(fieldType)),
-                    fieldAnalysis.isOptional,
-                    fieldAnalysis.isNodeList,
-                    fieldAnalysis.isEnumSet,
-                    fieldAnalysis.isSelfType);
-            String fieldSetting = f("%s.%s=%s;", classMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
-            String fieldAddition = f("%s.getPropertyMetaModels().add(%s.%s);", classMetaModelFieldName, classMetaModelFieldName, propertyMetaModelFieldName);
-
-            initializeFieldMetaModelsStatements.add(parseStatement(fieldSetting));
-            initializeFieldMetaModelsStatements.add(parseStatement(fieldAddition));
-        }
-    }
-
-    private String getter(Field field) {
-        return getterName(field.getType(), field.getName());
-    }
-
-    private static String metaModelName(Class<?> c) {
+    static String metaModelName(Class<?> c) {
         return c.getSimpleName() + "MetaModel";
-    }
-
-    private boolean fieldShouldBeIgnored(Field reflectionField) {
-        if (java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers())) {
-            return true;
-        }
-        String name = reflectionField.getName();
-        switch (name) {
-            case "parentNode":
-            case "observers":
-            case "innerList":
-            case "data":
-            case "range":
-            case "childNodes":
-            case "commentedNode":
-            case "orphanComments":
-                return true;
-        }
-        return false;
     }
 
 }

@@ -74,11 +74,11 @@ public abstract class VisitorGenerator {
     }
 
     private List<PropertyMetaModel> collectAllPropertyMetaModels(BaseNodeMetaModel node) {
-        List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getPropertyMetaModels());
+        List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(node.getDeclaredPropertyMetaModels());
         BaseNodeMetaModel walkNode = node;
         while (walkNode.getSuperNodeMetaModel().isPresent()) {
             walkNode = walkNode.getSuperNodeMetaModel().get();
-            allPropertyMetaModels.addAll(walkNode.getPropertyMetaModels());
+            allPropertyMetaModels.addAll(walkNode.getDeclaredPropertyMetaModels());
         }
         return allPropertyMetaModels;
     }
