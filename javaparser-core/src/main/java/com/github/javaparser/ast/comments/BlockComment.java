@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -40,6 +41,7 @@ public final class BlockComment extends Comment {
         this(null, "empty");
     }
 
+    @AllFieldsConstructor
     public BlockComment(String content) {
         this(null, content);
     }

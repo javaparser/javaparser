@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -45,6 +46,7 @@ public final class ArrayInitializerExpr extends Expression {
         this(null, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public ArrayInitializerExpr(NodeList<Expression> values) {
         this(null, values);
     }

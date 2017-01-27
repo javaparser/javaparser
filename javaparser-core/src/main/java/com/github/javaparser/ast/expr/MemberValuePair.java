@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -50,6 +51,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         this(null, new SimpleName(name), value);
     }
 
+    @AllFieldsConstructor
     public MemberValuePair(final SimpleName name, final Expression value) {
         this(null, name, value);
     }

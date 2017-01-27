@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -44,6 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
     private Type componentType;
 
+    @AllFieldsConstructor
     public ArrayType(Type componentType, NodeList<AnnotationExpr> annotations) {
         this(null, componentType, annotations);
     }

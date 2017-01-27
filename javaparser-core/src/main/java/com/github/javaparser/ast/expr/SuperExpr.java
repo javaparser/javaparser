@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -45,6 +46,7 @@ public final class SuperExpr extends Expression {
         this(null, null);
     }
 
+    @AllFieldsConstructor
     public SuperExpr(final Expression classExpr) {
         this(null, classExpr);
     }

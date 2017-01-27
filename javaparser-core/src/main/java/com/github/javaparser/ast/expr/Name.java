@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -56,6 +57,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         this(null, null, identifier);
     }
 
+    @AllFieldsConstructor
     public Name(Name qualifier, final String identifier) {
         this(null, qualifier, identifier);
     }

@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -57,6 +58,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         this(null, new NodeList<>(), true, null, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public ExplicitConstructorInvocationStmt(final boolean isThis,
                                              final Expression expression, final NodeList<Expression> arguments) {
         this(null, new NodeList<>(), isThis, expression, arguments);

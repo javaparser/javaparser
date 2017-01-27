@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -80,6 +81,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
                 defaultValue);
     }
 
+    @AllFieldsConstructor
     public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name,
                                        Expression defaultValue) {
         this(null,

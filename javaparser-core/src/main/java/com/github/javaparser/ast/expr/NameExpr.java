@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -47,6 +48,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         this(null, new SimpleName(name));
     }
 
+    @AllFieldsConstructor
     public NameExpr(final SimpleName name) {
         this(name.getRange().orElse(null), name);
     }

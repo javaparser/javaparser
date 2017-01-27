@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -79,6 +80,7 @@ public final class UnaryExpr extends Expression implements
         this(null, new IntegerLiteralExpr(), Operator.POSTFIX_INCREMENT);
     }
 
+    @AllFieldsConstructor
     public UnaryExpr(final Expression expression, final Operator operator) {
         this(null, expression, operator);
     }

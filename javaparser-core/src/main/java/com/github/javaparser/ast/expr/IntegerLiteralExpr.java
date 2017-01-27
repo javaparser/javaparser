@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -39,9 +40,9 @@ public class IntegerLiteralExpr extends StringLiteralExpr {
 
     public IntegerLiteralExpr() {
         this(null, "0");
-        int i = 0x00;
     }
 
+    @AllFieldsConstructor
     public IntegerLiteralExpr(final String value) {
         this(null, value);
     }

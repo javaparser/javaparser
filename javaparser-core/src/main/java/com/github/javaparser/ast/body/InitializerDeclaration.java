@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
@@ -52,6 +53,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         this(null, false, new BlockStmt());
     }
 
+    @AllFieldsConstructor
     public InitializerDeclaration(boolean isStatic, BlockStmt body) {
         this(null, isStatic, body);
     }

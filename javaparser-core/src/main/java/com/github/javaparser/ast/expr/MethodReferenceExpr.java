@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -60,6 +61,12 @@ public class MethodReferenceExpr extends Expression implements
                 new ClassExpr(),
                 null,
                 "empty");
+    }
+
+    @AllFieldsConstructor
+    public MethodReferenceExpr(Expression scope,
+                               NodeList<Type> typeArguments, String identifier) {
+        this(null, scope, typeArguments, identifier);
     }
 
     public MethodReferenceExpr(Range range, Expression scope,

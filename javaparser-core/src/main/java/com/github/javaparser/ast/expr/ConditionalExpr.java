@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -46,6 +47,7 @@ public final class ConditionalExpr extends Expression {
         this(null, new BooleanLiteralExpr(), new StringLiteralExpr(), new StringLiteralExpr());
     }
 
+    @AllFieldsConstructor
     public ConditionalExpr(Expression condition, Expression thenExpr, Expression elseExpr) {
         this(null, condition, thenExpr, elseExpr);
     }

@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -49,6 +50,7 @@ public final class CastExpr extends Expression implements
         this(null, new ClassOrInterfaceType(), new NameExpr());
     }
 
+    @AllFieldsConstructor
     public CastExpr(Type type, Expression expression) {
         this(null, type, expression);
     }

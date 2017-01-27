@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -46,6 +47,7 @@ public final class LocalClassDeclarationStmt extends Statement {
         this(null, new ClassOrInterfaceDeclaration());
     }
 
+    @AllFieldsConstructor
     public LocalClassDeclarationStmt(final ClassOrInterfaceDeclaration classDeclaration) {
         this(null, classDeclaration);
     }

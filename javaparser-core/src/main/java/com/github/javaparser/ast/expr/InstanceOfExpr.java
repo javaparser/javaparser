@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -50,6 +51,7 @@ public final class InstanceOfExpr extends Expression implements
         this(null, new NameExpr(), new ClassOrInterfaceType());
     }
 
+    @AllFieldsConstructor
     public InstanceOfExpr(final Expression expression, final ReferenceType type) {
         this(null, expression, type);
     }

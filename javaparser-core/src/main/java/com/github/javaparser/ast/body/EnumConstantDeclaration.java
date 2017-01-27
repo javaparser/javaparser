@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -71,6 +72,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
                 new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public EnumConstantDeclaration(NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments,
                                    NodeList<BodyDeclaration<?>> classBody) {
         this(null, annotations, name, arguments, classBody);

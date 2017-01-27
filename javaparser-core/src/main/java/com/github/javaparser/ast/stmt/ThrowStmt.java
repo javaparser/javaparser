@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
@@ -44,6 +45,7 @@ public final class ThrowStmt extends Statement implements
         this(null, new NameExpr());
     }
 
+    @AllFieldsConstructor
     public ThrowStmt(final Expression expression) {
         this(null, expression);
     }

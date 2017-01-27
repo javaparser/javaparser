@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -49,6 +50,7 @@ public final class BreakStmt extends Statement {
         this(null, new SimpleName(label));
     }
 
+    @AllFieldsConstructor
     public BreakStmt(final SimpleName label) {
         this(null, label);
     }

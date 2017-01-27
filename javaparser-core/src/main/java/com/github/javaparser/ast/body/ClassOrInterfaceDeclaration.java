@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -86,6 +87,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                 new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final SimpleName name,

@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
@@ -42,6 +43,7 @@ public final class CharLiteralExpr extends StringLiteralExpr {
         this(null, "?");
     }
 
+    @AllFieldsConstructor
     public CharLiteralExpr(String value) {
         this(null, value);
     }

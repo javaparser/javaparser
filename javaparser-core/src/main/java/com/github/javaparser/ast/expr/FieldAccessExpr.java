@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -56,6 +57,7 @@ public final class FieldAccessExpr extends Expression implements
         this(null, new ThisExpr(), new NodeList<>(), new SimpleName());
     }
 
+    @AllFieldsConstructor
     public FieldAccessExpr(final Expression scope, final String name) {
         this(null, scope, new NodeList<>(), new SimpleName(name));
     }

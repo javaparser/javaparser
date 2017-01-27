@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
@@ -50,6 +51,7 @@ public final class SynchronizedStmt extends Statement implements
         this(null, new NameExpr(), new BlockStmt());
     }
 
+    @AllFieldsConstructor
     public SynchronizedStmt(final Expression expression, final BlockStmt body) {
         this(null, expression, body);
     }

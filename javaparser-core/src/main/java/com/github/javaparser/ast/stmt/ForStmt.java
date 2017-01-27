@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -59,6 +60,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
                 new ReturnStmt());
     }
 
+    @AllFieldsConstructor
     public ForStmt(final NodeList<Expression> initialization, final Expression compare,
                    final NodeList<Expression> update, final Statement body) {
         this(null, initialization, compare, update, body);

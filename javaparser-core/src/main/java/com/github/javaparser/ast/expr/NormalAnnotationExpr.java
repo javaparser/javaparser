@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -41,6 +42,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         this(null, new Name(), new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public NormalAnnotationExpr(final Name name, final NodeList<MemberValuePair> pairs) {
         this(null, name, pairs);
     }

@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -42,11 +43,16 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     private NodeList<ReferenceType> elements;
 
+    public UnionType() {
+        this(null, new NodeList<>());
+    }
+    
     public UnionType(Range range, NodeList<ReferenceType> elements) {
         super(range, new NodeList<>());
         setElements(elements);
     }
 
+    @AllFieldsConstructor
     public UnionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }

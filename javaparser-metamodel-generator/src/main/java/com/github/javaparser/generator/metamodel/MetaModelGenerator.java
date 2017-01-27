@@ -23,7 +23,7 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.getJavaParser
 
 public class MetaModelGenerator {
     static final String NODE_META_MODEL = "BaseNodeMetaModel";
-    private static List<Class<? extends Node>> ALL_MODEL_CLASSES = new ArrayList<Class<? extends Node>>() {{
+    private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without
          being afraid those are not initialized yet. */
@@ -153,17 +153,17 @@ public class MetaModelGenerator {
     }
 
     private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
-        ClassOrInterfaceDeclaration mmClass = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
-        NodeList<Statement> initializeNodeMetaModelsStatements = mmClass.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializePropertyMetaModelsStatements = mmClass.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializeConstructorParametersStatements = mmClass.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
+        ClassOrInterfaceDeclaration metaModelCoid = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
+        NodeList<Statement> initializeNodeMetaModelsStatements = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
+        NodeList<Statement> initializePropertyMetaModelsStatements = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
+        NodeList<Statement> initializeConstructorParametersStatements = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
         initializeNodeMetaModelsStatements.clear();
         initializePropertyMetaModelsStatements.clear();
         initializeConstructorParametersStatements.clear();
 
         final NodeMetaModelGenerator nodeMetaModelGenerator = new NodeMetaModelGenerator();
-        for (Class<? extends Node> c : ALL_MODEL_CLASSES) {
-            nodeMetaModelGenerator.generate(c, mmClass, initializeNodeMetaModelsStatements, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements, sourceRoot);
+        for (Class<? extends Node> nodeClass : ALL_NODE_CLASSES) {
+            nodeMetaModelGenerator.generate(nodeClass, metaModelCoid, initializeNodeMetaModelsStatements, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements, sourceRoot);
         }
 
         initializeNodeMetaModelsStatements.sort(Comparator.comparing(Node::toString));

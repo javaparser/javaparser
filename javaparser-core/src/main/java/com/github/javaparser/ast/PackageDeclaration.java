@@ -58,6 +58,7 @@ public final class PackageDeclaration extends Node implements
         this(null, new NodeList<>(), name);
     }
 
+    @AllFieldsConstructor
     public PackageDeclaration(NodeList<AnnotationExpr> annotations, Name name) {
         this(null, annotations, name);
     }

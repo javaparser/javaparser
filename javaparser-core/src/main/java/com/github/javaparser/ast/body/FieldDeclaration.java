@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -85,6 +86,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
                 variables);
     }
 
+    @AllFieldsConstructor
     public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                             NodeList<VariableDeclarator> variables) {
         this(null,

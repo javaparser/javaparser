@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
@@ -39,6 +40,7 @@ public final class DoubleLiteralExpr extends StringLiteralExpr {
         this(null, "0");
     }
 
+    @AllFieldsConstructor
     public DoubleLiteralExpr(final String value) {
         this(null, value);
     }

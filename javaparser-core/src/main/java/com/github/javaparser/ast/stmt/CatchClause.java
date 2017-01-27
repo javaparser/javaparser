@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -48,6 +49,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     private BlockStmt body;
 
+    @AllFieldsConstructor
     public CatchClause() {
         this(null, new Parameter(), new BlockStmt());
     }

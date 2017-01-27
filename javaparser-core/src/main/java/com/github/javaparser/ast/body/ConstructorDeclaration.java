@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -91,10 +92,11 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 new BlockStmt());
     }
 
+    @AllFieldsConstructor
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
                                   NodeList<TypeParameter> typeParameters,
                                   SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions,
-                                  BlockStmt block) {
+                                  BlockStmt body) {
         this(null,
                 modifiers,
                 annotations,
@@ -102,19 +104,19 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
                 name,
                 parameters,
                 thrownExceptions,
-                block);
+                body);
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
                                   NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name,
-                                  NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt block) {
+                                  NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
-        setBody(block);
+        setBody(body);
     }
 
     @Override

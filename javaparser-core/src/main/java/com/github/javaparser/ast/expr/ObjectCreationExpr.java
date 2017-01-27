@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
@@ -34,8 +35,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -89,16 +88,24 @@ public final class ObjectCreationExpr extends Expression implements
                 null);
     }
 
+    @AllFieldsConstructor
+    public ObjectCreationExpr(
+            final Expression scope, final ClassOrInterfaceType type,
+            final NodeList<Type> typeArguments,
+            final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousClassBody) {
+        this(null, scope, type, typeArguments, arguments, anonymousClassBody);
+    }
+
     public ObjectCreationExpr(final Range range,
                               final Expression scope, final ClassOrInterfaceType type,
                               final NodeList<Type> typeArguments,
-                              final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousBody) {
+                              final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         super(range);
         setScope(scope);
         setType(type);
         setTypeArguments(typeArguments);
         setArguments(arguments);
-        setAnonymousClassBody(anonymousBody);
+        setAnonymousClassBody(anonymousClassBody);
     }
 
     @Override

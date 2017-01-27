@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -68,6 +69,7 @@ public final class TryStmt extends Statement {
                 null);
     }
 
+    @AllFieldsConstructor
     public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses,
                    final BlockStmt finallyBlock) {
         this(null,

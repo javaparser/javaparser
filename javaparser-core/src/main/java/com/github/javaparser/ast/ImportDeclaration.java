@@ -50,6 +50,7 @@ public final class ImportDeclaration extends Node implements
         this(null, new Name(), false, false);
     }
 
+    @AllFieldsConstructor
     public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
         this(null, name, isStatic, isAsterisk);
     }

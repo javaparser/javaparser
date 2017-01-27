@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,6 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class UnknownType extends Type {
 
+    @AllFieldsConstructor
     public UnknownType() {
         super(null, new NodeList<>());
     }

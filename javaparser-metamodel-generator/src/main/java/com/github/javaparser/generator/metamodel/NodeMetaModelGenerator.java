@@ -23,15 +23,16 @@ import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
 import static com.github.javaparser.generator.utils.GeneratorUtils.*;
 
 public class NodeMetaModelGenerator {
-    private final PropertyMetaModelGenerator propertyMetaModelGenerator = new PropertyMetaModelGenerator();
+    private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();
+    private final InitializeConstructorParametersStatementsGenerator initializeConstructorParametersStatementsGenerator = new InitializeConstructorParametersStatementsGenerator();
 
-    public void generate(Class<? extends Node> c, ClassOrInterfaceDeclaration mmClass, NodeList<Statement> initializeNodeMetaModelsStatements, NodeList<Statement> initializePropertyMetaModelsStatements, NodeList<Statement> initializeConstructorParametersStatements, SourceRoot sourceRoot) throws NoSuchMethodException {
-        String className = metaModelName(c);
+    public void generate(Class<? extends Node> nodeClass, ClassOrInterfaceDeclaration metaModelCoid, NodeList<Statement> initializeNodeMetaModelsStatements, NodeList<Statement> initializePropertyMetaModelsStatements, NodeList<Statement> initializeConstructorParametersStatements, SourceRoot sourceRoot) throws NoSuchMethodException {
+        String className = metaModelName(nodeClass);
         String fieldName = decapitalize(className);
-        mmClass.getFieldByName(fieldName).ifPresent(Node::remove);
-        FieldDeclaration f = mmClass.addField(className, fieldName, PUBLIC, FINAL);
+        metaModelCoid.getFieldByName(fieldName).ifPresent(Node::remove);
+        FieldDeclaration f = metaModelCoid.addField(className, fieldName, PUBLIC, FINAL);
 
-        Class<?> superclass = c.getSuperclass();
+        Class<?> superclass = nodeClass.getSuperclass();
         final String superClassMetaModel = optionalOf(decapitalize(metaModelName(superclass)), isNode(superclass));
 
         f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
@@ -43,7 +44,7 @@ public class NodeMetaModelGenerator {
         ClassOrInterfaceDeclaration classMetaModelClass = classMetaModelJavaFile.addClass(className, PUBLIC);
         classMetaModelClass.addExtendedType(new ClassOrInterfaceType(NODE_META_MODEL));
 
-        AstTypeAnalysis typeAnalysis = new AstTypeAnalysis(c);
+        AstTypeAnalysis typeAnalysis = new AstTypeAnalysis(nodeClass);
 
         ConstructorDeclaration classMMConstructor = classMetaModelClass
                 .addConstructor()
@@ -53,20 +54,23 @@ public class NodeMetaModelGenerator {
                 .getBody()
                 .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", %s, %s);",
                         NODE_META_MODEL,
-                        c.getName(),
-                        c.getSimpleName(),
-                        c.getPackage().getName(),
+                        nodeClass.getName(),
+                        nodeClass.getSimpleName(),
+                        nodeClass.getPackage().getName(),
                         typeAnalysis.isAbstract,
                         typeAnalysis.isSelfType)));
 
-        List<Field> fields = new ArrayList<>(Arrays.asList(c.getDeclaredFields()));
+        List<Field> fields = new ArrayList<>(Arrays.asList(nodeClass.getDeclaredFields()));
         fields.sort(Comparator.comparing(Field::getName));
         for (Field field : fields) {
             if (fieldShouldBeIgnored(field)) {
                 continue;
             }
 
-            propertyMetaModelGenerator.generate(c, field, classMetaModelClass, fieldName, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements);
+            initializePropertyMetaModelsStatementsGenerator.generate(nodeClass, field, classMetaModelClass, fieldName, initializePropertyMetaModelsStatements);
+        }
+        if (!typeAnalysis.isAbstract) {
+            initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
         }
     }
 

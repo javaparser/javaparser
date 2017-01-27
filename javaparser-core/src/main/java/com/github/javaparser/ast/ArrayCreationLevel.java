@@ -57,6 +57,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         this(null, dimension, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public ArrayCreationLevel(Expression dimension, NodeList<AnnotationExpr> annotations) {
         this(null, dimension, annotations);
     }

@@ -73,6 +73,7 @@ public final class CompilationUnit extends Node {
         this(null, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
         this(null, packageDeclaration, imports, types);
     }

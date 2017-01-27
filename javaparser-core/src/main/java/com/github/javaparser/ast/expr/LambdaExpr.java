@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
@@ -58,6 +59,12 @@ public class LambdaExpr extends Expression implements
                 new NodeList<>(),
                 new ReturnStmt(),
                 false);
+    }
+
+    @AllFieldsConstructor
+    public LambdaExpr(NodeList<Parameter> parameters, Statement body,
+                      boolean isEnclosingParameters) {
+        this(null, parameters, body, isEnclosingParameters);
     }
 
     public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,

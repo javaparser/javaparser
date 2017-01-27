@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
@@ -72,6 +73,7 @@ public final class MethodCallExpr extends Expression implements
                 new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
         this(null,
                 scope,

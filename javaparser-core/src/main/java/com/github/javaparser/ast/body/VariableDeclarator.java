@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -57,14 +58,18 @@ public final class VariableDeclarator extends Node implements
         this(null, new SimpleName(), null);
     }
 
-    public VariableDeclarator(Type type, SimpleName name) {
-        this(null, type, name, null);
-    }
-
     public VariableDeclarator(Type type, String variableName) {
         this(null, type, new SimpleName(variableName), null);
     }
 
+    public VariableDeclarator(Type type, SimpleName name) {
+        this(null, type, name, null);
+    }
+    
+    public VariableDeclarator(Type type, String variableName, Expression initializer) {
+        this(null, type, new SimpleName(variableName), initializer);
+    }
+    
     /**
      * Defines the declaration of a variable.
      *
@@ -72,12 +77,9 @@ public final class VariableDeclarator extends Node implements
      * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
      * is unnecessary as the <code>=</code> operator is already added.
      */
+    @AllFieldsConstructor
     public VariableDeclarator(Type type, SimpleName name, Expression initializer) {
         this(null, type, name, initializer);
-    }
-
-    public VariableDeclarator(Type type, String variableName, Expression initializer) {
-        this(null, type, new SimpleName(variableName), initializer);
     }
 
     public VariableDeclarator(Range range, Type type, SimpleName name, Expression initializer) {

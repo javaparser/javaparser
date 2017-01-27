@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -45,8 +46,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType<TypeParameter> implements 
-        NodeWithSimpleName<TypeParameter>, 
+public final class TypeParameter extends ReferenceType<TypeParameter> implements
+        NodeWithSimpleName<TypeParameter>,
         NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
@@ -79,6 +80,11 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
                 name,
                 typeBound,
                 new NodeList<>());
+    }
+
+    @AllFieldsConstructor
+    public TypeParameter(SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
+        this(null, name, typeBound, annotations);
     }
 
     public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {

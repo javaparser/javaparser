@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -44,6 +45,11 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
 
     public TypeExpr() {
         this(null, new ClassOrInterfaceType());
+    }
+
+    @AllFieldsConstructor
+    public TypeExpr(Type type) {
+        this(null, type);
     }
 
     public TypeExpr(Range range, Type type) {
