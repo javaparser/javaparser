@@ -11,7 +11,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import java.util.List;
 
 /**
- * Generates JavaParser's VoidVisitor.
+ * Generates JavaParser's GenericVisitor.
  */
 public class GenericVisitorGenerator extends VisitorGenerator {
     GenericVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
