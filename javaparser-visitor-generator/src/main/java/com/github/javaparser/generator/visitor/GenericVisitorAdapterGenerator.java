@@ -25,6 +25,8 @@ public class GenericVisitorAdapterGenerator extends VisitorGenerator {
     protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, List<PropertyMetaModel> allPropertyMetaModels, CompilationUnit compilationUnit) {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
+        
+        body.addStatement("R result;");
 
         final String resultCheck = "if (result != null) return result;";
 
@@ -33,11 +35,11 @@ public class GenericVisitorAdapterGenerator extends VisitorGenerator {
             if (field.getNodeReference().isPresent()) {
                 if (field.isOptional()) {
                     body.addStatement(f("if (n.%s.isPresent()) {" +
-                            "   R result = n.%s.get().accept(this, arg);" +
+                            "   result = n.%s.get().accept(this, arg);" +
                             "   %s" +
                             "}", getter, getter, resultCheck));
                 } else {
-                    body.addStatement(f("{ R result = n.%s.accept(this, arg); %s }", getter, resultCheck));
+                    body.addStatement(f("{ result = n.%s.accept(this, arg); %s }", getter, resultCheck));
                 }
             }
         }
