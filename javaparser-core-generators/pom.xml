@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-visitor-generator</artifactId>
-    <description>A visitor generator framework, and the generators for the javaparser-core visitors</description>
+    <artifactId>javaparser-core-generators</artifactId>
+    <description>A visitor generator framework, and the generators for javaparser-core</description>
 
     <dependencies>
         <dependency>

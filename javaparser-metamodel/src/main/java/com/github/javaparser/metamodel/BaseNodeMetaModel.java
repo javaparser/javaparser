@@ -77,6 +77,20 @@ public abstract class BaseNodeMetaModel {
     }
 
     /**
+     * @return a list of all properties in this node and its parents. Note that a new list is created every time this
+     * method is called.
+     */
+    public List<PropertyMetaModel> getAllPropertyMetaModels() {
+        List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(getDeclaredPropertyMetaModels());
+        BaseNodeMetaModel walkNode = this;
+        while (walkNode.getSuperNodeMetaModel().isPresent()) {
+            walkNode = walkNode.getSuperNodeMetaModel().get();
+            allPropertyMetaModels.addAll(walkNode.getDeclaredPropertyMetaModels());
+        }
+        return allPropertyMetaModels;
+    }
+
+    /**
      * @return the class for this AST node type.
      */
     public Class<? extends Node> getType() {

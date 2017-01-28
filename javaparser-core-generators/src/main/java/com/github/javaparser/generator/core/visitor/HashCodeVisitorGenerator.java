@@ -1,9 +1,10 @@
-package com.github.javaparser.generator.visitor;
+package com.github.javaparser.generator.core.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
@@ -18,16 +19,17 @@ import static com.github.javaparser.JavaParser.parseStatement;
  * Generates JavaParser's HashCodeVisitor.
  */
 public class HashCodeVisitorGenerator extends VisitorGenerator {
-    HashCodeVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
+    public HashCodeVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
         super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true, javaParserMetaModel);
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, List<PropertyMetaModel> propertyMetaModels, CompilationUnit compilationUnit) {
-        BlockStmt body = visitMethod.getBody().get();
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+        final BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
+        final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
+        final List<PropertyMetaModel> propertyMetaModels= node.getAllPropertyMetaModels();
         if (propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {
