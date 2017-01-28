@@ -44,7 +44,49 @@ import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
 
-// Use <Node> to prevent Node from becoming generic.
+/**
+ * Base class for all nodes of the abstract syntax tree.
+ * <h2>Construction</h2>
+ * <p>The tree is built by instantiating the required nodes, then adding them to other nodes.
+ * If it is the parser who is building the tree, it will use the largest constructor,
+ * the one with "range" as the first parameter.
+ * If you want to manually instantiate nodes, we suggest to...
+ * <ul>
+ * <li>use a convenience method, like "addStatement(...)", or if none are available...</li>
+ * <li>use a convenient constructor, like ClassOrInterfaceType(String name), or if none are available...</li>
+ * <li>use the default constructor.</li>
+ * <li>Alternatively, use one of the JavaParser.parse(snippet) methods.</li>
+ * </ul>
+ * ... and use the various methods on the node to initialize it further, if needed.
+ * <h2>Parent/child</h2>
+ * <p>The parent node field is managed automatically and can be seen as read only.
+ * Note that there is only one parent,
+ * and trying to use the same node in two places will lead to unexpected behaviour.
+ * It is advised to clone() a node before moving it around.
+ * <h2>Comments</h2>
+ * <p>Each Node can have one associated comment which describes it and
+ * a number of "orphan comments" which it contains but are not specifically
+ * associated to any child.
+ * <h2>Positions</h2>
+ * <p>When the parser creates nodes, it sets their source code position in the "range" field.
+ * When you manually instantiate nodes, their range is not set.
+ * The top left character is position 1, 1.
+ * Note that since this is an <i>abstract</i> syntax tree,
+ * it leaves out a lot of text from the original source file,
+ * like where braces or comma's are exactly.
+ * Therefore there is no position information on everything in the original source file.
+ * <h2>Observers</h2>
+ * <p>It is possible to add observers to the the tree.
+ * Any change in the tree is sent as an event to any observers watching.
+ * <h2>Visitors</h2>
+ * <p>The most comfortable way of working with an abstract syntax tree is using visitors.
+ * You can use one of the visitors in the visitor package, or extend one of them.
+ * A visitor can be "run" by calling accept on a node:
+ * <pre>node.accept(visitor, argument);</pre>
+ * where argument is an object of your choice (often simply null.)
+ *
+ * @author Julio Vilmar Gesser
+ */
 public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
 
     /**
