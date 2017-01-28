@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -29,8 +28,9 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * An annotation type declaration.<br/><code>@interface X { ... }</code>
@@ -40,33 +40,19 @@ import java.util.EnumSet;
 public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> {
 
     public AnnotationDeclaration() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new SimpleName(),
-                new NodeList<>());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
     public AnnotationDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                new SimpleName(name),
-                new NodeList<>());
+        this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
-                                 NodeList<BodyDeclaration<?>> members) {
-        this(null,
-                modifiers,
-                annotations,
-                name,
-                members);
+    public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+        this(null, modifiers, annotations, name, members);
     }
 
-    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
-                                 NodeList<BodyDeclaration<?>> members) {
+    public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
     }
 
@@ -80,4 +66,9 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         v.visit(this, arg);
     }
 
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getMembers(), getAnnotations());
+    }
 }
+

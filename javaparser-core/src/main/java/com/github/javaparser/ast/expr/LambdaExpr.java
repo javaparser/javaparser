@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -31,7 +30,8 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -45,8 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Raquel Pau
  */
-public class LambdaExpr extends Expression implements
-        NodeWithParameters<LambdaExpr> {
+public class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr> {
 
     private NodeList<Parameter> parameters;
 
@@ -55,20 +54,15 @@ public class LambdaExpr extends Expression implements
     private Statement body;
 
     public LambdaExpr() {
-        this(null,
-                new NodeList<>(),
-                new ReturnStmt(),
-                false);
+        this(null, new NodeList<>(), new ReturnStmt(), false);
     }
 
     @AllFieldsConstructor
-    public LambdaExpr(NodeList<Parameter> parameters, Statement body,
-                      boolean isEnclosingParameters) {
+    public LambdaExpr(NodeList<Parameter> parameters, Statement body, boolean isEnclosingParameters) {
         this(null, parameters, body, isEnclosingParameters);
     }
 
-    public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body,
-                      boolean isEnclosingParameters) {
+    public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body, boolean isEnclosingParameters) {
         super(range);
         setParameters(parameters);
         setBody(body);
@@ -118,4 +112,9 @@ public class LambdaExpr extends Expression implements
         return this;
     }
 
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getParameters());
+    }
 }
+

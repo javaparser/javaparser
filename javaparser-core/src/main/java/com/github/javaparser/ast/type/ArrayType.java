@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -30,11 +29,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -43,6 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * So, int[][] becomes ArrayType(ArrayType(int)).
  */
 public class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
+
     private Type componentType;
 
     @AllFieldsConstructor
@@ -123,7 +122,9 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      * Helper class that stores information about a pair of brackets.
      */
     public static class ArrayBracketPair {
+
         private Range range;
+
         private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
         public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
@@ -154,4 +155,10 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (ArrayType) super.setAnnotations(annotations);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

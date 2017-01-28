@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -29,8 +28,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -46,7 +46,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public UnionType() {
         this(null, new NodeList<>());
     }
-    
+
     public UnionType(Range range, NodeList<ReferenceType> elements) {
         super(range, new NodeList<>());
         setElements(elements);
@@ -82,4 +82,10 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getElements(), getAnnotations());
+    }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -28,9 +27,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -49,10 +46,7 @@ public final class IfStmt extends Statement {
     private Statement elseStmt;
 
     public IfStmt() {
-        this(null,
-                new BooleanLiteralExpr(),
-                new ReturnStmt(),
-                null);
+        this(null, new BooleanLiteralExpr(), new ReturnStmt(), null);
     }
 
     @AllFieldsConstructor
@@ -60,8 +54,7 @@ public final class IfStmt extends Statement {
         this(null, condition, thenStmt, elseStmt);
     }
 
-    public IfStmt(Range range,
-                  final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+    public IfStmt(Range range, final Expression condition, final Statement thenStmt, final Statement elseStmt) {
         super(range);
         setCondition(condition);
         setThenStmt(thenStmt);
@@ -117,3 +110,4 @@ public final class IfStmt extends Statement {
         return this;
     }
 }
+

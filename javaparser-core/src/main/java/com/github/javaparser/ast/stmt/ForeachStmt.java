@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -30,7 +29,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -48,21 +46,15 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     private Statement body;
 
     public ForeachStmt() {
-        this(null,
-                new VariableDeclarationExpr(),
-                new NameExpr(),
-                new ReturnStmt());
+        this(null, new VariableDeclarationExpr(), new NameExpr(), new ReturnStmt());
     }
 
     @AllFieldsConstructor
-    public ForeachStmt(final VariableDeclarationExpr variable,
-                       final Expression iterable, final Statement body) {
+    public ForeachStmt(final VariableDeclarationExpr variable, final Expression iterable, final Statement body) {
         this(null, variable, iterable, body);
     }
 
-    public ForeachStmt(Range range,
-                       final VariableDeclarationExpr variable, final Expression iterable,
-                       final Statement body) {
+    public ForeachStmt(Range range, final VariableDeclarationExpr variable, final Expression iterable, final Statement body) {
         super(range);
         setVariable(variable);
         setIterable(iterable);
@@ -118,3 +110,4 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return this;
     }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -31,9 +30,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -42,10 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements
-        NodeWithSimpleName<FieldAccessExpr>,
-        NodeWithTypeArguments<FieldAccessExpr>,
-        NodeWithOptionalScope<FieldAccessExpr> {
+public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithOptionalScope<FieldAccessExpr> {
 
     private Expression scope;
 
@@ -62,13 +58,11 @@ public final class FieldAccessExpr extends Expression implements
     }
 
     @AllFieldsConstructor
-    public FieldAccessExpr(final Expression scope, final NodeList<Type> typeArguments,
-                           final SimpleName name) {
+    public FieldAccessExpr(final Expression scope, final NodeList<Type> typeArguments, final SimpleName name) {
         this(null, scope, typeArguments, name);
     }
 
-    public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments,
-                           final SimpleName name) {
+    public FieldAccessExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments, final SimpleName name) {
         super(range);
         setScope(scope);
         setTypeArguments(typeArguments);
@@ -160,4 +154,10 @@ public final class FieldAccessExpr extends Expression implements
         setAsParentNodeOf(this.typeArguments);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getTypeArguments().orElse(null));
+    }
 }
+

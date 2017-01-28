@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -36,8 +35,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ThrowStmt extends Statement implements
-        NodeWithExpression<ThrowStmt> {
+public final class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt> {
 
     private Expression expression;
 
@@ -78,3 +76,4 @@ public final class ThrowStmt extends Statement implements
         return this;
     }
 }
+

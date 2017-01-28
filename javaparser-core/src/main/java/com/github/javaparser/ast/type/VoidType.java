@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -29,6 +28,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
  * when it returns void.
@@ -37,6 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Julio Vilmar Gesser
  */
 public final class VoidType extends Type implements NodeWithAnnotations<VoidType> {
+
     @AllFieldsConstructor
     public VoidType() {
         this(null);
@@ -61,4 +64,9 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
         return (VoidType) super.setAnnotations(annotations);
     }
 
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

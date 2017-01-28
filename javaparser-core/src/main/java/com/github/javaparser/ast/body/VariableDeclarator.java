@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -33,9 +32,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -44,9 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarator extends Node implements
-        NodeWithType<VariableDeclarator, Type>,
-        NodeWithSimpleName<VariableDeclarator> {
+public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator> {
 
     private SimpleName name;
 
@@ -65,11 +60,11 @@ public final class VariableDeclarator extends Node implements
     public VariableDeclarator(Type type, SimpleName name) {
         this(null, type, name, null);
     }
-    
+
     public VariableDeclarator(Type type, String variableName, Expression initializer) {
         this(null, type, new SimpleName(variableName), initializer);
     }
-    
+
     /**
      * Defines the declaration of a variable.
      *
@@ -152,3 +147,4 @@ public final class VariableDeclarator extends Node implements
         return this;
     }
 }
+

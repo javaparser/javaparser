@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -29,6 +28,9 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -51,13 +53,11 @@ public final class SwitchStmt extends Statement {
     }
 
     @AllFieldsConstructor
-    public SwitchStmt(final Expression selector,
-                      final NodeList<SwitchEntryStmt> entries) {
+    public SwitchStmt(final Expression selector, final NodeList<SwitchEntryStmt> entries) {
         this(null, selector, entries);
     }
 
-    public SwitchStmt(Range range, final Expression selector,
-                      final NodeList<SwitchEntryStmt> entries) {
+    public SwitchStmt(Range range, final Expression selector, final NodeList<SwitchEntryStmt> entries) {
         super(range);
         setSelector(selector);
         setEntries(entries);
@@ -108,4 +108,10 @@ public final class SwitchStmt extends Statement {
         setAsParentNodeOf(this.selector);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getEntries());
+    }
 }
+

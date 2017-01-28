@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -37,18 +36,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 public final class AssignExpr extends Expression {
 
     public enum Operator {
-        ASSIGN("="),
-        PLUS("+="),
-        MINUS("-="),
-        MULTIPLY("*="),
-        DIVIDE("/="),
-        AND("&="),
-        OR("|="),
-        XOR("^="),
-        REMAINDER("%="),
-        LEFT_SHIFT("<<="),
-        SIGNED_RIGHT_SHIFT(">>="),
-        UNSIGNED_RIGHT_SHIFT(">>>=");
+
+        ASSIGN("="), PLUS("+="), MINUS("-="), MULTIPLY("*="), DIVIDE("/="), AND("&="), OR("|="), XOR("^="), REMAINDER("%="), LEFT_SHIFT("<<="), SIGNED_RIGHT_SHIFT(">>="), UNSIGNED_RIGHT_SHIFT(">>>=");
 
         private final String codeRepresentation;
 
@@ -124,3 +113,4 @@ public final class AssignExpr extends Expression {
         return this;
     }
 }
+

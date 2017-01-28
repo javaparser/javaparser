@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -37,11 +36,9 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -52,11 +49,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends Node implements
-        NodeWithType<Parameter, Type>,
-        NodeWithAnnotations<Parameter>,
-        NodeWithSimpleName<Parameter>,
-        NodeWithModifiers<Parameter> {
+public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithModifiers<Parameter> {
 
     private Type type;
 
@@ -69,21 +62,11 @@ public final class Parameter extends Node implements
     private SimpleName name;
 
     public Parameter() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new ClassOrInterfaceType(),
-                false,
-                new SimpleName());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new SimpleName());
     }
 
     public Parameter(Type type, SimpleName name) {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                type,
-                false,
-                name);
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, name);
     }
 
     /**
@@ -93,38 +76,19 @@ public final class Parameter extends Node implements
      * @param name name of the parameter
      */
     public Parameter(Type type, String name) {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                type,
-                false,
-                new SimpleName(name));
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new SimpleName(name));
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type type, SimpleName name) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                type,
-                false,
-                name);
+        this(null, modifiers, new NodeList<>(), type, false, name);
     }
 
     @AllFieldsConstructor
-    public Parameter(EnumSet<Modifier> modifiers,
-                     NodeList<AnnotationExpr> annotations,
-                     Type type,
-                     boolean isVarArgs,
-                     SimpleName name) {
+    public Parameter(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, SimpleName name) {
         this(null, modifiers, annotations, type, isVarArgs, name);
     }
 
-    public Parameter(final Range range,
-                     EnumSet<Modifier> modifiers,
-                     NodeList<AnnotationExpr> annotations,
-                     Type type,
-                     boolean isVarArgs,
-                     SimpleName name) {
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, SimpleName name) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -219,6 +183,7 @@ public final class Parameter extends Node implements
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(annotations);
+        return Arrays.asList(getAnnotations());
     }
 }
+

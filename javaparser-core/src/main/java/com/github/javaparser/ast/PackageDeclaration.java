@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
@@ -29,10 +28,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -42,9 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class PackageDeclaration extends Node implements
-        NodeWithAnnotations<PackageDeclaration>,
-        NodeWithName<PackageDeclaration> {
+public final class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration>, NodeWithName<PackageDeclaration> {
 
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
@@ -126,7 +121,7 @@ public final class PackageDeclaration extends Node implements
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(annotations);
+        return Arrays.asList(getAnnotations());
     }
-
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -38,12 +37,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -52,16 +46,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements
-        NodeWithJavadoc<MethodDeclaration>,
-        NodeWithDeclaration,
-        NodeWithSimpleName<MethodDeclaration>,
-        NodeWithType<MethodDeclaration, Type>,
-        NodeWithModifiers<MethodDeclaration>,
-        NodeWithParameters<MethodDeclaration>,
-        NodeWithThrownExceptions<MethodDeclaration>,
-        NodeWithOptionalBlockStmt<MethodDeclaration>,
-        NodeWithTypeParameters<MethodDeclaration> {
+public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithType<MethodDeclaration, Type>, NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -80,77 +65,23 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     private Type type;
 
     public MethodDeclaration() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new NodeList<>(),
-                new ClassOrInterfaceType(),
-                new SimpleName(),
-                false,
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), false, new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                new NodeList<>(),
-                type,
-                new SimpleName(name),
-                false,
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), false, new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type type,
-                             final NodeList<Parameter> parameters) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                new NodeList<>(),
-                type,
-                new SimpleName(name),
-                false,
-                parameters,
-                new NodeList<>(),
-                new BlockStmt());
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type type, final NodeList<Parameter> parameters) {
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), false, parameters, new NodeList<>(), new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(final EnumSet<Modifier> modifiers,
-                             final NodeList<AnnotationExpr> annotations,
-                             final NodeList<TypeParameter> typeParameters,
-                             final Type type,
-                             final SimpleName name,
-                             final boolean isDefault,
-                             final NodeList<Parameter> parameters,
-                             final NodeList<ReferenceType> thrownExceptions,
-                             final BlockStmt body) {
-        this(null,
-                modifiers,
-                annotations,
-                typeParameters,
-                type,
-                name,
-                isDefault,
-                parameters,
-                thrownExceptions,
-                body);
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
+        this(null, modifiers, annotations, typeParameters, type, name, isDefault, parameters, thrownExceptions, body);
     }
 
-    public MethodDeclaration(Range range,
-                             final EnumSet<Modifier> modifiers,
-                             final NodeList<AnnotationExpr> annotations,
-                             final NodeList<TypeParameter> typeParameters,
-                             final Type type,
-                             final SimpleName name,
-                             final boolean isDefault,
-                             final NodeList<Parameter> parameters,
-                             final NodeList<ReferenceType> thrownExceptions,
-                             final BlockStmt body) {
+    public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -303,8 +234,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
      * @return method declaration as String
      */
     @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows,
-                                         boolean includingParameterName) {
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
@@ -365,10 +295,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(typeParameters);
-        res.add(parameters);
-        res.add(thrownExceptions);
-        return res;
+        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
     }
 }
+

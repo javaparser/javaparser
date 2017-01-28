@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -34,7 +33,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.EnumSet;
 
 /**
@@ -53,19 +51,8 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         this(null, new Parameter(), new BlockStmt());
     }
 
-    public CatchClause(final EnumSet<Modifier> exceptModifier,
-                       final NodeList<AnnotationExpr> exceptAnnotations,
-                       final ClassOrInterfaceType exceptType,
-                       final SimpleName exceptName,
-                       final BlockStmt body) {
-        this(null,
-                new Parameter(null,
-                        exceptModifier,
-                        exceptAnnotations,
-                        exceptType,
-                        false,
-                        exceptName),
-                body);
+    public CatchClause(final EnumSet<Modifier> exceptModifier, final NodeList<AnnotationExpr> exceptAnnotations, final ClassOrInterfaceType exceptType, final SimpleName exceptName, final BlockStmt body) {
+        this(null, new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, exceptName), body);
     }
 
     @AllFieldsConstructor
@@ -73,9 +60,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         this(null, parameter, body);
     }
 
-    public CatchClause(final Range range,
-                       final Parameter parameter,
-                       final BlockStmt body) {
+    public CatchClause(final Range range, final Parameter parameter, final BlockStmt body) {
         super(range);
         setParameter(parameter);
         setBody(body);
@@ -120,3 +105,4 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return this;
     }
 }
+

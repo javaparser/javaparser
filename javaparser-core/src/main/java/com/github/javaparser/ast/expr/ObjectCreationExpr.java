@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -35,8 +34,9 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,11 +46,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ObjectCreationExpr extends Expression implements
-        NodeWithTypeArguments<ObjectCreationExpr>,
-        NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>,
-        NodeWithArguments<ObjectCreationExpr>,
-        NodeWithOptionalScope<ObjectCreationExpr> {
+public final class ObjectCreationExpr extends Expression implements NodeWithTypeArguments<ObjectCreationExpr>, NodeWithType<ObjectCreationExpr, ClassOrInterfaceType>, NodeWithArguments<ObjectCreationExpr>, NodeWithOptionalScope<ObjectCreationExpr> {
 
     private Expression scope;
 
@@ -63,12 +59,7 @@ public final class ObjectCreationExpr extends Expression implements
     private NodeList<BodyDeclaration<?>> anonymousClassBody;
 
     public ObjectCreationExpr() {
-        this(null,
-                null,
-                new ClassOrInterfaceType(),
-                new NodeList<>(),
-                new NodeList<>(),
-                null);
+        this(null, null, new ClassOrInterfaceType(), new NodeList<>(), new NodeList<>(), null);
     }
 
     /**
@@ -78,28 +69,16 @@ public final class ObjectCreationExpr extends Expression implements
      * @param type this is the class that the constructor is being called for.
      * @param arguments Any arguments to pass to the constructor
      */
-    public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type,
-                              final NodeList<Expression> arguments) {
-        this(null,
-                scope,
-                type,
-                new NodeList<>(),
-                arguments,
-                null);
+    public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final NodeList<Expression> arguments) {
+        this(null, scope, type, new NodeList<>(), arguments, null);
     }
 
     @AllFieldsConstructor
-    public ObjectCreationExpr(
-            final Expression scope, final ClassOrInterfaceType type,
-            final NodeList<Type> typeArguments,
-            final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousClassBody) {
+    public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final NodeList<Type> typeArguments, final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         this(null, scope, type, typeArguments, arguments, anonymousClassBody);
     }
 
-    public ObjectCreationExpr(final Range range,
-                              final Expression scope, final ClassOrInterfaceType type,
-                              final NodeList<Type> typeArguments,
-                              final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousClassBody) {
+    public ObjectCreationExpr(final Range range, final Expression scope, final ClassOrInterfaceType type, final NodeList<Type> typeArguments, final NodeList<Expression> arguments, final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         super(range);
         setScope(scope);
         setType(type);
@@ -207,4 +186,10 @@ public final class ObjectCreationExpr extends Expression implements
         setAsParentNodeOf(this.typeArguments);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnonymousClassBody().orElse(null), getArguments(), getTypeArguments().orElse(null));
+    }
 }
+
