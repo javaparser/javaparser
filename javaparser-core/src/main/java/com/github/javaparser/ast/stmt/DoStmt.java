@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
@@ -45,6 +46,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         this(null, new ReturnStmt(), new BooleanLiteralExpr());
     }
 
+    @AllFieldsConstructor
     public DoStmt(final Statement body, final Expression condition) {
         this(null, body, condition);
     }

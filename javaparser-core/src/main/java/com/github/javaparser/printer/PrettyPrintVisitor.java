@@ -34,10 +34,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
@@ -141,10 +138,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print(")");
     }
 
-    private void printJavaComment(final Comment javacomment, final Void arg) {
-        if (javacomment != null) {
-            javacomment.accept(this, arg);
-        }
+    private void printJavaComment(final Optional<Comment> javacomment, final Void arg) {
+        javacomment.ifPresent(c -> c.accept(this, arg));
     }
 
     @Override

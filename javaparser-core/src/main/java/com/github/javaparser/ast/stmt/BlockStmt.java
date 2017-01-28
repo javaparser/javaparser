@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -46,6 +47,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         this(null, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public BlockStmt(final NodeList<Statement> statements) {
         this(null, statements);
 

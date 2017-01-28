@@ -28,6 +28,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
@@ -53,6 +54,7 @@ public interface ParseStart<R> {
     ParseStart<BodyDeclaration<?>> INTERFACE_BODY = p -> p.ClassOrInterfaceBodyDeclaration(true);
     ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = ASTParser::ClassOrInterfaceType;
     ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = ASTParser::VariableDeclarationExpression;
+    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = ASTParser::ExplicitConstructorInvocation;
 
     R parse(ASTParser parser) throws ParseException;
 }

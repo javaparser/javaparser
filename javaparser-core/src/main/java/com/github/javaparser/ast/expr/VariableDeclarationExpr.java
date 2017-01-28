@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -106,6 +107,13 @@ public final class VariableDeclarationExpr extends Expression implements
                 modifiers,
                 new NodeList<>(),
                 variables);
+    }
+
+    @AllFieldsConstructor
+    public VariableDeclarationExpr(final EnumSet<Modifier> modifiers,
+                                   final NodeList<AnnotationExpr> annotations,
+                                   final NodeList<VariableDeclarator> variables) {
+        this(null, modifiers, annotations, variables);
     }
 
     public VariableDeclarationExpr(final Range range,

@@ -151,14 +151,6 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     }
 
     @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
-        }
-        return null;
-    }
-
-    @Override
     public List<NodeList<?>> getNodeLists() {
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(members);

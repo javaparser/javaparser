@@ -53,10 +53,6 @@ public final class PositionUtils {
     }
 
     public static <T extends Node> void sortByBeginPosition(List<T> nodes, final boolean ignoringAnnotations) {
-        Collections.sort(nodes, (o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
-    }
-
-    public static <T extends Node> void sortByBeginPosition(NodeList<T> nodes, final boolean ignoringAnnotations) {
         nodes.sort((o1, o2) -> PositionUtils.compare(o1, o2, ignoringAnnotations));
     }
 
@@ -70,7 +66,7 @@ public final class PositionUtils {
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
         if (!a.getRange().isPresent() || !b.getRange().isPresent()) {
-            return -1;
+            return 0;
         }
         if (ignoringAnnotations) {
             int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
@@ -129,9 +125,6 @@ public final class PositionUtils {
     public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations) {
         final Range containedRange = contained.getRange().get();
         final Range containerRange = container.getRange().get();
-        if (containerRange == null || containedRange == null) {
-            return false;
-        }
         if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container) == null) {
             return container.containsWithin(contained);
         }

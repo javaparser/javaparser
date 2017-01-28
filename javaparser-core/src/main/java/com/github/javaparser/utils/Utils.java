@@ -113,7 +113,7 @@ public class Utils {
         return sb.toString();
     }
 
-    private static String capitalize(String original) {
+    public static String capitalize(String original) {
         if (original.length() < 1) {
             throw new IllegalArgumentException("This string is empty");
         } else if (original.length() == 1) {

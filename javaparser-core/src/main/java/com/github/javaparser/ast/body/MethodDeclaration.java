@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -118,6 +119,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
                 new BlockStmt());
     }
 
+    @AllFieldsConstructor
     public MethodDeclaration(final EnumSet<Modifier> modifiers,
                              final NodeList<AnnotationExpr> annotations,
                              final NodeList<TypeParameter> typeParameters,
@@ -359,14 +361,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             }
         }
         return sb.toString();
-    }
-
-    @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
-        }
-        return null;
     }
 
     @Override

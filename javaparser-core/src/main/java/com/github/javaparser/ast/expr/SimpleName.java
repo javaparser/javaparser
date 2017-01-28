@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -43,6 +44,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         this(null, "empty");
     }
 
+    @AllFieldsConstructor
     public SimpleName(final String identifier) {
         this(null, identifier);
     }

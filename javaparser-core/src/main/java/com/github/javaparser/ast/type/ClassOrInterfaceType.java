@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -80,6 +81,12 @@ public final class ClassOrInterfaceType extends ReferenceType implements
                 null);
     }
 
+    @AllFieldsConstructor
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name,
+                                final NodeList<Type> typeArguments) {
+        this(null, scope, name, typeArguments);
+    }
+
     public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name,
                                 final NodeList<Type> typeArguments) {
         super(range);
@@ -122,6 +129,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements
     public ClassOrInterfaceType setName(final SimpleName name) {
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         this.name = assertNotNull(name);
+        setAsParentNodeOf(name);
         return this;
     }
 

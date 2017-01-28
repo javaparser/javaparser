@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -51,6 +52,7 @@ public final class AssertStmt extends Statement {
         this(null, check, null);
     }
 
+    @AllFieldsConstructor
     public AssertStmt(final Expression check, final Expression message) {
         this(null, check, message);
     }

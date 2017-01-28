@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalLabel;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -52,6 +53,7 @@ public final class ContinueStmt extends Statement implements
         this(null, new SimpleName(label));
     }
 
+    @AllFieldsConstructor
     public ContinueStmt(final SimpleName label) {
         this(null, label);
     }

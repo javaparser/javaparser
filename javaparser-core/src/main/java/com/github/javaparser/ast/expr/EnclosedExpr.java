@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -42,6 +43,7 @@ public final class EnclosedExpr extends Expression {
         this(null, new StringLiteralExpr());
     }
 
+    @AllFieldsConstructor
     public EnclosedExpr(final Expression inner) {
         this(null, inner);
     }

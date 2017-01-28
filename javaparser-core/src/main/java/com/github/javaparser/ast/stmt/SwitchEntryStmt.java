@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
@@ -63,6 +64,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         this(null, null, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public SwitchEntryStmt(final Expression label, final NodeList<Statement> statements) {
         this(null, label, statements);
     }

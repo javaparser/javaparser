@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -43,6 +44,7 @@ public final class ReturnStmt extends Statement {
         this(null, null);
     }
 
+    @AllFieldsConstructor
     public ReturnStmt(final Expression expression) {
         this(null, expression);
     }

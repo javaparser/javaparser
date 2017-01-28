@@ -21,35 +21,38 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
+
+import java.util.Optional;
 
 /**
  * A node that can be documented with a Javadoc comment.
  */
 public interface NodeWithJavadoc<N extends Node> {
+    Optional<Comment> getComment();
+
+    Node setComment(Comment comment);
 
     /**
-     * Gets the JavadocComment for this node. You can set the JavadocComment by calling setJavadocComment passing a JavadocComment.
+     * Gets the JavadocComment for this node. You can set the JavadocComment by calling setJavadocComment passing a
+     * JavadocComment.
      *
      * @return The JavadocComment for this node if it exists, null if it doesn't.
      */
-    JavadocComment getJavadocComment();
+    default Optional<JavadocComment> getJavadocComment() {
+        return getComment().flatMap(c -> Optional.of((JavadocComment) c));
+    }
 
     /**
      * Gets the Javadoc for this node. You can set the Javadoc by calling setJavadocComment passing a Javadoc.
      *
      * @return The Javadoc for this node if it exists, null if it doesn't.
      */
-    default Javadoc getJavadoc() {
-        JavadocComment javadocComment = getJavadocComment();
-        if (javadocComment == null) {
-            return null;
-        } else {
-            return javadocComment.parse();
-        }
+    default Optional<Javadoc> getJavadoc() {
+        return getJavadocComment().flatMap(c -> Optional.of(c.parse()));
     }
 
     /**
@@ -63,7 +66,7 @@ public interface NodeWithJavadoc<N extends Node> {
     }
 
     default N setJavadocComment(JavadocComment comment) {
-        ((Node) this).setComment(comment);
+        setComment(comment);
         return (N) this;
     }
 
@@ -73,7 +76,11 @@ public interface NodeWithJavadoc<N extends Node> {
     }
 
     default boolean removeJavaDocComment() {
-        Node thisNode = (Node) this;
-        return thisNode.hasJavaDocComment() && thisNode.getComment().remove();
+        return hasJavaDocComment() && getComment().get().remove();
     }
+
+    default boolean hasJavaDocComment() {
+        return getComment().isPresent() && getComment().get() instanceof JavadocComment;
+    }
+
 }

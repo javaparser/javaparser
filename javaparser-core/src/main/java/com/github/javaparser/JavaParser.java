@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.javadoc.Javadoc;
@@ -402,5 +403,16 @@ public final class JavaParser {
      */
     public static Javadoc parseJavadoc(String content) {
         return JavadocParser.parse(content);
+    }
+
+    /**
+     * Parses the this(...) and super(...) statements that may occur at the start of a constructor.
+     *
+     * @param statement a statement like super("hello");
+     * @return the AST for the statement.
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
+        return simplifiedParse(EXPLICIT_CONSTRUCTOR_INVOCATION_STMT, provider(statement));
     }
 }

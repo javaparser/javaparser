@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -38,6 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -85,6 +87,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
                 new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
                                        final NodeList<AnnotationExpr> annotations, final boolean isInterface,
                                        final SimpleName name,
@@ -165,6 +168,19 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         this.typeParameters = assertNotNull(typeParameters);
         setAsParentNodeOf(this.typeParameters);
         return this;
+    }
+
+    /**
+     * Try to find a {@link ConstructorDeclaration} with no parameters by its name
+     *
+     * @return the methods found (multiple in case of polymorphism)
+     */
+    public Optional<ConstructorDeclaration> getDefaultConstructor() {
+        return getMembers().stream()
+                .filter(bd -> bd instanceof ConstructorDeclaration)
+                .map(bd -> (ConstructorDeclaration) bd)
+                .filter(cd -> cd.getParameters().isEmpty())
+                .findFirst();
     }
 
     @Override

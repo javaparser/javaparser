@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -47,6 +48,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     private NodeList<ReferenceType> elements;
 
+    @AllFieldsConstructor
     public IntersectionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }

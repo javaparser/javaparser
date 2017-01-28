@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -46,6 +47,11 @@ public final class LabeledStmt extends Statement {
 
     public LabeledStmt(final String label, final Statement statement) {
         this(null, new SimpleName(label), statement);
+    }
+
+    @AllFieldsConstructor
+    public LabeledStmt(final SimpleName label, final Statement statement) {
+        this(null, label, statement);
     }
 
     public LabeledStmt(Range range, final SimpleName label, final Statement statement) {

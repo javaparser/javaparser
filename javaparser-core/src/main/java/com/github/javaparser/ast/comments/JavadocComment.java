@@ -23,6 +23,7 @@ package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.javadoc.Javadoc;
@@ -38,6 +39,7 @@ public final class JavadocComment extends Comment {
         this(null, "empty");
     }
 
+    @AllFieldsConstructor
     public JavadocComment(String content) {
         this(null, content);
     }

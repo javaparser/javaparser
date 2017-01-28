@@ -21,6 +21,8 @@
 
 package com.github.javaparser.ast.type;
 
+import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -30,15 +32,20 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * An unknown parameter type object. It plays the role of a null object for
  * lambda parameters that have no explicit type declared. As such, it has no
  * lexical representation and hence gets no comment attributed.
- *
+ * <p>
  * <br/>In <code>DoubleToIntFunction d = <b>x</b> -> (int)x + 1;</code> the x parameter in bold has type UnknownType.
- * 
+ *
  * @author Didier Villevalois
  */
 public final class UnknownType extends Type {
 
+    @AllFieldsConstructor
     public UnknownType() {
-        super(null, new NodeList<>());
+        this(null);
+    }
+
+    public UnknownType(Range range) {
+        super(range, new NodeList<>());
     }
 
     @Override
@@ -56,6 +63,7 @@ public final class UnknownType extends Type {
         if (annotations.size() > 0) {
             throw new IllegalStateException("Inferred lambda types cannot be annotated.");
         }
-        return this;
+
+        return (UnknownType) super.setAnnotations(annotations);
     }
 }

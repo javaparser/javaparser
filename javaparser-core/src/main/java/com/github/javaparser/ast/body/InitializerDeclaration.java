@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
@@ -30,6 +31,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -50,6 +53,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         this(null, false, new BlockStmt());
     }
 
+    @AllFieldsConstructor
     public InitializerDeclaration(boolean isStatic, BlockStmt body) {
         this(null, isStatic, body);
     }
@@ -89,13 +93,5 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         notifyPropertyChange(ObservableProperty.IS_STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
-    }
-
-    @Override
-    public JavadocComment getJavadocComment() {
-        if (getComment() instanceof JavadocComment) {
-            return (JavadocComment) getComment();
-        }
-        return null;
     }
 }

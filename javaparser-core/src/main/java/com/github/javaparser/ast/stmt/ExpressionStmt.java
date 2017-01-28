@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
@@ -45,6 +46,7 @@ public final class ExpressionStmt extends Statement implements
         this(null, new BooleanLiteralExpr());
     }
 
+    @AllFieldsConstructor
     public ExpressionStmt(final Expression expression) {
         this(null, expression);
     }

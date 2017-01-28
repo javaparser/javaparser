@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -54,6 +55,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
                 new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public AnnotationDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                                  NodeList<BodyDeclaration<?>> members) {
         this(null,

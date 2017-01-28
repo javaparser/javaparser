@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -71,6 +72,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
                 new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public EnumDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name,
                            NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries,
                            NodeList<BodyDeclaration<?>> members) {

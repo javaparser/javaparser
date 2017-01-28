@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -78,6 +79,7 @@ public final class BinaryExpr extends Expression {
         this(null, new BooleanLiteralExpr(), new BooleanLiteralExpr(), Operator.EQUALS);
     }
 
+    @AllFieldsConstructor
     public BinaryExpr(Expression left, Expression right, Operator operator) {
         this(null, left, right, operator);
     }

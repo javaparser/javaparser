@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -53,6 +54,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
                 new ReturnStmt());
     }
 
+    @AllFieldsConstructor
     public ForeachStmt(final VariableDeclarationExpr variable,
                        final Expression iterable, final Statement body) {
         this(null, variable, iterable, body);

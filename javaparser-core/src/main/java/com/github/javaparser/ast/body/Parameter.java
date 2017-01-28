@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -107,6 +108,15 @@ public final class Parameter extends Node implements
                 type,
                 false,
                 name);
+    }
+
+    @AllFieldsConstructor
+    public Parameter(EnumSet<Modifier> modifiers,
+                     NodeList<AnnotationExpr> annotations,
+                     Type type,
+                     boolean isVarArgs,
+                     SimpleName name) {
+        this(null, modifiers, annotations, type, isVarArgs, name);
     }
 
     public Parameter(final Range range,

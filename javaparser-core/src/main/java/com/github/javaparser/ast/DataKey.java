@@ -22,7 +22,7 @@
 package com.github.javaparser.ast;
 
 /**
- * A key to a piece of user data associated with a {@link Node} at runtime.
+ * A key to a piece of data associated with a {@link Node} at runtime.
  * The key contains type information that can be used to check the
  * type of any user data value for the key when the value is set. DataKey is abstract in order to
  * force the creation of a subtype. That subtype is used to test for identity when looking for the

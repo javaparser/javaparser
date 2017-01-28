@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -49,6 +50,7 @@ public final class SwitchStmt extends Statement {
         this(null, new NameExpr(), new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public SwitchStmt(final Expression selector,
                       final NodeList<SwitchEntryStmt> entries) {
         this(null, selector, entries);

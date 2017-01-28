@@ -33,6 +33,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
@@ -156,8 +157,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      *
      * @return comment property
      */
-    public final Comment getComment() {
-        return comment;
+    public final Optional<Comment> getComment() {
+        return Optional.ofNullable(comment);
     }
 
     /**
@@ -217,10 +218,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return this;
     }
 
-    public boolean hasJavaDocComment() {
-        return hasComment() && getComment() instanceof JavadocComment;
-    }
-
     /**
      * Use this to store additional information to this node.
      *
@@ -255,7 +252,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     @Override
     public final int hashCode() {
-        return toString().hashCode();
+        return HashCodeVisitor.hashCode(this);
     }
 
     @Override
@@ -337,9 +334,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         comments.addAll(getOrphanComments());
 
         for (Node child : getChildNodes()) {
-            if (child.getComment() != null) {
-                comments.add(child.getComment());
-            }
+            child.getComment().ifPresent(comments::add);
             comments.addAll(child.getAllContainedComments());
         }
 
@@ -387,6 +382,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return range.isBefore(position);
     }
 
+    @Deprecated
     public boolean hasComment() {
         return comment != null;
     }

@@ -38,6 +38,7 @@ import java.util.List;
  * This visitor can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
  * from the nodes who needs to be changed, returning the changed node.
+ * Returning null will remove the node.
  *
  * @author Julio Vilmar Gesser
  */
@@ -839,8 +840,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     private void visitComment(Node n, final A arg) {
-        if (n != null && n.getComment() != null) {
-            n.setComment((Comment) n.getComment().accept(this, arg));
+        if (n != null && n.getComment().isPresent()) {
+            n.setComment((Comment) n.getComment().get().accept(this, arg));
         }
     }
 }
