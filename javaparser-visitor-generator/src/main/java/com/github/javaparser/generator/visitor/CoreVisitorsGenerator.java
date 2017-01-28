@@ -28,7 +28,8 @@ public class CoreVisitorsGenerator {
         new GenericVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
         new HashCodeVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
         new CloneVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
-
+        new TreeStructureVisitorGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
+        
         sourceRoot.saveAll();
     }
 }

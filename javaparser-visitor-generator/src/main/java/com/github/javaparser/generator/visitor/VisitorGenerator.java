@@ -2,6 +2,7 @@ package com.github.javaparser.generator.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.utils.SourceRoot;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.javaparser.ast.Modifier.*;
 
 /**
  * A class that makes it easier to generate visitor classes.
@@ -65,7 +68,7 @@ public abstract class VisitorGenerator {
         if (visitMethod.isPresent()) {
             generateVisitMethodBody(node, visitMethod.get(), allPropertyMetaModels, compilationUnit);
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC)
                     .addParameter(node.getTypeNameGenerified(), "n")
                     .addParameter(argumentType, "arg")
                     .setType(returnType);
