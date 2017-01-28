@@ -1,3 +1,14 @@
+Version 3.1.0
+------------------
+Sadly we found an issue that couldn't be solved in a backwards compatible way:
+* 719 getJavadoc, getJavadocComment and getComment could return null. Our promise was to return Optional, so that is what they do now.
+
+New:
+* 658 718 we have created a metamodel. It gives information about the structure of the various AST nodes, as if you are introspecting them. 
+* 353 visitors are no longer hand made, they are now generated from the metamodel. This should make them 100% reliable.
+Affected visitors are: GenericVisitorAdapter, EqualsVisitor, VoidVisitorAdapter, VoidVisitor, GenericVisitor, HashCodeVisitor, CloneVisitor.
+If you want to generate your own visitors, you can use the VisitorGenerator class.
+
 Version 3.0.1
 ------------------
 * 699 433 325 Javadoc can now be parsed
