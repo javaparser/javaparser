@@ -4,6 +4,9 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
+/**
+ * A general pattern that the generators in this module will follow.
+ */
 public abstract class Generator {
     protected final JavaParser javaParser;
     protected final SourceRoot sourceRoot;

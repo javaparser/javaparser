@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A class that makes it easier to generate visitor classes.
+ * Makes it easier to generate visitor classes.
  * It will create missing visit methods on the fly,
  * and will ask you to fill in the bodies of the visit methods.
  */

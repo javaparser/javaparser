@@ -11,6 +11,10 @@ import java.io.IOException;
 
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
+/**
+ * Makes it easier to generate code in the core AST nodes. The generateNode method will get every node type passed to it,
+ * ready for modification.
+ */
 public abstract class NodeGenerator extends Generator {
     protected NodeGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
         super(javaParser, sourceRoot, javaParserMetaModel);
