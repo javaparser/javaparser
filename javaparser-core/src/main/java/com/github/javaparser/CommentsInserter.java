@@ -130,7 +130,7 @@ class CommentsInserter {
                     previousComment = null;
                 }
             } else {
-                if (previousComment != null && !thing.hasComment()) {
+                if (previousComment != null && !thing.getComment().isPresent()) {
                     if (!configuration.isDoNotAssignCommentsPrecedingEmptyLines()
                             || !thereAreLinesBetween(previousComment, thing)) {
                         thing.setComment(previousComment);
@@ -180,7 +180,7 @@ class CommentsInserter {
         // The node start and end at the same line as the comment,
         // let's give to it the comment
         if (node.getBegin().get().line == lineComment.getBegin().get().line
-                && !node.hasComment()) {
+                && !node.getComment().isPresent()) {
             if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }

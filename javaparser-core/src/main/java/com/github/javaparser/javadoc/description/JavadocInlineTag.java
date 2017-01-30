@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2017 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -43,7 +43,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
         String tagName = nextWord(text);
         Type type = Type.fromName(tagName);
         String content = text.substring(tagName.length());
-        return new JavadocInlineTag(type, content);
+        return new JavadocInlineTag(tagName, type, content);
     }
 
     /**
@@ -77,17 +77,19 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     }
 
+    private String tagName;
     private Type type;
     private String content;
 
-    public JavadocInlineTag(Type type, String content) {
+    public JavadocInlineTag(String tagName, Type type, String content) {
+        this.tagName = tagName;
         this.type = type;
         this.content = content;
     }
 
     @Override
     public String toText() {
-        throw new UnsupportedOperationException();
+        return "@" + tagName + this.content;
     }
 
     @Override
@@ -97,22 +99,24 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
         JavadocInlineTag that = (JavadocInlineTag) o;
 
+        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null) return false;
         if (type != that.type) return false;
-        return content.equals(that.content);
-
+        return content != null ? content.equals(that.content) : that.content == null;
     }
 
     @Override
     public int hashCode() {
-        int result = type.hashCode();
-        result = 31 * result + content.hashCode();
+        int result = tagName != null ? tagName.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "JavadocInlineTag{" +
-                "type=" + type +
+                "tagName='" + tagName + '\'' +
+                ", type=" + type +
                 ", content='" + content + '\'' +
                 '}';
     }
