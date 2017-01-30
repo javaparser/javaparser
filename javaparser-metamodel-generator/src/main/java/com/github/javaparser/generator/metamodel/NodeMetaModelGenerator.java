@@ -3,9 +3,7 @@ package com.github.javaparser.generator.metamodel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.generator.utils.SourceRoot;
@@ -17,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
@@ -30,12 +29,14 @@ public class NodeMetaModelGenerator {
         String className = nodeMetaModelName(nodeClass);
         String nodeMetaModelFieldName = decapitalize(className);
         metaModelCoid.getFieldByName(nodeMetaModelFieldName).ifPresent(Node::remove);
-        FieldDeclaration f = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, FINAL);
+
+        FieldDeclaration nodeField = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, STATIC, FINAL);
 
         Class<?> superclass = nodeClass.getSuperclass();
         final String superClassMetaModel = optionalOf(decapitalize(nodeMetaModelName(superclass)), isNode(superclass));
 
-        f.getVariable(0).setInitializer(parseExpression(f("new %s(this, %s)", className, superClassMetaModel)));
+        nodeField.getVariable(0).setInitializer(parseExpression(f("new %s(%s)", className, superClassMetaModel)));
+
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 
         CompilationUnit classMetaModelJavaFile = new CompilationUnit(METAMODEL_PACKAGE);
@@ -48,11 +49,10 @@ public class NodeMetaModelGenerator {
 
         ConstructorDeclaration classMMConstructor = nodeMetaModelClass
                 .addConstructor()
-                .addParameter("JavaParserMetaModel", "parent")
                 .addParameter("Optional<" + NODE_META_MODEL + ">", "super" + NODE_META_MODEL);
         classMMConstructor
                 .getBody()
-                .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, parent, %s.class, \"%s\", \"%s\", %s, %s);",
+                .addStatement(parseExplicitConstructorInvocationStmt(f("super(super%s, %s.class, \"%s\", \"%s\", %s, %s);",
                         NODE_META_MODEL,
                         nodeClass.getName(),
                         nodeClass.getSimpleName(),
@@ -71,6 +71,18 @@ public class NodeMetaModelGenerator {
         }
         if (!typeAnalysis.isAbstract) {
             initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
+        }
+
+        moveStaticInitializeToTheEndOfTheClassBecauseWeNeedTheFieldsToInitializeFirst(metaModelCoid);
+    }
+
+    private void moveStaticInitializeToTheEndOfTheClassBecauseWeNeedTheFieldsToInitializeFirst(ClassOrInterfaceDeclaration metaModelCoid) {
+        for (BodyDeclaration<?> m : metaModelCoid.getMembers()){
+            if(m instanceof InitializerDeclaration){
+                m.remove();
+                metaModelCoid.addMember(m);
+                return;
+            }
         }
     }
 
