@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class CastExprMetaModel extends BaseNodeMetaModel {
 
-    CastExprMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.expr.CastExpr.class, "CastExpr", "com.github.javaparser.ast.expr", false, false);
+    CastExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.CastExpr.class, "CastExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
     public PropertyMetaModel expressionPropertyMetaModel;
