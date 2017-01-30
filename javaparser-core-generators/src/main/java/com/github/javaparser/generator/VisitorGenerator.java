@@ -2,6 +2,7 @@ package com.github.javaparser.generator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.utils.SourceRoot;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.javaparser.ast.Modifier.*;
 
 /**
  * Makes it easier to generate visitor classes.
@@ -26,7 +29,7 @@ public abstract class VisitorGenerator extends Generator {
     private final String argumentType;
     private final boolean createMissingVisitMethods;
 
-    public VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods, JavaParserMetaModel javaParserMetaModel) {
+    public VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
         super(javaParser, sourceRoot, javaParserMetaModel);
         this.pkg = pkg;
         this.visitorClassName = visitorClassName;
@@ -44,7 +47,7 @@ public abstract class VisitorGenerator extends Generator {
         }
         ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
 
-        javaParserMetaModel.getNodeMetaModels().stream()
+        JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
                 .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
     }
@@ -58,7 +61,7 @@ public abstract class VisitorGenerator extends Generator {
         if (visitMethod.isPresent()) {
             generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC)
                     .addParameter(node.getTypeNameGenerified(), "n")
                     .addParameter(argumentType, "arg")
                     .setType(returnType);

@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class MethodCallExprMetaModel extends BaseNodeMetaModel {
 
-    MethodCallExprMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.expr.MethodCallExpr.class, "MethodCallExpr", "com.github.javaparser.ast.expr", false, false);
+    MethodCallExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.MethodCallExpr.class, "MethodCallExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
     public PropertyMetaModel argumentsPropertyMetaModel;

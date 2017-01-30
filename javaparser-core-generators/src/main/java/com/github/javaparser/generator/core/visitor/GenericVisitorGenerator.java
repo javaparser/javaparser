@@ -12,8 +12,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * Generates JavaParser's GenericVisitor.
  */
 public class GenericVisitorGenerator extends VisitorGenerator {
-    public GenericVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitor", "R", "A", true, javaParserMetaModel);
+    public GenericVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitor", "R", "A", true);
     }
 
     @Override

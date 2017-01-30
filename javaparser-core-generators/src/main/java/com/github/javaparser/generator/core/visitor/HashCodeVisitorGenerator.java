@@ -19,8 +19,8 @@ import static com.github.javaparser.JavaParser.parseStatement;
  * Generates JavaParser's HashCodeVisitor.
  */
 public class HashCodeVisitorGenerator extends VisitorGenerator {
-    public HashCodeVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true, javaParserMetaModel);
+    public HashCodeVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true);
     }
 
     @Override
