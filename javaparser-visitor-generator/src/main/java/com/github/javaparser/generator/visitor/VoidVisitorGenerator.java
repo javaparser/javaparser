@@ -14,8 +14,8 @@ import java.util.List;
  * Generates JavaParser's VoidVisitor.
  */
 public class VoidVisitorGenerator extends VisitorGenerator {
-    VoidVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitor", "void", "A", true, javaParserMetaModel);
+    VoidVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitor", "void", "A", true);
     }
 
     @Override

@@ -29,6 +29,7 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavadocTest {
 
@@ -74,6 +75,32 @@ public class JavadocTest {
     public void descriptionAndBlockTagsAreRetrievable() {
         Javadoc javadoc = JavaParser.parseJavadoc("first line\nsecond line\n\n@param node a node\n@return result the result");
         assertEquals(javadoc.getDescription().toText(), "first line\nsecond line");
+        assertEquals(javadoc.getBlockTags().size(), 2);
+    }
+
+    @Test
+    public void inlineTagsAreParsable() {
+        String docText =
+                "Returns the {@link TOFilename}s of all files that existed during the requested\n" +
+                        "{@link TOVersion}.\n" +
+                        "\n" +
+                        "@param versionID the id of the {@link TOVersion}.\n" +
+                        "@return the filenames\n" +
+                        "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID.\n";
+        String javadoc = JavaParser.parseJavadoc(docText).toText();
+        assertTrue(javadoc.contains("{@link TOVersion}"));
+    }
+
+    @Test
+    public void emptyLinesBetweenBlockTagsGetsFiltered() {
+        String comment = " * The type of the Object to be mapped.\n" +
+                " * This interface maps the given Objects to existing ones in the database and\n" +
+                " * saves them.\n" +
+                " * \n" +
+                " * @author censored\n" +
+                " * \n" +
+                " * @param <T>\n";
+        Javadoc javadoc = JavaParser.parseJavadoc(comment);
         assertEquals(javadoc.getBlockTags().size(), 2);
     }
 

@@ -24,7 +24,7 @@ package com.github.javaparser.utils;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 /**
  * Any kind of utility.
@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
  */
 public class Utils {
     public static final String EOL = System.getProperty("line.separator");
+
+    public static final Predicate<String> STRING_NOT_EMPTY = s -> !s.isEmpty();
 
     public static <T> List<T> ensureNotNull(List<T> list) {
         return list == null ? new ArrayList<>() : list;

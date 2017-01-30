@@ -48,7 +48,7 @@ public class NodeWithJavadocTest {
                 false, "Foo");
         decl.setComment(new LineComment("A comment"));
         assertEquals(false, decl.removeJavaDocComment());
-        assertTrue(decl.hasComment());
+        assertTrue(decl.getComment().isPresent());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class NodeWithJavadocTest {
                 false, "Foo");
         decl.setComment(new JavadocComment("A comment"));
         assertEquals(true, decl.removeJavaDocComment());
-        assertFalse(decl.hasComment());
+        assertFalse(decl.getComment().isPresent());
     }
 
 }

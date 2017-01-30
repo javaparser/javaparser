@@ -48,7 +48,7 @@ public class EnumDeclarationBuildersTest {
     @Test
     public void testAddImplements() {
         EnumDeclaration testEnum = cu.addEnum("test");
-        testEnum.addImplements(Function.class);
+        testEnum.addImplementedType(Function.class);
         assertEquals(1, cu.getImports().size());
         assertEquals("import " + Function.class.getName() + ";" + EOL,
                 cu.getImport(0).toString());
