@@ -2,20 +2,16 @@ package com.github.javaparser.generator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.Modifier.PUBLIC;
 
 /**
  * Makes it easier to generate visitor classes.
@@ -29,8 +25,8 @@ public abstract class VisitorGenerator extends Generator {
     private final String argumentType;
     private final boolean createMissingVisitMethods;
 
-    public VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
-        super(javaParser, sourceRoot, javaParserMetaModel);
+    protected VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
+        super(javaParser, sourceRoot);
         this.pkg = pkg;
         this.visitorClassName = visitorClassName;
         this.returnType = returnType;

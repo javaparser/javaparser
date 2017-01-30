@@ -35,13 +35,11 @@ import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
-
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -112,7 +110,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> {
+    public static Comparator<Node> NODE_BY_BEGIN_POSITION = ( a,  b) -> {
         if (a.getRange().isPresent() && b.getRange().isPresent()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
@@ -342,7 +340,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     @Override
     public Node setParentNode(Node parentNode) {
-        observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
+        observers.forEach( o -> o.parentChange(this, this.parentNode, parentNode));
         // remove from old parent, if any
         if (this.parentNode != null) {
             this.parentNode.childNodes.remove(this);
@@ -381,7 +379,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        getAncestorOfType(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
+        getAncestorOfType(CompilationUnit.class).ifPresent( p -> p.addImport(clazz));
     }
 
     /**
@@ -459,7 +457,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                     // ok, we found a potential getter. Before invoking let's check there is a corresponding setter,
                     // otherwise there is no point
                     String setterName = "set" + method.getName().substring("get".length());
-                    Optional<Method> optSetter = Arrays.stream(parentClass.getMethods()).filter(m -> m.getName().equals(setterName)).filter(m -> !java.lang.reflect.Modifier.isStatic(m.getModifiers())).filter(m -> m.getParameterCount() == 1).filter(m -> m.getParameterTypes()[0].equals(setterParamType)).findFirst();
+                    Optional<Method> optSetter = Arrays.stream(parentClass.getMethods()).filter( m -> m.getName().equals(setterName)).filter( m -> !java.lang.reflect.Modifier.isStatic(m.getModifiers())).filter( m -> m.getParameterCount() == 1).filter( m -> m.getParameterTypes()[0].equals(setterParamType)).findFirst();
                     if (optSetter.isPresent()) {
                         try {
                             Object resultRaw = method.invoke(parentNode);
@@ -502,7 +500,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     protected <P> void notifyPropertyChange(ObservableProperty property, P oldValue, P newValue) {
-        this.observers.forEach(o -> o.propertyChange(this, property, oldValue, newValue));
+        this.observers.forEach( o -> o.propertyChange(this, property, oldValue, newValue));
     }
 
     @Override
@@ -523,7 +521,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch (mode) {
+        switch(mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -543,9 +541,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     public void registerForSubtree(AstObserver observer) {
         register(observer);
-        this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
-        this.getNodeLists().forEach(nl -> {
-            if (nl != null) nl.register(observer);
+        this.getChildNodes().forEach( c -> c.registerForSubtree(observer));
+        this.getNodeLists().forEach( nl -> {
+            if (nl != null)
+                nl.register(observer);
         });
     }
 

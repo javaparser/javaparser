@@ -16,12 +16,12 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.f;
  * ready for modification.
  */
 public abstract class NodeGenerator extends Generator {
-    protected NodeGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, javaParserMetaModel);
+    protected NodeGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
+        super(javaParser, sourceRoot);
     }
 
     public final void generate() throws IOException {
-        for (BaseNodeMetaModel nodeMetaModel : javaParserMetaModel.getNodeMetaModels()) {
+        for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
             CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java", javaParser).orElseThrow(() -> new IOException(f("java file for %s not found", nodeMetaModel.getTypeName())));
             ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new IOException("Can't find class"));
             generateNode(nodeMetaModel, nodeCu, nodeCoid);

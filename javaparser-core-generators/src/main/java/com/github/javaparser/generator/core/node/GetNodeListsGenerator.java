@@ -10,7 +10,6 @@ import com.github.javaparser.generator.NodeGenerator;
 import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.util.List;
@@ -19,8 +18,8 @@ import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 public class GetNodeListsGenerator extends NodeGenerator {
-    public GetNodeListsGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, javaParserMetaModel);
+    public GetNodeListsGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
+        super(javaParser, sourceRoot);
     }
 
     @Override

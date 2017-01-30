@@ -1,12 +1,10 @@
 package com.github.javaparser.generator.core;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.core.node.GetNodeListsGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.generator.utils.GeneratorUtils;
 import com.github.javaparser.generator.utils.SourceRoot;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,7 +30,7 @@ public class CoreGenerator {
         new CloneVisitorGenerator(javaParser, sourceRoot).generate();
         new TreeStructureVisitorGenerator(javaParser, sourceRoot).generate();
 
-        new GetNodeListsGenerator(javaParser, sourceRoot, javaParserMetaModel).generate();
+        new GetNodeListsGenerator(javaParser, sourceRoot).generate();
         
         sourceRoot.saveAll();
     }
