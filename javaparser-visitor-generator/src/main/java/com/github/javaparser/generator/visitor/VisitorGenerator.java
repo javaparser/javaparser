@@ -30,9 +30,8 @@ public abstract class VisitorGenerator {
     private final String returnType;
     private final String argumentType;
     private final boolean createMissingVisitMethods;
-    protected final JavaParserMetaModel javaParserMetaModel;
 
-    public VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods, JavaParserMetaModel javaParserMetaModel) {
+    public VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
         this.javaParser = javaParser;
         this.sourceRoot = sourceRoot;
         this.pkg = pkg;
@@ -40,7 +39,6 @@ public abstract class VisitorGenerator {
         this.returnType = returnType;
         this.argumentType = argumentType;
         this.createMissingVisitMethods = createMissingVisitMethods;
-        this.javaParserMetaModel = javaParserMetaModel;
     }
 
     public void generate() throws IOException {
@@ -52,7 +50,7 @@ public abstract class VisitorGenerator {
         }
         ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
 
-        javaParserMetaModel.getNodeMetaModels().stream()
+        JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
                 .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
     }

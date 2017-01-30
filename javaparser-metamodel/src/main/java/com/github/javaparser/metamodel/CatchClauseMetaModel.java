@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class CatchClauseMetaModel extends BaseNodeMetaModel {
 
-    CatchClauseMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.stmt.CatchClause.class, "CatchClause", "com.github.javaparser.ast.stmt", false, false);
+    CatchClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.CatchClause.class, "CatchClause", "com.github.javaparser.ast.stmt", false, false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

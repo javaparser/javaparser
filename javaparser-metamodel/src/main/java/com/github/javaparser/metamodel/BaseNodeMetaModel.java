@@ -12,7 +12,6 @@ import java.util.Optional;
  */
 public abstract class BaseNodeMetaModel {
     private final Optional<BaseNodeMetaModel> superNodeMetaModel;
-    private final JavaParserMetaModel javaParserMetaModel;
     private final List<PropertyMetaModel> declaredPropertyMetaModels = new ArrayList<>();
     private final List<PropertyMetaModel> constructorParameters = new ArrayList<>();
     private final Class<? extends Node> type;
@@ -21,9 +20,8 @@ public abstract class BaseNodeMetaModel {
     private final boolean isAbstract;
     private final boolean hasWildcard;
 
-    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, JavaParserMetaModel javaParserMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         this.superNodeMetaModel = superNodeMetaModel;
-        this.javaParserMetaModel = javaParserMetaModel;
         this.type = type;
         this.name = name;
         this.packageName = packageName;
@@ -51,13 +49,6 @@ public abstract class BaseNodeMetaModel {
      */
     public Optional<BaseNodeMetaModel> getSuperNodeMetaModel() {
         return superNodeMetaModel;
-    }
-
-    /**
-     * @return the overall model.
-     */
-    public JavaParserMetaModel getJavaParserMetaModel() {
-        return javaParserMetaModel;
     }
 
     /**

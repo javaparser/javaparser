@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class VariableDeclaratorMetaModel extends BaseNodeMetaModel {
 
-    VariableDeclaratorMetaModel(JavaParserMetaModel parent, Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, parent, com.github.javaparser.ast.body.VariableDeclarator.class, "VariableDeclarator", "com.github.javaparser.ast.body", false, false);
+    VariableDeclaratorMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, com.github.javaparser.ast.body.VariableDeclarator.class, "VariableDeclarator", "com.github.javaparser.ast.body", false, false);
     }
 
     public PropertyMetaModel initializerPropertyMetaModel;
