@@ -8,6 +8,7 @@ New:
 * 353 visitors are no longer hand made, they are now generated from the metamodel. This should make them 100% reliable.
 Affected visitors are: GenericVisitorAdapter, EqualsVisitor, VoidVisitorAdapter, VoidVisitor, GenericVisitor, HashCodeVisitor, CloneVisitor.
 If you want to generate your own visitors, you can use the VisitorGenerator class.
+* 220 733 717 smaller improvements and fixes
 
 Version 3.0.1
 ------------------
