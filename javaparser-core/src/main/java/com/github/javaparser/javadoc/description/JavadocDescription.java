@@ -38,10 +38,10 @@ public class JavadocDescription {
     public static JavadocDescription parseText(String text) {
         JavadocDescription instance = new JavadocDescription();
         int index = 0;
-        Pair<Integer, Integer> nextInlineTagPos = null;
+        Pair<Integer, Integer> nextInlineTagPos;
         while ((nextInlineTagPos = indexOfNextInlineTag(text, index)) != null) {
             if (nextInlineTagPos.a != index) {
-                instance.addElement(new JavadocSnippet(text.substring(index, nextInlineTagPos.a)));
+                instance.addElement(new JavadocSnippet(text.substring(index, nextInlineTagPos.a + 1)));
             }
             instance.addElement(JavadocInlineTag.fromText(text.substring(nextInlineTagPos.a, nextInlineTagPos.b + 1)));
             index = nextInlineTagPos.b;
