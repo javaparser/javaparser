@@ -25,6 +25,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.utils.Utils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,20 +45,21 @@ class JavadocParser {
 
     public static Javadoc parse(String commentContent) {
         List<String> cleanLines = cleanLines(commentContent);
-        int index = -1;
-        for (int i=0;i<cleanLines.size() && index == -1;i++) {
-            if (isABlockLine(cleanLines.get(i))) {
-                index = i;
-            }
-        }
+        int indexOfFirstBlockTag = cleanLines.stream()
+                .filter(JavadocParser::isABlockLine)
+                .map(cleanLines::indexOf)
+                .findFirst()
+                .orElse(-1);
         List<String> blockLines;
         String descriptionText;
-        if (index == -1) {
+        if (indexOfFirstBlockTag == -1) {
             descriptionText = trimRight(String.join("\n", cleanLines));
             blockLines = Collections.emptyList();
         } else {
-            descriptionText = trimRight(String.join("\n", cleanLines.subList(0, index)));
-            blockLines = cleanLines.subList(index, cleanLines.size());
+            descriptionText = trimRight(String.join("\n", cleanLines.subList(0, indexOfFirstBlockTag)));
+            blockLines = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream()
+                    .filter(Utils.STRING_NOT_EMPTY)
+                    .collect(Collectors.toList());
         }
         Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
@@ -82,29 +84,25 @@ class JavadocParser {
         return string;
     }
 
-    private static JavadocDescription parseText(String content) {
-        return JavadocDescription.parseText(content);
-    }
-
     private static List<String> cleanLines(String content) {
         String[] lines = content.split("\n");
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
-                    int asteriskIndex = startsWithAsterisk(l);
-                    if (asteriskIndex == -1) {
-                        return l;
-                    } else {
-                        // if a line starts with space followed by an asterisk drop to the asterisk
-                        // if there is a space immediately after the asterisk drop it also
-                        if (l.length() > (asteriskIndex + 1)) {
+            int asteriskIndex = startsWithAsterisk(l);
+            if (asteriskIndex == -1) {
+                return l;
+            } else {
+                // if a line starts with space followed by an asterisk drop to the asterisk
+                // if there is a space immediately after the asterisk drop it also
+                if (l.length() > (asteriskIndex + 1)) {
 
-                            char c = l.charAt(asteriskIndex + 1);
-                            if (c == ' ' || c == '\t') {
-                                return l.substring(asteriskIndex + 2);
-                            }
-                        }
-                        return l.substring(asteriskIndex + 1);
+                    char c = l.charAt(asteriskIndex + 1);
+                    if (c == ' ' || c == '\t') {
+                        return l.substring(asteriskIndex + 2);
                     }
-                }).collect(Collectors.toList());
+                }
+                return l.substring(asteriskIndex + 1);
+            }
+        }).collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines
         cleanedLines = cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
         // if the first starts with a space, remove it
