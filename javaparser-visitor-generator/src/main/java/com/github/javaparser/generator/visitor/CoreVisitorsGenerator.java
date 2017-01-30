@@ -27,6 +27,7 @@ public class CoreVisitorsGenerator {
         new GenericVisitorGenerator(javaParser, sourceRoot).generate();
         new HashCodeVisitorGenerator(javaParser, sourceRoot).generate();
         new CloneVisitorGenerator(javaParser, sourceRoot).generate();
+        new TreeStructureVisitorGenerator(javaParser, sourceRoot).generate();
 
         sourceRoot.saveAll();
     }
