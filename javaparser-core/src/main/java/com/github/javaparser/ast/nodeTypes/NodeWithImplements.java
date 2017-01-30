@@ -38,15 +38,25 @@ public interface NodeWithImplements<N extends Node> {
     N setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList);
 
     @SuppressWarnings("unchecked")
-    default N setImplementedType(int i, ClassOrInterfaceType implement){
+    default N setImplementedType(int i, ClassOrInterfaceType implement) {
         getImplementedTypes().set(i, implement);
         return (N) this;
     }
 
     @SuppressWarnings("unchecked")
-    default N addImplementedType(ClassOrInterfaceType implement){
+    default N addImplementedType(ClassOrInterfaceType implement) {
         getImplementedTypes().add(implement);
         return (N) this;
+    }
+
+    /** @deprecated use addImplementedType instead */
+    default N addImplements(String name) {
+        return addImplementedType(name);
+    }
+
+    /** @deprecated use addImplementedType instead */
+    default N addImplements(Class<?> clazz) {
+        return addImplementedType(clazz);
     }
 
     /**
@@ -56,7 +66,7 @@ public interface NodeWithImplements<N extends Node> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default N addImplements(String name) {
+    default N addImplementedType(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
         getImplementedTypes().add(classOrInterfaceType);
         classOrInterfaceType.setParentNode((Node) this);
@@ -69,8 +79,8 @@ public interface NodeWithImplements<N extends Node> {
      * @param clazz the type to implements from
      * @return this
      */
-    default N addImplements(Class<?> clazz) {
+    default N addImplementedType(Class<?> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
-        return addImplements(clazz.getSimpleName());
+        return addImplementedType(clazz.getSimpleName());
     }
 }

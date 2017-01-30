@@ -48,9 +48,9 @@ public class CommentTest {
         ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(EnumSet.noneOf(Modifier.class), false, "A");
         Comment c = new LineComment("A comment");
         decl.setComment(c);
-        assertEquals(true, decl.hasComment());
+        assertEquals(true, decl.getComment().isPresent());
         assertTrue(c.remove());
-        assertEquals(false, decl.hasComment());
+        assertEquals(false, decl.getComment().isPresent());
     }
 
     @Test
