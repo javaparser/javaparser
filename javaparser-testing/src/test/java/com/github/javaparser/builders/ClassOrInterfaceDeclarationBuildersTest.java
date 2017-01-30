@@ -49,7 +49,7 @@ public class ClassOrInterfaceDeclarationBuildersTest {
     @Test
     public void testAddExtends() {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
-        testClass.addExtends(List.class);
+        testClass.addExtendedType(List.class);
         assertEquals(1, cu.getImports().size());
         assertEquals("import " + List.class.getName() + ";" + EOL,
                 cu.getImport(0).toString());
@@ -60,7 +60,7 @@ public class ClassOrInterfaceDeclarationBuildersTest {
     @Test
     public void testAddImplements() {
         ClassOrInterfaceDeclaration testClass = cu.addClass("test");
-        testClass.addImplements(Function.class);
+        testClass.addImplementedType(Function.class);
         assertEquals(1, cu.getImports().size());
         assertEquals("import " + Function.class.getName() + ";" + EOL,
                 cu.getImport(0).toString());
