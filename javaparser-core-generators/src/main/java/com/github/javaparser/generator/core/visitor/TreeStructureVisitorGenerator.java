@@ -1,9 +1,10 @@
-package com.github.javaparser.generator.visitor;
+package com.github.javaparser.generator.core.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -19,7 +20,9 @@ public class TreeStructureVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, List<PropertyMetaModel> allPropertyMetaModels, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+        final List<PropertyMetaModel> allPropertyMetaModels = node.getAllPropertyMetaModels();
+        
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 

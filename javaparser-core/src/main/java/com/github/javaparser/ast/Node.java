@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
@@ -26,7 +25,6 @@ import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -37,13 +35,11 @@ import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
-
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -89,8 +85,8 @@ import static java.util.Collections.unmodifiableList;
  *
  * @author Julio Vilmar Gesser
  */
-// Use <Node> to prevent Node from becoming generic.
 public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable {
+
     /**
      * Different registration mode for observers on nodes.
      */
@@ -99,15 +95,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         /**
          * Notify exclusively for changes happening on this node alone.
          */
-        JUST_THIS_NODE,
-
-        /**
+        JUST_THIS_NODE, /**
          * Notify for changes happening on this node and all its descendants existing at the moment in
          * which the observer was registered. Nodes attached later will not be observed.
          */
-        THIS_NODE_AND_EXISTING_DESCENDANTS,
-
-        /**
+        THIS_NODE_AND_EXISTING_DESCENDANTS, /**
          * Notify for changes happening on this node and all its descendants. The descendants existing at the moment in
          * which the observer was registered will be observed immediately. As new nodes are attached later they are
          * automatically registered to be observed.
@@ -118,7 +110,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> {
+    public static Comparator<Node> NODE_BY_BEGIN_POSITION = ( a,  b) -> {
         if (a.getRange().isPresent() && b.getRange().isPresent()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }
@@ -129,10 +121,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
             return -1;
         }
         return 0;
-
     };
 
     private static final PrettyPrinter toStringPrinter = new PrettyPrinter(new PrettyPrinterConfiguration());
+
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
     private Range range;
@@ -140,6 +132,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     private Node parentNode;
 
     private List<Node> childNodes = new LinkedList<>();
+
     private List<Comment> orphanComments = new LinkedList<>();
 
     private IdentityHashMap<DataKey<?>, Object> data = null;
@@ -332,12 +325,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     public List<Comment> getAllContainedComments() {
         List<Comment> comments = new LinkedList<>();
         comments.addAll(getOrphanComments());
-
         for (Node child : getChildNodes()) {
             child.getComment().ifPresent(comments::add);
             comments.addAll(child.getAllContainedComments());
         }
-
         return comments;
     }
 
@@ -349,8 +340,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     @Override
     public Node setParentNode(Node parentNode) {
-        observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
-
+        observers.forEach( o -> o.parentChange(this, this.parentNode, parentNode));
         // remove from old parent, if any
         if (this.parentNode != null) {
             this.parentNode.childNodes.remove(this);
@@ -364,6 +354,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
+
     public static final int ABSOLUTE_END_LINE = -2;
 
     @Deprecated
@@ -388,7 +379,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     public void tryAddImportToParentCompilationUnit(Class<?> clazz) {
-        getAncestorOfType(CompilationUnit.class).ifPresent(p -> p.addImport(clazz));
+        getAncestorOfType(CompilationUnit.class).ifPresent( p -> p.addImport(clazz));
     }
 
     /**
@@ -452,10 +443,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         }
         boolean removed = false;
         Class<?> parentClass = parentNode.getClass();
-
-        // we are going to look to remove the node either by checking if it is part of a NodeList
-        // of if there is an explicit setter for it
-
         for (Method method : parentClass.getMethods()) {
             if (!removed && !java.lang.reflect.Modifier.isStatic(method.getModifiers())) {
                 // looking for methods returning a NodeList
@@ -464,22 +451,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                         NodeList result = (NodeList) method.invoke(parentNode);
                         removed = result.remove(this);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        // nothing to do here
                     }
-                } else if ((method.getReturnType().isAssignableFrom(this.getClass()) || isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()))
-                        && method.getParameterCount() == 0
-                        && method.getName().startsWith("get")) {
-                    final Class<?> setterParamType = isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()) ?
-                            getOptionalParameterType(method.getGenericReturnType()) : method.getReturnType();
+                } else if ((method.getReturnType().isAssignableFrom(this.getClass()) || isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass())) && method.getParameterCount() == 0 && method.getName().startsWith("get")) {
+                    final Class<?> setterParamType = isOptionalAssignableFrom(method.getGenericReturnType(), this.getClass()) ? getOptionalParameterType(method.getGenericReturnType()) : method.getReturnType();
                     // ok, we found a potential getter. Before invoking let's check there is a corresponding setter,
                     // otherwise there is no point
                     String setterName = "set" + method.getName().substring("get".length());
-                    Optional<Method> optSetter = Arrays.stream(parentClass.getMethods())
-                            .filter(m -> m.getName().equals(setterName))
-                            .filter(m -> !java.lang.reflect.Modifier.isStatic(m.getModifiers()))
-                            .filter(m -> m.getParameterCount() == 1)
-                            .filter(m -> m.getParameterTypes()[0].equals(setterParamType))
-                            .findFirst();
+                    Optional<Method> optSetter = Arrays.stream(parentClass.getMethods()).filter( m -> m.getName().equals(setterName)).filter( m -> !java.lang.reflect.Modifier.isStatic(m.getModifiers())).filter( m -> m.getParameterCount() == 1).filter( m -> m.getParameterTypes()[0].equals(setterParamType)).findFirst();
                     if (optSetter.isPresent()) {
                         try {
                             Object resultRaw = method.invoke(parentNode);
@@ -490,8 +468,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                                     Object o = optionalResultRaw.get();
                                     if (Node.class.isAssignableFrom(o.getClass())) {
                                         result = (Node) o;
-                                    } else continue;
-                                } else continue;
+                                    } else
+                                        continue;
+                                } else
+                                    continue;
                             } else {
                                 result = (Node) resultRaw;
                             }
@@ -500,7 +480,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
                                 removed = true;
                             }
                         } catch (IllegalAccessException | InvocationTargetException e) {
-                            // nothing to do here
                         }
                     }
                 }
@@ -521,7 +500,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     protected <P> void notifyPropertyChange(ObservableProperty property, P oldValue, P newValue) {
-        this.observers.forEach(o -> o.propertyChange(this, property, oldValue, newValue));
+        this.observers.forEach( o -> o.propertyChange(this, property, oldValue, newValue));
     }
 
     @Override
@@ -542,7 +521,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch (mode) {
+        switch(mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
@@ -562,8 +541,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
      */
     public void registerForSubtree(AstObserver observer) {
         register(observer);
-        this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
-        this.getNodeLists().forEach(nl -> nl.register(observer));
+        this.getChildNodes().forEach( c -> c.registerForSubtree(observer));
+        this.getNodeLists().forEach( nl -> {
+            if (nl != null)
+                nl.register(observer);
+        });
     }
 
     @Override
@@ -610,3 +592,4 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return Optional.of(parameterType);
     }
 }
+

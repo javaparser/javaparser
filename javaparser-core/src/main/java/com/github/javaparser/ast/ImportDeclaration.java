@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
 package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
@@ -39,11 +38,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * <p>The name does not include the asterisk or the static keyword.</p>
  * @author Julio Vilmar Gesser
  */
-public final class ImportDeclaration extends Node implements 
-        NodeWithName<ImportDeclaration> {
+public final class ImportDeclaration extends Node implements NodeWithName<ImportDeclaration> {
 
     private Name name;
+
     private boolean isStatic;
+
     private boolean isAsterisk;
 
     private ImportDeclaration() {
@@ -109,3 +109,4 @@ public final class ImportDeclaration extends Node implements
         return this;
     }
 }
+

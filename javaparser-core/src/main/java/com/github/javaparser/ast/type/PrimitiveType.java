@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -29,8 +28,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A primitive type.
@@ -41,6 +41,7 @@ import java.util.HashMap;
  * @author Julio Vilmar Gesser
  */
 public final class PrimitiveType extends Type implements NodeWithAnnotations<PrimitiveType> {
+
     public static PrimitiveType booleanType() {
         return new PrimitiveType(Primitive.BOOLEAN);
     }
@@ -74,16 +75,11 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     public enum Primitive {
-        BOOLEAN("Boolean"),
-        CHAR("Character"),
-        BYTE("Byte"),
-        SHORT("Short"),
-        INT("Integer"),
-        LONG("Long"),
-        FLOAT("Float"),
-        DOUBLE("Double");
+
+        BOOLEAN("Boolean"), CHAR("Character"), BYTE("Byte"), SHORT("Short"), INT("Integer"), LONG("Long"), FLOAT("Float"), DOUBLE("Double");
 
         final String nameOfBoxedType;
+
         private String codeRepresentation;
 
         public ClassOrInterfaceType toBoxedType() {
@@ -156,4 +152,10 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     public PrimitiveType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (PrimitiveType) super.setAnnotations(annotations);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -27,14 +26,13 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A literal string.
  * <br/><code>"Hello World!"</code>
  * <br/><code>"\"\n"</code>
- * <br/><code>"\u2122"</code>
+ * <br/><code>"™"</code>
  * <br/><code>"💩"</code>
  *
  * @author Julio Vilmar Gesser
@@ -87,3 +85,4 @@ public class StringLiteralExpr extends LiteralExpr {
         return this;
     }
 }
+

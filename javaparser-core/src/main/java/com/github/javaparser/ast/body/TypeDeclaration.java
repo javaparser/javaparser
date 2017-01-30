@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -33,11 +32,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -45,11 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T> implements
-        NodeWithSimpleName<T>,
-        NodeWithJavadoc<T>,
-        NodeWithModifiers<T>,
-        NodeWithMembers<T> {
+public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T> implements NodeWithSimpleName<T>, NodeWithJavadoc<T>, NodeWithModifiers<T>, NodeWithMembers<T> {
 
     private SimpleName name;
 
@@ -58,34 +51,18 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     private NodeList<BodyDeclaration<?>> members;
 
     public TypeDeclaration() {
-        this(null,
-                new NodeList<>(),
-                EnumSet.noneOf(Modifier.class),
-                new SimpleName(),
-                new NodeList<>());
+        this(null, new NodeList<>(), EnumSet.noneOf(Modifier.class), new SimpleName(), new NodeList<>());
     }
 
     public TypeDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(null,
-                new NodeList<>(),
-                modifiers,
-                new SimpleName(name),
-                new NodeList<>());
+        this(null, new NodeList<>(), modifiers, new SimpleName(name), new NodeList<>());
     }
 
-    public TypeDeclaration(NodeList<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, SimpleName name,
-                           NodeList<BodyDeclaration<?>> members) {
-        this(null,
-                annotations,
-                modifiers,
-                name,
-                members);
+    public TypeDeclaration(NodeList<AnnotationExpr> annotations, EnumSet<Modifier> modifiers, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+        this(null, annotations, modifiers, name, members);
     }
 
-    public TypeDeclaration(Range range, NodeList<AnnotationExpr> annotations,
-                           EnumSet<Modifier> modifiers, SimpleName name,
-                           NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(Range range, NodeList<AnnotationExpr> annotations, EnumSet<Modifier> modifiers, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(range, annotations);
         setName(name);
         setModifiers(modifiers);
@@ -157,3 +134,4 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return res;
     }
 }
+

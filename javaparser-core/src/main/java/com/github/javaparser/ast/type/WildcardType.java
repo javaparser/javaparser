@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -29,7 +28,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -59,8 +59,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         this(null, extendedTypes, superTypes);
     }
 
-    public WildcardType(final Range range,
-                        final ReferenceType extendedTypes, final ReferenceType superTypes) {
+    public WildcardType(final Range range, final ReferenceType extendedTypes, final ReferenceType superTypes) {
         super(range, new NodeList<>());
         setExtendedTypes(extendedTypes);
         setSuperTypes(superTypes);
@@ -114,4 +113,10 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     public WildcardType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (WildcardType) super.setAnnotations(annotations);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

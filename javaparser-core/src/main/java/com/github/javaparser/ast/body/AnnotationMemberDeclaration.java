@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -38,10 +37,10 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -49,11 +48,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements
-        NodeWithJavadoc<AnnotationMemberDeclaration>,
-        NodeWithSimpleName<AnnotationMemberDeclaration>,
-        NodeWithType<AnnotationMemberDeclaration, Type>,
-        NodeWithModifiers<AnnotationMemberDeclaration> {
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithModifiers<AnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -64,36 +59,19 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new ClassOrInterfaceType(),
-                new SimpleName(),
-                null);
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), null);
     }
 
     public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, Type type, String name, Expression defaultValue) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                type,
-                new SimpleName(name),
-                defaultValue);
+        this(null, modifiers, new NodeList<>(), type, new SimpleName(name), defaultValue);
     }
 
     @AllFieldsConstructor
-    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name,
-                                       Expression defaultValue) {
-        this(null,
-                modifiers,
-                annotations,
-                type,
-                name,
-                defaultValue);
+    public AnnotationMemberDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+        this(null, modifiers, annotations, type, name, defaultValue);
     }
 
-    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type,
-                                       SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         super(range, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -182,4 +160,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         setAsParentNodeOf(type);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

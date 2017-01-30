@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -31,7 +30,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,40 +46,26 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType<TypeParameter> implements
-        NodeWithSimpleName<TypeParameter>,
-        NodeWithAnnotations<TypeParameter> {
+public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
 
     private NodeList<ClassOrInterfaceType> typeBound;
 
     public TypeParameter() {
-        this(null,
-                new SimpleName(),
-                new NodeList<>(),
-                new NodeList<>());
+        this(null, new SimpleName(), new NodeList<>(), new NodeList<>());
     }
 
     public TypeParameter(final String name) {
-        this(null,
-                new SimpleName(name),
-                new NodeList<>(),
-                new NodeList<>());
+        this(null, new SimpleName(name), new NodeList<>(), new NodeList<>());
     }
 
     public TypeParameter(final String name, final NodeList<ClassOrInterfaceType> typeBound) {
-        this(null,
-                new SimpleName(name),
-                typeBound,
-                new NodeList<>());
+        this(null, new SimpleName(name), typeBound, new NodeList<>());
     }
 
     public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
-        this(range,
-                name,
-                typeBound,
-                new NodeList<>());
+        this(range, name, typeBound, new NodeList<>());
     }
 
     @AllFieldsConstructor
@@ -144,4 +130,10 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         super.setAnnotations(annotations);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getTypeBound(), getAnnotations());
+    }
 }
+

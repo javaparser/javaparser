@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -31,7 +30,7 @@ import com.github.javaparser.utils.Utils;
  * A literal character.
  * <br/><code>'a'</code>
  * <br/><code>'\t'</code>
- * <br/><code>'\u03a9'</code>
+ * <br/><code>'Ω'</code>
  * <br/><code>'\177'</code>
  * <br/><code>'💩'</code>
  *
@@ -69,3 +68,4 @@ public final class CharLiteralExpr extends StringLiteralExpr {
         v.visit(this, arg);
     }
 }
+
