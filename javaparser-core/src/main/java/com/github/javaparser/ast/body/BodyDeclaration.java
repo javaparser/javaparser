@@ -66,6 +66,8 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     public final T setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return (T) this;

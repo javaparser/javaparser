@@ -104,6 +104,8 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
         assertNotNull(entries);
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
+        if (this.entries != null)
+            this.entries.setParentNode(null);
         this.entries = entries;
         setAsParentNodeOf(entries);
         return this;
@@ -113,6 +115,8 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
+        if (this.implementedTypes != null)
+            this.implementedTypes.setParentNode(null);
         this.implementedTypes = implementedTypes;
         setAsParentNodeOf(implementedTypes);
         return this;

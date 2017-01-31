@@ -87,6 +87,8 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     public MethodReferenceExpr setScope(final Expression scope) {
         assertNotNull(scope);
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
         setAsParentNodeOf(scope);
         return this;
@@ -106,6 +108,8 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;

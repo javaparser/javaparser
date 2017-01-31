@@ -66,6 +66,9 @@ public class PropertyGenerator extends NodeGenerator {
             }
         }
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
+        if (property.isNode()) {
+            body.addStatement(f("if (this.%s != null) this.%s.setParentNode(null);", name, name));
+        }
         body.addStatement(f("this.%s = %s;", name, name));
         if (property.isNode()) {
             body.addStatement(f("setAsParentNodeOf(%s);", name));

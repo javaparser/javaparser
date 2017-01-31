@@ -85,6 +85,8 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
      */
     public ArrayCreationLevel setDimension(final Expression dimension) {
         notifyPropertyChange(ObservableProperty.DIMENSION, this.dimension, dimension);
+        if (this.dimension != null)
+            this.dimension.setParentNode(null);
         this.dimension = dimension;
         setAsParentNodeOf(dimension);
         return this;
@@ -103,6 +105,8 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     public ArrayCreationLevel setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;

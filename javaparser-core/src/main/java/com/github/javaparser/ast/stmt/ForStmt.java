@@ -99,6 +99,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setBody(final Statement body) {
         assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -112,6 +114,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      */
     public ForStmt setCompare(final Expression compare) {
         notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
+        if (this.compare != null)
+            this.compare.setParentNode(null);
         this.compare = compare;
         setAsParentNodeOf(compare);
         return this;
@@ -120,6 +124,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
         assertNotNull(initialization);
         notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
+        if (this.initialization != null)
+            this.initialization.setParentNode(null);
         this.initialization = initialization;
         setAsParentNodeOf(initialization);
         return this;
@@ -128,6 +134,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setUpdate(final NodeList<Expression> update) {
         assertNotNull(update);
         notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
+        if (this.update != null)
+            this.update.setParentNode(null);
         this.update = update;
         setAsParentNodeOf(update);
         return this;

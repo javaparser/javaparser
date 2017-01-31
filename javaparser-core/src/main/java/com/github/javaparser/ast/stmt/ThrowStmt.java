@@ -73,6 +73,8 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     public ThrowStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;

@@ -101,6 +101,8 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     public T setMembers(final NodeList<BodyDeclaration<?>> members) {
         assertNotNull(members);
         notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
+        if (this.members != null)
+            this.members.setParentNode(null);
         this.members = members;
         setAsParentNodeOf(members);
         return (T) this;
@@ -120,6 +122,8 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     public T setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return (T) this;

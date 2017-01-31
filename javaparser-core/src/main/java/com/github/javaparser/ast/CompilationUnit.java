@@ -164,6 +164,8 @@ public final class CompilationUnit extends Node {
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
+        if (this.imports != null)
+            this.imports.setParentNode(null);
         this.imports = imports;
         setAsParentNodeOf(imports);
         return this;
@@ -186,6 +188,8 @@ public final class CompilationUnit extends Node {
      */
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
+        if (this.packageDeclaration != null)
+            this.packageDeclaration.setParentNode(null);
         this.packageDeclaration = packageDeclaration;
         setAsParentNodeOf(packageDeclaration);
         return this;
@@ -197,6 +201,8 @@ public final class CompilationUnit extends Node {
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
+        if (this.types != null)
+            this.types.setParentNode(null);
         this.types = types;
         setAsParentNodeOf(types);
         return this;

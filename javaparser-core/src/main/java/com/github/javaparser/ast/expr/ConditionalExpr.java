@@ -82,6 +82,8 @@ public final class ConditionalExpr extends Expression {
     public ConditionalExpr setCondition(final Expression condition) {
         assertNotNull(condition);
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
@@ -90,6 +92,8 @@ public final class ConditionalExpr extends Expression {
     public ConditionalExpr setElseExpr(final Expression elseExpr) {
         assertNotNull(elseExpr);
         notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
+        if (this.elseExpr != null)
+            this.elseExpr.setParentNode(null);
         this.elseExpr = elseExpr;
         setAsParentNodeOf(elseExpr);
         return this;
@@ -98,6 +102,8 @@ public final class ConditionalExpr extends Expression {
     public ConditionalExpr setThenExpr(final Expression thenExpr) {
         assertNotNull(thenExpr);
         notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
+        if (this.thenExpr != null)
+            this.thenExpr.setParentNode(null);
         this.thenExpr = thenExpr;
         setAsParentNodeOf(thenExpr);
         return this;

@@ -131,6 +131,8 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      */
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
+        if (this.anonymousClassBody != null)
+            this.anonymousClassBody.setParentNode(null);
         this.anonymousClassBody = anonymousClassBody;
         setAsParentNodeOf(anonymousClassBody);
         return this;
@@ -140,6 +142,8 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        if (this.arguments != null)
+            this.arguments.setParentNode(null);
         this.arguments = arguments;
         setAsParentNodeOf(arguments);
         return this;
@@ -154,6 +158,8 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Override
     public ObjectCreationExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
         setAsParentNodeOf(scope);
         return this;
@@ -163,6 +169,8 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;
@@ -182,6 +190,8 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Override
     public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;

@@ -108,6 +108,8 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     public UnaryExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;

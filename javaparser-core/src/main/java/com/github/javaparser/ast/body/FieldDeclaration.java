@@ -128,6 +128,8 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
+        if (this.variables != null)
+            this.variables.setParentNode(null);
         this.variables = variables;
         setAsParentNodeOf(variables);
         return this;

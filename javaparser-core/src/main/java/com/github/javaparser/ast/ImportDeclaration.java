@@ -100,6 +100,8 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     public ImportDeclaration setName(final Name name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

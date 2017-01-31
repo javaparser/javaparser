@@ -83,6 +83,8 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     public MemberValuePair setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -91,6 +93,8 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     public MemberValuePair setValue(final Expression value) {
         assertNotNull(value);
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        if (this.value != null)
+            this.value.setParentNode(null);
         this.value = value;
         setAsParentNodeOf(value);
         return this;
