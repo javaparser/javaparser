@@ -31,7 +31,9 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.utils.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -811,14 +813,26 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(NodeList n, A arg) {
-        for (int i = 0; i < n.size(); i++) {
-            n.set(i, (Node) n.get(i).accept(this, arg));
+        if (n.isEmpty()) {
+            return n;
         }
-        for (int i = n.size() - 1; i >= 0; i--) {
-            if (n.get(i) == null) {
-                n.remove(i);
+
+        List<Pair<Node, Node>> changeList = new ArrayList<>();
+        List<Node> listCopy = new ArrayList<>(n);
+
+        for (Node node : listCopy) {
+            Node newNode = (Node) node.accept(this, arg);
+            changeList.add(new Pair<>(node, newNode));
+        }
+
+        for (Pair<Node, Node> change : changeList) {
+            if(change.b==null){
+                n.remove(change.a);
+            }else{
+                n.set(n.indexOf(change.a), change.b);
             }
         }
+
         return n;
     }
 

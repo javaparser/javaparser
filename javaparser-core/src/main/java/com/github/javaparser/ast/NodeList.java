@@ -51,11 +51,15 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     private List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
-        this(null);
+        this((Node)null);
     }
 
     public NodeList(Node parent) {
         setParentNode(parent);
+    }
+
+    public NodeList(NodeList<N> n) {
+        this.addAll(n);
     }
 
     @Override
