@@ -34,6 +34,8 @@ public interface NodeWithThrownExceptions<N extends Node> {
 
     NodeList<ReferenceType> getThrownExceptions();
 
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
+
     default ReferenceType getThrownException(int i) {
         return getThrownExceptions().get(i);
     }
@@ -58,7 +60,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
      * @return this
      */
     default N addThrownException(Class<? extends Throwable> clazz) {
-        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        tryAddImportToParentCompilationUnit(clazz);
         return addThrownException(new ClassOrInterfaceType(clazz.getSimpleName()));
     }
 
