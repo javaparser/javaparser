@@ -95,6 +95,12 @@ public class PropertyMetaModel {
     }
 
     /**
+     * @return whether this property is not optional.
+     */
+    public boolean isRequired() {
+        return !isOptional;
+    }
+    /**
      * @return whether this property is contained in a NodeList.
      */
     public boolean isNodeList() {
@@ -178,5 +184,12 @@ public class PropertyMetaModel {
             return "EnumSet<" + getTypeNameGenerified() + ">";
         }
         return getTypeNameGenerified();
+    }
+
+    /**
+     * @return is this property an AST Node?
+     */
+    public boolean isNode() {
+        return getNodeReference().isPresent();
     }
 }

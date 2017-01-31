@@ -110,5 +110,22 @@ public final class GeneratorUtils {
         return Paths.get(path, "..", "..", "..");
     }
 
+    /**
+     * @param input "aCamelCaseString"
+     * @return "A_CAMEL_CASE_STRING"
+     */
+    public static String camelCaseToScreaming(String input) {
+        if (input.isEmpty()) {
+            return "";
+        }
+        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase());
+        for (char c : input.substring(1).toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                scream.append("_");
+            }
+            scream.append(Character.toUpperCase(c));
+        }
+        return scream.toString();
+    }
 
 }

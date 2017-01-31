@@ -34,7 +34,7 @@ public abstract class VisitorGenerator extends Generator {
         this.createMissingVisitMethods = createMissingVisitMethods;
     }
 
-    public final void generate() throws IOException {
+    public final void generate() throws Exception {
         CompilationUnit compilationUnit = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
 
         Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
@@ -46,6 +46,11 @@ public abstract class VisitorGenerator extends Generator {
         JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
                 .forEach(node -> generateVisitMethodForNode(node, visitorClass, compilationUnit));
+        after();
+    }
+
+    protected void after() throws Exception {
+
     }
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
