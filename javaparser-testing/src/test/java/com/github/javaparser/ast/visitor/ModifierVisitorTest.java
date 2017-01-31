@@ -31,6 +31,7 @@ public class ModifierVisitorTest {
     @Test
     public void x() {
         NodeList<StringLiteralExpr> list = new NodeList<>();
+        list.add(new StringLiteralExpr("t"));
         list.add(new StringLiteralExpr("a"));
         list.add(new StringLiteralExpr("b"));
         list.add(new StringLiteralExpr("c"));
@@ -40,7 +41,8 @@ public class ModifierVisitorTest {
             public Visitable visit(final StringLiteralExpr n, final Void arg) {
                 String v = n.getValue();
 
-                list.add(new StringLiteralExpr("extra " + v));
+                list.add(0, new StringLiteralExpr("extra " + v));
+                list.remove(new StringLiteralExpr("t"));
 
                 if (v.equals("a")) {
                     return new StringLiteralExpr("x");
@@ -53,11 +55,12 @@ public class ModifierVisitorTest {
             }
         }, null);
 
-        assertEquals("x", list.get(0).getValue());
-        assertEquals("c", list.get(1).getValue());
+        assertEquals("extra c", list.get(0).getValue());
+        assertEquals("extra b", list.get(1).getValue());
         assertEquals("extra a", list.get(2).getValue());
-        assertEquals("extra b", list.get(3).getValue());
-        assertEquals("extra c", list.get(4).getValue());
-        assertEquals(5, list.size());
+        assertEquals("extra t", list.get(3).getValue());
+        assertEquals("x", list.get(4).getValue());
+        assertEquals("c", list.get(5).getValue());
+        assertEquals(6, list.size());
     }
 }

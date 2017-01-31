@@ -817,22 +817,25 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return n;
         }
 
-        List<Pair<Node, Node>> changeList = new ArrayList<>();
-        List<Node> listCopy = new ArrayList<>(n);
+        final List<Pair<Node, Node>> changeList = new ArrayList<>();
+        final List<Node> listCopy = new ArrayList<>(n);
 
         for (Node node : listCopy) {
-            Node newNode = (Node) node.accept(this, arg);
+            final Node newNode = (Node) node.accept(this, arg);
             changeList.add(new Pair<>(node, newNode));
         }
 
         for (Pair<Node, Node> change : changeList) {
-            if(change.b==null){
+            if (change.b == null) {
                 n.remove(change.a);
-            }else{
-                n.set(n.indexOf(change.a), change.b);
+            } else {
+                final int i = n.indexOf(change.a);
+                // If the user removed this item by hand, ignore the change.
+                if (i != -1) {
+                    n.set(i, change.b);
+                }
             }
         }
-
         return n;
     }
 
