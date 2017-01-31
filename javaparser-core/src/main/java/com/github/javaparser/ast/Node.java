@@ -357,6 +357,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     public static final int ABSOLUTE_END_LINE = -2;
 
+    /** @deprecated use isAfter() on range */
     @Deprecated
     public boolean isPositionedAfter(Position position) {
         if (range == null) {
@@ -365,6 +366,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return range.isAfter(position);
     }
 
+    /** @deprecated use isBefore() on range */
     @Deprecated
     public boolean isPositionedBefore(Position position) {
         if (range == null) {
@@ -373,6 +375,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return range.isBefore(position);
     }
 
+    /** @deprecated use getComment().isPresent() */
     @Deprecated
     public boolean hasComment() {
         return comment != null;
