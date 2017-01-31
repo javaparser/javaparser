@@ -16,16 +16,18 @@ public class PropertyMetaModel {
     private final Class<?> type;
     private final Optional<BaseNodeMetaModel> nodeReference;
     private final boolean isOptional;
+    private final boolean isNonEmpty;
     private final boolean isNodeList;
     private final boolean isEnumSet;
     private final boolean hasWildcard;
 
-    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
+    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNonEmpty, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
         this.containingNodeMetaModel = containingNodeMetaModel;
         this.name = name;
         this.type = type;
         this.nodeReference = nodeReference;
         this.isOptional = isOptional;
+        this.isNonEmpty = isNonEmpty;
         this.isNodeList = isNodeList;
         this.isEnumSet = isEnumSet;
         this.hasWildcard = hasWildcard;
@@ -71,6 +73,13 @@ public class PropertyMetaModel {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return whether this field may contain an empty String.
+     */
+    public boolean isNonEmpty() {
+        return isNonEmpty;
     }
 
     /**

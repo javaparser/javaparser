@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class PropertyMetaModelTest {
     @Test
     public void whenPropertyIsVerySimpleThenTypeInfoIsCorrect() {
-        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", int.class, Optional.empty(), false, false, false, false);
+        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", int.class, Optional.empty(), false, false, false, false, false);
         assertEquals("int", bert.getTypeName());
         assertEquals("int", bert.getTypeNameGenerified());
         assertEquals("int", bert.getTypeNameForGetter());
@@ -20,7 +20,7 @@ public class PropertyMetaModelTest {
 
     @Test
     public void whenPropertyIsVeryComplexThenTypeInfoIsCorrect() {
-        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", BodyDeclaration.class, Optional.empty(), true, true, false, true);
+        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", BodyDeclaration.class, Optional.empty(), true, false, true, false, true);
         assertEquals("BodyDeclaration", bert.getTypeName());
         assertEquals("BodyDeclaration<?>", bert.getTypeNameGenerified());
         assertEquals("Optional<NodeList<BodyDeclaration<?>>>", bert.getTypeNameForGetter());
@@ -29,7 +29,7 @@ public class PropertyMetaModelTest {
 
     @Test
     public void whenPropertyIsAnEnumThenTypeInfoIsCorrect() {
-        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", Modifier.class, Optional.empty(), false, false, true, false);
+        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", Modifier.class, Optional.empty(), false, false, false, true, false);
         assertEquals("Modifier", bert.getTypeName());
         assertEquals("Modifier", bert.getTypeNameGenerified());
         assertEquals("EnumSet<Modifier>", bert.getTypeNameForGetter());
