@@ -81,16 +81,18 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
 
     @Override
     public MemberValuePair setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     public MemberValuePair setValue(final Expression value) {
+        assertNotNull(value);
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        this.value = assertNotNull(value);
-        setAsParentNodeOf(this.value);
+        this.value = value;
+        setAsParentNodeOf(value);
         return this;
     }
 }

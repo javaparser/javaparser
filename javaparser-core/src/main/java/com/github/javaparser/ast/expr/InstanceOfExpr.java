@@ -80,17 +80,19 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
 
     @Override
     public InstanceOfExpr setExpression(final Expression expression) {
+        assertNotNull(expression);
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        this.expression = assertNotNull(expression);
-        setAsParentNodeOf(this.expression);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 
     @Override
     public InstanceOfExpr setType(final ReferenceType<?> type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        this.type = assertNotNull(type);
-        setAsParentNodeOf(this.type);
+        this.type = type;
+        setAsParentNodeOf(type);
         return this;
     }
 }

@@ -128,35 +128,35 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @param defaultValue the default value, can be null
      * @return this, the AnnotationMemberDeclaration
      */
-    public AnnotationMemberDeclaration setDefaultValue(Expression defaultValue) {
+    public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
-        if (this.defaultValue != null) {
-            this.defaultValue.setParentNode(null);
-        }
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
     }
 
     @Override
-    public AnnotationMemberDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public AnnotationMemberDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
-    public AnnotationMemberDeclaration setName(SimpleName name) {
+    public AnnotationMemberDeclaration setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     @Override
-    public AnnotationMemberDeclaration setType(Type type) {
+    public AnnotationMemberDeclaration setType(final Type type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        this.type = assertNotNull(type);
+        this.type = type;
         setAsParentNodeOf(type);
         return this;
     }

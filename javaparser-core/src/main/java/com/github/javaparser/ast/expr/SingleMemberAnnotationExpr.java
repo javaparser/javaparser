@@ -26,6 +26,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * An annotation that has a single value. <br/><code>@Count(15)</code>
  *
@@ -64,9 +66,10 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
+        assertNotNull(memberValue);
         notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
         this.memberValue = memberValue;
-        setAsParentNodeOf(this.memberValue);
+        setAsParentNodeOf(memberValue);
         return this;
     }
 }

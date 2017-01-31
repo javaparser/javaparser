@@ -128,14 +128,16 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 
     @Override
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        this.annotations = assertNotNull(annotations);
-        setAsParentNodeOf(this.annotations);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
         return this;
     }
 
     @Override
     public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
@@ -143,9 +145,10 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 
     @Override
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
+        assertNotNull(variables);
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
         this.variables = variables;
-        setAsParentNodeOf(this.variables);
+        setAsParentNodeOf(variables);
         return this;
     }
 

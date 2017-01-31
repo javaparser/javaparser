@@ -29,6 +29,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A do-while.
  * <br/><code>do { ... } while ( a==0 );</code>
@@ -77,16 +79,18 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
     @Override
     public DoStmt setBody(final Statement body) {
+        assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
-        setAsParentNodeOf(this.body);
+        setAsParentNodeOf(body);
         return this;
     }
 
     public DoStmt setCondition(final Expression condition) {
+        assertNotNull(condition);
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         this.condition = condition;
-        setAsParentNodeOf(this.condition);
+        setAsParentNodeOf(condition);
         return this;
     }
 }

@@ -70,10 +70,11 @@ public final class ArrayInitializerExpr extends Expression {
         return values;
     }
 
-    public ArrayInitializerExpr setValues(NodeList<Expression> values) {
+    public ArrayInitializerExpr setValues(final NodeList<Expression> values) {
+        assertNotNull(values);
         notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
-        this.values = assertNotNull(values);
-        setAsParentNodeOf(this.values);
+        this.values = values;
+        setAsParentNodeOf(values);
         return this;
     }
 

@@ -54,7 +54,7 @@ public class PropertyGenerator extends NodeGenerator {
         body.getStatements().clear();
         if (property.isRequired()) {
             Class<?> type = property.getType();
-            if (type == String.class) {
+            if (property.isNonEmpty()) {
                 body.addStatement(f("assertNonEmpty(%s);", name));
             } else if (type != boolean.class && type != int.class) {
                 body.addStatement(f("assertNotNull(%s);", name));
@@ -67,7 +67,11 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.isNode()) {
             body.addStatement(f("setAsParentNodeOf(%s);", name));
         }
-        body.addStatement(f("return this;"));
+        if (property.getContainingNodeMetaModel().hasWildcard()) {
+            body.addStatement(f("return (T) this;"));
+        } else {
+            body.addStatement(f("return this;"));
+        }
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {

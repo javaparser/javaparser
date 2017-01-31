@@ -149,38 +149,42 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     public MethodDeclaration setBody(final BlockStmt body) {
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
-        setAsParentNodeOf(this.body);
+        setAsParentNodeOf(body);
         return this;
     }
 
     @Override
     public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
     public MethodDeclaration setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
-        setAsParentNodeOf(this.name);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
     }
 
     @Override
     public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
+        assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        this.parameters = assertNotNull(parameters);
-        setAsParentNodeOf(this.parameters);
+        this.parameters = parameters;
+        setAsParentNodeOf(parameters);
         return this;
     }
 
     @Override
     public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
-        this.thrownExceptions = assertNotNull(thrownExceptions);
-        setAsParentNodeOf(this.thrownExceptions);
+        assertNotNull(thrownExceptions);
+        notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
+        this.thrownExceptions = thrownExceptions;
+        setAsParentNodeOf(thrownExceptions);
         return this;
     }
 
@@ -190,17 +194,19 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
-    public MethodDeclaration setType(Type type) {
+    public MethodDeclaration setType(final Type type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
-        setAsParentNodeOf(this.type);
+        setAsParentNodeOf(type);
         return this;
     }
 
     @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        this.typeParameters = assertNotNull(typeParameters);
+        this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
         return this;
     }
@@ -209,7 +215,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return isDefault;
     }
 
-    public MethodDeclaration setDefault(boolean isDefault) {
+    public MethodDeclaration setDefault(final boolean isDefault) {
+        notifyPropertyChange(ObservableProperty.DEFAULT, this.isDefault, isDefault);
         this.isDefault = isDefault;
         return this;
     }

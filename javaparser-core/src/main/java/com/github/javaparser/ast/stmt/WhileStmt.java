@@ -29,6 +29,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A while statement.
  * <br/><code>while(true) { ... }</code>
@@ -77,16 +79,18 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
 
     @Override
     public WhileStmt setBody(final Statement body) {
+        assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
-        setAsParentNodeOf(this.body);
+        setAsParentNodeOf(body);
         return this;
     }
 
     public WhileStmt setCondition(final Expression condition) {
+        assertNotNull(condition);
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         this.condition = condition;
-        setAsParentNodeOf(this.condition);
+        setAsParentNodeOf(condition);
         return this;
     }
 }

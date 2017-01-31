@@ -117,17 +117,19 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public FieldDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
-    public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
+        assertNotNull(variables);
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        this.variables = assertNotNull(variables);
-        setAsParentNodeOf(this.variables);
+        this.variables = variables;
+        setAsParentNodeOf(variables);
         return this;
     }
 

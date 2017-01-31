@@ -111,9 +111,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
+        assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        this.arguments = assertNotNull(arguments);
-        setAsParentNodeOf(this.arguments);
+        this.arguments = arguments;
+        setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -126,12 +127,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         this.expression = expression;
-        setAsParentNodeOf(this.expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
     public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
-        notifyPropertyChange(ObservableProperty.IS_THIS, this.isThis, isThis);
+        notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
         this.isThis = isThis;
         return this;
     }
@@ -151,7 +152,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 

@@ -97,9 +97,10 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Override
     public ForStmt setBody(final Statement body) {
+        assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
-        setAsParentNodeOf(this.body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -112,21 +113,23 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public ForStmt setCompare(final Expression compare) {
         notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
         this.compare = compare;
-        setAsParentNodeOf(this.compare);
+        setAsParentNodeOf(compare);
         return this;
     }
 
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
-        notifyPropertyChange(ObservableProperty.INITIALIZER, this.initialization, initialization);
-        this.initialization = assertNotNull(initialization);
-        setAsParentNodeOf(this.initialization);
+        assertNotNull(initialization);
+        notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
+        this.initialization = initialization;
+        setAsParentNodeOf(initialization);
         return this;
     }
 
     public ForStmt setUpdate(final NodeList<Expression> update) {
+        assertNotNull(update);
         notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
-        this.update = assertNotNull(update);
-        setAsParentNodeOf(this.update);
+        this.update = update;
+        setAsParentNodeOf(update);
         return this;
     }
 

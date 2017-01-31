@@ -112,8 +112,9 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
 
     @Override
     public ClassOrInterfaceType setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
@@ -125,9 +126,9 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
      * @return this, the ClassOrInterfaceType
      */
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
-        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
-        setAsParentNodeOf(this.scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
@@ -146,7 +147,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 

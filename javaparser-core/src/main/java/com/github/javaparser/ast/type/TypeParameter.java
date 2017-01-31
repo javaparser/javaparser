@@ -112,15 +112,17 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
     @Override
     public TypeParameter setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
+        assertNotNull(typeBound);
         notifyPropertyChange(ObservableProperty.TYPE_BOUND, this.typeBound, typeBound);
-        this.typeBound = assertNotNull(typeBound);
+        this.typeBound = typeBound;
         setAsParentNodeOf(typeBound);
         return this;
     }

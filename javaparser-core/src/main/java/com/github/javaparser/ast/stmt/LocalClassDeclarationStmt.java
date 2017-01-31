@@ -70,9 +70,10 @@ public final class LocalClassDeclarationStmt extends Statement {
     }
 
     public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
+        assertNotNull(classDeclaration);
         notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
-        this.classDeclaration = assertNotNull(classDeclaration);
-        setAsParentNodeOf(this.classDeclaration);
+        this.classDeclaration = classDeclaration;
+        setAsParentNodeOf(classDeclaration);
         return this;
     }
 }

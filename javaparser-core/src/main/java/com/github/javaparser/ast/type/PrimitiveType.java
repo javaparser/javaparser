@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A primitive type.
  * <br/><code>int</code>
@@ -139,6 +141,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     public PrimitiveType setType(final Primitive type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         return this;

@@ -29,6 +29,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * Usage of the throw statement.
  * <br/><code>throw new Exception()</code>
@@ -70,9 +72,10 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
 
     @Override
     public ThrowStmt setExpression(final Expression expression) {
+        assertNotNull(expression);
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         this.expression = expression;
-        setAsParentNodeOf(this.expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 }

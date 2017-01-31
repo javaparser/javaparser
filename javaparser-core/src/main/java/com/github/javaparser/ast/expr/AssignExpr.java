@@ -26,6 +26,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
  * <br/><code>a=5</code>
@@ -94,22 +96,26 @@ public final class AssignExpr extends Expression {
         return value;
     }
 
-    public AssignExpr setOperator(Operator op) {
-        this.operator = op;
+    public AssignExpr setOperator(final Operator operator) {
+        assertNotNull(operator);
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        this.operator = operator;
         return this;
     }
 
-    public AssignExpr setTarget(Expression target) {
+    public AssignExpr setTarget(final Expression target) {
+        assertNotNull(target);
         notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
         this.target = target;
-        setAsParentNodeOf(this.target);
+        setAsParentNodeOf(target);
         return this;
     }
 
-    public AssignExpr setValue(Expression value) {
+    public AssignExpr setValue(final Expression value) {
+        assertNotNull(value);
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
-        setAsParentNodeOf(this.value);
+        setAsParentNodeOf(value);
         return this;
     }
 }

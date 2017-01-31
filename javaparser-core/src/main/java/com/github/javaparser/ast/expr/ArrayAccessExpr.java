@@ -72,17 +72,19 @@ public final class ArrayAccessExpr extends Expression {
         return name;
     }
 
-    public ArrayAccessExpr setIndex(Expression index) {
+    public ArrayAccessExpr setIndex(final Expression index) {
+        assertNotNull(index);
         notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
-        this.index = assertNotNull(index);
-        setAsParentNodeOf(this.index);
+        this.index = index;
+        setAsParentNodeOf(index);
         return this;
     }
 
-    public ArrayAccessExpr setName(Expression name) {
+    public ArrayAccessExpr setName(final Expression name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
-        setAsParentNodeOf(this.name);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
     }
 }

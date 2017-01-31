@@ -75,10 +75,11 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Override
-    public LambdaExpr setParameters(NodeList<Parameter> parameters) {
+    public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
+        assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        this.parameters = assertNotNull(parameters);
-        setAsParentNodeOf(this.parameters);
+        this.parameters = parameters;
+        setAsParentNodeOf(parameters);
         return this;
     }
 
@@ -86,9 +87,11 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return body;
     }
 
-    public LambdaExpr setBody(Statement body) {
+    public LambdaExpr setBody(final Statement body) {
+        assertNotNull(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         this.body = body;
-        setAsParentNodeOf(this.body);
+        setAsParentNodeOf(body);
         return this;
     }
 
@@ -106,9 +109,9 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return isEnclosingParameters;
     }
 
-    public LambdaExpr setEnclosingParameters(boolean enclosingParameters) {
-        notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, enclosingParameters);
-        this.isEnclosingParameters = enclosingParameters;
+    public LambdaExpr setEnclosingParameters(final boolean isEnclosingParameters) {
+        notifyPropertyChange(ObservableProperty.ENCLOSING_PARAMETERS, this.isEnclosingParameters, isEnclosingParameters);
+        this.isEnclosingParameters = isEnclosingParameters;
         return this;
     }
 

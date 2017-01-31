@@ -132,15 +132,16 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
         this.anonymousClassBody = anonymousClassBody;
-        setAsParentNodeOf(this.anonymousClassBody);
+        setAsParentNodeOf(anonymousClassBody);
         return this;
     }
 
     @Override
     public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
+        assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        this.arguments = assertNotNull(arguments);
-        setAsParentNodeOf(this.arguments);
+        this.arguments = arguments;
+        setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -154,16 +155,16 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public ObjectCreationExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         this.scope = scope;
-        setAsParentNodeOf(this.scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
     @Override
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         assertNotNull(type);
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
-        setAsParentNodeOf(this.type);
+        setAsParentNodeOf(type);
         return this;
     }
 
@@ -182,7 +183,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
