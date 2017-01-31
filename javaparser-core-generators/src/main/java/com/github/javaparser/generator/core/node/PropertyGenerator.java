@@ -2,25 +2,23 @@ package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.generator.utils.GeneratorUtils.camelCaseToScreaming;
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
-import static com.github.javaparser.generator.utils.GeneratorUtils.optionalOf;
 
 public class PropertyGenerator extends NodeGenerator {
     private final Set<String> observablePropertyNames = new TreeSet<>();
@@ -39,7 +37,7 @@ public class PropertyGenerator extends NodeGenerator {
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
         final List<MethodDeclaration> setters = nodeCoid.getMethodsBySignature(property.getSetterMethodName(), property.getTypeNameForSetter());
-        String name = property.getName();
+        final String name = property.getName();
         if (setters.size() != 1) {
             throw new AssertionError(f("Not exactly one setter exists: %s.%s = %s", nodeMetaModel.getTypeName(), name, setters.size()));
         }
@@ -50,6 +48,13 @@ public class PropertyGenerator extends NodeGenerator {
                 .addModifier(FINAL);
 
         // Fill body
+        final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
+        observablePropertyNames.add(observableName);
+        if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
+            // Node.comment has a very specific setter that we shouldn't overwrite.
+            return;
+        }
+
         final BlockStmt body = setter.getBody().get();
         body.getStatements().clear();
         if (property.isRequired()) {
@@ -60,8 +65,6 @@ public class PropertyGenerator extends NodeGenerator {
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }
-        final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        observablePropertyNames.add(observableName);
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         body.addStatement(f("this.%s = %s;", name, name));
         if (property.isNode()) {
