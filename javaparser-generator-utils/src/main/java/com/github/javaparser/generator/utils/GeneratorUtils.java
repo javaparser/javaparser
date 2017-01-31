@@ -39,9 +39,12 @@ public final class GeneratorUtils {
     }
 
     public static String setterName(String fieldName) {
+        if (fieldName.startsWith("is")) {
+            return "set" + fieldName.substring(2);
+        }
         return "set" + capitalize(fieldName);
     }
-    
+
     public static String optionalOf(String text, boolean isOptional) {
         if (isOptional) {
             return f("Optional.of(%s)", text);
