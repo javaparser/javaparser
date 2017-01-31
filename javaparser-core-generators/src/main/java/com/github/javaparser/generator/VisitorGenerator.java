@@ -7,11 +7,14 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
+import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 /**
  * Makes it easier to generate visitor classes.
@@ -19,6 +22,7 @@ import static com.github.javaparser.ast.Modifier.PUBLIC;
  * and will ask you to fill in the bodies of the visit methods.
  */
 public abstract class VisitorGenerator extends Generator {
+    private final Logger log = LoggerFactory.getLogger(VisitorGenerator.class);
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
@@ -35,13 +39,15 @@ public abstract class VisitorGenerator extends Generator {
     }
 
     public final void generate() throws Exception {
-        CompilationUnit compilationUnit = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
+        log.info(f("Running %s", getClass().getSimpleName()));
+
+        final CompilationUnit compilationUnit = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
 
         Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
         if (!visitorClassOptional.isPresent()) {
             visitorClassOptional = compilationUnit.getInterfaceByName(visitorClassName);
         }
-        ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
+        final ClassOrInterfaceDeclaration visitorClass = visitorClassOptional.get();
 
         JavaParserMetaModel.getNodeMetaModels().stream()
                 .filter((baseNodeMetaModel) -> !baseNodeMetaModel.isAbstract())
