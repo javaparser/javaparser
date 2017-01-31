@@ -63,6 +63,9 @@ public class PropertyGenerator extends NodeGenerator {
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
         observablePropertyNames.add(observableName);
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
+        if (property.isNode()) {
+            body.addStatement(f("if (this.%s != null) this.%s.setParentNode(null);", name, name));
+        }
         body.addStatement(f("this.%s = %s;", name, name));
         if (property.isNode()) {
             body.addStatement(f("setAsParentNodeOf(%s);", name));
