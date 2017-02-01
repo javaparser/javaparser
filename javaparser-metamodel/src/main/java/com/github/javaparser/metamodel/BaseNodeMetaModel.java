@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
+
 /**
  * Meta-data about all classes in the AST.
  * These are all Nodes, except NodeList.
  */
 public abstract class BaseNodeMetaModel {
     private final Optional<BaseNodeMetaModel> superNodeMetaModel;
-    private final JavaParserMetaModel javaParserMetaModel;
     private final List<PropertyMetaModel> declaredPropertyMetaModels = new ArrayList<>();
     private final List<PropertyMetaModel> constructorParameters = new ArrayList<>();
     private final Class<? extends Node> type;
@@ -21,9 +22,8 @@ public abstract class BaseNodeMetaModel {
     private final boolean isAbstract;
     private final boolean hasWildcard;
 
-    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, JavaParserMetaModel javaParserMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+    public BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         this.superNodeMetaModel = superNodeMetaModel;
-        this.javaParserMetaModel = javaParserMetaModel;
         this.type = type;
         this.name = name;
         this.packageName = packageName;
@@ -54,13 +54,6 @@ public abstract class BaseNodeMetaModel {
     }
 
     /**
-     * @return the overall model.
-     */
-    public JavaParserMetaModel getJavaParserMetaModel() {
-        return javaParserMetaModel;
-    }
-
-    /**
      * @return a list of all properties declared directly in this node (not its parent nodes.) These are also available
      * as fields.
      */
@@ -74,6 +67,20 @@ public abstract class BaseNodeMetaModel {
      */
     public List<PropertyMetaModel> getConstructorParameters() {
         return constructorParameters;
+    }
+
+    /**
+     * @return a list of all properties in this node and its parents. Note that a new list is created every time this
+     * method is called.
+     */
+    public List<PropertyMetaModel> getAllPropertyMetaModels() {
+        List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(getDeclaredPropertyMetaModels());
+        BaseNodeMetaModel walkNode = this;
+        while (walkNode.getSuperNodeMetaModel().isPresent()) {
+            walkNode = walkNode.getSuperNodeMetaModel().get();
+            allPropertyMetaModels.addAll(walkNode.getDeclaredPropertyMetaModels());
+        }
+        return allPropertyMetaModels;
     }
 
     /**
@@ -141,5 +148,12 @@ public abstract class BaseNodeMetaModel {
      */
     public String getTypeName() {
         return type.getSimpleName();
+    }
+
+    /**
+     * The name of the field in JavaParserMetaModel for this node meta model.
+     */
+    public String getMetaModelFieldName() {
+        return decapitalize(getClass().getSimpleName());
     }
 }

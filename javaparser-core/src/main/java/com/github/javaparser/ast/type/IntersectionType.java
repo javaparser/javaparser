@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -29,7 +28,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -72,10 +72,13 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         return elements;
     }
 
-    public IntersectionType setElements(NodeList<ReferenceType> elements) {
+    public IntersectionType setElements(final NodeList<ReferenceType> elements) {
+        assertNotNull(elements);
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
-        this.elements = assertNotNull(elements);
-        setAsParentNodeOf(this.elements);
+        if (this.elements != null)
+            this.elements.setParentNode(null);
+        this.elements = elements;
+        setAsParentNodeOf(elements);
         return this;
     }
 
@@ -83,4 +86,10 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     public IntersectionType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (IntersectionType) super.setAnnotations(annotations);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getElements(), getAnnotations());
+    }
 }
+

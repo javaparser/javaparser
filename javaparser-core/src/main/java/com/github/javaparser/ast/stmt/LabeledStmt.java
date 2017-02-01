@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -27,7 +26,6 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -75,9 +73,12 @@ public final class LabeledStmt extends Statement {
     }
 
     public LabeledStmt setStatement(final Statement statement) {
+        assertNotNull(statement);
         notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
-        this.statement = assertNotNull(statement);
-        setAsParentNodeOf(this.statement);
+        if (this.statement != null)
+            this.statement.setParentNode(null);
+        this.statement = statement;
+        setAsParentNodeOf(statement);
         return this;
     }
 
@@ -86,9 +87,13 @@ public final class LabeledStmt extends Statement {
     }
 
     public LabeledStmt setLabel(final SimpleName label) {
+        assertNotNull(label);
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        this.label = assertNotNull(label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
         setAsParentNodeOf(label);
         return this;
     }
 }
+

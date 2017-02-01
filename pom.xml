@@ -3,7 +3,7 @@
     <modules>
         <module>javaparser-core</module>
         <module>javaparser-testing</module>
-        <module>javaparser-visitor-generator</module>
+        <module>javaparser-core-generators</module>
         <module>javaparser-metamodel-generator</module>
         <module>javaparser-generator-utils</module>
         <module>javaparser-metamodel</module>

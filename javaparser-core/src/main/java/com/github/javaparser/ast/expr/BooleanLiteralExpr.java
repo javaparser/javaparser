@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -66,9 +65,10 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         return value;
     }
 
-    public BooleanLiteralExpr setValue(boolean value) {
+    public BooleanLiteralExpr setValue(final boolean value) {
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
         return this;
     }
 }
+

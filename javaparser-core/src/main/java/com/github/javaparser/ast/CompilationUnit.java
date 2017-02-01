@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
@@ -34,13 +33,11 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.ClassUtils;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -78,8 +75,7 @@ public final class CompilationUnit extends Node {
         this(null, packageDeclaration, imports, types);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports,
-                           NodeList<TypeDeclaration<?>> types) {
+    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
         super(range);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
@@ -165,10 +161,13 @@ public final class CompilationUnit extends Node {
      *
      * @param imports the list of imports
      */
-    public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
+    public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
+        assertNotNull(imports);
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
-        this.imports = assertNotNull(imports);
-        setAsParentNodeOf(this.imports);
+        if (this.imports != null)
+            this.imports.setParentNode(null);
+        this.imports = imports;
+        setAsParentNodeOf(imports);
         return this;
     }
 
@@ -187,20 +186,25 @@ public final class CompilationUnit extends Node {
      *
      * @param pakage the packageDeclaration declaration to set or <code>null</code> to default package
      */
-    public CompilationUnit setPackageDeclaration(PackageDeclaration pakage) {
-        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, pakage);
-        this.packageDeclaration = pakage;
-        setAsParentNodeOf(this.packageDeclaration);
+    public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
+        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
+        if (this.packageDeclaration != null)
+            this.packageDeclaration.setParentNode(null);
+        this.packageDeclaration = packageDeclaration;
+        setAsParentNodeOf(packageDeclaration);
         return this;
     }
 
     /**
      * Sets the list of types declared in this compilation unit.
      */
-    public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+    public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
+        assertNotNull(types);
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
-        this.types = assertNotNull(types);
-        setAsParentNodeOf(this.types);
+        if (this.types != null)
+            this.types.setParentNode(null);
+        this.types = types;
+        setAsParentNodeOf(types);
         return this;
     }
 
@@ -252,8 +256,7 @@ public final class CompilationUnit extends Node {
     public CompilationUnit addImport(Class<?> clazz) {
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))
             return this;
-        else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType())
-                && !clazz.getComponentType().getName().startsWith("java.lang"))
+        else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType()) && !clazz.getComponentType().getName().startsWith("java.lang"))
             return addImport(clazz.getComponentType().getName());
         return addImport(clazz.getName());
     }
@@ -278,7 +281,7 @@ public final class CompilationUnit extends Node {
         }
         i.append(";");
         ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
-        if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
+        if (getImports().stream().anyMatch( im -> im.toString().equals(importDeclaration.toString())))
             return this;
         else {
             getImports().add(importDeclaration);
@@ -305,10 +308,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addClass(String name, Modifier... modifiers) {
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(
-                Arrays.stream(modifiers)
-                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
-                false, name);
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), false, name);
         getTypes().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
         return classOrInterfaceDeclaration;
@@ -332,10 +332,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public ClassOrInterfaceDeclaration addInterface(String name, Modifier... modifiers) {
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(
-                Arrays.stream(modifiers)
-                        .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))),
-                true, name);
+        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), true, name);
         getTypes().add(classOrInterfaceDeclaration);
         classOrInterfaceDeclaration.setParentNode(this);
         return classOrInterfaceDeclaration;
@@ -359,8 +356,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public EnumDeclaration addEnum(String name, Modifier... modifiers) {
-        EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
+        EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
         getTypes().add(enumDeclaration);
         enumDeclaration.setParentNode(this);
         return enumDeclaration;
@@ -384,8 +380,7 @@ public final class CompilationUnit extends Node {
      * @return the newly created class
      */
     public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier... modifiers) {
-        AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers)
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
+        AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
         getTypes().add(annotationDeclaration);
         annotationDeclaration.setParentNode(this);
         return annotationDeclaration;
@@ -397,10 +392,7 @@ public final class CompilationUnit extends Node {
      * @param className the class name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
-        return getTypes().stream().filter(type -> type.getNameAsString().equals(className)
-                && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface())
-                .findFirst()
-                .map(t -> (ClassOrInterfaceDeclaration) t);
+        return getTypes().stream().filter( type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map( t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
@@ -409,10 +401,7 @@ public final class CompilationUnit extends Node {
      * @param interfaceName the interface name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getInterfaceByName(String interfaceName) {
-        return getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName)
-                && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface())
-                .findFirst()
-                .map(t -> (ClassOrInterfaceDeclaration) t);
+        return getTypes().stream().filter( type -> type.getNameAsString().equals(interfaceName) && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map( t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
@@ -421,10 +410,7 @@ public final class CompilationUnit extends Node {
      * @param enumName the enum name (case-sensitive)
      */
     public Optional<EnumDeclaration> getEnumByName(String enumName) {
-        return getTypes().stream().filter(type -> type.getNameAsString().equals(enumName)
-                && type instanceof EnumDeclaration)
-                .findFirst()
-                .map(t -> (EnumDeclaration) t);
+        return getTypes().stream().filter( type -> type.getNameAsString().equals(enumName) && type instanceof EnumDeclaration).findFirst().map( t -> (EnumDeclaration) t);
     }
 
     /**
@@ -433,14 +419,12 @@ public final class CompilationUnit extends Node {
      * @param annotationName the annotation name (case-sensitive)
      */
     public Optional<AnnotationDeclaration> getAnnotationDeclarationByName(String annotationName) {
-        return getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName)
-                && type instanceof AnnotationDeclaration)
-                .findFirst()
-                .map(t -> (AnnotationDeclaration) t);
+        return getTypes().stream().filter( type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map( t -> (AnnotationDeclaration) t);
     }
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(imports, types);
+        return Arrays.asList(getImports(), getTypes());
     }
 }
+

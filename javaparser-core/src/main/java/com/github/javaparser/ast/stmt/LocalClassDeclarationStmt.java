@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -28,7 +27,6 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -72,9 +70,13 @@ public final class LocalClassDeclarationStmt extends Statement {
     }
 
     public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
+        assertNotNull(classDeclaration);
         notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
-        this.classDeclaration = assertNotNull(classDeclaration);
-        setAsParentNodeOf(this.classDeclaration);
+        if (this.classDeclaration != null)
+            this.classDeclaration.setParentNode(null);
+        this.classDeclaration = classDeclaration;
+        setAsParentNodeOf(classDeclaration);
         return this;
     }
 }
+

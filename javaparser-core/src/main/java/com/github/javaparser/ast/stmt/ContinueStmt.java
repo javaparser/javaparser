@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -28,9 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithOptionalLabel;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -40,8 +37,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ContinueStmt extends Statement implements
-        NodeWithOptionalLabel<ContinueStmt> {
+public final class ContinueStmt extends Statement implements NodeWithOptionalLabel<ContinueStmt> {
 
     private SimpleName label;
 
@@ -87,7 +83,11 @@ public final class ContinueStmt extends Statement implements
     @Override
     public ContinueStmt setLabel(final SimpleName label) {
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        this.label = assertNotNull(label);
+        if (this.label != null)
+            this.label.setParentNode(null);
+        this.label = label;
+        setAsParentNodeOf(label);
         return this;
     }
 }
+

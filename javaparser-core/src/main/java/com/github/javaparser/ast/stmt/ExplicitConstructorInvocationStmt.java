@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -30,9 +29,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -58,20 +57,16 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         this(null, new NodeList<>(), true, null, new NodeList<>());
     }
 
-    public ExplicitConstructorInvocationStmt(final boolean isThis,
-                                             final Expression expression, final NodeList<Expression> arguments) {
+    public ExplicitConstructorInvocationStmt(final boolean isThis, final Expression expression, final NodeList<Expression> arguments) {
         this(null, new NodeList<>(), isThis, expression, arguments);
     }
 
     @AllFieldsConstructor
-    public ExplicitConstructorInvocationStmt(final NodeList<Type> typeArguments, final boolean isThis,
-                                             final Expression expression, final NodeList<Expression> arguments) {
+    public ExplicitConstructorInvocationStmt(final NodeList<Type> typeArguments, final boolean isThis, final Expression expression, final NodeList<Expression> arguments) {
         this(null, typeArguments, isThis, expression, arguments);
     }
 
-    public ExplicitConstructorInvocationStmt(Range range,
-                                             final NodeList<Type> typeArguments, final boolean isThis,
-                                             final Expression expression, final NodeList<Expression> arguments) {
+    public ExplicitConstructorInvocationStmt(Range range, final NodeList<Type> typeArguments, final boolean isThis, final Expression expression, final NodeList<Expression> arguments) {
         super(range);
         setTypeArguments(typeArguments);
         setThis(isThis);
@@ -116,9 +111,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
+        assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        this.arguments = assertNotNull(arguments);
-        setAsParentNodeOf(this.arguments);
+        if (this.arguments != null)
+            this.arguments.setParentNode(null);
+        this.arguments = arguments;
+        setAsParentNodeOf(arguments);
         return this;
     }
 
@@ -130,13 +128,15 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      */
     public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
-        setAsParentNodeOf(this.expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 
     public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
-        notifyPropertyChange(ObservableProperty.IS_THIS, this.isThis, isThis);
+        notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
         this.isThis = isThis;
         return this;
     }
@@ -155,8 +155,16 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     @Override
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getArguments(), getTypeArguments().orElse(null));
+    }
 }
+

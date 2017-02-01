@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -40,12 +39,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -56,47 +50,30 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements
-        NodeWithJavadoc<FieldDeclaration>,
-        NodeWithModifiers<FieldDeclaration>,
-        NodeWithVariables<FieldDeclaration> {
+public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements NodeWithJavadoc<FieldDeclaration>, NodeWithModifiers<FieldDeclaration>, NodeWithVariables<FieldDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
     private NodeList<VariableDeclarator> variables;
 
     public FieldDeclaration() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new NodeList<>());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>());
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, VariableDeclarator variable) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                nodeList(variable));
+        this(null, modifiers, new NodeList<>(), nodeList(variable));
     }
 
     public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<VariableDeclarator> variables) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                variables);
+        this(null, modifiers, new NodeList<>(), variables);
     }
 
     @AllFieldsConstructor
-    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
-                            NodeList<VariableDeclarator> variables) {
-        this(null,
-                modifiers,
-                annotations,
-                variables);
+    public FieldDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
+        this(null, modifiers, annotations, variables);
     }
 
-    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
-                            NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(range, annotations);
         setModifiers(modifiers);
         setVariables(variables);
@@ -140,17 +117,21 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
-    public FieldDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public FieldDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
-    public FieldDeclaration setVariables(NodeList<VariableDeclarator> variables) {
+    public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
+        assertNotNull(variables);
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        this.variables = assertNotNull(variables);
-        setAsParentNodeOf(this.variables);
+        if (this.variables != null)
+            this.variables.setParentNode(null);
+        this.variables = variables;
+        setAsParentNodeOf(variables);
         return this;
     }
 
@@ -168,15 +149,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         Optional<ClassOrInterfaceDeclaration> parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
         Optional<EnumDeclaration> parentEnum = getAncestorOfType(EnumDeclaration.class);
         if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
-            throw new IllegalStateException(
-                    "You can use this only when the field is attached to a class or an enum");
-
+            throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
         final MethodDeclaration getter;
-        getter = parentClass.map(clazz -> clazz.addMethod("get" + fieldNameUpper, PUBLIC))
-                .orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, PUBLIC));
+        getter = parentClass.map( clazz -> clazz.addMethod("get" + fieldNameUpper, PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, PUBLIC));
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -198,16 +176,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         Optional<ClassOrInterfaceDeclaration> parentClass = getAncestorOfType(ClassOrInterfaceDeclaration.class);
         Optional<EnumDeclaration> parentEnum = getAncestorOfType(EnumDeclaration.class);
         if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
-            throw new IllegalStateException(
-                    "You can use this only when the field is attached to a class or an enum");
-
+            throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().substring(0, 1) + fieldName.substring(1, fieldName.length());
-
         final MethodDeclaration setter;
-        setter = parentClass.map(clazz -> clazz.addMethod("set" + fieldNameUpper, PUBLIC))
-                .orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, PUBLIC));
+        setter = parentClass.map( clazz -> clazz.addMethod("set" + fieldNameUpper, PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, PUBLIC));
         setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
@@ -218,8 +192,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(variables);
-        return res;
+        return Arrays.asList(getVariables(), getAnnotations());
     }
 }
+

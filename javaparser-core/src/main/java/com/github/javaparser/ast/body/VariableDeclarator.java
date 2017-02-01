@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -33,9 +32,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -44,9 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarator extends Node implements
-        NodeWithType<VariableDeclarator, Type>,
-        NodeWithSimpleName<VariableDeclarator> {
+public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator> {
 
     private SimpleName name;
 
@@ -65,11 +60,11 @@ public final class VariableDeclarator extends Node implements
     public VariableDeclarator(Type type, SimpleName name) {
         this(null, type, name, null);
     }
-    
+
     public VariableDeclarator(Type type, String variableName, Expression initializer) {
         this(null, type, new SimpleName(variableName), initializer);
     }
-    
+
     /**
      * Defines the declaration of a variable.
      *
@@ -109,9 +104,12 @@ public final class VariableDeclarator extends Node implements
     }
 
     @Override
-    public VariableDeclarator setName(SimpleName name) {
+    public VariableDeclarator setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
@@ -122,10 +120,12 @@ public final class VariableDeclarator extends Node implements
      * @param initializer the initializer expression, can be null
      * @return this, the VariableDeclarator
      */
-    public VariableDeclarator setInitializer(Expression initializer) {
+    public VariableDeclarator setInitializer(final Expression initializer) {
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
+        if (this.initializer != null)
+            this.initializer.setParentNode(null);
         this.initializer = initializer;
-        setAsParentNodeOf(this.initializer);
+        setAsParentNodeOf(initializer);
         return this;
     }
 
@@ -145,10 +145,14 @@ public final class VariableDeclarator extends Node implements
     }
 
     @Override
-    public VariableDeclarator setType(Type type) {
+    public VariableDeclarator setType(final Type type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
-        setAsParentNodeOf(this.type);
+        setAsParentNodeOf(type);
         return this;
     }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -29,7 +28,8 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -59,8 +59,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         this(null, extendedTypes, superTypes);
     }
 
-    public WildcardType(final Range range,
-                        final ReferenceType extendedTypes, final ReferenceType superTypes) {
+    public WildcardType(final Range range, final ReferenceType extendedTypes, final ReferenceType superTypes) {
         super(range, new NodeList<>());
         setExtendedTypes(extendedTypes);
         setSuperTypes(superTypes);
@@ -90,10 +89,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @param ext the extends, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setExtendedTypes(final ReferenceType ext) {
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, ext);
-        this.extendedTypes = ext;
-        setAsParentNodeOf(this.extendedTypes);
+    public WildcardType setExtendedTypes(final ReferenceType extendedTypes) {
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
+        if (this.extendedTypes != null)
+            this.extendedTypes.setParentNode(null);
+        this.extendedTypes = extendedTypes;
+        setAsParentNodeOf(extendedTypes);
         return this;
     }
 
@@ -103,10 +104,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @param sup the super, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setSuperTypes(final ReferenceType sup) {
-        notifyPropertyChange(ObservableProperty.SUPER, this.superTypes, sup);
-        this.superTypes = sup;
-        setAsParentNodeOf(this.superTypes);
+    public WildcardType setSuperTypes(final ReferenceType superTypes) {
+        notifyPropertyChange(ObservableProperty.SUPER_TYPES, this.superTypes, superTypes);
+        if (this.superTypes != null)
+            this.superTypes.setParentNode(null);
+        this.superTypes = superTypes;
+        setAsParentNodeOf(superTypes);
         return this;
     }
 
@@ -114,4 +117,10 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     public WildcardType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (WildcardType) super.setAnnotations(annotations);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

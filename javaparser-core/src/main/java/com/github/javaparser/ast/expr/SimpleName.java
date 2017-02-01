@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -28,7 +27,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
@@ -38,6 +36,7 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  * @see Name
  */
 public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
+
     private String identifier;
 
     public SimpleName() {
@@ -77,3 +76,4 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return this;
     }
 }
+

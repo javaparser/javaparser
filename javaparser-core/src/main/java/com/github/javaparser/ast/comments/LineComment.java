@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
@@ -64,3 +63,4 @@ public final class LineComment extends Comment {
         return true;
     }
 }
+

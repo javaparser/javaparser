@@ -1,15 +1,14 @@
-package com.github.javaparser.generator.visitor;
+package com.github.javaparser.generator.core.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-
-import java.util.List;
 
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
@@ -17,16 +16,16 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.f;
  * Generates JavaParser's VoidVisitorAdapter.
  */
 public class VoidVisitorAdapterGenerator extends VisitorGenerator {
-    VoidVisitorAdapterGenerator(JavaParser javaParser, SourceRoot sourceRoot, JavaParserMetaModel javaParserMetaModel) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorAdapter", "void", "A", true, javaParserMetaModel);
+    public VoidVisitorAdapterGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorAdapter", "void", "A", true);
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, List<PropertyMetaModel> allPropertyMetaModels, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-        for (PropertyMetaModel field : allPropertyMetaModels) {
+        for (PropertyMetaModel field : node.getAllPropertyMetaModels()) {
             final String getter = field.getGetterMethodName() + "()";
             if (field.getNodeReference().isPresent()) {
                 if (field.isOptional() && field.isNodeList()) {

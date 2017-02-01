@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -28,9 +27,9 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -62,30 +61,19 @@ public final class TryStmt extends Statement {
     private BlockStmt finallyBlock;
 
     public TryStmt() {
-        this(null,
-                new NodeList<>(),
-                new BlockStmt(),
-                new NodeList<>(),
-                null);
+        this(null, new NodeList<>(), new BlockStmt(), new NodeList<>(), null);
     }
 
-    public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses,
-                   final BlockStmt finallyBlock) {
-        this(null,
-                new NodeList<>(),
-                tryBlock,
-                catchClauses,
-                finallyBlock);
+    public TryStmt(final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+        this(null, new NodeList<>(), tryBlock, catchClauses, finallyBlock);
     }
 
     @AllFieldsConstructor
-    public TryStmt(NodeList<VariableDeclarationExpr> resources,
-                   final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+    public TryStmt(NodeList<VariableDeclarationExpr> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
         this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
-    public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources,
-                   final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+    public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
         super(range);
         setResources(resources);
         setTryBlock(tryBlock);
@@ -120,30 +108,46 @@ public final class TryStmt extends Statement {
     }
 
     public TryStmt setCatchClauses(final NodeList<CatchClause> catchClauses) {
+        assertNotNull(catchClauses);
         notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, this.catchClauses, catchClauses);
-        this.catchClauses = assertNotNull(catchClauses);
-        setAsParentNodeOf(this.catchClauses);
+        if (this.catchClauses != null)
+            this.catchClauses.setParentNode(null);
+        this.catchClauses = catchClauses;
+        setAsParentNodeOf(catchClauses);
         return this;
     }
 
     public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
         notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, this.finallyBlock, finallyBlock);
+        if (this.finallyBlock != null)
+            this.finallyBlock.setParentNode(null);
         this.finallyBlock = finallyBlock;
-        setAsParentNodeOf(this.finallyBlock);
+        setAsParentNodeOf(finallyBlock);
         return this;
     }
 
     public TryStmt setTryBlock(final BlockStmt tryBlock) {
         notifyPropertyChange(ObservableProperty.TRY_BLOCK, this.tryBlock, tryBlock);
+        if (this.tryBlock != null)
+            this.tryBlock.setParentNode(null);
         this.tryBlock = tryBlock;
-        setAsParentNodeOf(this.tryBlock);
+        setAsParentNodeOf(tryBlock);
         return this;
     }
 
-    public TryStmt setResources(NodeList<VariableDeclarationExpr> resources) {
+    public TryStmt setResources(final NodeList<VariableDeclarationExpr> resources) {
+        assertNotNull(resources);
         notifyPropertyChange(ObservableProperty.RESOURCES, this.resources, resources);
-        this.resources = assertNotNull(resources);
-        setAsParentNodeOf(this.resources);
+        if (this.resources != null)
+            this.resources.setParentNode(null);
+        this.resources = resources;
+        setAsParentNodeOf(resources);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getCatchClauses(), getResources());
+    }
 }
+

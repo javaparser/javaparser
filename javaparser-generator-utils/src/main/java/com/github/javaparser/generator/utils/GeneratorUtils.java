@@ -1,7 +1,6 @@
 package com.github.javaparser.generator.utils;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -39,9 +38,12 @@ public final class GeneratorUtils {
     }
 
     public static String setterName(String fieldName) {
+        if (fieldName.startsWith("is")) {
+            return "set" + fieldName.substring(2);
+        }
         return "set" + capitalize(fieldName);
     }
-    
+
     public static String optionalOf(String text, boolean isOptional) {
         if (isOptional) {
             return f("Optional.of(%s)", text);
@@ -64,13 +66,22 @@ public final class GeneratorUtils {
      * @param pkg the package in which the file resides, like "com.laamella.parser"
      * @param file the filename of the file in the package.
      */
-    public static Path fileInPackagePath(String root, String pkg, String file) {
+    public static Path fileInPackageAbsolutePath(String root, String pkg, String file) {
         pkg = packageToPath(pkg);
         return Paths.get(root, pkg, file).normalize();
     }
 
-    public static Path fileInPackagePath(Path root, String pkg, String file) {
-        return fileInPackagePath(root.toString(), pkg, file);
+    public static Path fileInPackageAbsolutePath(Path root, String pkg, String file) {
+        return fileInPackageAbsolutePath(root.toString(), pkg, file);
+    }
+
+    /**
+     * Turns a package and a file into a relative path. "com.laamella" and "Simple.java" will become
+     * "com/laamella/Simple.java"
+     */
+    public static Path fileInPackageRelativePath(String pkg, String file) {
+        pkg = packageToPath(pkg);
+        return Paths.get(pkg, file).normalize();
     }
 
     /**
@@ -86,13 +97,13 @@ public final class GeneratorUtils {
      * @param root the root directory in which the package resides
      * @param pkg the package, like "com.laamella.parser"
      */
-    public static Path packagePath(String root, String pkg) {
+    public static Path packageAbsolutePath(String root, String pkg) {
         pkg = packageToPath(pkg);
         return Paths.get(root, pkg).normalize();
     }
 
-    public static Path packagePath(Path root, String pkg) {
-        return packagePath(root.toString(), pkg);
+    public static Path packageAbsolutePath(Path root, String pkg) {
+        return packageAbsolutePath(root.toString(), pkg);
     }
 
     /**
@@ -107,5 +118,22 @@ public final class GeneratorUtils {
         return Paths.get(path, "..", "..", "..");
     }
 
+    /**
+     * @param input "aCamelCaseString"
+     * @return "A_CAMEL_CASE_STRING"
+     */
+    public static String camelCaseToScreaming(String input) {
+        if (input.isEmpty()) {
+            return "";
+        }
+        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase());
+        for (char c : input.substring(1).toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                scream.append("_");
+            }
+            scream.append(Character.toUpperCase(c));
+        }
+        return scream.toString();
+    }
 
 }

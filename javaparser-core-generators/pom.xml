@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javaparser-visitor-generator</artifactId>
-    <description>A visitor generator framework, and the generators for the javaparser-core visitors</description>
+    <artifactId>javaparser-core-generators</artifactId>
+    <description>A visitor generator framework, and the generators for javaparser-core</description>
 
     <dependencies>
         <dependency>
@@ -22,6 +22,11 @@
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-generator-utils</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.22</version>
         </dependency>
     </dependencies>
 </project>

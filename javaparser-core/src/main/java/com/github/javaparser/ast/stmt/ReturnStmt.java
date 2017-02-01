@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -28,7 +27,6 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 
 /**
@@ -83,8 +81,11 @@ public final class ReturnStmt extends Statement {
      */
     public ReturnStmt setExpression(final Expression expression) {
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
-        setAsParentNodeOf(this.expression);
+        setAsParentNodeOf(expression);
         return this;
     }
 }
+

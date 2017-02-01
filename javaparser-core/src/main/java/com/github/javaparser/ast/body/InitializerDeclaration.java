@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -31,9 +30,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -41,9 +40,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements
-        NodeWithJavadoc<InitializerDeclaration>,
-        NodeWithBlockStmt<InitializerDeclaration> {
+public final class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements NodeWithJavadoc<InitializerDeclaration>, NodeWithBlockStmt<InitializerDeclaration> {
 
     private boolean isStatic;
 
@@ -82,16 +79,25 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         return isStatic;
     }
 
-    public InitializerDeclaration setBody(BlockStmt body) {
-        notifyPropertyChange(ObservableProperty.BLOCK, this.body, body);
-        this.body = assertNotNull(body);
-        setAsParentNodeOf(this.body);
+    public InitializerDeclaration setBody(final BlockStmt body) {
+        assertNotNull(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
+        this.body = body;
+        setAsParentNodeOf(body);
         return this;
     }
 
-    public InitializerDeclaration setStatic(boolean isStatic) {
-        notifyPropertyChange(ObservableProperty.IS_STATIC, this.isStatic, isStatic);
+    public InitializerDeclaration setStatic(final boolean isStatic) {
+        notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

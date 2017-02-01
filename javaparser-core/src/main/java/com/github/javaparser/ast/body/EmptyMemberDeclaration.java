@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -28,6 +27,8 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A loose ";" inside a body.<br/><code>class X { ; }</code>
@@ -36,8 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @deprecated these ;'s should be ignored
  */
 @Deprecated
-public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDeclaration>
-        implements NodeWithJavadoc<EmptyMemberDeclaration> {
+public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDeclaration> implements NodeWithJavadoc<EmptyMemberDeclaration> {
 
     @AllFieldsConstructor
     public EmptyMemberDeclaration() {
@@ -57,4 +57,10 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
     public <A> void accept(VoidVisitor<A> v, A arg) {
         v.visit(this, arg);
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
 }
+

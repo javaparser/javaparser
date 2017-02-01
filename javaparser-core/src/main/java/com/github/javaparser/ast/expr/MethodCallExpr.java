@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -32,9 +31,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -43,11 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodCallExpr extends Expression implements
-        NodeWithTypeArguments<MethodCallExpr>,
-        NodeWithArguments<MethodCallExpr>,
-        NodeWithSimpleName<MethodCallExpr>,
-        NodeWithOptionalScope<MethodCallExpr> {
+public final class MethodCallExpr extends Expression implements NodeWithTypeArguments<MethodCallExpr>, NodeWithArguments<MethodCallExpr>, NodeWithSimpleName<MethodCallExpr>, NodeWithOptionalScope<MethodCallExpr> {
 
     private Expression scope;
 
@@ -58,27 +53,15 @@ public final class MethodCallExpr extends Expression implements
     private NodeList<Expression> arguments;
 
     public MethodCallExpr() {
-        this(null,
-                null,
-                new NodeList<>(),
-                new SimpleName(),
-                new NodeList<>());
+        this(null, null, new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
-        this(null,
-                scope,
-                new NodeList<>(),
-                new SimpleName(name),
-                new NodeList<>());
+        this(null, scope, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
     public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
-        this(null,
-                scope,
-                new NodeList<>(),
-                name,
-                arguments);
+        this(null, scope, new NodeList<>(), name, arguments);
     }
 
     @AllFieldsConstructor
@@ -119,25 +102,33 @@ public final class MethodCallExpr extends Expression implements
     }
 
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
+        assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        this.arguments = assertNotNull(arguments);
-        setAsParentNodeOf(this.arguments);
+        if (this.arguments != null)
+            this.arguments.setParentNode(null);
+        this.arguments = arguments;
+        setAsParentNodeOf(arguments);
         return this;
     }
 
     @Override
     public MethodCallExpr setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
-        setAsParentNodeOf(this.name);
+        setAsParentNodeOf(name);
         return this;
     }
 
     @Override
     public MethodCallExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
-        setAsParentNodeOf(this.scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
@@ -155,8 +146,16 @@ public final class MethodCallExpr extends Expression implements
     @Override
     public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getArguments(), getTypeArguments().orElse(null));
+    }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -35,12 +34,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -48,10 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements
-        NodeWithImplements<ClassOrInterfaceDeclaration>,
-        NodeWithExtends<ClassOrInterfaceDeclaration>,
-        NodeWithTypeParameters<ClassOrInterfaceDeclaration> {
+public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfaceDeclaration> implements NodeWithImplements<ClassOrInterfaceDeclaration>, NodeWithExtends<ClassOrInterfaceDeclaration>, NodeWithTypeParameters<ClassOrInterfaceDeclaration> {
 
     private boolean isInterface;
 
@@ -63,48 +54,19 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
     public ClassOrInterfaceDeclaration() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                false,
-                new SimpleName(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new NodeList<>());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), false, new SimpleName(), new NodeList<>(), new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
-    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface,
-                                       final String name) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                isInterface,
-                new SimpleName(name),
-                new NodeList<>(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new NodeList<>());
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final boolean isInterface, final String name) {
+        this(null, modifiers, new NodeList<>(), isInterface, new SimpleName(name), new NodeList<>(), new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers,
-                                       final NodeList<AnnotationExpr> annotations, final boolean isInterface,
-                                       final SimpleName name,
-                                       final NodeList<TypeParameter> typeParameters,
-                                       final NodeList<ClassOrInterfaceType> extendedTypes,
-                                       final NodeList<ClassOrInterfaceType> implementedTypes,
-                                       final NodeList<BodyDeclaration<?>> members) {
+    public ClassOrInterfaceDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final boolean isInterface, final SimpleName name, final NodeList<TypeParameter> typeParameters, final NodeList<ClassOrInterfaceType> extendedTypes, final NodeList<ClassOrInterfaceType> implementedTypes, final NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, isInterface, name, typeParameters, extendedTypes, implementedTypes, members);
     }
 
-    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers,
-                                       final NodeList<AnnotationExpr> annotations, final boolean isInterface,
-                                       final SimpleName name,
-                                       final NodeList<TypeParameter> typeParameters,
-                                       final NodeList<ClassOrInterfaceType> extendedTypes,
-                                       final NodeList<ClassOrInterfaceType> implementedTypes,
-                                       final NodeList<BodyDeclaration<?>> members) {
+    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final boolean isInterface, final SimpleName name, final NodeList<TypeParameter> typeParameters, final NodeList<ClassOrInterfaceType> extendedTypes, final NodeList<ClassOrInterfaceType> implementedTypes, final NodeList<BodyDeclaration<?>> members) {
         super(range, annotations, modifiers, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
@@ -141,32 +103,41 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
-    public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendsList) {
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendsList);
-        this.extendedTypes = assertNotNull(extendsList);
-        setAsParentNodeOf(this.extendedTypes);
+    public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
+        assertNotNull(extendedTypes);
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
+        if (this.extendedTypes != null)
+            this.extendedTypes.setParentNode(null);
+        this.extendedTypes = extendedTypes;
+        setAsParentNodeOf(extendedTypes);
         return this;
     }
 
     @Override
-    public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementsList) {
-        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementsList);
-        this.implementedTypes = assertNotNull(implementsList);
-        setAsParentNodeOf(this.implementedTypes);
+    public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
+        assertNotNull(implementedTypes);
+        notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
+        if (this.implementedTypes != null)
+            this.implementedTypes.setParentNode(null);
+        this.implementedTypes = implementedTypes;
+        setAsParentNodeOf(implementedTypes);
         return this;
     }
 
-    public ClassOrInterfaceDeclaration setInterface(final boolean interface_) {
-        notifyPropertyChange(ObservableProperty.IS_INTERFACE, this.isInterface, interface_);
-        this.isInterface = interface_;
+    public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
+        notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
+        this.isInterface = isInterface;
         return this;
     }
 
     @Override
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        this.typeParameters = assertNotNull(typeParameters);
-        setAsParentNodeOf(this.typeParameters);
+        if (this.typeParameters != null)
+            this.typeParameters.setParentNode(null);
+        this.typeParameters = typeParameters;
+        setAsParentNodeOf(typeParameters);
         return this;
     }
 
@@ -176,19 +147,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @return the methods found (multiple in case of polymorphism)
      */
     public Optional<ConstructorDeclaration> getDefaultConstructor() {
-        return getMembers().stream()
-                .filter(bd -> bd instanceof ConstructorDeclaration)
-                .map(bd -> (ConstructorDeclaration) bd)
-                .filter(cd -> cd.getParameters().isEmpty())
-                .findFirst();
+        return getMembers().stream().filter( bd -> bd instanceof ConstructorDeclaration).map( bd -> (ConstructorDeclaration) bd).filter( cd -> cd.getParameters().isEmpty()).findFirst();
     }
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(typeParameters);
-        res.add(extendedTypes);
-        res.add(implementedTypes);
-        return res;
+        return Arrays.asList(getExtendedTypes(), getImplementedTypes(), getTypeParameters(), getMembers(), getAnnotations());
     }
 }
+

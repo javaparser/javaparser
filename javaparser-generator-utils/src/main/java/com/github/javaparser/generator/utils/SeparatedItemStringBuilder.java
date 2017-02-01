@@ -29,6 +29,10 @@ public class SeparatedItemStringBuilder {
         return this;
     }
 
+    public boolean hasItems() {
+        return hasItems;
+    }
+
     /**
      * Convert the builder into its final string representation.
      */

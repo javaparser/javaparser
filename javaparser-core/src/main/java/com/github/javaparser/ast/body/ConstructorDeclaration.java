@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -36,11 +35,10 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -48,15 +46,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements
-        NodeWithJavadoc<ConstructorDeclaration>,
-        NodeWithDeclaration,
-        NodeWithSimpleName<ConstructorDeclaration>,
-        NodeWithModifiers<ConstructorDeclaration>,
-        NodeWithParameters<ConstructorDeclaration>,
-        NodeWithThrownExceptions<ConstructorDeclaration>,
-        NodeWithBlockStmt<ConstructorDeclaration>,
-        NodeWithTypeParameters<ConstructorDeclaration> {
+public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration, NodeWithSimpleName<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithBlockStmt<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -71,45 +61,19 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     private BlockStmt body;
 
     public ConstructorDeclaration() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new NodeList<>(),
-                new SimpleName(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                new NodeList<>(),
-                new SimpleName(name),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations,
-                                  NodeList<TypeParameter> typeParameters,
-                                  SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions,
-                                  BlockStmt body) {
-        this(null,
-                modifiers,
-                annotations,
-                typeParameters,
-                name,
-                parameters,
-                thrownExceptions,
-                body);
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
     }
 
-    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers,
-                                  NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name,
-                                  NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -161,41 +125,54 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public ConstructorDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setName(SimpleName name) {
+    public ConstructorDeclaration setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
-        setAsParentNodeOf(this.name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setParameters(NodeList<Parameter> parameters) {
+    public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
+        assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        this.parameters = assertNotNull(parameters);
-        setAsParentNodeOf(this.parameters);
+        if (this.parameters != null)
+            this.parameters.setParentNode(null);
+        this.parameters = parameters;
+        setAsParentNodeOf(parameters);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setThrownExceptions(NodeList<ReferenceType> thrownExceptions) {
-        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
-        this.thrownExceptions = assertNotNull(thrownExceptions);
-        setAsParentNodeOf(this.thrownExceptions);
+    public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+        assertNotNull(thrownExceptions);
+        notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
+        if (this.thrownExceptions != null)
+            this.thrownExceptions.setParentNode(null);
+        this.thrownExceptions = thrownExceptions;
+        setAsParentNodeOf(thrownExceptions);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setTypeParameters(NodeList<TypeParameter> typeParameters) {
+    public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        this.typeParameters = assertNotNull(typeParameters);
-        setAsParentNodeOf(this.typeParameters);
+        if (this.typeParameters != null)
+            this.typeParameters.setParentNode(null);
+        this.typeParameters = typeParameters;
+        setAsParentNodeOf(typeParameters);
         return this;
     }
 
@@ -206,8 +183,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
      * [throws exceptionsList]
      */
     @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows,
-                                         boolean includingParameterName) {
+    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
@@ -261,18 +237,19 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setBody(BlockStmt body) {
-        this.body = assertNotNull(body);
+    public ConstructorDeclaration setBody(final BlockStmt body) {
+        assertNotNull(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
+        this.body = body;
         setAsParentNodeOf(body);
         return this;
     }
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(typeParameters);
-        res.add(parameters);
-        res.add(thrownExceptions);
-        return res;
+        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
     }
 }
+

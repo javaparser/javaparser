@@ -18,13 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -55,10 +53,14 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     }
 
     @Override
-    public AnnotationExpr setName(Name name) {
+    public AnnotationExpr setName(final Name name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -37,11 +36,9 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -52,11 +49,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends Node implements
-        NodeWithType<Parameter, Type>,
-        NodeWithAnnotations<Parameter>,
-        NodeWithSimpleName<Parameter>,
-        NodeWithModifiers<Parameter> {
+public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithModifiers<Parameter> {
 
     private Type type;
 
@@ -69,21 +62,11 @@ public final class Parameter extends Node implements
     private SimpleName name;
 
     public Parameter() {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                new ClassOrInterfaceType(),
-                false,
-                new SimpleName());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new SimpleName());
     }
 
     public Parameter(Type type, SimpleName name) {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                type,
-                false,
-                name);
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, name);
     }
 
     /**
@@ -93,38 +76,19 @@ public final class Parameter extends Node implements
      * @param name name of the parameter
      */
     public Parameter(Type type, String name) {
-        this(null,
-                EnumSet.noneOf(Modifier.class),
-                new NodeList<>(),
-                type,
-                false,
-                new SimpleName(name));
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new SimpleName(name));
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type type, SimpleName name) {
-        this(null,
-                modifiers,
-                new NodeList<>(),
-                type,
-                false,
-                name);
+        this(null, modifiers, new NodeList<>(), type, false, name);
     }
 
     @AllFieldsConstructor
-    public Parameter(EnumSet<Modifier> modifiers,
-                     NodeList<AnnotationExpr> annotations,
-                     Type type,
-                     boolean isVarArgs,
-                     SimpleName name) {
+    public Parameter(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, SimpleName name) {
         this(null, modifiers, annotations, type, isVarArgs, name);
     }
 
-    public Parameter(final Range range,
-                     EnumSet<Modifier> modifiers,
-                     NodeList<AnnotationExpr> annotations,
-                     Type type,
-                     boolean isVarArgs,
-                     SimpleName name) {
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, SimpleName name) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
@@ -153,14 +117,17 @@ public final class Parameter extends Node implements
     }
 
     @Override
-    public Parameter setType(Type type) {
+    public Parameter setType(final Type type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
-        setAsParentNodeOf(this.type);
+        setAsParentNodeOf(type);
         return this;
     }
 
-    public Parameter setVarArgs(boolean isVarArgs) {
+    public Parameter setVarArgs(final boolean isVarArgs) {
         notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
@@ -195,30 +162,38 @@ public final class Parameter extends Node implements
      * so please avoid passing null
      */
     @Override
-    public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        this.annotations = assertNotNull(annotations);
-        setAsParentNodeOf(this.annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
         return this;
     }
 
     @Override
-    public Parameter setName(SimpleName name) {
+    public Parameter setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     @Override
-    public Parameter setModifiers(EnumSet<Modifier> modifiers) {
+    public Parameter setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(annotations);
+        return Arrays.asList(getAnnotations());
     }
 }
+

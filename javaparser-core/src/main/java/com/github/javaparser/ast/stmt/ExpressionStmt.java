@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
@@ -29,7 +28,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -37,8 +35,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ExpressionStmt extends Statement implements
-        NodeWithExpression<ExpressionStmt> {
+public final class ExpressionStmt extends Statement implements NodeWithExpression<ExpressionStmt> {
 
     private Expression expression;
 
@@ -73,9 +70,13 @@ public final class ExpressionStmt extends Statement implements
 
     @Override
     public ExpressionStmt setExpression(final Expression expression) {
+        assertNotNull(expression);
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        this.expression = assertNotNull(expression);
-        setAsParentNodeOf(this.expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 }
+

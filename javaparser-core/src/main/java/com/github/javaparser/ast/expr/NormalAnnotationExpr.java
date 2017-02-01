@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -27,7 +26,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -67,9 +67,12 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
+        assertNotNull(pairs);
         notifyPropertyChange(ObservableProperty.PAIRS, this.pairs, pairs);
-        this.pairs = assertNotNull(pairs);
-        setAsParentNodeOf(this.pairs);
+        if (this.pairs != null)
+            this.pairs.setParentNode(null);
+        this.pairs = pairs;
+        setAsParentNodeOf(pairs);
         return this;
     }
 
@@ -93,4 +96,10 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         memberValuePair.setParentNode(this);
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getPairs());
+    }
 }
+

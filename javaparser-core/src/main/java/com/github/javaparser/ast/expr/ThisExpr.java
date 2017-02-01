@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -26,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 
 /**
@@ -72,8 +70,11 @@ public final class ThisExpr extends Expression {
 
     public ThisExpr setClassExpr(final Expression classExpr) {
         notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
+        if (this.classExpr != null)
+            this.classExpr.setParentNode(null);
         this.classExpr = classExpr;
-        setAsParentNodeOf(this.classExpr);
+        setAsParentNodeOf(classExpr);
         return this;
     }
 }
+

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -26,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -74,17 +72,24 @@ public final class ArrayAccessExpr extends Expression {
         return name;
     }
 
-    public ArrayAccessExpr setIndex(Expression index) {
+    public ArrayAccessExpr setIndex(final Expression index) {
+        assertNotNull(index);
         notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
-        this.index = assertNotNull(index);
-        setAsParentNodeOf(this.index);
+        if (this.index != null)
+            this.index.setParentNode(null);
+        this.index = index;
+        setAsParentNodeOf(index);
         return this;
     }
 
-    public ArrayAccessExpr setName(Expression name) {
+    public ArrayAccessExpr setName(final Expression name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
-        setAsParentNodeOf(this.name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
     }
 }
+

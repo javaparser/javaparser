@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -26,7 +25,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -51,9 +49,12 @@ public abstract class Type extends Node {
         return getAnnotations().get(i);
     }
 
-    public Type setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        this.annotations = assertNotNull(annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
     }
@@ -78,3 +79,4 @@ public abstract class Type extends Node {
         }
     }
 }
+

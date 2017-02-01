@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -30,10 +29,11 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -46,9 +46,7 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  *
  * @author Raquel Pau
  */
-public class MethodReferenceExpr extends Expression implements
-        NodeWithTypeArguments<MethodReferenceExpr>,
-        NodeWithIdentifier<MethodReferenceExpr> {
+public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr> {
 
     private Expression scope;
 
@@ -57,20 +55,15 @@ public class MethodReferenceExpr extends Expression implements
     private String identifier;
 
     public MethodReferenceExpr() {
-        this(null,
-                new ClassExpr(),
-                null,
-                "empty");
+        this(null, new ClassExpr(), null, "empty");
     }
 
     @AllFieldsConstructor
-    public MethodReferenceExpr(Expression scope,
-                               NodeList<Type> typeArguments, String identifier) {
+    public MethodReferenceExpr(Expression scope, NodeList<Type> typeArguments, String identifier) {
         this(null, scope, typeArguments, identifier);
     }
 
-    public MethodReferenceExpr(Range range, Expression scope,
-                               NodeList<Type> typeArguments, String identifier) {
+    public MethodReferenceExpr(Range range, Expression scope, NodeList<Type> typeArguments, String identifier) {
         super(range);
         setIdentifier(identifier);
         setScope(scope);
@@ -79,7 +72,6 @@ public class MethodReferenceExpr extends Expression implements
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-
         return v.visit(this, arg);
     }
 
@@ -92,10 +84,13 @@ public class MethodReferenceExpr extends Expression implements
         return scope;
     }
 
-    public MethodReferenceExpr setScope(Expression scope) {
+    public MethodReferenceExpr setScope(final Expression scope) {
+        assertNotNull(scope);
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
-        setAsParentNodeOf(this.scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
@@ -112,9 +107,11 @@ public class MethodReferenceExpr extends Expression implements
      */
     @Override
     public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
-        notifyPropertyChange(ObservableProperty.TYPE, this.typeArguments, typeArguments);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
@@ -124,10 +121,16 @@ public class MethodReferenceExpr extends Expression implements
     }
 
     @Override
-    public MethodReferenceExpr setIdentifier(String identifier) {
+    public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getTypeArguments().orElse(null));
+    }
 }
+
