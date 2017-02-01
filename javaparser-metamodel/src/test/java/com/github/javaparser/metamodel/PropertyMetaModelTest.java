@@ -36,4 +36,10 @@ public class PropertyMetaModelTest {
         assertEquals("EnumSet<Modifier>", bert.getTypeNameForSetter());
     }
 
+    @Test
+    public void metaModelFieldName() {
+        PropertyMetaModel bert = new PropertyMetaModel(null, "bert", Modifier.class, Optional.empty(), false, false, false, true, false);
+        assertEquals("bertPropertyMetaModel", bert.getMetaModelFieldName());
+    }
+
 }

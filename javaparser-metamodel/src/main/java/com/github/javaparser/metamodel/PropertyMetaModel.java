@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
+import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
 
@@ -109,6 +110,7 @@ public class PropertyMetaModel {
     public boolean isRequired() {
         return !isOptional;
     }
+
     /**
      * @return whether this property is contained in a NodeList.
      */
@@ -201,4 +203,12 @@ public class PropertyMetaModel {
     public boolean isNode() {
         return getNodeReference().isPresent();
     }
+
+    /**
+     * The name of the field in the containing BaseNodeMetaModel for this property meta model.
+     */
+    public String getMetaModelFieldName() {
+        return getName() + "PropertyMetaModel";
+    }
+
 }
