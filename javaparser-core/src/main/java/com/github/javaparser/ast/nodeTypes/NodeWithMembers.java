@@ -192,7 +192,6 @@ public interface NodeWithMembers<N extends Node> {
         methodDeclaration.setModifiers(Arrays.stream(modifiers)
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(methodDeclaration);
-        methodDeclaration.setParentNode((Node) this);
         return methodDeclaration;
     }
 
@@ -208,7 +207,6 @@ public interface NodeWithMembers<N extends Node> {
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         constructorDeclaration.setName(((TypeDeclaration<?>) this).getName());
         getMembers().add(constructorDeclaration);
-        constructorDeclaration.setParentNode((Node) this);
         return constructorDeclaration;
     }
 
@@ -216,7 +214,6 @@ public interface NodeWithMembers<N extends Node> {
         BlockStmt block = new BlockStmt();
         InitializerDeclaration initializerDeclaration = new InitializerDeclaration(false, block);
         getMembers().add(initializerDeclaration);
-        initializerDeclaration.setParentNode((Node) this);
         return block;
     }
 
@@ -224,7 +221,6 @@ public interface NodeWithMembers<N extends Node> {
         BlockStmt block = new BlockStmt();
         InitializerDeclaration initializerDeclaration = new InitializerDeclaration(true, block);
         getMembers().add(initializerDeclaration);
-        initializerDeclaration.setParentNode((Node) this);
         return block;
     }
 

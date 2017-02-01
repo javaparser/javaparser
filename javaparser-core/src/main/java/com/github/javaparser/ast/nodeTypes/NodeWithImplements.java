@@ -69,7 +69,6 @@ public interface NodeWithImplements<N extends Node> {
     default N addImplementedType(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
         getImplementedTypes().add(classOrInterfaceType);
-        classOrInterfaceType.setParentNode((Node) this);
         return (N) this;
     }
 

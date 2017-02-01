@@ -120,7 +120,6 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         assertNonEmpty(name);
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
-        enumConstant.setParentNode(this);
         return enumConstant;
     }
 

@@ -277,7 +277,6 @@ public final class CompilationUnit extends Node {
             return this;
         else {
             getImports().add(importDeclaration);
-            importDeclaration.setParentNode(this);
             return this;
         }
     }
@@ -302,7 +301,6 @@ public final class CompilationUnit extends Node {
     public ClassOrInterfaceDeclaration addClass(String name, Modifier... modifiers) {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), false, name);
         getTypes().add(classOrInterfaceDeclaration);
-        classOrInterfaceDeclaration.setParentNode(this);
         return classOrInterfaceDeclaration;
     }
 
@@ -326,7 +324,6 @@ public final class CompilationUnit extends Node {
     public ClassOrInterfaceDeclaration addInterface(String name, Modifier... modifiers) {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = new ClassOrInterfaceDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), true, name);
         getTypes().add(classOrInterfaceDeclaration);
-        classOrInterfaceDeclaration.setParentNode(this);
         return classOrInterfaceDeclaration;
     }
 
@@ -350,7 +347,6 @@ public final class CompilationUnit extends Node {
     public EnumDeclaration addEnum(String name, Modifier... modifiers) {
         EnumDeclaration enumDeclaration = new EnumDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
         getTypes().add(enumDeclaration);
-        enumDeclaration.setParentNode(this);
         return enumDeclaration;
     }
 
@@ -374,7 +370,6 @@ public final class CompilationUnit extends Node {
     public AnnotationDeclaration addAnnotationDeclaration(String name, Modifier... modifiers) {
         AnnotationDeclaration annotationDeclaration = new AnnotationDeclaration(Arrays.stream(modifiers).collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))), name);
         getTypes().add(annotationDeclaration);
-        annotationDeclaration.setParentNode(this);
         return annotationDeclaration;
     }
 

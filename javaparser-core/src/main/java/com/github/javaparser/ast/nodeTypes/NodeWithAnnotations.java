@@ -66,7 +66,6 @@ public interface NodeWithAnnotations<N extends Node> {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
                 Name.parse(name), new NodeList<>());
         getAnnotations().add(normalAnnotationExpr);
-        normalAnnotationExpr.setParentNode((Node) this);
         return normalAnnotationExpr;
     }
 
@@ -92,7 +91,6 @@ public interface NodeWithAnnotations<N extends Node> {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
                 Name.parse(name));
         getAnnotations().add(markerAnnotationExpr);
-        markerAnnotationExpr.setParentNode((Node) this);
         return (N) this;
     }
 
@@ -119,7 +117,6 @@ public interface NodeWithAnnotations<N extends Node> {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
                 Name.parse(name), new NameExpr(value));
         getAnnotations().add(singleMemberAnnotationExpr);
-        singleMemberAnnotationExpr.setParentNode((Node) this);
         return (N) this;
     }
 

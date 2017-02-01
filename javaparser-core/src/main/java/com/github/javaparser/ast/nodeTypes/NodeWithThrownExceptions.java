@@ -47,7 +47,6 @@ public interface NodeWithThrownExceptions<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addThrownException(ReferenceType throwType) {
         getThrownExceptions().add(throwType);
-        throwType.setParentNode((Node) this);
         return (N) this;
     }
 

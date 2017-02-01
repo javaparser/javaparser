@@ -90,7 +90,6 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     public NormalAnnotationExpr addPair(String key, NameExpr value) {
         MemberValuePair memberValuePair = new MemberValuePair(key, value);
         getPairs().add(memberValuePair);
-        memberValuePair.setParentNode(this);
         return this;
     }
 
