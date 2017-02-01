@@ -82,6 +82,14 @@ public class JavaParserFacade {
         this.symbolSolver = new SymbolSolver(typeSolver);
     }
 
+    public getTypeSolver() {
+        return typeSolver;
+    }
+
+    public getSymbolSolver() {
+        return symbolSolver;
+    }
+
     public static JavaParserFacade get(TypeSolver typeSolver) {
         if (!instances.containsKey(typeSolver)) {
             instances.put(typeSolver, new JavaParserFacade(typeSolver));
