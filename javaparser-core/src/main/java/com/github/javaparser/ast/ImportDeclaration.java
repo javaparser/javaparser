@@ -26,6 +26,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An import declaration.
@@ -90,21 +91,24 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return isStatic;
     }
 
-    public ImportDeclaration setAsterisk(boolean asterisk) {
-        notifyPropertyChange(ObservableProperty.IS_ASTERISK, this.isAsterisk, isAsterisk);
-        this.isAsterisk = asterisk;
+    public ImportDeclaration setAsterisk(final boolean isAsterisk) {
+        notifyPropertyChange(ObservableProperty.ASTERISK, this.isAsterisk, isAsterisk);
+        this.isAsterisk = isAsterisk;
         return this;
     }
 
-    public ImportDeclaration setName(Name name) {
+    public ImportDeclaration setName(final Name name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
-        setAsParentNodeOf(this.name);
+        setAsParentNodeOf(name);
         return this;
     }
 
-    public ImportDeclaration setStatic(boolean isStatic) {
-        notifyPropertyChange(ObservableProperty.IS_STATIC, this.isStatic, isStatic);
+    public ImportDeclaration setStatic(final boolean isStatic) {
+        notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }

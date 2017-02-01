@@ -123,6 +123,8 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     public Name setQualifier(final Name qualifier) {
         notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
+        if (this.qualifier != null)
+            this.qualifier.setParentNode(null);
         this.qualifier = qualifier;
         setAsParentNodeOf(qualifier);
         return this;

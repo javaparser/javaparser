@@ -28,6 +28,9 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
 import java.util.Optional;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 public interface NodeWithParameters<N extends Node> {
     NodeList<Parameter> getParameters();
@@ -125,5 +128,33 @@ public interface NodeWithParameters<N extends Node> {
     default Optional<Parameter> getParameterByType(Class<?> type) {
         return getParameters().stream()
                 .filter(p -> p.getType().toString().equals(type.getSimpleName())).findFirst();
+    }
+
+    /**
+     * Check if the parameters have certain types.
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return true if all parameters match
+     */
+    default boolean hasParametersOfType(String... paramTypes) {
+        return getParameters().stream()
+                .map(p -> p.getType().toString())
+                .collect(toSet())
+                .equals(Stream.of(paramTypes).collect(toSet()));
+    }
+
+    /**
+     * Check if the parameters have certain types. Note that this is a match in SimpleName, so "java.awt.List" and
+     * "java.util.List" are identical to this algorithm.
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return true if all parameters match
+     */
+    default boolean hasParametersOfType(Class<?>... paramTypes) {
+        return getParameters().stream().map(p -> p.getType().toString())
+                .collect(toSet())
+                .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet()));
     }
 }

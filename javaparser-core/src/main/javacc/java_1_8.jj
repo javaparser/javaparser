@@ -2529,7 +2529,7 @@ Expression PrimaryPrefix():
 	  		  		}
 	  		  		params = add(0, params, p);
 	  		  		// TODO p may be null here
-	  		  		ret = new LambdaExpr(range(p.getBegin().get(), tokenEnd()), params, null, true);
+	  		  		ret = new LambdaExpr(range(p.getBegin().get(), tokenEnd()), params, new BlockStmt(), true);
 	  		 	}
 
 	  		 }

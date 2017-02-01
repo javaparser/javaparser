@@ -100,15 +100,20 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
      */
     public SwitchEntryStmt setLabel(final Expression label) {
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
+        if (this.label != null)
+            this.label.setParentNode(null);
         this.label = label;
-        setAsParentNodeOf(this.label);
+        setAsParentNodeOf(label);
         return this;
     }
 
     public SwitchEntryStmt setStatements(final NodeList<Statement> statements) {
+        assertNotNull(statements);
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        this.statements = assertNotNull(statements);
-        setAsParentNodeOf(this.statements);
+        if (this.statements != null)
+            this.statements.setParentNode(null);
+        this.statements = statements;
+        setAsParentNodeOf(statements);
         return this;
     }
 
