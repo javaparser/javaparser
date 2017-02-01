@@ -125,41 +125,54 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setModifiers(EnumSet<Modifier> modifiers) {
+    public ConstructorDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setName(SimpleName name) {
+    public ConstructorDeclaration setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
-        setAsParentNodeOf(this.name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setParameters(NodeList<Parameter> parameters) {
+    public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
+        assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        this.parameters = assertNotNull(parameters);
-        setAsParentNodeOf(this.parameters);
+        if (this.parameters != null)
+            this.parameters.setParentNode(null);
+        this.parameters = parameters;
+        setAsParentNodeOf(parameters);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setThrownExceptions(NodeList<ReferenceType> thrownExceptions) {
-        notifyPropertyChange(ObservableProperty.THROWN_TYPES, this.thrownExceptions, thrownExceptions);
-        this.thrownExceptions = assertNotNull(thrownExceptions);
-        setAsParentNodeOf(this.thrownExceptions);
+    public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+        assertNotNull(thrownExceptions);
+        notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
+        if (this.thrownExceptions != null)
+            this.thrownExceptions.setParentNode(null);
+        this.thrownExceptions = thrownExceptions;
+        setAsParentNodeOf(thrownExceptions);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setTypeParameters(NodeList<TypeParameter> typeParameters) {
+    public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+        assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        this.typeParameters = assertNotNull(typeParameters);
-        setAsParentNodeOf(this.typeParameters);
+        if (this.typeParameters != null)
+            this.typeParameters.setParentNode(null);
+        this.typeParameters = typeParameters;
+        setAsParentNodeOf(typeParameters);
         return this;
     }
 
@@ -224,8 +237,12 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     @Override
-    public ConstructorDeclaration setBody(BlockStmt body) {
-        this.body = assertNotNull(body);
+    public ConstructorDeclaration setBody(final BlockStmt body) {
+        assertNotNull(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
+        this.body = body;
         setAsParentNodeOf(body);
         return this;
     }

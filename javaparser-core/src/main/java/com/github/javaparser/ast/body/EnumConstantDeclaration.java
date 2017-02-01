@@ -94,24 +94,33 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
-    public EnumConstantDeclaration setArguments(NodeList<Expression> arguments) {
+    public EnumConstantDeclaration setArguments(final NodeList<Expression> arguments) {
+        assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
-        this.arguments = assertNotNull(arguments);
-        setAsParentNodeOf(this.arguments);
+        if (this.arguments != null)
+            this.arguments.setParentNode(null);
+        this.arguments = arguments;
+        setAsParentNodeOf(arguments);
         return this;
     }
 
-    public EnumConstantDeclaration setClassBody(NodeList<BodyDeclaration<?>> classBody) {
+    public EnumConstantDeclaration setClassBody(final NodeList<BodyDeclaration<?>> classBody) {
+        assertNotNull(classBody);
         notifyPropertyChange(ObservableProperty.CLASS_BODY, this.classBody, classBody);
-        this.classBody = assertNotNull(classBody);
-        setAsParentNodeOf(this.classBody);
+        if (this.classBody != null)
+            this.classBody.setParentNode(null);
+        this.classBody = classBody;
+        setAsParentNodeOf(classBody);
         return this;
     }
 
     @Override
-    public EnumConstantDeclaration setName(SimpleName name) {
+    public EnumConstantDeclaration setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }

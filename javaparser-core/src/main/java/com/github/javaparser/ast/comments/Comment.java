@@ -59,9 +59,10 @@ public abstract class Comment extends Node {
      *
      * @param content the text of the comment to set
      */
-    public Comment setContent(String content) {
+    public Comment setContent(final String content) {
+        assertNotNull(content);
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
-        this.content = assertNotNull(content);
+        this.content = content;
         return this;
     }
 

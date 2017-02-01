@@ -161,10 +161,13 @@ public final class CompilationUnit extends Node {
      *
      * @param imports the list of imports
      */
-    public CompilationUnit setImports(NodeList<ImportDeclaration> imports) {
+    public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
+        assertNotNull(imports);
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
-        this.imports = assertNotNull(imports);
-        setAsParentNodeOf(this.imports);
+        if (this.imports != null)
+            this.imports.setParentNode(null);
+        this.imports = imports;
+        setAsParentNodeOf(imports);
         return this;
     }
 
@@ -183,20 +186,25 @@ public final class CompilationUnit extends Node {
      *
      * @param pakage the packageDeclaration declaration to set or <code>null</code> to default package
      */
-    public CompilationUnit setPackageDeclaration(PackageDeclaration pakage) {
-        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, pakage);
-        this.packageDeclaration = pakage;
-        setAsParentNodeOf(this.packageDeclaration);
+    public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
+        notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
+        if (this.packageDeclaration != null)
+            this.packageDeclaration.setParentNode(null);
+        this.packageDeclaration = packageDeclaration;
+        setAsParentNodeOf(packageDeclaration);
         return this;
     }
 
     /**
      * Sets the list of types declared in this compilation unit.
      */
-    public CompilationUnit setTypes(NodeList<TypeDeclaration<?>> types) {
+    public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
+        assertNotNull(types);
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
-        this.types = assertNotNull(types);
-        setAsParentNodeOf(this.types);
+        if (this.types != null)
+            this.types.setParentNode(null);
+        this.types = types;
+        setAsParentNodeOf(types);
         return this;
     }
 

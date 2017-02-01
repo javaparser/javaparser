@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
@@ -95,23 +96,30 @@ public final class BinaryExpr extends Expression {
         return right;
     }
 
-    public BinaryExpr setLeft(Expression left) {
+    public BinaryExpr setLeft(final Expression left) {
+        assertNotNull(left);
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
+        if (this.left != null)
+            this.left.setParentNode(null);
         this.left = left;
-        setAsParentNodeOf(this.left);
+        setAsParentNodeOf(left);
         return this;
     }
 
-    public BinaryExpr setOperator(Operator op) {
-        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
-        this.operator = op;
+    public BinaryExpr setOperator(final Operator operator) {
+        assertNotNull(operator);
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        this.operator = operator;
         return this;
     }
 
-    public BinaryExpr setRight(Expression right) {
+    public BinaryExpr setRight(final Expression right) {
+        assertNotNull(right);
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
+        if (this.right != null)
+            this.right.setParentNode(null);
         this.right = right;
-        setAsParentNodeOf(this.right);
+        setAsParentNodeOf(right);
         return this;
     }
 }

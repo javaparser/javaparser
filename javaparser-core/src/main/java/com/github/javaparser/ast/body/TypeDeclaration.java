@@ -98,26 +98,33 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setMembers(NodeList<BodyDeclaration<?>> members) {
+    public T setMembers(final NodeList<BodyDeclaration<?>> members) {
+        assertNotNull(members);
         notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
-        this.members = assertNotNull(members);
-        setAsParentNodeOf(this.members);
+        if (this.members != null)
+            this.members.setParentNode(null);
+        this.members = members;
+        setAsParentNodeOf(members);
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setModifiers(EnumSet<Modifier> modifiers) {
+    public T setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return (T) this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public T setName(SimpleName name) {
+    public T setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return (T) this;
     }

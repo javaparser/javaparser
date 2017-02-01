@@ -55,10 +55,7 @@ public interface NodeWithTypeArguments<N extends Node> {
      * @return whether the type arguments look like &lt;>.
      */
     default boolean isUsingDiamondOperator() {
-        if (!getTypeArguments().isPresent()) {
-            return false;
-        }
-        return getTypeArguments().get().isEmpty();
+        return getTypeArguments().isPresent() && getTypeArguments().get().isEmpty();
     }
 
     /**

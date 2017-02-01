@@ -24,7 +24,8 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.NameExpr;
+
+import static com.github.javaparser.JavaParser.parseExpression;
 
 /**
  * A node with arguments.
@@ -40,7 +41,7 @@ public interface NodeWithArguments<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N addArgument(String arg) {
-        return addArgument(new NameExpr(arg));
+        return addArgument(parseExpression(arg));
     }
 
     @SuppressWarnings("unchecked")

@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
+import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
 
@@ -16,16 +17,18 @@ public class PropertyMetaModel {
     private final Class<?> type;
     private final Optional<BaseNodeMetaModel> nodeReference;
     private final boolean isOptional;
+    private final boolean isNonEmpty;
     private final boolean isNodeList;
     private final boolean isEnumSet;
     private final boolean hasWildcard;
 
-    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
+    public PropertyMetaModel(BaseNodeMetaModel containingNodeMetaModel, String name, Class<?> type, Optional<BaseNodeMetaModel> nodeReference, boolean isOptional, boolean isNonEmpty, boolean isNodeList, boolean isEnumSet, boolean hasWildcard) {
         this.containingNodeMetaModel = containingNodeMetaModel;
         this.name = name;
         this.type = type;
         this.nodeReference = nodeReference;
         this.isOptional = isOptional;
+        this.isNonEmpty = isNonEmpty;
         this.isNodeList = isNodeList;
         this.isEnumSet = isEnumSet;
         this.hasWildcard = hasWildcard;
@@ -74,6 +77,13 @@ public class PropertyMetaModel {
     }
 
     /**
+     * @return whether this field may contain an empty String.
+     */
+    public boolean isNonEmpty() {
+        return isNonEmpty;
+    }
+
+    /**
      * @return the class of the field.
      */
     public Class<?> getType() {
@@ -92,6 +102,13 @@ public class PropertyMetaModel {
      */
     public boolean isOptional() {
         return isOptional;
+    }
+
+    /**
+     * @return whether this property is not optional.
+     */
+    public boolean isRequired() {
+        return !isOptional;
     }
 
     /**
@@ -179,4 +196,19 @@ public class PropertyMetaModel {
         }
         return getTypeNameGenerified();
     }
+
+    /**
+     * @return is this property an AST Node?
+     */
+    public boolean isNode() {
+        return getNodeReference().isPresent();
+    }
+
+    /**
+     * The name of the field in the containing BaseNodeMetaModel for this property meta model.
+     */
+    public String getMetaModelFieldName() {
+        return getName() + "PropertyMetaModel";
+    }
+
 }

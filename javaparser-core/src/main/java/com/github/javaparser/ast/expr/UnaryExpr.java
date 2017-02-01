@@ -26,6 +26,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -104,16 +105,20 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     }
 
     @Override
-    public UnaryExpr setExpression(final Expression expr) {
-        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expr);
-        this.expression = expr;
-        setAsParentNodeOf(this.expression);
+    public UnaryExpr setExpression(final Expression expression) {
+        assertNotNull(expression);
+        notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
+        this.expression = expression;
+        setAsParentNodeOf(expression);
         return this;
     }
 
-    public UnaryExpr setOperator(final Operator op) {
-        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, op);
-        this.operator = op;
+    public UnaryExpr setOperator(final Operator operator) {
+        assertNotNull(operator);
+        notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
+        this.operator = operator;
         return this;
     }
 }

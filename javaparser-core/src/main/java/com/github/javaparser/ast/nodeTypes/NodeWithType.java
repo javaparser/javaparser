@@ -52,6 +52,8 @@ public interface NodeWithType<N extends Node, T extends Type> {
      */
     N setType(T type);
 
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
+
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
      *
@@ -60,7 +62,7 @@ public interface NodeWithType<N extends Node, T extends Type> {
      */
     @SuppressWarnings("unchecked")
     default N setType(Class<?> typeClass) {
-        ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
+        tryAddImportToParentCompilationUnit(typeClass);
         return setType((T) new ClassOrInterfaceType(typeClass.getSimpleName()));
     }
 
