@@ -77,11 +77,9 @@ public class StringLiteralExpr extends LiteralExpr {
     }
 
     public final StringLiteralExpr setValue(final String value) {
+        assertNotNull(value);
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        this.value = assertNotNull(value);
-        if (value.contains("\n") || value.contains("\r")) {
-            throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
-        }
+        this.value = value;
         return this;
     }
 }

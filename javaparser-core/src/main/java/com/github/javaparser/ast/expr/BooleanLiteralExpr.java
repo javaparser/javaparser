@@ -65,7 +65,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         return value;
     }
 
-    public BooleanLiteralExpr setValue(boolean value) {
+    public BooleanLiteralExpr setValue(final boolean value) {
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
         return this;

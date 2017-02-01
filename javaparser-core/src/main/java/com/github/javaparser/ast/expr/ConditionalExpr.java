@@ -79,24 +79,33 @@ public final class ConditionalExpr extends Expression {
         return thenExpr;
     }
 
-    public ConditionalExpr setCondition(Expression condition) {
+    public ConditionalExpr setCondition(final Expression condition) {
+        assertNotNull(condition);
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        this.condition = assertNotNull(condition);
-        setAsParentNodeOf(this.condition);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
+        this.condition = condition;
+        setAsParentNodeOf(condition);
         return this;
     }
 
-    public ConditionalExpr setElseExpr(Expression elseExpr) {
+    public ConditionalExpr setElseExpr(final Expression elseExpr) {
+        assertNotNull(elseExpr);
         notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
-        this.elseExpr = assertNotNull(elseExpr);
-        setAsParentNodeOf(this.elseExpr);
+        if (this.elseExpr != null)
+            this.elseExpr.setParentNode(null);
+        this.elseExpr = elseExpr;
+        setAsParentNodeOf(elseExpr);
         return this;
     }
 
-    public ConditionalExpr setThenExpr(Expression thenExpr) {
+    public ConditionalExpr setThenExpr(final Expression thenExpr) {
+        assertNotNull(thenExpr);
         notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
-        this.thenExpr = assertNotNull(thenExpr);
-        setAsParentNodeOf(this.thenExpr);
+        if (this.thenExpr != null)
+            this.thenExpr.setParentNode(null);
+        this.thenExpr = thenExpr;
+        setAsParentNodeOf(thenExpr);
         return this;
     }
 }

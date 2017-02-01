@@ -4,6 +4,8 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
 # Export all packages except impl
 -exportcontents: \
     com.github.javaparser, \
+    com.github.javaparser.javadoc, \
+    com.github.javaparser.javadoc.description, \
     com.github.javaparser.printer, \
     com.github.javaparser.utils, \
     com.github.javaparser.ast, \

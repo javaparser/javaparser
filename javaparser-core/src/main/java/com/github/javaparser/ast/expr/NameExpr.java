@@ -73,8 +73,11 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     @Override
     public NameExpr setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }

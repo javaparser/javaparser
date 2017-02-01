@@ -117,14 +117,17 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     @Override
-    public Parameter setType(Type type) {
+    public Parameter setType(final Type type) {
+        assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
-        setAsParentNodeOf(this.type);
+        setAsParentNodeOf(type);
         return this;
     }
 
-    public Parameter setVarArgs(boolean isVarArgs) {
+    public Parameter setVarArgs(final boolean isVarArgs) {
         notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
@@ -159,25 +162,32 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
      * so please avoid passing null
      */
     @Override
-    public Parameter setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        this.annotations = assertNotNull(annotations);
-        setAsParentNodeOf(this.annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
         return this;
     }
 
     @Override
-    public Parameter setName(SimpleName name) {
+    public Parameter setName(final SimpleName name) {
+        assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        this.name = assertNotNull(name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     @Override
-    public Parameter setModifiers(EnumSet<Modifier> modifiers) {
+    public Parameter setModifiers(final EnumSet<Modifier> modifiers) {
+        assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = assertNotNull(modifiers);
+        this.modifiers = modifiers;
         return this;
     }
 

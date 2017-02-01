@@ -49,9 +49,12 @@ public abstract class Type extends Node {
         return getAnnotations().get(i);
     }
 
-    public Type setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        this.annotations = assertNotNull(annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
     }
