@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
+
 /**
  * Meta-data about all classes in the AST.
  * These are all Nodes, except NodeList.
@@ -146,5 +148,12 @@ public abstract class BaseNodeMetaModel {
      */
     public String getTypeName() {
         return type.getSimpleName();
+    }
+
+    /**
+     * The name of the field in JavaParserMetaModel for this node meta model.
+     */
+    public String getMetaModelFieldName() {
+        return decapitalize(getClass().getSimpleName());
     }
 }

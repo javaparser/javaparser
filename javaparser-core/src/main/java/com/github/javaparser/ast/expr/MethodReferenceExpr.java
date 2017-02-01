@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -83,10 +84,13 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return scope;
     }
 
-    public MethodReferenceExpr setScope(Expression scope) {
+    public MethodReferenceExpr setScope(final Expression scope) {
+        assertNotNull(scope);
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
-        setAsParentNodeOf(this.scope);
+        setAsParentNodeOf(scope);
         return this;
     }
 
@@ -103,9 +107,11 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
      */
     @Override
     public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
-        notifyPropertyChange(ObservableProperty.TYPE, this.typeArguments, typeArguments);
+        notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
-        setAsParentNodeOf(this.typeArguments);
+        setAsParentNodeOf(typeArguments);
         return this;
     }
 
@@ -115,7 +121,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
-    public MethodReferenceExpr setIdentifier(String identifier) {
+    public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;

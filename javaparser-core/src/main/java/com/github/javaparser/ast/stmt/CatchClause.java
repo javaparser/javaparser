@@ -34,6 +34,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The catch part of a try-catch-finally. <br/>In <code>try { ... } catch (Exception e) { ... }</code> the CatchClause
@@ -86,9 +87,12 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     public CatchClause setParameter(final Parameter parameter) {
+        assertNotNull(parameter);
         notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
+        if (this.parameter != null)
+            this.parameter.setParentNode(null);
         this.parameter = parameter;
-        setAsParentNodeOf(this.parameter);
+        setAsParentNodeOf(parameter);
         return this;
     }
 
@@ -98,10 +102,13 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     @Override
-    public CatchClause setBody(BlockStmt block) {
-        notifyPropertyChange(ObservableProperty.BODY, this.body, block);
-        this.body = block;
-        setAsParentNodeOf(this.body);
+    public CatchClause setBody(final BlockStmt body) {
+        assertNotNull(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
+        this.body = body;
+        setAsParentNodeOf(body);
         return this;
     }
 }

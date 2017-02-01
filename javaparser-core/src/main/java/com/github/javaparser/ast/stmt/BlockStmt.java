@@ -69,9 +69,12 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     public BlockStmt setStatements(final NodeList<Statement> statements) {
+        assertNotNull(statements);
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        this.statements = assertNotNull(statements);
-        setAsParentNodeOf(this.statements);
+        if (this.statements != null)
+            this.statements.setParentNode(null);
+        this.statements = statements;
+        setAsParentNodeOf(statements);
         return this;
     }
 
