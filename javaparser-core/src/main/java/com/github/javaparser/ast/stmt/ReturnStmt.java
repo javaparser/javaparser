@@ -81,6 +81,8 @@ public final class ReturnStmt extends Statement {
      */
     public ReturnStmt setExpression(final Expression expression) {
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;

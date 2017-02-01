@@ -136,6 +136,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -145,6 +147,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
+        if (this.parameters != null)
+            this.parameters.setParentNode(null);
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
         return this;
@@ -154,6 +158,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
+        if (this.thrownExceptions != null)
+            this.thrownExceptions.setParentNode(null);
         this.thrownExceptions = thrownExceptions;
         setAsParentNodeOf(thrownExceptions);
         return this;
@@ -163,6 +169,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
+        if (this.typeParameters != null)
+            this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
         return this;
@@ -232,6 +240,8 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;

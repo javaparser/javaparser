@@ -76,6 +76,8 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
+        if (this.componentType != null)
+            this.componentType.setParentNode(null);
         this.componentType = componentType;
         setAsParentNodeOf(componentType);
         return this;

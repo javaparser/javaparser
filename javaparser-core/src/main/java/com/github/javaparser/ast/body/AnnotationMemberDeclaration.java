@@ -130,6 +130,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      */
     public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
+        if (this.defaultValue != null)
+            this.defaultValue.setParentNode(null);
         this.defaultValue = defaultValue;
         setAsParentNodeOf(defaultValue);
         return this;
@@ -147,6 +149,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     public AnnotationMemberDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -156,6 +160,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     public AnnotationMemberDeclaration setType(final Type type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

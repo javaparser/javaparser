@@ -86,6 +86,8 @@ public final class IfStmt extends Statement {
     public IfStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
@@ -99,6 +101,8 @@ public final class IfStmt extends Statement {
      */
     public IfStmt setElseStmt(final Statement elseStmt) {
         notifyPropertyChange(ObservableProperty.ELSE_STMT, this.elseStmt, elseStmt);
+        if (this.elseStmt != null)
+            this.elseStmt.setParentNode(null);
         this.elseStmt = elseStmt;
         setAsParentNodeOf(elseStmt);
         return this;
@@ -107,6 +111,8 @@ public final class IfStmt extends Statement {
     public IfStmt setThenStmt(final Statement thenStmt) {
         assertNotNull(thenStmt);
         notifyPropertyChange(ObservableProperty.THEN_STMT, this.thenStmt, thenStmt);
+        if (this.thenStmt != null)
+            this.thenStmt.setParentNode(null);
         this.thenStmt = thenStmt;
         setAsParentNodeOf(thenStmt);
         return this;

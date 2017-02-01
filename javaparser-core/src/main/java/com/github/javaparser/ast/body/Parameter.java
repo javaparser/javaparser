@@ -120,6 +120,8 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     public Parameter setType(final Type type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;
@@ -163,6 +165,8 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
@@ -172,6 +176,8 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     public Parameter setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

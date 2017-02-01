@@ -28,7 +28,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -81,6 +80,8 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     public DoStmt setBody(final Statement body) {
         assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -89,6 +90,8 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     public DoStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;

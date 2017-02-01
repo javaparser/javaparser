@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -106,6 +105,8 @@ public final class AssignExpr extends Expression {
     public AssignExpr setTarget(final Expression target) {
         assertNotNull(target);
         notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
+        if (this.target != null)
+            this.target.setParentNode(null);
         this.target = target;
         setAsParentNodeOf(target);
         return this;
@@ -114,6 +115,8 @@ public final class AssignExpr extends Expression {
     public AssignExpr setValue(final Expression value) {
         assertNotNull(value);
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        if (this.value != null)
+            this.value.setParentNode(null);
         this.value = value;
         setAsParentNodeOf(value);
         return this;

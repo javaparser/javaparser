@@ -114,6 +114,8 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     public TypeParameter setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -122,6 +124,8 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
         assertNotNull(typeBound);
         notifyPropertyChange(ObservableProperty.TYPE_BOUND, this.typeBound, typeBound);
+        if (this.typeBound != null)
+            this.typeBound.setParentNode(null);
         this.typeBound = typeBound;
         setAsParentNodeOf(typeBound);
         return this;

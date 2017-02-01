@@ -22,16 +22,16 @@ public class CoreGenerator {
 
         final SourceRoot sourceRoot = new SourceRoot(root);
 
-//        new GenericVisitorAdapterGenerator(javaParser, sourceRoot).generate();
-//        new EqualsVisitorGenerator(javaParser, sourceRoot).generate();
-//        new VoidVisitorAdapterGenerator(javaParser, sourceRoot).generate();
-//        new VoidVisitorGenerator(javaParser, sourceRoot).generate();
-//        new GenericVisitorGenerator(javaParser, sourceRoot).generate();
-//        new HashCodeVisitorGenerator(javaParser, sourceRoot).generate();
-//        new CloneVisitorGenerator(javaParser, sourceRoot).generate();
-//        new TreeStructureVisitorGenerator(javaParser, sourceRoot).generate();
-//
-//        new GetNodeListsGenerator(javaParser, sourceRoot).generate();
+        new GenericVisitorAdapterGenerator(javaParser, sourceRoot).generate();
+        new EqualsVisitorGenerator(javaParser, sourceRoot).generate();
+        new VoidVisitorAdapterGenerator(javaParser, sourceRoot).generate();
+        new VoidVisitorGenerator(javaParser, sourceRoot).generate();
+        new GenericVisitorGenerator(javaParser, sourceRoot).generate();
+        new HashCodeVisitorGenerator(javaParser, sourceRoot).generate();
+        new CloneVisitorGenerator(javaParser, sourceRoot).generate();
+        new TreeStructureVisitorGenerator(javaParser, sourceRoot).generate();
+
+        new GetNodeListsGenerator(javaParser, sourceRoot).generate();
         new PropertyGenerator(javaParser, sourceRoot).generate();
         
         sourceRoot.saveAll();

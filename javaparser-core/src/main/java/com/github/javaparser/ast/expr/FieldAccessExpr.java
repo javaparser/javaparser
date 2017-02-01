@@ -88,6 +88,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     public FieldAccessExpr setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -132,6 +134,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     @Override
     public FieldAccessExpr setScope(final Expression scope) {
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
         setAsParentNodeOf(scope);
         return this;
@@ -151,6 +155,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     @Override
     public FieldAccessExpr setTypeArguments(final NodeList<Type> typeArguments) {
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;

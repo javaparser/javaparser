@@ -28,7 +28,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -74,6 +73,8 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     public ClassExpr setType(final Type type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

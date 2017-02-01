@@ -63,6 +63,8 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public UnionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
+        if (this.elements != null)
+            this.elements.setParentNode(null);
         this.elements = elements;
         setAsParentNodeOf(elements);
         return this;

@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -100,6 +99,8 @@ public final class BinaryExpr extends Expression {
     public BinaryExpr setLeft(final Expression left) {
         assertNotNull(left);
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
+        if (this.left != null)
+            this.left.setParentNode(null);
         this.left = left;
         setAsParentNodeOf(left);
         return this;
@@ -115,6 +116,8 @@ public final class BinaryExpr extends Expression {
     public BinaryExpr setRight(final Expression right) {
         assertNotNull(right);
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
+        if (this.right != null)
+            this.right.setParentNode(null);
         this.right = right;
         setAsParentNodeOf(right);
         return this;

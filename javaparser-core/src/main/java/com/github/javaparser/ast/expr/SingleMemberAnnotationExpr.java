@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -68,6 +67,8 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
         assertNotNull(memberValue);
         notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
+        if (this.memberValue != null)
+            this.memberValue.setParentNode(null);
         this.memberValue = memberValue;
         setAsParentNodeOf(memberValue);
         return this;

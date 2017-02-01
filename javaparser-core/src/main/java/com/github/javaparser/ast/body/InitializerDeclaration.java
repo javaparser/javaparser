@@ -82,6 +82,8 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     public InitializerDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;

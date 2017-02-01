@@ -78,6 +78,8 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
+        if (this.parameters != null)
+            this.parameters.setParentNode(null);
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
         return this;
@@ -90,6 +92,8 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     public LambdaExpr setBody(final Statement body) {
         assertNotNull(body);
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;

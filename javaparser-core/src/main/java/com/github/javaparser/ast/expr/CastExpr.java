@@ -81,6 +81,8 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     public CastExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -90,6 +92,8 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     public CastExpr setType(final Type type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

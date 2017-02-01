@@ -102,6 +102,8 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     public PackageDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
@@ -116,6 +118,8 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     public PackageDeclaration setName(final Name name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

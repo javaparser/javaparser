@@ -97,6 +97,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public EnumConstantDeclaration setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
+        if (this.arguments != null)
+            this.arguments.setParentNode(null);
         this.arguments = arguments;
         setAsParentNodeOf(arguments);
         return this;
@@ -105,6 +107,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public EnumConstantDeclaration setClassBody(final NodeList<BodyDeclaration<?>> classBody) {
         assertNotNull(classBody);
         notifyPropertyChange(ObservableProperty.CLASS_BODY, this.classBody, classBody);
+        if (this.classBody != null)
+            this.classBody.setParentNode(null);
         this.classBody = classBody;
         setAsParentNodeOf(classBody);
         return this;
@@ -114,6 +118,8 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public EnumConstantDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

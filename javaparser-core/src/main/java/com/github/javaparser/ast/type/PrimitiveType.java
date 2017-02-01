@@ -31,7 +31,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

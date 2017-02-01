@@ -106,6 +106,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
+        if (this.extendedTypes != null)
+            this.extendedTypes.setParentNode(null);
         this.extendedTypes = extendedTypes;
         setAsParentNodeOf(extendedTypes);
         return this;
@@ -115,6 +117,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
+        if (this.implementedTypes != null)
+            this.implementedTypes.setParentNode(null);
         this.implementedTypes = implementedTypes;
         setAsParentNodeOf(implementedTypes);
         return this;
@@ -130,6 +134,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
+        if (this.typeParameters != null)
+            this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
         return this;
