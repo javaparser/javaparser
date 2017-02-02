@@ -2,6 +2,7 @@ package com.github.javaparser.ast.visitor.treestructure;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 
 import java.util.EnumSet;
 
@@ -46,5 +47,13 @@ public class TreeStructureDumpCallback implements TreeStructureVisitor.Callback 
     @Override
     public void outputProperty(Node node, String name, boolean value, Integer indent) {
         printIndented(indent, name + ": " + value);
+    }
+
+    @Override
+    public void enterList(NodeList n, String name, int indent) {
+    }
+
+    @Override
+    public void exitList(NodeList n, String name, int indent) {
     }
 }

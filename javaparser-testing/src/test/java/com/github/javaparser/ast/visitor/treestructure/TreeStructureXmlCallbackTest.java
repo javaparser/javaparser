@@ -28,4 +28,15 @@ public class TreeStructureXmlCallbackTest {
 
         assertEquals("<root operator='PLUS'><left value='1'></left><right value='1'></right></root>", stringBuilder.toString());
     }
+
+    @Test
+    public void testList() {
+        StringBuilder stringBuilder = new StringBuilder();
+        TreeStructureVisitor visitor = new TreeStructureVisitor(new TreeStructureXmlCallback(stringBuilder, false));
+        Expression expression = JavaParser.parseExpression("a(1,2)");
+
+        expression.accept(visitor, new Context());
+
+        assertEquals("<root><name identifier='a'></name><arguments value='1'></arguments><arguments value='2'></arguments></root>", stringBuilder.toString());
+    }
 }

@@ -9,9 +9,11 @@ import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.metamodel.Multiplicity.ONE;
 
 public class TreeStructureVisitorGenerator extends VisitorGenerator {
     public TreeStructureVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
@@ -25,15 +27,14 @@ public class TreeStructureVisitorGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
+        final List<PropertyMetaModel> orderedProperties = new ArrayList<>();
+        allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(p -> p.getMultiplicity() == ONE).forEach(orderedProperties::add);
+        allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(p -> p.getMultiplicity() == ONE).forEach(orderedProperties::add);
+        allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).forEach(orderedProperties::add);
+
         body.addStatement("callback.enterNode(n, arg.name, arg.indent);");
 
-        for (PropertyMetaModel field : allPropertyMetaModels) {
-            final String getter = field.getGetterMethodName();
-            if (!field.isNode()) {
-                body.addStatement(f("callback.outputProperty(n, \"%s\", n.%s(), arg.indent + 1);", field.getName(), getter));
-            }
-        }
-        for (PropertyMetaModel field : allPropertyMetaModels) {
+        for (PropertyMetaModel field : orderedProperties) {
             final String getter = field.getGetterMethodName();
             if (field.isNode()) {
                 if (field.isOptional()) {
@@ -41,6 +42,8 @@ public class TreeStructureVisitorGenerator extends VisitorGenerator {
                 } else {
                     body.addStatement(f("n.%s().accept(this, new Context(\"%s\", arg.indent + 1));", getter, field.getName()));
                 }
+            } else {
+                body.addStatement(f("callback.outputProperty(n, \"%s\", n.%s(), arg.indent + 1);", field.getName(), getter));
             }
         }
 

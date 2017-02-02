@@ -5,25 +5,33 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
 import java.util.EnumSet;
+import java.util.Stack;
 
 /**
- * A basic XML output callback for the TreeStructureVisitor.
+ * A basic JSON output callback for the TreeStructureVisitor.
  */
-public class TreeStructureXmlCallback implements TreeStructureVisitor.Callback {
+public class TreeStructureJsonCallback implements TreeStructureVisitor.Callback {
+    private static class State {
+        public boolean firstProperty = true;
+    }
+
     private final StringBuilder builder;
     private final boolean outputNodeType;
-    private boolean inOpenTag = false;
+    private final Stack<State> stateStack = new Stack<>();
 
-    public TreeStructureXmlCallback(StringBuilder builder, boolean outputNodeType) {
+    public TreeStructureJsonCallback(StringBuilder builder, boolean outputNodeType) {
         this.builder = builder;
         this.outputNodeType = outputNodeType;
     }
 
     @Override
     public void enterNode(Node n, String name, Integer indent) {
-        endOpenTag();
-        builder.append("<").append(name);
-        inOpenTag = true;
+        if(name.equals("root")){
+            builder.append("{");
+        }
+        comma();
+        stateStack.push(new State());
+        builder.append("\"").append(name).append("\"").append(":").append("{");
         if (outputNodeType) {
             printAttribute("type", n.getClass().getSimpleName());
         }
@@ -31,19 +39,27 @@ public class TreeStructureXmlCallback implements TreeStructureVisitor.Callback {
 
     @Override
     public void exitNode(Node n, String name, Integer indent) {
-        endOpenTag();
-        builder.append("</").append(name).append(">");
-    }
-
-    private void endOpenTag() {
-        if (inOpenTag) {
-            builder.append(">");
-            inOpenTag = false;
+        builder.append("}");
+        stateStack.pop();
+        if(name.equals("root")){
+            builder.append("}");
         }
     }
 
     private void printAttribute(String name, String value) {
-        builder.append(" ").append(name).append("='").append(value).append("'");
+        comma();
+        builder.append("\"").append(name).append("\":\"").append(value).append("\"");
+    }
+
+    private void comma() {
+        if(stateStack.isEmpty()){
+            return;
+        }
+        State state = stateStack.peek();
+        if (!state.firstProperty) {
+            builder.append(",");
+        }
+        state.firstProperty = false;
     }
 
     @Override

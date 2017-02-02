@@ -4,9 +4,10 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
+import static com.github.javaparser.metamodel.Multiplicity.MANY;
+import static com.github.javaparser.metamodel.Multiplicity.ONE;
 
 /**
  * Meta-data about a property of a node in the AST.
@@ -209,6 +210,20 @@ public class PropertyMetaModel {
      */
     public String getMetaModelFieldName() {
         return getName() + "PropertyMetaModel";
+    }
+
+    /**
+     * @return is this property an attribute, meaning: not a node?
+     */
+    public boolean isAttribute() {
+        return !isNode();
+    }
+
+    /**
+     * @return how many times can this property appear?
+     */
+    public Multiplicity getMultiplicity() {
+        return isNodeList() || isEnumSet() ? MANY : ONE;
     }
 
 }
