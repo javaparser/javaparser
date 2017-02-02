@@ -82,11 +82,11 @@ public class JavaParserFacade {
         this.symbolSolver = new SymbolSolver(typeSolver);
     }
 
-    public getTypeSolver() {
+    public TypeSolver getTypeSolver() {
         return typeSolver;
     }
 
-    public getSymbolSolver() {
+    public SymbolSolver getSymbolSolver() {
         return symbolSolver;
     }
 
