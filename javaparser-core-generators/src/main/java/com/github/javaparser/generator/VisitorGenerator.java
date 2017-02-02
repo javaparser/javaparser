@@ -10,7 +10,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
@@ -66,14 +65,21 @@ public abstract class VisitorGenerator extends Generator {
                 .findFirst();
 
         if (visitMethod.isPresent()) {
-            generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
+            MethodDeclaration method = visitMethod.get();
+            fixMethodSignature(node, method);
+            generateVisitMethodBody(node, method, compilationUnit);
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC)
-                    .addParameter(node.getTypeNameGenerified(), "n")
-                    .addParameter(argumentType, "arg")
-                    .setType(returnType);
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC);
+            fixMethodSignature(node, methodDeclaration);
             generateVisitMethodBody(node, methodDeclaration, compilationUnit);
         }
+    }
+
+    private void fixMethodSignature(BaseNodeMetaModel node, MethodDeclaration method) {
+        method.getParameters().clear();
+        method.setType(returnType);
+        method.addParameter(node.getTypeNameGenerified(), "n")
+                .addParameter(argumentType, "arg");
     }
 
     protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);

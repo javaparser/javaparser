@@ -109,7 +109,7 @@ public class Utils {
     public static String toCamelCase(String original) {
         StringBuilder sb = new StringBuilder();
         String[] parts = original.toLowerCase().split("_");
-        for (int i=0; i< parts.length; i++) {
+        for (int i = 0; i < parts.length; i++) {
             sb.append(i == 0 ? parts[i] : capitalize(parts[i]));
         }
         return sb.toString();
@@ -134,5 +134,15 @@ public class Utils {
             index++;
         }
         return string.substring(0, index);
+    }
+
+    /**
+     * Make an indent by appending indentLevel tab characters to the builder.
+     */
+    public static StringBuilder indent(StringBuilder builder, int indentLevel) {
+        for (int i = 0; i < indentLevel; i++) {
+            builder.append("\t");
+        }
+        return builder;
     }
 }

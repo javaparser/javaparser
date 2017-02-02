@@ -17,7 +17,7 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.f;
  */
 public class GenericVisitorAdapterGenerator extends VisitorGenerator {
     public GenericVisitorAdapterGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitorAdapter", "void", "A", true);
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "GenericVisitorAdapter", "R", "A", true);
     }
 
     @Override
