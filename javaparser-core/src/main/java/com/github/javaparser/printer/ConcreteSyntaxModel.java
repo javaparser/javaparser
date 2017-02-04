@@ -25,7 +25,6 @@ import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -41,7 +40,6 @@ import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.conditional;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.list;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
 /**
  * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
@@ -111,7 +109,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 token(ASTParserConstants.IMPORT),
                 space(),
-                conditional(IS_STATIC, FLAG, sequence(token(ASTParserConstants.STATIC), space())),
+                conditional(STATIC, FLAG, sequence(token(ASTParserConstants.STATIC), space())),
                 child(ObservableProperty.NAME),
                 conditional(IS_ASTERISK, FLAG, sequence(token(ASTParserConstants.DOT), token(ASTParserConstants.STAR))),
                 semicolon(),

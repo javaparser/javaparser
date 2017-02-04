@@ -29,12 +29,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-<<<<<<< HEAD
 import java.util.Arrays;
-=======
 
 import java.util.LinkedList;
->>>>>>> issue705: correct ForStmt getNodeLists
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;

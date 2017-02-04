@@ -133,7 +133,6 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return this;
     }
 
-<<<<<<< HEAD
     @Override
     public boolean remove(Node node) {
         if (node == null)
@@ -149,14 +148,14 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     @Override
     public UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
-=======
+    }
+
     public boolean isPostfix() {
         return operator.isPostfix();
     }
 
     public boolean isPrefix() {
         return !isPostfix();
->>>>>>> issue705: changes necessary to support UnaryExpr
     }
 }
 
