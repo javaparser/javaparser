@@ -154,5 +154,9 @@ public final class IfStmt extends Statement {
         return thenStmt instanceof BlockStmt;
     }
 
+    public boolean hasElseBlock() {
+        return elseStmt instanceof BlockStmt;
+    }
+
 }
 

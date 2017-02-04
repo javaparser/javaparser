@@ -28,9 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.MULTIPLE_REFERENCE;
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.MULTIPLE_ATTRIBUTE;
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.SINGLE_ATTRIBUTE;
+import static com.github.javaparser.ast.observer.ObservableProperty.Type.*;
 
 /**
  * Properties considered by the AstObserver
@@ -105,6 +103,7 @@ public enum ObservableProperty {
     THEN_EXPR,
     THEN_STMT,
     THEN_BLOCK(SINGLE_ATTRIBUTE, true),
+    ELSE_BLOCK(SINGLE_ATTRIBUTE, true),
     THIS,
     THROWN_EXCEPTIONS(MULTIPLE_REFERENCE),
     TRY_BLOCK,
@@ -126,7 +125,8 @@ public enum ObservableProperty {
     IS_DEFAULT,
     SUPER_TYPES,
     IS_POSTFIX,
-    IS_PREFIX;
+    IS_PREFIX,
+    EXPRESSION_BODY(SINGLE_REFERENCE, true);
 
     enum Type {
         SINGLE_ATTRIBUTE(false, false),
