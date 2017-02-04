@@ -104,6 +104,7 @@ public enum ObservableProperty {
     TARGET,
     THEN_EXPR,
     THEN_STMT,
+    THEN_BLOCK(SINGLE_ATTRIBUTE, true),
     THIS,
     THROWN_EXCEPTIONS(MULTIPLE_REFERENCE),
     TRY_BLOCK,
@@ -215,10 +216,13 @@ public enum ObservableProperty {
     public Object singleValueFor(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         if (!hasMethod(node, getterName)) {
-            if (camelCaseName().startsWith("is")) {
-                getterName = camelCaseName();
-            } else {
-                getterName = "is" + Utils.capitalize(camelCaseName());
+            getterName = "has" + Utils.capitalize(camelCaseName());
+            if (!hasMethod(node, getterName)) {
+                if (camelCaseName().startsWith("is")) {
+                    getterName = camelCaseName();
+                } else {
+                    getterName = "is" + Utils.capitalize(camelCaseName());
+                }
             }
         }
         try {

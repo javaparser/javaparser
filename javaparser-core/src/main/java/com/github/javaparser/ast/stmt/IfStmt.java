@@ -122,6 +122,7 @@ public final class IfStmt extends Statement {
         return this;
     }
 
+
     @Override
     public boolean remove(Node node) {
         if (node == null)
@@ -148,5 +149,10 @@ public final class IfStmt extends Statement {
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }
+
+    public boolean hasThenBlock() {
+        return thenStmt instanceof BlockStmt;
+    }
+
 }
 

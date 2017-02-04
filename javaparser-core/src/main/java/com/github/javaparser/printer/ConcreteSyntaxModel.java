@@ -297,8 +297,7 @@ public class ConcreteSyntaxModel {
                 token(ASTParserConstants.LPAREN),
                 child(ObservableProperty.CONDITION),
                 token(ASTParserConstants.RPAREN),
-                space(),
-                child(ObservableProperty.THEN_STMT),
+                CsmElement.conditional(ObservableProperty.THEN_BLOCK, CsmConditional.Condition.FLAG, CsmElement.sequence(CsmElement.space(), child(ObservableProperty.THEN_STMT)), CsmElement.sequence(CsmElement.newline(), CsmElement.indent(), child(ObservableProperty.THEN_STMT), CsmElement.unindent())),
                 conditional(ObservableProperty.ELSE_STMT, IS_PRESENT, sequence(space(), token(ASTParserConstants.ELSE), space(), child(ObservableProperty.ELSE_STMT)))
         ));
 
