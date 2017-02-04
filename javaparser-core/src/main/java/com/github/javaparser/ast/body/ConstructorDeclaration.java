@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2017 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,20 +25,17 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.*;
-import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
+
 import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,19 +43,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDeclaration> implements NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration, NodeWithSimpleName<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithBlockStmt<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
-
-    private EnumSet<Modifier> modifiers;
-
-    private NodeList<TypeParameter> typeParameters;
-
-    private SimpleName name;
-
-    private NodeList<Parameter> parameters;
-
-    private NodeList<ReferenceType> thrownExceptions;
-
-    private BlockStmt body;
+public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
+        implements NodeWithBlockStmt<ConstructorDeclaration> {
 
     public ConstructorDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
@@ -74,13 +60,7 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
-        super(range, annotations);
-        setModifiers(modifiers);
-        setTypeParameters(typeParameters);
-        setName(name);
-        setParameters(parameters);
-        setThrownExceptions(thrownExceptions);
-        setBody(body);
+        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
     }
 
     @Override
@@ -93,86 +73,51 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
         v.visit(this, arg);
     }
 
+    @Override
+    public BlockStmt getBody() {
+        return body;
+    }
+
     /**
-     * Return the modifiers of this member declaration.
+     * Sets the body
      *
-     * @return modifiers
-     * @see Modifier
+     * @param body the body, can not be null
+     * @return this, the ConstructorDeclaration
      */
     @Override
-    public EnumSet<Modifier> getModifiers() {
-        return modifiers;
-    }
-
-    @Override
-    public SimpleName getName() {
-        return name;
-    }
-
-    @Override
-    public NodeList<Parameter> getParameters() {
-        return parameters;
-    }
-
-    @Override
-    public NodeList<ReferenceType> getThrownExceptions() {
-        return thrownExceptions;
-    }
-
-    @Override
-    public NodeList<TypeParameter> getTypeParameters() {
-        return typeParameters;
+    public ConstructorDeclaration setBody(final BlockStmt body) {
+        assertNotNull(body);
+        setBodyInternal(body);
+        return this;
     }
 
     @Override
     public ConstructorDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        assertNotNull(modifiers);
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = modifiers;
+        setModifiersInternal(modifiers);
         return this;
     }
 
     @Override
     public ConstructorDeclaration setName(final SimpleName name) {
-        assertNotNull(name);
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
-        this.name = name;
-        setAsParentNodeOf(name);
+        setNameInternal(name);
         return this;
     }
 
     @Override
     public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
-        assertNotNull(parameters);
-        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        if (this.parameters != null)
-            this.parameters.setParentNode(null);
-        this.parameters = parameters;
-        setAsParentNodeOf(parameters);
+        setParametersInternal(parameters);
         return this;
     }
 
     @Override
     public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        assertNotNull(thrownExceptions);
-        notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
-        if (this.thrownExceptions != null)
-            this.thrownExceptions.setParentNode(null);
-        this.thrownExceptions = thrownExceptions;
-        setAsParentNodeOf(thrownExceptions);
+        setThrownExceptionsInternal(thrownExceptions);
         return this;
     }
 
     @Override
     public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        assertNotNull(typeParameters);
-        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
-            this.typeParameters.setParentNode(null);
-        this.typeParameters = typeParameters;
-        setAsParentNodeOf(typeParameters);
+        setTypeParametersInternal(typeParameters);
         return this;
     }
 
@@ -206,50 +151,9 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
             }
         }
         sb.append(")");
-        if (includingThrows) {
-            boolean firstThrow = true;
-            for (ReferenceType thr : getThrownExceptions()) {
-                if (firstThrow) {
-                    firstThrow = false;
-                    sb.append(" throws ");
-                } else {
-                    sb.append(", ");
-                }
-                sb.append(thr.toString(prettyPrinterNoCommentsConfiguration));
-            }
-        }
+        sb.append(appendThrowsIfRequested(includingThrows));
         return sb.toString();
     }
 
-    @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
-        return getDeclarationAsString(includingModifiers, includingThrows, true);
-    }
-
-    @Override
-    public String getDeclarationAsString() {
-        return getDeclarationAsString(true, true, true);
-    }
-
-    @Override
-    public BlockStmt getBody() {
-        return body;
-    }
-
-    @Override
-    public ConstructorDeclaration setBody(final BlockStmt body) {
-        assertNotNull(body);
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
-        this.body = body;
-        setAsParentNodeOf(body);
-        return this;
-    }
-
-    @Override
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
-    }
 }
 
