@@ -15,7 +15,7 @@ Affected visitors are: `GenericVisitorAdapter`, `EqualsVisitor`, `VoidVisitorAda
 If you want to generate your own visitors, you can use the `VisitorGenerator` class from `javaparser-core-generators`
 
 If you want to reuse the code generation utilities, look at module `javaparser-generator-utils` - there is a very useful `SourceRoot` class in there that takes away a lot of file management troubles.
-* 749 745 750 743 748 smaller improvements and fixes
+* 220 733 717 749 745 750 743 748 smaller improvements and fixes
 
 Version 3.0.1
 ------------------
