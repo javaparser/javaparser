@@ -23,7 +23,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.Node;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -38,7 +40,8 @@ public abstract class TreeVisitor {
      */
     public void visitDepthFirst(Node node) {
         process(node);
-        for (Node child : node.getChildNodes()) {
+        final List<Node> copy = new ArrayList<>(node.getChildNodes());
+        for (Node child : copy) {
             visitDepthFirst(child);
         }
     }
@@ -49,10 +52,10 @@ public abstract class TreeVisitor {
      * @param node the start node, and the first one that is passed to process(node).
      */
     public void visitBreadthFirst(Node node) {
-        Queue<Node> queue = new LinkedList<>();
+        final Queue<Node> queue = new LinkedList<>();
         queue.offer(node);
         while (queue.size() > 0) {
-            Node head = queue.peek();
+            final Node head = queue.peek();
             for (Node child : head.getChildNodes()) {
                 queue.offer(child);
             }
