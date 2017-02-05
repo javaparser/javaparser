@@ -12,7 +12,7 @@
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.0-beta.1</version>
+    <version>3.1.1-beta.1-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
@@ -142,7 +142,7 @@
         <connection>scm:git:git://github.com/javaparser/javaparser.git</connection>
         <developerConnection>scm:git:git@github.com:javaparser/javaparser.git</developerConnection>
         <url>https://github.com/javaparser/javaparser.git</url>
-        <tag>3.1.0-beta.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
