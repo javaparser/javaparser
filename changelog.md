@@ -6,16 +6,17 @@ This version needs a minor version increase because of a backwards compatability
 * 719 `getJavadoc`, `getJavadocComment` and `getComment` could return null. Our promise was to return `Optional`, so that is what they do now.
 
 New:
-* 658 718 we have created a metamodel.
+* 658 718 736 737 we have created a metamodel.
 It gives information about the structure of the various AST nodes, as if you are introspecting them.
 You can find it in `javaparser-metamodel`, the main class is `JavaParserMetaModel`
-* 353 visitors are no longer hand made, they are now generated from the metamodel. This should make them 100% reliable.
+* 353 365 visitors are no longer hand made, they are now generated from the metamodel. This should make them 100% reliable.
 Affected visitors are: `GenericVisitorAdapter`, `EqualsVisitor`, `VoidVisitorAdapter`, `VoidVisitor`, `GenericVisitor`, `HashCodeVisitor`, `CloneVisitor`.
 
 If you want to generate your own visitors, you can use the `VisitorGenerator` class from `javaparser-core-generators`
 
 If you want to reuse the code generation utilities, look at module `javaparser-generator-utils` - there is a very useful `SourceRoot` class in there that takes away a lot of file management troubles.
-* 220 733 717 749 745 750 743 748 smaller improvements and fixes
+* 538 735 `TreeStructureVisitor` has been added, which should be considered beta.
+* 220 733 717 749 745 750 743 748 666 732 746 734 733 smaller improvements and fixes
 
 Version 3.0.1
 ------------------
