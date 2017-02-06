@@ -32,7 +32,6 @@ public interface NodeWithBody<N extends Node> {
 
     default BlockStmt createBlockStatementAsBody() {
         BlockStmt b = new BlockStmt();
-        b.setParentNode((Node) this);
         setBody(b);
         return b;
     }
