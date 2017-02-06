@@ -27,8 +27,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -50,7 +49,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
-        implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration> {
+        implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>,
+        NodeWithModifiers<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration,
+        NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
+        NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
 
     private boolean isDefault;
 
@@ -102,8 +104,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      */
     @Override
     public MethodDeclaration setBody(final BlockStmt body) {
-        setBodyInternal(body);
-        return this;
+        return (MethodDeclaration) super.setBody(body);
     }
 
     @Override
@@ -124,32 +125,27 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     @Override
     public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        setModifiersInternal(modifiers);
-        return this;
+        return (MethodDeclaration) super.setModifiers(modifiers);
     }
 
     @Override
     public MethodDeclaration setName(final SimpleName name) {
-        setNameInternal(name);
-        return this;
+        return (MethodDeclaration) super.setName(name);
     }
 
     @Override
     public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
-        setParametersInternal(parameters);
-        return this;
+        return (MethodDeclaration) super.setParameters(parameters);
     }
 
     @Override
     public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        setThrownExceptionsInternal(thrownExceptions);
-        return this;
+        return (MethodDeclaration) super.setThrownExceptions(thrownExceptions);
     }
 
     @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        setTypeParametersInternal(typeParameters);
-        return this;
+        return (MethodDeclaration) super.setTypeParameters(typeParameters);
     }
 
     public boolean isDefault() {

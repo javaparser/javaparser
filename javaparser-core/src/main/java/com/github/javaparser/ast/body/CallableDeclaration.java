@@ -26,7 +26,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
@@ -41,10 +40,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
-public abstract class CallableDeclaration<T extends Node> extends BodyDeclaration<T>
-        implements NodeWithJavadoc<T>, NodeWithDeclaration,
-        NodeWithSimpleName<T>, NodeWithModifiers<T>, NodeWithParameters<T>,
-        NodeWithThrownExceptions<T>, NodeWithTypeParameters<T> {
+public abstract class CallableDeclaration<T extends Node> extends BodyDeclaration<T> {
 
     protected EnumSet<Modifier> modifiers;
 
@@ -65,7 +61,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         setName(name);
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
-        setBodyInternal(body);
+        setBody(body);
     }
 
     /**
@@ -74,12 +70,13 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
      *
      * @param body the body, can be null
      */
-    protected void setBodyInternal(final BlockStmt body) {
+    public CallableDeclaration<T> setBody(final BlockStmt body) {
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
+        return this;
     }
 
     /**
@@ -88,82 +85,82 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
      * @return modifiers
      * @see Modifier
      */
-    @Override
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    protected void setModifiersInternal(final EnumSet<Modifier> modifiers) {
+    public CallableDeclaration<T> setModifiers(EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
+        return this;
     }
 
-    @Override
     public SimpleName getName() {
         return name;
     }
 
-    protected void setNameInternal(final SimpleName name) {
+    public CallableDeclaration<T> setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
+        return this;
     }
 
-    @Override
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
 
-    protected void setParametersInternal(final NodeList<Parameter> parameters) {
+    public CallableDeclaration<T> setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         if (this.parameters != null)
             this.parameters.setParentNode(null);
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
+        return this;
     }
 
-    @Override
     public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
-    protected void setThrownExceptionsInternal(final NodeList<ReferenceType> thrownExceptions) {
+    public CallableDeclaration<T> setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
         if (this.thrownExceptions != null)
             this.thrownExceptions.setParentNode(null);
         this.thrownExceptions = thrownExceptions;
         setAsParentNodeOf(thrownExceptions);
+        return this;
     }
 
-    @Override
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
-    protected void setTypeParametersInternal(final NodeList<TypeParameter> typeParameters) {
+    public CallableDeclaration<T> setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
             this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
+        return this;
     }
 
-    @Override
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
         return getDeclarationAsString(includingModifiers, includingThrows, true);
     }
 
-    @Override
     public String getDeclarationAsString() {
         return getDeclarationAsString(true, true, true);
     }
+
+    public abstract String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName);
 
     protected String appendThrowsIfRequested(boolean includingThrows) {
         StringBuilder sb = new StringBuilder();

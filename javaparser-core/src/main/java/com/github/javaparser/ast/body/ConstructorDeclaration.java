@@ -27,7 +27,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt;
+import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -44,7 +44,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
-        implements NodeWithBlockStmt<ConstructorDeclaration> {
+        implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
+        NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration,
+        NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>,
+        NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
 
     public ConstructorDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
@@ -87,38 +90,32 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     @Override
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
-        setBodyInternal(body);
-        return this;
+        return (ConstructorDeclaration) super.setBody(body);
     }
 
     @Override
     public ConstructorDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        setModifiersInternal(modifiers);
-        return this;
+        return (ConstructorDeclaration) super.setModifiers(modifiers);
     }
 
     @Override
     public ConstructorDeclaration setName(final SimpleName name) {
-        setNameInternal(name);
-        return this;
+        return (ConstructorDeclaration) super.setName(name);
     }
 
     @Override
     public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
-        setParametersInternal(parameters);
-        return this;
+        return (ConstructorDeclaration) super.setParameters(parameters);
     }
 
     @Override
     public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        setThrownExceptionsInternal(thrownExceptions);
-        return this;
+        return (ConstructorDeclaration) super.setThrownExceptions(thrownExceptions);
     }
 
     @Override
     public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        setTypeParametersInternal(typeParameters);
-        return this;
+        return (ConstructorDeclaration) super.setTypeParameters(typeParameters);
     }
 
     /**
