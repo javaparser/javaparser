@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;

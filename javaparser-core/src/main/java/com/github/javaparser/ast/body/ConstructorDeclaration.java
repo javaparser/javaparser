@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -37,7 +36,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
