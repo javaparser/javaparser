@@ -1,7 +1,6 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

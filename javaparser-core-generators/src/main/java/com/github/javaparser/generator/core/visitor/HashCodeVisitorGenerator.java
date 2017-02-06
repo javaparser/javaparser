@@ -8,7 +8,6 @@ import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.util.List;

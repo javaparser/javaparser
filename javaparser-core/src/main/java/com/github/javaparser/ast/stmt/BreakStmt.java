@@ -27,7 +27,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A usage of the break keyword.
