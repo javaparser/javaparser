@@ -25,7 +25,6 @@ import com.github.javaparser.*;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
