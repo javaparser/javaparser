@@ -435,7 +435,7 @@ public final class CompilationUnit extends Node {
         }
         if (packageDeclaration != null) {
             if (node == packageDeclaration) {
-                setPackageDeclaration((PackageDeclaration) null);
+                removePackageDeclaration();
                 return true;
             }
         }
@@ -446,6 +446,10 @@ public final class CompilationUnit extends Node {
             }
         }
         return super.remove(node);
+    }
+
+    public CompilationUnit removePackageDeclaration() {
+        return setPackageDeclaration((PackageDeclaration) null);
     }
 }
 

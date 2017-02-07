@@ -223,7 +223,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         }
         if (scope != null) {
             if (node == scope) {
-                setScope((Expression) null);
+                removeScope();
                 return true;
             }
         }
@@ -236,6 +236,10 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
             }
         }
         return super.remove(node);
+    }
+
+    public ObjectCreationExpr removeScope() {
+        return setScope((Expression) null);
     }
 }
 

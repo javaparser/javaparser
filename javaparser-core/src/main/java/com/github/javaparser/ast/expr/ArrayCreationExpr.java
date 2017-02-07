@@ -172,7 +172,7 @@ public final class ArrayCreationExpr extends Expression {
             return false;
         if (initializer != null) {
             if (node == initializer) {
-                setInitializer((ArrayInitializerExpr) null);
+                removeInitializer();
                 return true;
             }
         }
@@ -183,6 +183,10 @@ public final class ArrayCreationExpr extends Expression {
             }
         }
         return super.remove(node);
+    }
+
+    public ArrayCreationExpr removeInitializer() {
+        return setInitializer((ArrayInitializerExpr) null);
     }
 }
 

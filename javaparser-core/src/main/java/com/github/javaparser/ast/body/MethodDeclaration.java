@@ -323,7 +323,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             return false;
         if (body != null) {
             if (node == body) {
-                setBody((BlockStmt) null);
+                removeBody();
                 return true;
             }
         }
@@ -346,6 +346,10 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             }
         }
         return super.remove(node);
+    }
+
+    public MethodDeclaration removeBody() {
+        return setBody((BlockStmt) null);
     }
 }
 

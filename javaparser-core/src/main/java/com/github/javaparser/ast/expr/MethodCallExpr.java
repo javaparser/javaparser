@@ -171,7 +171,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         }
         if (scope != null) {
             if (node == scope) {
-                setScope((Expression) null);
+                removeScope();
                 return true;
             }
         }
@@ -184,6 +184,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
             }
         }
         return super.remove(node);
+    }
+
+    public MethodCallExpr removeScope() {
+        return setScope((Expression) null);
     }
 }
 

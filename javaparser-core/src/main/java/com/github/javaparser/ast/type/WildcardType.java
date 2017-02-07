@@ -130,17 +130,25 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
             return false;
         if (extendedTypes != null) {
             if (node == extendedTypes) {
-                setExtendedTypes((ReferenceType) null);
+                removeExtendedTypes();
                 return true;
             }
         }
         if (superTypes != null) {
             if (node == superTypes) {
-                setSuperTypes((ReferenceType) null);
+                removeSuperTypes();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public WildcardType removeExtendedTypes() {
+        return setExtendedTypes((ReferenceType) null);
+    }
+
+    public WildcardType removeSuperTypes() {
+        return setSuperTypes((ReferenceType) null);
     }
 }
 

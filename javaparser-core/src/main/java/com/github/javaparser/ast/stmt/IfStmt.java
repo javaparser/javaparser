@@ -125,11 +125,15 @@ public final class IfStmt extends Statement {
             return false;
         if (elseStmt != null) {
             if (node == elseStmt) {
-                setElseStmt((Statement) null);
+                removeElseStmt();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public IfStmt removeElseStmt() {
+        return setElseStmt((Statement) null);
     }
 }
 

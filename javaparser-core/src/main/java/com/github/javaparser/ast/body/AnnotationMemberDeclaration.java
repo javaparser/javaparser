@@ -114,12 +114,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
-    public Expression removeDefaultValue() {
-        Expression res = defaultValue;
-        if (res != null) {
-            setDefaultValue(null);
-        }
-        return res;
+    public AnnotationMemberDeclaration removeDefaultValue() {
+        return setDefaultValue((Expression) null);
     }
 
     /**
@@ -178,7 +174,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
             return false;
         if (defaultValue != null) {
             if (node == defaultValue) {
-                setDefaultValue((Expression) null);
+                removeDefaultValue();
                 return true;
             }
         }

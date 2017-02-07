@@ -118,8 +118,8 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return Arrays.asList(getAnnotations());
     }
 
-    public void removeDimension() {
-        setDimension(null);
+    public ArrayCreationLevel removeDimension() {
+        return setDimension((Expression) null);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         }
         if (dimension != null) {
             if (node == dimension) {
-                setDimension((Expression) null);
+                removeDimension();
                 return true;
             }
         }

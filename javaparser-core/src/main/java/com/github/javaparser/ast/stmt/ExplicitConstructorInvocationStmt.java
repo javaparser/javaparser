@@ -180,7 +180,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         }
         if (expression != null) {
             if (node == expression) {
-                setExpression((Expression) null);
+                removeExpression();
                 return true;
             }
         }
@@ -193,6 +193,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
             }
         }
         return super.remove(node);
+    }
+
+    public ExplicitConstructorInvocationStmt removeExpression() {
+        return setExpression((Expression) null);
     }
 }
 

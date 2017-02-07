@@ -524,11 +524,15 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
             return false;
         if (comment != null) {
             if (node == comment) {
-                setComment((Comment) null);
+                removeComment();
                 return true;
             }
         }
         return false;
+    }
+
+    public Node removeComment() {
+        return setComment((Comment) null);
     }
 }
 

@@ -92,11 +92,15 @@ public final class BreakStmt extends Statement {
             return false;
         if (label != null) {
             if (node == label) {
-                setLabel((SimpleName) null);
+                removeLabel();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public BreakStmt removeLabel() {
+        return setLabel((SimpleName) null);
     }
 }
 

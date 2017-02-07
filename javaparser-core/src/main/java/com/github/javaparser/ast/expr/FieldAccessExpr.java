@@ -174,7 +174,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
             return false;
         if (scope != null) {
             if (node == scope) {
-                setScope((Expression) null);
+                removeScope();
                 return true;
             }
         }
@@ -187,6 +187,10 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
             }
         }
         return super.remove(node);
+    }
+
+    public FieldAccessExpr removeScope() {
+        return setScope((Expression) null);
     }
 }
 

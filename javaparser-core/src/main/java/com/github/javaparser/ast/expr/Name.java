@@ -136,11 +136,15 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
             return false;
         if (qualifier != null) {
             if (node == qualifier) {
-                setQualifier((Name) null);
+                removeQualifier();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public Name removeQualifier() {
+        return setQualifier((Name) null);
     }
 }
 

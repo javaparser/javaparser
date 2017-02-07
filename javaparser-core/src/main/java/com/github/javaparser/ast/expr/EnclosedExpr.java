@@ -87,11 +87,15 @@ public final class EnclosedExpr extends Expression {
             return false;
         if (inner != null) {
             if (node == inner) {
-                setInner((Expression) null);
+                removeInner();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public EnclosedExpr removeInner() {
+        return setInner((Expression) null);
     }
 }
 

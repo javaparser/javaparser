@@ -96,11 +96,15 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
             return false;
         if (label != null) {
             if (node == label) {
-                setLabel((SimpleName) null);
+                removeLabel();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public ContinueStmt removeLabel() {
+        return setLabel((SimpleName) null);
     }
 }
 

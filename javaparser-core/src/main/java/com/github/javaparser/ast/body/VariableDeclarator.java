@@ -161,11 +161,15 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
             return false;
         if (initializer != null) {
             if (node == initializer) {
-                setInitializer((Expression) null);
+                removeInitializer();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public VariableDeclarator removeInitializer() {
+        return setInitializer((Expression) null);
     }
 }
 

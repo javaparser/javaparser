@@ -163,7 +163,7 @@ public final class TryStmt extends Statement {
         }
         if (finallyBlock != null) {
             if (node == finallyBlock) {
-                setFinallyBlock((BlockStmt) null);
+                removeFinallyBlock();
                 return true;
             }
         }
@@ -175,11 +175,19 @@ public final class TryStmt extends Statement {
         }
         if (tryBlock != null) {
             if (node == tryBlock) {
-                setTryBlock((BlockStmt) null);
+                removeTryBlock();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public TryStmt removeFinallyBlock() {
+        return setFinallyBlock((BlockStmt) null);
+    }
+
+    public TryStmt removeTryBlock() {
+        return setTryBlock((BlockStmt) null);
     }
 }
 

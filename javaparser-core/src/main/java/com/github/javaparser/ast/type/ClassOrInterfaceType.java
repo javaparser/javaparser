@@ -174,7 +174,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
             return false;
         if (scope != null) {
             if (node == scope) {
-                setScope((ClassOrInterfaceType) null);
+                removeScope();
                 return true;
             }
         }
@@ -187,6 +187,10 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
             }
         }
         return super.remove(node);
+    }
+
+    public ClassOrInterfaceType removeScope() {
+        return setScope((ClassOrInterfaceType) null);
     }
 }
 

@@ -129,7 +129,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
             return false;
         if (label != null) {
             if (node == label) {
-                setLabel((Expression) null);
+                removeLabel();
                 return true;
             }
         }
@@ -140,6 +140,10 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
             }
         }
         return super.remove(node);
+    }
+
+    public SwitchEntryStmt removeLabel() {
+        return setLabel((Expression) null);
     }
 }
 

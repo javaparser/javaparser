@@ -153,7 +153,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
             return false;
         if (compare != null) {
             if (node == compare) {
-                setCompare((Expression) null);
+                removeCompare();
                 return true;
             }
         }
@@ -170,6 +170,10 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
             }
         }
         return super.remove(node);
+    }
+
+    public ForStmt removeCompare() {
+        return setCompare((Expression) null);
     }
 }
 

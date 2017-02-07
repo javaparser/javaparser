@@ -110,11 +110,15 @@ public final class AssertStmt extends Statement {
             return false;
         if (message != null) {
             if (node == message) {
-                setMessage((Expression) null);
+                removeMessage();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public AssertStmt removeMessage() {
+        return setMessage((Expression) null);
     }
 }
 

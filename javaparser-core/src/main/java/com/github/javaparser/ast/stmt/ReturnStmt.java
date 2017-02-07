@@ -95,11 +95,15 @@ public final class ReturnStmt extends Statement {
             return false;
         if (expression != null) {
             if (node == expression) {
-                setExpression((Expression) null);
+                removeExpression();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public ReturnStmt removeExpression() {
+        return setExpression((Expression) null);
     }
 }
 

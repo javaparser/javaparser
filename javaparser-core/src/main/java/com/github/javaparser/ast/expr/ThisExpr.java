@@ -84,11 +84,15 @@ public final class ThisExpr extends Expression {
             return false;
         if (classExpr != null) {
             if (node == classExpr) {
-                setClassExpr((Expression) null);
+                removeClassExpr();
                 return true;
             }
         }
         return super.remove(node);
+    }
+
+    public ThisExpr removeClassExpr() {
+        return setClassExpr((Expression) null);
     }
 }
 

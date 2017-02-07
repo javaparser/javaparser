@@ -3,7 +3,7 @@ package com.github.javaparser.generator.core;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.generator.core.node.GetNodeListsGenerator;
 import com.github.javaparser.generator.core.node.PropertyGenerator;
-import com.github.javaparser.generator.core.node.RemoveNodeMethodGenerator;
+import com.github.javaparser.generator.core.node.RemoveMethodGenerator;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.generator.utils.GeneratorUtils;
 import com.github.javaparser.generator.utils.SourceRoot;
@@ -33,7 +33,7 @@ public class CoreGenerator {
 
         new GetNodeListsGenerator(javaParser, sourceRoot).generate();
         new PropertyGenerator(javaParser, sourceRoot).generate();
-        new RemoveNodeMethodGenerator(javaParser, sourceRoot).generate();
+        new RemoveMethodGenerator(javaParser, sourceRoot).generate();
 
         sourceRoot.saveAll();
     }
