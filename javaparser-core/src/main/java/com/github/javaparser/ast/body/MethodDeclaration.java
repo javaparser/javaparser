@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2017 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,7 +25,6 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -37,7 +36,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.*;
+
+import java.util.EnumSet;
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,19 +48,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithType<MethodDeclaration, Type>, NodeWithModifiers<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
-
-    private EnumSet<Modifier> modifiers;
-
-    private NodeList<TypeParameter> typeParameters;
-
-    private SimpleName name;
-
-    private NodeList<Parameter> parameters;
-
-    private NodeList<ReferenceType> thrownExceptions;
-
-    private BlockStmt body;
+public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
+        implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>,
+        NodeWithModifiers<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration,
+        NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
+        NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
 
     private boolean isDefault;
 
@@ -82,14 +76,8 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
-        super(range, annotations);
-        setModifiers(modifiers);
-        setTypeParameters(typeParameters);
+        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
         setType(type);
-        setName(name);
-        setParameters(parameters);
-        setThrownExceptions(thrownExceptions);
-        setBody(body);
         setDefault(isDefault);
     }
 
@@ -109,37 +97,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     /**
-     * Return the modifiers of this member declaration.
-     *
-     * @return modifiers
-     * @see Modifier
-     */
-    @Override
-    public EnumSet<Modifier> getModifiers() {
-        return modifiers;
-    }
-
-    @Override
-    public SimpleName getName() {
-        return name;
-    }
-
-    @Override
-    public NodeList<Parameter> getParameters() {
-        return parameters;
-    }
-
-    @Override
-    public NodeList<ReferenceType> getThrownExceptions() {
-        return thrownExceptions;
-    }
-
-    @Override
-    public NodeList<TypeParameter> getTypeParameters() {
-        return typeParameters;
-    }
-
-    /**
      * Sets the body
      *
      * @param body the body, can be null
@@ -147,53 +104,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
      */
     @Override
     public MethodDeclaration setBody(final BlockStmt body) {
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
-        this.body = body;
-        setAsParentNodeOf(body);
-        return this;
-    }
-
-    @Override
-    public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        assertNotNull(modifiers);
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = modifiers;
-        return this;
-    }
-
-    @Override
-    public MethodDeclaration setName(final SimpleName name) {
-        assertNotNull(name);
-        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
-        this.name = name;
-        setAsParentNodeOf(name);
-        return this;
-    }
-
-    @Override
-    public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
-        assertNotNull(parameters);
-        notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        if (this.parameters != null)
-            this.parameters.setParentNode(null);
-        this.parameters = parameters;
-        setAsParentNodeOf(parameters);
-        return this;
-    }
-
-    @Override
-    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        assertNotNull(thrownExceptions);
-        notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
-        if (this.thrownExceptions != null)
-            this.thrownExceptions.setParentNode(null);
-        this.thrownExceptions = thrownExceptions;
-        setAsParentNodeOf(thrownExceptions);
-        return this;
+        return (MethodDeclaration) super.setBody(body);
     }
 
     @Override
@@ -213,14 +124,28 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     @Override
+    public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
+        return (MethodDeclaration) super.setModifiers(modifiers);
+    }
+
+    @Override
+    public MethodDeclaration setName(final SimpleName name) {
+        return (MethodDeclaration) super.setName(name);
+    }
+
+    @Override
+    public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
+        return (MethodDeclaration) super.setParameters(parameters);
+    }
+
+    @Override
+    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+        return (MethodDeclaration) super.setThrownExceptions(thrownExceptions);
+    }
+
+    @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        assertNotNull(typeParameters);
-        notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
-            this.typeParameters.setParentNode(null);
-        this.typeParameters = typeParameters;
-        setAsParentNodeOf(typeParameters);
-        return this;
+        return (MethodDeclaration) super.setTypeParameters(typeParameters);
     }
 
     public boolean isDefault() {
@@ -231,16 +156,6 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         notifyPropertyChange(ObservableProperty.DEFAULT, this.isDefault, isDefault);
         this.isDefault = isDefault;
         return this;
-    }
-
-    @Override
-    public String getDeclarationAsString() {
-        return getDeclarationAsString(true, true, true);
-    }
-
-    @Override
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
-        return getDeclarationAsString(includingModifiers, includingThrows, true);
     }
 
     /**
@@ -297,24 +212,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
             }
         }
         sb.append(")");
-        if (includingThrows) {
-            boolean firstThrow = true;
-            for (ReferenceType thr : getThrownExceptions()) {
-                if (firstThrow) {
-                    firstThrow = false;
-                    sb.append(" throws ");
-                } else {
-                    sb.append(", ");
-                }
-                sb.append(thr.toString(prettyPrinterNoCommentsConfiguration));
-            }
-        }
+        sb.append(appendThrowsIfRequested(includingThrows));
         return sb.toString();
     }
 
-    @Override
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
-    }
 }
 

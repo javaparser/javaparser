@@ -21,7 +21,6 @@
 
 package com.github.javaparser.printer;
 
-import java.lang.reflect.Constructor;
 import java.util.function.Function;
 
 public class PrettyPrinterConfiguration {

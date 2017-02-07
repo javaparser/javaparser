@@ -7,7 +7,6 @@ import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.generator.utils.GeneratorUtils;
 import com.github.javaparser.generator.utils.SourceRoot;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
