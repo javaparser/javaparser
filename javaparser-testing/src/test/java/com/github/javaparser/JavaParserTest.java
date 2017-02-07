@@ -21,11 +21,9 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
 import java.util.Optional;

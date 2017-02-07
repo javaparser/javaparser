@@ -4,7 +4,6 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
 
