@@ -21,15 +21,22 @@
 
 package com.github.javaparser.ast.visitor;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class ModifierVisitorTest {
     @Test
-    public void x() {
+    public void makeSureParentListsCanBeModified() {
         NodeList<StringLiteralExpr> list = new NodeList<>();
         list.add(new StringLiteralExpr("t"));
         list.add(new StringLiteralExpr("a"));
@@ -62,5 +69,59 @@ public class ModifierVisitorTest {
         assertEquals("x", list.get(4).getValue());
         assertEquals("c", list.get(5).getValue());
         assertEquals(6, list.size());
+    }
+
+    @Test
+    public void binaryExprReturnsLeftExpressionWhenRightSideIsRemoved() {
+        Expression expression = parseExpression("1+2");
+        Visitable result = expression.accept(new ModifierVisitor<Void>() {
+            public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
+                if (integerLiteralExpr.getValue().equals("1")) {
+                    return null;
+                }
+                return integerLiteralExpr;
+            }
+        }, null);
+        assertEquals("2", result.toString());
+    }
+
+    @Test
+    public void binaryExprReturnsRightExpressionWhenLeftSideIsRemoved() {
+        final Expression expression = parseExpression("1+2");
+        final Visitable result = expression.accept(new ModifierVisitor<Void>() {
+            public Visitable visit(IntegerLiteralExpr integerLiteralExpr, Void arg) {
+                if (integerLiteralExpr.getValue().equals("2")) {
+                    return null;
+                }
+                return integerLiteralExpr;
+            }
+        }, null);
+        assertEquals("1", result.toString());
+    }
+
+    @Test
+    public void fieldDeclarationCantSurviveWithoutVariables() {
+        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseClassBodyDeclaration("int x=1;");
+
+        final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
+            public Visitable visit(VariableDeclarator x, Void arg) {
+                return null;
+            }
+        }, null);
+
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void variableDeclarationCantSurviveWithoutVariables() {
+        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseClassBodyDeclaration("void x() {int x=1;}");
+
+        final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
+            public Visitable visit(VariableDeclarator x, Void arg) {
+                return null;
+            }
+        }, null);
+
+        assertEquals("void x() {" + EOL + "}", result.toString());
     }
 }

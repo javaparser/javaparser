@@ -35,6 +35,7 @@ import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
@@ -45,14 +46,6 @@ import java.util.List;
  * @author Julio Vilmar Gesser
  */
 public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
-
-    private void removeNulls(final List<?> list) {
-        for (int i = list.size() - 1; i >= 0; i--) {
-            if (list.get(i) == null) {
-                list.remove(i);
-            }
-        }
-    }
 
     @Override
     public Visitable visit(final AnnotationDeclaration n, final A arg) {
@@ -214,15 +207,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
         n.setExtendedTypes(modifyList(n.getExtendedTypes(), arg));
         n.setImplementedTypes(modifyList(n.getImplementedTypes(), arg));
-        n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
+        n.setMembers(modifyList(n.getMembers(), arg));
         return n;
-    }
-
-    private <N extends Node> NodeList<N> modifyList(NodeList<N> list, A arg) {
-        if (list == null) {
-            return null;
-        }
-        return (NodeList<N>) list.accept(this, arg);
     }
 
     @Override
@@ -239,9 +225,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final CompilationUnit n, final A arg) {
         visitComment(n, arg);
-        if (n.getPackageDeclaration().isPresent()) {
-            n.setPackageDeclaration((PackageDeclaration) n.getPackageDeclaration().get().accept(this, arg));
-        }
+        n.getPackageDeclaration().ifPresent(p -> n.setPackageDeclaration((PackageDeclaration) p.accept(this, arg)));
         n.setImports((NodeList<ImportDeclaration>) n.getImports().accept(this, arg));
         n.setTypes((NodeList<TypeDeclaration<?>>) n.getTypes().accept(this, arg));
         return n;
@@ -795,7 +779,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final MethodReferenceExpr n, final A arg) {
         visitComment(n, arg);
-        n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        n.setTypeArguments(typeArguments);
         if (n.getScope() != null) {
             n.setScope((Expression) n.getScope().accept(this, arg));
         }
@@ -861,4 +846,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             n.setComment((Comment) n.getComment().get().accept(this, arg));
         }
     }
+
+    private <N extends Node> NodeList<N> modifyList(NodeList<N> list, A arg) {
+        return (NodeList<N>) list.accept(this, arg);
+    }
+
+    private <N extends Node> NodeList<N> modifyList(Optional<NodeList<N>> list, A arg) {
+        return list.map(ns -> modifyList(list, arg)).orElse(null);
+    }
+
 }
