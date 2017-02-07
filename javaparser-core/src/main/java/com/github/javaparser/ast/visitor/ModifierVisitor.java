@@ -152,8 +152,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Expression left = (Expression) n.getLeft().accept(this, arg);
         Expression right = (Expression) n.getRight().accept(this, arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (left == null || right == null)
-            return null;
+        if (left == null)
+            return right;
+        if (right == null)
+            return left;
         n.setLeft(left);
         n.setRight(right);
         n.setComment(comment);

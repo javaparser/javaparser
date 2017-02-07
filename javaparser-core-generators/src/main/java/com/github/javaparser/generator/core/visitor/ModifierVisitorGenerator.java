@@ -3,7 +3,10 @@ package com.github.javaparser.generator.core.visitor;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.BinaryExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.generator.utils.SourceRoot;
@@ -56,18 +59,23 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             }
         }
 
-        final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") return null;");
-        for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
-            if (property.isRequired() && property.isNode()) {
-                if (property.isNodeList()) {
+        if(node.is(BinaryExpr.class)){
+            body.addStatement("if (left == null) return right;");
+            body.addStatement("if (right == null) return left;");
+        }else {
+            final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") return null;");
+            for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+                if (property.isRequired() && property.isNode()) {
+                    if (property.isNodeList()) {
 
-                } else {
-                    collapseCheck.append(f("%s==null", property.getName()));
+                    } else {
+                        collapseCheck.append(f("%s==null", property.getName()));
+                    }
                 }
             }
-        }
-        if (collapseCheck.hasItems()) {
-            body.addStatement(collapseCheck.toString());
+            if (collapseCheck.hasItems()) {
+                body.addStatement(collapseCheck.toString());
+            }
         }
 
         for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
@@ -80,12 +88,5 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
 }
 
 // TODO FieldDeclaration.variables may not be empty
-// TODO BinaryExpr if left==null return right, etc.
 // TODO VariableDeclarationExpr.variables may not be empty
 
-
-/**
- * @Override public Visitable visit(final BinaryExpr n, final A arg) { visitComment(n, arg); final Expression left =
- * (Expression) n.getLeft().accept(this, arg); final Expression right = (Expression) n.getRight().accept(this, arg); if
- * (left == null) { return right; } if (right == null) { return left; } n.setLeft(left); n.setRight(right); return n; }
- */
