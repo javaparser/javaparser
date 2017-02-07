@@ -36,10 +36,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 
@@ -49,15 +49,13 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration>
-        implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>,
-        NodeWithModifiers<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration,
-        NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>,
-        NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
+public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithModifiers<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
 
     private boolean isDefault;
 
     private Type type;
+
+    private BlockStmt body;
 
     public MethodDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), false, new NodeList<>(), new NodeList<>(), new BlockStmt());
@@ -77,9 +75,10 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
-        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
+        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
         setDefault(isDefault);
+        setBody(body);
     }
 
     @Override
@@ -105,7 +104,12 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      */
     @Override
     public MethodDeclaration setBody(final BlockStmt body) {
-        return (MethodDeclaration) super.setBody(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
+        this.body = body;
+        setAsParentNodeOf(body);
+        return this;
     }
 
     @Override
@@ -126,27 +130,27 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     @Override
     public MethodDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        return (MethodDeclaration) super.setModifiers(modifiers);
+        return super.setModifiers(modifiers);
     }
 
     @Override
     public MethodDeclaration setName(final SimpleName name) {
-        return (MethodDeclaration) super.setName(name);
+        return super.setName(name);
     }
 
     @Override
     public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
-        return (MethodDeclaration) super.setParameters(parameters);
+        return super.setParameters(parameters);
     }
 
     @Override
     public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        return (MethodDeclaration) super.setThrownExceptions(thrownExceptions);
+        return super.setThrownExceptions(thrownExceptions);
     }
 
     @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        return (MethodDeclaration) super.setTypeParameters(typeParameters);
+        return super.setTypeParameters(typeParameters);
     }
 
     public boolean isDefault() {
@@ -217,5 +221,26 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return sb.toString();
     }
 
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (body != null) {
+            if (node == body) {
+                removeBody();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public MethodDeclaration removeBody() {
+        return setBody((BlockStmt) null);
+    }
 }
 

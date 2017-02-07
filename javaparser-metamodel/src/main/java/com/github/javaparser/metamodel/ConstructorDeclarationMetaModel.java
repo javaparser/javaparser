@@ -9,15 +9,5 @@ public class ConstructorDeclarationMetaModel extends BaseNodeMetaModel {
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;
-
-    public PropertyMetaModel modifiersPropertyMetaModel;
-
-    public PropertyMetaModel namePropertyMetaModel;
-
-    public PropertyMetaModel parametersPropertyMetaModel;
-
-    public PropertyMetaModel thrownExceptionsPropertyMetaModel;
-
-    public PropertyMetaModel typeParametersPropertyMetaModel;
 }
 

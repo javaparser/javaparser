@@ -184,10 +184,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(MethodDeclaration _n, Object _arg) {
         BlockStmt body = cloneNode(_n.getBody(), _arg);
+        Type type = cloneNode(_n.getType(), _arg);
         SimpleName name = cloneNode(_n.getName(), _arg);
         NodeList<Parameter> parameters = cloneList(_n.getParameters(), _arg);
         NodeList<ReferenceType> thrownExceptions = cloneList(_n.getThrownExceptions(), _arg);
-        Type type = cloneNode(_n.getType(), _arg);
         NodeList<TypeParameter> typeParameters = cloneList(_n.getTypeParameters(), _arg);
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);

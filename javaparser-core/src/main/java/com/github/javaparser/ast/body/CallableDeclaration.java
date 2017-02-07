@@ -27,14 +27,11 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.TypeParameter;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -42,41 +39,23 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public abstract class CallableDeclaration<T extends Node> extends BodyDeclaration<T> {
 
-    protected EnumSet<Modifier> modifiers;
+    private EnumSet<Modifier> modifiers;
 
-    protected NodeList<TypeParameter> typeParameters;
+    private NodeList<TypeParameter> typeParameters;
 
-    protected SimpleName name;
+    private SimpleName name;
 
-    protected NodeList<Parameter> parameters;
+    private NodeList<Parameter> parameters;
 
-    protected NodeList<ReferenceType> thrownExceptions;
+    private NodeList<ReferenceType> thrownExceptions;
 
-    protected BlockStmt body;
-
-    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
-        setBody(body);
-    }
-
-    /**
-     * Sets the body.
-     * Attention: a constructors body can not be null and must be tested before calling this method!
-     *
-     * @param body the body, can be null
-     */
-    public CallableDeclaration<T> setBody(final BlockStmt body) {
-        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
-        this.body = body;
-        setAsParentNodeOf(body);
-        return this;
     }
 
     /**
@@ -89,67 +68,67 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return modifiers;
     }
 
-    public CallableDeclaration<T> setModifiers(EnumSet<Modifier> modifiers) {
+    public T setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
-        return this;
+        return (T) this;
     }
 
     public SimpleName getName() {
         return name;
     }
 
-    public CallableDeclaration<T> setName(final SimpleName name) {
+    public T setName(final SimpleName name) {
         assertNotNull(name);
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
-        return this;
+        return (T) this;
     }
 
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
 
-    public CallableDeclaration<T> setParameters(final NodeList<Parameter> parameters) {
+    public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         if (this.parameters != null)
             this.parameters.setParentNode(null);
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
-        return this;
+        return (T) this;
     }
 
     public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
-    public CallableDeclaration<T> setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public T setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
         if (this.thrownExceptions != null)
             this.thrownExceptions.setParentNode(null);
         this.thrownExceptions = thrownExceptions;
         setAsParentNodeOf(thrownExceptions);
-        return this;
+        return (T) this;
     }
 
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
-    public CallableDeclaration<T> setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
             this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
-        return this;
+        return (T) this;
     }
 
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows) {
@@ -184,4 +163,29 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
     }
 
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) == node) {
+                parameters.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < thrownExceptions.size(); i++) {
+            if (thrownExceptions.get(i) == node) {
+                thrownExceptions.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < typeParameters.size(); i++) {
+            if (typeParameters.get(i) == node) {
+                typeParameters.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
 }
+
