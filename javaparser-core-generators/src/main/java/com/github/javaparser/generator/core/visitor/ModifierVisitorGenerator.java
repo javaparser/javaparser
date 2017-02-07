@@ -33,36 +33,59 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         String s2 = "n.getPackageDeclaration().ifPresent(p -> n.setPackageDeclaration((PackageDeclaration) p.accept(this, arg)));";
 
 
-        for (PropertyMetaModel field : node.getAllPropertyMetaModels()) {
-            final String getter = field.getGetterMethodName() + "()";
-            if (field.getNodeReference().isPresent()) {
-                if (field.isNodeList()) {
-                    body.addStatement(f("NodeList<%s> %s = modifyList(n.%s().orElse(null), arg);", field.getTypeNameGenerified(), field.getName(), getter));
+        for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+            if (property.isNode()) {
+                if (property.isNodeList()) {
+                    body.addStatement(f("NodeList<%s> %s = modifyList(n.%s(), arg);",
+                            property.getTypeNameGenerified(),
+                            property.getName(),
+                            property.getGetterMethodName()));
+                } else if (property.isOptional()) {
+                    body.addStatement(f("%s %s = n.%s().map(s -> (%s) s.accept(this, arg)).orElse(null);",
+                            property.getTypeNameGenerified(),
+                            property.getName(),
+                            property.getGetterMethodName(),
+                            property.getTypeNameGenerified()));
                 } else {
-                    body.addStatement(f("%s %s = (Expression) n.getTarget().accept(this, arg);", field.getTypeNameGenerified(), field.getName(), getter));
+                    body.addStatement(f("%s %s = (%s) n.%s().accept(this, arg);",
+                            property.getTypeNameGenerified(),
+                            property.getName(),
+                            property.getTypeNameGenerified(),
+                            property.getGetterMethodName()));
                 }
             }
         }
 
-        SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder(f("%s r = new %s(", node.getTypeNameGenerified(), node.getTypeNameGenerified()), ",", ");");
-        builder.append("_n.getRange().orElse(null)");
-        for (PropertyMetaModel field : node.getConstructorParameters()) {
-            if (field.getName().equals("comment")) {
-                continue;
-            }
-            if (field.getNodeReference().isPresent()) {
-                builder.append(field.getName());
-            } else {
-                builder.append(f("_n.%s()", field.getGetterMethodName()));
+        final SeparatedItemStringBuilder collapseCheck = new SeparatedItemStringBuilder("if(", "||", ") return null;");
+        for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+            if (property.isRequired() && property.isNode()) {
+                if (property.isNodeList()) {
+
+                } else {
+                    collapseCheck.append(f("%s==null", property.getName()));
+                }
             }
         }
+        if (collapseCheck.hasItems()) {
+            body.addStatement(collapseCheck.toString());
+        }
 
-        body.addStatement(builder.toString());
-        body.addStatement("r.setComment(comment);");
-        body.addStatement("return r;");
+        for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
+            if (property.isNode()) {
+                body.addStatement(f("n.%s(%s);", property.getSetterMethodName(), property.getName()));
+            }
+        }
+        body.addStatement("return n;");
     }
 }
 
 // TODO FieldDeclaration.variables may not be empty
 // TODO BinaryExpr if left==null return right, etc.
 // TODO VariableDeclarationExpr.variables may not be empty
+
+
+/**
+ * @Override public Visitable visit(final BinaryExpr n, final A arg) { visitComment(n, arg); final Expression left =
+ * (Expression) n.getLeft().accept(this, arg); final Expression right = (Expression) n.getRight().accept(this, arg); if
+ * (left == null) { return right; } if (right == null) { return left; } n.setLeft(left); n.setRight(right); return n; }
+ */
