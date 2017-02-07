@@ -11,6 +11,7 @@ import com.github.javaparser.generator.VisitorGenerator;
 import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import static com.github.javaparser.generator.utils.GeneratorUtils.f;
@@ -84,6 +85,11 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             }
         }
         body.addStatement("return n;");
+    }
+
+    public static void main(String[] args) {
+        JavaParserMetaModel.getNodeMetaModels().forEach(n -> n.getDeclaredPropertyMetaModels().stream().filter(PropertyMetaModel::isNodeList)
+                .forEach(p -> System.out.println(p.getContainingNodeMetaModel().getTypeName()+"." +p.getName())));
     }
 }
 
