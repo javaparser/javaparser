@@ -139,5 +139,18 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         res.add(members);
         return res;
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < members.size(); i++) {
+            if (members.get(i) == node) {
+                members.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
 }
 

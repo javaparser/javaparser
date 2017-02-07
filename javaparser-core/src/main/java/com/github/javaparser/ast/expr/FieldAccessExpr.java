@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Access of a field of an object.
@@ -165,6 +166,27 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeArguments().orElse(null));
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (scope != null) {
+            if (node == scope) {
+                setScope((Expression) null);
+                return true;
+            }
+        }
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
+                    return true;
+                }
+            }
+        }
+        return super.remove(node);
     }
 }
 

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
+import com.github.javaparser.ast.Node;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -70,6 +71,13 @@ public final class UnknownType extends Type {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

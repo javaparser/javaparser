@@ -77,5 +77,18 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(annotations);
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
 }
 

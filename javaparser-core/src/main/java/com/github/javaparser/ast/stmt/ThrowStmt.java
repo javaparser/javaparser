@@ -29,6 +29,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Usage of the throw statement.
@@ -78,6 +79,13 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
 
 /**
  * A wildcard type argument.
@@ -121,6 +122,25 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (extendedTypes != null) {
+            if (node == extendedTypes) {
+                setExtendedTypes((ReferenceType) null);
+                return true;
+            }
+        }
+        if (superTypes != null) {
+            if (node == superTypes) {
+                setSuperTypes((ReferenceType) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

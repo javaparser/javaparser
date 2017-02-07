@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A constructor call. <br/>In <code>new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};</code>
@@ -200,6 +201,41 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnonymousClassBody().orElse(null), getArguments(), getTypeArguments().orElse(null));
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (anonymousClassBody != null) {
+            for (int i = 0; i < anonymousClassBody.size(); i++) {
+                if (anonymousClassBody.get(i) == node) {
+                    anonymousClassBody.remove(i);
+                    return true;
+                }
+            }
+        }
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
+                return true;
+            }
+        }
+        if (scope != null) {
+            if (node == scope) {
+                setScope((Expression) null);
+                return true;
+            }
+        }
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
+                    return true;
+                }
+            }
+        }
+        return super.remove(node);
     }
 }
 

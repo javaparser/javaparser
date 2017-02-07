@@ -129,5 +129,18 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         setAsParentNodeOf(qualifier);
         return this;
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (qualifier != null) {
+            if (node == qualifier) {
+                setQualifier((Name) null);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
 }
 

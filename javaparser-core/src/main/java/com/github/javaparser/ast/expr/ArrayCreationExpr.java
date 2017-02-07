@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -163,6 +164,25 @@ public final class ArrayCreationExpr extends Expression {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getLevels());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (initializer != null) {
+            if (node == initializer) {
+                setInitializer((ArrayInitializerExpr) null);
+                return true;
+            }
+        }
+        for (int i = 0; i < levels.size(); i++) {
+            if (levels.get(i) == node) {
+                levels.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

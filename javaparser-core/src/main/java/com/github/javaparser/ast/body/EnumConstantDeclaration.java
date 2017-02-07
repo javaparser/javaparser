@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
@@ -126,6 +127,25 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getArguments(), getClassBody(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < classBody.size(); i++) {
+            if (classBody.get(i) == node) {
+                classBody.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

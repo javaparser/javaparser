@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A usage of the keyword "assert"
@@ -101,6 +102,19 @@ public final class AssertStmt extends Statement {
         this.message = message;
         setAsParentNodeOf(message);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (message != null) {
+            if (node == message) {
+                setMessage((Expression) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

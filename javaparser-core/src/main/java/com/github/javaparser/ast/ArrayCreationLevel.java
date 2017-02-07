@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -119,6 +120,25 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
 
     public void removeDimension() {
         setDimension(null);
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        if (dimension != null) {
+            if (node == dimension) {
+                setDimension((Expression) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -116,6 +117,19 @@ public final class IfStmt extends Statement {
         this.thenStmt = thenStmt;
         setAsParentNodeOf(thenStmt);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (elseStmt != null) {
+            if (node == elseStmt) {
+                setElseStmt((Statement) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

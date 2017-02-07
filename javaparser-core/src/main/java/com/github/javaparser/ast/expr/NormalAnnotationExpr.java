@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
@@ -99,6 +100,19 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getPairs());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < pairs.size(); i++) {
+            if (pairs.get(i) == node) {
+                pairs.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

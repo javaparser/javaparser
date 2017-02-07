@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import com.github.javaparser.ast.Node;
 
 /**
  * An annotation type declaration.<br/><code>@interface X { ... }</code>
@@ -69,6 +70,13 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getMembers(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

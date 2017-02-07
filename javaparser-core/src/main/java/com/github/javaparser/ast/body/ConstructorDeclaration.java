@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
@@ -248,6 +249,31 @@ public final class ConstructorDeclaration extends BodyDeclaration<ConstructorDec
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) == node) {
+                parameters.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < thrownExceptions.size(); i++) {
+            if (thrownExceptions.get(i) == node) {
+                thrownExceptions.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < typeParameters.size(); i++) {
+            if (typeParameters.get(i) == node) {
+                typeParameters.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

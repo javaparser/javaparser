@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -165,6 +166,33 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getArguments(), getTypeArguments().orElse(null));
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
+                return true;
+            }
+        }
+        if (expression != null) {
+            if (node == expression) {
+                setExpression((Expression) null);
+                return true;
+            }
+        }
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
+                    return true;
+                }
+            }
+        }
+        return super.remove(node);
     }
 }
 

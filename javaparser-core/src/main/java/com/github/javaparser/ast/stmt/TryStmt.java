@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * The try statement.
@@ -148,6 +149,37 @@ public final class TryStmt extends Statement {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getCatchClauses(), getResources());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < catchClauses.size(); i++) {
+            if (catchClauses.get(i) == node) {
+                catchClauses.remove(i);
+                return true;
+            }
+        }
+        if (finallyBlock != null) {
+            if (node == finallyBlock) {
+                setFinallyBlock((BlockStmt) null);
+                return true;
+            }
+        }
+        for (int i = 0; i < resources.size(); i++) {
+            if (resources.get(i) == node) {
+                resources.remove(i);
+                return true;
+            }
+        }
+        if (tryBlock != null) {
+            if (node == tryBlock) {
+                setTryBlock((BlockStmt) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

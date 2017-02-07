@@ -38,6 +38,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;}
@@ -314,6 +315,37 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (body != null) {
+            if (node == body) {
+                setBody((BlockStmt) null);
+                return true;
+            }
+        }
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) == node) {
+                parameters.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < thrownExceptions.size(); i++) {
+            if (thrownExceptions.get(i) == node) {
+                thrownExceptions.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < typeParameters.size(); i++) {
+            if (typeParameters.get(i) == node) {
+                typeParameters.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

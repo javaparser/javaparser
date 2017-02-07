@@ -27,6 +27,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
 
 /**
  * A usage of the break keyword.
@@ -83,6 +84,19 @@ public final class BreakStmt extends Statement {
         this.label = label;
         setAsParentNodeOf(label);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (label != null) {
+            if (node == label) {
+                setLabel((SimpleName) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

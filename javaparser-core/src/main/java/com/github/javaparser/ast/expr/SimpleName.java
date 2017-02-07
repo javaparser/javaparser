@@ -75,5 +75,12 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         this.identifier = identifier;
         return this;
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
 }
 

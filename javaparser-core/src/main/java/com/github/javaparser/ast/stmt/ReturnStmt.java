@@ -28,6 +28,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
 
 /**
  * The return statement, with an optional expression to return.
@@ -86,6 +87,19 @@ public final class ReturnStmt extends Statement {
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (expression != null) {
+            if (node == expression) {
+                setExpression((Expression) null);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

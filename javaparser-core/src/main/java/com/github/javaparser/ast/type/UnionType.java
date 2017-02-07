@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
@@ -87,6 +88,19 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getElements(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

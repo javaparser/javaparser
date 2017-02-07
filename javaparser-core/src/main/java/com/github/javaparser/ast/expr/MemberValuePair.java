@@ -99,5 +99,12 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         setAsParentNodeOf(value);
         return this;
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
 }
 

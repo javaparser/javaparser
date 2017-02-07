@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A declaration of variables.
@@ -159,6 +160,25 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations(), getVariables());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 
