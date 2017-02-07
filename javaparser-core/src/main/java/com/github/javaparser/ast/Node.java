@@ -519,38 +519,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         return Collections.emptyList();
     }
 
-    private boolean isOptionalAssignableFrom(Type type, Class<?> clazz) {
-        return internalGetOptionalParameterType(type).isPresent();
-    }
-
-    private Class getOptionalParameterType(Type type) {
-        Optional<Class> res = internalGetOptionalParameterType(type);
-        if (res.isPresent()) {
-            return res.get();
-        } else {
-            throw new IllegalArgumentException("This type is not an Optional " + type);
-        }
-    }
-
-    private Optional<Class> internalGetOptionalParameterType(Type type) {
-        if (!(type instanceof ParameterizedType)) {
-            return Optional.empty();
-        }
-        ParameterizedType parameterizedType = (ParameterizedType) type;
-        if (!(parameterizedType.getRawType() instanceof Class)) {
-            return Optional.empty();
-        }
-        Class rawType = (Class) parameterizedType.getRawType();
-        if (!(rawType.equals(Optional.class))) {
-            return Optional.empty();
-        }
-        if (!(parameterizedType.getActualTypeArguments()[0] instanceof Class)) {
-            return Optional.empty();
-        }
-        Class parameterType = (Class) parameterizedType.getActualTypeArguments()[0];
-        return Optional.of(parameterType);
-    }
-
     public boolean remove(Node node) {
         if (node == null)
             return false;
