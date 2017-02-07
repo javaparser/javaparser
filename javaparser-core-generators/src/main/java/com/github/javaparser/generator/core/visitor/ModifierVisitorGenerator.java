@@ -68,7 +68,9 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
             for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
                 if (property.isRequired() && property.isNode()) {
                     if (property.isNodeList()) {
-
+                        if(property.isNonEmpty()){
+                            collapseCheck.append(f("%s.isEmpty()", property.getName()));
+                        }
                     } else {
                         collapseCheck.append(f("%s==null", property.getName()));
                     }

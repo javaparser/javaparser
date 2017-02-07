@@ -103,7 +103,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         ArrayInitializerExpr initializer = n.getInitializer().map( s -> (ArrayInitializerExpr) s.accept(this, arg)).orElse(null);
         NodeList<ArrayCreationLevel> levels = modifyList(n.getLevels(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (elementType == null)
+        if (elementType == null || levels.isEmpty())
             return null;
         n.setElementType(elementType);
         n.setInitializer(initializer);
@@ -452,6 +452,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<VariableDeclarator> variables = modifyList(n.getVariables(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (variables.isEmpty())
+            return null;
         n.setVariables(variables);
         n.setAnnotations(annotations);
         n.setComment(comment);
@@ -761,6 +763,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<ReferenceType> elements = modifyList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (elements.isEmpty())
+            return null;
         n.setElements(elements);
         n.setAnnotations(annotations);
         n.setComment(comment);
@@ -772,6 +776,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<ReferenceType> elements = modifyList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (elements.isEmpty())
+            return null;
         n.setElements(elements);
         n.setAnnotations(annotations);
         n.setComment(comment);
@@ -939,6 +945,8 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         NodeList<VariableDeclarator> variables = modifyList(n.getVariables(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (variables.isEmpty())
+            return null;
         n.setAnnotations(annotations);
         n.setVariables(variables);
         n.setComment(comment);

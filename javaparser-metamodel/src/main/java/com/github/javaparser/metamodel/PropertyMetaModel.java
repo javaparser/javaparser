@@ -4,7 +4,6 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
 import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
 import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
 
@@ -130,6 +129,13 @@ public class PropertyMetaModel {
      */
     public boolean hasWildcard() {
         return hasWildcard;
+    }
+
+    /**
+     * @return whether this property is not a list or set.
+     */
+    public boolean isSingular() {
+        return !(isNodeList || isEnumSet);
     }
 
     @Override
