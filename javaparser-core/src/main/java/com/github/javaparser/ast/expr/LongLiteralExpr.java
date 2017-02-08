@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * All ways to specify a long literal.
@@ -66,6 +67,11 @@ public class LongLiteralExpr extends StringLiteralExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public LongLiteralExpr clone() {
+        return (LongLiteralExpr) accept(new CloneVisitor(), null);
     }
 }
 

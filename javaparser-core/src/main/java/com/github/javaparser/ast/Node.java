@@ -258,11 +258,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     }
 
     @Override
-    public Node clone() {
-        return (Node) accept(new CloneVisitor(), null);
-    }
-
-    @Override
     public Optional<Node> getParentNode() {
         return Optional.ofNullable(parentNode);
     }
@@ -533,6 +528,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
 
     public Node removeComment() {
         return setComment((Comment) null);
+    }
+
+    @Override
+    public Node clone() {
+        return (Node) accept(new CloneVisitor(), null);
     }
 }
 

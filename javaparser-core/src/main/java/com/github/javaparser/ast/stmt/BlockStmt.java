@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Statements in between { and }.
@@ -95,6 +96,11 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public BlockStmt clone() {
+        return (BlockStmt) accept(new CloneVisitor(), null);
     }
 }
 

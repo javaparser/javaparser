@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -187,6 +188,11 @@ public final class ArrayCreationExpr extends Expression {
 
     public ArrayCreationExpr removeInitializer() {
         return setInitializer((ArrayInitializerExpr) null);
+    }
+
+    @Override
+    public ArrayCreationExpr clone() {
+        return (ArrayCreationExpr) accept(new CloneVisitor(), null);
     }
 }
 

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * The try statement.
@@ -188,6 +189,11 @@ public final class TryStmt extends Statement {
 
     public TryStmt removeTryBlock() {
         return setTryBlock((BlockStmt) null);
+    }
+
+    @Override
+    public TryStmt clone() {
+        return (TryStmt) accept(new CloneVisitor(), null);
     }
 }
 

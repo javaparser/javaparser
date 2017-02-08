@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A typecast. The (long) in <code>(long)15</code>
@@ -105,6 +106,11 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public CastExpr clone() {
+        return (CastExpr) accept(new CloneVisitor(), null);
     }
 }
 

@@ -40,6 +40,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * <p>
@@ -450,6 +451,11 @@ public final class CompilationUnit extends Node {
 
     public CompilationUnit removePackageDeclaration() {
         return setPackageDeclaration((PackageDeclaration) null);
+    }
+
+    @Override
+    public CompilationUnit clone() {
+        return (CompilationUnit) accept(new CloneVisitor(), null);
     }
 }
 

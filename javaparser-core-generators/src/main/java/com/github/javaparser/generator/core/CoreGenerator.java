@@ -1,6 +1,7 @@
 package com.github.javaparser.generator.core;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.generator.core.node.CloneGenerator;
 import com.github.javaparser.generator.core.node.GetNodeListsGenerator;
 import com.github.javaparser.generator.core.node.PropertyGenerator;
 import com.github.javaparser.generator.core.node.RemoveMethodGenerator;
@@ -34,6 +35,7 @@ public class CoreGenerator {
         new GetNodeListsGenerator(javaParser, sourceRoot).generate();
         new PropertyGenerator(javaParser, sourceRoot).generate();
         new RemoveMethodGenerator(javaParser, sourceRoot).generate();
+        new CloneGenerator(javaParser, sourceRoot).generate();
 
         sourceRoot.saveAll();
     }

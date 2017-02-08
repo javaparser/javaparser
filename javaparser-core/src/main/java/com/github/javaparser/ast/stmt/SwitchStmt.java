@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A switch statement.
@@ -130,6 +131,11 @@ public final class SwitchStmt extends Statement {
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public SwitchStmt clone() {
+        return (SwitchStmt) accept(new CloneVisitor(), null);
     }
 }
 

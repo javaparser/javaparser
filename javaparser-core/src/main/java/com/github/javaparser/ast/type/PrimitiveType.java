@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A primitive type.
@@ -166,6 +167,11 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public PrimitiveType clone() {
+        return (PrimitiveType) accept(new CloneVisitor(), null);
     }
 }
 

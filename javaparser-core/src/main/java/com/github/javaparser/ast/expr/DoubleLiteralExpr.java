@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A float or a double constant. This value is stored exactly as found in the source.
@@ -64,6 +65,11 @@ public final class DoubleLiteralExpr extends StringLiteralExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public DoubleLiteralExpr clone() {
+        return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
     }
 }
 

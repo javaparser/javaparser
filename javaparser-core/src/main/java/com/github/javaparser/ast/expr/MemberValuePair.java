@@ -28,6 +28,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A value for a member of an annotation.
@@ -105,6 +106,11 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public MemberValuePair clone() {
+        return (MemberValuePair) accept(new CloneVisitor(), null);
     }
 }
 

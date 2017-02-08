@@ -27,6 +27,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -128,6 +129,11 @@ public final class AssignExpr extends Expression {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public AssignExpr clone() {
+        return (AssignExpr) accept(new CloneVisitor(), null);
     }
 }
 

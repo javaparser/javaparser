@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
@@ -101,6 +102,11 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public UnionType clone() {
+        return (UnionType) accept(new CloneVisitor(), null);
     }
 }
 
