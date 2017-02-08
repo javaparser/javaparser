@@ -42,6 +42,7 @@ import java.util.*;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static
@@ -192,6 +193,19 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getVariables(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < variables.size(); i++) {
+            if (variables.get(i) == node) {
+                variables.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

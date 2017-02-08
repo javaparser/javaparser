@@ -28,26 +28,26 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
+import java.util.Arrays;
 import java.util.EnumSet;
-
+import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
  *
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
-        implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>,
-        NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration,
-        NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>,
-        NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
+public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
+
+    private BlockStmt body;
 
     public ConstructorDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
@@ -63,7 +63,8 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
-        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
+        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+        setBody(body);
     }
 
     @Override
@@ -90,32 +91,37 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     @Override
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
-        return (ConstructorDeclaration) super.setBody(body);
+        notifyPropertyChange(ObservableProperty.BODY, this.body, body);
+        if (this.body != null)
+            this.body.setParentNode(null);
+        this.body = body;
+        setAsParentNodeOf(body);
+        return this;
     }
 
     @Override
     public ConstructorDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
-        return (ConstructorDeclaration) super.setModifiers(modifiers);
+        return super.setModifiers(modifiers);
     }
 
     @Override
     public ConstructorDeclaration setName(final SimpleName name) {
-        return (ConstructorDeclaration) super.setName(name);
+        return super.setName(name);
     }
 
     @Override
     public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
-        return (ConstructorDeclaration) super.setParameters(parameters);
+        return super.setParameters(parameters);
     }
 
     @Override
     public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
-        return (ConstructorDeclaration) super.setThrownExceptions(thrownExceptions);
+        return super.setThrownExceptions(thrownExceptions);
     }
 
     @Override
     public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
-        return (ConstructorDeclaration) super.setTypeParameters(typeParameters);
+        return super.setTypeParameters(typeParameters);
     }
 
     /**
@@ -152,5 +158,16 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         return sb.toString();
     }
 
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
 }
 

@@ -27,6 +27,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -80,6 +81,13 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         this.name = name;
         setAsParentNodeOf(name);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

@@ -195,5 +195,18 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
 }
 

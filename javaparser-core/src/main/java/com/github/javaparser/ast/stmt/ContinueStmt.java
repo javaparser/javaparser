@@ -28,6 +28,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
 
 /**
  * A continue statement with an optional label;
@@ -87,6 +88,23 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         this.label = label;
         setAsParentNodeOf(label);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (label != null) {
+            if (node == label) {
+                removeLabel();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public ContinueStmt removeLabel() {
+        return setLabel((SimpleName) null);
     }
 }
 

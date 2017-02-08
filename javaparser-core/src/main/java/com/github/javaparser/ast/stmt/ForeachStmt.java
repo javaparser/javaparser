@@ -30,6 +30,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A for-each statement.
@@ -117,6 +118,13 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         this.variable = variable;
         setAsParentNodeOf(variable);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

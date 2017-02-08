@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
+import com.github.javaparser.ast.Node;
 
 /**
  * A loose ";" inside a body.<br/><code>class X { ; }</code>
@@ -60,6 +61,13 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

@@ -120,5 +120,12 @@ public abstract class Comment extends Node {
             return false;
         }
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
 }
 

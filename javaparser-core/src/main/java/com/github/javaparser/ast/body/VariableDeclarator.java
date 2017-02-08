@@ -154,5 +154,22 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         setAsParentNodeOf(type);
         return this;
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (initializer != null) {
+            if (node == initializer) {
+                removeInitializer();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public VariableDeclarator removeInitializer() {
+        return setInitializer((Expression) null);
+    }
 }
 

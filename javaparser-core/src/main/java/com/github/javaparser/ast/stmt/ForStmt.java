@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A classic for statement.
@@ -144,6 +145,35 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getInitialization(), getUpdate());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (compare != null) {
+            if (node == compare) {
+                removeCompare();
+                return true;
+            }
+        }
+        for (int i = 0; i < initialization.size(); i++) {
+            if (initialization.get(i) == node) {
+                initialization.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < update.size(); i++) {
+            if (update.get(i) == node) {
+                update.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public ForStmt removeCompare() {
+        return setCompare((Expression) null);
     }
 }
 

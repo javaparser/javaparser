@@ -51,7 +51,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     private List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
-        this((Node)null);
+        this((Node) null);
     }
 
     public NodeList(Node parent) {
@@ -429,4 +429,17 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return this.observers.contains(observer);
     }
 
+    /**
+     * Replaces the first node that is equal to "old" with "replacement".
+     *
+     * @return true if a replacement has happened.
+     */
+    public boolean replace(N old, N replacement) {
+        int i = indexOf(old);
+        if (i == -1) {
+            return false;
+        }
+        set(i, replacement);
+        return true;
+    }
 }

@@ -513,10 +513,10 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "isDefault", n.isDefault(), arg + 1);
         outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
         n.getBody().ifPresent( c -> c.accept(this, arg + 1));
+        n.getType().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getParameters().accept(this, arg + 1);
         n.getThrownExceptions().accept(this, arg + 1);
-        n.getType().accept(this, arg + 1);
         n.getTypeParameters().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
         n.getComment().ifPresent( c -> c.accept(this, arg + 1));

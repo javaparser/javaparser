@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.Node;
 
 /**
  * A base class for all literal expressions.
@@ -31,6 +32,13 @@ public abstract class LiteralExpr extends Expression {
 
     protected LiteralExpr(Range range) {
         super(range);
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A primitive type.
@@ -158,6 +159,13 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

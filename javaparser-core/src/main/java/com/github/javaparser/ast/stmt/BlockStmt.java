@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Statements in between { and }.
@@ -81,6 +82,19 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getStatements());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

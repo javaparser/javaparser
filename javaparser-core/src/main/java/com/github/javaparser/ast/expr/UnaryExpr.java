@@ -27,6 +27,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -120,6 +121,13 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 
