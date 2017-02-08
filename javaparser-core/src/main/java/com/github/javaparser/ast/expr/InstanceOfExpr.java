@@ -30,6 +30,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Usage of the instanceof operator.
@@ -98,6 +99,13 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         this.type = type;
         setAsParentNodeOf(type);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

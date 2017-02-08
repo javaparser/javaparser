@@ -24,6 +24,7 @@ package com.github.javaparser.ast;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -35,6 +36,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
 
 public class NodeListTest {
@@ -197,5 +199,18 @@ public class NodeListTest {
 
         cd.getMembers().removeIf(m -> ((FieldDeclaration) m).getVariable(0).getName().getIdentifier().length() > 3);
         assertEquals(Arrays.asList("'int longName;' REMOVAL in list at 1"), changes);
+    }
+
+    @Test
+    public void replace() {
+        final NodeList<Name> list = nodeList(new Name("a"), new Name("b"), new Name("c"));
+
+        final boolean replaced = list.replace(new Name("b"), new Name("z"));
+
+        assertEquals(true, replaced);
+        assertEquals(3, list.size());
+        assertEquals("a", list.get(0).asString());
+        assertEquals("z", list.get(1).asString());
+        assertEquals("c", list.get(2).asString());
     }
 }

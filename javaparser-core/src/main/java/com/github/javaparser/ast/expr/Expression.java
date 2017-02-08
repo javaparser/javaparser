@@ -33,5 +33,12 @@ public abstract class Expression extends Node {
     public Expression(Range range) {
         super(range);
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
 }
 

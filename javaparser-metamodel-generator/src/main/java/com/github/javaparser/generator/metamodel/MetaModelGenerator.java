@@ -32,6 +32,7 @@ public class MetaModelGenerator {
         add(Node.class);
 
         add(BodyDeclaration.class);
+        add(CallableDeclaration.class);
         add(Statement.class);
         add(Expression.class);
         add(Type.class);

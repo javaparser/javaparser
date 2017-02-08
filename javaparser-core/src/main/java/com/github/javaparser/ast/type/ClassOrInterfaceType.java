@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
@@ -165,6 +166,31 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeArguments().orElse(null), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (scope != null) {
+            if (node == scope) {
+                removeScope();
+                return true;
+            }
+        }
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
+                    return true;
+                }
+            }
+        }
+        return super.remove(node);
+    }
+
+    public ClassOrInterfaceType removeScope() {
+        return setScope((ClassOrInterfaceType) null);
     }
 }
 

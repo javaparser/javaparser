@@ -26,6 +26,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * Array brackets [] being used to get a value from an array.
@@ -90,6 +91,13 @@ public final class ArrayAccessExpr extends Expression {
         this.name = name;
         setAsParentNodeOf(name);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

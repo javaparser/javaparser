@@ -33,6 +33,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A lambda expression. The parameters are on the left side of the ->.
@@ -122,6 +123,19 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getParameters());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < parameters.size(); i++) {
+            if (parameters.get(i) == node) {
+                parameters.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

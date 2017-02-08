@@ -339,6 +339,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!objEquals(n1.isDefault(), n2.isDefault()))
             return false;
+        if (!nodeEquals(n1.getType(), n2.getType()))
+            return false;
         if (!objEquals(n1.getModifiers(), n2.getModifiers()))
             return false;
         if (!nodeEquals(n1.getName(), n2.getName()))
@@ -346,8 +348,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodesEquals(n1.getParameters(), n2.getParameters()))
             return false;
         if (!nodesEquals(n1.getThrownExceptions(), n2.getThrownExceptions()))
-            return false;
-        if (!nodeEquals(n1.getType(), n2.getType()))
             return false;
         if (!nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()))
             return false;

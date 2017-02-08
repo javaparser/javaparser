@@ -111,5 +111,12 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         setAsParentNodeOf(body);
         return this;
     }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
 }
 

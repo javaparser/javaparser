@@ -1001,6 +1001,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -1012,11 +1017,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getThrownExceptions().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getType().accept(this, arg);
             if (result != null)
                 return result;
         }

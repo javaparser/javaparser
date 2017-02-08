@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * The initialization of an array. In the following sample, the outer { } is an ArrayInitializerExpr.
@@ -83,6 +84,19 @@ public final class ArrayInitializerExpr extends Expression {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getValues());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < values.size(); i++) {
+            if (values.get(i) == node) {
+                values.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

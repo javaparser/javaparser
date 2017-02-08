@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -420,6 +421,35 @@ public final class CompilationUnit extends Node {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getImports(), getTypes());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < imports.size(); i++) {
+            if (imports.get(i) == node) {
+                imports.remove(i);
+                return true;
+            }
+        }
+        if (packageDeclaration != null) {
+            if (node == packageDeclaration) {
+                removePackageDeclaration();
+                return true;
+            }
+        }
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i) == node) {
+                types.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public CompilationUnit removePackageDeclaration() {
+        return setPackageDeclaration((PackageDeclaration) null);
     }
 }
 

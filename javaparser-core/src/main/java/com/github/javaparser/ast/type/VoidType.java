@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
+import com.github.javaparser.ast.Node;
 
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
@@ -66,6 +67,13 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
     }
 }
 

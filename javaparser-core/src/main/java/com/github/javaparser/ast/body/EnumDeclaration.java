@@ -36,6 +36,7 @@ import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
@@ -131,6 +132,25 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getEntries(), getImplementedTypes(), getMembers(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i) == node) {
+                entries.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < implementedTypes.size(); i++) {
+            if (implementedTypes.get(i) == node) {
+                implementedTypes.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
     }
 }
 

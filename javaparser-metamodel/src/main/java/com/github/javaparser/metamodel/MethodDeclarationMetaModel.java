@@ -12,16 +12,6 @@ public class MethodDeclarationMetaModel extends BaseNodeMetaModel {
 
     public PropertyMetaModel isDefaultPropertyMetaModel;
 
-    public PropertyMetaModel modifiersPropertyMetaModel;
-
-    public PropertyMetaModel namePropertyMetaModel;
-
-    public PropertyMetaModel parametersPropertyMetaModel;
-
-    public PropertyMetaModel thrownExceptionsPropertyMetaModel;
-
     public PropertyMetaModel typePropertyMetaModel;
-
-    public PropertyMetaModel typeParametersPropertyMetaModel;
 }
 
