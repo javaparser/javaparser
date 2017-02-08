@@ -96,7 +96,7 @@ public class PropertyGenerator extends NodeGenerator {
 
     @Override
     protected void after() throws Exception {
-        CompilationUnit observablePropertyCu = sourceRoot.parse("com.github.javaparser.ast.observer", "ObservableProperty.java", javaParser).get();
+        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java", javaParser).getResult().get();
         EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
         for (String prop : observablePropertyNames) {

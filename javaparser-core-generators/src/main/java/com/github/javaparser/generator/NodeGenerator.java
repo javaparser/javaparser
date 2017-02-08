@@ -27,7 +27,7 @@ public abstract class NodeGenerator extends Generator {
     public final void generate() throws Exception {
         log.info(f("Running %s", getClass().getSimpleName()));
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
-            CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java", javaParser).orElseThrow(() -> new IOException(f("java file for %s not found", nodeMetaModel.getTypeName())));
+            CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java", javaParser);
             ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new IOException("Can't find class"));
             generateNode(nodeMetaModel, nodeCu, nodeCoid);
         }

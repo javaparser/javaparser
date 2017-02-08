@@ -148,7 +148,7 @@ public class MetaModelGenerator {
 
         SourceRoot sourceRoot = new SourceRoot(root);
 
-        CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
+        CompilationUnit javaParserMetaModel = sourceRoot.tryToParse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).getResult().get();
 
         generateNodeMetaModels(javaParserMetaModel, sourceRoot);
 
