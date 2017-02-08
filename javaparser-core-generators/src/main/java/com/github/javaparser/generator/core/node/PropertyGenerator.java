@@ -59,7 +59,7 @@ public class PropertyGenerator extends NodeGenerator {
         body.getStatements().clear();
         if (property.isRequired()) {
             Class<?> type = property.getType();
-            if (property.isNonEmpty()) {
+            if (property.isNonEmpty() && property.isSingular()) {
                 body.addStatement(f("assertNonEmpty(%s);", name));
             } else if (type != boolean.class && type != int.class) {
                 body.addStatement(f("assertNotNull(%s);", name));

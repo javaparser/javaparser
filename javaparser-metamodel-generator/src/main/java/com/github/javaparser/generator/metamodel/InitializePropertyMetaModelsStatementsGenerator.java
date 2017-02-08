@@ -2,11 +2,12 @@ package com.github.javaparser.generator.metamodel;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.UnionType;
 
 import java.lang.reflect.Field;
 
@@ -48,7 +49,12 @@ public class InitializePropertyMetaModelsStatementsGenerator {
         return (c == VariableDeclarator.class && name.equals("initializer")) ||
                 (c == MethodReferenceExpr.class && name.equals("identifier")) ||
                 (c == Name.class && name.equals("identifier")) ||
-                (c == SimpleName.class && name.equals("identifier"));
+                (c == SimpleName.class && name.equals("identifier")) ||
+                (c == ArrayCreationExpr.class && name.equals("levels")) ||
+                (c == FieldDeclaration.class && name.equals("variables")) ||
+                (c == IntersectionType.class && name.equals("elements")) ||
+                (c == UnionType.class && name.equals("elements")) ||
+                (c == VariableDeclarationExpr.class && name.equals("variables"));
     }
 
     private String getter(Field field) {

@@ -30,6 +30,7 @@ public class CoreGenerator {
         new HashCodeVisitorGenerator(javaParser, sourceRoot).generate();
         new CloneVisitorGenerator(javaParser, sourceRoot).generate();
         new TreeStructureVisitorGenerator(javaParser, sourceRoot).generate();
+        new ModifierVisitorGenerator(javaParser, sourceRoot).generate();
 
         new GetNodeListsGenerator(javaParser, sourceRoot).generate();
         new PropertyGenerator(javaParser, sourceRoot).generate();
