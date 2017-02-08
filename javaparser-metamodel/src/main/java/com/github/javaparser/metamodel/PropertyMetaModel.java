@@ -76,7 +76,7 @@ public class PropertyMetaModel {
     }
 
     /**
-     * @return whether this field may contain an empty String.
+     * @return if this property is a String or a NodeList: whether it may be empty.
      */
     public boolean isNonEmpty() {
         return isNonEmpty;
@@ -129,6 +129,13 @@ public class PropertyMetaModel {
      */
     public boolean hasWildcard() {
         return hasWildcard;
+    }
+
+    /**
+     * @return whether this property is not a list or set.
+     */
+    public boolean isSingular() {
+        return !(isNodeList || isEnumSet);
     }
 
     @Override
