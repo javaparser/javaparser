@@ -27,4 +27,30 @@
             <version>1.7.22</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-javaparser-core</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classpathScope>test</classpathScope>
+                    <mainClass>com.github.javaparser.generator.core.CoreGenerator</mainClass>
+                    <arguments>
+                        <argument>${project.basedir}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

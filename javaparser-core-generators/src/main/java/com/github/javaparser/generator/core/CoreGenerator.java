@@ -5,7 +5,6 @@ import com.github.javaparser.generator.core.node.GetNodeListsGenerator;
 import com.github.javaparser.generator.core.node.PropertyGenerator;
 import com.github.javaparser.generator.core.node.RemoveMethodGenerator;
 import com.github.javaparser.generator.core.visitor.*;
-import com.github.javaparser.generator.utils.GeneratorUtils;
 import com.github.javaparser.generator.utils.SourceRoot;
 
 import java.nio.file.Path;
@@ -16,11 +15,19 @@ import java.nio.file.Paths;
  */
 public class CoreGenerator {
     public static void main(String[] args) throws Exception {
-        Path root = GeneratorUtils.getJavaParserBasePath().resolve(Paths.get("javaparser-core", "src", "main", "java"));
-
-        final JavaParser javaParser = new JavaParser();
-
+        if (args.length != 1) {
+            throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
+        }
+        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root);
+
+        new CoreGenerator().run(sourceRoot);
+
+        sourceRoot.saveAll();
+    }
+
+    private void run(SourceRoot sourceRoot) throws Exception {
+        final JavaParser javaParser = new JavaParser();
 
         new GenericVisitorAdapterGenerator(javaParser, sourceRoot).generate();
         new EqualsVisitorGenerator(javaParser, sourceRoot).generate();
@@ -35,7 +42,5 @@ public class CoreGenerator {
         new GetNodeListsGenerator(javaParser, sourceRoot).generate();
         new PropertyGenerator(javaParser, sourceRoot).generate();
         new RemoveMethodGenerator(javaParser, sourceRoot).generate();
-
-        sourceRoot.saveAll();
     }
 }
