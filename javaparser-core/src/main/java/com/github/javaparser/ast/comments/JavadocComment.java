@@ -27,6 +27,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
@@ -67,6 +68,11 @@ public final class JavadocComment extends Comment {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public JavadocComment clone() {
+        return (JavadocComment) accept(new CloneVisitor(), null);
     }
 }
 

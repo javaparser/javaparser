@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Defines an expression that accesses the class of a type.
@@ -86,6 +87,11 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public ClassExpr clone() {
+        return (ClassExpr) accept(new CloneVisitor(), null);
     }
 }
 

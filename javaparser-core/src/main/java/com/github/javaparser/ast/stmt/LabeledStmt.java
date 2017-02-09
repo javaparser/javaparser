@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A statement that is labeled, like <code>label123: println("continuing");</code>
@@ -102,6 +103,11 @@ public final class LabeledStmt extends Statement {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public LabeledStmt clone() {
+        return (LabeledStmt) accept(new CloneVisitor(), null);
     }
 }
 

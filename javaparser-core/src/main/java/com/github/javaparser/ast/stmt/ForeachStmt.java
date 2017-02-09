@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A for-each statement.
@@ -125,6 +126,11 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public ForeachStmt clone() {
+        return (ForeachStmt) accept(new CloneVisitor(), null);
     }
 }
 

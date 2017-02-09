@@ -28,6 +28,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A name that consists of a single identifier.
@@ -81,6 +82,11 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public SimpleName clone() {
+        return (SimpleName) accept(new CloneVisitor(), null);
     }
 }
 

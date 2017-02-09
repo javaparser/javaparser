@@ -26,6 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Base class for types.
@@ -90,6 +91,11 @@ public abstract class Type extends Node {
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public Type clone() {
+        return (Type) accept(new CloneVisitor(), null);
     }
 }
 

@@ -25,6 +25,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A base class for the different types of annotations.
@@ -69,6 +70,11 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public AnnotationExpr clone() {
+        return (AnnotationExpr) accept(new CloneVisitor(), null);
     }
 }
 

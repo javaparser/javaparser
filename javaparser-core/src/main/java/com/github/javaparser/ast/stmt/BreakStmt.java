@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A usage of the break keyword.
@@ -101,6 +102,11 @@ public final class BreakStmt extends Statement {
 
     public BreakStmt removeLabel() {
         return setLabel((SimpleName) null);
+    }
+
+    @Override
+    public BreakStmt clone() {
+        return (BreakStmt) accept(new CloneVisitor(), null);
     }
 }
 

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * An import declaration.
@@ -119,6 +120,11 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public ImportDeclaration clone() {
+        return (ImportDeclaration) accept(new CloneVisitor(), null);
     }
 }
 

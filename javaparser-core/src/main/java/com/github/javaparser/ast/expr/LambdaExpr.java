@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A lambda expression. The parameters are on the left side of the ->.
@@ -136,6 +137,11 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public LambdaExpr clone() {
+        return (LambdaExpr) accept(new CloneVisitor(), null);
     }
 }
 

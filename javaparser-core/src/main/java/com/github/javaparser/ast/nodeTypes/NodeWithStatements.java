@@ -103,7 +103,7 @@ public interface NodeWithStatements<N extends Node> {
     @SuppressWarnings("unchecked")
     default N copyStatements(NodeList<Statement> nodeList) {
         for (Statement n : nodeList) {
-            addStatement((Statement) n.clone());
+            addStatement(n.clone());
         }
         return (N) this;
     }

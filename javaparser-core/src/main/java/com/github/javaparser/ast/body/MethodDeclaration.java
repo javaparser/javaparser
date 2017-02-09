@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;}
@@ -241,6 +242,11 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     public MethodDeclaration removeBody() {
         return setBody((BlockStmt) null);
+    }
+
+    @Override
+    public MethodDeclaration clone() {
+        return (MethodDeclaration) accept(new CloneVisitor(), null);
     }
 }
 

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -128,6 +129,11 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public UnaryExpr clone() {
+        return (UnaryExpr) accept(new CloneVisitor(), null);
     }
 }
 
