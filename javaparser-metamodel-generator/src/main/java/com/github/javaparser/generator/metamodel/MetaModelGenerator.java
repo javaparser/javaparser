@@ -21,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
-import static com.github.javaparser.generator.utils.GeneratorUtils.getJavaParserBasePath;
 
 public class MetaModelGenerator {
     static final String NODE_META_MODEL = "BaseNodeMetaModel";
@@ -138,21 +137,23 @@ public class MetaModelGenerator {
     static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException {
-        new MetaModelGenerator().run();
-    }
+        if (args.length != 1) {
+            throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
+        }
+        final Path root = Paths.get(args[0], "..", "javaparser-metamodel", "src", "main", "java");
+        final SourceRoot sourceRoot = new SourceRoot(root);
 
-    private void run() throws IOException, NoSuchMethodException {
-        final Path root = getJavaParserBasePath().resolve(Paths.get("javaparser-metamodel", "src", "main", "java"));
-
-        JavaParser javaParser = new JavaParser();
-
-        SourceRoot sourceRoot = new SourceRoot(root);
-
-        CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
-
-        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
+        new MetaModelGenerator().run(sourceRoot);
 
         sourceRoot.saveAll();
+    }
+
+    private void run(SourceRoot sourceRoot) throws IOException, NoSuchMethodException {
+        final JavaParser javaParser = new JavaParser();
+
+        final CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
+
+        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
     }
 
     private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {

@@ -611,20 +611,20 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final MethodDeclaration n, final A arg) {
         BlockStmt body = n.getBody().map( s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Type type = (Type) n.getType().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
         NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
-        Type type = (Type) n.getType().accept(this, arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (name == null || type == null)
+        if (type == null || name == null)
             return null;
         n.setBody(body);
+        n.setType(type);
         n.setName(name);
         n.setParameters(parameters);
         n.setThrownExceptions(thrownExceptions);
-        n.setType(type);
         n.setTypeParameters(typeParameters);
         n.setAnnotations(annotations);
         n.setComment(comment);

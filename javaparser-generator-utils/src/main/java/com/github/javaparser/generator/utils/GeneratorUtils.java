@@ -107,18 +107,6 @@ public final class GeneratorUtils {
     }
 
     /**
-     * For generators that are inside the JavaParser project, this will get the root path of the project.
-     */
-    public static Path getJavaParserBasePath() {
-        String path = GeneratorUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        // Silly Windows fix
-        if (path.charAt(2) == ':') {
-            path = path.substring(1);
-        }
-        return Paths.get(path, "..", "..", "..");
-    }
-
-    /**
      * @param input "aCamelCaseString"
      * @return "A_CAMEL_CASE_STRING"
      */
