@@ -37,6 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -179,6 +180,11 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public ClassOrInterfaceDeclaration clone() {
+        return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
     }
 }
 

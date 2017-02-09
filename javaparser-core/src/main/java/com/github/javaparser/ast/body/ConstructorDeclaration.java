@@ -39,6 +39,7 @@ import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
@@ -168,6 +169,11 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public ConstructorDeclaration clone() {
+        return (ConstructorDeclaration) accept(new CloneVisitor(), null);
     }
 }
 

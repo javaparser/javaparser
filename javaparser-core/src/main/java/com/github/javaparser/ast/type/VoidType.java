@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
@@ -74,6 +75,11 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public VoidType clone() {
+        return (VoidType) accept(new CloneVisitor(), null);
     }
 }
 

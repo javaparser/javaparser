@@ -25,6 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -126,6 +127,11 @@ public abstract class Comment extends Node {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public Comment clone() {
+        return (Comment) accept(new CloneVisitor(), null);
     }
 }
 

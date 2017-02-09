@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * The return statement, with an optional expression to return.
@@ -104,6 +105,11 @@ public final class ReturnStmt extends Statement {
 
     public ReturnStmt removeExpression() {
         return setExpression((Expression) null);
+    }
+
+    @Override
+    public ReturnStmt clone() {
+        return (ReturnStmt) accept(new CloneVisitor(), null);
     }
 }
 

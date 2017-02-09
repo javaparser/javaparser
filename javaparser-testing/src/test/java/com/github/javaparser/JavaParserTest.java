@@ -53,7 +53,7 @@ public class JavaParserTest {
     @Test
     public void rangeOfArrayCreationLevelWithExpressionIsCorrect() {
         String code = "new int[123][456]";
-        ArrayCreationExpr expression = (ArrayCreationExpr)JavaParser.parseExpression(code);
+        ArrayCreationExpr expression = JavaParser.parseExpression(code);
         Optional<Range> range;
 
         range = expression.getLevels().get(0).getRange();
@@ -68,7 +68,7 @@ public class JavaParserTest {
     @Test
     public void rangeOfArrayCreationLevelWithoutExpressionIsCorrect() {
         String code = "new int[][]";
-        ArrayCreationExpr expression = (ArrayCreationExpr)JavaParser.parseExpression(code);
+        ArrayCreationExpr expression = JavaParser.parseExpression(code);
         Optional<Range> range;
 
         range = expression.getLevels().get(0).getRange();

@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A wildcard type argument.
@@ -149,6 +150,11 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
 
     public WildcardType removeSuperTypes() {
         return setSuperTypes((ReferenceType) null);
+    }
+
+    @Override
+    public WildcardType clone() {
+        return (WildcardType) accept(new CloneVisitor(), null);
     }
 }
 

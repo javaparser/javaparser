@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -62,6 +63,11 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public MarkerAnnotationExpr clone() {
+        return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
     }
 }
 

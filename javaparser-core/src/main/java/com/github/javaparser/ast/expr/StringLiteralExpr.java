@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A literal string.
@@ -89,6 +90,11 @@ public class StringLiteralExpr extends LiteralExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public StringLiteralExpr clone() {
+        return (StringLiteralExpr) accept(new CloneVisitor(), null);
     }
 }
 

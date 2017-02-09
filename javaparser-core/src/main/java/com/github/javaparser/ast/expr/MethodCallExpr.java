@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A method call on an object. <br/><code>circle.circumference()</code> <br/>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -188,6 +189,11 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 
     public MethodCallExpr removeScope() {
         return setScope((Expression) null);
+    }
+
+    @Override
+    public MethodCallExpr clone() {
+        return (MethodCallExpr) accept(new CloneVisitor(), null);
     }
 }
 

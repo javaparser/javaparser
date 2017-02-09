@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A literal "null".
@@ -58,6 +59,11 @@ public final class NullLiteralExpr extends LiteralExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public NullLiteralExpr clone() {
+        return (NullLiteralExpr) accept(new CloneVisitor(), null);
     }
 }
 

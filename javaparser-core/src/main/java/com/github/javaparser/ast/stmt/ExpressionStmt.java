@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -85,6 +86,11 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public ExpressionStmt clone() {
+        return (ExpressionStmt) accept(new CloneVisitor(), null);
     }
 }
 

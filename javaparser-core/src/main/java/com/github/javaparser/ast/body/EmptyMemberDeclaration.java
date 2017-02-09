@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A loose ";" inside a body.<br/><code>class X { ; }</code>
@@ -68,6 +69,11 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public EmptyMemberDeclaration clone() {
+        return (EmptyMemberDeclaration) accept(new CloneVisitor(), null);
     }
 }
 

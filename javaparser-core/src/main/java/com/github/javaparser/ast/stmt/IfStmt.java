@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -134,6 +135,11 @@ public final class IfStmt extends Statement {
 
     public IfStmt removeElseStmt() {
         return setElseStmt((Statement) null);
+    }
+
+    @Override
+    public IfStmt clone() {
+        return (IfStmt) accept(new CloneVisitor(), null);
     }
 }
 

@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A classic for statement.
@@ -174,6 +175,11 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     public ForStmt removeCompare() {
         return setCompare((Expression) null);
+    }
+
+    @Override
+    public ForStmt clone() {
+        return (ForStmt) accept(new CloneVisitor(), null);
     }
 }
 

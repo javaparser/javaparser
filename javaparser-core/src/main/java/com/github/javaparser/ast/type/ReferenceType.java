@@ -23,6 +23,7 @@ package com.github.javaparser.ast.type;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * Base class for reference types.
@@ -44,6 +45,11 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public ReferenceType<?> clone() {
+        return (ReferenceType<?>) accept(new CloneVisitor(), null);
     }
 }
 

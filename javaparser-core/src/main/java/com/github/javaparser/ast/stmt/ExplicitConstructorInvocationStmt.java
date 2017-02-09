@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -197,6 +198,11 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 
     public ExplicitConstructorInvocationStmt removeExpression() {
         return setExpression((Expression) null);
+    }
+
+    @Override
+    public ExplicitConstructorInvocationStmt clone() {
+        return (ExplicitConstructorInvocationStmt) accept(new CloneVisitor(), null);
     }
 }
 
