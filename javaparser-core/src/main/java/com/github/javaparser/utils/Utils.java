@@ -36,6 +36,9 @@ public class Utils {
 
     public static final Predicate<String> STRING_NOT_EMPTY = s -> !s.isEmpty();
 
+    /**
+     * @deprecated This is no longer in use by JavaParser, please write your own replacement.
+     */
     public static <T> List<T> ensureNotNull(List<T> list) {
         return list == null ? new ArrayList<>() : list;
     }
@@ -94,6 +97,8 @@ public class Utils {
     /**
      * Puts varargs in a mutable list.
      * This does not have the disadvantage of Arrays#asList that it has a static size.
+     *
+     * @deprecated This is no longer in use by JavaParser, please write your own replacement.
      */
     public static <T> List<T> arrayToList(T[] array) {
         List<T> list = new LinkedList<>();
@@ -102,28 +107,66 @@ public class Utils {
     }
 
     /**
+     * @deprecated use screamingToCamelCase
+     */
+    public static String toCamelCase(String original) {
+        return screamingToCamelCase(original);
+    }
+
+    /**
      * Transform a string to the camel case conversion.
      * <p>
      * For example "ABC_DEF" becomes "abcDef"
      */
-    public static String toCamelCase(String original) {
+    public static String screamingToCamelCase(String original) {
         StringBuilder sb = new StringBuilder();
         String[] parts = original.toLowerCase().split("_");
-        for (int i=0; i< parts.length; i++) {
+        for (int i = 0; i < parts.length; i++) {
             sb.append(i == 0 ? parts[i] : capitalize(parts[i]));
         }
         return sb.toString();
     }
 
+
+    /**
+     * @param input "aCamelCaseString"
+     * @return "A_CAMEL_CASE_STRING"
+     */
+    public static String camelCaseToScreaming(String input) {
+        if (input.isEmpty()) {
+            return "";
+        }
+        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase());
+        for (char c : input.substring(1).toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                scream.append("_");
+            }
+            scream.append(Character.toUpperCase(c));
+        }
+        return scream.toString();
+    }
+
+    /**
+     * Capitalizes the first character in the string.
+     */
     public static String capitalize(String original) {
-        if (original.length() < 1) {
+        if (original.isEmpty()) {
             throw new IllegalArgumentException("This string is empty");
-        } else if (original.length() == 1) {
-            return original.toUpperCase();
         } else {
             return original.substring(0, 1).toUpperCase() + original.substring(1);
         }
     }
+
+    /**
+     * Lower-cases the first character in the string.
+     */
+    public static String decapitalize(String string) {
+        if (string.isEmpty()) {
+            throw new IllegalArgumentException("This string is empty");
+        }
+        return string.substring(0, 1).toLowerCase() + string.substring(1);
+    }
+
 
     /**
      * Return the next word of the string, in other words it stops when a space is encountered.

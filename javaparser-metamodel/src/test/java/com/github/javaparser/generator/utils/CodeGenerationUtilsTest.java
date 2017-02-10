@@ -2,10 +2,10 @@ package com.github.javaparser.generator.utils;
 
 import org.junit.Test;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.*;
 import static org.junit.Assert.*;
 
-public class GeneratorUtilsTest {
+public class CodeGenerationUtilsTest {
     @Test
     public void setters() {
         assertEquals("setValue", setterName("value"));
@@ -19,11 +19,4 @@ public class GeneratorUtilsTest {
         assertEquals("isBlue", getterName(Boolean.class, "blue"));
     }
 
-    @Test
-    public void screamingEmptyString() {
-        assertEquals("", camelCaseToScreaming(""));
-        assertEquals("ABC", camelCaseToScreaming("abc"));
-        assertEquals("HELLO_HELLO", camelCaseToScreaming("HelloHello"));
-        assertEquals("APE_TAIL", camelCaseToScreaming("apeTail"));
-    }
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
  * Meta-data about all classes in the AST.

@@ -10,7 +10,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator {
     static final String NODE_META_MODEL = "BaseNodeMetaModel";

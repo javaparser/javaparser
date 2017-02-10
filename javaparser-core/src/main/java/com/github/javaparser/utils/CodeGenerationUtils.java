@@ -1,31 +1,13 @@
-package com.github.javaparser.generator.utils;
+package com.github.javaparser.utils;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public final class GeneratorUtils {
-    private GeneratorUtils() {
-    }
+import static com.github.javaparser.utils.Utils.capitalize;
 
-    /**
-     * Capitalizes the first character in the string.
-     */
-    public static String capitalize(String original) {
-        if (original.isEmpty()) {
-            return original;
-        }
-        return original.substring(0, 1).toUpperCase() + original.substring(1);
-    }
-
-    /**
-     * Lower-cases the first character in the string.
-     */
-    public static String decapitalize(String string) {
-        if (string.isEmpty()) {
-            return string;
-        }
-        return string.substring(0, 1).toLowerCase() + string.substring(1);
+public final class CodeGenerationUtils {
+    private CodeGenerationUtils() {
     }
 
     public static String getterName(Class<?> type, String name) {
@@ -105,23 +87,4 @@ public final class GeneratorUtils {
     public static Path packageAbsolutePath(Path root, String pkg) {
         return packageAbsolutePath(root.toString(), pkg);
     }
-
-    /**
-     * @param input "aCamelCaseString"
-     * @return "A_CAMEL_CASE_STRING"
-     */
-    public static String camelCaseToScreaming(String input) {
-        if (input.isEmpty()) {
-            return "";
-        }
-        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase());
-        for (char c : input.substring(1).toCharArray()) {
-            if (Character.isUpperCase(c)) {
-                scream.append("_");
-            }
-            scream.append(Character.toUpperCase(c));
-        }
-        return scream.toString();
-    }
-
 }

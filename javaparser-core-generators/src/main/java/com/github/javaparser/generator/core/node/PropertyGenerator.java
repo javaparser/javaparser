@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static com.github.javaparser.ast.Modifier.FINAL;
-import static com.github.javaparser.generator.utils.GeneratorUtils.camelCaseToScreaming;
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 public class PropertyGenerator extends NodeGenerator {
     private final Set<String> observablePropertyNames = new TreeSet<>();

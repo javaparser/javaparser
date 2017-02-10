@@ -4,8 +4,8 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.getterName;
-import static com.github.javaparser.generator.utils.GeneratorUtils.setterName;
+import static com.github.javaparser.utils.CodeGenerationUtils.getterName;
+import static com.github.javaparser.utils.CodeGenerationUtils.setterName;
 
 /**
  * Meta-data about a property of a node in the AST.

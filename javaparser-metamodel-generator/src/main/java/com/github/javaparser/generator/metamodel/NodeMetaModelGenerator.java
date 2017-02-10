@@ -6,7 +6,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -19,7 +19,8 @@ import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
-import static com.github.javaparser.generator.utils.GeneratorUtils.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class NodeMetaModelGenerator {
     private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();

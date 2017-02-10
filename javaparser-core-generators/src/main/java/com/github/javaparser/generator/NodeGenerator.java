@@ -3,7 +3,7 @@ package com.github.javaparser.generator;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import org.slf4j.Logger;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Makes it easier to generate code in the core AST nodes. The generateNode method will get every node type passed to it,

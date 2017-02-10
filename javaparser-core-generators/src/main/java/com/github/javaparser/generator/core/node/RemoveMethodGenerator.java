@@ -8,7 +8,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.generator.utils.GeneratorUtils.capitalize;
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.capitalize;
 
 
 public class RemoveMethodGenerator extends NodeGenerator {

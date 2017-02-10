@@ -4,7 +4,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import org.slf4j.Logger;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Makes it easier to generate visitor classes.

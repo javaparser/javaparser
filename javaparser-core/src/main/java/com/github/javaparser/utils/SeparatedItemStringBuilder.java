@@ -1,4 +1,4 @@
-package com.github.javaparser.generator.utils;
+package com.github.javaparser.utils;
 
 /**
  * Builds a string containing a list of items with a prefix, a postfix, and a separator.

@@ -6,7 +6,7 @@ import com.github.javaparser.generator.core.node.GetNodeListsGenerator;
 import com.github.javaparser.generator.core.node.PropertyGenerator;
 import com.github.javaparser.generator.core.node.RemoveMethodGenerator;
 import com.github.javaparser.generator.core.visitor.*;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
