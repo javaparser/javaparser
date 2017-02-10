@@ -23,7 +23,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator {
-    static final String NODE_META_MODEL = "BaseNodeMetaModel";
+    static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
     private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without

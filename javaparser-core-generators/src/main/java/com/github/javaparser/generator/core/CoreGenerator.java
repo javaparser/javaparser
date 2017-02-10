@@ -1,10 +1,7 @@
 package com.github.javaparser.generator.core;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.generator.core.node.CloneGenerator;
-import com.github.javaparser.generator.core.node.GetNodeListsGenerator;
-import com.github.javaparser.generator.core.node.PropertyGenerator;
-import com.github.javaparser.generator.core.node.RemoveMethodGenerator;
+import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.SourceRoot;
 
@@ -44,5 +41,6 @@ public class CoreGenerator {
         new PropertyGenerator(javaParser, sourceRoot).generate();
         new RemoveMethodGenerator(javaParser, sourceRoot).generate();
         new CloneGenerator(javaParser, sourceRoot).generate();
+        new GetMetaModelGenerator(javaParser, sourceRoot).generate();
     }
 }
