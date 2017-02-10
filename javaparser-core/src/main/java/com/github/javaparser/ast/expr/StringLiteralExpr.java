@@ -22,11 +22,9 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 
@@ -39,9 +37,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public class StringLiteralExpr extends LiteralExpr {
-
-    protected String value;
+public class StringLiteralExpr extends LiteralStringValueExpr {
 
     public StringLiteralExpr() {
         this(null, "empty");
@@ -60,8 +56,7 @@ public class StringLiteralExpr extends LiteralExpr {
     }
 
     public StringLiteralExpr(final Range range, final String value) {
-        super(range);
-        setValue(value);
+        super(range, value);
     }
 
     @Override
@@ -72,17 +67,6 @@ public class StringLiteralExpr extends LiteralExpr {
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
-    }
-
-    public final String getValue() {
-        return value;
-    }
-
-    public final StringLiteralExpr setValue(final String value) {
-        assertNotNull(value);
-        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        this.value = value;
-        return this;
     }
 
     @Override

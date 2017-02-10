@@ -37,7 +37,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
  * 
  * @author Julio Vilmar Gesser
  */
-public class IntegerLiteralExpr extends StringLiteralExpr {
+public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     public IntegerLiteralExpr() {
         this(null, "0");

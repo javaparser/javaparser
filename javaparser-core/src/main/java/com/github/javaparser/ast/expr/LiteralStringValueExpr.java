@@ -21,43 +21,33 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
- * A float or a double constant. This value is stored exactly as found in the source.
- * <br/><code>100.1f</code>
- * <br/><code>23958D</code>
- * <br/><code>0x4.5p1f</code>
- *
- * @author Julio Vilmar Gesser
+ * Any literal value that is stored internally as a String.
  */
-public final class DoubleLiteralExpr extends LiteralStringValueExpr {
+public abstract class LiteralStringValueExpr extends LiteralExpr {
 
-    public DoubleLiteralExpr() {
-        this(null, "0");
+    protected String value;
+
+    public LiteralStringValueExpr(final Range range, final String value) {
+        super(range);
+        setValue(value);
     }
 
-    @AllFieldsConstructor
-    public DoubleLiteralExpr(final String value) {
-        this(null, value);
+    public final String getValue() {
+        return value;
     }
 
-    public DoubleLiteralExpr(final Range range, final String value) {
-        super(range, value);
-    }
-
-    @Override
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-        return v.visit(this, arg);
-    }
-
-    @Override
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
-        v.visit(this, arg);
+    public final LiteralStringValueExpr setValue(final String value) {
+        assertNotNull(value);
+        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
+        this.value = value;
+        return this;
     }
 
     @Override
@@ -68,8 +58,8 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
-    public DoubleLiteralExpr clone() {
-        return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
+    public LiteralStringValueExpr clone() {
+        return (LiteralStringValueExpr) accept(new CloneVisitor(), null);
     }
 }
 

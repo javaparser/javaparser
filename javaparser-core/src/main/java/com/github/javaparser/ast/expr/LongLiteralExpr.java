@@ -37,7 +37,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public class LongLiteralExpr extends StringLiteralExpr {
+public class LongLiteralExpr extends LiteralStringValueExpr {
 
     public LongLiteralExpr() {
         this(null, "0");
@@ -45,7 +45,7 @@ public class LongLiteralExpr extends StringLiteralExpr {
 
     @AllFieldsConstructor
     public LongLiteralExpr(final String value) {
-        super(value);
+        this(null, value);
     }
 
     public LongLiteralExpr(final Range range, final String value) {

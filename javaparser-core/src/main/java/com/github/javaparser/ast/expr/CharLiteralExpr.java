@@ -38,7 +38,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public final class CharLiteralExpr extends StringLiteralExpr {
+public final class CharLiteralExpr extends LiteralStringValueExpr {
 
     public CharLiteralExpr() {
         this(null, "?");
