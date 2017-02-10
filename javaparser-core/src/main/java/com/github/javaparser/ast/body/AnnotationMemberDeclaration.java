@@ -189,6 +189,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return (AnnotationMemberDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public AnnotationMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }

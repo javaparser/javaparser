@@ -139,6 +139,7 @@ public final class BinaryExpr extends Expression {
         return (BinaryExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public BinaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.binaryExprMetaModel;
     }

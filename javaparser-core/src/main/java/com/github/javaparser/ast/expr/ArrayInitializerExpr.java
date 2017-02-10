@@ -107,6 +107,7 @@ public final class ArrayInitializerExpr extends Expression {
         return (ArrayInitializerExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ArrayInitializerExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayInitializerExprMetaModel;
     }

@@ -67,6 +67,7 @@ public final class EmptyStmt extends Statement {
         return (EmptyStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public EmptyStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.emptyStmtMetaModel;
     }

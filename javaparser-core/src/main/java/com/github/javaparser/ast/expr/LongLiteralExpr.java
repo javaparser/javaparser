@@ -76,6 +76,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return (LongLiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public LongLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.longLiteralExprMetaModel;
     }

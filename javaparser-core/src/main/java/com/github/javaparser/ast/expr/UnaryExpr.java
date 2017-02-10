@@ -138,6 +138,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return (UnaryExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
     }

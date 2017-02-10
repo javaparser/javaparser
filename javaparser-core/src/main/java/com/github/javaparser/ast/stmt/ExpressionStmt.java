@@ -95,6 +95,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         return (ExpressionStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ExpressionStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionStmtMetaModel;
     }

@@ -115,6 +115,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         return (CastExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public CastExprMetaModel getMetaModel() {
         return JavaParserMetaModel.castExprMetaModel;
     }

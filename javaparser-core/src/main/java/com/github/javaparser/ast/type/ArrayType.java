@@ -180,6 +180,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return (ArrayType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ArrayTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayTypeMetaModel;
     }

@@ -96,6 +96,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         return (ClassExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ClassExprMetaModel getMetaModel() {
         return JavaParserMetaModel.classExprMetaModel;
     }

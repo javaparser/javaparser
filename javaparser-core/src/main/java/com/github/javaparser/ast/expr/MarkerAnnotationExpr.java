@@ -72,6 +72,7 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
         return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public MarkerAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }

@@ -83,6 +83,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return (StringLiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public StringLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.stringLiteralExprMetaModel;
     }

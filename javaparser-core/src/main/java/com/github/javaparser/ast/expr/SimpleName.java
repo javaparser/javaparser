@@ -91,6 +91,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return (SimpleName) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public SimpleNameMetaModel getMetaModel() {
         return JavaParserMetaModel.simpleNameMetaModel;
     }

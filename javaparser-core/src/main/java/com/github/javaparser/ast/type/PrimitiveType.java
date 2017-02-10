@@ -176,6 +176,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         return (PrimitiveType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public PrimitiveTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.primitiveTypeMetaModel;
     }

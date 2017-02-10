@@ -111,6 +111,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return (UnionType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public UnionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unionTypeMetaModel;
     }

@@ -96,6 +96,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         return (ThrowStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ThrowStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.throwStmtMetaModel;
     }

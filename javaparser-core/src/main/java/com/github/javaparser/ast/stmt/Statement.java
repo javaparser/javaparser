@@ -49,6 +49,7 @@ public abstract class Statement extends Node {
         return (Statement) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public StatementMetaModel getMetaModel() {
         return JavaParserMetaModel.statementMetaModel;
     }

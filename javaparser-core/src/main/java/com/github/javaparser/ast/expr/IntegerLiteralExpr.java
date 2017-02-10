@@ -76,6 +76,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         return (IntegerLiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public IntegerLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.integerLiteralExprMetaModel;
     }

@@ -155,6 +155,7 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return (Name) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public NameMetaModel getMetaModel() {
         return JavaParserMetaModel.nameMetaModel;
     }

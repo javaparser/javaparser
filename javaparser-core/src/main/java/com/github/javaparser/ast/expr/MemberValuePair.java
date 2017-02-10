@@ -115,6 +115,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         return (MemberValuePair) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public MemberValuePairMetaModel getMetaModel() {
         return JavaParserMetaModel.memberValuePairMetaModel;
     }

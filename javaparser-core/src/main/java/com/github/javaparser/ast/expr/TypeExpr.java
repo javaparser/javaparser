@@ -97,6 +97,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         return (TypeExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public TypeExprMetaModel getMetaModel() {
         return JavaParserMetaModel.typeExprMetaModel;
     }

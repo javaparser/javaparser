@@ -201,6 +201,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         return (FieldAccessExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public FieldAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldAccessExprMetaModel;
     }

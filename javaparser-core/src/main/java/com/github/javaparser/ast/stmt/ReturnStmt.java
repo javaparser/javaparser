@@ -114,6 +114,7 @@ public final class ReturnStmt extends Statement {
         return (ReturnStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ReturnStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.returnStmtMetaModel;
     }

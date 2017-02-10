@@ -114,6 +114,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         return (IntersectionType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public IntersectionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.intersectionTypeMetaModel;
     }

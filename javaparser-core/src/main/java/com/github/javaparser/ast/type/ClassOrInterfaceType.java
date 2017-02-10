@@ -201,6 +201,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ClassOrInterfaceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }

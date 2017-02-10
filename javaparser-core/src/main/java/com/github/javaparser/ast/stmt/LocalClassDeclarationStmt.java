@@ -94,6 +94,7 @@ public final class LocalClassDeclarationStmt extends Statement {
         return (LocalClassDeclarationStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public LocalClassDeclarationStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.localClassDeclarationStmtMetaModel;
     }

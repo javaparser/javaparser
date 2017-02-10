@@ -129,6 +129,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return (ImportDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ImportDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.importDeclarationMetaModel;
     }

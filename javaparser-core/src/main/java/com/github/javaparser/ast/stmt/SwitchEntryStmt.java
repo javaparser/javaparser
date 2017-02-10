@@ -154,6 +154,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return (SwitchEntryStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public SwitchEntryStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.switchEntryStmtMetaModel;
     }

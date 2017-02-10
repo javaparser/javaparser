@@ -161,6 +161,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public TypeDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.typeDeclarationMetaModel;
     }

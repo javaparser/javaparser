@@ -75,6 +75,7 @@ public final class BlockComment extends Comment {
         return (BlockComment) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public BlockCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.blockCommentMetaModel;
     }

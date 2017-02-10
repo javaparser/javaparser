@@ -112,6 +112,7 @@ public final class LabeledStmt extends Statement {
         return (LabeledStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public LabeledStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.labeledStmtMetaModel;
     }

@@ -178,6 +178,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         return (ConstructorDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ConstructorDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.constructorDeclarationMetaModel;
     }

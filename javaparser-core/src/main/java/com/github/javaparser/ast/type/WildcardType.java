@@ -159,6 +159,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return (WildcardType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public WildcardTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.wildcardTypeMetaModel;
     }

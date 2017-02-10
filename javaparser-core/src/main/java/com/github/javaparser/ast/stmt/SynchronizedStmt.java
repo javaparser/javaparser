@@ -114,6 +114,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return (SynchronizedStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public SynchronizedStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.synchronizedStmtMetaModel;
     }

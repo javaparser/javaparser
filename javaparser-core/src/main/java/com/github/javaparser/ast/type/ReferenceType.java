@@ -54,6 +54,7 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
         return (ReferenceType<?>) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ReferenceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.referenceTypeMetaModel;
     }

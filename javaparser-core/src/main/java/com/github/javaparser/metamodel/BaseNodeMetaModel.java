@@ -111,6 +111,13 @@ public abstract class BaseNodeMetaModel {
         return hasWildcard;
     }
 
+    /**
+     * @return whether this AST node is the root node, meaning that it is the meta model for "Node": "NodeMetaModel".
+     */
+    public boolean isRootNode() {
+        return !superNodeMetaModel.isPresent();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

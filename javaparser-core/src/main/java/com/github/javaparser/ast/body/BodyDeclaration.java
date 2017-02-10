@@ -99,6 +99,7 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         return (BodyDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public BodyDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.bodyDeclarationMetaModel;
     }

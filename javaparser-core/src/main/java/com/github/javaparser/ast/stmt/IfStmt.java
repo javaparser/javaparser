@@ -144,6 +144,7 @@ public final class IfStmt extends Statement {
         return (IfStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }

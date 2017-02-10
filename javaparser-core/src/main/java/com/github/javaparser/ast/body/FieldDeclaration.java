@@ -216,6 +216,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return (FieldDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public FieldDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldDeclarationMetaModel;
     }

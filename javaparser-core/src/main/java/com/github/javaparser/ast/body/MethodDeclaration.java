@@ -251,6 +251,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return (MethodDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public MethodDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.methodDeclarationMetaModel;
     }

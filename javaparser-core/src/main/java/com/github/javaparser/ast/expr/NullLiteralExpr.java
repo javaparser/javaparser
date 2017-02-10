@@ -68,6 +68,7 @@ public final class NullLiteralExpr extends LiteralExpr {
         return (NullLiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public NullLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nullLiteralExprMetaModel;
     }

@@ -460,6 +460,7 @@ public final class CompilationUnit extends Node {
         return (CompilationUnit) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public CompilationUnitMetaModel getMetaModel() {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }

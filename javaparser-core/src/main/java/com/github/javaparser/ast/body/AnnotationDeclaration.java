@@ -87,6 +87,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         return (AnnotationDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public AnnotationDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationDeclarationMetaModel;
     }

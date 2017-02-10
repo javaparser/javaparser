@@ -198,6 +198,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return (MethodCallExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public MethodCallExprMetaModel getMetaModel() {
         return JavaParserMetaModel.methodCallExprMetaModel;
     }

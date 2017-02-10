@@ -77,6 +77,7 @@ public final class JavadocComment extends Comment {
         return (JavadocComment) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public JavadocCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.javadocCommentMetaModel;
     }

@@ -164,6 +164,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         return (TypeParameter) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public TypeParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.typeParameterMetaModel;
     }

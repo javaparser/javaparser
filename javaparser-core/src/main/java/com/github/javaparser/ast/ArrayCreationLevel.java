@@ -149,6 +149,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return (ArrayCreationLevel) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ArrayCreationLevelMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayCreationLevelMetaModel;
     }

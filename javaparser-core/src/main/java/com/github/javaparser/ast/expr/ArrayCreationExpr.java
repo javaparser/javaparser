@@ -197,6 +197,7 @@ public final class ArrayCreationExpr extends Expression {
         return (ArrayCreationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ArrayCreationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayCreationExprMetaModel;
     }

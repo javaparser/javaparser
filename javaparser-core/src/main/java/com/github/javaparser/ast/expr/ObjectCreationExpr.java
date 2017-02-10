@@ -250,6 +250,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return (ObjectCreationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ObjectCreationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.objectCreationExprMetaModel;
     }

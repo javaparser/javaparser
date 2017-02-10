@@ -184,6 +184,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return (ForStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ForStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.forStmtMetaModel;
     }

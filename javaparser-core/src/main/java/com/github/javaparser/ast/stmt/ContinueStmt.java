@@ -115,6 +115,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         return (ContinueStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ContinueStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.continueStmtMetaModel;
     }

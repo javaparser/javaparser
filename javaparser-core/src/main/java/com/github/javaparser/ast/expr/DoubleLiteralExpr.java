@@ -74,6 +74,7 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public DoubleLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.doubleLiteralExprMetaModel;
     }

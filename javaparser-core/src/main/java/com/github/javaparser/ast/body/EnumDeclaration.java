@@ -161,6 +161,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return (EnumDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public EnumDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.enumDeclarationMetaModel;
     }

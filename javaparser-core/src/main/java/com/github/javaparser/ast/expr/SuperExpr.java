@@ -109,6 +109,7 @@ public final class SuperExpr extends Expression {
         return (SuperExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public SuperExprMetaModel getMetaModel() {
         return JavaParserMetaModel.superExprMetaModel;
     }

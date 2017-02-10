@@ -129,6 +129,7 @@ public final class AssertStmt extends Statement {
         return (AssertStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public AssertStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.assertStmtMetaModel;
     }

@@ -135,6 +135,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return (ForeachStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ForeachStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.foreachStmtMetaModel;
     }

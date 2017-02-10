@@ -103,6 +103,7 @@ public final class ThisExpr extends Expression {
         return (ThisExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ThisExprMetaModel getMetaModel() {
         return JavaParserMetaModel.thisExprMetaModel;
     }

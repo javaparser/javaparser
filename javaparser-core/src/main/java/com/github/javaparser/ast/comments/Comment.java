@@ -136,6 +136,7 @@ public abstract class Comment extends Node {
         return (Comment) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public CommentMetaModel getMetaModel() {
         return JavaParserMetaModel.commentMetaModel;
     }

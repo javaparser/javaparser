@@ -49,6 +49,7 @@ public abstract class Expression extends Node {
         return (Expression) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionMetaModel;
     }

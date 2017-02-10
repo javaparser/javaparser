@@ -114,6 +114,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         return (InitializerDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public InitializerDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.initializerDeclarationMetaModel;
     }

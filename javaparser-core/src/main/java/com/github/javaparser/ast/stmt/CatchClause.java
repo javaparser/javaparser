@@ -127,6 +127,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return (CatchClause) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public CatchClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.catchClauseMetaModel;
     }

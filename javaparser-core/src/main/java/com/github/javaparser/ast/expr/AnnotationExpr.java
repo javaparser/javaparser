@@ -79,6 +79,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         return (AnnotationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public AnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationExprMetaModel;
     }

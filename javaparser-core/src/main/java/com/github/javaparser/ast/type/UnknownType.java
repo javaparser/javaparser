@@ -88,6 +88,7 @@ public final class UnknownType extends Type {
         return (UnknownType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public UnknownTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unknownTypeMetaModel;
     }

@@ -87,6 +87,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         return (BooleanLiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public BooleanLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.booleanLiteralExprMetaModel;
     }

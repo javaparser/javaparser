@@ -156,6 +156,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return (EnumConstantDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public EnumConstantDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.enumConstantDeclarationMetaModel;
     }

@@ -108,6 +108,7 @@ public final class ArrayAccessExpr extends Expression {
         return (ArrayAccessExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ArrayAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayAccessExprMetaModel;
     }

@@ -152,6 +152,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         return (PackageDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public PackageDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.packageDeclarationMetaModel;
     }

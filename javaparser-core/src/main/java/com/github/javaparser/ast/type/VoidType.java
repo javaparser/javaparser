@@ -84,6 +84,7 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
         return (VoidType) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public VoidTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.voidTypeMetaModel;
     }

@@ -125,6 +125,7 @@ public final class ConditionalExpr extends Expression {
         return (ConditionalExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ConditionalExprMetaModel getMetaModel() {
         return JavaParserMetaModel.conditionalExprMetaModel;
     }

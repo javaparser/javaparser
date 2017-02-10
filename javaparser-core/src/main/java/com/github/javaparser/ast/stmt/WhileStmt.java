@@ -113,6 +113,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         return (WhileStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public WhileStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.whileStmtMetaModel;
     }

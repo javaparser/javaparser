@@ -98,6 +98,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         return (NameExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public NameExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nameExprMetaModel;
     }

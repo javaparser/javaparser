@@ -100,6 +100,7 @@ public abstract class Type extends Node {
         return (Type) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public TypeMetaModel getMetaModel() {
         return JavaParserMetaModel.typeMetaModel;
     }

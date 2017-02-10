@@ -79,6 +79,7 @@ public final class LineComment extends Comment {
         return (LineComment) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public LineCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.lineCommentMetaModel;
     }

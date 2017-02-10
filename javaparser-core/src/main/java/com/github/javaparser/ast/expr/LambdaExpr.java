@@ -146,6 +146,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return (LambdaExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public LambdaExprMetaModel getMetaModel() {
         return JavaParserMetaModel.lambdaExprMetaModel;
     }

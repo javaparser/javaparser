@@ -105,6 +105,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         return (BlockStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public BlockStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.blockStmtMetaModel;
     }

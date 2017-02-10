@@ -113,6 +113,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return (DoStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public DoStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.doStmtMetaModel;
     }

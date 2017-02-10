@@ -196,6 +196,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (CallableDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public CallableDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.callableDeclarationMetaModel;
     }

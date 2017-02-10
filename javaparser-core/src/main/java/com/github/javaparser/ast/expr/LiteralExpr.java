@@ -49,6 +49,7 @@ public abstract class LiteralExpr extends Expression {
         return (LiteralExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public LiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.literalExprMetaModel;
     }

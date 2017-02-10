@@ -207,6 +207,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return (ExplicitConstructorInvocationStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ExplicitConstructorInvocationStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.explicitConstructorInvocationStmtMetaModel;
     }

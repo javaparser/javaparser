@@ -157,6 +157,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return (MethodReferenceExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public MethodReferenceExprMetaModel getMetaModel() {
         return JavaParserMetaModel.methodReferenceExprMetaModel;
     }

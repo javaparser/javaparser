@@ -123,6 +123,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         return (NormalAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public NormalAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }

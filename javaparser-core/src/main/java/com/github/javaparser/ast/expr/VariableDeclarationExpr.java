@@ -189,6 +189,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public VariableDeclarationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.variableDeclarationExprMetaModel;
     }

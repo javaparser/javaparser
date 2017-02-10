@@ -116,6 +116,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         return (InstanceOfExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public InstanceOfExprMetaModel getMetaModel() {
         return JavaParserMetaModel.instanceOfExprMetaModel;
     }

@@ -111,6 +111,7 @@ public final class BreakStmt extends Statement {
         return (BreakStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public BreakStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.breakStmtMetaModel;
     }

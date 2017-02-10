@@ -180,6 +180,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         return (VariableDeclarator) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public VariableDeclaratorMetaModel getMetaModel() {
         return JavaParserMetaModel.variableDeclaratorMetaModel;
     }

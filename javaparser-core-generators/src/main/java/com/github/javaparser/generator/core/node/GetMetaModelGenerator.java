@@ -23,9 +23,9 @@ public class GetMetaModelGenerator extends NodeGenerator {
 
         nodeCu.addImport(nodeMetaModel.getClass().getName());
         nodeCu.addImport(JavaParserMetaModel.class);
-
-        final String method = f("public %s getMetaModel() { return JavaParserMetaModel.%s; }",
-                nodeMetaModel.getClass().getSimpleName(), 
+        final String method = f("%s public %s getMetaModel() { return JavaParserMetaModel.%s; }",
+                nodeMetaModel.isRootNode() ? "" : "@Override",
+                nodeMetaModel.getClass().getSimpleName(),
                 nodeMetaModel.getMetaModelFieldName());
 
         nodeCoid.addMember(parseClassBodyDeclaration(method));

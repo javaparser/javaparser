@@ -78,6 +78,7 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         return (EmptyMemberDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public EmptyMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.emptyMemberDeclarationMetaModel;
     }

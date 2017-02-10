@@ -138,6 +138,7 @@ public final class AssignExpr extends Expression {
         return (AssignExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public AssignExprMetaModel getMetaModel() {
         return JavaParserMetaModel.assignExprMetaModel;
     }

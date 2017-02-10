@@ -189,6 +189,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public ClassOrInterfaceDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
     }

@@ -90,6 +90,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public SingleMemberAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.singleMemberAnnotationExprMetaModel;
     }

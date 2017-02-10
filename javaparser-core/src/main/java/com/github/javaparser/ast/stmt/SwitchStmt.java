@@ -140,6 +140,7 @@ public final class SwitchStmt extends Statement {
         return (SwitchStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public SwitchStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.switchStmtMetaModel;
     }

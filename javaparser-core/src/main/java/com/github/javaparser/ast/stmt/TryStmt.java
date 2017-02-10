@@ -198,6 +198,7 @@ public final class TryStmt extends Statement {
         return (TryStmt) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public TryStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.tryStmtMetaModel;
     }

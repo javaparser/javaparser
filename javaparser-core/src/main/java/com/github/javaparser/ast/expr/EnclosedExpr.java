@@ -106,6 +106,7 @@ public final class EnclosedExpr extends Expression {
         return (EnclosedExpr) accept(new CloneVisitor(), null);
     }
 
+    @Override
     public EnclosedExprMetaModel getMetaModel() {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }
