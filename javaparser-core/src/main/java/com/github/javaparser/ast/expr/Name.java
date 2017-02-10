@@ -30,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NameMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -151,6 +153,10 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     @Override
     public Name clone() {
         return (Name) accept(new CloneVisitor(), null);
+    }
+
+    public NameMetaModel getMetaModel() {
+        return JavaParserMetaModel.nameMetaModel;
     }
 }
 

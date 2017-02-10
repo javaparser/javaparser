@@ -24,8 +24,9 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -60,6 +61,10 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Override
     public LiteralStringValueExpr clone() {
         return (LiteralStringValueExpr) accept(new CloneVisitor(), null);
+    }
+
+    public LiteralStringValueExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.literalStringValueExprMetaModel;
     }
 }
 

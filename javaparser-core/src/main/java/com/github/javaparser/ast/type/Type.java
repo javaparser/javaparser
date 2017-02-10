@@ -27,6 +27,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for types.
@@ -96,6 +98,10 @@ public abstract class Type extends Node {
     @Override
     public Type clone() {
         return (Type) accept(new CloneVisitor(), null);
+    }
+
+    public TypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeMetaModel;
     }
 }
 

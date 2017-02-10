@@ -30,6 +30,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ReturnStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The return statement, with an optional expression to return.
@@ -110,6 +112,10 @@ public final class ReturnStmt extends Statement {
     @Override
     public ReturnStmt clone() {
         return (ReturnStmt) accept(new CloneVisitor(), null);
+    }
+
+    public ReturnStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.returnStmtMetaModel;
     }
 }
 

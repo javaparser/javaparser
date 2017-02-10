@@ -31,6 +31,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.AssertStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A usage of the keyword "assert"
@@ -125,6 +127,10 @@ public final class AssertStmt extends Statement {
     @Override
     public AssertStmt clone() {
         return (AssertStmt) accept(new CloneVisitor(), null);
+    }
+
+    public AssertStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.assertStmtMetaModel;
     }
 }
 

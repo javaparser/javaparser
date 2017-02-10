@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.WildcardTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A wildcard type argument.
@@ -155,6 +157,10 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     @Override
     public WildcardType clone() {
         return (WildcardType) accept(new CloneVisitor(), null);
+    }
+
+    public WildcardTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.wildcardTypeMetaModel;
     }
 }
 

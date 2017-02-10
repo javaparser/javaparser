@@ -38,8 +38,10 @@ public class MetaModelGenerator {
 
         add(AnnotationExpr.class);
         add(TypeDeclaration.class);
-        add(LiteralExpr.class);
         add(ReferenceType.class);
+
+        add(LiteralExpr.class);
+        add(LiteralStringValueExpr.class);
         add(StringLiteralExpr.class);
 
         //

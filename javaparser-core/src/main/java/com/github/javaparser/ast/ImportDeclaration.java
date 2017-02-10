@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An import declaration.
@@ -125,6 +127,10 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     @Override
     public ImportDeclaration clone() {
         return (ImportDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    public ImportDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.importDeclarationMetaModel;
     }
 }
 

@@ -41,6 +41,8 @@ import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ParameterMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -213,6 +215,10 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     @Override
     public Parameter clone() {
         return (Parameter) accept(new CloneVisitor(), null);
+    }
+
+    public ParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.parameterMetaModel;
     }
 }
 

@@ -41,6 +41,8 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CompilationUnitMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <p>
@@ -456,6 +458,10 @@ public final class CompilationUnit extends Node {
     @Override
     public CompilationUnit clone() {
         return (CompilationUnit) accept(new CloneVisitor(), null);
+    }
+
+    public CompilationUnitMetaModel getMetaModel() {
+        return JavaParserMetaModel.compilationUnitMetaModel;
     }
 }
 

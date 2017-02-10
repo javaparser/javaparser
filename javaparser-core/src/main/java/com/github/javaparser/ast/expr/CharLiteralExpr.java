@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A literal character.
@@ -80,6 +82,10 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     @Override
     public CharLiteralExpr clone() {
         return (CharLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public CharLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.charLiteralExprMetaModel;
     }
 }
 

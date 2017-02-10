@@ -38,6 +38,8 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.EnumDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
@@ -157,6 +159,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     @Override
     public EnumDeclaration clone() {
         return (EnumDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    public EnumDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.enumDeclarationMetaModel;
     }
 }
 

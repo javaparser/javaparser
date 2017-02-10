@@ -33,6 +33,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.IntersectionTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -110,6 +112,10 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     @Override
     public IntersectionType clone() {
         return (IntersectionType) accept(new CloneVisitor(), null);
+    }
+
+    public IntersectionTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.intersectionTypeMetaModel;
     }
 }
 

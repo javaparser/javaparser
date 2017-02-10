@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.EmptyStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Julio Vilmar Gesser
@@ -63,6 +65,10 @@ public final class EmptyStmt extends Statement {
     @Override
     public EmptyStmt clone() {
         return (EmptyStmt) accept(new CloneVisitor(), null);
+    }
+
+    public EmptyStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.emptyStmtMetaModel;
     }
 }
 

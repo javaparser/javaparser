@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TypeExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
@@ -93,6 +95,10 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     @Override
     public TypeExpr clone() {
         return (TypeExpr) accept(new CloneVisitor(), null);
+    }
+
+    public TypeExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeExprMetaModel;
     }
 }
 

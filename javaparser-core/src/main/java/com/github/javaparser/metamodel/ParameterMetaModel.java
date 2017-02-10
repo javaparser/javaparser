@@ -2,7 +2,7 @@ package com.github.javaparser.metamodel;
 
 import java.util.Optional;
 
-public class ParameterMetaModel extends BaseNodeMetaModel {
+public class ParameterMetaModel extends NodeMetaModel {
 
     ParameterMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.body.Parameter.class, "Parameter", "com.github.javaparser.ast.body", false, false);

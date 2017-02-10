@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SingleMemberAnnotationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An annotation that has a single value. <br/><code>@Count(15)</code>
@@ -86,6 +88,10 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     @Override
     public SingleMemberAnnotationExpr clone() {
         return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
+    }
+
+    public SingleMemberAnnotationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.singleMemberAnnotationExprMetaModel;
     }
 }
 

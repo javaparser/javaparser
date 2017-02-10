@@ -39,6 +39,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ObjectCreationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A constructor call. <br/>In <code>new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};</code>
@@ -246,6 +248,10 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Override
     public ObjectCreationExpr clone() {
         return (ObjectCreationExpr) accept(new CloneVisitor(), null);
+    }
+
+    public ObjectCreationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.objectCreationExprMetaModel;
     }
 }
 

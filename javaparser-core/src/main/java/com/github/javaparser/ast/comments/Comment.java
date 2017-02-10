@@ -26,6 +26,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CommentMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -132,6 +134,10 @@ public abstract class Comment extends Node {
     @Override
     public Comment clone() {
         return (Comment) accept(new CloneVisitor(), null);
+    }
+
+    public CommentMetaModel getMetaModel() {
+        return JavaParserMetaModel.commentMetaModel;
     }
 }
 

@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.InstanceOfExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Usage of the instanceof operator.
@@ -112,6 +114,10 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     @Override
     public InstanceOfExpr clone() {
         return (InstanceOfExpr) accept(new CloneVisitor(), null);
+    }
+
+    public InstanceOfExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.instanceOfExprMetaModel;
     }
 }
 

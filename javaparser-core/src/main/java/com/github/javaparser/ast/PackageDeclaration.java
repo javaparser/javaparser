@@ -33,6 +33,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A package declaration.
@@ -148,6 +150,10 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     @Override
     public PackageDeclaration clone() {
         return (PackageDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    public PackageDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.packageDeclarationMetaModel;
     }
 }
 

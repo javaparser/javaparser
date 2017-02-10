@@ -27,6 +27,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A literal string.
@@ -79,6 +81,10 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     @Override
     public StringLiteralExpr clone() {
         return (StringLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public StringLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.stringLiteralExprMetaModel;
     }
 }
 

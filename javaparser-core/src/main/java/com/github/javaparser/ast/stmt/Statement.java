@@ -23,6 +23,8 @@ package com.github.javaparser.ast.stmt;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.StatementMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A base class for all statements.
@@ -45,6 +47,10 @@ public abstract class Statement extends Node {
     @Override
     public Statement clone() {
         return (Statement) accept(new CloneVisitor(), null);
+    }
+
+    public StatementMetaModel getMetaModel() {
+        return JavaParserMetaModel.statementMetaModel;
     }
 }
 

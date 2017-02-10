@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.UnknownTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -84,6 +86,10 @@ public final class UnknownType extends Type {
     @Override
     public UnknownType clone() {
         return (UnknownType) accept(new CloneVisitor(), null);
+    }
+
+    public UnknownTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.unknownTypeMetaModel;
     }
 }
 

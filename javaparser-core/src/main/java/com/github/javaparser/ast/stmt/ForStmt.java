@@ -35,6 +35,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ForStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A classic for statement.
@@ -180,6 +182,10 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Override
     public ForStmt clone() {
         return (ForStmt) accept(new CloneVisitor(), null);
+    }
+
+    public ForStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.forStmtMetaModel;
     }
 }
 

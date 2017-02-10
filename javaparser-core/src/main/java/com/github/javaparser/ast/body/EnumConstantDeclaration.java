@@ -37,6 +37,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.EnumConstantDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
@@ -152,6 +154,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Override
     public EnumConstantDeclaration clone() {
         return (EnumConstantDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    public EnumConstantDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.enumConstantDeclarationMetaModel;
     }
 }
 

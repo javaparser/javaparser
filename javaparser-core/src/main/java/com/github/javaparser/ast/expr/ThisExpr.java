@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ThisExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An occurrence of the "this" keyword. <br/><code>World.this.greet()</code> is a MethodCallExpr of method name greet,
@@ -99,6 +101,10 @@ public final class ThisExpr extends Expression {
     @Override
     public ThisExpr clone() {
         return (ThisExpr) accept(new CloneVisitor(), null);
+    }
+
+    public ThisExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.thisExprMetaModel;
     }
 }
 

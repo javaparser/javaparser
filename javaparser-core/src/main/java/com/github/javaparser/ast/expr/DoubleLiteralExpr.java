@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DoubleLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A float or a double constant. This value is stored exactly as found in the source.
@@ -70,6 +72,10 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     @Override
     public DoubleLiteralExpr clone() {
         return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public DoubleLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.doubleLiteralExprMetaModel;
     }
 }
 

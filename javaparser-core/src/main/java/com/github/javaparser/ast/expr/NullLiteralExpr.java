@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NullLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A literal "null".
@@ -64,6 +66,10 @@ public final class NullLiteralExpr extends LiteralExpr {
     @Override
     public NullLiteralExpr clone() {
         return (NullLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public NullLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.nullLiteralExprMetaModel;
     }
 }
 

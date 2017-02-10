@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ClassExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Defines an expression that accesses the class of a type.
@@ -92,6 +94,10 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     @Override
     public ClassExpr clone() {
         return (ClassExpr) accept(new CloneVisitor(), null);
+    }
+
+    public ClassExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.classExprMetaModel;
     }
 }
 

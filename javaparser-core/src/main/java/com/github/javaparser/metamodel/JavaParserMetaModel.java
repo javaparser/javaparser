@@ -16,7 +16,7 @@ public final class JavaParserMetaModel {
     private static final List<BaseNodeMetaModel> nodeMetaModels = new ArrayList<>();
 
     private static void initializeConstructorParameters() {
-        stringLiteralExprMetaModel.getConstructorParameters().add(stringLiteralExprMetaModel.valuePropertyMetaModel);
+        stringLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         arrayCreationLevelMetaModel.getConstructorParameters().add(arrayCreationLevelMetaModel.dimensionPropertyMetaModel);
         arrayCreationLevelMetaModel.getConstructorParameters().add(arrayCreationLevelMetaModel.annotationsPropertyMetaModel);
         compilationUnitMetaModel.getConstructorParameters().add(compilationUnitMetaModel.packageDeclarationPropertyMetaModel);
@@ -98,23 +98,23 @@ public final class JavaParserMetaModel {
         booleanLiteralExprMetaModel.getConstructorParameters().add(booleanLiteralExprMetaModel.valuePropertyMetaModel);
         castExprMetaModel.getConstructorParameters().add(castExprMetaModel.typePropertyMetaModel);
         castExprMetaModel.getConstructorParameters().add(castExprMetaModel.expressionPropertyMetaModel);
-        charLiteralExprMetaModel.getConstructorParameters().add(stringLiteralExprMetaModel.valuePropertyMetaModel);
+        charLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         classExprMetaModel.getConstructorParameters().add(classExprMetaModel.typePropertyMetaModel);
         conditionalExprMetaModel.getConstructorParameters().add(conditionalExprMetaModel.conditionPropertyMetaModel);
         conditionalExprMetaModel.getConstructorParameters().add(conditionalExprMetaModel.thenExprPropertyMetaModel);
         conditionalExprMetaModel.getConstructorParameters().add(conditionalExprMetaModel.elseExprPropertyMetaModel);
-        doubleLiteralExprMetaModel.getConstructorParameters().add(stringLiteralExprMetaModel.valuePropertyMetaModel);
+        doubleLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         enclosedExprMetaModel.getConstructorParameters().add(enclosedExprMetaModel.innerPropertyMetaModel);
         fieldAccessExprMetaModel.getConstructorParameters().add(fieldAccessExprMetaModel.scopePropertyMetaModel);
         fieldAccessExprMetaModel.getConstructorParameters().add(fieldAccessExprMetaModel.typeArgumentsPropertyMetaModel);
         fieldAccessExprMetaModel.getConstructorParameters().add(fieldAccessExprMetaModel.namePropertyMetaModel);
         instanceOfExprMetaModel.getConstructorParameters().add(instanceOfExprMetaModel.expressionPropertyMetaModel);
         instanceOfExprMetaModel.getConstructorParameters().add(instanceOfExprMetaModel.typePropertyMetaModel);
-        integerLiteralExprMetaModel.getConstructorParameters().add(stringLiteralExprMetaModel.valuePropertyMetaModel);
+        integerLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         lambdaExprMetaModel.getConstructorParameters().add(lambdaExprMetaModel.parametersPropertyMetaModel);
         lambdaExprMetaModel.getConstructorParameters().add(lambdaExprMetaModel.bodyPropertyMetaModel);
         lambdaExprMetaModel.getConstructorParameters().add(lambdaExprMetaModel.isEnclosingParametersPropertyMetaModel);
-        longLiteralExprMetaModel.getConstructorParameters().add(stringLiteralExprMetaModel.valuePropertyMetaModel);
+        longLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         markerAnnotationExprMetaModel.getConstructorParameters().add(annotationExprMetaModel.namePropertyMetaModel);
         memberValuePairMetaModel.getConstructorParameters().add(memberValuePairMetaModel.namePropertyMetaModel);
         memberValuePairMetaModel.getConstructorParameters().add(memberValuePairMetaModel.valuePropertyMetaModel);
@@ -263,6 +263,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(lambdaExprMetaModel);
         nodeMetaModels.add(lineCommentMetaModel);
         nodeMetaModels.add(literalExprMetaModel);
+        nodeMetaModels.add(literalStringValueExprMetaModel);
         nodeMetaModels.add(localClassDeclarationStmtMetaModel);
         nodeMetaModels.add(longLiteralExprMetaModel);
         nodeMetaModels.add(markerAnnotationExprMetaModel);
@@ -331,8 +332,8 @@ public final class JavaParserMetaModel {
         typeDeclarationMetaModel.getDeclaredPropertyMetaModels().add(typeDeclarationMetaModel.modifiersPropertyMetaModel);
         typeDeclarationMetaModel.namePropertyMetaModel = new PropertyMetaModel(typeDeclarationMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false, false);
         typeDeclarationMetaModel.getDeclaredPropertyMetaModels().add(typeDeclarationMetaModel.namePropertyMetaModel);
-        stringLiteralExprMetaModel.valuePropertyMetaModel = new PropertyMetaModel(stringLiteralExprMetaModel, "value", java.lang.String.class, Optional.empty(), false, false, false, false, false);
-        stringLiteralExprMetaModel.getDeclaredPropertyMetaModels().add(stringLiteralExprMetaModel.valuePropertyMetaModel);
+        literalStringValueExprMetaModel.valuePropertyMetaModel = new PropertyMetaModel(literalStringValueExprMetaModel, "value", java.lang.String.class, Optional.empty(), false, false, false, false, false);
+        literalStringValueExprMetaModel.getDeclaredPropertyMetaModels().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         arrayCreationLevelMetaModel.annotationsPropertyMetaModel = new PropertyMetaModel(arrayCreationLevelMetaModel, "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, Optional.of(annotationExprMetaModel), false, false, true, false, false);
         arrayCreationLevelMetaModel.getDeclaredPropertyMetaModels().add(arrayCreationLevelMetaModel.annotationsPropertyMetaModel);
         arrayCreationLevelMetaModel.dimensionPropertyMetaModel = new PropertyMetaModel(arrayCreationLevelMetaModel, "dimension", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false, false);
@@ -656,11 +657,13 @@ public final class JavaParserMetaModel {
 
     public static final TypeDeclarationMetaModel typeDeclarationMetaModel = new TypeDeclarationMetaModel(Optional.of(bodyDeclarationMetaModel));
 
-    public static final LiteralExprMetaModel literalExprMetaModel = new LiteralExprMetaModel(Optional.of(expressionMetaModel));
-
     public static final ReferenceTypeMetaModel referenceTypeMetaModel = new ReferenceTypeMetaModel(Optional.of(typeMetaModel));
 
-    public static final StringLiteralExprMetaModel stringLiteralExprMetaModel = new StringLiteralExprMetaModel(Optional.of(literalExprMetaModel));
+    public static final LiteralExprMetaModel literalExprMetaModel = new LiteralExprMetaModel(Optional.of(expressionMetaModel));
+
+    public static final LiteralStringValueExprMetaModel literalStringValueExprMetaModel = new LiteralStringValueExprMetaModel(Optional.of(literalExprMetaModel));
+
+    public static final StringLiteralExprMetaModel stringLiteralExprMetaModel = new StringLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
     public static final ArrayCreationLevelMetaModel arrayCreationLevelMetaModel = new ArrayCreationLevelMetaModel(Optional.of(nodeMetaModel));
 
@@ -714,13 +717,13 @@ public final class JavaParserMetaModel {
 
     public static final CastExprMetaModel castExprMetaModel = new CastExprMetaModel(Optional.of(expressionMetaModel));
 
-    public static final CharLiteralExprMetaModel charLiteralExprMetaModel = new CharLiteralExprMetaModel(Optional.of(stringLiteralExprMetaModel));
+    public static final CharLiteralExprMetaModel charLiteralExprMetaModel = new CharLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
     public static final ClassExprMetaModel classExprMetaModel = new ClassExprMetaModel(Optional.of(expressionMetaModel));
 
     public static final ConditionalExprMetaModel conditionalExprMetaModel = new ConditionalExprMetaModel(Optional.of(expressionMetaModel));
 
-    public static final DoubleLiteralExprMetaModel doubleLiteralExprMetaModel = new DoubleLiteralExprMetaModel(Optional.of(stringLiteralExprMetaModel));
+    public static final DoubleLiteralExprMetaModel doubleLiteralExprMetaModel = new DoubleLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
     public static final EnclosedExprMetaModel enclosedExprMetaModel = new EnclosedExprMetaModel(Optional.of(expressionMetaModel));
 
@@ -728,11 +731,11 @@ public final class JavaParserMetaModel {
 
     public static final InstanceOfExprMetaModel instanceOfExprMetaModel = new InstanceOfExprMetaModel(Optional.of(expressionMetaModel));
 
-    public static final IntegerLiteralExprMetaModel integerLiteralExprMetaModel = new IntegerLiteralExprMetaModel(Optional.of(stringLiteralExprMetaModel));
+    public static final IntegerLiteralExprMetaModel integerLiteralExprMetaModel = new IntegerLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
     public static final LambdaExprMetaModel lambdaExprMetaModel = new LambdaExprMetaModel(Optional.of(expressionMetaModel));
 
-    public static final LongLiteralExprMetaModel longLiteralExprMetaModel = new LongLiteralExprMetaModel(Optional.of(stringLiteralExprMetaModel));
+    public static final LongLiteralExprMetaModel longLiteralExprMetaModel = new LongLiteralExprMetaModel(Optional.of(literalStringValueExprMetaModel));
 
     public static final MarkerAnnotationExprMetaModel markerAnnotationExprMetaModel = new MarkerAnnotationExprMetaModel(Optional.of(annotationExprMetaModel));
 

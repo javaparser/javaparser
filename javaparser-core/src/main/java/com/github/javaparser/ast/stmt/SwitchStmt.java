@@ -33,6 +33,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SwitchStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A switch statement.
@@ -136,6 +138,10 @@ public final class SwitchStmt extends Statement {
     @Override
     public SwitchStmt clone() {
         return (SwitchStmt) accept(new CloneVisitor(), null);
+    }
+
+    public SwitchStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.switchStmtMetaModel;
     }
 }
 

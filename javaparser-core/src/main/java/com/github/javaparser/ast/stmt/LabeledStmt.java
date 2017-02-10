@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.LabeledStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A statement that is labeled, like <code>label123: println("continuing");</code>
@@ -108,6 +110,10 @@ public final class LabeledStmt extends Statement {
     @Override
     public LabeledStmt clone() {
         return (LabeledStmt) accept(new CloneVisitor(), null);
+    }
+
+    public LabeledStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.labeledStmtMetaModel;
     }
 }
 

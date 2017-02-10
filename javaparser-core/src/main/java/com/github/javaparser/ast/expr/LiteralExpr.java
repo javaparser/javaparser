@@ -23,6 +23,8 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.LiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A base class for all literal expressions.
@@ -45,6 +47,10 @@ public abstract class LiteralExpr extends Expression {
     @Override
     public LiteralExpr clone() {
         return (LiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public LiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.literalExprMetaModel;
     }
 }
 

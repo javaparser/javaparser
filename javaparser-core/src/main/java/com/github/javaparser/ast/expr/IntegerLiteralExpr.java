@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * All ways to specify an int literal.
@@ -72,6 +74,10 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     @Override
     public IntegerLiteralExpr clone() {
         return (IntegerLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public IntegerLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.integerLiteralExprMetaModel;
     }
 }
 

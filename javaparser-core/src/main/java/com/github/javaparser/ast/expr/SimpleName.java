@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SimpleNameMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A name that consists of a single identifier.
@@ -87,6 +89,10 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Override
     public SimpleName clone() {
         return (SimpleName) accept(new CloneVisitor(), null);
+    }
+
+    public SimpleNameMetaModel getMetaModel() {
+        return JavaParserMetaModel.simpleNameMetaModel;
     }
 }
 

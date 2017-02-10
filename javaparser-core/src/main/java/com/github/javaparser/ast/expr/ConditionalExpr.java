@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ConditionalExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An if-then or if-then-else construct.
@@ -121,6 +123,10 @@ public final class ConditionalExpr extends Expression {
     @Override
     public ConditionalExpr clone() {
         return (ConditionalExpr) accept(new CloneVisitor(), null);
+    }
+
+    public ConditionalExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.conditionalExprMetaModel;
     }
 }
 

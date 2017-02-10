@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * All ways to specify a long literal.
@@ -72,6 +74,10 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     @Override
     public LongLiteralExpr clone() {
         return (LongLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    public LongLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.longLiteralExprMetaModel;
     }
 }
 

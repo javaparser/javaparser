@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ThrowStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Usage of the throw statement.
@@ -92,6 +94,10 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     @Override
     public ThrowStmt clone() {
         return (ThrowStmt) accept(new CloneVisitor(), null);
+    }
+
+    public ThrowStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.throwStmtMetaModel;
     }
 }
 
