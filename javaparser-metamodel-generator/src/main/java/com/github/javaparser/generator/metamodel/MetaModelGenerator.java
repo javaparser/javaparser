@@ -140,7 +140,7 @@ public class MetaModelGenerator {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
-        final Path root = Paths.get(args[0], "..", "javaparser-metamodel", "src", "main", "java");
+        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root);
 
         new MetaModelGenerator().run(sourceRoot);
