@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-generator-utils</artifactId>
+            <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
