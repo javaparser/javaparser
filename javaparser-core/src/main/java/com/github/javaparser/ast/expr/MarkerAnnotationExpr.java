@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -68,6 +70,11 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     @Override
     public MarkerAnnotationExpr clone() {
         return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public MarkerAnnotationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }
 }
 

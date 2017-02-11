@@ -7,15 +7,15 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetNodeListsGenerator extends NodeGenerator {
     public GetNodeListsGenerator(JavaParser javaParser, SourceRoot sourceRoot) {

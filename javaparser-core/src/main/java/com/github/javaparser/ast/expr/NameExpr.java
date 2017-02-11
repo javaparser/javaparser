@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NameExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -94,6 +96,11 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     @Override
     public NameExpr clone() {
         return (NameExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public NameExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.nameExprMetaModel;
     }
 }
 

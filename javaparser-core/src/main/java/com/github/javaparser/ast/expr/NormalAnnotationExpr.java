@@ -31,6 +31,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NormalAnnotationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
@@ -119,6 +121,11 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     @Override
     public NormalAnnotationExpr clone() {
         return (NormalAnnotationExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public NormalAnnotationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }
 }
 

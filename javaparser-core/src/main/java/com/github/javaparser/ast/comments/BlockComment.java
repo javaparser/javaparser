@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.BlockCommentMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <p>
@@ -71,6 +73,11 @@ public final class BlockComment extends Comment {
     @Override
     public BlockComment clone() {
         return (BlockComment) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public BlockCommentMetaModel getMetaModel() {
+        return JavaParserMetaModel.blockCommentMetaModel;
     }
 }
 

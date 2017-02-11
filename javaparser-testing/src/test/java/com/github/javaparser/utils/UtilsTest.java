@@ -23,14 +23,23 @@ package com.github.javaparser.utils;
 
 import org.junit.Test;
 
+import static com.github.javaparser.utils.Utils.*;
 import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
 
     @Test
-    public void testToCamelCase() {
-        assertEquals("abc", Utils.toCamelCase("ABC"));
-        assertEquals("abcDef", Utils.toCamelCase("ABC_DEF"));
-        assertEquals("abc", Utils.toCamelCase("ABC_"));
+    public void testScreamingToCamelCase() {
+        assertEquals("abc", screamingToCamelCase("ABC"));
+        assertEquals("abcDef", screamingToCamelCase("ABC_DEF"));
+        assertEquals("abc", screamingToCamelCase("ABC_"));
+    }
+
+    @Test
+    public void screamingEmptyString() {
+        assertEquals("", camelCaseToScreaming(""));
+        assertEquals("ABC", camelCaseToScreaming("abc"));
+        assertEquals("HELLO_HELLO", camelCaseToScreaming("HelloHello"));
+        assertEquals("APE_TAIL", camelCaseToScreaming("apeTail"));
     }
 }

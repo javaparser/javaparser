@@ -42,6 +42,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 import static java.util.Collections.unmodifiableList;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -533,6 +535,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
     @Override
     public Node clone() {
         return (Node) accept(new CloneVisitor(), null);
+    }
+
+    public NodeMetaModel getMetaModel() {
+        return JavaParserMetaModel.nodeMetaModel;
     }
 }
 

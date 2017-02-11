@@ -34,6 +34,8 @@ import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
@@ -192,6 +194,11 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     @Override
     public CallableDeclaration<?> clone() {
         return (CallableDeclaration<?>) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public CallableDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.callableDeclarationMetaModel;
     }
 }
 

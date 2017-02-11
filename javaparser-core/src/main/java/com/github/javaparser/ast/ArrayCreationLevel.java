@@ -34,6 +34,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ArrayCreationLevelMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -145,6 +147,11 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     @Override
     public ArrayCreationLevel clone() {
         return (ArrayCreationLevel) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ArrayCreationLevelMetaModel getMetaModel() {
+        return JavaParserMetaModel.arrayCreationLevelMetaModel;
     }
 }
 

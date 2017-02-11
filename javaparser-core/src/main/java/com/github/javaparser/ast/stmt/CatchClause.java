@@ -36,6 +36,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CatchClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The catch part of a try-catch-finally. <br/>In <code>try { ... } catch (Exception e) { ... }</code> the CatchClause
@@ -123,6 +125,11 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     @Override
     public CatchClause clone() {
         return (CatchClause) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public CatchClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.catchClauseMetaModel;
     }
 }
 

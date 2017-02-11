@@ -37,6 +37,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.MethodCallExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A method call on an object. <br/><code>circle.circumference()</code> <br/>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -194,6 +196,11 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     @Override
     public MethodCallExpr clone() {
         return (MethodCallExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public MethodCallExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.methodCallExprMetaModel;
     }
 }
 

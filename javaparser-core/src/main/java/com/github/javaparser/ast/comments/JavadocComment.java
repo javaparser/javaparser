@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.JavadocCommentMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
@@ -73,6 +75,11 @@ public final class JavadocComment extends Comment {
     @Override
     public JavadocComment clone() {
         return (JavadocComment) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public JavadocCommentMetaModel getMetaModel() {
+        return JavaParserMetaModel.javadocCommentMetaModel;
     }
 }
 

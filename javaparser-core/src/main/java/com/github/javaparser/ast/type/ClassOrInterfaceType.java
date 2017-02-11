@@ -37,6 +37,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
@@ -197,6 +199,11 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     @Override
     public ClassOrInterfaceType clone() {
         return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ClassOrInterfaceTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }
 }
 

@@ -26,6 +26,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.LineCommentMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <p>
@@ -75,6 +77,11 @@ public final class LineComment extends Comment {
     @Override
     public LineComment clone() {
         return (LineComment) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public LineCommentMetaModel getMetaModel() {
+        return JavaParserMetaModel.lineCommentMetaModel;
     }
 }
 

@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ForeachStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A for-each statement.
@@ -131,6 +133,11 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     @Override
     public ForeachStmt clone() {
         return (ForeachStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ForeachStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.foreachStmtMetaModel;
     }
 }
 

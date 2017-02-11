@@ -35,6 +35,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -203,6 +205,11 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     @Override
     public ExplicitConstructorInvocationStmt clone() {
         return (ExplicitConstructorInvocationStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ExplicitConstructorInvocationStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.explicitConstructorInvocationStmtMetaModel;
     }
 }
 

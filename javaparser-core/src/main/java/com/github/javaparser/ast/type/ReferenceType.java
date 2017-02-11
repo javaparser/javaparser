@@ -24,6 +24,8 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Base class for reference types.
@@ -50,6 +52,11 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
     @Override
     public ReferenceType<?> clone() {
         return (ReferenceType<?>) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ReferenceTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.referenceTypeMetaModel;
     }
 }
 

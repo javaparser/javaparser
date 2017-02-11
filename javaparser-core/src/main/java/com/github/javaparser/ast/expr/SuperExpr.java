@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SuperExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An occurrence of the "super" keyword. <br/><code>World.super.greet()</code> is a MethodCallExpr of method name greet,
@@ -105,6 +107,11 @@ public final class SuperExpr extends Expression {
     @Override
     public SuperExpr clone() {
         return (SuperExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public SuperExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.superExprMetaModel;
     }
 }
 

@@ -28,6 +28,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.AssignExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -134,6 +136,11 @@ public final class AssignExpr extends Expression {
     @Override
     public AssignExpr clone() {
         return (AssignExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public AssignExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.assignExprMetaModel;
     }
 }
 

@@ -36,6 +36,8 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The declaration of a variable.<br/><code>int x = 14;</code>
@@ -176,6 +178,11 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     @Override
     public VariableDeclarator clone() {
         return (VariableDeclarator) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public VariableDeclaratorMetaModel getMetaModel() {
+        return JavaParserMetaModel.variableDeclaratorMetaModel;
     }
 }
 

@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ExpressionStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -91,6 +93,11 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     @Override
     public ExpressionStmt clone() {
         return (ExpressionStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ExpressionStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.expressionStmtMetaModel;
     }
 }
 

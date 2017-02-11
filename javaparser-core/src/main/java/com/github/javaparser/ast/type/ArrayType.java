@@ -37,6 +37,8 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ArrayTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -176,6 +178,11 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     public ArrayType clone() {
         return (ArrayType) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ArrayTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.arrayTypeMetaModel;
     }
 }
 

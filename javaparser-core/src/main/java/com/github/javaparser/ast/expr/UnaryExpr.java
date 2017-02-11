@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.UnaryExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -134,6 +136,11 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     @Override
     public UnaryExpr clone() {
         return (UnaryExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public UnaryExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.unaryExprMetaModel;
     }
 }
 

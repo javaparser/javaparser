@@ -22,13 +22,13 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A literal string.
@@ -39,9 +39,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
  *
  * @author Julio Vilmar Gesser
  */
-public class StringLiteralExpr extends LiteralExpr {
-
-    protected String value;
+public class StringLiteralExpr extends LiteralStringValueExpr {
 
     public StringLiteralExpr() {
         this(null, "empty");
@@ -60,8 +58,7 @@ public class StringLiteralExpr extends LiteralExpr {
     }
 
     public StringLiteralExpr(final Range range, final String value) {
-        super(range);
-        setValue(value);
+        super(range, value);
     }
 
     @Override
@@ -74,17 +71,6 @@ public class StringLiteralExpr extends LiteralExpr {
         v.visit(this, arg);
     }
 
-    public final String getValue() {
-        return value;
-    }
-
-    public final StringLiteralExpr setValue(final String value) {
-        assertNotNull(value);
-        notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        this.value = value;
-        return this;
-    }
-
     @Override
     public boolean remove(Node node) {
         if (node == null)
@@ -95,6 +81,11 @@ public class StringLiteralExpr extends LiteralExpr {
     @Override
     public StringLiteralExpr clone() {
         return (StringLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public StringLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.stringLiteralExprMetaModel;
     }
 }
 

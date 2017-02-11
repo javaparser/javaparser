@@ -34,6 +34,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A primitive type.
@@ -172,6 +174,11 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     @Override
     public PrimitiveType clone() {
         return (PrimitiveType) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public PrimitiveTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.primitiveTypeMetaModel;
     }
 }
 
