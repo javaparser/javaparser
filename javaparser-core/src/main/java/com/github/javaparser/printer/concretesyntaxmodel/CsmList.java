@@ -32,23 +32,25 @@ import java.util.Iterator;
 
 public class CsmList implements CsmElement {
     private ObservableProperty property;
-    private CsmElement separator;
+    private CsmElement separatorPost;
+    private CsmElement separatorPre;
     private CsmElement preceeding;
     private CsmElement following;
 
     public CsmList(ObservableProperty property, CsmElement separator) {
         this.property = property;
-        this.separator = separator;
+        this.separatorPost = separator;
     }
 
     public CsmList(ObservableProperty property) {
         this.property = property;
-        this.separator = null;
+        this.separatorPost = null;
     }
 
-    public CsmList(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
+    public CsmList(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
         this.property = property;
-        this.separator = separator;
+        this.separatorPre = separatorPre;
+        this.separatorPost = separatorPost;
         this.preceeding = preceeding;
         this.following = following;
     }
@@ -65,8 +67,8 @@ public class CsmList implements CsmElement {
             }
             for (int i = 0; i < nodeList.size(); i++) {
                 ConcreteSyntaxModel.genericPrettyPrint(nodeList.get(i), printer);
-                if (separator != null && i != (nodeList.size() - 1)) {
-                    separator.prettyPrint(node, printer);
+                if (separatorPost != null && i != (nodeList.size() - 1)) {
+                    separatorPost.prettyPrint(node, printer);
                 }
             }
             if (!nodeList.isEmpty() && following != null) {
@@ -81,9 +83,12 @@ public class CsmList implements CsmElement {
                 preceeding.prettyPrint(node, printer);
             }
             for (Iterator it = values.iterator(); it.hasNext(); ) {
+                if (separatorPre != null && it.hasNext()) {
+                    separatorPre.prettyPrint(node, printer);
+                }
                 printer.print(PrintingHelper.printToString(it.next()));
-                if (separator != null && it.hasNext()) {
-                    separator.prettyPrint(node, printer);
+                if (separatorPost != null && it.hasNext()) {
+                    separatorPost.prettyPrint(node, printer);
                 }
             }
             if (!values.isEmpty() && following != null) {

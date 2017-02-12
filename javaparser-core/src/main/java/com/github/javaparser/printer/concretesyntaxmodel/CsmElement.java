@@ -101,11 +101,15 @@ public interface CsmElement {
     }
 
     static CsmElement list(ObservableProperty property, CsmElement separator) {
-        return new CsmList(property, separator, new CsmNone(), new CsmNone());
+        return new CsmList(property, CsmElement.none(), separator, new CsmNone(), new CsmNone());
     }
 
     static CsmElement list(ObservableProperty property, CsmElement separator, CsmElement preceeding, CsmElement following) {
-        return new CsmList(property, separator, preceeding, following);
+        return new CsmList(property, none(), separator, preceeding, following);
+    }
+
+    static CsmElement list(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
+        return new CsmList(property, separatorPre, separatorPost, preceeding, following);
     }
 
     static CsmElement orphanCommentsEnding() {

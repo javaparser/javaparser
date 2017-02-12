@@ -34,9 +34,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.*;
 import java.util.*;
 
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.FLAG;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_NOT_EMPTY;
-import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.IS_PRESENT;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.conditional;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.list;
@@ -521,6 +519,31 @@ public class ConcreteSyntaxModel {
                 CsmElement.token(ASTParserConstants.LBRACE),
                 CsmElement.list(ObservableProperty.VALUES, CsmElement.sequence(CsmElement.comma(), CsmElement.space()), CsmElement.space(), CsmElement.space()),
                 CsmElement.token(ASTParserConstants.RBRACE)));
+
+        concreteSyntaxModelByClass.put(EnumDeclaration.class, CsmElement.sequence(
+                CsmElement.comment(),
+                annotations(),
+                modifiers(),
+                CsmElement.token(ASTParserConstants.ENUM),
+                CsmElement.space(),
+                CsmElement.child(ObservableProperty.NAME),
+                list(ObservableProperty.IMPLEMENTED_TYPES,
+                        CsmElement.sequence(CsmElement.comma(), CsmElement.space()),
+                        CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants.IMPLEMENTS), CsmElement.space()),
+                        CsmElement.none()),
+                CsmElement.space(),
+                CsmElement.token(ASTParserConstants.LBRACE),
+                CsmElement.indent(),
+                CsmElement.list(ObservableProperty.ENTRIES,
+                        CsmElement.sequence(CsmElement.comma(), CsmElement.space()),
+                        CsmElement.newline(),
+                        CsmElement.none()),
+                CsmElement.conditional(ObservableProperty.MEMBERS, IS_EMPTY,
+                        CsmElement.conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, CsmElement.newline()),
+                        CsmElement.sequence(CsmElement.semicolon(), CsmElement.newline(), CsmElement.list(ObservableProperty.MEMBERS, CsmElement.newline(), CsmElement.newline(), CsmElement.none(), CsmElement.none()))),
+                CsmElement.unindent(),
+                CsmElement.token(ASTParserConstants.RBRACE)
+        ));
 
     }
 
