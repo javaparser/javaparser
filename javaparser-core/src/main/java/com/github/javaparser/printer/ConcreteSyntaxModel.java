@@ -571,7 +571,12 @@ public class ConcreteSyntaxModel {
                 CsmElement.token(ASTParserConstants.RBRACKET)
         ));
 
-//        concreteSyntaxModelByClass.put(SuperExpr.class, CsmElement.none());
+        concreteSyntaxModelByClass.put(SuperExpr.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.conditional(ObservableProperty.CLASS_EXPR, IS_PRESENT, CsmElement.sequence(CsmElement.child(ObservableProperty.CLASS_EXPR), CsmElement.token(ASTParserConstants.DOT))),
+                CsmElement.token(ASTParserConstants.SUPER)
+        ));
+
 //
 //        concreteSyntaxModelByClass.put(LocalClassDeclarationStmt.class, CsmElement.none());
 //
