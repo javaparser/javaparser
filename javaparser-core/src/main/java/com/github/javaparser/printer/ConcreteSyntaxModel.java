@@ -435,6 +435,14 @@ public class ConcreteSyntaxModel {
                 comment(),
                 attribute(ObservableProperty.VALUE)
         ));
+        concreteSyntaxModelByClass.put(LongLiteralExpr.class, sequence(
+                comment(),
+                attribute(ObservableProperty.VALUE)
+        ));
+        concreteSyntaxModelByClass.put(DoubleLiteralExpr.class, sequence(
+                comment(),
+                attribute(ObservableProperty.VALUE)
+        ));
         concreteSyntaxModelByClass.put(MethodReferenceExpr.class, sequence(
                 comment(),
                 child(ObservableProperty.SCOPE),
