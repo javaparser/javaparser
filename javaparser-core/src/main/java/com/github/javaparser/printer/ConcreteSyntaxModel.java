@@ -224,7 +224,7 @@ public class ConcreteSyntaxModel {
                     modifiers(),
                     conditional(ObservableProperty.VARIABLES, IS_NOT_EMPTY, child(ObservableProperty.MAXIMUM_COMMON_TYPE)),
                     space(),
-                    list(ObservableProperty.VARIABLES, sequence(comma(), space(), null, null)),
+                    list(ObservableProperty.VARIABLES, sequence(comma(), space())),
                     semicolon()));
 
         // FIXME array levels

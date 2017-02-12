@@ -30,6 +30,12 @@ public class CsmSequence implements CsmElement {
     private List<CsmElement> elements;
 
     public CsmSequence(List<CsmElement> elements) {
+        if (elements == null) {
+            throw new NullPointerException();
+        }
+        if (elements.stream().filter(e -> e == null).findAny().isPresent()) {
+            throw new IllegalArgumentException("Null element in the sequence");
+        }
         this.elements = elements;
     }
 
