@@ -203,6 +203,8 @@ public enum ObservableProperty {
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+        } catch (ClassCastException e) {
+            throw new RuntimeException(e);
         }
     }
 

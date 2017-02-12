@@ -263,9 +263,7 @@ public class ConcreteSyntaxModel {
             token(ASTParserConstants.LPAREN),
             list(ObservableProperty.ARGUMENTS, sequence(comma(), space()), none(), none()),
             token(ASTParserConstants.RPAREN),
-            conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT, sequence(
-                    space(),
-                    child(ObservableProperty.ANONYMOUS_CLASS_BODY)))
+            conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT, CsmElement.list(ObservableProperty.ANONYMOUS_CLASS_BODY, CsmElement.newline(), CsmElement.newline(), CsmElement.space(), CsmElement.none()))
         ));
 
         concreteSyntaxModelByClass.put(MethodCallExpr.class, sequence(
