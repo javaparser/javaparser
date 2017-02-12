@@ -66,6 +66,9 @@ public class CsmList implements CsmElement {
                 preceeding.prettyPrint(node, printer);
             }
             for (int i = 0; i < nodeList.size(); i++) {
+                if (separatorPre != null && i != 0) {
+                    separatorPre.prettyPrint(node, printer);
+                }
                 ConcreteSyntaxModel.genericPrettyPrint(nodeList.get(i), printer);
                 if (separatorPost != null && i != (nodeList.size() - 1)) {
                     separatorPost.prettyPrint(node, printer);

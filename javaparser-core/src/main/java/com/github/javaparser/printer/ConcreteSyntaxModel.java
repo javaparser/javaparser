@@ -62,7 +62,8 @@ public class ConcreteSyntaxModel {
     }
 
     private static CsmElement typeParameters() {
-        return list(ObservableProperty.TYPE_PARAMETERS, none(), space(), space());
+        return list(ObservableProperty.TYPE_PARAMETERS, CsmElement.sequence(CsmElement.comma(), CsmElement.space()), CsmElement.token(ASTParserConstants.LT),
+                CsmElement.sequence(CsmElement.token(ASTParserConstants.GT), CsmElement.space()));
     }
 
     private static CsmElement typeArguments() {
@@ -124,7 +125,6 @@ public class ConcreteSyntaxModel {
                 memberAnnotations(),
                 modifiers(),
                 typeParameters(),
-                conditional(ObservableProperty.IS_GENERIC, FLAG, space()),
                 child(ObservableProperty.NAME),
                 token(ASTParserConstants.LPAREN),
                 list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
@@ -173,7 +173,7 @@ public class ConcreteSyntaxModel {
                 token(ASTParserConstants.LPAREN),
                 list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
                 token(ASTParserConstants.RPAREN),
-                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(space(), token(ASTParserConstants.THROWS), space()), none(), sequence(comma(), space())),
+                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(ASTParserConstants.THROWS), space()), none()),
                 conditional(ObservableProperty.BODY, IS_PRESENT, sequence(space(), child(ObservableProperty.BODY)), semicolon())
         ));
 
