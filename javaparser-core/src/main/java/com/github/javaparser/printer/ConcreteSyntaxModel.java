@@ -627,9 +627,18 @@ public class ConcreteSyntaxModel {
                 CsmElement.comment(),
                 CsmElement.token(ASTParserConstants.SEMICOLON)
         ));
-//
-//        concreteSyntaxModelByClass.put(SwitchStmt.class, CsmElement.none());
 
+        concreteSyntaxModelByClass.put(SwitchStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.SWITCH),
+                CsmElement.token(ASTParserConstants.LPAREN),
+                CsmElement.child(ObservableProperty.SELECTOR),
+                CsmElement.token(ASTParserConstants.RPAREN),
+                CsmElement.space(),
+                CsmElement.token(ASTParserConstants.LBRACE),
+                CsmElement.list(ObservableProperty.ENTRIES, CsmElement.none(), CsmElement.indent(), CsmElement.unindent()),
+                CsmElement.token(ASTParserConstants.RBRACE)
+        ));
     }
 
     private ConcreteSyntaxModel() {

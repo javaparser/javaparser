@@ -889,7 +889,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.unindent();
         }
         printer.print("}");
-
     }
 
     @Override
