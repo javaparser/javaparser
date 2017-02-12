@@ -219,7 +219,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(FieldDeclaration.class, sequence(
                     orphanCommentsBeforeThis(),
                     comment(),
-                    list(ObservableProperty.ANNOTATIONS),
+                    annotations(),
                     modifiers(),
                     conditional(ObservableProperty.VARIABLES, IS_NOT_EMPTY, child(ObservableProperty.MAXIMUM_COMMON_TYPE)),
                     space(),
