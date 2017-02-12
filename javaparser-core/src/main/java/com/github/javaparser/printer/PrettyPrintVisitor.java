@@ -372,13 +372,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printer.print("?");
-        if (n.getExtendedTypes().isPresent()) {
+        if (n.getExtendedType().isPresent()) {
             printer.print(" extends ");
-            n.getExtendedTypes().get().accept(this, arg);
+            n.getExtendedType().get().accept(this, arg);
         }
-        if (n.getSuperTypes().isPresent()) {
+        if (n.getSuperType().isPresent()) {
             printer.print(" super ");
-            n.getSuperTypes().get().accept(this, arg);
+            n.getSuperType().get().accept(this, arg);
         }
     }
 

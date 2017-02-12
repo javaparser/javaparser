@@ -306,8 +306,8 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(WildcardType _n, Object _arg) {
-        ReferenceType extendedTypes = cloneNode(_n.getExtendedTypes(), _arg);
-        ReferenceType superTypes = cloneNode(_n.getSuperTypes(), _arg);
+        ReferenceType extendedTypes = cloneNode(_n.getExtendedType(), _arg);
+        ReferenceType superTypes = cloneNode(_n.getSuperType(), _arg);
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
         WildcardType r = new WildcardType(_n.getRange().orElse(null), extendedTypes, superTypes);

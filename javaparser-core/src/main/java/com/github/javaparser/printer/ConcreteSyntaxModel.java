@@ -282,10 +282,9 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(VoidType.class, sequence(comment(), annotations(), token(ASTParserConstants.VOID)));
 
         concreteSyntaxModelByClass.put(WildcardType.class, sequence(comment(), annotations(), token(ASTParserConstants.HOOK),
-                list(ObservableProperty.EXTENDED_TYPES, sequence(space(), token(ASTParserConstants.EXTENDS), space()), none(), sequence(comma(), space())),
-                list(ObservableProperty.SUPER_TYPES, sequence(space(), token(ASTParserConstants.SUPER), space()), none(), sequence(comma(), space()))));
-
-
+                CsmElement.conditional(ObservableProperty.EXTENDED_TYPE, IS_PRESENT, CsmElement.sequence(space(), token(ASTParserConstants.EXTENDS), space(), CsmElement.child(EXTENDED_TYPE))),
+                CsmElement.conditional(ObservableProperty.SUPER_TYPE, IS_PRESENT, CsmElement.sequence(space(), token(ASTParserConstants.SUPER), space(), CsmElement.child(SUPER_TYPE)))));
+        
         concreteSyntaxModelByClass.put(MarkerAnnotationExpr.class, sequence(comment(), token(ASTParserConstants.AT), attribute(ObservableProperty.NAME)));
 
         concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(comment(), token(ASTParserConstants.RETURN),

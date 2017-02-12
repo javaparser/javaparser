@@ -46,27 +46,27 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
 
-    private ReferenceType extendedTypes;
+    private ReferenceType extendedType;
 
-    private ReferenceType superTypes;
+    private ReferenceType superType;
 
     public WildcardType() {
         this(null, null, null);
     }
 
-    public WildcardType(final ReferenceType extendedTypes) {
-        this(null, extendedTypes, null);
+    public WildcardType(final ReferenceType extendedType) {
+        this(null, extendedType, null);
     }
 
     @AllFieldsConstructor
-    public WildcardType(final ReferenceType extendedTypes, final ReferenceType superTypes) {
-        this(null, extendedTypes, superTypes);
+    public WildcardType(final ReferenceType extendedType, final ReferenceType superType) {
+        this(null, extendedType, superType);
     }
 
-    public WildcardType(final Range range, final ReferenceType extendedTypes, final ReferenceType superTypes) {
+    public WildcardType(final Range range, final ReferenceType extendedType, final ReferenceType superType) {
         super(range, new NodeList<>());
-        setExtendedTypes(extendedTypes);
-        setSuperTypes(superTypes);
+        setExtendedType(extendedType);
+        setSuperType(superType);
     }
 
     @Override
@@ -79,12 +79,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         v.visit(this, arg);
     }
 
-    public Optional<ReferenceType> getExtendedTypes() {
-        return Optional.ofNullable(extendedTypes);
+    public Optional<ReferenceType> getExtendedType() {
+        return Optional.ofNullable(extendedType);
     }
 
-    public Optional<ReferenceType> getSuperTypes() {
-        return Optional.ofNullable(superTypes);
+    public Optional<ReferenceType> getSuperType() {
+        return Optional.ofNullable(superType);
     }
 
     /**
@@ -93,12 +93,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @param ext the extends, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setExtendedTypes(final ReferenceType extendedTypes) {
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
-        if (this.extendedTypes != null)
-            this.extendedTypes.setParentNode(null);
-        this.extendedTypes = extendedTypes;
-        setAsParentNodeOf(extendedTypes);
+    public WildcardType setExtendedType(final ReferenceType extendedType) {
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedType, extendedType);
+        if (this.extendedType != null)
+            this.extendedType.setParentNode(null);
+        this.extendedType = extendedType;
+        setAsParentNodeOf(extendedType);
         return this;
     }
 
@@ -108,12 +108,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @param sup the super, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setSuperTypes(final ReferenceType superTypes) {
-        notifyPropertyChange(ObservableProperty.SUPER_TYPES, this.superTypes, superTypes);
-        if (this.superTypes != null)
-            this.superTypes.setParentNode(null);
-        this.superTypes = superTypes;
-        setAsParentNodeOf(superTypes);
+    public WildcardType setSuperType(final ReferenceType superType) {
+        notifyPropertyChange(ObservableProperty.SUPER_TYPES, this.superType, superType);
+        if (this.superType != null)
+            this.superType.setParentNode(null);
+        this.superType = superType;
+        setAsParentNodeOf(superType);
         return this;
     }
 
@@ -131,14 +131,14 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (extendedTypes != null) {
-            if (node == extendedTypes) {
+        if (extendedType != null) {
+            if (node == extendedType) {
                 removeExtendedTypes();
                 return true;
             }
         }
-        if (superTypes != null) {
-            if (node == superTypes) {
+        if (superType != null) {
+            if (node == superType) {
                 removeSuperTypes();
                 return true;
             }
@@ -147,11 +147,11 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     public WildcardType removeExtendedTypes() {
-        return setExtendedTypes((ReferenceType) null);
+        return setExtendedType((ReferenceType) null);
     }
 
     public WildcardType removeSuperTypes() {
-        return setSuperTypes((ReferenceType) null);
+        return setSuperType((ReferenceType) null);
     }
 
     @Override
