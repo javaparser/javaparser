@@ -563,6 +563,28 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.NAME)
         ));
 
+        concreteSyntaxModelByClass.put(ArrayAccessExpr.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.child(ObservableProperty.NAME),
+                CsmElement.token(ASTParserConstants.LBRACKET),
+                CsmElement.child(ObservableProperty.INDEX),
+                CsmElement.token(ASTParserConstants.RBRACKET)
+        ));
+
+//        concreteSyntaxModelByClass.put(SuperExpr.class, CsmElement.none());
+//
+//        concreteSyntaxModelByClass.put(LocalClassDeclarationStmt.class, CsmElement.none());
+//
+//        concreteSyntaxModelByClass.put(ExplicitConstructorInvocationStmt.class, CsmElement.none());
+//
+//        concreteSyntaxModelByClass.put(AssertStmt.class, CsmElement.none());
+//
+//        concreteSyntaxModelByClass.put(LabeledStmt.class, CsmElement.none());
+//
+//        concreteSyntaxModelByClass.put(EmptyStmt.class, CsmElement.none());
+//
+//        concreteSyntaxModelByClass.put(SwitchStmt.class, CsmElement.none());
+
     }
 
     private ConcreteSyntaxModel() {
