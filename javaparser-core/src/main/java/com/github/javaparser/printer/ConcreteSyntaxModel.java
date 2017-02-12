@@ -577,8 +577,10 @@ public class ConcreteSyntaxModel {
                 CsmElement.token(ASTParserConstants.SUPER)
         ));
 
-//
-//        concreteSyntaxModelByClass.put(LocalClassDeclarationStmt.class, CsmElement.none());
+        concreteSyntaxModelByClass.put(LocalClassDeclarationStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.child(ObservableProperty.CLASS_DECLARATION)
+        ));
 //
 //        concreteSyntaxModelByClass.put(ExplicitConstructorInvocationStmt.class, CsmElement.none());
 //
