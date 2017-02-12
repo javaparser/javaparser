@@ -129,7 +129,7 @@ public class ConcreteSyntaxModel {
                 token(ASTParserConstants.LPAREN),
                 list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
                 token(ASTParserConstants.RPAREN),
-                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(space(), token(ASTParserConstants.THROWS), space()), none(), sequence(comma(), space())),
+                list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(ASTParserConstants.THROWS), space()), none()),
                 space(),
                 child(ObservableProperty.BODY)
         ));
