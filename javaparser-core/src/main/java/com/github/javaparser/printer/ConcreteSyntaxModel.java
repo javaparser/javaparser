@@ -598,8 +598,21 @@ public class ConcreteSyntaxModel {
                 CsmElement.semicolon()
         ));
 
-//
-//        concreteSyntaxModelByClass.put(AssertStmt.class, CsmElement.none());
+
+        concreteSyntaxModelByClass.put(AssertStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.ASSERT),
+                CsmElement.space(),
+                CsmElement.child(ObservableProperty.CHECK),
+                CsmElement.conditional(ObservableProperty.MESSAGE, IS_PRESENT, CsmElement.sequence(
+                        CsmElement.space(),
+                        CsmElement.token(ASTParserConstants.COLON),
+                        CsmElement.space(),
+                        CsmElement.child(ObservableProperty.MESSAGE)
+                )),
+                CsmElement.semicolon()
+        ));
+
 //
 //        concreteSyntaxModelByClass.put(LabeledStmt.class, CsmElement.none());
 //
