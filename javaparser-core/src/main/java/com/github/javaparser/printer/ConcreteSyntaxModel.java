@@ -85,7 +85,7 @@ public class ConcreteSyntaxModel {
                     comment(),
                     child(ObservableProperty.PACKAGE_DECLARATION),
                     list(ObservableProperty.IMPORTS, none(), none(), newline()),
-                    list(TYPES, newline()),
+                    list(TYPES, newline(), CsmElement.none(), CsmElement.newline()),
                     orphanCommentsEnding()));
 
         concreteSyntaxModelByClass.put(PackageDeclaration.class, sequence(
@@ -194,8 +194,8 @@ public class ConcreteSyntaxModel {
                             token(ASTParserConstants.IMPLEMENTS),
                             space()), none()),
                     space(),
-                    block(sequence(newline(), newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), none(), newline()))),
-                    newline()));
+                    block(sequence(newline(), newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), none(), newline())))
+                    ));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),
                     conditional(SCOPE, IS_PRESENT, sequence(child(SCOPE), string(ASTParserConstants.DOT))),
@@ -539,7 +539,7 @@ public class ConcreteSyntaxModel {
                         none()),
                 conditional(ObservableProperty.MEMBERS, IS_EMPTY,
                         conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, newline()),
-                        sequence(CsmElement.semicolon(), newline(), list(ObservableProperty.MEMBERS, newline(), newline(), none(), none()))),
+                        sequence(CsmElement.semicolon(), newline(), CsmElement.newline(), list(ObservableProperty.MEMBERS, newline(), newline(), none(), none()))),
                 unindent(),
                 token(RBRACE)
         ));
