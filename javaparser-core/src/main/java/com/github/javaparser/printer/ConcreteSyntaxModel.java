@@ -67,7 +67,8 @@ public class ConcreteSyntaxModel {
     }
 
     private static CsmElement typeArguments() {
-        return list(ObservableProperty.TYPE_ARGUMENTS, none(), space(), space());
+        return list(ObservableProperty.TYPE_ARGUMENTS, CsmElement.sequence(CsmElement.comma(), CsmElement.space()), CsmElement.token(ASTParserConstants.LT),
+                CsmElement.sequence(CsmElement.token(ASTParserConstants.GT)));
     }
 
     static {
