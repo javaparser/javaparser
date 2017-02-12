@@ -185,10 +185,10 @@ public class ConcreteSyntaxModel {
                     space(),
                     child(ObservableProperty.NAME),
                     list(TYPE_PARAMETERS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
-                    list(ObservableProperty.EXTENDED_TYPES, sequence(
-                            space(),
-                            token(ASTParserConstants.EXTENDS),
-                            space()), none(), sequence(string(ASTParserConstants.COMMA), space())),
+                    list(ObservableProperty.EXTENDED_TYPES,
+                            sequence(string(ASTParserConstants.COMMA), space()),
+                            sequence(space(), token(ASTParserConstants.EXTENDS), space()),
+                            none()),
                     list(ObservableProperty.IMPLEMENTED_TYPES, sequence(string(ASTParserConstants.COMMA), space()), sequence(
                             space(),
                             token(ASTParserConstants.IMPLEMENTS),
