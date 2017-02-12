@@ -499,6 +499,8 @@ public class ConcreteSyntaxModel {
                 CsmElement.child(ObservableProperty.DIMENSION),
                 token(ASTParserConstants.RBRACKET)
         ));
+
+        concreteSyntaxModelByClass.put(EmptyMemberDeclaration.class, CsmElement.sequence(CsmElement.comment(), CsmElement.token(ASTParserConstants.SEMICOLON)));
     }
 
     private ConcreteSyntaxModel() {
