@@ -552,9 +552,15 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.NAME),
                 list(ObservableProperty.ARGUMENTS, sequence(comma(), space()), token(ASTParserConstants.LPAREN), token(ASTParserConstants.RPAREN)),
                 conditional(CLASS_BODY, IS_NOT_EMPTY, sequence(space(), token(ASTParserConstants.LBRACE),
-                        list(ObservableProperty.MEMBERS, newline(), newline(), none(), none()),
+                        list(ObservableProperty.CLASS_BODY, newline(), newline(), none(), none()),
                         unindent(),
                         token(RBRACE)))
+        ));
+
+        concreteSyntaxModelByClass.put(FieldAccessExpr.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.conditional(SCOPE, IS_PRESENT, CsmElement.sequence(CsmElement.child(SCOPE), CsmElement.token(ASTParserConstants.DOT))),
+                child(ObservableProperty.NAME)
         ));
 
     }
