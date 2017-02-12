@@ -501,6 +501,11 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(EmptyMemberDeclaration.class, CsmElement.sequence(CsmElement.comment(), CsmElement.token(ASTParserConstants.SEMICOLON)));
+
+        concreteSyntaxModelByClass.put(InitializerDeclaration.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.conditional(ObservableProperty.STATIC, FLAG, CsmElement.sequence(CsmElement.token(ASTParserConstants.STATIC), CsmElement.space())),
+                CsmElement.child(ObservableProperty.BODY)));
     }
 
     private ConcreteSyntaxModel() {
