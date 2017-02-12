@@ -33,8 +33,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
 
-import static com.github.javaparser.ASTParserConstants.AT;
-import static com.github.javaparser.ASTParserConstants.RBRACE;
+import static com.github.javaparser.ASTParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
@@ -102,7 +101,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(Name.class, sequence(
                 comment(),
                 conditional(ObservableProperty.QUALIFIER, IS_PRESENT, sequence(child(ObservableProperty.QUALIFIER), token(ASTParserConstants.DOT))),
-                attribute(IDENTIFIER),
+                attribute(ObservableProperty.IDENTIFIER),
                 orphanCommentsEnding()
         ));
 
@@ -110,7 +109,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 token(ASTParserConstants.IMPORT),
                 space(),
-                conditional(STATIC, FLAG, sequence(token(ASTParserConstants.STATIC), space())),
+                conditional(ObservableProperty.STATIC, FLAG, sequence(token(ASTParserConstants.STATIC), space())),
                 child(ObservableProperty.NAME),
                 conditional(IS_ASTERISK, FLAG, sequence(token(ASTParserConstants.DOT), token(ASTParserConstants.STAR))),
                 semicolon(),
@@ -675,6 +674,31 @@ public class ConcreteSyntaxModel {
                 CsmElement.token(ASTParserConstants.CONTINUE),
                 CsmElement.conditional(ObservableProperty.LABEL, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.child(ObservableProperty.LABEL))),
                 CsmElement.semicolon()
+        ));
+
+        concreteSyntaxModelByClass.put(DoStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.DO),
+                CsmElement.space(),
+                CsmElement.child(ObservableProperty.BODY),
+                CsmElement.space(),
+                CsmElement.token(ASTParserConstants.WHILE),
+                CsmElement.space(),
+                CsmElement.token(ASTParserConstants.LPAREN),
+                child(ObservableProperty.CONDITION),
+                CsmElement.token(ASTParserConstants.RPAREN),
+                CsmElement.semicolon()
+        ));
+
+        concreteSyntaxModelByClass.put(SynchronizedStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.SYNCHRONIZED),
+                CsmElement.space(),
+                CsmElement.token(LPAREN),
+                CsmElement.child(EXPRESSION),
+                CsmElement.token(RPAREN),
+                CsmElement.space(),
+                CsmElement.child(BODY)
         ));
     }
 
