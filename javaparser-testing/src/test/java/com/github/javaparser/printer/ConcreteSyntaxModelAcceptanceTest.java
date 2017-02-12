@@ -53,4 +53,11 @@ public class ConcreteSyntaxModelAcceptanceTest {
         assertEquals(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
+    @Test
+    public void printingExampleJavaConcepts() throws IOException {
+        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/JavaConcepts.java");
+        //System.out.println(cu.toString());
+        assertEquals(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
+    }
+
 }
