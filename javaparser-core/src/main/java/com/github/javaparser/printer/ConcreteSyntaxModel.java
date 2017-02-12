@@ -613,8 +613,15 @@ public class ConcreteSyntaxModel {
                 CsmElement.semicolon()
         ));
 
-//
-//        concreteSyntaxModelByClass.put(LabeledStmt.class, CsmElement.none());
+
+        concreteSyntaxModelByClass.put(LabeledStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.child(ObservableProperty.LABEL),
+                CsmElement.token(ASTParserConstants.COLON),
+                CsmElement.space(),
+                child(ObservableProperty.STATEMENT)
+        ));
+
 //
 //        concreteSyntaxModelByClass.put(EmptyStmt.class, CsmElement.none());
 //
