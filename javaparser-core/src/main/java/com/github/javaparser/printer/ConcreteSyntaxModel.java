@@ -485,6 +485,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 token(ASTParserConstants.NEW),
                 space(),
+                CsmElement.child(ObservableProperty.ELEMENT_TYPE),
                 list(ObservableProperty.LEVELS),
                 conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), child(ObservableProperty.INITIALIZER)))
         ));
