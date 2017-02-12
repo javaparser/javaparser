@@ -26,6 +26,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.*;
+import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
@@ -474,6 +475,14 @@ public class ConcreteSyntaxModel {
                                 CsmElement.token(ASTParserConstants.EXTENDS),
                                 CsmElement.space()),
                         CsmElement.none())
+        ));
+
+        concreteSyntaxModelByClass.put(ArrayCreationExpr.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.NEW),
+                CsmElement.space(),
+                CsmElement.list(ObservableProperty.LEVELS),
+                CsmElement.conditional(ObservableProperty.INITIALIZER, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.child(ObservableProperty.INITIALIZER)))
         ));
     }
 
