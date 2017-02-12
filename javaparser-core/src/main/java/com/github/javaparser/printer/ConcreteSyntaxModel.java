@@ -622,8 +622,11 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.STATEMENT)
         ));
 
-//
-//        concreteSyntaxModelByClass.put(EmptyStmt.class, CsmElement.none());
+
+        concreteSyntaxModelByClass.put(EmptyStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.SEMICOLON)
+        ));
 //
 //        concreteSyntaxModelByClass.put(SwitchStmt.class, CsmElement.none());
 
