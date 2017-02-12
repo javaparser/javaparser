@@ -700,6 +700,19 @@ public class ConcreteSyntaxModel {
                 CsmElement.space(),
                 CsmElement.child(BODY)
         ));
+
+        concreteSyntaxModelByClass.put(TryStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.TRY),
+                CsmElement.space(),
+                CsmElement.conditional(ObservableProperty.RESOURCES, CsmConditional.Condition.IS_NOT_EMPTY, CsmElement.sequence(
+                        CsmElement.token(LPAREN),
+                        list(ObservableProperty.RESOURCES, CsmElement.sequence(CsmElement.semicolon(), CsmElement.newline()), CsmElement.indent(), CsmElement.unindent()),
+                        CsmElement.token(RPAREN))),
+                CsmElement.child(ObservableProperty.TRY_BLOCK),
+                CsmElement.list(ObservableProperty.CATCH_CLAUSES),
+                CsmElement.conditional(ObservableProperty.FINALLY_BLOCK, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants.FINALLY), CsmElement.space(), CsmElement.child(ObservableProperty.FINALLY_BLOCK)))
+        ));
     }
 
     private ConcreteSyntaxModel() {
