@@ -725,6 +725,12 @@ public class ConcreteSyntaxModel {
                 CsmElement.space(),
                 CsmElement.child(BODY)
         ));
+
+        concreteSyntaxModelByClass.put(UnionType.class, CsmElement.sequence(
+                CsmElement.comment(),
+                annotations(),
+                CsmElement.list(ObservableProperty.ELEMENTS, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants.BIT_OR), CsmElement.space()))
+        ));
     }
 
     private ConcreteSyntaxModel() {
