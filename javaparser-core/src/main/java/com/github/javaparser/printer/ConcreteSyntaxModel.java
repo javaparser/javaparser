@@ -532,14 +532,16 @@ public class ConcreteSyntaxModel {
                         none()),
                 space(),
                 token(ASTParserConstants.LBRACE),
+                CsmElement.newline(),
                 CsmElement.indent(),
+                CsmElement.newline(),
                 list(ObservableProperty.ENTRIES,
                         sequence(comma(), space()),
-                        CsmElement.sequence(newline(), newline()),
+                        CsmElement.none(),
                         none()),
                 conditional(ObservableProperty.MEMBERS, IS_EMPTY,
                         conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, newline()),
-                        sequence(CsmElement.semicolon(), newline(), CsmElement.newline(), list(ObservableProperty.MEMBERS, newline(), newline(), none(), none()))),
+                        sequence(CsmElement.semicolon(), newline(), CsmElement.newline(), list(ObservableProperty.MEMBERS, newline(), newline(), none(), CsmElement.newline()))),
                 unindent(),
                 token(RBRACE)
         ));
@@ -549,10 +551,10 @@ public class ConcreteSyntaxModel {
                 memberAnnotations(),
                 child(ObservableProperty.NAME),
                 list(ObservableProperty.ARGUMENTS, sequence(comma(), space()), token(ASTParserConstants.LPAREN), token(ASTParserConstants.RPAREN)),
-                conditional(CLASS_BODY, IS_NOT_EMPTY, sequence(space(), token(ASTParserConstants.LBRACE),
-                        list(ObservableProperty.CLASS_BODY, newline(), newline(), none(), none()),
+                conditional(CLASS_BODY, IS_NOT_EMPTY, sequence(space(), token(ASTParserConstants.LBRACE), CsmElement.newline(), CsmElement.indent(), CsmElement.newline(),
+                        list(ObservableProperty.CLASS_BODY, newline(), newline(), none(), CsmElement.newline()),
                         unindent(),
-                        token(RBRACE)))
+                        token(RBRACE), CsmElement.newline()))
         ));
 
         concreteSyntaxModelByClass.put(FieldAccessExpr.class, CsmElement.sequence(
