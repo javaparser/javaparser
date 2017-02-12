@@ -1173,7 +1173,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getParameter().accept(this, arg);
         printer.print(") ");
         n.getBody().accept(this, arg);
-
     }
 
     @Override

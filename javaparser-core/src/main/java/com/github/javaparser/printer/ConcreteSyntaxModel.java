@@ -713,6 +713,18 @@ public class ConcreteSyntaxModel {
                 CsmElement.list(ObservableProperty.CATCH_CLAUSES),
                 CsmElement.conditional(ObservableProperty.FINALLY_BLOCK, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants.FINALLY), CsmElement.space(), CsmElement.child(ObservableProperty.FINALLY_BLOCK)))
         ));
+
+        concreteSyntaxModelByClass.put(CatchClause.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.space(),
+                CsmElement.token(ASTParserConstants.CATCH),
+                CsmElement.space(),
+                CsmElement.token(LPAREN),
+                CsmElement.child(ObservableProperty.PARAMETER),
+                CsmElement.token(RPAREN),
+                CsmElement.space(),
+                CsmElement.child(BODY)
+        ));
     }
 
     private ConcreteSyntaxModel() {
