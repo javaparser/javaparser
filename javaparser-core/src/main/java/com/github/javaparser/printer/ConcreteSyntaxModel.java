@@ -284,7 +284,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(WildcardType.class, sequence(comment(), annotations(), token(ASTParserConstants.HOOK),
                 CsmElement.conditional(ObservableProperty.EXTENDED_TYPE, IS_PRESENT, CsmElement.sequence(space(), token(ASTParserConstants.EXTENDS), space(), CsmElement.child(EXTENDED_TYPE))),
                 CsmElement.conditional(ObservableProperty.SUPER_TYPE, IS_PRESENT, CsmElement.sequence(space(), token(ASTParserConstants.SUPER), space(), CsmElement.child(SUPER_TYPE)))));
-        
+
         concreteSyntaxModelByClass.put(MarkerAnnotationExpr.class, sequence(comment(), token(ASTParserConstants.AT), attribute(ObservableProperty.NAME)));
 
         concreteSyntaxModelByClass.put(ReturnStmt.class, sequence(comment(), token(ASTParserConstants.RETURN),
