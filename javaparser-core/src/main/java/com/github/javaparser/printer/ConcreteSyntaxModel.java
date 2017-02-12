@@ -198,7 +198,7 @@ public class ConcreteSyntaxModel {
                     newline()));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),
-                    conditional(SCOPE, CsmConditional.Condition.IS_PRESENT, sequence(child(SCOPE), string(ASTParserConstants.DOT))),
+                    conditional(SCOPE, IS_PRESENT, sequence(child(SCOPE), string(ASTParserConstants.DOT))),
                     list(ANNOTATIONS, space()),
                     child(NAME),
                     conditional(ObservableProperty.USING_DIAMOND_OPERATOR, FLAG,
@@ -384,7 +384,7 @@ public class ConcreteSyntaxModel {
                 space(),
                 token(ASTParserConstants.ARROW),
                 space(),
-                CsmElement.conditional(ObservableProperty.EXPRESSION_BODY, CsmConditional.Condition.IS_PRESENT, child(ObservableProperty.EXPRESSION_BODY), child(ObservableProperty.BODY))
+                CsmElement.conditional(ObservableProperty.EXPRESSION_BODY, IS_PRESENT, child(ObservableProperty.EXPRESSION_BODY), child(ObservableProperty.BODY))
         ));
 
         concreteSyntaxModelByClass.put(CharLiteralExpr.class, sequence(
@@ -459,6 +459,22 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.EXPRESSION)
         ));
         concreteSyntaxModelByClass.put(UnknownType.class, none());
+
+        concreteSyntaxModelByClass.put(TypeParameter.class, CsmElement.sequence(
+                CsmElement.comment(),
+                annotations(),
+                CsmElement.child(ObservableProperty.NAME),
+                CsmElement.list(ObservableProperty.TYPE_BOUND,
+                        CsmElement.sequence(
+                            CsmElement.space(),
+                            CsmElement.token(ASTParserConstants.BIT_AND),
+                            CsmElement.space()),
+                        CsmElement.sequence(
+                                CsmElement.space(),
+                                CsmElement.token(ASTParserConstants.EXTENDS),
+                                CsmElement.space()),
+                        CsmElement.none())
+        ));
     }
 
     private ConcreteSyntaxModel() {
