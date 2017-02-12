@@ -535,7 +535,7 @@ public class ConcreteSyntaxModel {
                 CsmElement.indent(),
                 list(ObservableProperty.ENTRIES,
                         sequence(comma(), space()),
-                        newline(),
+                        CsmElement.sequence(newline(), newline()),
                         none()),
                 conditional(ObservableProperty.MEMBERS, IS_EMPTY,
                         conditional(ObservableProperty.ENTRIES, IS_NOT_EMPTY, newline()),
