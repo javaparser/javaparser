@@ -650,6 +650,13 @@ public class ConcreteSyntaxModel {
                 CsmElement.list(ObservableProperty.STATEMENTS, CsmElement.newline()),
                 CsmElement.unindent()
         ));
+
+        concreteSyntaxModelByClass.put(BreakStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.BREAK),
+                CsmElement.conditional(ObservableProperty.LABEL, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.child(ObservableProperty.LABEL))),
+                CsmElement.semicolon()
+        ));
     }
 
     private ConcreteSyntaxModel() {
