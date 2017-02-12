@@ -137,7 +137,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(Parameter.class, sequence(
                 comment(),
-                annotations(),
+                list(ObservableProperty.ANNOTATIONS, CsmElement.space(), CsmElement.none(), CsmElement.space()),
                 modifiers(),
                 child(ObservableProperty.TYPE),
                 conditional(ObservableProperty.VAR_ARGS, FLAG, token(ASTParserConstants.ELLIPSIS)),
@@ -326,7 +326,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(VariableDeclarationExpr.class, sequence(
                 comment(),
-                annotations(),
+                list(ObservableProperty.ANNOTATIONS, CsmElement.space(), CsmElement.none(), CsmElement.space()),
                 modifiers(),
                 child(ObservableProperty.MAXIMUM_COMMON_TYPE),
                 space(),
