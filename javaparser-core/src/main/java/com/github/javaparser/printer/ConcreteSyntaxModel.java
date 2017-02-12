@@ -484,6 +484,13 @@ public class ConcreteSyntaxModel {
                 CsmElement.list(ObservableProperty.LEVELS),
                 CsmElement.conditional(ObservableProperty.INITIALIZER, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.child(ObservableProperty.INITIALIZER)))
         ));
+
+        concreteSyntaxModelByClass.put(ArrayCreationLevel.class, CsmElement.sequence(
+                annotations(),
+                token(ASTParserConstants.LBRACKET),
+                CsmElement.child(ObservableProperty.DIMENSION),
+                token(ASTParserConstants.RBRACKET)
+        ));
     }
 
     private ConcreteSyntaxModel() {
