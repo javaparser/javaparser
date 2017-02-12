@@ -506,6 +506,15 @@ public class ConcreteSyntaxModel {
                 CsmElement.comment(),
                 CsmElement.conditional(ObservableProperty.STATIC, FLAG, CsmElement.sequence(CsmElement.token(ASTParserConstants.STATIC), CsmElement.space())),
                 CsmElement.child(ObservableProperty.BODY)));
+
+        concreteSyntaxModelByClass.put(NormalAnnotationExpr.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.AT),
+                CsmElement.child(ObservableProperty.NAME),
+                token(ASTParserConstants.LPAREN),
+                CsmElement.list(ObservableProperty.PAIRS, CsmElement.sequence(CsmElement.comma(), CsmElement.space())),
+                token(ASTParserConstants.RPAREN)
+        ));
     }
 
     private ConcreteSyntaxModel() {
