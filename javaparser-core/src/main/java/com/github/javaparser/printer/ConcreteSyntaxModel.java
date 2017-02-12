@@ -669,6 +669,13 @@ public class ConcreteSyntaxModel {
                 CsmElement.space(),
                 CsmElement.child(ObservableProperty.ELSE_EXPR)
         ));
+
+        concreteSyntaxModelByClass.put(ContinueStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(ASTParserConstants.CONTINUE),
+                CsmElement.conditional(ObservableProperty.LABEL, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.child(ObservableProperty.LABEL))),
+                CsmElement.semicolon()
+        ));
     }
 
     private ConcreteSyntaxModel() {
