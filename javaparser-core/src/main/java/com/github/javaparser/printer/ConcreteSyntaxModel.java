@@ -33,6 +33,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
 
+import static com.github.javaparser.ASTParserConstants.AT;
 import static com.github.javaparser.ASTParserConstants.RBRACE;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
@@ -581,8 +582,22 @@ public class ConcreteSyntaxModel {
                 CsmElement.comment(),
                 CsmElement.child(ObservableProperty.CLASS_DECLARATION)
         ));
-//
-//        concreteSyntaxModelByClass.put(ExplicitConstructorInvocationStmt.class, CsmElement.none());
+
+        concreteSyntaxModelByClass.put(ExplicitConstructorInvocationStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.conditional(ObservableProperty.IS_THIS, FLAG,
+                        CsmElement.sequence(typeArguments(), CsmElement.token(ASTParserConstants.THIS)),
+                        CsmElement.sequence(
+                                CsmElement.conditional(ObservableProperty.EXPRESSION, IS_PRESENT, CsmElement.sequence(CsmElement.child(ObservableProperty.EXPRESSION), CsmElement.token(ASTParserConstants.DOT))),
+                                typeArguments(),
+                                CsmElement.token(ASTParserConstants.SUPER)
+                        )),
+                CsmElement.token(ASTParserConstants.LPAREN),
+                CsmElement.list(ObservableProperty.ARGUMENTS, CsmElement.sequence(CsmElement.comma(), CsmElement.space())),
+                CsmElement.token(ASTParserConstants.RPAREN),
+                CsmElement.semicolon()
+        ));
+
 //
 //        concreteSyntaxModelByClass.put(AssertStmt.class, CsmElement.none());
 //
