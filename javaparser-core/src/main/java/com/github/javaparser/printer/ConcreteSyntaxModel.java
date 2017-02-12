@@ -636,6 +636,7 @@ public class ConcreteSyntaxModel {
                 CsmElement.token(ASTParserConstants.RPAREN),
                 CsmElement.space(),
                 CsmElement.token(ASTParserConstants.LBRACE),
+                CsmElement.newline(),
                 CsmElement.list(ObservableProperty.ENTRIES, CsmElement.none(), CsmElement.indent(), CsmElement.unindent()),
                 CsmElement.token(ASTParserConstants.RBRACE)
         ));
@@ -643,11 +644,11 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(SwitchEntryStmt.class, CsmElement.sequence(
                 CsmElement.comment(),
                 CsmElement.conditional(ObservableProperty.LABEL, IS_PRESENT,
-                        CsmElement.sequence(CsmElement.child(ObservableProperty.LABEL), CsmElement.semicolon()),
-                        CsmElement.sequence(CsmElement.token(ASTParserConstants.DEFAULT), CsmElement.semicolon())),
+                        CsmElement.sequence(CsmElement.token(ASTParserConstants.CASE), CsmElement.space(), CsmElement.child(ObservableProperty.LABEL), CsmElement.token(ASTParserConstants.COLON)),
+                        CsmElement.sequence(CsmElement.token(ASTParserConstants._DEFAULT), CsmElement.token(ASTParserConstants.COLON))),
                 CsmElement.newline(),
                 CsmElement.indent(),
-                CsmElement.list(ObservableProperty.STATEMENTS, CsmElement.newline()),
+                CsmElement.list(ObservableProperty.STATEMENTS, CsmElement.newline(), CsmElement.none(), CsmElement.newline()),
                 CsmElement.unindent()
         ));
 
