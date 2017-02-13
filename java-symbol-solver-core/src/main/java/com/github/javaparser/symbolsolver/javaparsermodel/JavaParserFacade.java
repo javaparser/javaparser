@@ -393,7 +393,7 @@ public class JavaParserFacade {
         }
     }
 
-    public Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
+    protected Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
