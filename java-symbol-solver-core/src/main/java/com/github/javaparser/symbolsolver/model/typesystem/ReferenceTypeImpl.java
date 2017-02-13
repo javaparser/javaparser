@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.HashSet;
@@ -86,7 +87,12 @@ public class ReferenceTypeImpl extends ReferenceType {
             if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {
                 return true;
             } else {
-                return isCorrespondingBoxingType(other.describe());
+                // Check if 'other' can be boxed to match this type
+                if (isCorrespondingBoxingType(other.describe())) return true;
+
+                // Resolve the boxed type and check if it can be assigned via widening reference conversion
+                SymbolReference<ReferenceTypeDeclaration> type = typeSolver.tryToSolveType(other.asPrimitive().getBoxTypeQName());
+                return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
             }
         }
         if (other instanceof LambdaArgumentTypePlaceholder) {

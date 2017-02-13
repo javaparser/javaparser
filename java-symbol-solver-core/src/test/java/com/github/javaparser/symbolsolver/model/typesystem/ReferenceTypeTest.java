@@ -189,6 +189,22 @@ public class ReferenceTypeTest {
     }
 
     @Test
+    public void testIsAssignableByBoxedPrimitive(){
+        ReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver),typeSolver);
+        ReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver),typeSolver);
+        ReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver),typeSolver);
+
+        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.INT));
+        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.DOUBLE));
+        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.SHORT));
+        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.LONG));
+        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.FLOAT));
+        assertEquals(false, numberType.isAssignableBy(PrimitiveType.BOOLEAN));
+        assertEquals(true,  intType.isAssignableBy(PrimitiveType.INT));
+        assertEquals(true,  doubleType.isAssignableBy(PrimitiveType.DOUBLE));
+    }
+
+    @Test
     public void testIsAssignableByGenerics() {
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
         assertEquals(false, listOfStrings.isAssignableBy(listOfWildcardExtendsString));
