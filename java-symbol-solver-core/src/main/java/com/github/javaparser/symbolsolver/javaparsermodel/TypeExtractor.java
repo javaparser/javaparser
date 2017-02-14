@@ -35,7 +35,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
-    private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
+    private static Logger logger = Logger.getLogger(TypeExtractor.class.getCanonicalName());
 
     static {
         logger.setLevel(Level.INFO);
@@ -56,10 +56,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public Type visit(VariableDeclarator node, Boolean solveLambdas) {
         if (getParentNode(node) instanceof FieldDeclaration) {
 //                FieldDeclaration parent = (FieldDeclaration) getParentNode(node);
-            return JavaParserFacade.get(typeSolver).convertToUsageVariableType((VariableDeclarator) node);
+            return facade.convertToUsageVariableType(node);
         } else if (getParentNode(node) instanceof VariableDeclarationExpr) {
 //                VariableDeclarationExpr parent = (VariableDeclarationExpr) getParentNode(node);
-            return JavaParserFacade.get(typeSolver).convertToUsageVariableType((VariableDeclarator) node);
+            return facade.convertToUsageVariableType(node);
         } else {
             throw new UnsupportedOperationException(getParentNode(node).getClass().getCanonicalName());
         }
@@ -70,14 +70,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (node.getType() instanceof UnknownType) {
             throw new IllegalStateException("Parameter has unknown type: " + node);
         }
-        return JavaParserFacade.get(typeSolver).convertToUsage(node.getType(), node);
+        return facade.convertToUsage(node.getType(), node);
     }
 
 
     @Override
     public Type visit(ArrayAccessExpr node, Boolean solveLambdas) {
-        ArrayAccessExpr arrayAccessExpr = (ArrayAccessExpr) node;
-        Type arrayUsageType = arrayAccessExpr.getName().accept(this, solveLambdas);
+        Type arrayUsageType = node.getName().accept(this, solveLambdas);
         if (arrayUsageType.isArray()) {
             return ((com.github.javaparser.symbolsolver.model.typesystem.ArrayType) arrayUsageType).getComponentType();
         }
@@ -100,19 +99,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(AssignExpr node, Boolean solveLambdas) {
-        AssignExpr assignExpr = (AssignExpr) node;
-        return assignExpr.getTarget().accept(this, solveLambdas);
+        return node.getTarget().accept(this, solveLambdas);
     }
 
     @Override
     public Type visit(BinaryExpr node, Boolean solveLambdas) {
-        BinaryExpr binaryExpr = (BinaryExpr) node;
-        switch (binaryExpr.getOperator()) {
+        switch (node.getOperator()) {
             case PLUS:
             case MINUS:
             case DIVIDE:
             case MULTIPLY:
-                return facade.getBinaryTypeConcrete(binaryExpr.getLeft(), binaryExpr.getRight(), solveLambdas);
+                return facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas);
             case LESS_EQUALS:
             case LESS:
             case GREATER:
@@ -129,9 +126,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case LEFT_SHIFT:
             case REMAINDER:
             case XOR:
-                return binaryExpr.getLeft().accept(this, solveLambdas);
+                return node.getLeft().accept(this, solveLambdas);
             default:
-                throw new UnsupportedOperationException("FOO " + binaryExpr.getOperator().name());
+                throw new UnsupportedOperationException("FOO " + node.getOperator().name());
         }
     }
 
@@ -262,7 +259,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(ObjectCreationExpr node, Boolean solveLambdas) {
-        Type type = JavaParserFacade.get(typeSolver).convertToUsage(node.getType(), node);
+        Type type = facade.convertToUsage(node.getType(), node);
         return type;
     }
 
@@ -313,7 +310,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (getParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr);
+            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName().getId());
             }
@@ -345,7 +342,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     }
 
                     if (!staticCall) {
-                        Type scopeType = JavaParserFacade.get(typeSolver).getType(scope);
+                        Type scopeType = facade.getType(scope);
                         if (scopeType.isReferenceType()) {
                             result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
                         }
@@ -396,7 +393,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (getParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr, false);
+            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName().getId());
             }
