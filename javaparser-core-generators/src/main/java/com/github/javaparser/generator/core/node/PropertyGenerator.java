@@ -2,7 +2,9 @@ package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -12,16 +14,15 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 public class PropertyGenerator extends NodeGenerator {
-    private final Set<String> observablePropertyNames = new TreeSet<>();
+
+    private final Map<String, PropertyMetaModel> observableProperties = new HashMap<>();
 
     public PropertyGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
         super(javaParser, sourceRoot);
@@ -49,7 +50,7 @@ public class PropertyGenerator extends NodeGenerator {
 
         // Fill body
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        observablePropertyNames.add(observableName);
+        observableProperties.put(observableName, property);
         if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
             // Node.comment has a very specific setter that we shouldn't overwrite.
             return;
@@ -99,8 +100,26 @@ public class PropertyGenerator extends NodeGenerator {
         CompilationUnit observablePropertyCu = sourceRoot.parse("com.github.javaparser.ast.observer", "ObservableProperty.java", javaParser).get();
         EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
-        for (String prop : observablePropertyNames) {
-            observablePropertyEnum.addEnumConstant(prop);
+        List<String> observablePropertyNames = new LinkedList<>(observableProperties.keySet());
+        observablePropertyNames.sort(String::compareTo);
+        for (String propName : observablePropertyNames) {
+            PropertyMetaModel property = observableProperties.get(propName);
+            boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
+            System.out.println(String.format("%s with type %s is attribute %s", property.getName(), property.getType(), isAttribute));
+            EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(propName);
+            if (isAttribute) {
+                if (property.isEnumSet()) {
+                    enumConstantDeclaration.addArgument("Type.MULTIPLE_ATTRIBUTE");
+                } else {
+                    enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+                }
+            } else {
+                if (property.isNodeList()) {
+                    enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
+                } else {
+                    enumConstantDeclaration.addArgument("Type.SINGLE_REFERENCE");
+                }
+            }
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
