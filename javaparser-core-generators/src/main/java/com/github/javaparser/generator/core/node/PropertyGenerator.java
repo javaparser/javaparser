@@ -22,7 +22,8 @@ import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 public class PropertyGenerator extends NodeGenerator {
 
-    private final Map<String, PropertyMetaModel> observableProperties = new HashMap<>();
+    private final Map<String, PropertyMetaModel> declaredProperties = new HashMap<>();
+    private final Map<String, PropertyMetaModel> derivedProperties = new HashMap<>();
 
     public PropertyGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
         super(javaParser, sourceRoot);
@@ -34,6 +35,7 @@ public class PropertyGenerator extends NodeGenerator {
             generateGetter(nodeMetaModel, nodeCoid, property);
             generateSetter(nodeMetaModel, nodeCoid, property);
         }
+        nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
     }
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
@@ -50,7 +52,7 @@ public class PropertyGenerator extends NodeGenerator {
 
         // Fill body
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        observableProperties.put(observableName, property);
+        declaredProperties.put(observableName, property);
         if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
             // Node.comment has a very specific setter that we shouldn't overwrite.
             return;
@@ -95,31 +97,42 @@ public class PropertyGenerator extends NodeGenerator {
         }
     }
 
+    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, String constantName, PropertyMetaModel property, boolean derived){
+        boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
+        System.out.println(String.format("%s with type %s is attribute %s", property.getName(), property.getType(), isAttribute));
+        EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(constantName);
+        if (isAttribute) {
+            if (property.isEnumSet()) {
+                enumConstantDeclaration.addArgument("Type.MULTIPLE_ATTRIBUTE");
+            } else {
+                enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+            }
+        } else {
+            if (property.isNodeList()) {
+                enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
+            } else {
+                enumConstantDeclaration.addArgument("Type.SINGLE_REFERENCE");
+            }
+        }
+        if (derived) {
+            enumConstantDeclaration.addArgument("true");
+        }
+    }
+
     @Override
     protected void after() throws Exception {
         CompilationUnit observablePropertyCu = sourceRoot.parse("com.github.javaparser.ast.observer", "ObservableProperty.java", javaParser).get();
         EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
-        List<String> observablePropertyNames = new LinkedList<>(observableProperties.keySet());
+        List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
         observablePropertyNames.sort(String::compareTo);
         for (String propName : observablePropertyNames) {
-            PropertyMetaModel property = observableProperties.get(propName);
-            boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
-            System.out.println(String.format("%s with type %s is attribute %s", property.getName(), property.getType(), isAttribute));
-            EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(propName);
-            if (isAttribute) {
-                if (property.isEnumSet()) {
-                    enumConstantDeclaration.addArgument("Type.MULTIPLE_ATTRIBUTE");
-                } else {
-                    enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
-                }
-            } else {
-                if (property.isNodeList()) {
-                    enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
-                } else {
-                    enumConstantDeclaration.addArgument("Type.SINGLE_REFERENCE");
-                }
-            }
+            generateObservableProperty(observablePropertyEnum, propName, declaredProperties.get(propName), false);
+        }
+        List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
+        derivedPropertyNames.sort(String::compareTo);
+        for (String propName : derivedPropertyNames) {
+            generateObservableProperty(observablePropertyEnum, propName, derivedProperties.get(propName), true);
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
