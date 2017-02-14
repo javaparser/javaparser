@@ -113,7 +113,7 @@ public class ConcreteSyntaxModel {
                 space(),
                 conditional(ObservableProperty.STATIC, FLAG, sequence(token(ASTParserConstants.STATIC), space())),
                 child(ObservableProperty.NAME),
-                conditional(IS_ASTERISK, FLAG, sequence(token(ASTParserConstants.DOT), token(ASTParserConstants.STAR))),
+                conditional(ASTERISK, FLAG, sequence(token(ASTParserConstants.DOT), token(ASTParserConstants.STAR))),
                 semicolon(),
                 newline(),
                 orphanCommentsEnding()
