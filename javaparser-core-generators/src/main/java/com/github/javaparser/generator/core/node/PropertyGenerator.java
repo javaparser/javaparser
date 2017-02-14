@@ -97,9 +97,10 @@ public class PropertyGenerator extends NodeGenerator {
         }
     }
 
-    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, String constantName, PropertyMetaModel property, boolean derived){
+    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived){
         boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
-        System.out.println(String.format("%s with type %s is attribute %s", property.getName(), property.getType(), isAttribute));
+        String name = property.getName();
+        String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
         EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(constantName);
         if (isAttribute) {
             if (property.isEnumSet()) {
@@ -127,12 +128,12 @@ public class PropertyGenerator extends NodeGenerator {
         List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
         observablePropertyNames.sort(String::compareTo);
         for (String propName : observablePropertyNames) {
-            generateObservableProperty(observablePropertyEnum, propName, declaredProperties.get(propName), false);
+            generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
         }
         List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
         derivedPropertyNames.sort(String::compareTo);
         for (String propName : derivedPropertyNames) {
-            generateObservableProperty(observablePropertyEnum, propName, derivedProperties.get(propName), true);
+            generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
