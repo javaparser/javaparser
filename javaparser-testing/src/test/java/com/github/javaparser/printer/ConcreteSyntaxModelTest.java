@@ -56,7 +56,7 @@ public class ConcreteSyntaxModelTest {
     @Test
     public void printSimplestClass() {
         Node node = JavaParser.parse("class A {}");
-        assertEquals("class A {\n\n" +
+        assertEquals("class A {\n" +
                 "}\n", print(node));
     }
 
@@ -73,7 +73,6 @@ public class ConcreteSyntaxModelTest {
     public void printAnEmptyInterface() {
         Node node = JavaParser.parse("interface A {}");
         assertEquals("interface A {\n" +
-                "\n" +
                 "}\n", print(node));
     }
 
@@ -81,7 +80,6 @@ public class ConcreteSyntaxModelTest {
     public void printAnEmptyInterfaceWithModifier() {
         Node node = JavaParser.parse("public interface A {}");
         assertEquals("public interface A {\n" +
-                "\n" +
                 "}\n", print(node));
     }
 }
