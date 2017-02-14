@@ -166,7 +166,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 memberAnnotations(),
                 modifiers(),
-                conditional(ObservableProperty.IS_DEFAULT, FLAG, sequence(token(ASTParserConstants.DEFAULT), space())),
+                conditional(ObservableProperty.DEFAULT, FLAG, sequence(token(ASTParserConstants.DEFAULT), space())),
                 typeParameters(),
                 child(ObservableProperty.TYPE),
                 space(),
@@ -182,7 +182,7 @@ public class ConcreteSyntaxModel {
                     comment(),
                     list(ObservableProperty.ANNOTATIONS, newline(), none(), newline()),
                     modifiers(),
-                    conditional(ObservableProperty.IS_INTERFACE, FLAG, token(ASTParserConstants.INTERFACE), token(ASTParserConstants.CLASS)),
+                    conditional(ObservableProperty.INTERFACE, FLAG, token(ASTParserConstants.INTERFACE), token(ASTParserConstants.CLASS)),
                     space(),
                     child(ObservableProperty.NAME),
                     list(TYPE_PARAMETERS, sequence(comma(), space()), string(ASTParserConstants.LT), string(ASTParserConstants.GT)),
@@ -595,7 +595,7 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ExplicitConstructorInvocationStmt.class, CsmElement.sequence(
                 CsmElement.comment(),
-                CsmElement.conditional(ObservableProperty.IS_THIS, FLAG,
+                CsmElement.conditional(ObservableProperty.THIS, FLAG,
                         CsmElement.sequence(typeArguments(), CsmElement.token(ASTParserConstants.THIS)),
                         CsmElement.sequence(
                                 CsmElement.conditional(ObservableProperty.EXPRESSION, IS_PRESENT, CsmElement.sequence(CsmElement.child(ObservableProperty.EXPRESSION), CsmElement.token(ASTParserConstants.DOT))),
