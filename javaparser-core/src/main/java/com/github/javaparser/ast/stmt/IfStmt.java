@@ -155,7 +155,7 @@ public final class IfStmt extends Statement {
     }
 
     public boolean hasElseBlock() {
-        return elseStmt instanceof BlockStmt;
+        return elseStmt instanceof BlockStmt || elseStmt instanceof IfStmt;
     }
 
 }

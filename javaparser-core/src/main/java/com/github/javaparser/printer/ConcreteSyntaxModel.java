@@ -258,13 +258,23 @@ public class ConcreteSyntaxModel {
             conditional(ObservableProperty.SCOPE, IS_PRESENT, sequence(child(ObservableProperty.SCOPE), token(ASTParserConstants.DOT))),
             token(ASTParserConstants.NEW),
             space(),
-            list(ObservableProperty.TYPE_ARGUMENTS),
+            list(ObservableProperty.TYPE_ARGUMENTS, CsmElement.sequence(CsmElement.comma(), CsmElement.space()), CsmElement.token(LT), CsmElement.token(GT)),
             conditional(ObservableProperty.TYPE_ARGUMENTS, IS_NOT_EMPTY, space()),
             child(ObservableProperty.TYPE),
             token(ASTParserConstants.LPAREN),
             list(ObservableProperty.ARGUMENTS, sequence(comma(), space()), none(), none()),
             token(ASTParserConstants.RPAREN),
-            conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT, CsmElement.list(ObservableProperty.ANONYMOUS_CLASS_BODY, CsmElement.newline(), CsmElement.newline(), CsmElement.space(), CsmElement.none()))
+            conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT,
+                    CsmElement.sequence(
+                            CsmElement.space(), CsmElement.token(LBRACE), CsmElement.newline(), CsmElement.indent(),
+                            CsmElement.list(ObservableProperty.ANONYMOUS_CLASS_BODY,
+                                    CsmElement.newline(),
+                                    CsmElement.newline(),
+                                    CsmElement.newline(),
+                                    CsmElement.newline()),
+                            CsmElement.unindent(),
+                            CsmElement.token(RBRACE)
+                    ))
         ));
 
         concreteSyntaxModelByClass.put(MethodCallExpr.class, sequence(
@@ -711,7 +721,8 @@ public class ConcreteSyntaxModel {
                 CsmElement.conditional(ObservableProperty.RESOURCES, CsmConditional.Condition.IS_NOT_EMPTY, CsmElement.sequence(
                         CsmElement.token(LPAREN),
                         list(ObservableProperty.RESOURCES, CsmElement.sequence(CsmElement.semicolon(), CsmElement.newline()), CsmElement.indent(), CsmElement.unindent()),
-                        CsmElement.token(RPAREN))),
+                        CsmElement.token(RPAREN),
+                        CsmElement.space())),
                 CsmElement.child(ObservableProperty.TRY_BLOCK),
                 CsmElement.list(ObservableProperty.CATCH_CLAUSES),
                 CsmElement.conditional(ObservableProperty.FINALLY_BLOCK, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants.FINALLY), CsmElement.space(), CsmElement.child(ObservableProperty.FINALLY_BLOCK)))
