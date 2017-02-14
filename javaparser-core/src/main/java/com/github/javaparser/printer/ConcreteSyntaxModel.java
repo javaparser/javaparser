@@ -86,7 +86,7 @@ public class ConcreteSyntaxModel {
                     comment(),
                     child(ObservableProperty.PACKAGE_DECLARATION),
                     list(ObservableProperty.IMPORTS, none(), none(), newline()),
-                    list(TYPES, newline(), CsmElement.none(), CsmElement.newline()),
+                    list(TYPES, newline(), CsmElement.newline(), CsmElement.none(), CsmElement.newline()),
                     orphanCommentsEnding()));
 
         concreteSyntaxModelByClass.put(PackageDeclaration.class, sequence(
@@ -195,7 +195,7 @@ public class ConcreteSyntaxModel {
                             token(ASTParserConstants.IMPLEMENTS),
                             space()), none()),
                     space(),
-                    block(sequence(newline(), newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), none(), newline())))
+                    block(sequence(newline(), list(ObservableProperty.MEMBERS, sequence(newline(), newline()), CsmElement.newline(), newline())))
                     ));
 
         concreteSyntaxModelByClass.put(ClassOrInterfaceType.class, sequence(comment(),
