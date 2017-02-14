@@ -1,3 +1,12 @@
+Version 3.1.0-beta.2
+------------------
+This version is a beta because `TreeStructureVisitor` is not in its definite state yet.
+
+* 762 761 772 merge `javaparser-metamodel` and `javaparser-generator-utils` into `javaparser-core`.
+* 766 the `ModifierVisitor` is now created by a code generator. Its behaviour has been made logical, and may give different results than before.
+* 755 `ConstructorDeclaration` and `MethodDeclaration` now share a parent: `CallableDeclaration`
+* 687 759 773 769 768 767 765 759 smaller improvements and fixes
+
 Version 3.1.0-beta.1
 ------------------
 This version is a beta because there are a lot of new features that may still change.
