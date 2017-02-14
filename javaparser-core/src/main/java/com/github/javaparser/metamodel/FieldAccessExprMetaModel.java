@@ -13,5 +13,7 @@ public class FieldAccessExprMetaModel extends ExpressionMetaModel {
     public PropertyMetaModel scopePropertyMetaModel;
 
     public PropertyMetaModel typeArgumentsPropertyMetaModel;
+
+    public PropertyMetaModel usingDiamondOperatorMetamodel;
 }
 

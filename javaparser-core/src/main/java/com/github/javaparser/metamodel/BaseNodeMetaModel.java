@@ -15,6 +15,7 @@ import static com.github.javaparser.utils.Utils.decapitalize;
 public abstract class BaseNodeMetaModel {
     private final Optional<BaseNodeMetaModel> superNodeMetaModel;
     private final List<PropertyMetaModel> declaredPropertyMetaModels = new ArrayList<>();
+    private final List<PropertyMetaModel> derivedPropertyMetaModels = new ArrayList<>();
     private final List<PropertyMetaModel> constructorParameters = new ArrayList<>();
     private final Class<? extends Node> type;
     private final String name;
@@ -59,6 +60,10 @@ public abstract class BaseNodeMetaModel {
      */
     public List<PropertyMetaModel> getDeclaredPropertyMetaModels() {
         return declaredPropertyMetaModels;
+    }
+
+    public List<PropertyMetaModel> getDerivedPropertyMetaModels() {
+        return derivedPropertyMetaModels;
     }
 
     /**
