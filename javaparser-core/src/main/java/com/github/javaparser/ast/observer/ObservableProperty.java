@@ -23,11 +23,9 @@ package com.github.javaparser.ast.observer;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.utils.Utils;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
-
 import static com.github.javaparser.ast.observer.ObservableProperty.Type.*;
 
 /**
@@ -131,12 +129,11 @@ public enum ObservableProperty {
     EXPRESSION_BODY(SINGLE_REFERENCE, true);
 
     enum Type {
-        SINGLE_ATTRIBUTE(false, false),
-        SINGLE_REFERENCE(false, true),
-        MULTIPLE_ATTRIBUTE(true, false),
-        MULTIPLE_REFERENCE(true, true);
+
+        SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
 
         private boolean multiple;
+
         private boolean node;
 
         Type(boolean multiple, boolean node) {
@@ -146,6 +143,7 @@ public enum ObservableProperty {
     }
 
     private Type type;
+
     private boolean derived;
 
     ObservableProperty(Type type) {
@@ -190,9 +188,9 @@ public enum ObservableProperty {
                 return null;
             }
             if (result instanceof Node) {
-                return (Node)result;
-            } else if (result instanceof Optional){
-                Optional<Node> opt = (Optional<Node>)result;
+                return (Node) result;
+            } else if (result instanceof Optional) {
+                Optional<Node> opt = (Optional<Node>) result;
                 if (opt.isPresent()) {
                     return opt.get();
                 } else {
@@ -234,8 +232,8 @@ public enum ObservableProperty {
             if (result == null) {
                 return null;
             }
-           if (result instanceof Optional){
-                Optional<Node> opt = (Optional<Node>)result;
+            if (result instanceof Optional) {
+                Optional<Node> opt = (Optional<Node>) result;
                 if (opt.isPresent()) {
                     return opt.get();
                 } else {
@@ -245,7 +243,7 @@ public enum ObservableProperty {
                 return result;
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node + " (class: "+ node.getClass().getSimpleName()+")", e);
+            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -259,7 +257,7 @@ public enum ObservableProperty {
             if (result instanceof NodeList) {
                 return (NodeList) result;
             } else {
-                Optional<NodeList> opt = (Optional<NodeList>)result;
+                Optional<NodeList> opt = (Optional<NodeList>) result;
                 if (opt.isPresent()) {
                     return opt.get();
                 } else {
@@ -287,7 +285,7 @@ public enum ObservableProperty {
     public String singleStringValueFor(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         try {
-            return (String)node.getClass().getMethod(getterName).invoke(node);
+            return (String) node.getClass().getMethod(getterName).invoke(node);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
         }
@@ -306,7 +304,7 @@ public enum ObservableProperty {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         try {
             Object result = node.getClass().getMethod(getterName).invoke(node);
-            return null == result || ((result instanceof Optional) && !((Optional)result).isPresent());
+            return null == result || ((result instanceof Optional) && !((Optional) result).isPresent());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
         }
