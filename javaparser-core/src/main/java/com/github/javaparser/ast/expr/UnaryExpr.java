@@ -46,14 +46,8 @@ import com.github.javaparser.printer.Printable;
 public final class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
 
     public enum Operator implements Printable {
-        PLUS("+", false),
-        MINUS("-", false),
-        PREFIX_INCREMENT("++", false),
-        PREFIX_DECREMENT("--", false),
-        LOGICAL_COMPLEMENT("!", false),
-        BITWISE_COMPLEMENT("~", false),
-        POSTFIX_INCREMENT("++", true),
-        POSTFIX_DECREMENT("--", true);
+
+        PLUS("+", false), MINUS("-", false), PREFIX_INCREMENT("++", false), PREFIX_DECREMENT("--", false), LOGICAL_COMPLEMENT("!", false), BITWISE_COMPLEMENT("~", false), POSTFIX_INCREMENT("++", true), POSTFIX_DECREMENT("--", true);
 
         private final String codeRepresentation;
 
@@ -140,6 +134,14 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return super.remove(node);
     }
 
+    public boolean isPostfix() {
+        return operator.isPostfix();
+    }
+
+    public boolean isPrefix() {
+        return !isPostfix();
+    }
+
     @Override
     public UnaryExpr clone() {
         return (UnaryExpr) accept(new CloneVisitor(), null);
@@ -148,14 +150,6 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     @Override
     public UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
-    }
-
-    public boolean isPostfix() {
-        return operator.isPostfix();
-    }
-
-    public boolean isPrefix() {
-        return !isPostfix();
     }
 }
 

@@ -306,11 +306,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(WildcardType _n, Object _arg) {
-        ReferenceType extendedTypes = cloneNode(_n.getExtendedType(), _arg);
-        ReferenceType superTypes = cloneNode(_n.getSuperType(), _arg);
+        ReferenceType extendedType = cloneNode(_n.getExtendedType(), _arg);
+        ReferenceType superType = cloneNode(_n.getSuperType(), _arg);
         NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
         Comment comment = cloneNode(_n.getComment(), _arg);
-        WildcardType r = new WildcardType(_n.getRange().orElse(null), extendedTypes, superTypes);
+        WildcardType r = new WildcardType(_n.getRange().orElse(null), extendedType, superType);
         r.setComment(comment);
         return r;
     }

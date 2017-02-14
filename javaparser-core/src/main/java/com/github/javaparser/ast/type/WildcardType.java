@@ -94,7 +94,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @return this, the WildcardType
      */
     public WildcardType setExtendedType(final ReferenceType extendedType) {
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedType, extendedType);
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
         if (this.extendedType != null)
             this.extendedType.setParentNode(null);
         this.extendedType = extendedType;
@@ -109,7 +109,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @return this, the WildcardType
      */
     public WildcardType setSuperType(final ReferenceType superType) {
-        notifyPropertyChange(ObservableProperty.SUPER_TYPES, this.superType, superType);
+        notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
         if (this.superType != null)
             this.superType.setParentNode(null);
         this.superType = superType;
@@ -133,13 +133,13 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
             return false;
         if (extendedType != null) {
             if (node == extendedType) {
-                removeExtendedTypes();
+                removeExtendedType();
                 return true;
             }
         }
         if (superType != null) {
             if (node == superType) {
-                removeSuperTypes();
+                removeSuperType();
                 return true;
             }
         }
@@ -151,6 +151,14 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     public WildcardType removeSuperTypes() {
+        return setSuperType((ReferenceType) null);
+    }
+
+    public WildcardType removeExtendedType() {
+        return setExtendedType((ReferenceType) null);
+    }
+
+    public WildcardType removeSuperType() {
         return setSuperType((ReferenceType) null);
     }
 

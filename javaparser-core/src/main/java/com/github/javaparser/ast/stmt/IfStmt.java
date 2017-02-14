@@ -122,7 +122,6 @@ public final class IfStmt extends Statement {
         return this;
     }
 
-
     @Override
     public boolean remove(Node node) {
         if (node == null)
@@ -140,6 +139,14 @@ public final class IfStmt extends Statement {
         return setElseStmt((Statement) null);
     }
 
+    public boolean hasThenBlock() {
+        return thenStmt instanceof BlockStmt;
+    }
+
+    public boolean hasElseBlock() {
+        return elseStmt instanceof BlockStmt || elseStmt instanceof IfStmt;
+    }
+
     @Override
     public IfStmt clone() {
         return (IfStmt) accept(new CloneVisitor(), null);
@@ -149,14 +156,5 @@ public final class IfStmt extends Statement {
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }
-
-    public boolean hasThenBlock() {
-        return thenStmt instanceof BlockStmt;
-    }
-
-    public boolean hasElseBlock() {
-        return elseStmt instanceof BlockStmt || elseStmt instanceof IfStmt;
-    }
-
 }
 

@@ -30,7 +30,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -149,10 +148,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
-        res.add(initialization);
-        res.add(update);
-        return res;
+        return Arrays.asList(getInitialization(), getUpdate());
     }
 
     @Override

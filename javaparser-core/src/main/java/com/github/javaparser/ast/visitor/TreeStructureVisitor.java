@@ -757,8 +757,8 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
 
     public void visit(WildcardType n, Integer arg) {
         enterNode(n, arg);
-        n.getExtendedType().ifPresent(c -> c.accept(this, arg + 1));
-        n.getSuperType().ifPresent(c -> c.accept(this, arg + 1));
+        n.getExtendedType().ifPresent( c -> c.accept(this, arg + 1));
+        n.getSuperType().ifPresent( c -> c.accept(this, arg + 1));
         n.getAnnotations().accept(this, arg + 1);
         n.getComment().ifPresent( c -> c.accept(this, arg + 1));
         exitNode(n, arg);

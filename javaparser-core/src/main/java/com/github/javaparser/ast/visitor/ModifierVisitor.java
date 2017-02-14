@@ -992,12 +992,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final WildcardType n, final A arg) {
-        ReferenceType extendedTypes = n.getExtendedType().map(s -> (ReferenceType) s.accept(this, arg)).orElse(null);
-        ReferenceType superTypes = n.getSuperType().map(s -> (ReferenceType) s.accept(this, arg)).orElse(null);
+        ReferenceType extendedType = n.getExtendedType().map( s -> (ReferenceType) s.accept(this, arg)).orElse(null);
+        ReferenceType superType = n.getSuperType().map( s -> (ReferenceType) s.accept(this, arg)).orElse(null);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setExtendedType(extendedTypes);
-        n.setSuperType(superTypes);
+        n.setExtendedType(extendedType);
+        n.setSuperType(superType);
         n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
