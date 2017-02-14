@@ -34,7 +34,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -131,7 +130,6 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return Arrays.asList(getParameters());
     }
 
-
     @Override
     public boolean remove(Node node) {
         if (node == null)
@@ -145,6 +143,14 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return super.remove(node);
     }
 
+    public Optional<Expression> getExpressionBody() {
+        if (body instanceof ExpressionStmt) {
+            return Optional.of(((ExpressionStmt) body).getExpression());
+        } else {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public LambdaExpr clone() {
         return (LambdaExpr) accept(new CloneVisitor(), null);
@@ -153,14 +159,6 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Override
     public LambdaExprMetaModel getMetaModel() {
         return JavaParserMetaModel.lambdaExprMetaModel;
-    }
-
-    public Optional<Expression> getExpressionBody() {
-        if (body instanceof ExpressionStmt) {
-            return Optional.of(((ExpressionStmt)body).getExpression());
-        } else {
-            return Optional.empty();
-        }
     }
 }
 
