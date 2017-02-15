@@ -41,6 +41,7 @@ public class JavaParserTypeSolver implements TypeSolver {
     private TypeSolver parent;
 
     private Map<String, CompilationUnit> parsedFiles = new HashMap<String, CompilationUnit>();
+    private Map<String, ReferenceTypeDeclaration> foundTypes=new HashMap<>();
 
     public JavaParserTypeSolver(File srcDir) {
         this.srcDir = srcDir;
@@ -80,6 +81,8 @@ public class JavaParserTypeSolver implements TypeSolver {
 
         // TODO support enums
         // TODO support interfaces
+        if (foundTypes.containsKey(name))
+        	return SymbolReference.solved(foundTypes.get(name));
 
         String[] nameElements = name.split("\\.");
 
@@ -106,6 +109,7 @@ public class JavaParserTypeSolver implements TypeSolver {
                         return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
                     }
                     ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(this).getTypeDeclaration(astTypeDeclaration.get());
+                    foundTypes.put(name, typeDeclaration);
                     return SymbolReference.solved(typeDeclaration);
                 } catch (IOException e) {
                     throw new RuntimeException(e);

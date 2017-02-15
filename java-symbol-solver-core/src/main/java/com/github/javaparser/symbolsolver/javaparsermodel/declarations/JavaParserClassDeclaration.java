@@ -111,7 +111,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         }
 
         ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        fields.addAll(superclass.getAllFields());
+        if (superclass!=this)
+        	fields.addAll(superclass.getAllFields());
 
         getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
             fields.add(f);
