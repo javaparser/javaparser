@@ -19,6 +19,15 @@ public final class CodeGenerationUtils {
         return "get" + capitalize(name);
     }
 
+    public static String getterToPropertyName(String getterName) {
+        if (getterName.startsWith("is")) {
+            return getterName.substring("is".length());
+        } else if (getterName.startsWith("get")) {
+            return getterName.substring("get".length());
+        }
+        throw new IllegalArgumentException("Unexpected getterName '" + getterName + "'");
+    }
+
     public static String setterName(String fieldName) {
         if (fieldName.startsWith("is")) {
             return "set" + fieldName.substring(2);
