@@ -153,7 +153,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void removingJavadoc() throws IOException {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
-        assertTrue(it.getJavadocComment().remove());
+        assertTrue(it.getJavadocComment().get().remove());
         assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
     }
 

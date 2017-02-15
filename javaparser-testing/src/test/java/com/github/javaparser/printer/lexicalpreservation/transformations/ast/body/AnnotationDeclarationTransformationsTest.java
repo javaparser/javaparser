@@ -111,7 +111,7 @@ public class AnnotationDeclarationTransformationsTest extends AbstractLexicalPre
     @Test
     public void removingJavadoc() throws IOException {
         considerExample("AnnotationDeclaration_Example9_original");
-        boolean removed = cu.getAnnotationDeclarationByName("ClassPreamble").get().getJavadocComment().remove();
+        boolean removed = cu.getAnnotationDeclarationByName("ClassPreamble").get().getJavadocComment().get().remove();
         assertEquals(true, removed);
         assertTransformed("AnnotationDeclaration_Example9", cu);
     }

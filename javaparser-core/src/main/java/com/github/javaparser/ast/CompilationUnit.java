@@ -188,7 +188,7 @@ public final class CompilationUnit extends Node {
     /**
      * Sets or clear the package declarations of this compilation unit.
      *
-     * @param pakage the packageDeclaration declaration to set or <code>null</code> to default package
+     * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
      */
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
@@ -465,8 +465,5 @@ public final class CompilationUnit extends Node {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }
 
-    public void removePackageDeclaration() {
-        setPackageDeclaration((PackageDeclaration)null);
-    }
 }
 

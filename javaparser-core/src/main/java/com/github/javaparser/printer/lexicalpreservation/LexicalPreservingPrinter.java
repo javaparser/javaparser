@@ -210,7 +210,7 @@ public class LexicalPreservingPrinter {
                 if (property == ObservableProperty.COMMENTED_NODE) {
                     return;
                 }
-                if (property == ObservableProperty.IS_INTERFACE) {
+                if (property == ObservableProperty.INTERFACE) {
                     if ((Boolean)newValue) {
                         nodeText.replace(byTokenType(ASTParserConstants.CLASS), new TokenTextElement(ASTParserConstants.INTERFACE, "interface"));
                     } else {
@@ -218,7 +218,7 @@ public class LexicalPreservingPrinter {
                     }
                     return;
                 }
-                if (property == ObservableProperty.IS_STATIC) {
+                if (property == ObservableProperty.STATIC) {
                     if ((Boolean)newValue) {
                         nodeText.addElement(0, new TokenTextElement(ASTParserConstants.STATIC, "static"));
                         nodeText.addElement(1, new TokenTextElement(0, " "));
@@ -462,7 +462,7 @@ public class LexicalPreservingPrinter {
 
     private Inserter insertAfterChild(ObservableProperty property, TokenTextElement... separators) {
         return (parent, child) -> {
-            Node childToFollow = property.singleValueFor(parent);
+            Node childToFollow = (Node)property.singleValueFor(parent);
             if (childToFollow == null) {
                 throw new IllegalArgumentException();
             }
