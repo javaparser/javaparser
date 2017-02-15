@@ -31,6 +31,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -139,10 +140,12 @@ public final class IfStmt extends Statement {
         return setElseStmt((Statement) null);
     }
 
+    @DerivedProperty
     public boolean hasThenBlock() {
         return thenStmt instanceof BlockStmt;
     }
 
+    @DerivedProperty
     public boolean hasElseBlock() {
         return elseStmt instanceof BlockStmt || elseStmt instanceof IfStmt;
     }

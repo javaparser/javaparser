@@ -26,6 +26,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.metamodel.DerivedProperty;
 
 /**
  * A node which has a list of variables.
@@ -102,10 +103,9 @@ public interface NodeWithVariables<N extends Node> {
      * <br/>For <code>int a;</code> this is int.
      * <br/>For <code>int a,b,c,d;</code> this is also int.
      * <br/>For <code>int a,b[],c;</code> this is also int.
-     * * <br/>For <code>int[] a[][],b[],c[][];</code> this is int[][].
-     * <p>
-     * Visible for testing.
+     * <br/>For <code>int[] a[][],b[],c[][];</code> this is int[][].
      */
+    @DerivedProperty
     default Type getMaximumCommonType() {
         // we use a local class because we cannot use an helper static method in an interface
         class Helper {

@@ -25,6 +25,8 @@ public final class CodeGenerationUtils {
             return decapitalize(getterName.substring("is".length()));
         } else if (getterName.startsWith("get")) {
             return decapitalize(getterName.substring("get".length()));
+        } else if (getterName.startsWith("has")) {
+            return decapitalize(getterName.substring("has".length()));
         }
         throw new IllegalArgumentException("Unexpected getterName '" + getterName + "'");
     }
