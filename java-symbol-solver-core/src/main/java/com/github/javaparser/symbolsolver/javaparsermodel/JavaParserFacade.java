@@ -20,17 +20,13 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -38,14 +34,9 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import com.google.common.collect.ImmutableList;
 
 import java.util.*;
 import java.util.logging.ConsoleHandler;
@@ -76,10 +67,12 @@ public class JavaParserFacade {
     private SymbolSolver symbolSolver;
     private Map<Node, Type> cacheWithLambdasSolved = new IdentityHashMap<>();
     private Map<Node, Type> cacheWithoutLambadsSolved = new IdentityHashMap<>();
+    private TypeExtractor typeExtractor;
 
     private JavaParserFacade(TypeSolver typeSolver) {
         this.typeSolver = typeSolver.getRoot();
         this.symbolSolver = new SymbolSolver(typeSolver);
+        this.typeExtractor = new TypeExtractor(typeSolver, this);
     }
 
     public TypeSolver getTypeSolver() {
@@ -104,7 +97,7 @@ public class JavaParserFacade {
         instances.clear();
     }
 
-    private static Type solveGenericTypes(Type type, Context context, TypeSolver typeSolver) {
+    protected static Type solveGenericTypes(Type type, Context context, TypeSolver typeSolver) {
         if (type.isTypeVariable()) {
             Optional<Type> solved = context.solveGenericType(type.describe(), typeSolver);
             if (solved.isPresent()) {
@@ -321,7 +314,7 @@ public class JavaParserFacade {
         return Optional.empty();
     }
 
-    private MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr) {
+    protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr) {
         if (!(methodReferenceExpr.getScope() instanceof TypeExpr)) {
             throw new UnsupportedOperationException();
         }
@@ -345,7 +338,7 @@ public class JavaParserFacade {
         }
     }
 
-    private Type getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas) {
+    protected Type getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas) {
         Type leftType = getTypeConcrete(left, solveLambdas);
         Type rightType = getTypeConcrete(right, solveLambdas);
         if (rightType.isAssignableBy(leftType)) {
@@ -363,328 +356,10 @@ public class JavaParserFacade {
      */
     private Type getTypeConcrete(Node node, boolean solveLambdas) {
         if (node == null) throw new IllegalArgumentException();
-        if (node instanceof NameExpr) {
-            NameExpr nameExpr = (NameExpr) node;
-            logger.finest("getType on name expr " + node);
-            Optional<Value> value = new SymbolSolver(typeSolver).solveSymbolAsValue(nameExpr.getName().getId(), nameExpr);
-            if (!value.isPresent()) {
-                throw new UnsolvedSymbolException("Solving " + node, nameExpr.getName().getId());
-            } else {
-                return value.get().getType();
-            }
-        } else if (node instanceof MethodCallExpr) {
-            logger.finest("getType on method call " + node);
-            // first solve the method
-            MethodUsage ref = solveMethodAsUsage((MethodCallExpr) node);
-            logger.finest("getType on method call " + node + " resolved to " + ref);
-            logger.finest("getType on method call " + node + " return type is " + ref.returnType());
-            return ref.returnType();
-            // the type is the return type of the method
-        } else if (node instanceof LambdaExpr) {
-            if (getParentNode(node) instanceof MethodCallExpr) {
-                MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
-                int pos = JavaParserSymbolDeclaration.getParamPos(node);
-                SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr);
-                if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName().getId());
-                }
-                logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
-                //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
-                if (solveLambdas) {
-
-                    // The type parameter referred here should be the java.util.stream.Stream.T
-                    Type result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-
-                    // FIXME: here we should replace the type parameters that can be resolved
-                    //        for example when invoking myListOfStrings.stream().filter(s -> s.length > 0);
-                    //        the MethodDeclaration of filter is:
-                    //        Stream<T> filter(Predicate<? super T> predicate)
-                    //        but T in this case is equal to String
-                    if (callExpr.getScope().isPresent()) {
-                        Expression scope = callExpr.getScope().get();
-
-                        // If it is a static call we should not try to get the type of the scope
-                        boolean staticCall = false;
-                        if (scope instanceof NameExpr) {
-                            NameExpr nameExpr = (NameExpr) scope;
-                            try {
-                                JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName().getId(), typeSolver);
-                                staticCall = true;
-                            } catch (Exception e) {
-
-                            }
-                        }
-
-                        if (!staticCall) {
-                            Type scopeType = JavaParserFacade.get(typeSolver).getType(scope);
-                            if (scopeType.isReferenceType()) {
-                                result = scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result);
-                            }
-                        }
-                    }
-
-                    // We need to replace the type variables
-                    Context ctx = JavaParserFactory.getContext(node, typeSolver);
-                    result = solveGenericTypes(result, ctx, typeSolver);
-
-                    //We should find out which is the functional method (e.g., apply) and replace the params of the
-                    //solveLambdas with it, to derive so the values. We should also consider the value returned by the
-                    //lambdas
-                    Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
-                    if (functionalMethod.isPresent()) {
-                        LambdaExpr lambdaExpr = (LambdaExpr) node;
-
-                        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-                        // At this point parameterType
-                        // if Function<T=? super Stream.T, ? extends map.R>
-                        // we should replace Stream.T
-                        Type functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
-                        //inferenceContext.addPair(parameterType, functionalInterfaceType);
-                        //inferenceContext.addPair(parameterType, result);
-                        inferenceContext.addPair(result, functionalInterfaceType);
-                        if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                            ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
-                            Type actualType = getType(expressionStmt.getExpression());
-                            Type formalType = functionalMethod.get().returnType();
-                            inferenceContext.addPair(formalType, actualType);
-                            result = inferenceContext.resolve(inferenceContext.addSingle(result));
-                        } else {
-                            throw new UnsupportedOperationException();
-                        }
-                    }
-
-                    return result;
-                } else {
-                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-                }
-            } else {
-                throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
-            }
-        } else if (node instanceof MethodReferenceExpr) {
-            if (getParentNode(node) instanceof MethodCallExpr) {
-                MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
-                int pos = JavaParserSymbolDeclaration.getParamPos(node);
-                SymbolReference<MethodDeclaration> refMethod = JavaParserFacade.get(typeSolver).solve(callExpr, false);
-                if (!refMethod.isSolved()) {
-                    throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName().getId());
-                }
-                logger.finest("getType on method reference expr " + refMethod.getCorrespondingDeclaration().getName());
-                //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
-                if (solveLambdas) {
-                    Type result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-                    // We need to replace the type variables
-                    Context ctx = JavaParserFactory.getContext(node, typeSolver);
-                    result = solveGenericTypes(result, ctx, typeSolver);
-
-                    //We should find out which is the functional method (e.g., apply) and replace the params of the
-                    //solveLambdas with it, to derive so the values. We should also consider the value returned by the
-                    //lambdas
-                    Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
-                    if (functionalMethod.isPresent()) {
-                        if (node instanceof MethodReferenceExpr) {
-                            MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) node;
-
-                            Type actualType = toMethodUsage(methodReferenceExpr).returnType();
-                            Type formalType = functionalMethod.get().returnType();
-
-                            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-                            inferenceContext.addPair(formalType, actualType);
-                            result = inferenceContext.resolve(inferenceContext.addSingle(result));
-                        } else {
-                            LambdaExpr lambdaExpr = (LambdaExpr) node;
-
-                            if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                                ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
-                                Type actualType = getType(expressionStmt.getExpression());
-                                Type formalType = functionalMethod.get().returnType();
-
-                                InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-                                inferenceContext.addPair(formalType, actualType);
-                                result = inferenceContext.resolve(inferenceContext.addSingle(result));
-                            } else {
-                                throw new UnsupportedOperationException();
-                            }
-                        }
-                    }
-
-                    return result;
-                } else {
-                    return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
-                }
-            } else {
-                throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
-            }
-        } else if (node instanceof VariableDeclarator) {
-            if (getParentNode(node) instanceof FieldDeclaration) {
-//                FieldDeclaration parent = (FieldDeclaration) getParentNode(node);
-                return JavaParserFacade.get(typeSolver).convertToUsageVariableType((VariableDeclarator) node);
-            } else if (getParentNode(node) instanceof VariableDeclarationExpr) {
-//                VariableDeclarationExpr parent = (VariableDeclarationExpr) getParentNode(node);
-                return JavaParserFacade.get(typeSolver).convertToUsageVariableType((VariableDeclarator) node);
-            } else {
-                throw new UnsupportedOperationException(getParentNode(node).getClass().getCanonicalName());
-            }
-        } else if (node instanceof Parameter) {
-            Parameter parameter = (Parameter) node;
-            if (parameter.getType() instanceof UnknownType) {
-                throw new IllegalStateException("Parameter has unknown type: " + parameter);
-            }
-            return JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), parameter);
-        } else if (node instanceof FieldAccessExpr) {
-            FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
-            // We should understand if this is a static access
-            if (fieldAccessExpr.getScope().isPresent() && fieldAccessExpr.getScope().get() instanceof NameExpr) {
-                NameExpr staticValue = (NameExpr) fieldAccessExpr.getScope().get();
-                SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(fieldAccessExpr, typeSolver).solveType(staticValue.toString(), typeSolver);
-                if (typeAccessedStatically.isSolved()) {
-                    // TODO here maybe we have to substitute type typeParametersValues
-                    return ((ReferenceTypeDeclaration) typeAccessedStatically.getCorrespondingDeclaration()).getField(fieldAccessExpr.getField().getId()).getType();
-                }
-            } else if (fieldAccessExpr.getScope().isPresent() && fieldAccessExpr.getScope().get().toString().indexOf('.') > 0) {
-                // try to find fully qualified name
-                SymbolReference<ReferenceTypeDeclaration> sr = typeSolver.tryToSolveType(fieldAccessExpr.getScope().get().toString());
-                if (sr.isSolved()) {
-                    return sr.getCorrespondingDeclaration().getField(fieldAccessExpr.getField().getId()).getType();
-                }
-            }
-            Optional<Value> value = null;
-            try {
-                value = new SymbolSolver(typeSolver).solveSymbolAsValue(fieldAccessExpr.getField().getId(), fieldAccessExpr);
-            } catch (UnsolvedSymbolException use) {
-                // Deal with badly parsed FieldAccessExpr that are in fact fqn classes
-                if (fieldAccessExpr.getParentNode().isPresent() && fieldAccessExpr.getParentNode().get() instanceof FieldAccessExpr) {
-                    throw use;
-                }
-                SymbolReference<ReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
-                if (sref.isSolved()) {
-                    return new ReferenceTypeImpl(sref.getCorrespondingDeclaration(), typeSolver);
-                }
-            }
-            if (value != null && value.isPresent()) {
-                return value.get().getType();
-            } else {
-                throw new UnsolvedSymbolException(fieldAccessExpr.getField().getId());
-            }
-        } else if (node instanceof ObjectCreationExpr) {
-            ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) node;
-            Type type = JavaParserFacade.get(typeSolver).convertToUsage(objectCreationExpr.getType(), node);
-            return type;
-        } else if (node instanceof NullLiteralExpr) {
-            return NullType.INSTANCE;
-        } else if (node instanceof BooleanLiteralExpr) {
-            return PrimitiveType.BOOLEAN;
-        } else if (node instanceof IntegerLiteralExpr) {
-            return PrimitiveType.INT;
-        } else if (node instanceof LongLiteralExpr) {
-            return PrimitiveType.LONG;
-        } else if (node instanceof CharLiteralExpr) {
-            return PrimitiveType.CHAR;
-        } else if (node instanceof DoubleLiteralExpr) {
-            if (((DoubleLiteralExpr) node).getValue().toLowerCase().endsWith("f")) {
-                return PrimitiveType.FLOAT;
-            }
-            return PrimitiveType.DOUBLE;
-        } else if (node instanceof StringLiteralExpr) {
-            return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType("java.lang.String"), typeSolver);
-        } else if (node instanceof UnaryExpr) {
-            UnaryExpr unaryExpr = (UnaryExpr) node;
-            switch (unaryExpr.getOperator()) {
-                case MINUS:
-                case PLUS:
-                    return getTypeConcrete(unaryExpr.getExpression(), solveLambdas);
-                case LOGICAL_COMPLEMENT:
-                    return PrimitiveType.BOOLEAN;
-                case POSTFIX_DECREMENT:
-                case PREFIX_DECREMENT:
-                case POSTFIX_INCREMENT:
-                case PREFIX_INCREMENT:
-                    return getTypeConcrete(unaryExpr.getExpression(), solveLambdas);
-                default:
-                    throw new UnsupportedOperationException(unaryExpr.getOperator().name());
-            }
-        } else if (node instanceof BinaryExpr) {
-            BinaryExpr binaryExpr = (BinaryExpr) node;
-            switch (binaryExpr.getOperator()) {
-                case PLUS:
-                case MINUS:
-                case DIVIDE:
-                case MULTIPLY:
-                    return getBinaryTypeConcrete(binaryExpr.getLeft(), binaryExpr.getRight(), solveLambdas);
-                case LESS_EQUALS:
-                case LESS:
-                case GREATER:
-                case GREATER_EQUALS:
-                case EQUALS:
-                case NOT_EQUALS:
-                case OR:
-                case AND:
-                    return PrimitiveType.BOOLEAN;
-                case BINARY_AND:
-                case BINARY_OR:
-                case SIGNED_RIGHT_SHIFT:
-                case UNSIGNED_RIGHT_SHIFT:
-                case LEFT_SHIFT:
-                case REMAINDER:
-                case XOR:
-                    return getTypeConcrete(binaryExpr.getLeft(), solveLambdas);
-                default:
-                    throw new UnsupportedOperationException("FOO " + binaryExpr.getOperator().name());
-            }
-        } else if (node instanceof VariableDeclarationExpr) {
-            VariableDeclarationExpr expr = (VariableDeclarationExpr) node;
-            if (expr.getVariables().size() != 1) {
-                throw new UnsupportedOperationException();
-            }
-            return convertToUsageVariableType(expr.getVariables().get(0));
-        } else if (node instanceof InstanceOfExpr) {
-            return PrimitiveType.BOOLEAN;
-        } else if (node instanceof EnclosedExpr) {
-            EnclosedExpr enclosedExpr = (EnclosedExpr) node;
-            return getTypeConcrete(enclosedExpr.getInner().get(), solveLambdas);
-        } else if (node instanceof CastExpr) {
-            CastExpr enclosedExpr = (CastExpr) node;
-            return convertToUsage(enclosedExpr.getType(), JavaParserFactory.getContext(node, typeSolver));
-        } else if (node instanceof AssignExpr) {
-            AssignExpr assignExpr = (AssignExpr) node;
-            return getTypeConcrete(assignExpr.getTarget(), solveLambdas);
-        } else if (node instanceof ThisExpr) {
-            return new ReferenceTypeImpl(getTypeDeclaration(findContainingTypeDecl(node)), typeSolver);
-        } else if (node instanceof ConditionalExpr) {
-            ConditionalExpr conditionalExpr = (ConditionalExpr) node;
-            return getTypeConcrete(conditionalExpr.getThenExpr(), solveLambdas);
-        } else if (node instanceof ArrayCreationExpr) {
-            ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr) node;
-            Type res = convertToUsage(arrayCreationExpr.getElementType(), JavaParserFactory.getContext(node, typeSolver));
-            for (int i=0;i<arrayCreationExpr.getLevels().size();i++) {
-                res = new ArrayType(res);
-            }
-            return res;
-        } else if (node instanceof ArrayAccessExpr) {
-            ArrayAccessExpr arrayAccessExpr = (ArrayAccessExpr) node;
-            Type arrayUsageType = getTypeConcrete(arrayAccessExpr.getName(), solveLambdas);
-            if (arrayUsageType.isArray()) {
-                return ((ArrayType) arrayUsageType).getComponentType();
-            }
-            return arrayUsageType;
-        } else if (node instanceof SuperExpr) {
-            TypeDeclaration typeOfNode = getTypeDeclaration(findContainingTypeDecl(node));
-            if (typeOfNode instanceof ClassDeclaration) {
-                return ((ClassDeclaration) typeOfNode).getSuperClass();
-            } else {
-                throw new UnsupportedOperationException(node.getClass().getCanonicalName());
-            }
-        } else if (node instanceof ClassExpr) {
-            // This implementation does not regard the actual type argument of the ClassExpr.
-            ClassExpr classExpr = (ClassExpr) node;
-            com.github.javaparser.ast.type.Type astType = classExpr.getType();
-            Type jssType = convertToUsage(astType, classExpr.getType());
-            return new ReferenceTypeImpl(new ReflectionClassDeclaration(Class.class, typeSolver), ImmutableList.of(jssType), typeSolver);
-        } else {
-            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
-        }
+        return node.accept(typeExtractor, solveLambdas);
     }
 
-    private com.github.javaparser.ast.body.TypeDeclaration<?> findContainingTypeDecl(Node node) {
+    protected com.github.javaparser.ast.body.TypeDeclaration<?> findContainingTypeDecl(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             return (ClassOrInterfaceDeclaration) node;
         } else if (node instanceof EnumDeclaration) {
@@ -718,7 +393,7 @@ public class JavaParserFacade {
         }
     }
 
-    private Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
+    protected Type convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
