@@ -13,5 +13,7 @@ public class VariableDeclarationExprMetaModel extends ExpressionMetaModel {
     public PropertyMetaModel modifiersPropertyMetaModel;
 
     public PropertyMetaModel variablesPropertyMetaModel;
+
+    public PropertyMetaModel maximumCommonTypePropertyMetaModel;
 }
 
