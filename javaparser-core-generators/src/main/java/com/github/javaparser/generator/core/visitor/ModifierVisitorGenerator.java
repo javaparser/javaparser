@@ -23,17 +23,6 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
-<<<<<<< HEAD
-=======
-        String s1 = "Expression target = (Expression) n.getTarget().accept(this, arg);" +
-                "        if (target == null) return null;" +
-                "        n.setTarget(target);";
-
-        String s = "n.setExtendedType(modifyList(n.getExtendedType(), arg));";
-        String s2 = "n.getPackageDeclaration().ifPresent(p -> n.setPackageDeclaration((PackageDeclaration) p.accept(this, arg)));";
-
-
->>>>>>> issue705: refactoring WildcardType
         for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
             if (property.isNode()) {
                 if (property.isNodeList()) {
