@@ -87,10 +87,20 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return Optional.ofNullable(superType);
     }
 
+    @Deprecated
+    public Optional<ReferenceType> getExtendedTypes() {
+        return getExtendedType();
+    }
+
+    @Deprecated
+    public Optional<ReferenceType> getSuperTypes() {
+        return getSuperType();
+    }
+
     /**
-     * Sets the extends
+     * Sets the extended type
      *
-     * @param ext the extends, can be null
+     * @param extendedType the extends, can be null
      * @return this, the WildcardType
      */
     public WildcardType setExtendedType(final ReferenceType extendedType) {
@@ -103,9 +113,22 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     /**
-     * Sets the super
+     * Sets the extended type
      *
-     * @param sup the super, can be null
+     * @param extendedType the extends, can be null
+     * @return this, the WildcardType
+     *
+     * @deprecated use setExtendedType instead,
+     */
+    @Deprecated
+    public WildcardType setExtendedTypes(final ReferenceType extendedType) {
+        return setExtendedType(extendedType);
+    }
+
+    /**
+     * Sets the supertype
+     *
+     * @param superType the super, can be null
      * @return this, the WildcardType
      */
     public WildcardType setSuperType(final ReferenceType superType) {
@@ -115,6 +138,19 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         this.superType = superType;
         setAsParentNodeOf(superType);
         return this;
+    }
+
+    /**
+     * Sets the supertype
+     *
+     * @param superType the super, can be null
+     * @return this, the WildcardType
+     *
+     * @deprecated use setSuperType instead
+     */
+    @Deprecated
+    public WildcardType setSuperTypes(final ReferenceType superType) {
+        return setSuperType(superType);
     }
 
     @Override
@@ -146,12 +182,14 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return super.remove(node);
     }
 
+    @Deprecated
     public WildcardType removeExtendedTypes() {
-        return setExtendedType((ReferenceType) null);
+        return removeExtendedType();
     }
 
+    @Deprecated
     public WildcardType removeSuperTypes() {
-        return setSuperType((ReferenceType) null);
+        return removeSuperType();
     }
 
     public WildcardType removeExtendedType() {
