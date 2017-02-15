@@ -410,9 +410,9 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(UnaryExpr.class, sequence(
-                conditional(ObservableProperty.IS_PREFIX, FLAG, attribute(ObservableProperty.OPERATOR)),
+                conditional(ObservableProperty.PREFIX, FLAG, attribute(ObservableProperty.OPERATOR)),
                 child(ObservableProperty.EXPRESSION),
-                conditional(ObservableProperty.IS_POSTFIX, FLAG, attribute(ObservableProperty.OPERATOR))
+                conditional(ObservableProperty.POSTFIX, FLAG, attribute(ObservableProperty.OPERATOR))
         ));
 
         concreteSyntaxModelByClass.put(InstanceOfExpr.class, sequence(

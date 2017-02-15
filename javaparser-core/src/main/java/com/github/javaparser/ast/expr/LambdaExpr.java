@@ -37,6 +37,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -143,6 +144,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return super.remove(node);
     }
 
+    @DerivedProperty
     public Optional<Expression> getExpressionBody() {
         if (body instanceof ExpressionStmt) {
             return Optional.of(((ExpressionStmt) body).getExpression());

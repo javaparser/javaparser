@@ -11,5 +11,9 @@ public class UnaryExprMetaModel extends ExpressionMetaModel {
     public PropertyMetaModel expressionPropertyMetaModel;
 
     public PropertyMetaModel operatorPropertyMetaModel;
+
+    public PropertyMetaModel postfixPropertyMetaModel;
+
+    public PropertyMetaModel prefixPropertyMetaModel;
 }
 

@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
@@ -134,10 +135,12 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return super.remove(node);
     }
 
+    @DerivedProperty
     public boolean isPostfix() {
         return operator.isPostfix();
     }
 
+    @DerivedProperty
     public boolean isPrefix() {
         return !isPostfix();
     }
