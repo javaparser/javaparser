@@ -2,7 +2,9 @@ package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -12,16 +14,16 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static com.github.javaparser.ast.Modifier.FINAL;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 public class PropertyGenerator extends NodeGenerator {
-    private final Set<String> observablePropertyNames = new TreeSet<>();
+
+    private final Map<String, PropertyMetaModel> declaredProperties = new HashMap<>();
+    private final Map<String, PropertyMetaModel> derivedProperties = new HashMap<>();
 
     public PropertyGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
         super(javaParser, sourceRoot);
@@ -33,6 +35,7 @@ public class PropertyGenerator extends NodeGenerator {
             generateGetter(nodeMetaModel, nodeCoid, property);
             generateSetter(nodeMetaModel, nodeCoid, property);
         }
+        nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
     }
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
@@ -49,7 +52,7 @@ public class PropertyGenerator extends NodeGenerator {
 
         // Fill body
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
-        observablePropertyNames.add(observableName);
+        declaredProperties.put(observableName, property);
         if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
             // Node.comment has a very specific setter that we shouldn't overwrite.
             return;
@@ -94,13 +97,43 @@ public class PropertyGenerator extends NodeGenerator {
         }
     }
 
+    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived){
+        boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
+        String name = property.getName();
+        String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
+        EnumConstantDeclaration enumConstantDeclaration = observablePropertyEnum.addEnumConstant(constantName);
+        if (isAttribute) {
+            if (property.isEnumSet()) {
+                enumConstantDeclaration.addArgument("Type.MULTIPLE_ATTRIBUTE");
+            } else {
+                enumConstantDeclaration.addArgument("Type.SINGLE_ATTRIBUTE");
+            }
+        } else {
+            if (property.isNodeList()) {
+                enumConstantDeclaration.addArgument("Type.MULTIPLE_REFERENCE");
+            } else {
+                enumConstantDeclaration.addArgument("Type.SINGLE_REFERENCE");
+            }
+        }
+        if (derived) {
+            enumConstantDeclaration.addArgument("true");
+        }
+    }
+
     @Override
     protected void after() throws Exception {
         CompilationUnit observablePropertyCu = sourceRoot.parse("com.github.javaparser.ast.observer", "ObservableProperty.java", javaParser).get();
         EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
-        for (String prop : observablePropertyNames) {
-            observablePropertyEnum.addEnumConstant(prop);
+        List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
+        observablePropertyNames.sort(String::compareTo);
+        for (String propName : observablePropertyNames) {
+            generateObservableProperty(observablePropertyEnum, declaredProperties.get(propName), false);
+        }
+        List<String> derivedPropertyNames = new LinkedList<>(derivedProperties.keySet());
+        derivedPropertyNames.sort(String::compareTo);
+        for (String propName : derivedPropertyNames) {
+            generateObservableProperty(observablePropertyEnum, derivedProperties.get(propName), true);
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");

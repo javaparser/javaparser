@@ -15,5 +15,7 @@ public class ExplicitConstructorInvocationStmtMetaModel extends StatementMetaMod
     public PropertyMetaModel isThisPropertyMetaModel;
 
     public PropertyMetaModel typeArgumentsPropertyMetaModel;
+
+    public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }
 

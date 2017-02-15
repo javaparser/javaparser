@@ -499,9 +499,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     public Boolean visit(final WildcardType n1, final Visitable arg) {
         final WildcardType n2 = (WildcardType) arg;
-        if (!nodeEquals(n1.getExtendedTypes(), n2.getExtendedTypes()))
+        if (!nodeEquals(n1.getExtendedType(), n2.getExtendedType()))
             return false;
-        if (!nodeEquals(n1.getSuperTypes(), n2.getSuperTypes()))
+        if (!nodeEquals(n1.getSuperType(), n2.getSuperType()))
             return false;
         if (!nodesEquals(n1.getAnnotations(), n2.getAnnotations()))
             return false;

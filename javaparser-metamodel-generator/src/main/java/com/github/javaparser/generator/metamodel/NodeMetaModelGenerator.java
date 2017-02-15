@@ -6,9 +6,11 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -88,6 +90,12 @@ public class NodeMetaModelGenerator {
 
             initializePropertyMetaModelsStatementsGenerator.generate(nodeClass, field, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
         }
+        for (Method method : nodeClass.getMethods()) {
+            if (method.isAnnotationPresent(DerivedProperty.class)) {
+                initializePropertyMetaModelsStatementsGenerator.generateDerivedProperty(nodeClass, method, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
+            }
+        }
+
         if (!typeAnalysis.isAbstract) {
             initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
         }

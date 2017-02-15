@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.github.javaparser.utils.Utils.capitalize;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 public final class CodeGenerationUtils {
     private CodeGenerationUtils() {
@@ -17,6 +18,17 @@ public final class CodeGenerationUtils {
             return "is" + capitalize(name);
         }
         return "get" + capitalize(name);
+    }
+
+    public static String getterToPropertyName(String getterName) {
+        if (getterName.startsWith("is")) {
+            return decapitalize(getterName.substring("is".length()));
+        } else if (getterName.startsWith("get")) {
+            return decapitalize(getterName.substring("get".length()));
+        } else if (getterName.startsWith("has")) {
+            return decapitalize(getterName.substring("has".length()));
+        }
+        throw new IllegalArgumentException("Unexpected getterName '" + getterName + "'");
     }
 
     public static String setterName(String fieldName) {

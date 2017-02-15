@@ -13,5 +13,7 @@ public class MethodReferenceExprMetaModel extends ExpressionMetaModel {
     public PropertyMetaModel scopePropertyMetaModel;
 
     public PropertyMetaModel typeArgumentsPropertyMetaModel;
+
+    public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }
 

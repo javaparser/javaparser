@@ -8,8 +8,8 @@ public class WildcardTypeMetaModel extends TypeMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.type.WildcardType.class, "WildcardType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public PropertyMetaModel extendedTypesPropertyMetaModel;
+    public PropertyMetaModel extendedTypePropertyMetaModel;
 
-    public PropertyMetaModel superTypesPropertyMetaModel;
+    public PropertyMetaModel superTypePropertyMetaModel;
 }
 

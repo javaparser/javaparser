@@ -17,5 +17,7 @@ public class ObjectCreationExprMetaModel extends ExpressionMetaModel {
     public PropertyMetaModel typePropertyMetaModel;
 
     public PropertyMetaModel typeArgumentsPropertyMetaModel;
+
+    public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }
 

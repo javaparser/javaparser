@@ -24,6 +24,7 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.metamodel.DerivedProperty;
 
 import java.util.Optional;
 
@@ -54,6 +55,7 @@ public interface NodeWithTypeArguments<N extends Node> {
     /**
      * @return whether the type arguments look like &lt;>.
      */
+    @DerivedProperty
     default boolean isUsingDiamondOperator() {
         return getTypeArguments().isPresent() && getTypeArguments().get().isEmpty();
     }

@@ -11,5 +11,7 @@ public class FieldDeclarationMetaModel extends BodyDeclarationMetaModel {
     public PropertyMetaModel modifiersPropertyMetaModel;
 
     public PropertyMetaModel variablesPropertyMetaModel;
+
+    public PropertyMetaModel maximumCommonTypePropertyMetaModel;
 }
 

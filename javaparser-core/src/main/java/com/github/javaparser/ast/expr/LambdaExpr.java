@@ -26,15 +26,18 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -139,6 +142,15 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
             }
         }
         return super.remove(node);
+    }
+
+    @DerivedProperty
+    public Optional<Expression> getExpressionBody() {
+        if (body instanceof ExpressionStmt) {
+            return Optional.of(((ExpressionStmt) body).getExpression());
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

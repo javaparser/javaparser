@@ -29,8 +29,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.Printable;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -44,7 +46,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public final class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
 
-    public enum Operator {
+    public enum Operator implements Printable {
 
         PLUS("+", false), MINUS("-", false), PREFIX_INCREMENT("++", false), PREFIX_DECREMENT("--", false), LOGICAL_COMPLEMENT("!", false), BITWISE_COMPLEMENT("~", false), POSTFIX_INCREMENT("++", true), POSTFIX_DECREMENT("--", true);
 
@@ -131,6 +133,16 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @DerivedProperty
+    public boolean isPostfix() {
+        return operator.isPostfix();
+    }
+
+    @DerivedProperty
+    public boolean isPrefix() {
+        return !isPostfix();
     }
 
     @Override
