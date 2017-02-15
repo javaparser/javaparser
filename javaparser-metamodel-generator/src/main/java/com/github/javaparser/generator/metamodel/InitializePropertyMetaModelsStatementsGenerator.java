@@ -53,21 +53,21 @@ public class InitializePropertyMetaModelsStatementsGenerator {
         final String typeName = fieldType.getTypeName().replace('$', '.');
         final String propertyMetaModelFieldName = getterToPropertyName(method.getName()) + "PropertyMetaModel";
         nodeMetaModelClass.addField("PropertyMetaModel", propertyMetaModelFieldName, PUBLIC);
-//        final String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s, %s)",
-//                nodeMetaModelFieldName,
-//                field.getName(),
-//                typeName,
-//                optionalOf(decapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
-//                fieldAnalysis.isOptional,
-//                isNonEmpty(field),
-//                fieldAnalysis.isNodeList,
-//                fieldAnalysis.isEnumSet,
-//                fieldAnalysis.isSelfType);
-//        final String fieldSetting = f("%s.%s=%s;", nodeMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
-//        final String fieldAddition = f("%s.getDeclaredPropertyMetaModels().add(%s.%s);", nodeMetaModelFieldName, nodeMetaModelFieldName, propertyMetaModelFieldName);
-//
-//        initializePropertyMetaModelsStatements.add(parseStatement(fieldSetting));
-//        initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
+        final String propertyInitializer = f("new PropertyMetaModel(%s, \"%s\", %s.class, %s, %s, %s, %s, %s, %s)",
+                nodeMetaModelFieldName,
+                getterToPropertyName(method.getName()),
+                typeName,
+                optionalOf(decapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
+                fieldAnalysis.isOptional,
+                isNonEmpty(method),
+                fieldAnalysis.isNodeList,
+                fieldAnalysis.isEnumSet,
+                fieldAnalysis.isSelfType);
+        final String fieldSetting = f("%s.%s=%s;", nodeMetaModelFieldName, propertyMetaModelFieldName, propertyInitializer);
+        final String fieldAddition = f("%s.getDerivedPropertyMetaModels().add(%s.%s);", nodeMetaModelFieldName, nodeMetaModelFieldName, propertyMetaModelFieldName);
+
+        initializePropertyMetaModelsStatements.add(parseStatement(fieldSetting));
+        initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
     }
 
     private boolean isNonEmpty(Field field) {
@@ -82,6 +82,10 @@ public class InitializePropertyMetaModelsStatementsGenerator {
                 (c == IntersectionType.class && name.equals("elements")) ||
                 (c == UnionType.class && name.equals("elements")) ||
                 (c == VariableDeclarationExpr.class && name.equals("variables"));
+    }
+
+    private boolean isNonEmpty(Method method) {
+        return true;
     }
 
     private String getter(Field field) {
