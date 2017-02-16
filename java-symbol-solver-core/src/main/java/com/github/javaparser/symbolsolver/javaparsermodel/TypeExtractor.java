@@ -17,9 +17,7 @@ import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
@@ -78,7 +76,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public Type visit(ArrayAccessExpr node, Boolean solveLambdas) {
         Type arrayUsageType = node.getName().accept(this, solveLambdas);
         if (arrayUsageType.isArray()) {
-            return ((com.github.javaparser.symbolsolver.model.typesystem.ArrayType) arrayUsageType).getComponentType();
+            return ((ArrayType) arrayUsageType).getComponentType();
         }
         return arrayUsageType;
     }
@@ -87,7 +85,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public Type visit(ArrayCreationExpr node, Boolean solveLambdas) {
         Type res = facade.convertToUsage(node.getElementType(), JavaParserFactory.getContext(node, typeSolver));
         for (int i = 0; i < node.getLevels().size(); i++) {
-            res = new com.github.javaparser.symbolsolver.model.typesystem.ArrayType(res);
+            res = new ArrayType(res);
         }
         return res;
     }
@@ -118,7 +116,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case NOT_EQUALS:
             case OR:
             case AND:
-                return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.BOOLEAN;
+                return PrimitiveType.BOOLEAN;
             case BINARY_AND:
             case BINARY_OR:
             case SIGNED_RIGHT_SHIFT:
@@ -194,7 +192,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(InstanceOfExpr node, Boolean solveLambdas) {
-        return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.BOOLEAN;
+        return PrimitiveType.BOOLEAN;
     }
 
     @Override
@@ -204,30 +202,30 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(IntegerLiteralExpr node, Boolean solveLambdas) {
-        return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.INT;
+        return PrimitiveType.INT;
     }
 
     @Override
     public Type visit(LongLiteralExpr node, Boolean solveLambdas) {
-        return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.LONG;
+        return PrimitiveType.LONG;
     }
 
     @Override
     public Type visit(CharLiteralExpr node, Boolean solveLambdas) {
-        return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.CHAR;
+        return PrimitiveType.CHAR;
     }
 
     @Override
     public Type visit(DoubleLiteralExpr node, Boolean solveLambdas) {
         if (node.getValue().toLowerCase().endsWith("f")) {
-            return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.FLOAT;
+            return PrimitiveType.FLOAT;
         }
-        return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.DOUBLE;
+        return PrimitiveType.DOUBLE;
     }
 
     @Override
     public Type visit(BooleanLiteralExpr node, Boolean solveLambdas) {
-        return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.BOOLEAN;
+        return PrimitiveType.BOOLEAN;
     }
 
     @Override
@@ -285,7 +283,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case PLUS:
                 return node.getExpression().accept(this, solveLambdas);
             case LOGICAL_COMPLEMENT:
-                return com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.BOOLEAN;
+                return PrimitiveType.BOOLEAN;
             case POSTFIX_DECREMENT:
             case PREFIX_DECREMENT:
             case POSTFIX_INCREMENT:
