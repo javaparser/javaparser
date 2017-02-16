@@ -46,7 +46,7 @@ public class CompilationUnitTransformationsTest extends AbstractLexicalPreservin
     public void removingPackageDeclaration() throws IOException {
         considerCode("package foo.bar; class A {}");
         cu.removePackageDeclaration();
-        assertTransformedToString("lass A {}", cu);
+        assertTransformedToString("class A {}", cu);
     }
 
     @Test
