@@ -180,6 +180,16 @@ public class MethodResolutionLogic {
         for (int i = 0; i < expected.typeParametersValues().size(); i++) {
             Type expectedParam = expected.typeParametersValues().get(i);
             Type actualParam = actual.typeParametersValues().get(i);
+
+            // In the case of nested parameterizations eg. List<R> <-> List<Integer>
+            // we should peel off one layer and ensure R <-> Integer
+            if (expectedParam.isReferenceType() && actualParam.isReferenceType()){
+                ReferenceType r1 = expectedParam.asReferenceType();
+                ReferenceType r2 = actualParam.asReferenceType();
+
+                return isAssignableMatchTypeParametersMatchingQName(r1, r2, matchedParameters);
+            }
+
             if (expectedParam.isTypeVariable()) {
                 String expectedParamName = expectedParam.asTypeParameter().getName();
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
