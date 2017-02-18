@@ -353,8 +353,12 @@ public class LexicalDifferenceCalculator {
                         throw new UnsupportedOperationException(diffEl.getClass().getSimpleName());
                     }
                 } else if (diffIndex >= this.elements.size() && nodeTextIndex < nodeText.getElements().size()) {
-                    nodeTextIndex++;
-                    throw new UnsupportedOperationException("B");
+                    TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
+                    if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpace()) {
+                        nodeTextIndex++;
+                    } else {
+                        throw new UnsupportedOperationException("B " + nodeText + ". Difference: " + this + " " + nodeTextEl);
+                    }
                 } else {
                     DifferenceElement diffEl = elements.get(diffIndex);
                     TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
@@ -369,7 +373,7 @@ public class LexicalDifferenceCalculator {
                             diffIndex++;
                             nodeTextIndex++;
                         } else if ((kept.element instanceof CsmChild) && nodeTextEl instanceof TokenTextElement) {
-                            if (((TokenTextElement)nodeTextEl).isWhiteSpace()) {
+                            if (((TokenTextElement) nodeTextEl).isWhiteSpace()) {
                                 if (comingFromRemoved) {
                                     nodeText.removeElement(nodeTextIndex);
                                 } else {
@@ -377,6 +381,15 @@ public class LexicalDifferenceCalculator {
                                 }
                             } else {
                                 throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
+                            }
+                        } else if ((kept.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement) {
+                            CsmToken csmToken = (CsmToken)kept.element;
+                            TokenTextElement nodeTextToken = (TokenTextElement)nodeTextEl;
+                            if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
+                                nodeTextIndex++;
+                                diffIndex++;
+                            } else {
+                                throw new UnsupportedOperationException();
                             }
                         } else {
                             throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);

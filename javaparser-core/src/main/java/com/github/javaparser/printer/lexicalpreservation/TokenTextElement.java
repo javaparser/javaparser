@@ -93,6 +93,6 @@ class TokenTextElement extends TextElement {
     }
 
     public boolean isWhiteSpace() {
-        return tokenKind == 3 || tokenKind == 1;
+        return tokenKind == 3 || tokenKind == 1 || tokenKind == 0;
     }
 }
