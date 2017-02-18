@@ -332,6 +332,7 @@ public class LexicalDifferenceCalculator {
         public void apply(NodeText nodeText) {
             int diffIndex = 0;
             int nodeTextIndex = 0;
+            boolean comingFromRemoved = false;
             do {
                 if (diffIndex < this.elements.size() && nodeTextIndex >= nodeText.getElements().size()) {
                     DifferenceElement diffEl = elements.get(diffIndex);
@@ -347,6 +348,7 @@ public class LexicalDifferenceCalculator {
                         } else {
                             throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
                         }
+                        comingFromRemoved = false;
                     } else {
                         throw new UnsupportedOperationException(diffEl.getClass().getSimpleName());
                     }
@@ -360,6 +362,7 @@ public class LexicalDifferenceCalculator {
                         nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
                         diffIndex++;
                         nodeTextIndex++;
+                        comingFromRemoved = false;
                     } else if (diffEl instanceof Kept) {
                         Kept kept = (Kept)diffEl;
                         if ((kept.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
@@ -367,13 +370,18 @@ public class LexicalDifferenceCalculator {
                             nodeTextIndex++;
                         } else if ((kept.element instanceof CsmChild) && nodeTextEl instanceof TokenTextElement) {
                             if (((TokenTextElement)nodeTextEl).isWhiteSpace()) {
-                                nodeTextIndex++;
+                                if (comingFromRemoved) {
+                                    nodeText.removeElement(nodeTextIndex);
+                                } else {
+                                    nodeTextIndex++;
+                                }
                             } else {
                                 throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                             }
                         } else {
                             throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                         }
+                        comingFromRemoved = false;
                     } else if (diffEl instanceof Removed) {
                         Removed removed = (Removed)diffEl;
                         if ((removed.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
@@ -382,6 +390,7 @@ public class LexicalDifferenceCalculator {
                         } else {
                             throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                         }
+                        comingFromRemoved = true;
                     } else {
                         throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
                     }

@@ -53,7 +53,9 @@ public class CompilationUnitTransformationsTest extends AbstractLexicalPreservin
     public void replacingPackageDeclaration() throws IOException {
         considerCode("package foo.bar; class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo2"), "baz")));
-        assertTransformedToString("package foo2.baz; class A {}", cu);
+        assertTransformedToString("package foo2.baz;\n" +
+                "\n" +
+                "class A {}", cu);
     }
 
     // imports
