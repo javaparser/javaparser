@@ -16,10 +16,10 @@ import java.util.*;
 
 public class LexicalDifferenceCalculator {
 
-    class CalculatedSyntaxModel {
+    static class CalculatedSyntaxModel {
         List<CsmElement> elements;
 
-        public CalculatedSyntaxModel(List<CsmElement> elements) {
+        CalculatedSyntaxModel(List<CsmElement> elements) {
             this.elements = elements;
         }
 
@@ -78,6 +78,21 @@ public class LexicalDifferenceCalculator {
         @Override
         public String toString() {
             return "child(" + child.getClass().getSimpleName()+")";
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            CsmChild csmChild = (CsmChild) o;
+
+            return child.equals(csmChild.child);
+        }
+
+        @Override
+        public int hashCode() {
+            return child.hashCode();
         }
     }
 

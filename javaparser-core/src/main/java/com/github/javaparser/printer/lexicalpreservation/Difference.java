@@ -24,8 +24,10 @@ public class Difference {
         this.elements = elements;
     }
 
-    private interface DifferenceElement {
-
+    interface DifferenceElement {
+        public static DifferenceElement added(CsmElement element) {
+            return new Added(element);
+        }
     }
 
     private static class Added implements DifferenceElement {
@@ -38,6 +40,21 @@ public class Difference {
         @Override
         public String toString() {
             return "Added{" + element + '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Added added = (Added) o;
+
+            return element.equals(added.element);
+        }
+
+        @Override
+        public int hashCode() {
+            return element.hashCode();
         }
     }
 
@@ -158,9 +175,6 @@ public class Difference {
         if (originalIndex < original.elements.size() || afterIndex < after.elements.size()) {
             elements.addAll(calculateImpl(original.sub(originalIndex, original.elements.size()), after.sub(afterIndex, after.elements.size())).elements);
         }
-
-        System.out.println("CALCULATE "+original.elements.size()+ " "+after.elements.size());
-
         return new Difference(elements);
     }
 
@@ -175,7 +189,7 @@ public class Difference {
                 elements.add(new Removed(original.elements.get(originalIndex)));
                 originalIndex++;
             } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
-                elements.add(new Added(after.elements.get(originalIndex)));
+                elements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
             } else {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
@@ -341,5 +355,9 @@ public class Difference {
     @Override
     public String toString() {
         return "Difference{" + elements + '}';
+    }
+
+    public List<DifferenceElement> getElements() {
+        return elements;
     }
 }
