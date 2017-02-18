@@ -25,8 +25,12 @@ public class Difference {
     }
 
     interface DifferenceElement {
-        public static DifferenceElement added(CsmElement element) {
+        static DifferenceElement added(CsmElement element) {
             return new Added(element);
+        }
+
+        static DifferenceElement removed(CsmElement element) {
+            return new Removed(element);
         }
     }
 
@@ -69,6 +73,21 @@ public class Difference {
         public String toString() {
             return "Kept{" + element + '}';
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Kept kept = (Kept) o;
+
+            return element.equals(kept.element);
+        }
+
+        @Override
+        public int hashCode() {
+            return element.hashCode();
+        }
     }
 
     private static class Removed implements DifferenceElement {
@@ -81,6 +100,21 @@ public class Difference {
         @Override
         public String toString() {
             return "Removed{" + element + '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Removed removed = (Removed) o;
+
+            return element.equals(removed.element);
+        }
+
+        @Override
+        public int hashCode() {
+            return element.hashCode();
         }
     }
 

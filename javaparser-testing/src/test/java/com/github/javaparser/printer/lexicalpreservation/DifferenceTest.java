@@ -48,4 +48,26 @@ public class DifferenceTest {
         assertEquals(Difference.DifferenceElement.added(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(2));
         assertEquals(Difference.DifferenceElement.added(new LexicalDifferenceCalculator.CsmChild(n2)), diff.getElements().get(3));
     }
+
+    @Test
+    public void calculateDifferenceBIsEmpty() {
+        Node n1 = new FieldDeclaration();
+        Node n2 = new MethodDeclaration();
+
+        LexicalDifferenceCalculator.CalculatedSyntaxModel a = new LexicalDifferenceCalculator.CalculatedSyntaxModel(Arrays.asList(
+                new CsmElement[]{
+                        new CsmToken(ASTParserConstants.LPAREN),
+                        new LexicalDifferenceCalculator.CsmChild(n1),
+                        new CsmToken(ASTParserConstants.RPAREN),
+                        new LexicalDifferenceCalculator.CsmChild(n2)
+                }
+        ));
+        LexicalDifferenceCalculator.CalculatedSyntaxModel b = new LexicalDifferenceCalculator.CalculatedSyntaxModel(Collections.emptyList());
+        Difference diff = Difference.calculate(a, b);
+        assertEquals(4, diff.getElements().size());
+        assertEquals(Difference.DifferenceElement.removed(new CsmToken(ASTParserConstants.LPAREN)), diff.getElements().get(0));
+        assertEquals(Difference.DifferenceElement.removed(new LexicalDifferenceCalculator.CsmChild(n1)), diff.getElements().get(1));
+        assertEquals(Difference.DifferenceElement.removed(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(2));
+        assertEquals(Difference.DifferenceElement.removed(new LexicalDifferenceCalculator.CsmChild(n2)), diff.getElements().get(3));
+    }
 }
