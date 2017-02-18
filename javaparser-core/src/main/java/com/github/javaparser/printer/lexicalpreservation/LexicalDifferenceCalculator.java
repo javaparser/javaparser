@@ -190,8 +190,14 @@ public class LexicalDifferenceCalculator {
         switch (modifier) {
             case PUBLIC:
                 return ASTParserConstants.PUBLIC;
+            case PRIVATE:
+                return ASTParserConstants.PRIVATE;
+            case PROTECTED:
+                return ASTParserConstants.PROTECTED;
+            case STATIC:
+                return ASTParserConstants.STATIC;
             default:
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(modifier.name());
         }
     }
 
