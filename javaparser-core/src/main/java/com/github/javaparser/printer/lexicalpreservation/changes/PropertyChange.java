@@ -50,4 +50,13 @@ public class PropertyChange implements Change {
                 throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
         }
     }
+
+    @Override
+    public Object getValue(ObservableProperty property, Node node) {
+        if (property == this.property) {
+            return newValue;
+        } else {
+            return property.getValue(node);
+        }
+    }
 }

@@ -375,6 +375,9 @@ public class Difference {
                             && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)nodeTextEl).getTokenKind()) {
                         nodeText.removeElement(nodeTextIndex);
                         diffIndex++;
+                    } else if (nodeTextEl instanceof TokenTextElement
+                            && ((TokenTextElement)nodeTextEl).isWhiteSpace()) {
+                        nodeTextIndex++;
                     } else {
                         throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                     }
