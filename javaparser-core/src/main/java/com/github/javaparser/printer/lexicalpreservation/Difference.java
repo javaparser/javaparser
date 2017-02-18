@@ -246,13 +246,13 @@ public class Difference {
                     comingFromAdded = false;
                     originalIndex++;
                     afterIndex++;
-                } else if (LexicalDifferenceCalculator.isWhitespace(nextOriginal)) {
-                    originalIndex++;
-                } else if (LexicalDifferenceCalculator.isWhitespace(nextAfter)) {
-                    if (comingFromAdded) {
-                        elements.add(new Added(nextAfter));
-                    }
-                    afterIndex++;
+                //} else if (LexicalDifferenceCalculator.isWhitespace(nextOriginal)) {
+                //    originalIndex++;
+//                } else if (LexicalDifferenceCalculator.isWhitespace(nextAfter)) {
+//                    if (comingFromAdded) {
+//                        elements.add(new Added(nextAfter));
+//                    }
+//                    afterIndex++;
                 } else {
                     //System.out.println("NOT MATCHING " + original.elements.get(originalIndex) + " " + after.elements.get(afterIndex));
                     // We can try to remove the element or add it and look which one leads to the lower difference
