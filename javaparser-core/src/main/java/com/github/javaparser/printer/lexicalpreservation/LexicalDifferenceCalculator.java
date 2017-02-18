@@ -1,9 +1,11 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
@@ -189,8 +191,14 @@ public class LexicalDifferenceCalculator {
                     for (Iterator it = collection.iterator(); it.hasNext(); ) {
                         if (!first) {
                             calculatedSyntaxModelFor(csmList.getSeparatorPre(), node, elements, change);
+                        };
+                        Object value = it.next();
+                        if (value instanceof Modifier) {
+                            Modifier modifier = (Modifier)value;
+                            elements.add(new CsmToken(toToken(modifier)));
+                        } else {
+                            throw new UnsupportedOperationException(it.next().getClass().getSimpleName());
                         }
-                        if (true) throw new UnsupportedOperationException(it.next().toString());
                         //findCompulsoryTokens(it.next());
                         if (it.hasNext()) {
                             calculatedSyntaxModelFor(csmList.getSeparatorPost(), node, elements, change);
@@ -214,6 +222,15 @@ public class LexicalDifferenceCalculator {
             // nothing to do
         } else {
             throw new UnsupportedOperationException(csm.getClass().getSimpleName());
+        }
+    }
+
+    private int toToken(Modifier modifier) {
+        switch (modifier) {
+            case PUBLIC:
+                return ASTParserConstants.PUBLIC;
+            default:
+                throw new UnsupportedOperationException();
         }
     }
 
@@ -394,7 +411,7 @@ public class LexicalDifferenceCalculator {
             while (commonChildrenIndex < commonChildren.size()) {
                 Node child = commonChildren.get(commonChildrenIndex++);
                 int posOfNextChildInOriginal = childrenInOriginal.get(child);
-                int posOfNextChildInAfter    = childrenInOriginal.get(child);
+                int posOfNextChildInAfter    = childrenInAfter.get(child);
                 if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInOriginal) {
                     elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)).elements);
                 }
@@ -533,7 +550,17 @@ public class LexicalDifferenceCalculator {
                                     nodeTextIndex++;
                                 }
                             } else {
-                                throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
+                                if (kept.element instanceof CsmChild) {
+                                    CsmChild keptChild = (CsmChild)kept.element;
+                                    if (keptChild.child instanceof PrimitiveType) {
+                                        nodeTextIndex++;
+                                        diffIndex++;
+                                    } else {
+                                        throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
+                                    }
+                                } else {
+                                    throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
+                                }
                             }
                         } else if ((kept.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement) {
                             CsmToken csmToken = (CsmToken) kept.element;
