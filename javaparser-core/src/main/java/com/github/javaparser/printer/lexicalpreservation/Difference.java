@@ -32,6 +32,10 @@ public class Difference {
         static DifferenceElement removed(CsmElement element) {
             return new Removed(element);
         }
+
+        static DifferenceElement kept(CsmElement element) {
+            return new Kept(element);
+        }
     }
 
     private static class Added implements DifferenceElement {
@@ -198,7 +202,7 @@ public class Difference {
             Node child = commonChildren.get(commonChildrenIndex++);
             int posOfNextChildInOriginal = childrenInOriginal.get(child);
             int posOfNextChildInAfter    = childrenInAfter.get(child);
-            if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInOriginal) {
+            if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter) {
                 elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)).elements);
             }
             elements.add(new Kept(new LexicalDifferenceCalculator.CsmChild(child)));
