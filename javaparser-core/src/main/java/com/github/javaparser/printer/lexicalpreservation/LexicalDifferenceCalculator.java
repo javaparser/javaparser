@@ -8,6 +8,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.lexicalpreservation.changes.Change;
+import com.github.javaparser.printer.lexicalpreservation.changes.NoChange;
+import com.github.javaparser.printer.lexicalpreservation.changes.PropertyChange;
 
 import java.util.*;
 
@@ -86,63 +89,6 @@ public class LexicalDifferenceCalculator {
         return csmElement instanceof CsmToken && isWhitespace(((CsmToken)csmElement).getTokenType());
     }
 
-    interface Change {
-
-        boolean evaluate(CsmConditional csmConditional, Node node);
-    }
-
-    class NoChange implements Change {
-
-        @Override
-        public boolean evaluate(CsmConditional csmConditional, Node node) {
-            switch (csmConditional.getCondition()) {
-                case FLAG:
-                    return (Boolean)csmConditional.getProperty().singleValueFor(node);
-                case IS_NOT_EMPTY:
-                    return !csmConditional.getProperty().isNullOrEmpty(node);
-                case IS_PRESENT:
-                    return !csmConditional.getProperty().isNullOrEmpty(node);
-                default:
-                    throw new UnsupportedOperationException(""+csmConditional.getProperty()+ " "+csmConditional.getCondition());
-            }
-        }
-    }
-
-    class PropertyChange implements Change {
-        private ObservableProperty property;
-        private Object oldValue;
-        private Object newValue;
-
-        public PropertyChange(ObservableProperty property, Object oldValue, Object newValue) {
-            this.property = property;
-            this.oldValue = oldValue;
-            this.newValue = newValue;
-        }
-
-        @Override
-        public boolean evaluate(CsmConditional csmConditional, Node node) {
-            switch (csmConditional.getCondition()) {
-                case FLAG:
-                    if (csmConditional.getProperty() == property) {
-                        return (Boolean)newValue;
-                    }
-                    return (Boolean)csmConditional.getProperty().singleValueFor(node);
-                case IS_NOT_EMPTY:
-                    if (csmConditional.getProperty() == property) {
-                        return newValue != null && !((NodeList)newValue).isEmpty();
-                    }
-                    return !csmConditional.getProperty().isNullOrEmpty(node);
-                case IS_PRESENT:
-                    if (csmConditional.getProperty() == property) {
-                        return newValue != null && !((NodeList)newValue).isEmpty();
-                    }
-                    return !csmConditional.getProperty().isNullOrEmpty(node);
-                default:
-                    throw new UnsupportedOperationException(""+csmConditional.getProperty()+ " "+csmConditional.getCondition());
-            }
-        }
-    }
-
     private void calculatedSyntaxModelFor(CsmElement csm, Node node, List<CsmElement> elements, Change change) {
         if (csm instanceof CsmSequence) {
             CsmSequence csmSequence = (CsmSequence) csm;
@@ -152,8 +98,8 @@ public class LexicalDifferenceCalculator {
         } else if (csm instanceof CsmSingleReference) {
             CsmSingleReference csmSingleReference = (CsmSingleReference)csm;
             Node child;
-            if (change instanceof PropertyChange && ((PropertyChange)change).property == csmSingleReference.getProperty()) {
-                child = (Node)((PropertyChange)change).newValue;
+            if (change instanceof PropertyChange && ((PropertyChange)change).getProperty() == csmSingleReference.getProperty()) {
+                child = (Node)((PropertyChange)change).getNewValue();
             } else {
                 child = csmSingleReference.getProperty().singlePropertyFor(node);
             }
@@ -242,206 +188,4 @@ public class LexicalDifferenceCalculator {
         return new CalculatedSyntaxModel(elements);
     }
 
-    private int calculatePropertyChange(NodeText nodeText, int index, CsmElement element, Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-        if (element instanceof CsmSequence) {
-            CsmSequence csmSequence = (CsmSequence) element;
-            for (CsmElement child : csmSequence.getElements()) {
-                index = calculatePropertyChange(nodeText, index, child, observedNode, property, oldValue, newValue);
-            }
-            return index;
-        } else if (element instanceof CsmSingleReference) {
-            CsmSingleReference csmSingleReference = (CsmSingleReference)element;
-            if (csmSingleReference.getProperty() == property) {
-                if (oldValue == null) {
-//                    TextElement textElement = nodeText.getElements().get(index);
-//                    if (!(textElement instanceof ChildTextElement)) {
-//                        throw new IllegalStateException();
-//                    }
-//                    if (oldValue != ((ChildTextElement) textElement).getChild()) {
-//                        throw new IllegalStateException();
-//                    }
-                    return index;
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            } else {
-                return index + 1;
-            }
-        } else if (element instanceof CsmComment) {
-            return index;
-        } else if (element instanceof CsmList) {
-            CsmList csmList = (CsmList)element;
-            return index;
-        } else {
-            throw new UnsupportedOperationException(element.getClass().getSimpleName());
-        }
-    }
-
-    interface CompulsoryElement {
-
-    }
-
-    class ChildElement implements CompulsoryElement {
-        public Node child;
-
-        public ChildElement(Node child) {
-            this.child = child;
-        }
-
-        @Override
-        public String toString() {
-            return "child(" + child.getClass().getSimpleName() + ")";
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            ChildElement that = (ChildElement) o;
-
-            return child.equals(that.child);
-        }
-
-        @Override
-        public int hashCode() {
-            return child.hashCode();
-        }
-    }
-
-    class TokenElement implements CompulsoryElement {
-        int tokenType;
-
-        public TokenElement(int tokenType) {
-            this.tokenType = tokenType;
-        }
-
-        @Override
-        public String toString() {
-            return ASTParserConstants.tokenImage[tokenType];
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            TokenElement that = (TokenElement) o;
-
-            return tokenType == that.tokenType;
-        }
-
-        @Override
-        public int hashCode() {
-            return tokenType;
-        }
-    }
-
-    private List<CompulsoryElement> findCompulsoryTokens(Node node) {
-        CsmElement csmElement = ConcreteSyntaxModel.forClass(node.getClass());
-        return findCompulsoryTokens(csmElement, node);
-    }
-
-    private List<CompulsoryElement> findCompulsoryTokens(CsmElement csmElement, Node node) {
-        if (csmElement instanceof CsmSequence) {
-            CsmSequence csmSequence = (CsmSequence) csmElement;
-            List<CompulsoryElement> elements = new LinkedList<>();
-            csmSequence.getElements().forEach(e -> elements.addAll(findCompulsoryTokens(e, node)));
-            return elements;
-        } else if (csmElement instanceof CsmNone) {
-            // nothing to do
-            return Collections.emptyList();
-        } else if (csmElement instanceof CsmComment) {
-            // nothing to do
-            return Collections.emptyList();
-        } else if (csmElement instanceof CsmList) {
-            List<CompulsoryElement> elements = new LinkedList<>();
-            CsmList csmList = (CsmList) csmElement;
-            if (csmList.getProperty().isAboutNodes()) {
-                NodeList nodeList = csmList.getProperty().listValueFor(node);
-                if (!nodeList.isEmpty()) {
-                    elements.addAll(findCompulsoryTokens(csmList.getPreceeding(), node));
-                    for (int i = 0; i < nodeList.size(); i++) {
-                        if (i != 0) {
-                            elements.addAll(findCompulsoryTokens(((CsmList) csmElement).getSeparatorPre(), node));
-                        }
-                        elements.add(new ChildElement(nodeList.get(i)));
-                        if (i != (nodeList.size() - 1)) {
-                            elements.addAll(findCompulsoryTokens(((CsmList) csmElement).getSeparatorPost(), node));
-                        }
-
-                    }
-                    elements.addAll(findCompulsoryTokens(csmList.getFollowing(), node));
-                }
-            } else {
-                Collection collection = csmList.getProperty().listPropertyFor(node);
-                if (!collection.isEmpty()) {
-                    elements.addAll(findCompulsoryTokens(csmList.getPreceeding(), node));
-
-                    boolean first = true;
-                    for (Iterator it = collection.iterator(); it.hasNext(); ) {
-                        if (!first) {
-                            elements.addAll(findCompulsoryTokens(((CsmList) csmElement).getSeparatorPre(), node));
-                        }
-                        if (true) throw new UnsupportedOperationException(it.next().toString());
-                        //findCompulsoryTokens(it.next());
-                        if (it.hasNext()) {
-                            elements.addAll(findCompulsoryTokens(((CsmList) csmElement).getSeparatorPost(), node));
-                        }
-                        first = false;
-                    }
-                    elements.addAll(findCompulsoryTokens(csmList.getFollowing(), node));
-                }
-            }
-            return elements;
-        } else if (csmElement instanceof CsmToken) {
-            CsmToken csmToken = (CsmToken) csmElement;
-            if (csmToken.getTokenType() <= 5) {
-                return Collections.emptyList();
-            }
-            if (csmToken.getTokenType() >= 31 && csmToken.getTokenType() <= 36) {
-                return Collections.emptyList();
-            }
-            List<CompulsoryElement> res = new LinkedList<>();
-            res.add(new TokenElement(csmToken.getTokenType()));
-            return res;
-        } else if (csmElement instanceof CsmConditional) {
-            CsmConditional csmConditional = (CsmConditional) csmElement;
-            boolean condition;
-            switch (csmConditional.getCondition()) {
-                case FLAG:
-                    condition = (Boolean) csmConditional.getProperty().singleValueFor(node);
-                    break;
-                case IS_PRESENT:
-                    condition = !csmConditional.getProperty().isNull(node);
-                    break;
-                default:
-                    throw new UnsupportedOperationException(csmConditional.getCondition().toString());
-            }
-            if (condition) {
-                return findCompulsoryTokens(csmConditional.getThenElement(), node);
-            } else {
-                return findCompulsoryTokens(csmConditional.getElseElement(), node);
-            }
-        } else if (csmElement instanceof CsmSingleReference) {
-            CsmSingleReference singleReference = (CsmSingleReference) csmElement;
-            List<CompulsoryElement> res = new LinkedList<>();
-            res.add(new ChildElement(singleReference.getProperty().singlePropertyFor(node)));
-            return res;
-        } else if (csmElement instanceof CsmAttribute) {
-            CsmAttribute csmAttribute = (CsmAttribute) csmElement;
-            String text = csmAttribute.getProperty().singleValueFor(node).toString();
-            List<CompulsoryElement> res = new LinkedList<>();
-            res.add(new TokenElement(csmAttribute.getTokenType(text)));
-            return res;
-        } else if (csmElement instanceof CsmIndent) {
-            return Collections.emptyList();
-        } else if (csmElement instanceof CsmUnindent) {
-            return Collections.emptyList();
-        } else if (csmElement instanceof CsmOrphanCommentsEnding) {
-            return Collections.emptyList();
-        } else {
-            throw new UnsupportedOperationException(csmElement.getClass().getSimpleName());
-        }
-    }
 }
