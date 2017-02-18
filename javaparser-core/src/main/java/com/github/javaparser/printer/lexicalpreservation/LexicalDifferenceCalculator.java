@@ -7,6 +7,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.utils.Pair;
 
 import java.util.*;
 
@@ -31,6 +32,10 @@ public class LexicalDifferenceCalculator {
                     "elements=" + elements +
                     '}';
         }
+
+        public CalculatedSyntaxModel sub(int start, int end) {
+            return new CalculatedSyntaxModel(elements.subList(start, end));
+        }
     }
 
     public void calculatePropertyChange(NodeText nodeText, Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
@@ -51,7 +56,7 @@ public class LexicalDifferenceCalculator {
         return new CalculatedSyntaxModel(elements);
     }
 
-    class CsmChild implements CsmElement {
+    static class CsmChild implements CsmElement {
         private Node child;
 
         public CsmChild(Node child) {
@@ -359,8 +364,55 @@ public class LexicalDifferenceCalculator {
             throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
         }
 
+        private static Map<Node, Integer> findChildrenPositions(CalculatedSyntaxModel calculatedSyntaxModel) {
+            Map<Node, Integer> positions = new HashMap<>();
+            for (int i=0;i<calculatedSyntaxModel.elements.size();i++) {
+                CsmElement element = calculatedSyntaxModel.elements.get(i);
+                if (element instanceof CsmChild) {
+                    positions.put(((CsmChild)element).child, i);
+                }
+            }
+            return positions;
+        }
+
         public static Difference calculate(CalculatedSyntaxModel original, CalculatedSyntaxModel after) {
+            //Prima potrei trovare i punti fissi guardando i child e i token non di white space.
+            //A quel punto le differenze le calcolerei solo su quello che rimane
+
+            Map<Node, Integer> childrenInOriginal = findChildrenPositions(original);
+            Map<Node, Integer> childrenInAfter = findChildrenPositions(after);
+
+            List<Node> commonChildren = new LinkedList<>(childrenInOriginal.keySet());
+            commonChildren.retainAll(childrenInAfter.keySet());
+            commonChildren.sort((a, b) -> Integer.compare(childrenInOriginal.get(a), childrenInOriginal.get(a)));
+
+            List<DifferenceElement> elements = new LinkedList<>();
+
+            int originalIndex = 0;
+            int afterIndex = 0;
+            int commonChildrenIndex = 0;
+            while (commonChildrenIndex < commonChildren.size()) {
+                Node child = commonChildren.get(commonChildrenIndex++);
+                int posOfNextChildInOriginal = childrenInOriginal.get(child);
+                int posOfNextChildInAfter    = childrenInOriginal.get(child);
+                if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInOriginal) {
+                    elements.addAll(calculateImpl(original.sub(originalIndex, posOfNextChildInOriginal), after.sub(afterIndex, posOfNextChildInAfter)).elements);
+                }
+                elements.add(new Kept(new CsmChild(child)));
+                originalIndex = posOfNextChildInOriginal + 1;
+                afterIndex = posOfNextChildInAfter + 1;
+            }
+
+            if (originalIndex < original.elements.size() || afterIndex < after.elements.size()) {
+                elements.addAll(calculateImpl(original.sub(originalIndex, original.elements.size()), after.sub(afterIndex, after.elements.size())).elements);
+            }
+
             System.out.println("CALCULATE "+original.elements.size()+ " "+after.elements.size());
+
+            return new Difference(elements);
+        }
+
+        private static Difference calculateImpl(CalculatedSyntaxModel original, CalculatedSyntaxModel after) {
             List<DifferenceElement> elements = new LinkedList<>();
 
             int originalIndex = 0;
