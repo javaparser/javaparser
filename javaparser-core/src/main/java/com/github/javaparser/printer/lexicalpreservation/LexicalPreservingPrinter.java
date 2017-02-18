@@ -142,114 +142,114 @@ public class LexicalPreservingPrinter {
 
                 // Type requires to be handled in a special way because it is basically a fake node, not part of the
                 // AST
-                if (property == ObservableProperty.TYPE && observedNode.getParentNode().get() instanceof FieldDeclaration) {
-                    // Here we have the infamous phantom nodes so we need to handle this specially
-                    // We first of all remove all tokens before the variables. We then print
-                    // the common type and a space
-                    // behind each variables we put the necessary brackets
-                    FieldDeclaration fieldDeclaration = (FieldDeclaration)observedNode.getParentNode().get();
-                    FieldDeclaration fieldDeclarationCopy = (FieldDeclaration) fieldDeclaration.clone();
-                    int varIndex = fieldDeclaration.getVariables().indexOf(observedNode);
-                    fieldDeclarationCopy.getVariable(varIndex).setType((Type) newValue);
-                    Type commonType = fieldDeclarationCopy.getCommonType();
-
-                    NodeText fieldNodeText = lpp.getTextForNode(fieldDeclaration);
-                    fieldNodeText.removeAllBefore(byNode(fieldDeclaration.getVariable(0)));
-                    fieldNodeText.addChild(0, commonType);
-                    fieldNodeText.addElement(1, space());
-                    return;
-                }
-                if (oldValue instanceof Comment && newValue instanceof Comment) {
-                    NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
-                    nodeTextForParent.replaceComment((Comment)oldValue, (Comment)newValue);
-                    return;
-                }
-                if (oldValue instanceof Node && newValue instanceof Node) {
-                    nodeText.replace(byNode((Node)oldValue), (Node)newValue);
-                    return;
-                }
-                if (property == ObservableProperty.MODIFIERS) {
-                    EnumSet<Modifier> oldModifiers = (EnumSet<Modifier>)oldValue;
-                    EnumSet<Modifier> newModifiers = (EnumSet<Modifier>)newValue;
-                    oldModifiers.removeAll(newModifiers);
-                    newModifiers.removeAll(oldModifiers);
-                    oldModifiers.forEach(mToRemove -> nodeText.remove(byTokenType(fromModifier(mToRemove).getTokenKind()), true));
-                    newModifiers.forEach(mToAdd -> {
-                        nodeText.addElement(0, space());
-                        nodeText.addElement(0, fromModifier(mToAdd));
-                    });
-                    return;
-                }
-                if (property == ObservableProperty.INITIALIZER) {
-                    if (oldValue == null && newValue != null) {
-                        nodeText.addElement(space());
-                        nodeText.addElement(equal());
-                        nodeText.addElement(space());
-                        nodeText.addChild((Node)newValue);
-                        return;
-                    } else if (oldValue != null && newValue == null) {
-                        nodeText.removeFromToken(equal(), true);
-                        return;
-                    }
-                }
-                if (property == ObservableProperty.DEFAULT_VALUE) {
-                    if (oldValue == null && newValue != null) {
-                        lpp.insertBefore(byTokenType(ASTParserConstants.SEMICOLON), space(), Tokens.create(ASTParserConstants._DEFAULT), space()).insert(observedNode, (Node)newValue);
-                        return;
-                    } else if (oldValue != null && newValue == null) {
-                        nodeText.removeFromTokenUntil(Tokens.create(ASTParserConstants._DEFAULT), Optional.of(byTokenType(ASTParserConstants.SEMICOLON)), true);
-                        return;
-                    }
-                }
-                if (property == ObservableProperty.COMMENT) {
-                    if (oldValue == null && newValue != null) {
-                        // FIXME consider CompilationUnit which contains its own JavaDoc
-                        lpp.insertBefore(byNode(observedNode), true, Tokens.newline()).insert(observedNode.getParentNode().get(), (Node)newValue);
-                        return;
-                    } else if (oldValue != null && newValue == null) {
-                        NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
-                        nodeTextForParent.removeComment((Comment)oldValue);
-                        return;
-                    }
-                }
-                if (property == ObservableProperty.COMMENTED_NODE) {
-                    return;
-                }
-                if (property == ObservableProperty.INTERFACE) {
-                    if ((Boolean)newValue) {
-                        nodeText.replace(byTokenType(ASTParserConstants.CLASS), new TokenTextElement(ASTParserConstants.INTERFACE, "interface"));
-                    } else {
-                        nodeText.replace(byTokenType(ASTParserConstants.INTERFACE), new TokenTextElement(ASTParserConstants.CLASS, "class"));
-                    }
-                    return;
-                }
-                if (property == ObservableProperty.STATIC) {
-                    if ((Boolean)newValue) {
-                        nodeText.addElement(0, new TokenTextElement(ASTParserConstants.STATIC, "static"));
-                        nodeText.addElement(1, new TokenTextElement(0, " "));
-                    } else {
-                        nodeText.remove(byTokenType(ASTParserConstants.STATIC), true);
-                    }
-                    return;
-                }
-                if (property == ObservableProperty.DIMENSION) {
-                    if (newValue == null) {
-                        nodeText.remove(byNode((Node)oldValue));
-                    } else {
-                        lpp.insertAfter(byTokenType(ASTParserConstants.LBRACKET), InsertionMode.PLAIN).insert(observedNode, (Node)newValue);
-                    }
-                    return;
-                }
-                if (property == ObservableProperty.PACKAGE_DECLARATION) {
-                    if (newValue == null) {
-                        throw new UnsupportedOperationException();
-                    } else {
-                        lpp.atBeginning(InsertionMode.ON_ITS_OWN_LINE, TokenTextElement.newLine()).insert(observedNode, (Node)newValue);
-                    }
-                    return;
-                }
-                throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
-                        oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
+//                if (property == ObservableProperty.TYPE && observedNode.getParentNode().get() instanceof FieldDeclaration) {
+//                    // Here we have the infamous phantom nodes so we need to handle this specially
+//                    // We first of all remove all tokens before the variables. We then print
+//                    // the common type and a space
+//                    // behind each variables we put the necessary brackets
+//                    FieldDeclaration fieldDeclaration = (FieldDeclaration)observedNode.getParentNode().get();
+//                    FieldDeclaration fieldDeclarationCopy = (FieldDeclaration) fieldDeclaration.clone();
+//                    int varIndex = fieldDeclaration.getVariables().indexOf(observedNode);
+//                    fieldDeclarationCopy.getVariable(varIndex).setType((Type) newValue);
+//                    Type commonType = fieldDeclarationCopy.getCommonType();
+//
+//                    NodeText fieldNodeText = lpp.getTextForNode(fieldDeclaration);
+//                    fieldNodeText.removeAllBefore(byNode(fieldDeclaration.getVariable(0)));
+//                    fieldNodeText.addChild(0, commonType);
+//                    fieldNodeText.addElement(1, space());
+//                    return;
+//                }
+//                if (oldValue instanceof Comment && newValue instanceof Comment) {
+//                    NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
+//                    nodeTextForParent.replaceComment((Comment)oldValue, (Comment)newValue);
+//                    return;
+//                }
+//                if (oldValue instanceof Node && newValue instanceof Node) {
+//                    nodeText.replace(byNode((Node)oldValue), (Node)newValue);
+//                    return;
+//                }
+//                if (property == ObservableProperty.MODIFIERS) {
+//                    EnumSet<Modifier> oldModifiers = (EnumSet<Modifier>)oldValue;
+//                    EnumSet<Modifier> newModifiers = (EnumSet<Modifier>)newValue;
+//                    oldModifiers.removeAll(newModifiers);
+//                    newModifiers.removeAll(oldModifiers);
+//                    oldModifiers.forEach(mToRemove -> nodeText.remove(byTokenType(fromModifier(mToRemove).getTokenKind()), true));
+//                    newModifiers.forEach(mToAdd -> {
+//                        nodeText.addElement(0, space());
+//                        nodeText.addElement(0, fromModifier(mToAdd));
+//                    });
+//                    return;
+//                }
+//                if (property == ObservableProperty.INITIALIZER) {
+//                    if (oldValue == null && newValue != null) {
+//                        nodeText.addElement(space());
+//                        nodeText.addElement(equal());
+//                        nodeText.addElement(space());
+//                        nodeText.addChild((Node)newValue);
+//                        return;
+//                    } else if (oldValue != null && newValue == null) {
+//                        nodeText.removeFromToken(equal(), true);
+//                        return;
+//                    }
+//                }
+//                if (property == ObservableProperty.DEFAULT_VALUE) {
+//                    if (oldValue == null && newValue != null) {
+//                        lpp.insertBefore(byTokenType(ASTParserConstants.SEMICOLON), space(), Tokens.create(ASTParserConstants._DEFAULT), space()).insert(observedNode, (Node)newValue);
+//                        return;
+//                    } else if (oldValue != null && newValue == null) {
+//                        nodeText.removeFromTokenUntil(Tokens.create(ASTParserConstants._DEFAULT), Optional.of(byTokenType(ASTParserConstants.SEMICOLON)), true);
+//                        return;
+//                    }
+//                }
+//                if (property == ObservableProperty.COMMENT) {
+//                    if (oldValue == null && newValue != null) {
+//                        // FIXME consider CompilationUnit which contains its own JavaDoc
+//                        lpp.insertBefore(byNode(observedNode), true, Tokens.newline()).insert(observedNode.getParentNode().get(), (Node)newValue);
+//                        return;
+//                    } else if (oldValue != null && newValue == null) {
+//                        NodeText nodeTextForParent = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
+//                        nodeTextForParent.removeComment((Comment)oldValue);
+//                        return;
+//                    }
+//                }
+//                if (property == ObservableProperty.COMMENTED_NODE) {
+//                    return;
+//                }
+//                if (property == ObservableProperty.INTERFACE) {
+//                    if ((Boolean)newValue) {
+//                        nodeText.replace(byTokenType(ASTParserConstants.CLASS), new TokenTextElement(ASTParserConstants.INTERFACE, "interface"));
+//                    } else {
+//                        nodeText.replace(byTokenType(ASTParserConstants.INTERFACE), new TokenTextElement(ASTParserConstants.CLASS, "class"));
+//                    }
+//                    return;
+//                }
+//                if (property == ObservableProperty.STATIC) {
+//                    if ((Boolean)newValue) {
+//                        nodeText.addElement(0, new TokenTextElement(ASTParserConstants.STATIC, "static"));
+//                        nodeText.addElement(1, new TokenTextElement(0, " "));
+//                    } else {
+//                        nodeText.remove(byTokenType(ASTParserConstants.STATIC), true);
+//                    }
+//                    return;
+//                }
+//                if (property == ObservableProperty.DIMENSION) {
+//                    if (newValue == null) {
+//                        nodeText.remove(byNode((Node)oldValue));
+//                    } else {
+//                        lpp.insertAfter(byTokenType(ASTParserConstants.LBRACKET), InsertionMode.PLAIN).insert(observedNode, (Node)newValue);
+//                    }
+//                    return;
+//                }
+//                if (property == ObservableProperty.PACKAGE_DECLARATION) {
+//                    if (newValue == null) {
+//                        throw new UnsupportedOperationException();
+//                    } else {
+//                        lpp.atBeginning(InsertionMode.ON_ITS_OWN_LINE, TokenTextElement.newLine()).insert(observedNode, (Node)newValue);
+//                    }
+//                    return;
+//                }
+//                throw new UnsupportedOperationException(String.format("Property %s is not supported yet. Old value %s (%s), new value %s (%s)", property, oldValue,
+//                        oldValue == null ? "": oldValue.getClass(), newValue, newValue == null ? "": newValue.getClass()));
             }
 
             @Override

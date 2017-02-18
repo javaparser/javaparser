@@ -97,7 +97,7 @@ public class Utils {
 
     /**
      * Puts varargs in a mutable list.
-     * This does not have the disadvantage of Arrays#asList that it has a static size.
+     * This does not have the disadvantage of Arrays#asList that it has a static cost.
      *
      * @deprecated This is no longer in use by JavaParser, please write your own replacement.
      */

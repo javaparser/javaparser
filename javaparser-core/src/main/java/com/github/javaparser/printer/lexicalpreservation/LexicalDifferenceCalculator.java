@@ -8,6 +8,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 
+import javax.xml.soap.Text;
 import java.util.*;
 
 public class LexicalDifferenceCalculator {
@@ -17,6 +18,10 @@ public class LexicalDifferenceCalculator {
 
         public CalculatedSyntaxModel(List<CsmElement> elements) {
             this.elements = elements;
+        }
+
+        public CalculatedSyntaxModel from(int index) {
+            return new CalculatedSyntaxModel(elements.subList(index, elements.size()));
         }
 
         @Override
@@ -35,6 +40,7 @@ public class LexicalDifferenceCalculator {
         CalculatedSyntaxModel original = calculatedSyntaxModelFor(element, observedNode);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterPropertyChange(element, observedNode, property, oldValue, newValue);
         Difference difference = Difference.calculate(original, after);
+        System.out.println("DIFFERENCE " + difference);
         difference.apply(nodeText);
     }
 
@@ -197,14 +203,199 @@ public class LexicalDifferenceCalculator {
      */
     public static class Difference {
 
+        private List<DifferenceElement> elements;
+
+        private Difference(List<DifferenceElement> elements) {
+            this.elements = elements;
+        }
+
+        private interface DifferenceElement {
+
+        }
+
+        private static class Added implements DifferenceElement {
+            CsmElement element;
+
+            public Added(CsmElement element) {
+                this.element = element;
+            }
+
+            @Override
+            public String toString() {
+                return "Added{" + element + '}';
+            }
+        }
+
+        private static class Kept implements DifferenceElement  {
+            CsmElement element;
+
+            public Kept(CsmElement element) {
+                this.element = element;
+            }
+
+            @Override
+            public String toString() {
+                return "Kept{" + element + '}';
+            }
+        }
+
+        private static class Removed implements DifferenceElement  {
+            CsmElement element;
+
+            public Removed(CsmElement element) {
+                this.element = element;
+            }
+
+            @Override
+            public String toString() {
+                return "Removed{" + element + '}';
+            }
+        }
+
+        private static boolean matching(CsmElement a, CsmElement b) {
+            if (a instanceof CsmChild) {
+                if (b instanceof CsmChild) {
+                    CsmChild childA = (CsmChild) a;
+                    CsmChild childB = (CsmChild) b;
+                    return childA.child.equals(childB.child);
+                } else if (b instanceof CsmToken) {
+                    return false;
+                } else {
+                    throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                }
+            } else if (a instanceof CsmToken) {
+                if (b instanceof CsmToken) {
+                    CsmToken childA = (CsmToken)a;
+                    CsmToken childB = (CsmToken)b;
+                    return childA.getTokenType() == childB.getTokenType();
+                } else if (b instanceof CsmChild) {
+                    return false;
+                }
+            }
+            throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+        }
+
         public static Difference calculate(CalculatedSyntaxModel original, CalculatedSyntaxModel after) {
-            System.out.println("ORIGINAL " + original);
-            System.out.println("AFTER " + after);
-            throw new UnsupportedOperationException();
+            List<DifferenceElement> elements = new LinkedList<>();
+
+            int originalIndex = 0;
+            int afterIndex = 0;
+
+            do {
+                if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
+                    elements.add(new Removed(original.elements.get(originalIndex)));
+                    originalIndex++;
+                } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
+                    elements.add(new Added(after.elements.get(originalIndex)));
+                    afterIndex++;
+                } else {
+                    CsmElement nextOriginal = original.elements.get(originalIndex);
+                    CsmElement nextAfter = after.elements.get(afterIndex);
+                    if (matching(nextOriginal, nextAfter)) {
+                        elements.add(new Kept(nextOriginal));
+                        originalIndex++;
+                        afterIndex++;
+                    } else {
+                        //System.out.println("NOT MATCHING " + original.elements.get(originalIndex) + " " + after.elements.get(afterIndex));
+                        // We can try to remove the element or add it and look which one leads to the lower difference
+                        Difference removing = calculate(original.from(originalIndex + 1), after);
+                        Difference adding = calculate(original, after.from(afterIndex + 1));
+                        if (removing.cost() >= adding.cost()) {
+                            elements.add(new Added(nextAfter));
+                            afterIndex++;
+                        } else {
+                            elements.add(new Removed(nextOriginal));
+                            originalIndex++;
+                        }
+                        //throw new UnsupportedOperationException("B");
+                    }
+                }
+            } while (originalIndex < original.elements.size() || afterIndex < after.elements.size());
+
+            //System.out.println("ORIGINAL " + original);
+            //System.out.println("AFTER " + after);
+            return new Difference(elements);
+        }
+
+        private TextElement toTextElement(LexicalPreservingPrinter lpp, CsmElement csmElement) {
+            if (csmElement instanceof CsmChild) {
+                return new ChildTextElement(lpp, ((CsmChild)csmElement).child);
+            } else {
+                throw new UnsupportedOperationException(csmElement.getClass().getSimpleName());
+            }
+        }
+
+        private boolean isWhitespace(int tokenType) {
+            return tokenType == 3 || tokenType == 1;
         }
 
         public void apply(NodeText nodeText) {
+            int diffIndex = 0;
+            int nodeTextIndex = 0;
+            do {
+                if (diffIndex < this.elements.size() && nodeTextIndex >= nodeText.getElements().size()) {
+                    DifferenceElement diffEl = elements.get(diffIndex);
+                    if (diffEl instanceof Kept) {
+                        Kept kept = (Kept)diffEl;
+                        if (kept.element instanceof CsmToken) {
+                            CsmToken csmToken = (CsmToken)kept.element;
+                            if (isWhitespace(csmToken.getTokenType())) {
+                                diffIndex++;
+                            } else {
+                                throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
+                            }
+                        } else {
+                            throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
+                        }
+                    } else {
+                        throw new UnsupportedOperationException(diffEl.getClass().getSimpleName());
+                    }
+                } else if (diffIndex >= this.elements.size() && nodeTextIndex < nodeText.getElements().size()) {
+                    nodeTextIndex++;
+                    throw new UnsupportedOperationException("B");
+                } else {
+                    DifferenceElement diffEl = elements.get(diffIndex);
+                    TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
+                    if (diffEl instanceof Added) {
+                        nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
+                        diffIndex++;
+                        nodeTextIndex++;
+                    } else if (diffEl instanceof Kept) {
+                        Kept kept = (Kept)diffEl;
+                        if ((kept.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
+                            diffIndex++;
+                            nodeTextIndex++;
+                        } else if ((kept.element instanceof CsmChild) && nodeTextEl instanceof TokenTextElement) {
+                            if (((TokenTextElement)nodeTextEl).isWhiteSpace()) {
+                                nodeTextIndex++;
+                            } else {
+                                throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
+                            }
+                        } else {
+                            throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
+                        }
+                    } else if (diffEl instanceof Removed) {
+                        Removed removed = (Removed)diffEl;
+                        if ((removed.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
+                            nodeText.removeElement(nodeTextIndex);
+                            diffIndex++;
+                        } else {
+                            throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
+                        }
+                    } else {
+                        throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
+                    }
+                }
+            } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
+        }
 
+        public long cost() {
+            return elements.stream().filter(e -> !(e instanceof Kept)).count();
+        }
+
+        @Override
+        public String toString() {
+            return "Difference{" + elements + '}';
         }
     }
 

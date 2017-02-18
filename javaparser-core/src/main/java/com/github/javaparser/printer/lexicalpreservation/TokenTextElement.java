@@ -91,4 +91,8 @@ class TokenTextElement extends TextElement {
     boolean isNode(Node node) {
         return false;
     }
+
+    public boolean isWhiteSpace() {
+        return tokenKind == 3 || tokenKind == 1;
+    }
 }

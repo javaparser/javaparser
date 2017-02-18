@@ -43,6 +43,10 @@ class NodeText {
     private LexicalPreservingPrinter lexicalPreservingPrinter;
     private List<TextElement> elements;
 
+    public LexicalPreservingPrinter getLexicalPreservingPrinter() {
+        return lexicalPreservingPrinter;
+    }
+
     enum Option {
         REMOVE_SPACE_IMMEDIATELY_AFTER,
         EXCLUDE_START,
