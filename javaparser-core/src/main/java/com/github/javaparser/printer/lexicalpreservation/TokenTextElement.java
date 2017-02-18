@@ -48,6 +48,11 @@ class TokenTextElement extends TextElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
+        if (tokenKind == 3) {
+            content = "\n";
+        } else if (tokenKind == 32) {
+            content = " ";
+        }
         this.tokenKind = tokenKind;
         this.text = content;
     }

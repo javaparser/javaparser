@@ -104,7 +104,6 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         assertEquals(26, diff.getElements().size());
         assertEquals(Difference.DifferenceElement.added(new CsmToken(ASTParserConstants.PUBLIC)), diff.getElements().get(0));
         assertEquals(Difference.DifferenceElement.added(new CsmToken(32)), diff.getElements().get(1));
-        assertEquals(Difference.DifferenceElement.kept(new CsmToken(32)), diff.getElements().get(1));
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.AT)), diff.getElements().get(2));
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.INTERFACE)), diff.getElements().get(3));
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(32)), diff.getElements().get(4));

@@ -191,7 +191,7 @@ public class Difference {
 
         List<Node> commonChildren = new LinkedList<>(childrenInOriginal.keySet());
         commonChildren.retainAll(childrenInAfter.keySet());
-        commonChildren.sort((a, b) -> Integer.compare(childrenInOriginal.get(a), childrenInOriginal.get(a)));
+        commonChildren.sort((a, b) -> Integer.compare(childrenInOriginal.get(a), childrenInOriginal.get(b)));
 
         List<DifferenceElement> elements = new LinkedList<>();
 
@@ -221,29 +221,37 @@ public class Difference {
 
         int originalIndex = 0;
         int afterIndex = 0;
+        boolean comingFromAdded = false;
 
         do {
             if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
                 elements.add(new Removed(original.elements.get(originalIndex)));
                 originalIndex++;
+                comingFromAdded = false;
             } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
                 elements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
+                comingFromAdded = true;
             } else {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
                 if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
+                    comingFromAdded = false;
                     originalIndex++;
                     afterIndex++;
                 } else if (replacement(nextOriginal, nextAfter)) {
                     elements.add(new Removed(nextOriginal));
                     elements.add(new Added(nextAfter));
+                    comingFromAdded = false;
                     originalIndex++;
                     afterIndex++;
                 } else if (LexicalDifferenceCalculator.isWhitespace(nextOriginal)) {
                     originalIndex++;
                 } else if (LexicalDifferenceCalculator.isWhitespace(nextAfter)) {
+                    if (comingFromAdded) {
+                        elements.add(new Added(nextAfter));
+                    }
                     afterIndex++;
                 } else {
                     //System.out.println("NOT MATCHING " + original.elements.get(originalIndex) + " " + after.elements.get(afterIndex));
@@ -254,11 +262,13 @@ public class Difference {
                         removing = calculate(original.from(originalIndex + 1), after);
                     }
 
-                    if (removing !=null && removing.cost() >= adding.cost()) {
+                    if (removing == null || removing.cost() >= adding.cost()) {
                         elements.add(new Added(nextAfter));
+                        comingFromAdded = true;
                         afterIndex++;
                     } else {
                         elements.add(new Removed(nextOriginal));
+                        comingFromAdded = false;
                         originalIndex++;
                     }
                     //throw new UnsupportedOperationException("B");
@@ -286,6 +296,7 @@ public class Difference {
         int diffIndex = 0;
         int nodeTextIndex = 0;
         boolean comingFromRemoved = false;
+        boolean comingFromAdded = false;
         do {
             if (diffIndex < this.elements.size() && nodeTextIndex >= nodeText.getElements().size()) {
                 DifferenceElement diffEl = elements.get(diffIndex);
@@ -302,6 +313,7 @@ public class Difference {
                         throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
                     }
                     comingFromRemoved = false;
+                    comingFromAdded = false;
                 } else if (diffEl instanceof Added) {
                     nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
                     nodeTextIndex++;
@@ -324,6 +336,7 @@ public class Difference {
                     diffIndex++;
                     nodeTextIndex++;
                     comingFromRemoved = false;
+                    comingFromAdded = true;
                 } else if (diffEl instanceof Kept) {
                     Kept kept = (Kept)diffEl;
                     if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
@@ -366,6 +379,7 @@ public class Difference {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                     }
                     comingFromRemoved = false;
+                    comingFromAdded = false;
                 } else if (diffEl instanceof Removed) {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
@@ -382,6 +396,7 @@ public class Difference {
                         throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                     }
                     comingFromRemoved = true;
+                    comingFromAdded = false;
                 } else {
                     throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
                 }
