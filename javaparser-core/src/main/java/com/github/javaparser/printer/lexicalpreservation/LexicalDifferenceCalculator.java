@@ -8,7 +8,6 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 
-import javax.xml.soap.Text;
 import java.util.*;
 
 public class LexicalDifferenceCalculator {
@@ -21,7 +20,9 @@ public class LexicalDifferenceCalculator {
         }
 
         public CalculatedSyntaxModel from(int index) {
-            return new CalculatedSyntaxModel(elements.subList(index, elements.size()));
+            List<CsmElement> newList = new LinkedList<>();
+            newList.addAll(elements.subList(index, elements.size()));
+            return new CalculatedSyntaxModel(newList);
         }
 
         @Override
@@ -68,12 +69,34 @@ public class LexicalDifferenceCalculator {
         }
     }
 
+    private static boolean isWhitespace(int tokenType) {
+        return tokenType == 0 || tokenType == 3 || tokenType == 1 || tokenType == 32 || tokenType == 31;
+    }
+
+    private static boolean isWhitespace(CsmElement csmElement) {
+        return csmElement instanceof CsmToken && isWhitespace(((CsmToken)csmElement).getTokenType());
+    }
+
     interface Change {
 
+        boolean evaluate(CsmConditional csmConditional, Node node);
     }
 
     class NoChange implements Change {
 
+        @Override
+        public boolean evaluate(CsmConditional csmConditional, Node node) {
+            switch (csmConditional.getCondition()) {
+                case FLAG:
+                    return (Boolean)csmConditional.getProperty().singleValueFor(node);
+                case IS_NOT_EMPTY:
+                    return !csmConditional.getProperty().isNullOrEmpty(node);
+                case IS_PRESENT:
+                    return !csmConditional.getProperty().isNullOrEmpty(node);
+                default:
+                    throw new UnsupportedOperationException(""+csmConditional.getProperty()+ " "+csmConditional.getCondition());
+            }
+        }
     }
 
     class PropertyChange implements Change {
@@ -85,6 +108,29 @@ public class LexicalDifferenceCalculator {
             this.property = property;
             this.oldValue = oldValue;
             this.newValue = newValue;
+        }
+
+        @Override
+        public boolean evaluate(CsmConditional csmConditional, Node node) {
+            switch (csmConditional.getCondition()) {
+                case FLAG:
+                    if (csmConditional.getProperty() == property) {
+                        return (Boolean)newValue;
+                    }
+                    return (Boolean)csmConditional.getProperty().singleValueFor(node);
+                case IS_NOT_EMPTY:
+                    if (csmConditional.getProperty() == property) {
+                        return newValue != null && !((NodeList)newValue).isEmpty();
+                    }
+                    return !csmConditional.getProperty().isNullOrEmpty(node);
+                case IS_PRESENT:
+                    if (csmConditional.getProperty() == property) {
+                        return newValue != null && !((NodeList)newValue).isEmpty();
+                    }
+                    return !csmConditional.getProperty().isNullOrEmpty(node);
+                default:
+                    throw new UnsupportedOperationException(""+csmConditional.getProperty()+ " "+csmConditional.getCondition());
+            }
         }
     }
 
@@ -149,6 +195,18 @@ public class LexicalDifferenceCalculator {
                     calculatedSyntaxModelFor(csmList.getFollowing(), node, elements, change);
                 }
             }
+        } else if (csm instanceof CsmConditional) {
+            CsmConditional csmConditional = (CsmConditional) csm;
+            boolean satisfied = change.evaluate(csmConditional, node);
+            if (satisfied) {
+                calculatedSyntaxModelFor(csmConditional.getThenElement(), node, elements, change);
+            } else {
+                calculatedSyntaxModelFor(csmConditional.getElseElement(), node, elements, change);
+            }
+        } else if (csm instanceof CsmIndent) {
+            // nothing to do
+        } else if (csm instanceof CsmUnindent) {
+            // nothing to do
         } else {
             throw new UnsupportedOperationException(csm.getClass().getSimpleName());
         }
@@ -275,7 +333,34 @@ public class LexicalDifferenceCalculator {
             throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
         }
 
+        private static boolean replacement(CsmElement a, CsmElement b) {
+            if (a instanceof CsmChild) {
+                if (b instanceof CsmChild) {
+                    CsmChild childA = (CsmChild) a;
+                    CsmChild childB = (CsmChild) b;
+                    return childA.child.getClass().equals(childB.getClass());
+                } else if (b instanceof CsmToken) {
+                    return false;
+                    //throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                } else {
+                    throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                }
+            } else if (a instanceof CsmToken) {
+                if (b instanceof CsmToken) {
+                    CsmToken childA = (CsmToken)a;
+                    CsmToken childB = (CsmToken)b;
+                    //throw new UnsupportedOperationException(childA + " "+childB);
+                    return childA.getTokenType() == childB.getTokenType();
+                } else if (b instanceof CsmChild) {
+                    //throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+                    return false;
+                }
+            }
+            throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
+        }
+
         public static Difference calculate(CalculatedSyntaxModel original, CalculatedSyntaxModel after) {
+            System.out.println("CALCULATE "+original.elements.size()+ " "+after.elements.size());
             List<DifferenceElement> elements = new LinkedList<>();
 
             int originalIndex = 0;
@@ -295,12 +380,25 @@ public class LexicalDifferenceCalculator {
                         elements.add(new Kept(nextOriginal));
                         originalIndex++;
                         afterIndex++;
+                    } else if (replacement(nextOriginal, nextAfter)) {
+                        elements.add(new Removed(nextOriginal));
+                        elements.add(new Added(nextAfter));
+                        originalIndex++;
+                        afterIndex++;
+                    } else if (isWhitespace(nextOriginal)) {
+                        originalIndex++;
+                    } else if (isWhitespace(nextAfter)) {
+                        afterIndex++;
                     } else {
                         //System.out.println("NOT MATCHING " + original.elements.get(originalIndex) + " " + after.elements.get(afterIndex));
                         // We can try to remove the element or add it and look which one leads to the lower difference
-                        Difference removing = calculate(original.from(originalIndex + 1), after);
                         Difference adding = calculate(original, after.from(afterIndex + 1));
-                        if (removing.cost() >= adding.cost()) {
+                        Difference removing = null;
+                        if (adding.cost() > 0) {
+                            removing = calculate(original.from(originalIndex + 1), after);
+                        }
+
+                        if (removing !=null && removing.cost() >= adding.cost()) {
                             elements.add(new Added(nextAfter));
                             afterIndex++;
                         } else {
@@ -319,15 +417,14 @@ public class LexicalDifferenceCalculator {
 
         private TextElement toTextElement(LexicalPreservingPrinter lpp, CsmElement csmElement) {
             if (csmElement instanceof CsmChild) {
-                return new ChildTextElement(lpp, ((CsmChild)csmElement).child);
+                return new ChildTextElement(lpp, ((CsmChild) csmElement).child);
+            } else if (csmElement instanceof CsmToken) {
+                return new TokenTextElement(((CsmToken) csmElement).getTokenType());
             } else {
                 throw new UnsupportedOperationException(csmElement.getClass().getSimpleName());
             }
         }
 
-        private boolean isWhitespace(int tokenType) {
-            return tokenType == 3 || tokenType == 1;
-        }
 
         public void apply(NodeText nodeText) {
             int diffIndex = 0;
@@ -337,9 +434,9 @@ public class LexicalDifferenceCalculator {
                 if (diffIndex < this.elements.size() && nodeTextIndex >= nodeText.getElements().size()) {
                     DifferenceElement diffEl = elements.get(diffIndex);
                     if (diffEl instanceof Kept) {
-                        Kept kept = (Kept)diffEl;
+                        Kept kept = (Kept) diffEl;
                         if (kept.element instanceof CsmToken) {
-                            CsmToken csmToken = (CsmToken)kept.element;
+                            CsmToken csmToken = (CsmToken) kept.element;
                             if (isWhitespace(csmToken.getTokenType())) {
                                 diffIndex++;
                             } else {
@@ -349,6 +446,10 @@ public class LexicalDifferenceCalculator {
                             throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
                         }
                         comingFromRemoved = false;
+                    } else if (diffEl instanceof Added) {
+                        nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
+                        nodeTextIndex++;
+                        diffIndex++;
                     } else {
                         throw new UnsupportedOperationException(diffEl.getClass().getSimpleName());
                     }
@@ -383,13 +484,17 @@ public class LexicalDifferenceCalculator {
                                 throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                             }
                         } else if ((kept.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement) {
-                            CsmToken csmToken = (CsmToken)kept.element;
-                            TokenTextElement nodeTextToken = (TokenTextElement)nodeTextEl;
+                            CsmToken csmToken = (CsmToken) kept.element;
+                            TokenTextElement nodeTextToken = (TokenTextElement) nodeTextEl;
                             if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
                                 nodeTextIndex++;
                                 diffIndex++;
+                            } else if (isWhitespace(csmToken.getTokenType())) {
+                                diffIndex++;
+                            } else if (nodeTextToken.isWhiteSpace()) {
+                                nodeTextIndex++;
                             } else {
-                                throw new UnsupportedOperationException();
+                                throw new UnsupportedOperationException("CSM TOKEN " + csmToken + " NodeText TOKEN " + nodeTextToken);
                             }
                         } else {
                             throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
@@ -398,6 +503,10 @@ public class LexicalDifferenceCalculator {
                     } else if (diffEl instanceof Removed) {
                         Removed removed = (Removed)diffEl;
                         if ((removed.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
+                            nodeText.removeElement(nodeTextIndex);
+                            diffIndex++;
+                        } else if ((removed.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement
+                                && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)nodeTextEl).getTokenKind()) {
                             nodeText.removeElement(nodeTextIndex);
                             diffIndex++;
                         } else {

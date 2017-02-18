@@ -43,6 +43,15 @@ class TokenTextElement extends TextElement {
         this.text = text;
     }
 
+    TokenTextElement(int tokenKind) {
+        String content = ASTParserConstants.tokenImage[tokenKind];
+        if (content.startsWith("\"")) {
+            content = content.substring(1, content.length() - 1);
+        }
+        this.tokenKind = tokenKind;
+        this.text = content;
+    }
+
     @Override
     String expand() {
         return text;
@@ -93,6 +102,6 @@ class TokenTextElement extends TextElement {
     }
 
     public boolean isWhiteSpace() {
-        return tokenKind == 3 || tokenKind == 1 || tokenKind == 0;
+        return tokenKind == 3 || tokenKind == 1 || tokenKind == 0 || tokenKind == 31 || tokenKind == 32;
     }
 }
