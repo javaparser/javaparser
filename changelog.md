@@ -1,3 +1,11 @@
+Version 3.1.0
+------------------
+`TreeStructureVisitor` and `ConcreteSyntaxModel` are still unstable.
+
+* 705 755 Add the concrete syntax model, which will give you information about the exact syntax a certain nodes matches.
+
+* 777 smaller improvements and fixes
+
 Version 3.1.0-beta.2
 ------------------
 This version is a beta because `TreeStructureVisitor` is not in its definite state yet.
