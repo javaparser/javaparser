@@ -193,12 +193,12 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         assertEquals(new CsmToken(ASTParserConstants.JAVA_DOC_COMMENT, "/**Cool this annotation!*/"), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new CsmToken(ASTParserConstants.PUBLIC), csm.elements.get(i++));
-        assertEquals(new CsmToken(32), csm.elements.get(i++));
+        assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new CsmToken(ASTParserConstants.AT), csm.elements.get(i++));
         assertEquals(new CsmToken(ASTParserConstants.INTERFACE), csm.elements.get(i++));
-        assertEquals(new CsmToken(32), csm.elements.get(i++));
+        assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getName()), csm.elements.get(i++));
-        assertEquals(new CsmToken(32), csm.elements.get(i++));
+        assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new CsmToken(ASTParserConstants.LBRACE), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(0)), csm.elements.get(i++));
