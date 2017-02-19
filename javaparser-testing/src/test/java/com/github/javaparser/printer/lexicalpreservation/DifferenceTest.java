@@ -353,6 +353,20 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         assertEquals(i, diff.getElements().size());
     }
 
+    @Test
+    public void replacingNameForEnumConstantDeclaration() throws IOException {
+        EnumConstantDeclaration ecd = considerEcd("A");
+        SimpleName newName = new SimpleName("B");
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(ecd);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(ecd, ObservableProperty.NAME,
+                ecd.getName(), newName);
+        Difference diff = Difference.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(Difference.DifferenceElement.removed(new CsmChild(ecd.getName())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.added(new CsmChild(newName)), diff.getElements().get(i++));
+        assertEquals(i, diff.getElements().size());
+    }
+
     protected AnnotationMemberDeclaration considerAmd(String code) {
         considerCode("@interface AD { " + code + " }");
         return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
@@ -361,5 +375,10 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
     protected ConstructorDeclaration considerCd(String code) {
         considerCode("class A { " + code + " }");
         return (ConstructorDeclaration) cu.getType(0).getMembers().get(0);
+    }
+
+    protected EnumConstantDeclaration considerEcd(String code) {
+        considerCode("enum A { " + code + " }");
+        return ((EnumDeclaration)cu.getType(0)).getEntries().get(0);
     }
 }
