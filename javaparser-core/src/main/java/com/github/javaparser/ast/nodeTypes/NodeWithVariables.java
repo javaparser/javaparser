@@ -125,6 +125,9 @@ public interface NodeWithVariables<N extends Node> {
                     return null;
                 }
                 for (int i = type.getArrayLevel(); i > level; i--) {
+                    if (!(type instanceof ArrayType)) {
+                        throw new AssertionError("The variables do not have a common type.");
+                    }
                     type = ((ArrayType) type).getComponentType();
                 }
                 return type;
