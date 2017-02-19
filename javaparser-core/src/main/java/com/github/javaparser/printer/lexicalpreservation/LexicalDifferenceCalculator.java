@@ -62,6 +62,10 @@ public class LexicalDifferenceCalculator {
         return new CalculatedSyntaxModel(elements);
     }
 
+    CalculatedSyntaxModel calculatedSyntaxModelForNode(Node node) {
+        return calculatedSyntaxModelForNode(ConcreteSyntaxModel.forClass(node.getClass()), node);
+    }
+
     static class CsmChild implements CsmElement {
         private Node child;
 
@@ -224,6 +228,10 @@ public class LexicalDifferenceCalculator {
             default:
                 throw new UnsupportedOperationException(modifier.name());
         }
+    }
+
+    CalculatedSyntaxModel calculatedSyntaxModelAfterPropertyChange(Node node, ObservableProperty property, Object oldValue, Object newValue) {
+        return calculatedSyntaxModelAfterPropertyChange(ConcreteSyntaxModel.forClass(node.getClass()), node, property, oldValue, newValue);
     }
 
     // Visible for testing
