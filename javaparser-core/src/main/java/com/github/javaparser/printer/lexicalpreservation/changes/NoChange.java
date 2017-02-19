@@ -13,6 +13,8 @@ public class NoChange implements Change {
                 return (Boolean) csmConditional.getProperty().singleValueFor(node);
             case IS_NOT_EMPTY:
                 return !csmConditional.getProperty().isNullOrEmpty(node);
+            case IS_EMPTY:
+                return csmConditional.getProperty().isNullOrEmpty(node);
             case IS_PRESENT:
                 return !csmConditional.getProperty().isNullOrEmpty(node);
             default:

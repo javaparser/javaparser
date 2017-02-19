@@ -43,6 +43,11 @@ public class PropertyChange implements Change {
                     return newValue != null && !((NodeList) newValue).isEmpty();
                 }
                 return !csmConditional.getProperty().isNullOrEmpty(node);
+            case IS_EMPTY:
+                if (csmConditional.getProperty() == property) {
+                    return newValue == null || ((NodeList) newValue).isEmpty();
+                }
+                return csmConditional.getProperty().isNullOrEmpty(node);
             case IS_PRESENT:
                 if (csmConditional.getProperty() == property) {
                     if (newValue == null) {
