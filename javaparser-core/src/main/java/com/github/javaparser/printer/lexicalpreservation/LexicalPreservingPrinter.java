@@ -198,6 +198,12 @@ public class LexicalPreservingPrinter {
                     throw new UnsupportedOperationException();
                 }
             }
+
+            @Override
+            public void concreteListReplacement(NodeList observedNode, int index, Node oldValue, Node newValue) {
+                NodeText nodeText = lpp.getTextForNode(observedNode.getParentNodeForChildren());
+                new LexicalDifferenceCalculator().calculateListReplacement(nodeText, findNodeListName(observedNode), observedNode, index, oldValue, newValue);
+            }
         };
     }
 

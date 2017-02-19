@@ -4,14 +4,16 @@ import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -20,6 +22,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.assertj.core.internal.Diff;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,6 +30,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.newline;
+import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.unindent;
 import static com.github.javaparser.printer.lexicalpreservation.Difference.DifferenceElement.added;
 import static com.github.javaparser.printer.lexicalpreservation.Difference.DifferenceElement.kept;
 import static com.github.javaparser.printer.lexicalpreservation.Difference.DifferenceElement.removed;
@@ -367,6 +373,68 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         assertEquals(i, diff.getElements().size());
     }
 
+    @Test
+    public void addingStatementToEmptyMethodBody() {
+        String code = "class A { void foo(char p1, int p2) {} }";
+        considerCode(code);
+
+        Statement s = new ExpressionStmt(new BinaryExpr(
+                new IntegerLiteralExpr("10"), new IntegerLiteralExpr("2"), BinaryExpr.Operator.PLUS
+        ));
+        MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(m.getBody().get());
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListAddition(m.getBody().get(), ObservableProperty.STATEMENTS, 0, s);
+        Difference diff = Difference.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.LBRACE)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(3)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.added(new CsmChild(s)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.added(new CsmToken(3)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.RBRACE)), diff.getElements().get(i++));
+        assertEquals(i, diff.getElements().size());
+    }
+
+    @Test
+    public void methodDeclarationRemovingParameter() {
+        MethodDeclaration md = considerMd("public void foo(float f){}");
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(md);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(md, ObservableProperty.PARAMETERS, 0, md.getParameter(0));
+        Difference diff = Difference.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.PUBLIC)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmChild(md.getType())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmChild(md.getName())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.LPAREN)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.removed(new CsmChild(md.getParameter(0))), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmChild(md.getBody().get())), diff.getElements().get(i++));
+        assertEquals(i, diff.getElements().size());
+    }
+
+    @Test
+    public void methodDeclarationAddingParameter() {
+        MethodDeclaration md = considerMd("public void foo(){}");
+        Parameter newParameter = new Parameter(new ArrayType(PrimitiveType.intType()), new SimpleName("foo"));
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(md);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListAddition(md, ObservableProperty.PARAMETERS, 0, newParameter);
+        Difference diff = Difference.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.PUBLIC)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmChild(md.getType())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmChild(md.getName())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.LPAREN)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.added(new CsmChild(newParameter)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.kept(new CsmChild(md.getBody().get())), diff.getElements().get(i++));
+        assertEquals(i, diff.getElements().size());
+    }
+
     protected AnnotationMemberDeclaration considerAmd(String code) {
         considerCode("@interface AD { " + code + " }");
         return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
@@ -380,5 +448,10 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
     protected EnumConstantDeclaration considerEcd(String code) {
         considerCode("enum A { " + code + " }");
         return ((EnumDeclaration)cu.getType(0)).getEntries().get(0);
+    }
+
+    protected MethodDeclaration considerMd(String code) {
+        considerCode("class A { " + code + " }");
+        return (MethodDeclaration) cu.getType(0).getMembers().get(0);
     }
 }
