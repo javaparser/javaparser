@@ -1,5 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
@@ -398,6 +399,13 @@ public class Difference {
                         nodeTextIndex++;
                     } else if (removed.element instanceof CsmToken && ((CsmToken)removed.element).isWhiteSpace()) {
                         diffIndex++;
+                    } else if (removed.element instanceof LexicalDifferenceCalculator.CsmChild && ((LexicalDifferenceCalculator.CsmChild)removed.element).getChild() instanceof PrimitiveType) {
+                        if (isPrimitiveType(nodeTextEl)) {
+                            nodeText.removeElement(nodeTextIndex);
+                            diffIndex++;
+                        } else {
+                            throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
+                        }
                     } else {
                         throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                     }
@@ -408,6 +416,36 @@ public class Difference {
                 }
             }
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
+    }
+
+    private boolean isPrimitiveType(TextElement textElement) {
+        if (textElement instanceof TokenTextElement) {
+            TokenTextElement tokenTextElement = (TokenTextElement)textElement;
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.BYTE) {
+                return true;
+            }
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.CHAR) {
+                return true;
+            }
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.SHORT) {
+                return true;
+            }
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.INT) {
+                return true;
+            }
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.LONG) {
+                return true;
+            }
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.FLOAT) {
+                return true;
+            }
+            if (tokenTextElement.getTokenKind() == ASTParserConstants.DOUBLE) {
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
 
     public long cost() {

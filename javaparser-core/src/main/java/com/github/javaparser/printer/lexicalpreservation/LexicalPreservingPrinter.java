@@ -28,6 +28,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -145,6 +146,9 @@ public class LexicalPreservingPrinter {
                 }
 
                 new LexicalDifferenceCalculator().calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
+                /*if (property == ObservableProperty.TYPE && observedNode instanceof VariableDeclarator) {
+                    // TODO recalculate the maximum common type of the parent
+                }*/
 
                 //Una volta calcolata la differenza la applico al nodeText
 
