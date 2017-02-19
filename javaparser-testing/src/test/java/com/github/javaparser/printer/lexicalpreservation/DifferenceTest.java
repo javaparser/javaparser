@@ -5,10 +5,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
@@ -22,6 +19,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -337,8 +335,31 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         assertEquals(i, diff.getElements().size());
     }
 
+    @Test
+    public void addedModifierToConstructorDeclaration() {
+        ConstructorDeclaration cd = considerCd("A(){}");
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(cd);
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(cd, ObservableProperty.MODIFIERS,
+                EnumSet.noneOf(Modifier.class), EnumSet.of(Modifier.PUBLIC));
+        Difference diff = Difference.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(added(new CsmToken(ASTParserConstants.PUBLIC)), diff.getElements().get(i++));
+        assertEquals(added(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(kept(new CsmChild(cd.getName())), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(ASTParserConstants.LPAREN)), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(kept(new CsmChild(cd.getBody())), diff.getElements().get(i++));
+        assertEquals(i, diff.getElements().size());
+    }
+
     protected AnnotationMemberDeclaration considerAmd(String code) {
         considerCode("@interface AD { " + code + " }");
         return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+    }
+
+    protected ConstructorDeclaration considerCd(String code) {
+        considerCode("class A { " + code + " }");
+        return (ConstructorDeclaration) cu.getType(0).getMembers().get(0);
     }
 }

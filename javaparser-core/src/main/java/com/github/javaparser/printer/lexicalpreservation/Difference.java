@@ -377,6 +377,8 @@ public class Difference {
                         } else {
                             throw new UnsupportedOperationException("CSM TOKEN " + csmToken + " NodeText TOKEN " + nodeTextToken);
                         }
+                    } else if ((kept.element instanceof CsmToken) && ((CsmToken) kept.element).isWhiteSpace()) {
+                        diffIndex++;
                     } else {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                     }
