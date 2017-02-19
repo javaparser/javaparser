@@ -5,6 +5,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 
+import java.util.Optional;
+
 public class PropertyChange implements Change {
     private ObservableProperty property;
     private Object oldValue;
@@ -43,7 +45,13 @@ public class PropertyChange implements Change {
                 return !csmConditional.getProperty().isNullOrEmpty(node);
             case IS_PRESENT:
                 if (csmConditional.getProperty() == property) {
-                    return newValue != null && !((NodeList) newValue).isEmpty();
+                    if (newValue == null) {
+                        return false;
+                    }
+                    if (newValue instanceof Optional) {
+                        return ((Optional)newValue).isPresent();
+                    }
+                    return true;
                 }
                 return !csmConditional.getProperty().isNullOrEmpty(node);
             default:

@@ -256,10 +256,10 @@ public class Difference {
                 } else {
                     //System.out.println("NOT MATCHING " + original.elements.get(originalIndex) + " " + after.elements.get(afterIndex));
                     // We can try to remove the element or add it and look which one leads to the lower difference
-                    Difference adding = calculate(original, after.from(afterIndex + 1));
+                    Difference adding = calculate(original.from(originalIndex), after.from(afterIndex + 1));
                     Difference removing = null;
                     if (adding.cost() > 0) {
-                        removing = calculate(original.from(originalIndex + 1), after);
+                        removing = calculate(original.from(originalIndex + 1), after.from(afterIndex));
                     }
 
                     if (removing == null || removing.cost() > adding.cost()) {

@@ -10,6 +10,8 @@ import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -307,9 +309,30 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         assertEquals(kept(new CsmToken(ASTParserConstants.LPAREN)), diff.getElements().get(i++));
         assertEquals(kept(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(i++));
         assertEquals(removed(new CsmToken(1)), diff.getElements().get(i++));
-        assertEquals(removed(new CsmToken(ASTParserConstants.DEFAULT)), diff.getElements().get(i++));
+        assertEquals(removed(new CsmToken(ASTParserConstants._DEFAULT)), diff.getElements().get(i++));
         assertEquals(removed(new CsmToken(1)), diff.getElements().get(i++));
         assertEquals(removed(new CsmChild(md.getDefaultValue().get())), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(ASTParserConstants.SEMICOLON)), diff.getElements().get(i++));
+        assertEquals(i, diff.getElements().size());
+    }
+
+    @Test
+    public void addedDefaultValueInAnnotationMemberDeclaration() {
+        AnnotationMemberDeclaration md = considerAmd("int foo();");
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(md);
+        Expression defaultValue = new IntegerLiteralExpr(("10"));
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(md, ObservableProperty.DEFAULT_VALUE, null, defaultValue);
+        Difference diff = Difference.calculate(csmOriginal, csmChanged);
+        int i = 0;
+        assertEquals(kept(new CsmChild(md.getType())), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(kept(new CsmChild(md.getName())), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(ASTParserConstants.LPAREN)), diff.getElements().get(i++));
+        assertEquals(kept(new CsmToken(ASTParserConstants.RPAREN)), diff.getElements().get(i++));
+        assertEquals(added(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(added(new CsmToken(ASTParserConstants._DEFAULT)), diff.getElements().get(i++));
+        assertEquals(added(new CsmToken(1)), diff.getElements().get(i++));
+        assertEquals(added(new CsmChild(defaultValue)), diff.getElements().get(i++));
         assertEquals(kept(new CsmToken(ASTParserConstants.SEMICOLON)), diff.getElements().get(i++));
         assertEquals(i, diff.getElements().size());
     }
