@@ -135,6 +135,9 @@ public class LexicalPreservingPrinter {
                 if (property == ObservableProperty.RANGE || property == ObservableProperty.COMMENTED_NODE) {
                     return;
                 }
+                if (property == ObservableProperty.COMMENT) {
+                    throw new UnsupportedOperationException("COMMENTS REQUIRE SPECIAL HANDLING");
+                }
                 NodeText nodeText = lpp.getOrCreateNodeText(observedNode);
 
                 if (nodeText == null) {

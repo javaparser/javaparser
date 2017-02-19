@@ -290,7 +290,7 @@ public class Difference {
             throw new UnsupportedOperationException(csmElement.getClass().getSimpleName());
         }
     }
-    
+
     public void apply(NodeText nodeText) {
         if (nodeText == null) {
             throw new NullPointerException();
