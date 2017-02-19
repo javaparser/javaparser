@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.Modified;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
@@ -154,6 +155,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     }
 
     @Override
+    @Modified
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);

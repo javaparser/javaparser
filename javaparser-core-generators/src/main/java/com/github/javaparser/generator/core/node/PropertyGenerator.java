@@ -1,6 +1,7 @@
 package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.Modified;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -44,6 +45,10 @@ public class PropertyGenerator extends NodeGenerator {
         if (setters.size() != 1) {
             throw new AssertionError(f("Not exactly one setter exists: %s.%s = %s", nodeMetaModel.getTypeName(), name, setters.size()));
         }
+        if (setters.get(0).isAnnotationPresent(Modified.class)) {
+            return;
+        }
+
         // Fix parameter name
         final MethodDeclaration setter = setters.get(0);
         setter.getParameters().clear();
