@@ -55,7 +55,7 @@ public class CompilationUnitTransformationsTest extends AbstractLexicalPreservin
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo2"), "baz")));
         assertTransformedToString("package foo2.baz;\n" +
                 "\n" +
-                "class A {}", cu);
+                " class A {}", cu);
     }
 
     // imports
