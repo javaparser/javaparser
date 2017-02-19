@@ -47,6 +47,16 @@ class NodeText {
         return lexicalPreservingPrinter;
     }
 
+    public void removeElement(TextElement textElement) {
+        for (int i=0;i<elements.size();i++){
+            if (elements.get(i) == textElement) {
+                elements.remove(i);
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     enum Option {
         REMOVE_SPACE_IMMEDIATELY_AFTER,
         EXCLUDE_START,
@@ -99,6 +109,10 @@ class NodeText {
         elements.add(new TokenTextElement(tokenKind, text));
     }
 
+    void addToken(int index, int tokenKind, String text) {
+        elements.add(index, new TokenTextElement(tokenKind, text));
+    }
+
     //
     // Finding elements
     //
@@ -114,7 +128,7 @@ class NodeText {
                 return i;
             }
         }
-        throw new IllegalArgumentException(String.format("I could not find child '%s' from position %i", matcher, from));
+        throw new IllegalArgumentException(String.format("I could not find child '%s' from position %d", matcher, from));
     }
 
     int findChild(Node child) {

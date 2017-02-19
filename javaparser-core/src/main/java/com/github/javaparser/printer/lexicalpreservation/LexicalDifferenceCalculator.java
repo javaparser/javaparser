@@ -116,23 +116,23 @@ public class LexicalDifferenceCalculator {
             CsmSequence csmSequence = (CsmSequence) csm;
             csmSequence.getElements().forEach(e -> calculatedSyntaxModelForNode(e, node, elements, change));
         } else if (csm instanceof CsmComment) {
-            Object valueRaw = change.getValue(ObservableProperty.COMMENT, node);
-            if (valueRaw instanceof Optional) {
-                if (((Optional)valueRaw).isPresent()) {
-                    valueRaw = ((Optional)valueRaw).get();
-                } else {
-                    valueRaw = null;
-                }
-            }
-            if (valueRaw != null) {
-                Comment comment = (Comment) valueRaw;
-                if (comment instanceof JavadocComment) {
-                    elements.add(new CsmToken(ASTParserConstants.JAVA_DOC_COMMENT, "/**" + ((JavadocComment)comment).getContent() + "*/"));
-                    elements.add(new CsmToken(3));
-                } else {
-                    throw new UnsupportedOperationException(valueRaw.getClass().getSimpleName());
-                }
-            }
+//            Object valueRaw = change.getValue(ObservableProperty.COMMENT, node);
+//            if (valueRaw instanceof Optional) {
+//                if (((Optional)valueRaw).isPresent()) {
+//                    valueRaw = ((Optional)valueRaw).get();
+//                } else {
+//                    valueRaw = null;
+//                }
+//            }
+//            if (valueRaw != null) {
+//                Comment comment = (Comment) valueRaw;
+//                if (comment instanceof JavadocComment) {
+//                    elements.add(new CsmToken(ASTParserConstants.JAVA_DOC_COMMENT, "/**" + ((JavadocComment)comment).getContent() + "*/"));
+//                    elements.add(new CsmToken(3));
+//                } else {
+//                    throw new UnsupportedOperationException(valueRaw.getClass().getSimpleName());
+//                }
+//            }
         } else if (csm instanceof CsmSingleReference) {
             CsmSingleReference csmSingleReference = (CsmSingleReference)csm;
             Node child;

@@ -51,6 +51,7 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.ASTParserConstants.EXTENDS;
 import static com.github.javaparser.ASTParserConstants.IMPLEMENTS;
+import static com.github.javaparser.ASTParserConstants.JAVA_DOC_COMMENT;
 import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.EXCLUDE_END;
 import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.EXCLUDE_START;
 import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.REMOVE_SPACE_IMMEDIATELY_AFTER;
@@ -137,7 +138,45 @@ public class LexicalPreservingPrinter {
                     return;
                 }
                 if (property == ObservableProperty.COMMENT) {
-                    throw new UnsupportedOperationException("COMMENTS REQUIRE SPECIAL HANDLING");
+                    if (!observedNode.getParentNode().isPresent()) {
+                        throw new IllegalStateException();
+                    }
+                    NodeText nodeText = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
+                    if (oldValue == null && newValue != null) {
+                        // Find the position of the comment node and put in front of it the comment and a newline
+                        int index = nodeText.findChild(observedNode);
+                        nodeText.addChild(index, (Comment)newValue);
+                        //nodeText.addToken(index + 1, 3, "\n");
+                    } else if (oldValue != null && newValue == null) {
+                        if (oldValue instanceof JavadocComment) {
+                            JavadocComment javadocComment = (JavadocComment)oldValue;
+                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(ASTParserConstants.JAVA_DOC_COMMENT)
+                            && ((TokenTextElement)e).getText().equals("/**"+javadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
+                            if (matchingTokens.size() != 1) {
+                                throw new IllegalStateException();
+                            }
+                            int index = nodeText.findElement(matchingTokens.get(0));
+                            nodeText.removeElement(index);
+                            if (nodeText.getElements().get(index).isToken(3)) {
+                                nodeText.removeElement(index);
+                            }
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
+                    } else if (oldValue != null && newValue != null) {
+                        if (oldValue instanceof JavadocComment) {
+                            JavadocComment oldJavadocComment = (JavadocComment)oldValue;
+                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(ASTParserConstants.JAVA_DOC_COMMENT)
+                                    && ((TokenTextElement)e).getText().equals("/**"+oldJavadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
+                            if (matchingTokens.size() != 1) {
+                                throw new IllegalStateException();
+                            }
+                            JavadocComment newJavadocComment = (JavadocComment)newValue;
+                            nodeText.replace(matchingTokens.get(0), new TokenTextElement(JAVA_DOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
+                        } else {
+                            throw new UnsupportedOperationException();
+                        }
+                    }
                 }
                 NodeText nodeText = lpp.getOrCreateNodeText(observedNode);
 
