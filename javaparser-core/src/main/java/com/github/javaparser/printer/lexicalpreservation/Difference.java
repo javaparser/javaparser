@@ -293,6 +293,9 @@ public class Difference {
 
 
     public void apply(NodeText nodeText) {
+        if (nodeText == null) {
+            throw new NullPointerException();
+        }
         int diffIndex = 0;
         int nodeTextIndex = 0;
         boolean comingFromRemoved = false;
@@ -392,6 +395,8 @@ public class Difference {
                     } else if (nodeTextEl instanceof TokenTextElement
                             && ((TokenTextElement)nodeTextEl).isWhiteSpace()) {
                         nodeTextIndex++;
+                    } else if (removed.element instanceof CsmToken && ((CsmToken)removed.element).isWhiteSpace()) {
+                        diffIndex++;
                     } else {
                         throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                     }

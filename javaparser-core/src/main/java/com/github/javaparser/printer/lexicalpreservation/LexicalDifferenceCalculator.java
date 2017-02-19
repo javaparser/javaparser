@@ -4,6 +4,8 @@ import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
@@ -42,6 +44,9 @@ public class LexicalDifferenceCalculator {
     }
 
     public void calculatePropertyChange(NodeText nodeText, Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+        if (nodeText == null) {
+            throw new NullPointerException();
+        }
         CsmElement element = ConcreteSyntaxModel.forClass(observedNode.getClass());
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, observedNode);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterPropertyChange(element, observedNode, property, oldValue, newValue);
@@ -107,7 +112,23 @@ public class LexicalDifferenceCalculator {
             CsmSequence csmSequence = (CsmSequence) csm;
             csmSequence.getElements().forEach(e -> calculatedSyntaxModelForNode(e, node, elements, change));
         } else if (csm instanceof CsmComment) {
-            // nothing to do
+            Object valueRaw = change.getValue(ObservableProperty.COMMENT, node);
+            if (valueRaw instanceof Optional) {
+                if (((Optional)valueRaw).isPresent()) {
+                    valueRaw = ((Optional)valueRaw).get();
+                } else {
+                    valueRaw = null;
+                }
+            }
+            if (valueRaw != null) {
+                Comment comment = (Comment) valueRaw;
+                if (comment instanceof JavadocComment) {
+                    elements.add(new CsmToken(ASTParserConstants.JAVA_DOC_COMMENT, "/**" + ((JavadocComment)comment).getContent() + "*/"));
+                    elements.add(new CsmToken(3));
+                } else {
+                    throw new UnsupportedOperationException(valueRaw.getClass().getSimpleName());
+                }
+            }
         } else if (csm instanceof CsmSingleReference) {
             CsmSingleReference csmSingleReference = (CsmSingleReference)csm;
             Node child;
@@ -181,6 +202,10 @@ public class LexicalDifferenceCalculator {
             // nothing to do
         } else if (csm instanceof CsmUnindent) {
             // nothing to do
+        } else if (csm instanceof CsmAttribute) {
+            CsmAttribute csmAttribute = (CsmAttribute)csm;
+            Object value = change.getValue(csmAttribute.getProperty(), node);
+            throw new UnsupportedOperationException((String)value);
         } else {
             throw new UnsupportedOperationException(csm.getClass().getSimpleName());
         }

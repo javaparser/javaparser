@@ -29,6 +29,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -134,7 +135,11 @@ public class LexicalPreservingPrinter {
                 if (property == ObservableProperty.RANGE) {
                     return;
                 }
-                NodeText nodeText = lpp.getTextForNode(observedNode);
+                NodeText nodeText = lpp.getOrCreateNodeText(observedNode);
+
+                if (nodeText == null) {
+                    throw new NullPointerException(observedNode.getClass().getSimpleName());
+                }
 
                 new LexicalDifferenceCalculator().calculatePropertyChange(nodeText, observedNode, property, oldValue, newValue);
 
@@ -449,6 +454,11 @@ public class LexicalPreservingPrinter {
                 default:
                     throw new IllegalArgumentException();
             }
+            return nodeText;
+        }
+        if (node instanceof JavadocComment) {
+            NodeText nodeText = new NodeText(this);
+            nodeText.addToken(ASTParserConstants.JAVA_DOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
             return nodeText;
         }
 
