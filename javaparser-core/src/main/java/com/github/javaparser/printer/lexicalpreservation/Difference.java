@@ -262,7 +262,7 @@ public class Difference {
                         removing = calculate(original.from(originalIndex + 1), after);
                     }
 
-                    if (removing == null || removing.cost() >= adding.cost()) {
+                    if (removing == null || removing.cost() > adding.cost()) {
                         elements.add(new Added(nextAfter));
                         comingFromAdded = true;
                         afterIndex++;
