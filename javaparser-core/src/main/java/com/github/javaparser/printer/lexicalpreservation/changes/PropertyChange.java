@@ -31,40 +31,6 @@ public class PropertyChange implements Change {
     }
 
     @Override
-    public boolean evaluate(CsmConditional csmConditional, Node node) {
-        switch (csmConditional.getCondition()) {
-            case FLAG:
-                if (csmConditional.getProperty() == property) {
-                    return (Boolean) newValue;
-                }
-                return (Boolean) csmConditional.getProperty().singleValueFor(node);
-            case IS_NOT_EMPTY:
-                if (csmConditional.getProperty() == property) {
-                    return newValue != null && !((NodeList) newValue).isEmpty();
-                }
-                return !csmConditional.getProperty().isNullOrEmpty(node);
-            case IS_EMPTY:
-                if (csmConditional.getProperty() == property) {
-                    return newValue == null || ((NodeList) newValue).isEmpty();
-                }
-                return csmConditional.getProperty().isNullOrEmpty(node);
-            case IS_PRESENT:
-                if (csmConditional.getProperty() == property) {
-                    if (newValue == null) {
-                        return false;
-                    }
-                    if (newValue instanceof Optional) {
-                        return ((Optional)newValue).isPresent();
-                    }
-                    return true;
-                }
-                return !csmConditional.getProperty().isNullOrEmpty(node);
-            default:
-                throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
-        }
-    }
-
-    @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == this.property) {
             return newValue;

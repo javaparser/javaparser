@@ -189,10 +189,11 @@ public class LexicalPreservingPrinter {
 
             @Override
             public void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                NodeText nodeText = lpp.getTextForNode(observedNode.getParentNodeForChildren());
                 if (type == ListChangeType.REMOVAL) {
-                    lpp.updateTextBecauseOfRemovedChild(observedNode, index, observedNode.getParentNode(), nodeAddedOrRemoved);
+                    new LexicalDifferenceCalculator().calculateListRemoval(nodeText, findNodeListName(observedNode), observedNode, index, nodeAddedOrRemoved);
                 } else if (type == ListChangeType.ADDITION) {
-                    lpp.updateTextBecauseOfAddedChild(observedNode, index, observedNode.getParentNode(), nodeAddedOrRemoved);
+                    new LexicalDifferenceCalculator().calculateListAddition(nodeText, findNodeListName(observedNode),observedNode, index, nodeAddedOrRemoved);
                 } else {
                     throw new UnsupportedOperationException();
                 }
@@ -592,7 +593,7 @@ public class LexicalPreservingPrinter {
     // Helper methods
     //
 
-    private ObservableProperty findNodeListName(NodeList nodeList) {
+    private static ObservableProperty findNodeListName(NodeList nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
             if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(NodeList.class.getCanonicalName())) {
