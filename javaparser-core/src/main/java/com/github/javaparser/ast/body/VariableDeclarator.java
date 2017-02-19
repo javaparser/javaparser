@@ -34,12 +34,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -160,11 +158,11 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.getParentNode().isPresent() && this.getParentNode().get() instanceof NodeWithVariables) {
-            NodeWithVariables nodeWithVariables = (NodeWithVariables)this.getParentNode().get();
+            NodeWithVariables nodeWithVariables = (NodeWithVariables) this.getParentNode().get();
             Type currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
             List<Type> types = new LinkedList<>();
             int index = nodeWithVariables.getVariables().indexOf(this);
-            for (int i=0;i<nodeWithVariables.getVariables().size();i++) {
+            for (int i = 0; i < nodeWithVariables.getVariables().size(); i++) {
                 if (i == index) {
                     types.add(type);
                 } else {
@@ -172,7 +170,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
                 }
             }
             Type newMaxCommonType = NodeWithVariables.maximumCommonType(types);
-            ((Node)nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType, newMaxCommonType);
+            ((Node) nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType, newMaxCommonType);
         }
         if (this.type != null) {
             this.type.setParentNode(null);
