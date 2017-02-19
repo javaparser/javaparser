@@ -132,7 +132,7 @@ public class LexicalPreservingPrinter {
                 if ((oldValue != null && oldValue.equals(newValue)) || (oldValue == null && newValue == null)) {
                     return;
                 }
-                if (property == ObservableProperty.RANGE) {
+                if (property == ObservableProperty.RANGE || property == ObservableProperty.COMMENTED_NODE) {
                     return;
                 }
                 NodeText nodeText = lpp.getOrCreateNodeText(observedNode);
