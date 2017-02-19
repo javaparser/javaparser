@@ -21,7 +21,7 @@ import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.optionalOf;
-import static com.github.javaparser.utils.Utils.decapitalize;
+import static com.github.javaparser.utils.Utils.uncapitalize;
 
 public class NodeMetaModelGenerator {
     private final InitializePropertyMetaModelsStatementsGenerator initializePropertyMetaModelsStatementsGenerator = new InitializePropertyMetaModelsStatementsGenerator();
@@ -32,7 +32,7 @@ public class NodeMetaModelGenerator {
         if(nodeClass== StringLiteralExpr.class){
             System.out.println();
         }
-        final String nodeMetaModelFieldName = decapitalize(className);
+        final String nodeMetaModelFieldName = uncapitalize(className);
         metaModelCoid.getFieldByName(nodeMetaModelFieldName).ifPresent(Node::remove);
 
         final FieldDeclaration nodeField = metaModelCoid.addField(className, nodeMetaModelFieldName, PUBLIC, STATIC, FINAL);
@@ -43,7 +43,7 @@ public class NodeMetaModelGenerator {
         boolean isRootNode = !isNode(superclass);
         nodeField.getVariable(0).setInitializer(parseExpression(f("new %s(%s)",
                 className,
-                optionalOf(decapitalize(superNodeMetaModel), !isRootNode))));
+                optionalOf(uncapitalize(superNodeMetaModel), !isRootNode))));
 
         initializeNodeMetaModelsStatements.add(parseStatement(f("nodeMetaModels.add(%s);", nodeMetaModelFieldName)));
 

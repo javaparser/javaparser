@@ -17,7 +17,7 @@ import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.isNode;
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelName;
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
-import static com.github.javaparser.utils.Utils.decapitalize;
+import static com.github.javaparser.utils.Utils.uncapitalize;
 
 public class InitializePropertyMetaModelsStatementsGenerator {
     public void generate(Class<?> nodeClass, Field field, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
@@ -32,7 +32,7 @@ public class InitializePropertyMetaModelsStatementsGenerator {
                 nodeMetaModelFieldName,
                 field.getName(),
                 typeName,
-                optionalOf(decapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
+                optionalOf(uncapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
                 fieldAnalysis.isOptional,
                 isNonEmpty(field),
                 fieldAnalysis.isNodeList,
@@ -57,7 +57,7 @@ public class InitializePropertyMetaModelsStatementsGenerator {
                 nodeMetaModelFieldName,
                 getterToPropertyName(method.getName()),
                 typeName,
-                optionalOf(decapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
+                optionalOf(uncapitalize(nodeMetaModelName(fieldType)), isNode(fieldType)),
                 fieldAnalysis.isOptional,
                 isNonEmpty(method),
                 fieldAnalysis.isNodeList,

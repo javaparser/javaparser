@@ -93,7 +93,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
     }
 
     private String nodeListCheck(PropertyMetaModel property) {
-        return f("for (int i = 0; i < %s.cost(); i++) {" +
+        return f("for (int i = 0; i < %s.size(); i++) {" +
                 "  if (%s.get(i) == node) {" +
                 "    %s.remove(i);" +
                 "    return true;" +

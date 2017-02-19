@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.decapitalize;
+import static com.github.javaparser.utils.Utils.uncapitalize;
 
 public class MetaModelGenerator {
     static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
@@ -188,7 +188,7 @@ public class MetaModelGenerator {
     }
 
     static String nodeMetaModelFieldName(Class<?> nodeClass) {
-        return decapitalize(nodeMetaModelName(nodeClass));
+        return uncapitalize(nodeMetaModelName(nodeClass));
     }
 
 }
