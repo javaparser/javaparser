@@ -341,6 +341,34 @@ public class Difference {
         return false;
     }
 
+    /**
+     * If we are at the beginning of a line, with just spaces or tabs before us we should force the space to be
+     * the same as the indentation.
+     *
+     * @param nodeText
+     * @param nodeTextIndex
+     */
+    private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
+        boolean hasOnlyWsBefore = true;
+        for (int i=nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.getElements().size(); i--) {
+            if (nodeText.getElements().get(i).isNewline()) {
+                break;
+            }
+            if (!nodeText.getElements().get(i).isSpaceOrTab()) {
+                hasOnlyWsBefore = false;
+            }
+        }
+        if (hasOnlyWsBefore) {
+            for (int i=nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.getElements().size(); i--) {
+                if (nodeText.getElements().get(i).isNewline()) {
+                    break;
+                }
+                nodeText.removeElement(i);
+            }
+        }
+        return nodeTextIndex;
+    }
+
     public void apply(NodeText nodeText, Node node) {
         List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
@@ -461,6 +489,10 @@ public class Difference {
                         nodeText.removeElement(nodeTextIndex);
                         if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(3)) {
                             nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
+                        } else {
+                            if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
+                                nodeTextIndex = considerEnforcingIndentation(nodeText, nodeTextIndex);
+                            }
                         }
                         diffIndex++;
                     } else if ((removed.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement

@@ -137,7 +137,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     public void replacingAnnotation() throws IOException {
         AnnotationMemberDeclaration it = consider("@myAnno int foo();");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
-        assertTransformedToString("@myOtherAnno()\nint foo();", it);
+        assertTransformedToString("@myOtherAnno() int foo();", it);
     }
 
     // Javadoc

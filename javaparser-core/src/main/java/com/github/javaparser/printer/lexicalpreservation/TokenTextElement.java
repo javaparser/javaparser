@@ -111,9 +111,19 @@ class TokenTextElement extends TextElement {
         return tokenKind == 3 || tokenKind == 1 || tokenKind == 2 || tokenKind == 0;
     }
 
+    @Override
+    public boolean isSpaceOrTab() {
+        return tokenKind == 1 || tokenKind == 2;
+    }
+
     public boolean isWhiteSpaceOrComment() {
         return tokenKind == 3 || tokenKind == 1 || tokenKind == 2 || tokenKind == 0 || tokenKind == 31 || tokenKind == 32 || tokenKind == ASTParserConstants.JAVA_DOC_COMMENT
                 || tokenKind == ASTParserConstants.JAVA_DOC_COMMENT
                 || tokenKind == ASTParserConstants.MULTI_LINE_COMMENT;
+    }
+
+    @Override
+    public boolean isNewline() {
+        return tokenKind == 3;
     }
 }

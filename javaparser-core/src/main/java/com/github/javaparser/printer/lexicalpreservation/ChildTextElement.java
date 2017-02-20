@@ -85,4 +85,14 @@ class ChildTextElement extends TextElement {
     public boolean isWhiteSpace() {
         return false;
     }
+
+    @Override
+    public boolean isSpaceOrTab() {
+        return false;
+    }
+
+    @Override
+    public boolean isNewline() {
+        return false;
+    }
 }
