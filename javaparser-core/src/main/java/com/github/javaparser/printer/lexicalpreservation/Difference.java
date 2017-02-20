@@ -421,10 +421,14 @@ public class Difference {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     } else if (isAfterLBrace(nodeText, nodeTextIndex) && !isAReplacement(diffIndex)) {
+                        //nodeTextIndex = removeWhiteSpaceAfterBrace(nodeText, nodeTextIndex);
                         if (textElement.isToken(3)) {
                             used = true;
                         }
                         nodeText.addElement(nodeTextIndex++, new TokenTextElement(3));
+                        while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
+                            nodeText.getElements().remove(nodeTextIndex);
+                        }
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
@@ -522,6 +526,14 @@ public class Difference {
                 }
             }
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
+    }
+
+    private int removeWhiteSpaceAfterBrace(NodeText nodeText, int nodeTextIndex) {
+        while (nodeTextIndex >= 0 && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
+            nodeText.removeElement(nodeTextIndex);
+            nodeTextIndex--;
+        }
+        return nodeTextIndex;
     }
 
     private boolean isAReplacement(int diffIndex) {

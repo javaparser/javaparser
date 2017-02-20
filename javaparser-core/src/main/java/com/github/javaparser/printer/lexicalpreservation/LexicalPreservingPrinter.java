@@ -579,21 +579,25 @@ public class LexicalPreservingPrinter {
 
     // Visible for testing
     List<TokenTextElement> findIndentation(Node node) {
+        List<TokenTextElement> followingNewlines = new LinkedList<>();
         List<TokenTextElement> elements = new LinkedList<>();
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
-            // For some reason 3 is used as token kind of newlines
-            if (tte.getTokenKind() != 1) {
-                return elements;
-            }
             if (tte.getTokenKind() == ASTParserConstants.SINGLE_LINE_COMMENT
                     || tte.getTokenKind() == Tokens.newline().getTokenKind()) {
-                return elements;
+                break;
+            } else {
+                followingNewlines.add(tte);
             }
-            elements.add(tte);
         }
-        return elements;
+        Collections.reverse(followingNewlines);
+        for (int i=0;i<followingNewlines.size();i++){
+            if (!followingNewlines.get(i).isSpaceOrTab()) {
+                return followingNewlines.subList(0, i);
+            }
+        }
+        return followingNewlines;
     }
 
     //
