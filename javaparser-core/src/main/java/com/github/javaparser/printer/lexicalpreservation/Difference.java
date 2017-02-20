@@ -331,6 +331,16 @@ public class Difference {
         return nodeTextIndex;
     }
 
+    private boolean isAfterLBrace(NodeText nodeText, int nodeTextIndex) {
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(ASTParserConstants.LBRACE)) {
+            return true;
+        }
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
+            return isAfterLBrace(nodeText, nodeTextIndex - 1);
+        }
+        return false;
+    }
+
     public void apply(NodeText nodeText, Node node) {
         List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
@@ -381,7 +391,7 @@ public class Difference {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
-                    } else if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(ASTParserConstants.LBRACE)) {
+                    } else if (isAfterLBrace(nodeText, nodeTextIndex)) {
                         if (textElement.isToken(3)) {
                             used = true;
                         }

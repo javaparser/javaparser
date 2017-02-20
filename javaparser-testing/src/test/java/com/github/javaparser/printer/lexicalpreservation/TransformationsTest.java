@@ -139,6 +139,7 @@ public class TransformationsTest extends  AbstractLexicalPreservingTest {
         considerExample("Example_param3_original");
         MethodDeclaration md = (MethodDeclaration) cu.getClassByName("A").get().getMember(0);
         md.setType(PrimitiveType.intType());
+        assertTransformed("Example_param5b", cu);
         md.getBody().get().getStatements().add(new ReturnStmt(new NameExpr("p1")));
         assertTransformed("Example_param5", cu);
     }
