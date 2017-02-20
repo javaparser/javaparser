@@ -449,7 +449,7 @@ public class Difference {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         nodeText.removeElement(nodeTextIndex);
-                        if (nodeTextIndex > nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(3)) {
+                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(3)) {
                             nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
                         }
                         diffIndex++;
