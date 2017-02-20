@@ -368,11 +368,15 @@ public class Difference {
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
                 if (diffEl instanceof Added) {
                     TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
+                    boolean used = false;
                     if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     } else if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(ASTParserConstants.LBRACE)) {
+                        if (textElement.isToken(3)) {
+                            used = true;
+                        }
                         nodeText.addElement(nodeTextIndex++, new TokenTextElement(3));
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
@@ -381,8 +385,10 @@ public class Difference {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     }
-                    nodeText.addElement(nodeTextIndex, textElement);
-                    nodeTextIndex++;
+                    if (!used) {
+                        nodeText.addElement(nodeTextIndex, textElement);
+                        nodeTextIndex++;
+                    }
                     diffIndex++;
                     comingFromRemoved = false;
                     comingFromAdded = true;
