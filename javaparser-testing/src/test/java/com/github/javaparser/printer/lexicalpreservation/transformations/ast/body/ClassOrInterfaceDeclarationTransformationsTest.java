@@ -180,14 +180,14 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     public void removingField() throws IOException {
         ClassOrInterfaceDeclaration cid = consider("public class A { int foo; }");
         cid.getMembers().remove(0);
-        assertTransformedToString("public class A { }", cid);
+        assertTransformedToString("public class A {  }", cid);
     }
 
     @Test
     public void replacingFieldWithAnotherField() throws IOException {
         ClassOrInterfaceDeclaration cid = consider("public class A {float f;}");
         cid.getMembers().set(0, new FieldDeclaration(EnumSet.noneOf(Modifier.class), new VariableDeclarator(PrimitiveType.intType(), "bar")));
-        assertTransformedToString("public class A {\n    int bar;\n}", cid);
+        assertTransformedToString("public class A {int bar;}", cid);
     }
 
     // Annotations

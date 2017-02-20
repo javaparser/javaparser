@@ -6,6 +6,7 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -419,7 +420,7 @@ public class Difference {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
-                    } else if (isAfterLBrace(nodeText, nodeTextIndex)) {
+                    } else if (isAfterLBrace(nodeText, nodeTextIndex) && !isAReplacement(diffIndex)) {
                         if (textElement.isToken(3)) {
                             used = true;
                         }
@@ -521,6 +522,10 @@ public class Difference {
                 }
             }
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
+    }
+
+    private boolean isAReplacement(int diffIndex) {
+        return (diffIndex > 0) && getElements().get(diffIndex) instanceof Added && getElements().get(diffIndex - 1) instanceof Removed;
     }
 
     private boolean isPrimitiveType(TextElement textElement) {
