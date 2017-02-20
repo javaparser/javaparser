@@ -297,7 +297,7 @@ public class Difference {
 
     private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
         List<TextElement> res = new LinkedList<>();
-        res.addAll(prevElements);
+        res.addAll(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
             if (e.isToken(3) || e.isToken(31)) {
@@ -311,6 +311,15 @@ public class Difference {
                 }
             }
         }
+        return res;
+    }
+
+    private List<TextElement> indentationBlock() {
+        List<TextElement> res = new LinkedList<>();
+        res.add(new TokenTextElement(1));
+        res.add(new TokenTextElement(1));
+        res.add(new TokenTextElement(1));
+        res.add(new TokenTextElement(1));
         return res;
     }
 
@@ -361,6 +370,14 @@ public class Difference {
                     TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
                     if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
+                            nodeText.addElement(nodeTextIndex++, e);
+                        }
+                    } else if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(ASTParserConstants.LBRACE)) {
+                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(3));
+                        for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
+                            nodeText.addElement(nodeTextIndex++, e);
+                        }
+                        for (TextElement e : indentationBlock()) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     }
