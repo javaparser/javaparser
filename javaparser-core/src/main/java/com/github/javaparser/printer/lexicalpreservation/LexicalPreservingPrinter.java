@@ -146,6 +146,7 @@ public class LexicalPreservingPrinter {
                         // Find the position of the comment node and put in front of it the comment and a newline
                         int index = nodeText.findChild(observedNode);
                         nodeText.addChild(index, (Comment)newValue);
+                        nodeText.addToken(index +1, 3, "\n");
                         //nodeText.addToken(index + 1, 3, "\n");
                     } else if (oldValue != null && newValue == null) {
                         if (oldValue instanceof JavadocComment) {
