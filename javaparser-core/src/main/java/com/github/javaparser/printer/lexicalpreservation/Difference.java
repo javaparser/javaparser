@@ -440,6 +440,9 @@ public class Difference {
                         nodeText.addElement(nodeTextIndex, textElement);
                         nodeTextIndex++;
                     }
+                    if (textElement.isNewline()) {
+                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex);
+                    }
                     diffIndex++;
                     comingFromRemoved = false;
                     comingFromAdded = true;
@@ -526,6 +529,19 @@ public class Difference {
                 }
             }
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
+    }
+
+    private int STANDARD_INDENTANTAION_SIZE = 4;
+
+    private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex) {
+        List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
+        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(ASTParserConstants.RBRACE)) {
+            indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTANTAION_SIZE, indentationAdj.size()));
+        }
+        for (TextElement e : indentationAdj) {
+            nodeText.getElements().add(nodeTextIndex++, e);
+        }
+        return nodeTextIndex;
     }
 
     private int removeWhiteSpaceAfterBrace(NodeText nodeText, int nodeTextIndex) {
