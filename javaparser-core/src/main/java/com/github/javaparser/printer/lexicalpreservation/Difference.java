@@ -4,6 +4,7 @@ import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 import java.util.HashMap;
@@ -142,6 +143,8 @@ public class Difference {
             } else if (b instanceof LexicalDifferenceCalculator.CsmChild) {
                 return false;
             }
+        } else if (a instanceof CsmIndent) {
+            return b instanceof CsmIndent;
         }
         throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
     }
@@ -247,9 +250,9 @@ public class Difference {
                     comingFromAdded = false;
                     originalIndex++;
                     afterIndex++;
-                //} else if (LexicalDifferenceCalculator.isWhitespace(nextOriginal)) {
+                //} else if (LexicalDifferenceCalculator.isWhitespaceOrComment(nextOriginal)) {
                 //    originalIndex++;
-//                } else if (LexicalDifferenceCalculator.isWhitespace(nextAfter)) {
+//                } else if (LexicalDifferenceCalculator.isWhitespaceOrComment(nextAfter)) {
 //                    if (comingFromAdded) {
 //                        elements.add(new Added(nextAfter));
 //                    }
@@ -292,7 +295,27 @@ public class Difference {
         }
     }
 
-    public void apply(NodeText nodeText) {
+    private List<TextElement> processIndentation(List<TokenTextElement> indentation, List<TextElement> prevElements) {
+        List<TextElement> res = new LinkedList<>();
+        res.addAll(prevElements);
+        boolean afterNl = false;
+        for (TextElement e : prevElements) {
+            if (e.isToken(3) || e.isToken(31)) {
+                res.clear();
+                afterNl = true;
+            } else {
+                if (afterNl && e instanceof TokenTextElement && LexicalDifferenceCalculator.isWhitespace(((TokenTextElement)e).getTokenKind())) {
+                    res.add(e);
+                } else {
+                    afterNl = false;
+                }
+            }
+        }
+        return res;
+    }
+
+    public void apply(NodeText nodeText, Node node) {
+        List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
             throw new NullPointerException();
         }
@@ -307,7 +330,7 @@ public class Difference {
                     Kept kept = (Kept) diffEl;
                     if (kept.element instanceof CsmToken) {
                         CsmToken csmToken = (CsmToken) kept.element;
-                        if (LexicalDifferenceCalculator.isWhitespace(csmToken.getTokenType())) {
+                        if (LexicalDifferenceCalculator.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
                         } else {
                             throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
@@ -335,9 +358,15 @@ public class Difference {
                 DifferenceElement diffEl = elements.get(diffIndex);
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
                 if (diffEl instanceof Added) {
-                    nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
-                    diffIndex++;
+                    TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
+                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
+                        for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
+                            nodeText.addElement(nodeTextIndex++, e);
+                        }
+                    }
+                    nodeText.addElement(nodeTextIndex, textElement);
                     nodeTextIndex++;
+                    diffIndex++;
                     comingFromRemoved = false;
                     comingFromAdded = true;
                 } else if (diffEl instanceof Kept) {
@@ -371,7 +400,7 @@ public class Difference {
                         if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
                             nodeTextIndex++;
                             diffIndex++;
-                        } else if (LexicalDifferenceCalculator.isWhitespace(csmToken.getTokenType())) {
+                        } else if (LexicalDifferenceCalculator.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
                         } else if (nodeTextToken.isWhiteSpace()) {
                             nodeTextIndex++;

@@ -22,7 +22,7 @@ public class LexicalDifferenceCalculator {
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListRemoval(element, observableProperty, nodeList, index, nodeRemoved);
         Difference difference = Difference.calculate(original, after);
-        difference.apply(nodeText);
+        difference.apply(nodeText, container);
     }
 
     // Visible for testing
@@ -59,7 +59,7 @@ public class LexicalDifferenceCalculator {
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListAddition(element, observableProperty, nodeList, index, nodeAdded);
         Difference difference = Difference.calculate(original, after);
-        difference.apply(nodeText);
+        difference.apply(nodeText, container);
     }
 
     public void calculateListReplacement(NodeText nodeText, ObservableProperty observableProperty, NodeList nodeList, int index, Node oldValue, Node newValue) {
@@ -68,7 +68,7 @@ public class LexicalDifferenceCalculator {
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, container);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterListReplacement(element, observableProperty, nodeList, index, oldValue, newValue);
         Difference difference = Difference.calculate(original, after);
-        difference.apply(nodeText);
+        difference.apply(nodeText, container);
     }
 
     private CalculatedSyntaxModel calculatedSyntaxModelAfterListReplacement(CsmElement csm, ObservableProperty observableProperty, NodeList nodeList, int index, Node oldValue, Node newValue) {
@@ -111,7 +111,7 @@ public class LexicalDifferenceCalculator {
         CalculatedSyntaxModel original = calculatedSyntaxModelForNode(element, observedNode);
         CalculatedSyntaxModel after = calculatedSyntaxModelAfterPropertyChange(element, observedNode, property, oldValue, newValue);
         Difference difference = Difference.calculate(original, after);
-        difference.apply(nodeText);
+        difference.apply(nodeText, observedNode);
     }
 
     // Visible for testing
@@ -163,11 +163,15 @@ public class LexicalDifferenceCalculator {
     }
 
     public static boolean isWhitespace(int tokenType) {
+        return tokenType == 0 || tokenType == 3 || tokenType == 1;
+    }
+
+    public static boolean isWhitespaceOrComment(int tokenType) {
         return tokenType == 0 || tokenType == 3 || tokenType == 1 || tokenType == 32 || tokenType == 31;
     }
 
-    public static boolean isWhitespace(CsmElement csmElement) {
-        return csmElement instanceof CsmToken && isWhitespace(((CsmToken)csmElement).getTokenType());
+    public static boolean isWhitespaceOrComment(CsmElement csmElement) {
+        return csmElement instanceof CsmToken && isWhitespaceOrComment(((CsmToken)csmElement).getTokenType());
     }
 
     private void calculatedSyntaxModelForNode(CsmElement csm, Node node, List<CsmElement> elements, Change change) {
@@ -262,9 +266,9 @@ public class LexicalDifferenceCalculator {
                 calculatedSyntaxModelForNode(csmConditional.getElseElement(), node, elements, change);
             }
         } else if (csm instanceof CsmIndent) {
-            // nothing to do
+            //elements.add(csm);
         } else if (csm instanceof CsmUnindent) {
-            // nothing to do
+            //elements.add(csm);
         } else if (csm instanceof CsmAttribute) {
             CsmAttribute csmAttribute = (CsmAttribute)csm;
             Object value = change.getValue(csmAttribute.getProperty(), node);
