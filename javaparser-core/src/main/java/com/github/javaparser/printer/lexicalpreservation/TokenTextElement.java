@@ -106,7 +106,12 @@ class TokenTextElement extends TextElement {
         return false;
     }
 
+    @Override
     public boolean isWhiteSpace() {
+        return tokenKind == 3 || tokenKind == 1 || tokenKind == 2 || tokenKind == 0;
+    }
+
+    public boolean isWhiteSpaceOrComment() {
         return tokenKind == 3 || tokenKind == 1 || tokenKind == 2 || tokenKind == 0 || tokenKind == 31 || tokenKind == 32 || tokenKind == ASTParserConstants.JAVA_DOC_COMMENT
                 || tokenKind == ASTParserConstants.JAVA_DOC_COMMENT
                 || tokenKind == ASTParserConstants.MULTI_LINE_COMMENT;

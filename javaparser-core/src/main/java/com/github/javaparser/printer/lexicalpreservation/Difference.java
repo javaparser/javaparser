@@ -323,6 +323,14 @@ public class Difference {
         return res;
     }
 
+    private int considerCleaningTheLine(NodeText nodeText, int nodeTextIndex) {
+        while (nodeTextIndex >=1 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
+            nodeText.removeElement(nodeTextIndex - 1);
+            nodeTextIndex--;
+        }
+        return nodeTextIndex;
+    }
+
     public void apply(NodeText nodeText, Node node) {
         List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
@@ -358,7 +366,7 @@ public class Difference {
                 }
             } else if (diffIndex >= this.elements.size() && nodeTextIndex < nodeText.getElements().size()) {
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
-                if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpace()) {
+                if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
                     nodeTextIndex++;
                 } else {
                     throw new UnsupportedOperationException("B " + nodeText + ". Difference: " + this + " " + nodeTextEl);
@@ -398,12 +406,12 @@ public class Difference {
                         diffIndex++;
                         nodeTextIndex++;
                     } else if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof TokenTextElement) {
-                        if (((TokenTextElement) nodeTextEl).isWhiteSpace()) {
-                            if (comingFromRemoved) {
-                                nodeText.removeElement(nodeTextIndex);
-                            } else {
+                        if (((TokenTextElement) nodeTextEl).isWhiteSpaceOrComment()) {
+                            //if (comingFromRemoved) {
+                                //nodeText.removeElement(nodeTextIndex);
+                            //} else {
                                 nodeTextIndex++;
-                            }
+                            //}
                         } else {
                             if (kept.element instanceof LexicalDifferenceCalculator.CsmChild) {
                                 LexicalDifferenceCalculator.CsmChild keptChild = (LexicalDifferenceCalculator.CsmChild)kept.element;
@@ -425,7 +433,7 @@ public class Difference {
                             diffIndex++;
                         } else if (LexicalDifferenceCalculator.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
-                        } else if (nodeTextToken.isWhiteSpace()) {
+                        } else if (nodeTextToken.isWhiteSpaceOrComment()) {
                             nodeTextIndex++;
                         } else {
                             throw new UnsupportedOperationException("CSM TOKEN " + csmToken + " NodeText TOKEN " + nodeTextToken);
@@ -441,13 +449,16 @@ public class Difference {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         nodeText.removeElement(nodeTextIndex);
+                        if (nodeTextIndex > nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(3)) {
+                            nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
+                        }
                         diffIndex++;
                     } else if ((removed.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement
                             && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)nodeTextEl).getTokenKind()) {
                         nodeText.removeElement(nodeTextIndex);
                         diffIndex++;
                     } else if (nodeTextEl instanceof TokenTextElement
-                            && ((TokenTextElement)nodeTextEl).isWhiteSpace()) {
+                            && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
                         nodeTextIndex++;
                     } else if (removed.element instanceof CsmToken && ((CsmToken)removed.element).isWhiteSpace()) {
                         diffIndex++;

@@ -81,4 +81,8 @@ class ChildTextElement extends TextElement {
         return "ChildTextElement{" + child + '}';
     }
 
+    @Override
+    public boolean isWhiteSpace() {
+        return false;
+    }
 }

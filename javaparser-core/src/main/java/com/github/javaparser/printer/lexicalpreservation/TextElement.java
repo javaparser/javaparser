@@ -40,4 +40,6 @@ public abstract class TextElement implements TextElementMatcher {
     }
 
     abstract boolean isNode(Node node);
+
+    public abstract boolean isWhiteSpace();
 }
