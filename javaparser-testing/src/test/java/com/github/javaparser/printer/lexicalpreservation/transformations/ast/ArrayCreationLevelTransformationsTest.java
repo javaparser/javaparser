@@ -72,7 +72,7 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
     public void addingAnnotation() throws IOException {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()[]", it);
+        assertTransformedToString("@myAnno()\n[]", it);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
     public void replacingAnnotation() throws IOException {
         ArrayCreationLevel it = consider("@myAnno []");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
-        assertTransformedToString("@myOtherAnno()[]", it);
+        assertTransformedToString("@myOtherAnno() []", it);
     }
 
 }

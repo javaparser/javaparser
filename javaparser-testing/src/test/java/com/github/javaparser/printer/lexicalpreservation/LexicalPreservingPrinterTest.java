@@ -286,7 +286,6 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         c.getMembers().remove(0);
         assertEquals("class /*a comment*/ A {\t\t\n" +
                 "\n" +
-                "\n" +
                 "         void foo(int p  ) { return  'z'  \t; }}", lpp.print(c));
     }
 
