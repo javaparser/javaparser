@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.function.Function;
 
 /**
  * Any kind of utility.
@@ -147,28 +149,6 @@ public class Utils {
     }
 
     /**
-     * Capitalizes the first character in the string.
-     */
-    public static String capitalize(String original) {
-        if (original.isEmpty()) {
-            throw new IllegalArgumentException("This string is empty");
-        } else {
-            return original.substring(0, 1).toUpperCase() + original.substring(1);
-        }
-    }
-
-    /**
-     * Lower-cases the first character in the string.
-     */
-    public static String decapitalize(String string) {
-        if (string.isEmpty()) {
-            throw new IllegalArgumentException("This string is empty");
-        }
-        return string.substring(0, 1).toLowerCase() + string.substring(1);
-    }
-
-
-    /**
      * Return the next word of the string, in other words it stops when a space is encountered.
      */
     public static String nextWord(String string) {
@@ -177,5 +157,31 @@ public class Utils {
             index++;
         }
         return string.substring(0, index);
+    }
+
+    /**
+     * Capitalizes the first character in the string.
+     */
+    public static String capitalize(String s) {
+        return stringTransformer(s, it -> it.toUpperCase());
+    }
+
+    /**
+     * Lower-cases the first character in the string.
+     */
+    public static String decapitalize(String s) {
+        return stringTransformer(s, it -> it.toLowerCase());
+    }
+
+    private static String stringTransformer(String s, Function<String, String> transformation) {
+        if (s.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append(transformation.apply(s.substring(0, 1)));
+        if (s.length() > 1) {
+            sb.append(s.substring(1));
+        }
+        return sb.toString();
     }
 }
