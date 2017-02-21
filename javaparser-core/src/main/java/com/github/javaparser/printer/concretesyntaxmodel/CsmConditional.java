@@ -35,6 +35,22 @@ public class CsmConditional implements CsmElement {
     private CsmElement thenElement;
     private CsmElement elseElement;
 
+    public Condition getCondition() {
+        return condition;
+    }
+
+    public ObservableProperty getProperty() {
+        return property;
+    }
+
+    public CsmElement getThenElement() {
+        return thenElement;
+    }
+
+    public CsmElement getElseElement() {
+        return elseElement;
+    }
+
     public enum Condition {
         IS_EMPTY,
         IS_NOT_EMPTY,
@@ -43,7 +59,7 @@ public class CsmConditional implements CsmElement {
 
         boolean evaluate(Node node, ObservableProperty property){
             if (this == IS_PRESENT) {
-                return !property.isNullOrEmpty(node);
+                return !property.isNullOrNotPresent(node);
             }
             if (this == FLAG) {
                 return (Boolean)property.singleValueFor(node);

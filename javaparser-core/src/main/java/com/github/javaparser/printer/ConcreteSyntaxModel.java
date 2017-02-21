@@ -24,6 +24,7 @@ package com.github.javaparser.printer;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.*;
 import com.github.javaparser.ast.observer.Observable;
@@ -166,7 +167,7 @@ public class ConcreteSyntaxModel {
                 comment(),
                 memberAnnotations(),
                 modifiers(),
-                conditional(ObservableProperty.DEFAULT, FLAG, sequence(token(ASTParserConstants.DEFAULT), space())),
+                conditional(ObservableProperty.DEFAULT, FLAG, sequence(token(ASTParserConstants._DEFAULT), space())),
                 typeParameters(),
                 child(ObservableProperty.TYPE),
                 space(),
@@ -745,6 +746,53 @@ public class ConcreteSyntaxModel {
                 annotations(),
                 CsmElement.list(ObservableProperty.ELEMENTS, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants.BIT_OR), CsmElement.space()))
         ));
+
+        concreteSyntaxModelByClass.put(AnnotationDeclaration.class, CsmElement.sequence(
+                CsmElement.comment(),
+                memberAnnotations(),
+                modifiers(),
+                CsmElement.token(ASTParserConstants.AT),
+                CsmElement.token(ASTParserConstants.INTERFACE),
+                CsmElement.space(),
+                CsmElement.child(ObservableProperty.NAME),
+                CsmElement.space(),
+                CsmElement.token(LBRACE),
+                CsmElement.newline(),
+                CsmElement.indent(),
+                CsmElement.list(ObservableProperty.MEMBERS, CsmElement.newline(), CsmElement.none(), CsmElement.none(), CsmElement.newline()),
+                CsmElement.unindent(),
+                CsmElement.token(RBRACE)
+        ));
+
+        concreteSyntaxModelByClass.put(AnnotationMemberDeclaration.class, CsmElement.sequence(
+                CsmElement.comment(),
+                memberAnnotations(),
+                modifiers(),
+                CsmElement.child(ObservableProperty.TYPE),
+                CsmElement.space(),
+                CsmElement.child(ObservableProperty.NAME),
+                CsmElement.token(LPAREN),
+                CsmElement.token(RPAREN),
+                CsmElement.conditional(ObservableProperty.DEFAULT_VALUE, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants._DEFAULT), CsmElement.space(), CsmElement.child(DEFAULT_VALUE))),
+                CsmElement.semicolon()
+        ));
+    }
+
+    private static class JavadocContentTokenCalculator implements CsmToken.TokenContentCalculator {
+        @Override
+        public String calculate(Node node) {
+            return "/**" + ((JavadocComment)node).getContent() + "*";
+        }
+
+        @Override
+        public int hashCode() {
+            return 1;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof JavadocContentTokenCalculator;
+        }
     }
 
     private ConcreteSyntaxModel() {

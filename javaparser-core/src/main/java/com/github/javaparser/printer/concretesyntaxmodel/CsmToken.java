@@ -31,11 +31,34 @@ import com.github.javaparser.printer.SourcePrinter;
 public class CsmToken implements CsmElement {
     private int tokenType;
     private String content;
+    private TokenContentCalculator tokenContentCalculator;
+
+    public interface TokenContentCalculator {
+        String calculate(Node node);
+    }
+
+    public int getTokenType() {
+        return tokenType;
+    }
+
+    public String getContent(Node node) {
+        if (tokenContentCalculator != null) {
+            return tokenContentCalculator.calculate(node);
+        }
+        return content;
+    }
+
     public CsmToken(int tokenType) {
+
         this.tokenType = tokenType;
         this.content = ASTParserConstants.tokenImage[tokenType];
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
+        }
+        if (tokenType == 3) {
+            content = "\n";
+        } else if (tokenType == 32) {
+            content = " ";
         }
     }
 
@@ -44,12 +67,46 @@ public class CsmToken implements CsmElement {
         this.content = content;
     }
 
+    public CsmToken(int tokenType, TokenContentCalculator tokenContentCalculator) {
+        this.tokenType = tokenType;
+        this.tokenContentCalculator = tokenContentCalculator;
+    }
+
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (tokenType == 3) {
             printer.println();
         } else {
-            printer.print(content);
+            printer.print(getContent(node));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "token(" + ASTParserConstants.tokenImage[tokenType]+ ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CsmToken csmToken = (CsmToken) o;
+
+        if (tokenType != csmToken.tokenType) return false;
+        if (content != null ? !content.equals(csmToken.content) : csmToken.content != null) return false;
+        return tokenContentCalculator != null ? tokenContentCalculator.equals(csmToken.tokenContentCalculator) : csmToken.tokenContentCalculator == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tokenType;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (tokenContentCalculator != null ? tokenContentCalculator.hashCode() : 0);
+        return result;
+    }
+
+    public boolean isWhiteSpace() {
+        return tokenType == 3 || tokenType == 1 || tokenType == 0 || tokenType == 31 || tokenType == 32;
     }
 }

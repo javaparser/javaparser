@@ -21,12 +21,17 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmAttribute implements CsmElement {
+    public ObservableProperty getProperty() {
+        return property;
+    }
+
     private ObservableProperty property;
 
     public CsmAttribute(ObservableProperty property) {
@@ -37,5 +42,19 @@ public class CsmAttribute implements CsmElement {
     public void prettyPrint(Node node, SourcePrinter printer) {
         Object value = property.singleValueFor(node);
         printer.print(PrintingHelper.printToString(value));
+    }
+
+    public int getTokenType(String text) {
+        if (property == ObservableProperty.IDENTIFIER) {
+            return ASTParserConstants.IDENTIFIER;
+        }
+        if (property == ObservableProperty.TYPE) {
+            for (int i=0;i<ASTParserConstants.tokenImage.length;i++) {
+                if (ASTParserConstants.tokenImage[i].equals("\"" + text.toLowerCase() + "\"")) {
+                    return i;
+                }
+            }
+        }
+        throw new UnsupportedOperationException(property.name()+ " " + text);
     }
 }

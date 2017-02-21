@@ -67,6 +67,10 @@ public interface CsmElement {
         return new CsmToken(tokenType);
     }
 
+    static CsmElement token(int tokenType, CsmToken.TokenContentCalculator tokenContentCalculator) {
+        return new CsmToken(tokenType, tokenContentCalculator);
+    }
+
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
         return new CsmConditional(property, condition, thenElement);
     }
@@ -76,7 +80,7 @@ public interface CsmElement {
     }
 
     static CsmElement space() {
-        return new CsmToken(32, " ");
+        return new CsmToken(1, " ");
     }
 
     static CsmElement semicolon() {
