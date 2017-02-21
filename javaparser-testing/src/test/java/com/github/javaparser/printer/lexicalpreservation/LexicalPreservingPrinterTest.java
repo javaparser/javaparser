@@ -6,9 +6,12 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.UnionType;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -390,11 +393,55 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     }
 
     @Test
+    public void printASingleCatch() {
+        String code = "class A {{try { doit(); } catch (Exception e) {}}}";
+        considerCode(code);
+
+        assertEquals("class A {{try { doit(); } catch (Exception e) {}}}", lpp.print(cu));
+    }
+
+    @Test
     public void printAMultiCatch() {
         String code = "class A {{try { doit(); } catch (Exception | AssertionError e) {}}}";
         considerCode(code);
 
         assertEquals("class A {{try { doit(); } catch (Exception | AssertionError e) {}}}", lpp.print(cu));
+    }
+
+    @Test
+    public void printASingleCatchType() {
+        String code = "class A {{try { doit(); } catch (Exception e) {}}}";
+        considerCode(code);
+        InitializerDeclaration initializerDeclaration = (InitializerDeclaration)cu.getType(0).getMembers().get(0);
+        TryStmt tryStmt = (TryStmt)initializerDeclaration.getBody().getStatements().get(0);
+        CatchClause catchClause = tryStmt.getCatchClauses().get(0);
+        Type catchType = catchClause.getParameter().getType();
+
+        assertEquals("Exception", lpp.print(catchType));
+    }
+
+    @Test
+    public void printUnionType() {
+        String code = "class A {{try { doit(); } catch (Exception | AssertionError e) {}}}";
+        considerCode(code);
+        InitializerDeclaration initializerDeclaration = (InitializerDeclaration)cu.getType(0).getMembers().get(0);
+        TryStmt tryStmt = (TryStmt)initializerDeclaration.getBody().getStatements().get(0);
+        CatchClause catchClause = tryStmt.getCatchClauses().get(0);
+        UnionType unionType = (UnionType)catchClause.getParameter().getType();
+
+        assertEquals("Exception | AssertionError", lpp.print(unionType));
+    }
+
+    @Test
+    public void printParameterHavingUnionType() {
+        String code = "class A {{try { doit(); } catch (Exception | AssertionError e) {}}}";
+        considerCode(code);
+        InitializerDeclaration initializerDeclaration = (InitializerDeclaration)cu.getType(0).getMembers().get(0);
+        TryStmt tryStmt = (TryStmt)initializerDeclaration.getBody().getStatements().get(0);
+        CatchClause catchClause = tryStmt.getCatchClauses().get(0);
+        Parameter parameter = catchClause.getParameter();
+
+        assertEquals("Exception | AssertionError e", lpp.print(parameter));
     }
 
 }
