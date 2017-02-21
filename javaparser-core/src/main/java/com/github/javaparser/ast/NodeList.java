@@ -133,8 +133,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public N set(int index, N element) {
-        notifyElementRemoved(index, innerList.get(index));
-        notifyElementAdded(index, element);
+        notifyElementReplaced(index, element);
         setAsParentNodeOf(element);
         return innerList.set(index, element);
     }
@@ -412,6 +411,10 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     private void notifyElementRemoved(int index, Node nodeAddedOrRemoved) {
         this.observers.forEach(o -> o.listChange(this, AstObserver.ListChangeType.REMOVAL, index, nodeAddedOrRemoved));
+    }
+
+    private void notifyElementReplaced(int index, Node nodeAddedOrRemoved) {
+        this.observers.forEach(o -> o.listReplacement(this, index, this.get(index), nodeAddedOrRemoved));
     }
 
     @Override
