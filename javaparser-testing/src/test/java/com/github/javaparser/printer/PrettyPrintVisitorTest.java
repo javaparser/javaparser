@@ -27,6 +27,7 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class PrettyPrintVisitorTest {
@@ -77,16 +78,16 @@ public class PrettyPrintVisitorTest {
     @Test
     public void printSimplestClass() {
         Node node = JavaParser.parse("class A {}");
-        assertEquals("class A {\n" +
-                "}\n", print(node));
+        assertEquals("class A {" + EOL +
+                "}" + EOL, print(node));
     }
 
     @Test
     public void printAClassWithField() {
         Node node = JavaParser.parse("class A { int a; }");
-        assertEquals("class A {\n" +
-                "\n" +
-                "    int a;\n" +
-                "}\n", print(node));
+        assertEquals("class A {" + EOL
+                + EOL +
+                "    int a;" + EOL +
+                "}" + EOL, print(node));
     }
 }
