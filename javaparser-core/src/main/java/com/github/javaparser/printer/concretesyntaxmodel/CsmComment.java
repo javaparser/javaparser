@@ -26,20 +26,21 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
-public class CsmComment implements CsmElement{
+import static com.github.javaparser.utils.Utils.EOL;
+
+public class CsmComment implements CsmElement {
 
     static void process(Comment comment, SourcePrinter printer) {
         if (comment instanceof BlockComment) {
             printer.print("/*");
             printer.print(comment.getContent());
-            printer.print("*/\n");
+            printer.print("*/" + EOL);
         } else if (comment instanceof JavadocComment) {
             printer.print("/**");
             printer.print(comment.getContent());
-            printer.print("*/\n");
+            printer.print("*/" + EOL);
         } else if (comment instanceof LineComment) {
             printer.print("//");
             printer.print(comment.getContent());
