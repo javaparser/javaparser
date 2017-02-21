@@ -389,4 +389,12 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("class A { private final Stack<Iterator<Triple>> its = new Stack<Iterator<Triple>>(); }", lpp.print(cu));
     }
 
+    @Test
+    public void printAMultiCatch() {
+        String code = "class A {{try { doit(); } catch (Exception | AssertionError e) {}}}";
+        considerCode(code);
+
+        assertEquals("class A {{try { doit(); } catch (Exception | AssertionError e) {}}}", lpp.print(cu));
+    }
+
 }
