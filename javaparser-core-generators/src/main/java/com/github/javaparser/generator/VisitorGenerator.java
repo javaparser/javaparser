@@ -4,6 +4,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Log;
@@ -64,10 +66,15 @@ public abstract class VisitorGenerator extends Generator {
         if (visitMethod.isPresent()) {
             generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC)
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
                     .addParameter(argumentType, "arg")
                     .setType(returnType);
+            if (!visitorClass.isInterface()) {
+                methodDeclaration
+                        .addAnnotation(new MarkerAnnotationExpr(new Name("Override")))
+                        .addModifier(PUBLIC);
+            }
             generateVisitMethodBody(node, methodDeclaration, compilationUnit);
         }
     }

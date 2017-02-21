@@ -22,12 +22,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
@@ -61,10 +58,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
-    }
-
-    private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
     }
 
     @Override
@@ -272,10 +265,12 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final CompilationUnit n, final A arg) {
         NodeList<ImportDeclaration> imports = modifyList(n.getImports(), arg);
+        ModuleDeclaration module = n.getModule().map( s -> (ModuleDeclaration) s.accept(this, arg)).orElse(null);
         PackageDeclaration packageDeclaration = n.getPackageDeclaration().map( s -> (PackageDeclaration) s.accept(this, arg)).orElse(null);
         NodeList<TypeDeclaration<?>> types = modifyList(n.getTypes(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setImports(imports);
+        n.setModule(module);
         n.setPackageDeclaration(packageDeclaration);
         n.setTypes(types);
         n.setComment(comment);
@@ -1096,6 +1091,80 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     private <N extends Node> NodeList<N> modifyList(Optional<NodeList<N>> list, A arg) {
         return list.map(ns -> modifyList(ns, arg)).orElse(null);
+    }
+
+    public Visitable visit(ModuleDeclaration n, A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<ModuleStmt> moduleStmts = modifyList(n.getModuleStmts(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setModuleStmts(moduleStmts);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    public Visitable visit(ModuleRequiresStmt n, A arg) {
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override()
+    public Visitable visit(ModuleExportsStmt n, A arg) {
+        NodeList<Name> moduleNames = modifyList(n.getModuleNames(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setModuleNames(moduleNames);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override()
+    public Visitable visit(ModuleProvidesStmt n, A arg) {
+        Type type = (Type) n.getType().accept(this, arg);
+        NodeList<Type> withTypes = modifyList(n.getWithTypes(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setType(type);
+        n.setWithTypes(withTypes);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override()
+    public Visitable visit(ModuleUsesStmt n, A arg) {
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setType(type);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(ModuleOpensStmt n, A arg) {
+        NodeList<Name> moduleNames = modifyList(n.getModuleNames(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setModuleNames(moduleNames);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
     }
 }
 

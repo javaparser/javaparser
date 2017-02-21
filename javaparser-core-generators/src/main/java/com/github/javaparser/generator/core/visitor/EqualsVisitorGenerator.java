@@ -16,7 +16,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  */
 public class EqualsVisitorGenerator extends VisitorGenerator {
     public EqualsVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "EqualsVisitor", "Boolean", "Node", true);
+        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "EqualsVisitor", "Boolean", "Visitable", true);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class EqualsVisitorGenerator extends VisitorGenerator {
             final String getter = field.getGetterMethodName() + "()";
             if (field.getNodeReference().isPresent()) {
                 if (field.isNodeList()) {
-                    body.addStatement(f("if (!nodesEquals(n1.%s, n2.%s)) return false;", getter, getter));
+                    body.addStatement(f("if (!nodesEquals(n.%s, n2.%s)) return false;", getter, getter));
                 } else {
-                    body.addStatement(f("if (!nodeEquals(n1.%s, n2.%s)) return false;", getter, getter));
+                    body.addStatement(f("if (!nodeEquals(n.%s, n2.%s)) return false;", getter, getter));
                 }
             } else {
-                body.addStatement(f("if (!objEquals(n1.%s, n2.%s)) return false;", getter, getter));
+                body.addStatement(f("if (!objEquals(n.%s, n2.%s)) return false;", getter, getter));
             }
         }
         if (body.getStatements().size() == 1) {

@@ -8,6 +8,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.SourceRoot;
@@ -43,6 +44,9 @@ public class MetaModelGenerator {
         add(LiteralExpr.class);
         add(LiteralStringValueExpr.class);
         add(StringLiteralExpr.class);
+
+        add(ModuleDeclaration.class);
+        add(ModuleStmt.class);
 
         //
         add(ArrayCreationLevel.class);
@@ -134,6 +138,12 @@ public class MetaModelGenerator {
         add(UnknownType.class);
         add(VoidType.class);
         add(WildcardType.class);
+
+        add(ModuleRequiresStmt.class);
+        add(ModuleExportsStmt.class);
+        add(ModuleProvidesStmt.class);
+        add(ModuleUsesStmt.class);
+        add(ModuleOpensStmt.class);
     }};
 
     static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
@@ -167,6 +177,7 @@ public class MetaModelGenerator {
         initializePropertyMetaModelsStatements.clear();
         initializeConstructorParametersStatements.clear();
 
+        metaModelCoid.getFields().stream().filter(f -> f.getVariable(0).getNameAsString().endsWith("MetaModel")).forEach(Node::remove);
         final NodeMetaModelGenerator nodeMetaModelGenerator = new NodeMetaModelGenerator();
         for (Class<? extends Node> nodeClass : ALL_NODE_CLASSES) {
             nodeMetaModelGenerator.generate(nodeClass, metaModelCoid, initializeNodeMetaModelsStatements, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements, sourceRoot);

@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
@@ -84,7 +84,7 @@ public interface CsmElement {
     }
 
     static CsmElement semicolon() {
-        return new CsmToken(ASTParserConstants.SEMICOLON);
+        return new CsmToken(GeneratedJavaParserConstants.SEMICOLON);
     }
 
     static CsmElement comment() { return new CsmComment(); }
@@ -98,7 +98,7 @@ public interface CsmElement {
     }
 
     static CsmElement comma() {
-        return new CsmToken(ASTParserConstants.COMMA);
+        return new CsmToken(GeneratedJavaParserConstants.COMMA);
     }
 
     static CsmElement list(ObservableProperty property) {
@@ -135,6 +135,6 @@ public interface CsmElement {
     }
 
     static CsmElement block(CsmElement content) {
-        return sequence(token(ASTParserConstants.LBRACE), indent(), content, unindent(), token(ASTParserConstants.RBRACE));
+        return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
     }
 }

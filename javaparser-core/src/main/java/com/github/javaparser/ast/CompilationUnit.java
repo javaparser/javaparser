@@ -29,9 +29,13 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.CompilationUnitMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.ClassUtils;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -39,10 +43,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.CompilationUnitMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <p>
@@ -66,21 +66,24 @@ public final class CompilationUnit extends Node {
 
     private NodeList<TypeDeclaration<?>> types;
 
+    private ModuleDeclaration module;
+
     public CompilationUnit() {
-        this(null, null, new NodeList<>(), new NodeList<>());
+        this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
 
     public CompilationUnit(String packageDeclaration) {
-        this(null, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>());
+        this(null, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>(), null);
     }
 
     @AllFieldsConstructor
-    public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
-        this(null, packageDeclaration, imports, types);
+    public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
+        this(null, packageDeclaration, imports, types, module);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types) {
+    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(range);
+        setModule(module);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
@@ -188,7 +191,7 @@ public final class CompilationUnit extends Node {
     /**
      * Sets or clear the package declarations of this compilation unit.
      *
-     * @param pakage the packageDeclaration declaration to set or <code>null</code> to default package
+     * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
      */
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
@@ -436,6 +439,12 @@ public final class CompilationUnit extends Node {
                 return true;
             }
         }
+        if (module != null) {
+            if (node == module) {
+                removeModule();
+                return true;
+            }
+        }
         if (packageDeclaration != null) {
             if (node == packageDeclaration) {
                 removePackageDeclaration();
@@ -453,6 +462,23 @@ public final class CompilationUnit extends Node {
 
     public CompilationUnit removePackageDeclaration() {
         return setPackageDeclaration((PackageDeclaration) null);
+    }
+
+    public Optional<ModuleDeclaration> getModule() {
+        return Optional.ofNullable(module);
+    }
+
+    public CompilationUnit setModule(final ModuleDeclaration module) {
+        notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
+        if (this.module != null)
+            this.module.setParentNode(null);
+        this.module = module;
+        setAsParentNodeOf(module);
+        return this;
+    }
+
+    public CompilationUnit removeModule() {
+        return setModule((ModuleDeclaration) null);
     }
 
     @Override

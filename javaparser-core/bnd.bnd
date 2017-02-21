@@ -6,12 +6,15 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser, \
     com.github.javaparser.javadoc, \
     com.github.javaparser.javadoc.description, \
+    com.github.javaparser.metamodel, \
     com.github.javaparser.printer, \
+    com.github.javaparser.printer.concretesyntaxmodel, \
     com.github.javaparser.utils, \
     com.github.javaparser.ast, \
     com.github.javaparser.ast.body, \
     com.github.javaparser.ast.imports, \
     com.github.javaparser.ast.comments, \
+    com.github.javaparser.ast.modules, \
     com.github.javaparser.ast.nodeTypes, \
     com.github.javaparser.ast.expr, \
     com.github.javaparser.ast.stmt, \

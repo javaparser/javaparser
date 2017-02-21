@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
@@ -58,7 +58,7 @@ public class CsmToken implements CsmElement {
     public CsmToken(int tokenType) {
 
         this.tokenType = tokenType;
-        this.content = ASTParserConstants.tokenImage[tokenType];
+        this.content = GeneratedJavaParserConstants.tokenImage[tokenType];
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }

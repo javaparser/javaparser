@@ -25,11 +25,11 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
-  TOKEN_FACTORY = "GeneratedJavaParser.GTToken";
+  TOKEN_FACTORY = "GeneratedModuleInfoParser.GTToken";
   JAVA_TEMPLATE_TYPE = "modern";
 }
 
-PARSER_BEGIN(GeneratedJavaParser)
+PARSER_BEGIN(GeneratedModuleInfoParser)
 /*
  *
  * This file is part of Java 1.8 parser and Abstract Syntax Tree.
@@ -49,13 +49,14 @@ import java.util.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.ast.NodeList.*;
-import static com.github.javaparser.GeneratedJavaParser.*;
+import static com.github.javaparser.GeneratedModuleInfoParser.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
@@ -63,7 +64,7 @@ import static com.github.javaparser.ast.type.ArrayType.*;
 /**
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
-final class GeneratedJavaParser {
+final class GeneratedModuleInfoParser {
 
     private final Position INVALID = pos(-1, 0);
     List<Problem> problems = new ArrayList<Problem>();
@@ -209,7 +210,7 @@ final class GeneratedJavaParser {
     }
 
     static final class GTToken extends Token {
-        int realKind = GeneratedJavaParserConstants.GT;
+        int realKind = GeneratedModuleInfoParserConstants.GT;
 
         GTToken(int kind, String image) {
             this.kind = kind;
@@ -264,7 +265,7 @@ final class GeneratedJavaParser {
     }
 }
 
-PARSER_END(GeneratedJavaParser)
+PARSER_END(GeneratedModuleInfoParser)
 
 /* WHITE SPACE */
 
@@ -435,6 +436,16 @@ TOKEN :
 | < VOID: "void" >
 | < VOLATILE: "volatile" >
 | < WHILE: "while" >
+| < REQUIRES: "requires" >
+| < TO: "to" >
+| < WITH: "with" >
+| < OPEN: "open" >
+| < OPENS: "opens" >
+| < USES: "uses" >
+| < MODULE: "module" >
+| < EXPORTS: "exports" >
+| < PROVIDES: "provides" >
+| < TRANSITIVE: "transitive" >
 }
 
 /* LITERALS */
@@ -1291,13 +1302,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     ((GeneratedModuleInfoParser.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
+     ((GeneratedModuleInfoParser.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -1311,23 +1322,6 @@ TOKEN :
 /*
  * Program structuring syntax follows.
  */
-
-CompilationUnit CompilationUnit():
-{
-	PackageDeclaration pakage = null;
-	NodeList<ImportDeclaration> imports = emptyList();
-	ImportDeclaration in = null;
-	NodeList<TypeDeclaration<?>> types = emptyList();
-	TypeDeclaration tn = null;
-}
-{
-    ( ";" )*
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
-    ( tn = TypeDeclaration() { types = add(types, tn); } | ";")*
-    (<EOF> | "\u001A" /** ctrl+z char **/)
-    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types, null); }
-}
 
 PackageDeclaration PackageDeclaration():
 {
@@ -1395,6 +1389,8 @@ ModifierHolder Modifiers():
    "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(tokenBegin()); }
   |
    "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
+  |
+   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(tokenBegin()); }
   |
    ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); }
   )
@@ -3371,4 +3367,68 @@ Expression DefaultValue():
 {
   "default" ret = MemberValue()
   { return ret; }
+}
+
+/* Module syntax follows */
+
+
+ModuleStmt ModuleStmt():
+{
+    ModifierHolder modifiers;
+    Name name;
+    Name tmpName;
+    NodeList<Name> names=emptyList();
+    Type type;
+    Type tmpType;
+    NodeList<Type> types=emptyList();
+    Position begin;
+    ModuleStmt stmt=new ModuleRequiresStmt();
+}
+{
+    (
+        "requires" {begin=tokenBegin();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, tokenEnd()), modifiers.modifiers, name);}
+    |
+        "exports" {begin=tokenBegin();} name=Name() ["to" tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, tokenEnd()), name, names);}
+    |
+        "opens" {begin=tokenBegin();} name=Name() ["to" tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, tokenEnd()), name, names);}
+    |
+        "uses" { begin=tokenBegin();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, tokenEnd()), type);}
+    |
+        "provides" { begin=tokenBegin();} type=Type() "with" tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, tokenEnd()), type, types);}
+    )
+    { return stmt; }
+}
+
+ModuleDeclaration ModuleDeclaration():
+{
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    NodeList<ModuleStmt> statements = new NodeList<ModuleStmt>();
+    boolean open=false;
+    ModuleStmt st;
+    Name name;
+    Position begin=INVALID;
+}
+{
+    annotations = Annotations()
+    [ "open" {open=true; begin = begin.orIfInvalid(tokenBegin());} ]
+    "module" { begin = begin.orIfInvalid(tokenBegin()); }
+    name = Name() "{"
+    ( st = ModuleStmt() { statements = add(statements, st); } )*
+    "}"
+    { return new ModuleDeclaration(range(begin, tokenEnd()), annotations, name, open, statements); }
+}
+
+CompilationUnit CompilationUnit():
+{
+	NodeList<ImportDeclaration> imports = emptyList();
+	ImportDeclaration in = null;
+	ModuleDeclaration module = null;
+}
+{
+    ( ";" )*
+    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
+    [ module = ModuleDeclaration() ]
+    (";")*
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new CompilationUnit(range(Position.HOME, tokenEnd()), null, imports, emptyList(), module); }
 }
