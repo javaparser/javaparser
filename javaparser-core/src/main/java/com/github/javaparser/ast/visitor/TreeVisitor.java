@@ -33,6 +33,13 @@ import java.util.Queue;
  */
 public abstract class TreeVisitor {
 
+    public void visitLeavesFirst(Node node) {
+        for (Node child : node.getChildNodes()) {
+            visitLeavesFirst(child);
+        }
+        process(node);
+    }
+
     /**
      * Performs a pre-order node traversal starting with a given node. When each node is visited,
      * {@link #process(Node)} is called for further processing.
