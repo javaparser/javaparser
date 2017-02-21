@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.function.Function;
 
 /**
@@ -177,7 +176,7 @@ public class Utils {
         if (s.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(transformation.apply(s.substring(0, 1)));
         if (s.length() > 1) {
             sb.append(s.substring(1));
