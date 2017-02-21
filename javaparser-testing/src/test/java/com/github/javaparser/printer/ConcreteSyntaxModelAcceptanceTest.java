@@ -24,11 +24,10 @@ package com.github.javaparser.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.utils.TestUtils;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 
@@ -39,12 +38,7 @@ public class ConcreteSyntaxModelAcceptanceTest {
     }
 
     private String prettyPrintedExpectation(String name) throws IOException {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("com/github/javaparser/printer/" + name + "_prettyprinted");
-        Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
-        String result = scanner.hasNext() ? scanner.next() : "";
-        scanner.close();
-        inputStream.close();
-        return result;
+        return TestUtils.readFileWith("com/github/javaparser/printer/" + name + "_prettyprinted");
     }
 
     @Test
@@ -56,7 +50,6 @@ public class ConcreteSyntaxModelAcceptanceTest {
     @Test
     public void printingExampleJavaConcepts() throws IOException {
         CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/JavaConcepts.java");
-        //System.out.println(cu.toString());
         assertEquals(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
     }
 

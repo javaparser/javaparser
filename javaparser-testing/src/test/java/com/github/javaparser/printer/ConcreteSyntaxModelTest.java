@@ -24,9 +24,9 @@ package com.github.javaparser.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class ConcreteSyntaxModelTest {
@@ -56,30 +56,30 @@ public class ConcreteSyntaxModelTest {
     @Test
     public void printSimplestClass() {
         Node node = JavaParser.parse("class A {}");
-        assertEquals("class A {\n" +
-                "}\n", print(node));
+        assertEquals("class A {" + EOL +
+                "}" + EOL, print(node));
     }
 
     @Test
     public void printAClassWithField() {
         Node node = JavaParser.parse("class A { int a; }");
-        assertEquals("class A {\n" +
-                "\n" +
-                "    int a;\n" +
-                "}\n", print(node));
+        assertEquals("class A {" + EOL
+                + EOL +
+                "    int a;" + EOL +
+                "}" + EOL, print(node));
     }
 
     @Test
     public void printAnEmptyInterface() {
         Node node = JavaParser.parse("interface A {}");
-        assertEquals("interface A {\n" +
-                "}\n", print(node));
+        assertEquals("interface A {" + EOL +
+                "}" + EOL, print(node));
     }
 
     @Test
     public void printAnEmptyInterfaceWithModifier() {
         Node node = JavaParser.parse("public interface A {}");
-        assertEquals("public interface A {\n" +
-                "}\n", print(node));
+        assertEquals("public interface A {" + EOL +
+                "}" + EOL, print(node));
     }
 }
