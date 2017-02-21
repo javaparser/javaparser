@@ -37,7 +37,18 @@ public class JavaToken {
     }
 
     public JavaToken(Token token) {
-        this(Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn), token.kind, token.image);
+        Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
+        String text = token.image;
+        if (token.kind == ASTParserConstants.GT) {
+            range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.beginColumn);
+            text = ">";
+        } else if (token.kind == ASTParserConstants.RSIGNEDSHIFT) {
+            range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.beginColumn + 1);
+            text = ">>";
+        }
+        this.range = range;
+        this.kind = token.kind;
+        this.text = text;
     }
 
     public Range getRange() {
