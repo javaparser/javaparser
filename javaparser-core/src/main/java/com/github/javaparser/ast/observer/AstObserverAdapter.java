@@ -40,4 +40,9 @@ public abstract class AstObserverAdapter implements AstObserver {
     public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
         // do nothing
     }
+
+    @Override
+    public void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode) {
+        // do nothing
+    }
 }
