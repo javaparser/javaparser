@@ -24,10 +24,11 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.Arrays;
+
+import static com.github.javaparser.utils.Utils.EOL;
 
 
 public interface CsmElement {
@@ -85,7 +86,7 @@ public interface CsmElement {
     static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
-        return new CsmToken(3, "\n");
+        return new CsmToken(3, EOL);
     }
 
     static CsmElement none() {
