@@ -28,6 +28,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.LocalClassDeclarationStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A class declaration inside a method. 
@@ -84,6 +87,16 @@ public final class LocalClassDeclarationStmt extends Statement {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public LocalClassDeclarationStmt clone() {
+        return (LocalClassDeclarationStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public LocalClassDeclarationStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.localClassDeclarationStmtMetaModel;
     }
 }
 

@@ -35,6 +35,9 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.MethodReferenceExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -147,6 +150,16 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public MethodReferenceExpr clone() {
+        return (MethodReferenceExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public MethodReferenceExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.methodReferenceExprMetaModel;
     }
 }
 

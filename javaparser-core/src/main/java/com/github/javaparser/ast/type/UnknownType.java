@@ -29,6 +29,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.UnknownTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -78,6 +81,16 @@ public final class UnknownType extends Type {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public UnknownType clone() {
+        return (UnknownType) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public UnknownTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.unknownTypeMetaModel;
     }
 }
 

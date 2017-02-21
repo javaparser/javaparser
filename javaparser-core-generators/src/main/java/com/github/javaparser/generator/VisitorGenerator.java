@@ -4,16 +4,14 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 /**
  * Makes it easier to generate visitor classes.
@@ -21,7 +19,6 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.f;
  * and will ask you to fill in the bodies of the visit methods.
  */
 public abstract class VisitorGenerator extends Generator {
-    private final Logger log = LoggerFactory.getLogger(VisitorGenerator.class);
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
@@ -38,7 +35,7 @@ public abstract class VisitorGenerator extends Generator {
     }
 
     public final void generate() throws Exception {
-        log.info(f("Running %s", getClass().getSimpleName()));
+        Log.info("Running %s", getClass().getSimpleName());
 
         final CompilationUnit compilationUnit = sourceRoot.tryToParse(pkg, visitorClassName + ".java", javaParser).getResult().get();
 

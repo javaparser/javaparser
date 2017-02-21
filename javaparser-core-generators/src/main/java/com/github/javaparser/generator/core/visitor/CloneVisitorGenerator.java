@@ -5,12 +5,12 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Generates JavaParser's CloneVisitor.

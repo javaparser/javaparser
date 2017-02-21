@@ -1647,13 +1647,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final WildcardType n, final A arg) {
         R result;
-        if (n.getExtendedTypes().isPresent()) {
-            result = n.getExtendedTypes().get().accept(this, arg);
+        if (n.getExtendedType().isPresent()) {
+            result = n.getExtendedType().get().accept(this, arg);
             if (result != null)
                 return result;
         }
-        if (n.getSuperTypes().isPresent()) {
-            result = n.getSuperTypes().get().accept(this, arg);
+        if (n.getSuperType().isPresent()) {
+            result = n.getSuperType().get().accept(this, arg);
             if (result != null)
                 return result;
         }

@@ -29,6 +29,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Any declaration that can appear between the { and } of a class, interface, or enum.
@@ -89,6 +92,16 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public BodyDeclaration<?> clone() {
+        return (BodyDeclaration<?>) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public BodyDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.bodyDeclarationMetaModel;
     }
 }
 

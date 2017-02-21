@@ -34,6 +34,9 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TypeParameterMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A type parameter.
@@ -154,6 +157,16 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public TypeParameter clone() {
+        return (TypeParameter) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public TypeParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeParameterMetaModel;
     }
 }
 

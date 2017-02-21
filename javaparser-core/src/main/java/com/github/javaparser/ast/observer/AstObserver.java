@@ -32,7 +32,7 @@ public interface AstObserver {
     /**
      * Type of change occurring on a List
      */
-    public enum ListChangeType {
+    enum ListChangeType {
         ADDITION,
         REMOVAL
     }

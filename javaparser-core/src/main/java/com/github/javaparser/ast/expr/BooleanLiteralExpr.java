@@ -26,6 +26,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.BooleanLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The boolean literals.
@@ -77,6 +80,16 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public BooleanLiteralExpr clone() {
+        return (BooleanLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public BooleanLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.booleanLiteralExprMetaModel;
     }
 }
 

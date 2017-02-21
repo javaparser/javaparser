@@ -25,6 +25,9 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.BlockCommentMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * <p>
@@ -65,6 +68,16 @@ public final class BlockComment extends Comment {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public BlockComment clone() {
+        return (BlockComment) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public BlockCommentMetaModel getMetaModel() {
+        return JavaParserMetaModel.blockCommentMetaModel;
     }
 }
 

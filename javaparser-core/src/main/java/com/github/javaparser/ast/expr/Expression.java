@@ -22,6 +22,9 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ExpressionMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A base class for all expressions.
@@ -39,6 +42,16 @@ public abstract class Expression extends Node {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public Expression clone() {
+        return (Expression) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ExpressionMetaModel getMetaModel() {
+        return JavaParserMetaModel.expressionMetaModel;
     }
 }
 

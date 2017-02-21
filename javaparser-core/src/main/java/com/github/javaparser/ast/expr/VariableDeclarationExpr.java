@@ -39,6 +39,9 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.VariableDeclarationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A declaration of variables.
@@ -179,6 +182,16 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public VariableDeclarationExpr clone() {
+        return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public VariableDeclarationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.variableDeclarationExprMetaModel;
     }
 }
 

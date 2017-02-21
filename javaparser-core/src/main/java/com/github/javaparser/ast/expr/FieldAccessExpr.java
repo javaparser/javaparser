@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Access of a field of an object.
@@ -191,6 +194,16 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
 
     public FieldAccessExpr removeScope() {
         return setScope((Expression) null);
+    }
+
+    @Override
+    public FieldAccessExpr clone() {
+        return (FieldAccessExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public FieldAccessExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.fieldAccessExprMetaModel;
     }
 }
 

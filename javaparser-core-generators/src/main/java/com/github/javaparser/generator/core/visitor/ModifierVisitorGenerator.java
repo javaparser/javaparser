@@ -4,21 +4,15 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
-import com.github.javaparser.generator.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
+import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
-/**
- * Generates JavaParser's EqualsVisitor.
- */
 public class ModifierVisitorGenerator extends VisitorGenerator {
     public ModifierVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
         super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "ModifierVisitor", "Visitable", "A", true);
@@ -28,14 +22,6 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
     protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
-
-        String s1 = "Expression target = (Expression) n.getTarget().accept(this, arg);" +
-                "        if (target == null) return null;" +
-                "        n.setTarget(target);";
-
-        String s = "n.setExtendedTypes(modifyList(n.getExtendedTypes(), arg));";
-        String s2 = "n.getPackageDeclaration().ifPresent(p -> n.setPackageDeclaration((PackageDeclaration) p.accept(this, arg)));";
-
 
         for (PropertyMetaModel property : node.getAllPropertyMetaModels()) {
             if (property.isNode()) {
@@ -88,13 +74,4 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         }
         body.addStatement("return n;");
     }
-
-    public static void main(String[] args) {
-        JavaParserMetaModel.getNodeMetaModels().forEach(n -> n.getDeclaredPropertyMetaModels().stream().filter(PropertyMetaModel::isNodeList)
-                .forEach(p -> System.out.println(p.getContainingNodeMetaModel().getTypeName()+"." +p.getName())));
-    }
 }
-
-// TODO FieldDeclaration.variables may not be empty
-// TODO VariableDeclarationExpr.variables may not be empty
-

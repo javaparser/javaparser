@@ -35,6 +35,9 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A base class for all types of type declarations.
@@ -151,6 +154,16 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public TypeDeclaration<?> clone() {
+        return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public TypeDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeDeclarationMetaModel;
     }
 }
 

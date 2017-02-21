@@ -33,6 +33,9 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.InitializerDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
@@ -104,6 +107,16 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public InitializerDeclaration clone() {
+        return (InitializerDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public InitializerDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.initializerDeclarationMetaModel;
     }
 }
 

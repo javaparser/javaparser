@@ -1,7 +1,7 @@
 package com.github.javaparser.generator;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 
 /**
  * A general pattern that the generators in this module will follow.

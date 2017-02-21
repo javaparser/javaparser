@@ -30,10 +30,14 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ForStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A classic for statement.
@@ -174,6 +178,16 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     public ForStmt removeCompare() {
         return setCompare((Expression) null);
+    }
+
+    @Override
+    public ForStmt clone() {
+        return (ForStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ForStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.forStmtMetaModel;
     }
 }
 

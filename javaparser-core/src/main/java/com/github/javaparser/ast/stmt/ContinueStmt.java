@@ -29,6 +29,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ContinueStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A continue statement with an optional label;
@@ -105,6 +108,16 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
 
     public ContinueStmt removeLabel() {
         return setLabel((SimpleName) null);
+    }
+
+    @Override
+    public ContinueStmt clone() {
+        return (ContinueStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ContinueStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.continueStmtMetaModel;
     }
 }
 

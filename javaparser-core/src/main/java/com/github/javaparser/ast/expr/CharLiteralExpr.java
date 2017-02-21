@@ -26,6 +26,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A literal character.
@@ -37,7 +40,7 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public final class CharLiteralExpr extends StringLiteralExpr {
+public final class CharLiteralExpr extends LiteralStringValueExpr {
 
     public CharLiteralExpr() {
         this(null, "?");
@@ -74,6 +77,16 @@ public final class CharLiteralExpr extends StringLiteralExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public CharLiteralExpr clone() {
+        return (CharLiteralExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public CharLiteralExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.charLiteralExprMetaModel;
     }
 }
 

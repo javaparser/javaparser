@@ -34,6 +34,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -43,6 +44,9 @@ import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.FieldDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static
@@ -206,6 +210,16 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public FieldDeclaration clone() {
+        return (FieldDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public FieldDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.fieldDeclarationMetaModel;
     }
 }
 

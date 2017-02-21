@@ -27,6 +27,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.BinaryExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.Printable;
 
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
@@ -38,7 +42,7 @@ import com.github.javaparser.ast.Node;
  */
 public final class BinaryExpr extends Expression {
 
-    public enum Operator {
+    public enum Operator implements Printable {
 
         OR("||"), AND("&&"), BINARY_OR("|"), BINARY_AND("&"), XOR("^"), EQUALS("=="), NOT_EQUALS("!="), LESS("<"), GREATER(">"), LESS_EQUALS("<="), GREATER_EQUALS(">="), LEFT_SHIFT("<<"), SIGNED_RIGHT_SHIFT(">>"), UNSIGNED_RIGHT_SHIFT(">>>"), PLUS("+"), MINUS("-"), MULTIPLY("*"), DIVIDE("/"), REMAINDER("%");
 
@@ -129,6 +133,16 @@ public final class BinaryExpr extends Expression {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public BinaryExpr clone() {
+        return (BinaryExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public BinaryExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.binaryExprMetaModel;
     }
 }
 

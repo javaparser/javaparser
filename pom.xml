@@ -5,14 +5,12 @@
         <module>javaparser-testing</module>
         <module>javaparser-core-generators</module>
         <module>javaparser-metamodel-generator</module>
-        <module>javaparser-generator-utils</module>
-        <module>javaparser-metamodel</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.1-beta.1-SNAPSHOT</version>
+    <version>3.1.1-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>

@@ -32,6 +32,9 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.AnnotationDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An annotation type declaration.<br/><code>@interface X { ... }</code>
@@ -77,6 +80,16 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public AnnotationDeclaration clone() {
+        return (AnnotationDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public AnnotationDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.annotationDeclarationMetaModel;
     }
 }
 

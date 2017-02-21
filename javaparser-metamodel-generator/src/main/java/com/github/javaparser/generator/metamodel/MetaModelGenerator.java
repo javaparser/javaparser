@@ -10,7 +10,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,11 +20,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
-import static com.github.javaparser.generator.utils.GeneratorUtils.getJavaParserBasePath;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator {
-    static final String NODE_META_MODEL = "BaseNodeMetaModel";
+    static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
     private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without
@@ -39,8 +38,10 @@ public class MetaModelGenerator {
 
         add(AnnotationExpr.class);
         add(TypeDeclaration.class);
-        add(LiteralExpr.class);
         add(ReferenceType.class);
+
+        add(LiteralExpr.class);
+        add(LiteralStringValueExpr.class);
         add(StringLiteralExpr.class);
 
         //
@@ -138,21 +139,23 @@ public class MetaModelGenerator {
     static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException {
-        new MetaModelGenerator().run();
-    }
+        if (args.length != 1) {
+            throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
+        }
+        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
+        final SourceRoot sourceRoot = new SourceRoot(root);
 
-    private void run() throws IOException, NoSuchMethodException {
-        final Path root = getJavaParserBasePath().resolve(Paths.get("javaparser-metamodel", "src", "main", "java"));
-
-        JavaParser javaParser = new JavaParser();
-
-        SourceRoot sourceRoot = new SourceRoot(root);
-
-        CompilationUnit javaParserMetaModel = sourceRoot.tryToParse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).getResult().get();
-
-        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
+        new MetaModelGenerator().run(sourceRoot);
 
         sourceRoot.saveAll();
+    }
+
+    private void run(SourceRoot sourceRoot) throws IOException, NoSuchMethodException {
+        final JavaParser javaParser = new JavaParser();
+
+        final CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
+
+        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
     }
 
     private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {

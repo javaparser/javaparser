@@ -13,7 +13,7 @@ public class BlockStmtTest {
         MethodCallExpr expression = new MethodCallExpr(exp, "y");
 
         blockStmt.addStatement(expression);
-        blockStmt.addStatement((Expression) expression.clone());
+        blockStmt.addStatement(expression.clone());
         // This fails when the issue exists:
         String s = blockStmt.toString();
     }

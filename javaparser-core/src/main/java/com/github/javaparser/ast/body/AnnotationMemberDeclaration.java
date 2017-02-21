@@ -42,6 +42,9 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.AnnotationMemberDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The "int id();" in <code>@interface X { int id(); }</code>
@@ -179,6 +182,16 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public AnnotationMemberDeclaration clone() {
+        return (AnnotationMemberDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public AnnotationMemberDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }
 }
 

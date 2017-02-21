@@ -31,6 +31,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SynchronizedStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Usage of the synchronized keyword.
@@ -104,6 +107,16 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public SynchronizedStmt clone() {
+        return (SynchronizedStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public SynchronizedStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.synchronizedStmtMetaModel;
     }
 }
 

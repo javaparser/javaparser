@@ -30,6 +30,9 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ArrayInitializerExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The initialization of an array. In the following sample, the outer { } is an ArrayInitializerExpr.
@@ -97,6 +100,16 @@ public final class ArrayInitializerExpr extends Expression {
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public ArrayInitializerExpr clone() {
+        return (ArrayInitializerExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ArrayInitializerExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.arrayInitializerExprMetaModel;
     }
 }
 
