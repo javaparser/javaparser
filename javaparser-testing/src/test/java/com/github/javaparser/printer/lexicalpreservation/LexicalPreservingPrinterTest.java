@@ -382,4 +382,11 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("import static com.github.javaparser.ParseStart.*;", lpp.print(imp));
     }
 
+    @Test
+    public void checkAnnidatedTypeParametersPrinting() {
+        String code = "class A { private final Stack<Iterator<Triple>> its = new Stack<Iterator<Triple>>(); }";
+        considerCode(code);
+        assertEquals("class A { private final Stack<Iterator<Triple>> its = new Stack<Iterator<Triple>>(); }", lpp.print(cu));
+    }
+
 }
