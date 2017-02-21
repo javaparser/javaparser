@@ -57,6 +57,12 @@ public class NodeListTest {
             public void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
                 changes.add(String.format("'%s' %s in list at %d", nodeAddedOrRemoved, type, index));
             }
+
+            @Override
+            public void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode) {
+                changes.add(String.format("'%s' %s in list at %d", oldNode, ListChangeType.REMOVAL, index));
+                changes.add(String.format("'%s' %s in list at %d", newNode, ListChangeType.ADDITION, index));
+            }
         };
     }
 

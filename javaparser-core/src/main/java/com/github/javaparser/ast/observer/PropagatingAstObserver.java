@@ -72,11 +72,22 @@ public abstract class PropagatingAstObserver implements AstObserver {
         concreteListChange(observedNode, type, index, nodeAddedOrRemoved);
     }
 
+    @Override
+    public void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode) {
+        considerRemoving(oldNode);
+        considerAdding(newNode);
+        concreteListReplacement(observedNode, index, oldNode, newNode);
+    }
+
     public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         // do nothing
     }
 
     public void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        // do nothing
+    }
+
+    public void concreteListReplacement(NodeList observedNode, int index, Node oldValue, Node newValue) {
         // do nothing
     }
 
