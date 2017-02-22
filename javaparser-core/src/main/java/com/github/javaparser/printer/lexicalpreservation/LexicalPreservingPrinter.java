@@ -58,7 +58,7 @@ import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.
 import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byNode;
 import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byTokenType;
 import static com.github.javaparser.printer.lexicalpreservation.Tokens.*;
-import static com.github.javaparser.utils.Utils.uncapitalize;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
@@ -615,7 +615,7 @@ public class LexicalPreservingPrinter {
                         if (name.startsWith("get")) {
                             name = name.substring("get".length());
                         }
-                        return ObservableProperty.fromCamelCaseName(uncapitalize(name));
+                        return ObservableProperty.fromCamelCaseName(decapitalize(name));
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
