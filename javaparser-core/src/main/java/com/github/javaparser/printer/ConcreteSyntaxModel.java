@@ -30,9 +30,12 @@ import com.github.javaparser.ast.observer.*;
 import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ASTParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
@@ -48,7 +51,8 @@ import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
  */
 public class ConcreteSyntaxModel {
 
-    static Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
+    private static Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
+    private static Optional<String> initializationError;
 
     private static CsmElement modifiers() {
         return list(ObservableProperty.MODIFIERS, space(), none(), space());
@@ -776,6 +780,13 @@ public class ConcreteSyntaxModel {
                 CsmElement.conditional(ObservableProperty.DEFAULT_VALUE, IS_PRESENT, CsmElement.sequence(CsmElement.space(), CsmElement.token(ASTParserConstants._DEFAULT), CsmElement.space(), CsmElement.child(DEFAULT_VALUE))),
                 CsmElement.semicolon()
         ));
+
+        List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream().filter(c -> !concreteSyntaxModelByClass.containsKey(c.getType())).map(nm -> nm.getType().getSimpleName()).collect(Collectors.toList());
+        if (unsupportedNodeClassNames.isEmpty()) {
+            initializationError = Optional.empty();
+        } else {
+            initializationError = Optional.of("The CSM should include support for these classes: " + String.join(", ", unsupportedNodeClassNames));
+        }
     }
 
     private static class JavadocContentTokenCalculator implements CsmToken.TokenContentCalculator {
@@ -810,6 +821,9 @@ public class ConcreteSyntaxModel {
     }
 
     public static CsmElement forClass(Class<? extends Node> nodeClazz) {
+        if (initializationError.isPresent()) {
+            throw new IllegalStateException(initializationError.get());
+        }
         if (!concreteSyntaxModelByClass.containsKey(nodeClazz)) {
             throw new UnsupportedOperationException(nodeClazz.getSimpleName());
         }
