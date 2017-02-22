@@ -39,6 +39,39 @@ public class JavaToken {
     public JavaToken(Token token) {
         Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
         String text = token.image;
+
+        // You could be puzzled by the following lines
+        //
+        // The reason why these lines are necessary is the fact that Java is ambiguous. There are cases where the
+        // sequence of characters ">>>" and ">>" should be recognized as the single tokens ">>>" and ">>". In other
+        // cases however we want to split those characters in single GT tokens (">").
+        //
+        // For example, in expressions ">>" and ">>>" are valid, while when defining types we could have this:
+        //
+        //   List<List<Set<String>>>>
+        //
+        // You can see that the sequence ">>>>" should be interpreted as four consecutive ">" tokens closing a type
+        // parameter list.
+        //
+        // The JavaCC handle this case by first recognizing always the longest token, and then depending on the context
+        // putting back the unused chars in the stream. However in those cases the token provided is invalid: it has an
+        // image corresponding to the text originally recognized, without considering that after some characters could
+        // have been put back into the stream.
+        //
+        // So in the case of:
+        //
+        //   List<List<Set<String>>>>
+        //                       ___   -> recognized as ">>>", then ">>" put back in the stream but
+        //                                Token(type=GT, image=">>>") passed to this class
+        //                        ___  -> recognized as ">>>", then ">>" put back in the stream but
+        //                                Token(type=GT, image=">>>") passed to this class
+        //                         __  -> recognized as ">>", then ">" put back in the stream but
+        //                                Token(type=GT, image=">>") passed to this class
+        //                          _  -> Token(type=GT, image=">") good!
+        //
+        // So given the image could be wrong but the type is correct, we look at the type of the token and we fix
+        // the image. Everybody is happy and we can keep this horrible thing as our little secret.
+
         if (token.kind == ASTParserConstants.GT) {
             range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.beginColumn);
             text = ">";
