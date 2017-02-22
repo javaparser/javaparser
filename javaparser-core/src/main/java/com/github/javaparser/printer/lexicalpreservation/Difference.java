@@ -6,12 +6,11 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.sun.org.apache.regexp.internal.RE;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.github.javaparser.printer.TokenConstants.NEWLINE_TOKEN;
+import static com.github.javaparser.printer.TokenConstants.SPACE_TOKEN;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -20,6 +19,8 @@ import java.util.Map;
  * I should later be able to apply such difference to a nodeText.
  */
 public class Difference {
+
+    private int STANDARD_INDENTANTION_SIZE = 4;
 
     private List<DifferenceElement> elements;
 
@@ -166,10 +167,8 @@ public class Difference {
             if (b instanceof CsmToken) {
                 CsmToken childA = (CsmToken)a;
                 CsmToken childB = (CsmToken)b;
-                //throw new UnsupportedOperationException(childA + " "+childB);
                 return childA.getTokenType() == childB.getTokenType();
             } else if (b instanceof LexicalDifferenceCalculator.CsmChild) {
-                //throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
                 return false;
             }
         }
@@ -188,15 +187,12 @@ public class Difference {
     }
 
     public static Difference calculate(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
-        //Prima potrei trovare i punti fissi guardando i child e i token non di white space.
-        //A quel punto le differenze le calcolerei solo su quello che rimane
-
         Map<Node, Integer> childrenInOriginal = findChildrenPositions(original);
         Map<Node, Integer> childrenInAfter = findChildrenPositions(after);
 
         List<Node> commonChildren = new LinkedList<>(childrenInOriginal.keySet());
         commonChildren.retainAll(childrenInAfter.keySet());
-        commonChildren.sort((a, b) -> Integer.compare(childrenInOriginal.get(a), childrenInOriginal.get(b)));
+        commonChildren.sort(Comparator.comparingInt(childrenInOriginal::get));
 
         List<DifferenceElement> elements = new LinkedList<>();
 
@@ -226,40 +222,27 @@ public class Difference {
 
         int originalIndex = 0;
         int afterIndex = 0;
-        boolean comingFromAdded = false;
 
         do {
             if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
                 elements.add(new Removed(original.elements.get(originalIndex)));
                 originalIndex++;
-                comingFromAdded = false;
             } else if (originalIndex >= original.elements.size() && afterIndex < after.elements.size()) {
                 elements.add(new Added(after.elements.get(afterIndex)));
                 afterIndex++;
-                comingFromAdded = true;
             } else {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
                 if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
-                    comingFromAdded = false;
                     originalIndex++;
                     afterIndex++;
                 } else if (replacement(nextOriginal, nextAfter)) {
                     elements.add(new Removed(nextOriginal));
                     elements.add(new Added(nextAfter));
-                    comingFromAdded = false;
                     originalIndex++;
                     afterIndex++;
-                //} else if (LexicalDifferenceCalculator.isWhitespaceOrComment(nextOriginal)) {
-                //    originalIndex++;
-//                } else if (LexicalDifferenceCalculator.isWhitespaceOrComment(nextAfter)) {
-//                    if (comingFromAdded) {
-//                        elements.add(new Added(nextAfter));
-//                    }
-//                    afterIndex++;
                 } else {
-                    //System.out.println("NOT MATCHING " + original.elements.get(originalIndex) + " " + after.elements.get(afterIndex));
                     // We can try to remove the element or add it and look which one leads to the lower difference
                     Difference adding = calculate(original.from(originalIndex), after.from(afterIndex + 1));
                     Difference removing = null;
@@ -269,11 +252,9 @@ public class Difference {
 
                     if (removing == null || removing.cost() > adding.cost()) {
                         elements.add(new Added(nextAfter));
-                        comingFromAdded = true;
                         afterIndex++;
                     } else {
                         elements.add(new Removed(nextOriginal));
-                        comingFromAdded = false;
                         originalIndex++;
                     }
                     //throw new UnsupportedOperationException("B");
@@ -281,8 +262,6 @@ public class Difference {
             }
         } while (originalIndex < original.elements.size() || afterIndex < after.elements.size());
 
-        //System.out.println("ORIGINAL " + original);
-        //System.out.println("AFTER " + after);
         return new Difference(elements);
     }
 
@@ -301,7 +280,7 @@ public class Difference {
         res.addAll(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isToken(3) || e.isToken(31)) {
+            if (e.isToken(NEWLINE_TOKEN) || e.isToken(31)) {
                 res.clear();
                 afterNl = true;
             } else {
@@ -317,10 +296,10 @@ public class Difference {
 
     private List<TextElement> indentationBlock() {
         List<TextElement> res = new LinkedList<>();
-        res.add(new TokenTextElement(1));
-        res.add(new TokenTextElement(1));
-        res.add(new TokenTextElement(1));
-        res.add(new TokenTextElement(1));
+        res.add(new TokenTextElement(SPACE_TOKEN));
+        res.add(new TokenTextElement(SPACE_TOKEN));
+        res.add(new TokenTextElement(SPACE_TOKEN));
+        res.add(new TokenTextElement(SPACE_TOKEN));
         return res;
     }
 
@@ -404,7 +383,7 @@ public class Difference {
                 if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
                     nodeTextIndex++;
                 } else {
-                    throw new UnsupportedOperationException("B " + nodeText + ". Difference: " + this + " " + nodeTextEl);
+                    throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: " + this + " " + nodeTextEl);
                 }
             } else {
                 DifferenceElement diffEl = elements.get(diffIndex);
@@ -412,15 +391,15 @@ public class Difference {
                 if (diffEl instanceof Added) {
                     TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
                     boolean used = false;
-                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
+                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(NEWLINE_TOKEN)) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     } else if (isAfterLBrace(nodeText, nodeTextIndex) && !isAReplacement(diffIndex)) {
-                        if (textElement.isToken(3)) {
+                        if (textElement.isToken(NEWLINE_TOKEN)) {
                             used = true;
                         }
-                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(3));
+                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(NEWLINE_TOKEN));
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
                         }
@@ -471,7 +450,7 @@ public class Difference {
                         } else if (nodeTextToken.isWhiteSpaceOrComment()) {
                             nodeTextIndex++;
                         } else {
-                            throw new UnsupportedOperationException("CSM TOKEN " + csmToken + " NodeText TOKEN " + nodeTextToken);
+                            throw new UnsupportedOperationException("Csm token " + csmToken + " NodeText TOKEN " + nodeTextToken);
                         }
                     } else if ((kept.element instanceof CsmToken) && ((CsmToken) kept.element).isWhiteSpace()) {
                         diffIndex++;
@@ -516,12 +495,10 @@ public class Difference {
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
     }
 
-    private int STANDARD_INDENTANTAION_SIZE = 4;
-
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
         if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(ASTParserConstants.RBRACE)) {
-            indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTANTAION_SIZE, indentationAdj.size()));
+            indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTANTION_SIZE, indentationAdj.size()));
         }
         for (TextElement e : indentationAdj) {
             nodeText.getElements().add(nodeTextIndex++, e);

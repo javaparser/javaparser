@@ -228,7 +228,6 @@ public class LexicalDifferenceCalculator {
                         } else {
                             throw new UnsupportedOperationException(it.next().getClass().getSimpleName());
                         }
-                        //findCompulsoryTokens(it.next());
                         if (it.hasNext()) {
                             calculatedSyntaxModelForNode(csmList.getSeparatorPost(), node, elements, change);
                         }
