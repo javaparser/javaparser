@@ -34,10 +34,42 @@ import java.util.Queue;
 public abstract class TreeVisitor {
 
     /**
-     * https://en.wikipedia.org/wiki/Depth-first_search
+     * Performs a pre-order node traversal starting with a given node. When each node is visited,
+     * {@link #process(Node)} is called for further processing.
      *
-     * @param node the start node, and the first one that is passed to process(node).
+     * @param node The node at which the traversal begins.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
      */
+    public void visitPreOrder(Node node) {
+        process(node);
+        new ArrayList<>(node.getChildNodes()).forEach(child -> visitPreOrder(child));
+    }
+
+    /**
+     * Performs a post-order node traversal starting with a given node. When each node is visited,
+     * {@link #process(Node)} is called for further processing.
+     *
+     * @param node The node at which the traversal begins.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
+     */
+    public void visitPostOrder(Node node) {
+        new ArrayList<>(node.getChildNodes()).forEach(child -> visitPostOrder(child));
+        process(node);
+    }
+
+    /**
+     * Performs a pre-order node traversal starting with a given node. When each node is visited,
+     * {@link #process(Node)} is called for further processing.
+     *
+     * @deprecated As of release 3.1.0, replaced by {@link #visitPreOrder(Node)}
+     *
+     * @param node The node at which the traversal begins.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
+     */
+    @Deprecated
     public void visitDepthFirst(Node node) {
         process(node);
         final List<Node> copy = new ArrayList<>(node.getChildNodes());
@@ -63,5 +95,10 @@ public abstract class TreeVisitor {
         }
     }
 
+    /**
+     * Process the given node.
+     *
+     * @param node The current node to process.
+     */
     public abstract void process(Node node);
 }
