@@ -36,7 +36,6 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 

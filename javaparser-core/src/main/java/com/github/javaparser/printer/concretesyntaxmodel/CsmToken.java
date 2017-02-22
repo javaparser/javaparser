@@ -26,12 +26,19 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.utils.Utils;
 
 
 public class CsmToken implements CsmElement {
     private int tokenType;
     private String content;
     private TokenContentCalculator tokenContentCalculator;
+
+    public static int NEWLINE_TOKEN = 3;
+    public static int SPACE_TOKEN = 1;
+    public static int SPACE_TOKEN_ALT = 32;
+    public static int TAB_TOKEN = 31;
+    public static int EOF_TOKEN = 0;
 
     public interface TokenContentCalculator {
         String calculate(Node node);
@@ -55,9 +62,9 @@ public class CsmToken implements CsmElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (tokenType == 3) {
-            content = "\n";
-        } else if (tokenType == 32) {
+        if (tokenType == NEWLINE_TOKEN) {
+            content = Utils.EOL;
+        } else if (tokenType == SPACE_TOKEN) {
             content = " ";
         }
     }
@@ -107,6 +114,6 @@ public class CsmToken implements CsmElement {
     }
 
     public boolean isWhiteSpace() {
-        return tokenType == 3 || tokenType == 1 || tokenType == 0 || tokenType == 31 || tokenType == 32;
+        return tokenType == NEWLINE_TOKEN || tokenType == SPACE_TOKEN || tokenType == EOF_TOKEN || tokenType == TAB_TOKEN || tokenType == SPACE_TOKEN_ALT;
     }
 }
