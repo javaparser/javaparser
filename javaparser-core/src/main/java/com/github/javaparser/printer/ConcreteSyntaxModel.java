@@ -821,7 +821,7 @@ public class ConcreteSyntaxModel {
                 orphanCommentsEnding()));
 
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream()
-                .filter(c -> !c.isAbstract() && Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))
+                .filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType()))
                 .map(nm -> nm.getType().getSimpleName())
                 .collect(Collectors.toList());
         if (unsupportedNodeClassNames.isEmpty()) {
