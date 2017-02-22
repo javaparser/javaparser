@@ -1,6 +1,7 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
@@ -16,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.UTF8;
@@ -28,8 +30,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.*;
  */
 public class SourceRoot {
     private final Path root;
-    private final Map<Path, CompilationUnit> content = new HashMap<>();
-    private final List<Problem> problems = new ArrayList<>();
+    private final Map<Path, ParseResult<CompilationUnit>> content = new HashMap<>();
 
     public SourceRoot(Path root) {
         this.root = root.normalize();
@@ -37,17 +38,16 @@ public class SourceRoot {
     }
 
     /**
-     * Parses a package recursively.
+     * Parses all .java files in a package recursively.
      */
-    public Map<Path, CompilationUnit> parse(String startPackage, JavaParser parser) throws IOException {
+    public Map<Path, ParseResult<CompilationUnit>> tryToParse(String startPackage, JavaParser parser) throws IOException {
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
-        content.clear();
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
-                    parse(startPackage, file.getFileName().toString(), parser);
+                    tryToParse(startPackage, file.getFileName().toString(), parser);
                 }
                 return FileVisitResult.CONTINUE;
             }
@@ -56,10 +56,10 @@ public class SourceRoot {
     }
 
     /**
-     * Parse every Java file in this source root.
+     * Parse every .java file in this source root.
      */
-    public Map<Path, CompilationUnit> parse(JavaParser parser) throws IOException {
-        return parse("", parser);
+    public Map<Path, ParseResult<CompilationUnit>> tryToParse(JavaParser parser) throws IOException {
+        return tryToParse("", parser);
     }
 
     /**
@@ -74,12 +74,12 @@ public class SourceRoot {
      */
     public void saveAll(Path root) throws FileNotFoundException, UnsupportedEncodingException {
         Log.info("Saving all files (%s) to %s", content.size(), root);
-        for (Map.Entry<Path, CompilationUnit> cu : content.entrySet()) {
+        for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : content.entrySet()) {
             final Path path = root.resolve(cu.getKey());
             Log.trace("Saving %s", path);
             path.getParent().toFile().mkdirs();
 
-            final String code = new PrettyPrinter().print(cu.getValue());
+            final String code = new PrettyPrinter().print(cu.getValue().getResult().get());
             try (PrintWriter out = new PrintWriter(path.toFile(), UTF8.toString())) {
                 out.println(code);
             }
@@ -87,39 +87,54 @@ public class SourceRoot {
     }
 
     /**
-     * A complete list of encountered problems while parsing.
+     * The Java files that have been parsed by this source root object,
+     * or have been added manually.
      */
-    public List<Problem> getProblems() {
-        return problems;
-    }
-
-    /**
-     * The Java files that have been parsed by this source root object.
-     */
-    public Map<Path, CompilationUnit> getContent() {
+    public Map<Path, ParseResult<CompilationUnit>> getContent() {
         return content;
     }
 
     /**
-     * Parse a single Java file and return it.
+     * The CompilationUnits of the Java files that have been parsed succesfully by this source root object,
+     * or have been added manually.
      */
-    public Optional<CompilationUnit> parse(String packag, String filename, JavaParser javaParser) throws IOException {
+    public List<CompilationUnit> getCompilationUnits() {
+        return content.values().stream()
+                .filter(ParseResult::isSuccessful)
+                .map(p -> p.getResult().get())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Try to parse a single Java file and return the result of parsing.
+     */
+    public ParseResult<CompilationUnit> tryToParse(String packag, String filename, JavaParser javaParser) throws IOException {
         final Path relativePath = fileInPackageRelativePath(packag, filename);
         if (content.containsKey(relativePath)) {
             Log.trace("Retrieving cached %s", relativePath);
-            return Optional.of(content.get(relativePath));
+            return content.get(relativePath);
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", path);
         final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
-        if (result.isSuccessful()) {
-            final CompilationUnit cu = result.getResult().get();
-            content.put(relativePath, cu);
-        } else {
-            Log.error("Problems occurred parsing %s.", relativePath);
-            problems.addAll(result.getProblems());
+        content.put(relativePath, result);
+        return result;
+    }
+
+    /**
+     * Try to parse a single Java file and return it.
+     * @throws ParseProblemException when something went wrong.
+     */
+    public CompilationUnit parse(String packag, String filename, JavaParser javaParser) {
+        try {
+            ParseResult<CompilationUnit> result = tryToParse(packag, filename, javaParser);
+            if (result.isSuccessful()) {
+                return result.getResult().get();
+            }
+            throw new ParseProblemException(result.getProblems());
+        } catch (IOException e) {
+            throw new ParseProblemException(e);
         }
-        return result.getResult();
     }
 
     /**
@@ -128,6 +143,7 @@ public class SourceRoot {
     public void add(String pkg, String filename, CompilationUnit compilationUnit) {
         Log.trace("Adding new file %s.%s", pkg, filename);
         final Path path = fileInPackageRelativePath(pkg, filename);
-        content.put(path, compilationUnit);
+        final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
+        content.put(path, parseResult);
     }
 }

@@ -153,16 +153,16 @@ public class MetaModelGenerator {
     private void run(SourceRoot sourceRoot) throws IOException, NoSuchMethodException {
         final JavaParser javaParser = new JavaParser();
 
-        final CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
+        final CompilationUnit javaParserMetaModel = sourceRoot.tryToParse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).getResult().get();
 
         generateNodeMetaModels(javaParserMetaModel, sourceRoot);
     }
 
     private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
-        ClassOrInterfaceDeclaration metaModelCoid = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
-        NodeList<Statement> initializeNodeMetaModelsStatements = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializePropertyMetaModelsStatements = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializeConstructorParametersStatements = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
+        final ClassOrInterfaceDeclaration metaModelCoid = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
+        final NodeList<Statement> initializeNodeMetaModelsStatements = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
+        final NodeList<Statement> initializePropertyMetaModelsStatements = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
+        final NodeList<Statement> initializeConstructorParametersStatements = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
         initializeNodeMetaModelsStatements.clear();
         initializePropertyMetaModelsStatements.clear();
         initializeConstructorParametersStatements.clear();
