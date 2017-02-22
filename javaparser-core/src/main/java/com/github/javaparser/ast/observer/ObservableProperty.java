@@ -27,6 +27,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 import static com.github.javaparser.ast.observer.ObservableProperty.Type.*;
+import com.github.javaparser.utils.Utils;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Optional;
+import static com.github.javaparser.utils.Utils.capitalize;
 
 /**
  * Properties considered by the AstObserver
@@ -190,11 +195,22 @@ public enum ObservableProperty {
     }
 
     public String singleStringValueFor(Node node) {
+        return (String) getValue(node);
+    }
+
+    public Object getValue(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         try {
-            return (String) node.getClass().getMethod(getterName).invoke(node);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+            return node.getClass().getMethod(getterName).invoke(node);
+        } catch (NoSuchMethodException e1) {
+            getterName = "is" + Utils.capitalize(camelCaseName());
+            try {
+                return node.getClass().getMethod(getterName).invoke(node);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e2) {
+                throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e2);
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -207,13 +223,57 @@ public enum ObservableProperty {
         }
     }
 
+    public boolean isNullOrNotPresent(Node node) {
+        String getterName = "get" + Utils.capitalize(camelCaseName());
+        try {
+            Object result = node.getClass().getMethod(getterName).invoke(node);
+            if (result == null) {
+                return true;
+            }
+            if (result instanceof Optional) {
+                return !((Optional) result).isPresent();
+            }
+            return false;
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+        }
+    }
+
+    public static boolean valueIsNullOrEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof Optional) {
+            if (((Optional) value).isPresent()) {
+                value = ((Optional) value).get();
+            } else {
+                return true;
+            }
+        }
+        if (value instanceof Collection) {
+            if (((Collection) value).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isNullOrEmpty(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         try {
             Object result = node.getClass().getMethod(getterName).invoke(node);
-            return null == result || ((result instanceof Optional) && !((Optional) result).isPresent());
+            return valueIsNullOrEmpty(result);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+        }
+    }
+
+    public static ObservableProperty fromCamelCaseName(String camelCaseName) {
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter( v -> v.camelCaseName().equals(camelCaseName)).findFirst();
+        if (observableProperty.isPresent()) {
+            return observableProperty.get();
+        } else {
+            throw new IllegalArgumentException("No property found with the given camel case name: " + camelCaseName);
         }
     }
 }
