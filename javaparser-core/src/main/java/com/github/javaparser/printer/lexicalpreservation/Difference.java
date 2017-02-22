@@ -377,8 +377,6 @@ public class Difference {
         }
         int diffIndex = 0;
         int nodeTextIndex = 0;
-        boolean comingFromRemoved = false;
-        boolean comingFromAdded = false;
         do {
             if (diffIndex < this.elements.size() && nodeTextIndex >= nodeText.getElements().size()) {
                 DifferenceElement diffEl = elements.get(diffIndex);
@@ -394,8 +392,6 @@ public class Difference {
                     } else {
                         throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
                     }
-                    comingFromRemoved = false;
-                    comingFromAdded = false;
                 } else if (diffEl instanceof Added) {
                     nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
                     nodeTextIndex++;
@@ -421,7 +417,6 @@ public class Difference {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     } else if (isAfterLBrace(nodeText, nodeTextIndex) && !isAReplacement(diffIndex)) {
-                        //nodeTextIndex = removeWhiteSpaceAfterBrace(nodeText, nodeTextIndex);
                         if (textElement.isToken(3)) {
                             used = true;
                         }
@@ -444,8 +439,6 @@ public class Difference {
                         nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex);
                     }
                     diffIndex++;
-                    comingFromRemoved = false;
-                    comingFromAdded = true;
                 } else if (diffEl instanceof Kept) {
                     Kept kept = (Kept)diffEl;
                     if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
@@ -453,11 +446,7 @@ public class Difference {
                         nodeTextIndex++;
                     } else if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof TokenTextElement) {
                         if (((TokenTextElement) nodeTextEl).isWhiteSpaceOrComment()) {
-                            //if (comingFromRemoved) {
-                                //nodeText.removeElement(nodeTextIndex);
-                            //} else {
-                                nodeTextIndex++;
-                            //}
+                            nodeTextIndex++;
                         } else {
                             if (kept.element instanceof LexicalDifferenceCalculator.CsmChild) {
                                 LexicalDifferenceCalculator.CsmChild keptChild = (LexicalDifferenceCalculator.CsmChild)kept.element;
@@ -489,8 +478,6 @@ public class Difference {
                     } else {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                     }
-                    comingFromRemoved = false;
-                    comingFromAdded = false;
                 } else if (diffEl instanceof Removed) {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
@@ -522,8 +509,6 @@ public class Difference {
                     } else {
                         throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                     }
-                    comingFromRemoved = true;
-                    comingFromAdded = false;
                 } else {
                     throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
                 }
@@ -544,14 +529,6 @@ public class Difference {
         return nodeTextIndex;
     }
 
-    private int removeWhiteSpaceAfterBrace(NodeText nodeText, int nodeTextIndex) {
-        while (nodeTextIndex >= 0 && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
-            nodeText.removeElement(nodeTextIndex);
-            nodeTextIndex--;
-        }
-        return nodeTextIndex;
-    }
-
     private boolean isAReplacement(int diffIndex) {
         return (diffIndex > 0) && getElements().get(diffIndex) instanceof Added && getElements().get(diffIndex - 1) instanceof Removed;
     }
@@ -559,28 +536,14 @@ public class Difference {
     private boolean isPrimitiveType(TextElement textElement) {
         if (textElement instanceof TokenTextElement) {
             TokenTextElement tokenTextElement = (TokenTextElement)textElement;
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.BYTE) {
-                return true;
-            }
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.CHAR) {
-                return true;
-            }
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.SHORT) {
-                return true;
-            }
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.INT) {
-                return true;
-            }
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.LONG) {
-                return true;
-            }
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.FLOAT) {
-                return true;
-            }
-            if (tokenTextElement.getTokenKind() == ASTParserConstants.DOUBLE) {
-                return true;
-            }
-            return false;
+            int tokenKind = tokenTextElement.getTokenKind();
+            return tokenKind == ASTParserConstants.BYTE
+                || tokenKind == ASTParserConstants.CHAR
+                || tokenKind == ASTParserConstants.SHORT
+                || tokenKind == ASTParserConstants.INT
+                || tokenKind == ASTParserConstants.LONG
+                || tokenKind == ASTParserConstants.FLOAT
+                || tokenKind == ASTParserConstants.DOUBLE;
         } else {
             return false;
         }

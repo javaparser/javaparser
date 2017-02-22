@@ -5,6 +5,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 
+/**
+ * The removal of an element in a list.
+ */
 public class ListRemovalChange implements Change {
     private ObservableProperty observableProperty;
     private NodeList nodeList;

@@ -7,6 +7,9 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 
 import java.util.Optional;
 
+/**
+ * The change in value of a property.
+ */
 public class PropertyChange implements Change {
     private ObservableProperty property;
     private Object oldValue;

@@ -4,6 +4,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 
+/**
+ * The replacement of an element in a list.
+ */
 public class ListReplacementChange implements Change {
     private ObservableProperty observableProperty;
     private NodeList nodeList;

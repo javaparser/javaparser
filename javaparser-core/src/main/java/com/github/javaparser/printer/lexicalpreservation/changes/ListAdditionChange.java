@@ -5,6 +5,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 
+/**
+ * The Addition of an element to a list.
+ */
 public class ListAdditionChange implements Change {
     private ObservableProperty observableProperty;
     private NodeList nodeList;

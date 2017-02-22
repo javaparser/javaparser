@@ -4,6 +4,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 
+/**
+ * This represent a change happened to a specific Node.
+ */
 public interface Change {
 
     default boolean evaluate(CsmConditional csmConditional, Node node) {
