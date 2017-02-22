@@ -27,6 +27,7 @@ public class CoreGenerator {
     private void run(SourceRoot sourceRoot) throws Exception {
         final JavaParser javaParser = new JavaParser();
 
+        new GenericListVisitorAdapterGenerator(javaParser, sourceRoot).generate();
         new GenericVisitorAdapterGenerator(javaParser, sourceRoot).generate();
         new EqualsVisitorGenerator(javaParser, sourceRoot).generate();
         new VoidVisitorAdapterGenerator(javaParser, sourceRoot).generate();
