@@ -38,7 +38,7 @@ public class PropertyChange implements Change {
         if (property == this.property) {
             return newValue;
         } else {
-            return property.getValue(node);
+            return property.getRawValue(node);
         }
     }
 }

@@ -11,6 +11,6 @@ public class NoChange implements Change {
 
     @Override
     public Object getValue(ObservableProperty property, Node node) {
-        return property.getValue(node);
+        return property.getRawValue(node);
     }
 }
