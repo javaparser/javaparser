@@ -26,7 +26,7 @@ import com.github.javaparser.utils.Utils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
-import static com.github.javaparser.ast.observer.ObservableProperty.Type.*;
+import java.util.Arrays;
 
 /**
  * Properties considered by the AstObserver
@@ -53,6 +53,15 @@ public enum ObservableProperty {
 
     private boolean derived;
 
+    public static ObservableProperty fromCamelCaseName(String camelCaseName) {
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter( v -> v.camelCaseName().equals(camelCaseName)).findFirst();
+        if (observableProperty.isPresent()) {
+            return observableProperty.get();
+        } else {
+            throw new IllegalArgumentException("No property found with the given camel case name: " + camelCaseName);
+        }
+    }
+
     ObservableProperty(Type type) {
         this.type = type;
         this.derived = false;
@@ -65,6 +74,10 @@ public enum ObservableProperty {
 
     ObservableProperty() {
         this(Type.SINGLE_REFERENCE, false);
+    }
+
+    public boolean isDerived() {
+        return derived;
     }
 
     public boolean isAboutNodes() {
@@ -87,27 +100,21 @@ public enum ObservableProperty {
         return Utils.toCamelCase(name());
     }
 
-    public Node singlePropertyFor(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
+    public Node getValueAsSingleReference(Node node) {
+        Object rawValue = getRawValue(node);
         try {
-            Object result = node.getClass().getMethod(getterName).invoke(node);
-            if (result == null) {
-                return null;
-            }
-            if (result instanceof Node) {
-                return (Node) result;
-            } else if (result instanceof Optional) {
-                Optional<Node> opt = (Optional<Node>) result;
+            if (rawValue instanceof Node) {
+                return (Node) rawValue;
+            } else if (rawValue instanceof Optional) {
+                Optional<Node> opt = (Optional<Node>) rawValue;
                 if (opt.isPresent()) {
                     return opt.get();
                 } else {
                     return null;
                 }
             } else {
-                throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), result.toString(), result.getClass().getCanonicalName()));
+                throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
             }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
@@ -122,99 +129,76 @@ public enum ObservableProperty {
         }
     }
 
-    public Object singleValueFor(Node node) {
+    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {
+        Object rawValue = getRawValue(node);
+        try {
+            if (rawValue == null) {
+                return null;
+            }
+            if (rawValue instanceof NodeList) {
+                return (NodeList) rawValue;
+            } else {
+                Optional<NodeList> opt = (Optional<NodeList>) rawValue;
+                if (opt.isPresent()) {
+                    return opt.get();
+                } else {
+                    return null;
+                }
+            }
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
+        }
+    }
+
+    public Collection<?> getValueAsCollection(Node node) {
+        Object rawValue = getRawValue(node);
+        try {
+            return (Collection) rawValue;
+        } catch (ClassCastException e) {
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
+        }
+    }
+
+    public String getValueAsStringAttribute(Node node) {
+        return (String) getRawValue(node);
+    }
+
+    public Boolean getValueAsBooleanAttribute(Node node) {
+        return (Boolean) getRawValue(node);
+    }
+
+    public Object getRawValue(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         if (!hasMethod(node, getterName)) {
-            getterName = "has" + Utils.capitalize(camelCaseName());
+            getterName = "is" + Utils.capitalize(camelCaseName());
             if (!hasMethod(node, getterName)) {
-                if (camelCaseName().startsWith("is")) {
-                    getterName = camelCaseName();
-                } else {
-                    getterName = "is" + Utils.capitalize(camelCaseName());
-                }
+                getterName = "has" + Utils.capitalize(camelCaseName());
             }
         }
         try {
-            Object result = node.getClass().getMethod(getterName).invoke(node);
-            if (result == null) {
-                return null;
-            }
-            if (result instanceof Optional) {
-                Optional<Node> opt = (Optional<Node>) result;
-                if (opt.isPresent()) {
-                    return opt.get();
-                } else {
-                    return null;
-                }
-            } else {
-                return result;
-            }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
-        }
-    }
-
-    public NodeList<? extends Node> listValueFor(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
-        try {
-            Object result = node.getClass().getMethod(getterName).invoke(node);
-            if (result == null) {
-                return null;
-            }
-            if (result instanceof NodeList) {
-                return (NodeList) result;
-            } else {
-                Optional<NodeList> opt = (Optional<NodeList>) result;
-                if (opt.isPresent()) {
-                    return opt.get();
-                } else {
-                    return null;
-                }
-            }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
-        }
-    }
-
-    public Collection<?> listPropertyFor(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
-        try {
-            Object result = node.getClass().getMethod(getterName).invoke(node);
-            if (result == null) {
-                return null;
-            }
-            return (Collection) result;
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
-        }
-    }
-
-    public String singleStringValueFor(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
-        try {
-            return (String) node.getClass().getMethod(getterName).invoke(node);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+            return node.getClass().getMethod(getterName).invoke(node);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
         }
     }
 
     public boolean isNull(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
-        try {
-            return null == node.getClass().getMethod(getterName).invoke(node);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
+        return null == getRawValue(node);
+    }
+
+    public boolean isNullOrNotPresent(Node node) {
+        Object result = getRawValue(node);
+        if (result == null) {
+            return true;
         }
+        if (result instanceof Optional) {
+            return !((Optional) result).isPresent();
+        }
+        return false;
     }
 
     public boolean isNullOrEmpty(Node node) {
-        String getterName = "get" + Utils.capitalize(camelCaseName());
-        try {
-            Object result = node.getClass().getMethod(getterName).invoke(node);
-            return null == result || ((result instanceof Optional) && !((Optional) result).isPresent());
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Unable to get single value for " + this.name() + " from " + node, e);
-        }
+        return Utils.valueIsNullOrEmpty(getRawValue(node));
     }
 }
 

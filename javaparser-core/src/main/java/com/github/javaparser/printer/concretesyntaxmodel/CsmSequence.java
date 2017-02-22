@@ -39,6 +39,10 @@ public class CsmSequence implements CsmElement {
         this.elements = elements;
     }
 
+    public List<CsmElement> getElements() {
+        return elements;
+    }
+
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         elements.forEach(e -> e.prettyPrint(node, printer));

@@ -35,7 +35,7 @@ public class CsmString implements CsmElement {
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         printer.print("\"");
-        printer.print(property.singleStringValueFor(node));
+        printer.print(property.getValueAsStringAttribute(node));
         printer.print("\"");
     }
 }

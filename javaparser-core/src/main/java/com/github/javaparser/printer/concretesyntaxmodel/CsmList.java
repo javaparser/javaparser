@@ -37,14 +37,32 @@ public class CsmList implements CsmElement {
     private CsmElement preceeding;
     private CsmElement following;
 
+    public ObservableProperty getProperty() {
+        return property;
+    }
+
+    public CsmElement getSeparatorPost() {
+        return separatorPost;
+    }
+
+    public CsmElement getSeparatorPre() {
+        return separatorPre;
+    }
+
+    public CsmElement getPreceeding() {
+        return preceeding;
+    }
+
+    public CsmElement getFollowing() {
+        return following;
+    }
+
     public CsmList(ObservableProperty property, CsmElement separator) {
-        this.property = property;
-        this.separatorPost = separator;
+        this(property, new CsmNone(), separator, new CsmNone(), new CsmNone());
     }
 
     public CsmList(ObservableProperty property) {
-        this.property = property;
-        this.separatorPost = null;
+        this(property, new CsmNone(), new CsmNone(), new CsmNone(), new CsmNone());
     }
 
     public CsmList(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
@@ -58,7 +76,7 @@ public class CsmList implements CsmElement {
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (property.isAboutNodes()) {
-            NodeList nodeList = property.listValueFor(node);
+            NodeList nodeList = property.getValueAsMultipleReference(node);
             if (nodeList == null) {
                 return;
             }
@@ -78,7 +96,7 @@ public class CsmList implements CsmElement {
                 following.prettyPrint(node, printer);
             }
         } else {
-            Collection<?> values = property.listPropertyFor(node);
+            Collection<?> values = property.getValueAsCollection(node);
             if (values == null) {
                 return;
             }
