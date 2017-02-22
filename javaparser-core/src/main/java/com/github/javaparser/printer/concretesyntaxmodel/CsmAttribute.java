@@ -40,7 +40,7 @@ public class CsmAttribute implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        Object value = property.singleValueFor(node);
+        Object value = property.getRawValue(node);
         printer.print(PrintingHelper.printToString(value));
     }
 

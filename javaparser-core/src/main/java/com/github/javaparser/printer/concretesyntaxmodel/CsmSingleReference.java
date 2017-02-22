@@ -40,7 +40,7 @@ public class CsmSingleReference implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        Node child = property.singlePropertyFor(node);
+        Node child = property.getValueAsSingleReference(node);
         if (child != null) {
             ConcreteSyntaxModel.genericPrettyPrint(child, printer);
         }

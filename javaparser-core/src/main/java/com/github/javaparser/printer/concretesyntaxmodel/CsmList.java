@@ -76,7 +76,7 @@ public class CsmList implements CsmElement {
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (property.isAboutNodes()) {
-            NodeList nodeList = property.listValueFor(node);
+            NodeList nodeList = property.getValueAsMultipleReference(node);
             if (nodeList == null) {
                 return;
             }
@@ -96,7 +96,7 @@ public class CsmList implements CsmElement {
                 following.prettyPrint(node, printer);
             }
         } else {
-            Collection<?> values = property.listPropertyFor(node);
+            Collection<?> values = property.getValueAsCollection(node);
             if (values == null) {
                 return;
             }

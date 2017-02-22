@@ -24,10 +24,7 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
-
-import java.util.function.Predicate;
 
 public class CsmConditional implements CsmElement {
     private Condition condition;
@@ -62,13 +59,13 @@ public class CsmConditional implements CsmElement {
                 return !property.isNullOrNotPresent(node);
             }
             if (this == FLAG) {
-                return (Boolean)property.singleValueFor(node);
+                return property.getValueAsBooleanAttribute(node);
             }
             if (this == IS_EMPTY) {
-                return property.listValueFor(node).isEmpty();
+                return property.getValueAsMultipleReference(node).isEmpty();
             }
             if (this == IS_NOT_EMPTY) {
-                NodeList value = property.listValueFor(node);
+                NodeList value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
             throw new UnsupportedOperationException(name());
