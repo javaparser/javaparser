@@ -24,16 +24,29 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
-
-import java.util.function.Predicate;
 
 public class CsmConditional implements CsmElement {
     private Condition condition;
     private ObservableProperty property;
     private CsmElement thenElement;
     private CsmElement elseElement;
+
+    public Condition getCondition() {
+        return condition;
+    }
+
+    public ObservableProperty getProperty() {
+        return property;
+    }
+
+    public CsmElement getThenElement() {
+        return thenElement;
+    }
+
+    public CsmElement getElseElement() {
+        return elseElement;
+    }
 
     public enum Condition {
         IS_EMPTY,
@@ -43,16 +56,16 @@ public class CsmConditional implements CsmElement {
 
         boolean evaluate(Node node, ObservableProperty property){
             if (this == IS_PRESENT) {
-                return !property.isNullOrEmpty(node);
+                return !property.isNullOrNotPresent(node);
             }
             if (this == FLAG) {
-                return (Boolean)property.singleValueFor(node);
+                return property.getValueAsBooleanAttribute(node);
             }
             if (this == IS_EMPTY) {
-                return property.listValueFor(node).isEmpty();
+                return property.getValueAsMultipleReference(node).isEmpty();
             }
             if (this == IS_NOT_EMPTY) {
-                NodeList value = property.listValueFor(node);
+                NodeList value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
             throw new UnsupportedOperationException(name());

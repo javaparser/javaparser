@@ -181,4 +181,28 @@ public class Utils {
         sb.append(s.substring(1));
         return sb.toString();
     }
+
+    /**
+     * Return true if the value is null, an empty Optional or an empty String.
+     * @param value
+     * @return
+     */
+    public static boolean valueIsNullOrEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof Optional) {
+            if (((Optional) value).isPresent()) {
+                value = ((Optional) value).get();
+            } else {
+                return true;
+            }
+        }
+        if (value instanceof Collection) {
+            if (((Collection) value).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
