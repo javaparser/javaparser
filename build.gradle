@@ -10,9 +10,6 @@ plugins {
   id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
-apply plugin: 'maven'
-apply plugin: 'idea'
-
 allprojects  {
   apply plugin: 'java'
   apply plugin: 'idea'
@@ -27,22 +24,14 @@ allprojects  {
     maven { url "http://repo.maven.apache.org/maven2" }
   }
 
-  jacoco {
-    toolVersion = "0.7.6.201602180812"
-    reportsDir = file("$buildDir/test_coverage")
-  }
+  apply plugin: 'java'
 
-  jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination "${buildDir}/jacocoHtml"
-    }
-  }  
 }
 
 subprojects {
   apply plugin: 'java'
+  apply plugin: 'maven'
+
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
 
@@ -60,15 +49,6 @@ subprojects {
     from sourceSets.main.allSource
   }
 
-  artifacts {
-    archives javadocJar, sourcesJar
-  }
-}
-
-allprojects {
-  apply plugin: 'signing'
-  apply plugin: 'maven'
-
   if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
       tasks.withType(Javadoc) {
@@ -77,9 +57,26 @@ allprojects {
     }
   }
 
-  task writeNewPom {
-    doLast {
-      pom.project {
+  jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir/test_coverage")
+  }
+
+  jacocoTestReport {
+    reports {
+      xml.enabled true
+      csv.enabled false
+      html.destination "${buildDir}/jacocoHtml"
+    }
+  }
+
+  artifacts {
+    archives javadocJar, sourcesJar
+  }
+
+  task generatePom << {
+    pom {
+      project {
         name project.name
         description project.description
         packaging 'jar'
@@ -106,8 +103,8 @@ allprojects {
             email = 'federico@tomassetti.me'
           }
         }
-      }.writeTo("$buildDir/newpom.xml")
-    }
+      }
+    }.writeTo("$buildDir/pom.xml")
   }
 }
 
