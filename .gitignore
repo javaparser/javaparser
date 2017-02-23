@@ -23,3 +23,4 @@ build-*
 *.asc
 build
 /.project
+out
