@@ -444,4 +444,12 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("Exception | AssertionError e", lpp.print(parameter));
     }
 
+    @Test
+    public void printLambaWithUntypedParams() {
+        String code = "class A {Function<String,String> f = a -> a;}";
+        considerCode(code);
+
+        assertEquals("class A {Function<String,String> f = a -> a;}", lpp.print(cu));
+    }
+
 }
