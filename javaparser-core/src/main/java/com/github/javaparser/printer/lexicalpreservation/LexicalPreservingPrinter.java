@@ -334,7 +334,7 @@ public class LexicalPreservingPrinter {
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
             if (tte.getTokenKind() == ASTParserConstants.SINGLE_LINE_COMMENT
-                    || tte.getTokenKind() == Tokens.newline().getTokenKind()) {
+                    || tte.getTokenKind() == TokenConstants.NEWLINE_TOKEN) {
                 break;
             } else {
                 followingNewlines.add(tte);

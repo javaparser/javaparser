@@ -24,10 +24,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.TokenConstants;
 
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This contains the lexical information for a single node.
@@ -155,56 +153,8 @@ class NodeText {
     // Removing sequences
     //
 
-    void removeFromToken(TextElementMatcher start, boolean includingPreceedingSpace) {
-        removeFromTokenUntil(start, Optional.empty(), includingPreceedingSpace);
-    }
-
-    void removeFromTokenUntil(TextElementMatcher start, Optional<TextElementMatcher> end, boolean includingPreceedingSpace) {
-        for (int i=elements.size() - 1; i>=0; i--) {
-            if (start.match(elements.get(i))) {
-                while (elements.size() > i && (!end.isPresent() || !end.get().match(elements.get(i)))) {
-                    elements.remove(i);
-                }
-                if (includingPreceedingSpace && elements.get(i - 1).isToken(Tokens.space().getTokenKind())) {
-                    elements.remove(i - 1);
-                }
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
     void removeElement(int index) {
         elements.remove(index);
-    }
-
-    /**
-     * Remove all elements between the given token (inclusive) and the given child (exclusive).
-     */
-    void removeTextBetween(TextElementMatcher start, TextElementMatcher end, EnumSet<Option> options) {
-        int startDeletion = findElement(start);
-        int endDeletion = findElement(end, startDeletion + 1);
-        if (options.contains(Option.REMOVE_SPACE_IMMEDIATELY_AFTER) && (getTextElement(endDeletion + 1) instanceof TokenTextElement) &&
-                ((TokenTextElement) getTextElement(endDeletion + 1)).getTokenKind() == Tokens.whitespaceTokenKind()) {
-            endDeletion++;
-        }
-        if (options.contains(Option.EXCLUDE_START)) {
-            startDeletion++;
-        }
-        if (options.contains(Option.EXCLUDE_END)) {
-            endDeletion--;
-        }
-        removeBetweenIndexes(startDeletion, endDeletion);
-    }
-
-    /**
-     * Remove all elements between startDeletion (inclusive) and endDeletion (exclusive).
-     */
-    private void removeBetweenIndexes(int startDeletion, int endDeletion) {
-        int i = endDeletion;
-        while (i >= startDeletion) {
-            elements.remove(i--);
-        }
     }
 
     //

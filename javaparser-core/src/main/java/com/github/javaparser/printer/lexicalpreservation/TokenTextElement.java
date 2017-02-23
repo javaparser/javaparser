@@ -24,6 +24,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.printer.TokenConstants;
+import com.github.javaparser.utils.Utils;
 
 class TokenTextElement extends TextElement {
 
@@ -48,9 +50,9 @@ class TokenTextElement extends TextElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (tokenKind == 3) {
-            content = "\n";
-        } else if (tokenKind == 32) {
+        if (tokenKind == TokenConstants.NEWLINE_TOKEN) {
+            content = Utils.EOL;
+        } else if (tokenKind == TokenConstants.SPACE_TOKEN) {
             content = " ";
         }
         this.tokenKind = tokenKind;
@@ -108,18 +110,16 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isWhiteSpace() {
-        return tokenKind == 3 || tokenKind == 1 || tokenKind == 2 || tokenKind == 0;
+        return TokenConstants.isWhitespace(tokenKind);
     }
 
     @Override
     public boolean isSpaceOrTab() {
-        return tokenKind == 1 || tokenKind == 2;
+        return TokenConstants.isSpaceOrTab(tokenKind);
     }
 
-    public boolean isWhiteSpaceOrComment() {
-        return tokenKind == 3 || tokenKind == 1 || tokenKind == 2 || tokenKind == 0 || tokenKind == 31 || tokenKind == 32 || tokenKind == ASTParserConstants.JAVA_DOC_COMMENT
-                || tokenKind == ASTParserConstants.JAVA_DOC_COMMENT
-                || tokenKind == ASTParserConstants.MULTI_LINE_COMMENT;
+    boolean isWhiteSpaceOrComment() {
+        return TokenConstants.isWhitespaceOrComment(tokenKind);
     }
 
     @Override

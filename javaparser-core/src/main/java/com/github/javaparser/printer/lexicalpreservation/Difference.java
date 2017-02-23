@@ -489,7 +489,7 @@ public class Difference {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         nodeText.removeElement(nodeTextIndex);
-                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(3)) {
+                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(TokenConstants.NEWLINE_TOKEN)) {
                             nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
                         } else {
                             if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
@@ -504,15 +504,18 @@ public class Difference {
                     } else if (nodeTextEl instanceof TokenTextElement
                             && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
                         nodeTextIndex++;
-                    } else if (removed.element instanceof CsmToken && ((CsmToken)removed.element).isWhiteSpace()) {
-                        diffIndex++;
-                    } else if (removed.element instanceof LexicalDifferenceCalculator.CsmChild && ((LexicalDifferenceCalculator.CsmChild)removed.element).getChild() instanceof PrimitiveType) {
+                    } else if (removed.element instanceof LexicalDifferenceCalculator.CsmChild
+                            && ((LexicalDifferenceCalculator.CsmChild)removed.element).getChild() instanceof PrimitiveType) {
                         if (isPrimitiveType(nodeTextEl)) {
                             nodeText.removeElement(nodeTextIndex);
                             diffIndex++;
                         } else {
                             throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                         }
+                    } else if (removed.element instanceof CsmToken && ((CsmToken)removed.element).isWhiteSpace()) {
+                        diffIndex++;
+                    } else if (nodeTextEl.isWhiteSpace()) {
+                        nodeTextIndex++;
                     } else {
                         throw new UnsupportedOperationException("removed " + removed.element + " vs " + nodeTextEl);
                     }
