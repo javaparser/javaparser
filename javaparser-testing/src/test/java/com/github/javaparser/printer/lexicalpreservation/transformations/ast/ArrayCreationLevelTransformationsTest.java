@@ -28,6 +28,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
     public void addingAnnotation() throws IOException {
         ArrayCreationLevel it = consider("[]");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()\n[]", it);
+        assertTransformedToString("@myAnno()"+ Utils.EOL+"[]", it);
     }
 
     @Test

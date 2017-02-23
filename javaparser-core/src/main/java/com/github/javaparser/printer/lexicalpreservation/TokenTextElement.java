@@ -33,7 +33,7 @@ class TokenTextElement extends TextElement {
     private String text;
 
     public static TokenTextElement newLine() {
-        return new TokenTextElement(3, "\n");
+        return new TokenTextElement(TokenConstants.NEWLINE_TOKEN, Utils.EOL);
     }
 
     TokenTextElement(JavaToken token) {
@@ -124,6 +124,6 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isNewline() {
-        return tokenKind == 3;
+        return tokenKind == TokenConstants.NEWLINE_TOKEN;
     }
 }

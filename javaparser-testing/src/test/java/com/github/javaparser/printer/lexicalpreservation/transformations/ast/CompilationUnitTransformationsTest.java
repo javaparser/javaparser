@@ -24,9 +24,12 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
 import java.io.IOException;
+
+import static com.github.javaparser.utils.Utils.EOL;
 
 /**
  * Transforming CompilationUnit and verifying the LexicalPreservation works as expected.
@@ -39,7 +42,7 @@ public class CompilationUnitTransformationsTest extends AbstractLexicalPreservin
     public void addingPackageDeclaration() throws IOException {
         considerCode("class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo"), "bar")));
-        assertTransformedToString("package foo.bar;\n\nclass A {}", cu);
+        assertTransformedToString("package foo.bar;"+ EOL + EOL + "class A {}", cu);
     }
 
     @Test
@@ -53,8 +56,8 @@ public class CompilationUnitTransformationsTest extends AbstractLexicalPreservin
     public void replacingPackageDeclaration() throws IOException {
         considerCode("package foo.bar; class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo2"), "baz")));
-        assertTransformedToString("package foo2.baz;\n" +
-                "\n" +
+        assertTransformedToString("package foo2.baz;" +
+                EOL + EOL +
                 " class A {}", cu);
     }
 

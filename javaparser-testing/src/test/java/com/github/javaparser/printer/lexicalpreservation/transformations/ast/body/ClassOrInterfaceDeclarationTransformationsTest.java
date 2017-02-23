@@ -33,11 +33,13 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.EnumSet;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -173,7 +175,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     public void addingField() throws IOException {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
         cid.addField("int", "foo");
-        assertTransformedToString("class A {\n    int foo;\n}", cid);
+        assertTransformedToString("class A {" + EOL + "    int foo;" + EOL + "}", cid);
     }
 
     @Test

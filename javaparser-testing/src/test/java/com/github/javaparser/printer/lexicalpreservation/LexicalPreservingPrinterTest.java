@@ -12,6 +12,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
@@ -259,7 +261,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         classA.addField("int", "myField");
-        assertEquals("class A {\n    int myField;\n}", lpp.print(classA));
+        assertEquals("class A {" + EOL + "    int myField;"+EOL+"}", lpp.print(classA));
     }
 
     @Test
@@ -272,7 +274,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void printASimpleCUWithoutChanges() {
-        String code = "class /*a comment*/ A {\t\t\n int f;\n\n\n         void foo(int p  ) { return  'z'  \t; }}";
+        String code = "class /*a comment*/ A {\t\t"+EOL+" int f;"+EOL+EOL+EOL+"         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
         assertEquals(code, lpp.print(cu));
@@ -282,13 +284,13 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void printASimpleClassRemovingAField() {
-        String code = "class /*a comment*/ A {\t\t\n int f;\n\n\n         void foo(int p  ) { return  'z'  \t; }}";
+        String code = "class /*a comment*/ A {\t\t"+EOL+" int f;"+EOL+EOL+EOL+"         void foo(int p  ) { return  'z'  \t; }}";
         considerCode(code);
 
         ClassOrInterfaceDeclaration c = cu.getClassByName("A").get();
         c.getMembers().remove(0);
-        assertEquals("class /*a comment*/ A {\t\t\n" +
-                "\n" +
+        assertEquals("class /*a comment*/ A {\t\t"+ EOL +
+                EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", lpp.print(c));
     }
 
@@ -353,8 +355,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         NodeList<Statement> stmts = cu.getClassByName("A").get().getMethodsByName("foo").get(0).getBody().get().getStatements();
         stmts.add(s);
         MethodDeclaration m = cu.getClassByName("A").get().getMethodsByName("foo").get(0);
-        assertEquals("void foo(char p1, int p2) {\n" +
-                "    10 + 2;\n" +
+        assertEquals("void foo(char p1, int p2) {"+EOL +
+                "    10 + 2;"+ EOL +
                 "}", lpp.print(m));
     }
 

@@ -33,6 +33,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -116,7 +117,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     public void addingAnnotation() throws IOException {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()\nint foo();", it);
+        assertTransformedToString("@myAnno()"+EOL+"int foo();", it);
     }
 
     @Test
@@ -128,7 +129,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
 
     @Test
     public void removingAnnotationOnPrevLine() throws IOException {
-        AnnotationMemberDeclaration it = consider("@myAnno\nint foo();");
+        AnnotationMemberDeclaration it = consider("@myAnno" + EOL + "int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
@@ -146,7 +147,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     public void addingJavadoc() throws IOException {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
-        assertTransformedToString("@interface AD { /**Cool this annotation!*/\n" +
+        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + EOL +
                 "int foo(); }", it.getParentNode().get());
     }
 
