@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Modified;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
@@ -38,7 +37,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
