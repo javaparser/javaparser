@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -90,6 +91,34 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         setName(name);
         setInitializer(initializer);
         setType(type);
+        init();
+    }
+
+    private void init() {
+        this.register(new AstObserverAdapter() {
+
+            @Override
+            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                if (property == ObservableProperty.TYPE) {
+                    VariableDeclarator vd = VariableDeclarator.this;
+                    if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
+                        NodeWithVariables nodeWithVariables = (NodeWithVariables) vd.getParentNode().get();
+                        Type currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
+                        List<Type> types = new LinkedList<>();
+                        int index = nodeWithVariables.getVariables().indexOf(vd);
+                        for (int i = 0; i < nodeWithVariables.getVariables().size(); i++) {
+                            if (i == index) {
+                                types.add((Type) newValue);
+                            } else {
+                                types.add(nodeWithVariables.getVariable(i).getType());
+                            }
+                        }
+                        Type newMaxCommonType = NodeWithVariables.maximumCommonType(types);
+                        ((Node) nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType, newMaxCommonType);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -153,28 +182,11 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     }
 
     @Override
-    @Modified
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.getParentNode().isPresent() && this.getParentNode().get() instanceof NodeWithVariables) {
-            NodeWithVariables nodeWithVariables = (NodeWithVariables) this.getParentNode().get();
-            Type currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
-            List<Type> types = new LinkedList<>();
-            int index = nodeWithVariables.getVariables().indexOf(this);
-            for (int i = 0; i < nodeWithVariables.getVariables().size(); i++) {
-                if (i == index) {
-                    types.add(type);
-                } else {
-                    types.add(nodeWithVariables.getVariable(i).getType());
-                }
-            }
-            Type newMaxCommonType = NodeWithVariables.maximumCommonType(types);
-            ((Node) nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType, newMaxCommonType);
-        }
-        if (this.type != null) {
+        if (this.type != null)
             this.type.setParentNode(null);
-        }
         this.type = type;
         setAsParentNodeOf(type);
         return this;
