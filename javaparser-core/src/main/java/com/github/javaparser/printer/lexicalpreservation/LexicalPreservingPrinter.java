@@ -39,6 +39,10 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
+import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmSequence;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.utils.Pair;
 
 import java.io.IOException;
@@ -312,9 +316,22 @@ public class LexicalPreservingPrinter {
             return nodeText;
         }
 
-        // Here we can get the text easily but then we need to figure out how to parse it so that
-        // we get the tokens
-        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+        return interpret(node, ConcreteSyntaxModel.forClass(node.getClass()));
+    }
+
+    private NodeText interpret(Node node, CsmElement csm) {
+        LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
+        NodeText nodeText = new NodeText(this);
+        for (CsmElement element : calculatedSyntaxModel.elements) {
+            if (element instanceof LexicalDifferenceCalculator.CsmChild) {
+                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+            } else if (element instanceof CsmToken){
+                nodeText.addToken(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(node));
+            } else {
+                throw new UnsupportedOperationException(element.getClass().getSimpleName());
+            }
+        }
+        return nodeText;
     }
 
     // Visible for testing
