@@ -22,28 +22,21 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
-import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.printer.TokenConstants;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmSequence;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.utils.Pair;
+import com.github.javaparser.utils.Utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -53,15 +46,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ASTParserConstants.EXTENDS;
-import static com.github.javaparser.ASTParserConstants.IMPLEMENTS;
 import static com.github.javaparser.ASTParserConstants.JAVA_DOC_COMMENT;
-import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.EXCLUDE_END;
-import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.EXCLUDE_START;
-import static com.github.javaparser.printer.lexicalpreservation.NodeText.Option.REMOVE_SPACE_IMMEDIATELY_AFTER;
-import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byNode;
-import static com.github.javaparser.printer.lexicalpreservation.TextElementMatchers.byTokenType;
-import static com.github.javaparser.printer.lexicalpreservation.Tokens.*;
+import static com.github.javaparser.printer.TokenConstants.NEWLINE_TOKEN;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
@@ -131,8 +117,7 @@ public class LexicalPreservingPrinter {
                         // Find the position of the comment node and put in front of it the comment and a newline
                         int index = nodeText.findChild(observedNode);
                         nodeText.addChild(index, (Comment)newValue);
-                        nodeText.addToken(index +1, 3, "\n");
-                        //nodeText.addToken(index + 1, 3, "\n");
+                        nodeText.addToken(index + 1, NEWLINE_TOKEN, Utils.EOL);
                     } else if (oldValue != null && newValue == null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment javadocComment = (JavadocComment)oldValue;
@@ -143,7 +128,7 @@ public class LexicalPreservingPrinter {
                             }
                             int index = nodeText.findElement(matchingTokens.get(0));
                             nodeText.removeElement(index);
-                            if (nodeText.getElements().get(index).isToken(3)) {
+                            if (nodeText.getElements().get(index).isToken(NEWLINE_TOKEN)) {
                                 nodeText.removeElement(index);
                             }
                         } else {
@@ -174,21 +159,21 @@ public class LexicalPreservingPrinter {
             }
 
             @Override
-            public void concreteListChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                NodeText nodeText = lpp.getTextForNode(observedNode.getParentNodeForChildren());
+            public void concreteListChange(NodeList changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+                NodeText nodeText = lpp.getTextForNode(changedList.getParentNodeForChildren());
                 if (type == ListChangeType.REMOVAL) {
-                    new LexicalDifferenceCalculator().calculateListRemoval(nodeText, findNodeListName(observedNode), observedNode, index, nodeAddedOrRemoved);
+                    new LexicalDifferenceCalculator().calculateListRemovalDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
                 } else if (type == ListChangeType.ADDITION) {
-                    new LexicalDifferenceCalculator().calculateListAddition(nodeText, findNodeListName(observedNode),observedNode, index, nodeAddedOrRemoved);
+                    new LexicalDifferenceCalculator().calculateListAdditionDifference(findNodeListName(changedList),changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
                 } else {
                     throw new UnsupportedOperationException();
                 }
             }
 
             @Override
-            public void concreteListReplacement(NodeList observedNode, int index, Node oldValue, Node newValue) {
-                NodeText nodeText = lpp.getTextForNode(observedNode.getParentNodeForChildren());
-                new LexicalDifferenceCalculator().calculateListReplacement(nodeText, findNodeListName(observedNode), observedNode, index, oldValue, newValue);
+            public void concreteListReplacement(NodeList changedList, int index, Node oldValue, Node newValue) {
+                NodeText nodeText = lpp.getTextForNode(changedList.getParentNodeForChildren());
+                new LexicalDifferenceCalculator().calculateListReplacementDifference(findNodeListName(changedList), changedList, index, oldValue, newValue).apply(nodeText, changedList.getParentNodeForChildren());
             }
         };
     }

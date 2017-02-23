@@ -21,14 +21,8 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.printer.TokenConstants;
 
 import java.util.EnumSet;
 import java.util.LinkedList;
@@ -43,18 +37,8 @@ class NodeText {
     private LexicalPreservingPrinter lexicalPreservingPrinter;
     private List<TextElement> elements;
 
-    public LexicalPreservingPrinter getLexicalPreservingPrinter() {
+    LexicalPreservingPrinter getLexicalPreservingPrinter() {
         return lexicalPreservingPrinter;
-    }
-
-    public void removeElement(TextElement textElement) {
-        for (int i=0;i<elements.size();i++){
-            if (elements.get(i) == textElement) {
-                elements.remove(i);
-                return;
-            }
-        }
-        throw new IllegalArgumentException();
     }
 
     enum Option {
@@ -139,14 +123,6 @@ class NodeText {
         return findElement(TextElementMatchers.byNode(child), from);
     }
 
-    private int findToken(int tokenKind) {
-        return findToken(tokenKind, 0);
-    }
-
-    private int findToken(int tokenKind, int from) {
-        return findElement(TextElementMatchers.byTokenType(tokenKind), from);
-    }
-
     //
     // Removing single elements
     //
@@ -162,7 +138,7 @@ class NodeText {
                 elements.remove(e);
                 if (potentiallyFollowingWhitespace) {
                     if (i < elements.size()) {
-                        if (elements.get(i).isToken(1)) {
+                        if (elements.get(i).isToken(TokenConstants.SPACE_TOKEN)) {
                             elements.remove(i);
                         }
                     } else {
@@ -184,7 +160,7 @@ class NodeText {
     }
 
     void removeFromTokenUntil(TextElementMatcher start, Optional<TextElementMatcher> end, boolean includingPreceedingSpace) {
-        for (int i=elements.size() -1; i>=0; i--) {
+        for (int i=elements.size() - 1; i>=0; i--) {
             if (start.match(elements.get(i))) {
                 while (elements.size() > i && (!end.isPresent() || !end.get().match(elements.get(i)))) {
                     elements.remove(i);
@@ -198,40 +174,8 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
-    void removeAllBefore(TextElementMatcher delimiter) {
-        int index = findElement(delimiter);
-        for (int i=0;i<index;i++) {
-            elements.remove(0);
-        }
-    }
-
     void removeElement(int index) {
         elements.remove(index);
-    }
-
-    void removeWhiteSpaceFollowing(TextElementMatcher delimiter) {
-        int index = findElement(delimiter);
-        ++index;
-        while (index < elements.size() && (elements.get(index).isToken(1)||elements.get(index).isToken(3))) {
-            elements.remove(index);
-        }
-    }
-
-    void removeComment(Comment comment) {
-        for (int i=0;i<elements.size();i++){
-            TextElement e = elements.get(i);
-            if (e.isCommentToken() && e.expand().trim().equals(comment.toString().trim())) {
-                elements.remove(i);
-                if (i<elements.size() && elements.get(i).isToken(3)) {
-                    elements.remove(i);
-                }
-                return;
-            }
-        }
-    }
-
-    void removeTextBetween(TextElementMatcher start, TextElementMatcher end) {
-        removeTextBetween(start, end, EnumSet.noneOf(Option.class));
     }
 
     /**
@@ -267,25 +211,10 @@ class NodeText {
     // Replacing elements
     //
 
-    void replace(TextElementMatcher position, Node newChild) {
-        replace(position, new ChildTextElement(lexicalPreservingPrinter, newChild));
-    }
-
     void replace(TextElementMatcher position, TextElement newElement) {
         int index = findElement(position, 0);
         elements.remove(index);
         elements.add(index, newElement);
-    }
-
-    void replaceComment(Comment oldValue, Comment newValue) {
-        for (int i=0;i<elements.size();i++){
-            TextElement e = elements.get(i);
-            if (e.isCommentToken() && e.expand().trim().equals(oldValue.toString().trim())) {
-                elements.remove(i);
-                elements.add(i, new TokenTextElement(commentToTokenKind(newValue), newValue.toString().trim()));
-                return;
-            }
-        }
     }
 
     //
@@ -315,18 +244,6 @@ class NodeText {
     // Visible for testing
     List<TextElement> getElements() {
         return elements;
-    }
-
-    private int commentToTokenKind(Comment comment){
-        if (comment instanceof JavadocComment) {
-            return ASTParserConstants.JAVA_DOC_COMMENT;
-        } else if (comment instanceof LineComment) {
-            return ASTParserConstants.SINGLE_LINE_COMMENT;
-        } else if (comment instanceof BlockComment) {
-            return ASTParserConstants.MULTI_LINE_COMMENT;
-        } else {
-            throw new IllegalArgumentException();
-        }
     }
 
     @Override

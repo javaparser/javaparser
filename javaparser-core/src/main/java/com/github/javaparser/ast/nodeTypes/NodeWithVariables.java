@@ -110,10 +110,10 @@ public interface NodeWithVariables<N extends Node> {
      */
     @DerivedProperty
     default Type getMaximumCommonType() {
-        return maximumCommonType(this.getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
+        return calculateMaximumCommonType(this.getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
     }
 
-    static Type maximumCommonType(List<Type> types) {
+    static Type calculateMaximumCommonType(List<Type> types) {
         // we use a local class because we cannot use an helper static method in an interface
         class Helper {
             // Conceptually: given a type we start from the Element Type and get as many array levels as indicated

@@ -3,6 +3,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.ASTParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.printer.TokenConstants;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
@@ -159,7 +160,6 @@ public class Difference {
                 return childA.getChild().getClass().equals(childB.getClass());
             } else if (b instanceof CsmToken) {
                 return false;
-                //throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
             } else {
                 throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
             }
@@ -175,6 +175,9 @@ public class Difference {
         throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
     }
 
+    /**
+     * Find the positions of all the given children.
+     */
     private static Map<Node, Integer> findChildrenPositions(LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel) {
         Map<Node, Integer> positions = new HashMap<>();
         for (int i=0;i<calculatedSyntaxModel.elements.size();i++) {
@@ -186,7 +189,23 @@ public class Difference {
         return positions;
     }
 
-    public static Difference calculate(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+    /**
+     * Calculate the Difference between two CalculatedSyntaxModel elements, determining which elements were kept,
+     * which were added and which were removed.
+     */
+    static Difference calculate(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
+        // For performance reasons we use the positions of matching children
+        // to guide the calculation of the difference
+        //
+        // Suppose we have:
+        //   qwerty[A]uiop
+        //   qwer[A]uiop
+        //
+        // with [A] being a child and lowercase letters being tokens
+        //
+        // We would calculate the Difference between "qwerty" and "qwer" then we know the A is kep, and then we
+        // would calculate the difference between "uiop" and "uiop"
+
         Map<Node, Integer> childrenInOriginal = findChildrenPositions(original);
         Map<Node, Integer> childrenInAfter = findChildrenPositions(after);
 
@@ -223,6 +242,9 @@ public class Difference {
         int originalIndex = 0;
         int afterIndex = 0;
 
+        // We move through the two CalculatedSyntaxModel, moving both forward when we have a match
+        // and moving just one side forward when we have an element kept or removed
+
         do {
             if (originalIndex < original.elements.size() && afterIndex >= after.elements.size()) {
                 elements.add(new Removed(original.elements.get(originalIndex)));
@@ -257,7 +279,6 @@ public class Difference {
                         elements.add(new Removed(nextOriginal));
                         originalIndex++;
                     }
-                    //throw new UnsupportedOperationException("B");
                 }
             }
         } while (originalIndex < original.elements.size() || afterIndex < after.elements.size());
@@ -280,11 +301,11 @@ public class Difference {
         res.addAll(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isToken(NEWLINE_TOKEN) || e.isToken(31)) {
+            if (e.isToken(NEWLINE_TOKEN) || e.isToken(ASTParserConstants.SINGLE_LINE_COMMENT)) {
                 res.clear();
                 afterNl = true;
             } else {
-                if (afterNl && e instanceof TokenTextElement && LexicalDifferenceCalculator.isWhitespace(((TokenTextElement)e).getTokenKind())) {
+                if (afterNl && e instanceof TokenTextElement && TokenConstants.isWhitespace(((TokenTextElement)e).getTokenKind())) {
                     res.add(e);
                 } else {
                     afterNl = false;
@@ -349,7 +370,11 @@ public class Difference {
         return nodeTextIndex;
     }
 
-    public void apply(NodeText nodeText, Node node) {
+    /**
+     * Node that we have calculate the Difference we can apply to a concrete NodeText, modifying it according
+     * to the difference (adding and removing the elements provided).
+     */
+    void apply(NodeText nodeText, Node node) {
         List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
             throw new NullPointerException();
@@ -363,13 +388,15 @@ public class Difference {
                     Kept kept = (Kept) diffEl;
                     if (kept.element instanceof CsmToken) {
                         CsmToken csmToken = (CsmToken) kept.element;
-                        if (LexicalDifferenceCalculator.isWhitespaceOrComment(csmToken.getTokenType())) {
+                        if (TokenConstants.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
                         } else {
-                            throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
+                            throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
+                                    + nodeText + ". Difference: " + this);
                         }
                     } else {
-                        throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: " + nodeText + ". Difference: " + this);
+                        throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
+                                + nodeText + ". Difference: " + this);
                     }
                 } else if (diffEl instanceof Added) {
                     nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
@@ -383,7 +410,8 @@ public class Difference {
                 if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
                     nodeTextIndex++;
                 } else {
-                    throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: " + this + " " + nodeTextEl);
+                    throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "
+                            + this + " " + nodeTextEl);
                 }
             } else {
                 DifferenceElement diffEl = elements.get(diffIndex);
@@ -445,7 +473,7 @@ public class Difference {
                         if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
                             nodeTextIndex++;
                             diffIndex++;
-                        } else if (LexicalDifferenceCalculator.isWhitespaceOrComment(csmToken.getTokenType())) {
+                        } else if (TokenConstants.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
                         } else if (nodeTextToken.isWhiteSpaceOrComment()) {
                             nodeTextIndex++;
