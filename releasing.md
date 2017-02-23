@@ -1,7 +1,7 @@
 After fighting with different plugins for automatically deploy new versions to Maven central
 we currently use a manual process. As primitive as it is it actually works.
 
-First we generate all thejars we need to generate:
+First we generate all the jars we need to generate:
 
 * mvn install
 * mvn javadoc:jar
