@@ -47,3 +47,8 @@ gpg $GPGPARAMS -ab java-symbol-solver-logic/build/libs/java-symbol-solver-logic-
 cd java-symbol-solver-logic/build/libs
 jar -cvf bundle-java-symbol-solver-logic.jar ../pom.xml ../pom.xml.asc java-symbol-solver-logic-${VERSION}.jar java-symbol-solver-logic-${VERSION}.jar.asc java-symbol-solver-logic-${VERSION}-javadoc.jar java-symbol-solver-logic-${VERSION}-javadoc.jar.asc java-symbol-solver-logic-${VERSION}-sources.jar java-symbol-solver-logic-${VERSION}-sources.jar.asc
 cd ../../..
+
+mkdir -p release
+mv release/java-symbol-solver-core/build/libs/bundle-java-symbol-solver-core.jar .
+mv release/java-symbol-solver-model/build/libs/bundle-java-symbol-solver-model.jar .
+mv release/java-symbol-solver-logic/build/libs/bundle-java-symbol-solver-logic.jar .
