@@ -10,7 +10,10 @@ plugins {
   id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
-def jssVersion = '0.5.0'
+def jssVersion = '0.5.0-SNAPSHOT'
+def descriptions = ["java-symbol-solver-core": "A Symbol Solver for Java, built on top of JavaParser (core)",
+                    "java-symbol-solver-model": "A Symbol Solver for Java, built on top of JavaParser (model)",
+                    "java-symbol-solver-logic": "A Symbol Solver for Java, built on top of JavaParser (logic)"]
 
 task version << {
   print "Version ${jssVersion}"
@@ -83,7 +86,7 @@ subprojects {
     pom {
       project {
         name project.name
-        description project.description
+        description descriptions[project.name]
         version jssVersion
         packaging 'jar'
         url 'https://github.com/javaparser/java-symbol-solver'

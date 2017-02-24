@@ -49,6 +49,6 @@ jar -cvf bundle-java-symbol-solver-logic.jar ../pom.xml ../pom.xml.asc java-symb
 cd ../../..
 
 mkdir -p release
-mv release/java-symbol-solver-core/build/libs/bundle-java-symbol-solver-core.jar .
-mv release/java-symbol-solver-model/build/libs/bundle-java-symbol-solver-model.jar .
-mv release/java-symbol-solver-logic/build/libs/bundle-java-symbol-solver-logic.jar .
+mv java-symbol-solver-core/build/libs/bundle-java-symbol-solver-core.jar release
+mv java-symbol-solver-model/build/libs/bundle-java-symbol-solver-model.jar release
+mv java-symbol-solver-logic/build/libs/bundle-java-symbol-solver-logic.jar release
