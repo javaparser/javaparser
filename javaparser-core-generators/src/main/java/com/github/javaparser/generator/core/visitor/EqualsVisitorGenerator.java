@@ -15,8 +15,8 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * Generates JavaParser's EqualsVisitor.
  */
 public class EqualsVisitorGenerator extends VisitorGenerator {
-    public EqualsVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "EqualsVisitor", "Boolean", "Visitable", true);
+    public EqualsVisitorGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot, "com.github.javaparser.ast.visitor", "EqualsVisitor", "Boolean", "Visitable", true);
     }
 
     @Override

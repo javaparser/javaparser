@@ -1090,7 +1090,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     private <N extends Node> NodeList<N> modifyList(Optional<NodeList<N>> list, A arg) {
-        return list.map(ns -> modifyList(ns, arg)).orElse(null);
+        return list.map( ns -> modifyList(ns, arg)).orElse(null);
     }
 
     public Visitable visit(ModuleDeclaration n, A arg) {

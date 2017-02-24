@@ -1,9 +1,9 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ModuleInfoParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
 
@@ -16,13 +16,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
+import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system.
@@ -31,6 +35,8 @@ import static com.github.javaparser.utils.CodeGenerationUtils.*;
 public class SourceRoot {
     private final Path root;
     private final Map<Path, ParseResult<CompilationUnit>> content = new HashMap<>();
+    private JavaParser javaParser = new JavaParser();
+    private ModuleInfoParser moduleInfoParser = new ModuleInfoParser();
 
     public SourceRoot(Path root) {
         this.root = root.normalize();
@@ -40,14 +46,14 @@ public class SourceRoot {
     /**
      * Parses all .java files in a package recursively.
      */
-    public Map<Path, ParseResult<CompilationUnit>> tryToParse(String startPackage, JavaParser parser) throws IOException {
+    public Map<Path, ParseResult<CompilationUnit>> tryToParse(String startPackage) throws IOException {
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
-                    tryToParse(startPackage, file.getFileName().toString(), parser);
+                    tryToParse(startPackage, file.getFileName().toString());
                 }
                 return FileVisitResult.CONTINUE;
             }
@@ -58,8 +64,8 @@ public class SourceRoot {
     /**
      * Parse every .java file in this source root.
      */
-    public Map<Path, ParseResult<CompilationUnit>> tryToParse(JavaParser parser) throws IOException {
-        return tryToParse("", parser);
+    public Map<Path, ParseResult<CompilationUnit>> tryToParse() throws IOException {
+        return tryToParse("");
     }
 
     /**
@@ -108,7 +114,7 @@ public class SourceRoot {
     /**
      * Try to parse a single Java file and return the result of parsing.
      */
-    public ParseResult<CompilationUnit> tryToParse(String packag, String filename, JavaParser javaParser) throws IOException {
+    public ParseResult<CompilationUnit> tryToParse(String packag, String filename) throws IOException {
         final Path relativePath = fileInPackageRelativePath(packag, filename);
         if (content.containsKey(relativePath)) {
             Log.trace("Retrieving cached %s", relativePath);
@@ -116,18 +122,30 @@ public class SourceRoot {
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", path);
-        final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
+        final ParseResult<CompilationUnit> result = innerParse(packag, filename, path);
         content.put(relativePath, result);
         return result;
     }
 
     /**
+     * Contains the inner parsing logic.
+     * It was made overridable so you can influence the way files with module info are treated.
+     */
+    protected ParseResult<CompilationUnit> innerParse(String packag, String filename, Path path) throws IOException {
+        if (filename.equals("module-info.java")) {
+            return moduleInfoParser.parse(provider(path));
+        }
+        return javaParser.parse(COMPILATION_UNIT, provider(path));
+    }
+
+    /**
      * Try to parse a single Java file and return it.
+     *
      * @throws ParseProblemException when something went wrong.
      */
-    public CompilationUnit parse(String packag, String filename, JavaParser javaParser) {
+    public CompilationUnit parse(String packag, String filename) {
         try {
-            ParseResult<CompilationUnit> result = tryToParse(packag, filename, javaParser);
+            final ParseResult<CompilationUnit> result = tryToParse(packag, filename);
             if (result.isSuccessful()) {
                 return result.getResult().get();
             }
@@ -145,5 +163,23 @@ public class SourceRoot {
         final Path path = fileInPackageRelativePath(pkg, filename);
         final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
         content.put(path, parseResult);
+    }
+
+    public JavaParser getJavaParser() {
+        return javaParser;
+    }
+
+    public SourceRoot setJavaParser(JavaParser javaParser) {
+        this.javaParser = javaParser;
+        return this;
+    }
+
+    public ModuleInfoParser getModuleInfoParser() {
+        return moduleInfoParser;
+    }
+
+    public SourceRoot setModuleInfoParser(ModuleInfoParser moduleInfoParser) {
+        this.moduleInfoParser = moduleInfoParser;
+        return this;
     }
 }

@@ -90,7 +90,7 @@ public class CsmToken implements CsmElement {
 
     @Override
     public String toString() {
-        return "token(" + ASTParserConstants.tokenImage[tokenType]+ ")";
+        return "token(" + GeneratedJavaParserConstants.tokenImage[tokenType]+ ")";
     }
 
     @Override

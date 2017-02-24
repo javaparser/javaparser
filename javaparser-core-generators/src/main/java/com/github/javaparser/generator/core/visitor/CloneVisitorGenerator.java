@@ -16,8 +16,8 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * Generates JavaParser's CloneVisitor.
  */
 public class CloneVisitorGenerator extends VisitorGenerator {
-    public CloneVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "CloneVisitor", "Visitable", "Object", true);
+    public CloneVisitorGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot, "com.github.javaparser.ast.visitor", "CloneVisitor", "Visitable", "Object", true);
     }
 
     @Override

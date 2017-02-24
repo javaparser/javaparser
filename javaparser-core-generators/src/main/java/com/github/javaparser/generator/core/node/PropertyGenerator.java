@@ -25,8 +25,8 @@ public class PropertyGenerator extends NodeGenerator {
     private final Map<String, PropertyMetaModel> declaredProperties = new HashMap<>();
     private final Map<String, PropertyMetaModel> derivedProperties = new HashMap<>();
 
-    public PropertyGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot);
+    public PropertyGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class PropertyGenerator extends NodeGenerator {
 
     @Override
     protected void after() throws Exception {
-        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java", javaParser).getResult().get();
+        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
         EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
         List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());

@@ -17,14 +17,14 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * it, ready for modification.
  */
 public abstract class NodeGenerator extends Generator {
-    protected NodeGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot);
+    protected NodeGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
     }
 
     public final void generate() throws Exception {
         Log.info("Running %s", getClass().getSimpleName());
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
-            CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java", javaParser);
+            CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
             ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new IOException("Can't find class"));
             generateNode(nodeMetaModel, nodeCu, nodeCoid);
         }

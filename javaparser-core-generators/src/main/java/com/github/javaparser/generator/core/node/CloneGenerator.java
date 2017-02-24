@@ -13,8 +13,8 @@ import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CloneGenerator extends NodeGenerator {
-    public CloneGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot);
+    public CloneGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
     }
 
     @Override
