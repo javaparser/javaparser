@@ -10,13 +10,18 @@ plugins {
   id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
+version = '0.5.0'
+
+task version << {
+  print "Version $version"
+}
+
 allprojects  {
   apply plugin: 'java'
   apply plugin: 'idea'
   apply plugin: 'jacoco'
 
   group = 'com.github.javaparser'
-  version = '0.4-SNAPSHOT'
 
   repositories {
     mavenCentral()
