@@ -161,9 +161,7 @@ public class MetaModelGenerator {
     }
 
     private void run(SourceRoot sourceRoot) throws IOException, NoSuchMethodException {
-        final JavaParser javaParser = new JavaParser();
-
-        final CompilationUnit javaParserMetaModel = sourceRoot.tryToParse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).getResult().get();
+        final CompilationUnit javaParserMetaModel = sourceRoot.tryToParse(METAMODEL_PACKAGE, "JavaParserMetaModel.java").getResult().get();
 
         generateNodeMetaModels(javaParserMetaModel, sourceRoot);
     }
