@@ -280,6 +280,18 @@ public final class JavaParser {
     }
 
     /**
+     * Parses the passed module info string. 
+     * {@link CompilationUnit} that represents it.
+     *
+     * @param moduleInfo {@link String} containing module info
+     * @return CompilationUnit representing the module info
+     * @throws ParseProblemException if the source code has parse errors
+     */
+    public static CompilationUnit parseModuleInfo(final String moduleInfo) {
+        return ModuleInfoParser.parse(moduleInfo);
+    }
+
+    /**
      * Parses the Java statement contained in a {@link String} and returns a
      * {@link Statement} that represents it.
      *
