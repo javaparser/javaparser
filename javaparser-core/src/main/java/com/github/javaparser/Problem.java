@@ -47,7 +47,7 @@ public class Problem {
     public String toString() {
         StringBuilder str = new StringBuilder(message);
         if (range != null)
-            str.append(" at ").append(range);
+            str.append(" at ").append(range.begin);
         if (cause != null) {
             str.append(Utils.EOL).append("Problem stacktrace : ").append(Utils.EOL);
             for (int i = 0; i < cause.getStackTrace().length; i++) {

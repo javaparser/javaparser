@@ -58,7 +58,7 @@ public class ParseResultTest {
         assertThat(result.getTokens().isPresent()).isTrue();
 
         assertThat(result.toString()).startsWith("Parsing failed:" + EOL +
-                "Parse error at (line 1,col 1)-(line 1,col 5)" + EOL +
+                "Parse error at (line 1,col 1)" + EOL +
                 "Problem stacktrace :");
     }
 }
