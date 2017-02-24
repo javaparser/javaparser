@@ -118,9 +118,11 @@ subprojects {
 }
 
 task sign(type:Exec) {
-  String home = System.getProperty("user.home")
-  String passphrase =new File(home + '/.gnupg/passphrase.txt').text
-  commandLine 'gpg2', '--passphrase', passphrase, '--batch', '--yes', '--no-tty', '-ab', 'java-symbol-solver-core/build/pom.xml'
+  doLast {
+    String home = System.getProperty("user.home")
+    String passphrase = new File(home + '/.gnupg/passphrase.txt').text
+    commandLine 'gpg2', '--passphrase', passphrase, '--batch', '--yes', '--no-tty', '-ab', 'java-symbol-solver-core/build/pom.xml'
+  }
 }
 
 
