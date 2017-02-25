@@ -797,6 +797,7 @@ public class ConcreteSyntaxModel {
                     child(ObservableProperty.PACKAGE_DECLARATION),
                     list(ObservableProperty.IMPORTS, none(), none(), newline()),
                     list(TYPES, newline(), CsmElement.newline(), CsmElement.none(), CsmElement.newline()),
+                    child(ObservableProperty.MODULE),
                     orphanCommentsEnding()));
 
         concreteSyntaxModelByClass.put(ImportDeclaration.class, sequence(

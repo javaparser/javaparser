@@ -8,7 +8,7 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.Assert;
+import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -110,6 +110,43 @@ public class ModuleDeclarationTest {
                         "    uses V.W;" + EOL +
                         "    provides X.Y with Z1.Z2, Z3.Z4;" + EOL +
                         "}" + EOL, cu.toString());
+
+    }
+
+    @Test
+    public void testCsmPrinting() {
+        CompilationUnit cu = ModuleInfoParser.parse(
+                "@Foo(1) @Foo(2) @Bar " +
+                        "module M.N {" +
+                        "  requires A.B;" +
+                        "  requires transitive C.D;" +
+                        "  requires static E.F;" +
+                        "  requires transitive static G.H;" +
+                        "" +
+                        "  exports P.Q;" +
+                        "  exports R.S to T1.U1, T2.U2;" +
+                        "" +
+                        "  opens P.Q;" +
+                        "  opens R.S to T1.U1, T2.U2;" +
+                        "" +
+                        "  uses V.W;" +
+                        "  provides X.Y with Z1.Z2, Z3.Z4;" +
+                        "}");
+        
+        assertEquals(
+                "@Foo(1) @Foo(2) @Bar " + EOL +
+                        "module M.N {" + EOL +
+                        "    requires A.B;" + EOL +
+                        "    requires transitive C.D;" + EOL +
+                        "    requires static E.F;" + EOL +
+                        "    requires static transitive G.H;" + EOL +
+                        "    exports P.Q;" + EOL +
+                        "    exports R.S to T1.U1, T2.U2;" + EOL +
+                        "    opens P.Q;" + EOL +
+                        "    opens R.S to T1.U1, T2.U2;" + EOL +
+                        "    uses V.W;" + EOL +
+                        "    provides X.Y with Z1.Z2, Z3.Z4;" + EOL +
+                        "}" + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
 
     }
 }
