@@ -43,13 +43,13 @@ public class ConcreteSyntaxModelAcceptanceTest {
 
     @Test
     public void printingExamplePrettyPrintVisitor() throws IOException {
-        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/PrettyPrintVisitor.java");
+        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/PrettyPrintVisitor_saved.java");
         assertEquals(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
     @Test
     public void printingExampleJavaConcepts() throws IOException {
-        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/JavaConcepts.java");
+        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/JavaConcepts_saved.java");
         assertEquals(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
     }
 

@@ -1,0 +1,4 @@
+// This is my class, with my comment
+class A {
+    void foo(int p1, char p2) { }
+}
