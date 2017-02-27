@@ -44,6 +44,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 @FunctionalInterface
 public interface ParseStart<R> {
     ParseStart<CompilationUnit> COMPILATION_UNIT = GeneratedJavaParser::CompilationUnit;
+    ParseStart<CompilationUnit> MODULE_INFO = GeneratedJavaParser::ModuleInfo;
     ParseStart<BlockStmt> BLOCK = GeneratedJavaParser::Block;
     ParseStart<Statement> STATEMENT = GeneratedJavaParser::BlockStatement;
     ParseStart<ImportDeclaration> IMPORT_DECLARATION = GeneratedJavaParser::ImportDeclaration;

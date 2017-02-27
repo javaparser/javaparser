@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedModuleInfoParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.TokenConstants;
@@ -46,7 +46,7 @@ class TokenTextElement extends TextElement {
     }
 
     TokenTextElement(int tokenKind) {
-        String content = GeneratedModuleInfoParserConstants.tokenImage[tokenKind];
+        String content = GeneratedJavaParserConstants.tokenImage[tokenKind];
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }

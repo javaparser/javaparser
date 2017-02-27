@@ -51,7 +51,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("}", lpp.getTextForNode(classA).getTextElement(5).expand());
         assertEquals("", lpp.getTextForNode(classA).getTextElement(6).expand());
         assertEquals(true, lpp.getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
-        assertEquals(GeneratedModuleInfoParserConstants.EOF, ((TokenTextElement)lpp.getTextForNode(classA).getTextElement(6)).getTokenKind());
+        assertEquals(GeneratedJavaParserConstants.EOF, ((TokenTextElement)lpp.getTextForNode(classA).getTextElement(6)).getTokenKind());
     }
 
     @Test

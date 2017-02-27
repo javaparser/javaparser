@@ -1,9 +1,9 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ModuleInfoParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
 
@@ -36,7 +36,6 @@ public class SourceRoot {
     private final Path root;
     private final Map<Path, ParseResult<CompilationUnit>> content = new HashMap<>();
     private JavaParser javaParser = new JavaParser();
-    private ModuleInfoParser moduleInfoParser = new ModuleInfoParser();
 
     public SourceRoot(Path root) {
         this.root = root.normalize();
@@ -133,7 +132,7 @@ public class SourceRoot {
      */
     protected ParseResult<CompilationUnit> innerParse(String packag, String filename, Path path) throws IOException {
         if (filename.equals("module-info.java")) {
-            return moduleInfoParser.parse(provider(path));
+            return javaParser.parse(ParseStart.MODULE_INFO, provider(path));
         }
         return javaParser.parse(COMPILATION_UNIT, provider(path));
     }
@@ -171,15 +170,6 @@ public class SourceRoot {
 
     public SourceRoot setJavaParser(JavaParser javaParser) {
         this.javaParser = javaParser;
-        return this;
-    }
-
-    public ModuleInfoParser getModuleInfoParser() {
-        return moduleInfoParser;
-    }
-
-    public SourceRoot setModuleInfoParser(ModuleInfoParser moduleInfoParser) {
-        this.moduleInfoParser = moduleInfoParser;
         return this;
     }
 }

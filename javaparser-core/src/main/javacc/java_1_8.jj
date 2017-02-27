@@ -49,6 +49,7 @@ import java.util.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -435,16 +436,16 @@ TOKEN :
 | < VOID: "void" >
 | < VOLATILE: "volatile" >
 | < WHILE: "while" >
-| < REQUIRES: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq0" >
-| < TO: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq1" >
-| < WITH: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq2" >
-| < OPEN: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq3" >
-| < OPENS: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq4" >
-| < USES: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq5" >
-| < MODULE: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq6" >
-| < EXPORTS: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq7" >
-| < PROVIDES: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq8" >
-| < TRANSITIVE: "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9" >
+| < REQUIRES: "requires" >
+| < TO: "to" >
+| < WITH: "with" >
+| < OPEN: "open" >
+| < OPENS: "opens" >
+| < USES: "uses" >
+| < MODULE: "module" >
+| < EXPORTS: "exports" >
+| < PROVIDES: "provides" >
+| < TRANSITIVE: "transitive" >
 }
 
 /* LITERALS */
@@ -1406,6 +1407,8 @@ ModifierHolder Modifiers():
   |
    "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
   |
+   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(tokenBegin()); }
+  |
    ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); }
   )
  )*
@@ -1624,10 +1627,10 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	    |
 	      ret = AnnotationTypeDeclaration(modifier)
 	    |
-	      LOOKAHEAD( [ TypeParameters() ] <IDENTIFIER> "(" )
+	      LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
 	      ret = ConstructorDeclaration(modifier)
 	    |
-	      LOOKAHEAD( Type() <IDENTIFIER> ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
+	      LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
 	      ret = FieldDeclaration(modifier)
 	    |
 	      ret = MethodDeclaration(modifier)
@@ -2101,8 +2104,8 @@ Name Name():
 	Name ret;
 }
 {
-  <IDENTIFIER> { ret = new Name(tokenRange(), null, token.image); }
-  ( LOOKAHEAD(2) "." <IDENTIFIER> { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
+  Identifier() { ret = new Name(tokenRange(), null, token.image); }
+  ( LOOKAHEAD(2) "." Identifier() { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
   { return ret; }
 }
 
@@ -2111,7 +2114,19 @@ SimpleName SimpleName():
     SimpleName ret;
 }
 {
-  <IDENTIFIER> { ret = new SimpleName(tokenRange(), token.image); }
+  Identifier() { ret = new SimpleName(tokenRange(), token.image); }
+  { return ret; }
+}
+
+
+String Identifier():
+{
+    String ret;
+}
+{
+    // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
+  (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
+   <IDENTIFIER>) { ret = token.image; }
   { return ret; }
 }
 
@@ -2160,7 +2175,7 @@ Expression Expression():
        ret = generateLambda(ret, lambdaBody);
      }
    }
- |  "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
+ |  "::"  [typeArgs = TypeArguments() ] (Identifier() | "new")
  {
    ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
  }
@@ -2513,7 +2528,7 @@ Expression PrimaryPrefix():
 			}
 	  	}
 	 |
-		"::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
+		"::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
 		  ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
 		}
@@ -2550,7 +2565,7 @@ Expression PrimaryPrefix():
 	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBegin().get(), tokenEnd()), type); }
 
 	| LOOKAHEAD (ResultType() "::" )
-	  type = ResultType() "::" [typeArgs = TypeArguments() ] (<IDENTIFIER> | "new")
+	  type = ResultType() "::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
 		  ret = new TypeExpr(type.getRange().get(), type);
 		  ret = new MethodReferenceExpr(ret.getRange().get(), ret, typeArgs.list, token.image);
@@ -2600,7 +2615,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  |
 	  	ret = AllocationExpression(scope)
 	  |
-	  	LOOKAHEAD( [ TypeArguments() ] <IDENTIFIER> )
+	  	LOOKAHEAD( [ TypeArguments() ] Identifier() )
 	  	[ typeArgs = TypeArguments() ]
 	  	name = SimpleName()
 	  	[ args = Arguments() {hasArgs=true;} ]
@@ -2917,7 +2932,7 @@ ExpressionStmt StatementExpression():
 	  |
 	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
 	  |
-	    "::"  [typeArgs = TypeArguments() ] (<IDENTIFIER > | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
+	    "::"  [typeArgs = TypeArguments() ] (Identifier() | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
@@ -3038,7 +3053,7 @@ NodeList<Expression> ForInit():
 }
 {
   (
-	  LOOKAHEAD( Modifiers() Type() <IDENTIFIER> )
+	  LOOKAHEAD( Modifiers() Type() Identifier() )
 	  expr = VariableDeclarationExpression() { ret = new NodeList<Expression>(); ret.add(expr); }
 	|
 	  ret = ExpressionList()
@@ -3243,7 +3258,7 @@ AnnotationExpr Annotation():
 {
     "@" { begin=tokenBegin(); } name = Name()
     (
-        LOOKAHEAD( "(" ( <IDENTIFIER> "=" | ")" ))
+        LOOKAHEAD( "(" ( Identifier() "=" | ")" ))
         "(" [ pairs = MemberValuePairs() ] ")"
         { ret = new NormalAnnotationExpr(range(begin, tokenEnd()), name, pairs); }
     |
@@ -3344,7 +3359,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
   |
     modifier = Modifiers()
     (
-	   LOOKAHEAD(Type() <IDENTIFIER> "(")
+	   LOOKAHEAD(Type() Identifier() "(")
 	   ret = AnnotationTypeMemberDeclaration(modifier)
 	  |
 	   ret = ClassOrInterfaceDeclaration(modifier)
@@ -3382,3 +3397,68 @@ Expression DefaultValue():
   "default" ret = MemberValue()
   { return ret; }
 }
+
+/* Module syntax follows */
+
+
+ModuleStmt ModuleStmt():
+{
+    ModifierHolder modifiers;
+    Name name;
+    Name tmpName;
+    NodeList<Name> names=emptyList();
+    Type type;
+    Type tmpType;
+    NodeList<Type> types=emptyList();
+    Position begin;
+    ModuleStmt stmt=new ModuleRequiresStmt();
+}
+{
+    (
+        <REQUIRES> {begin=tokenBegin();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, tokenEnd()), modifiers.modifiers, name);}
+    |
+        <EXPORTS> {begin=tokenBegin();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, tokenEnd()), name, names);}
+    |
+        <OPENS> {begin=tokenBegin();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, tokenEnd()), name, names);}
+    |
+        <USES> { begin=tokenBegin();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, tokenEnd()), type);}
+    |
+        <PROVIDES> { begin=tokenBegin();} type=Type() <WITH> tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, tokenEnd()), type, types);}
+    )
+    { return stmt; }
+}
+
+ModuleDeclaration ModuleDeclaration():
+{
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    NodeList<ModuleStmt> statements = new NodeList<ModuleStmt>();
+    boolean open=false;
+    ModuleStmt st;
+    Name name;
+    Position begin=INVALID;
+}
+{
+    annotations = Annotations()
+    [ <OPEN> {open=true; begin = begin.orIfInvalid(tokenBegin());} ]
+    <MODULE> { begin = begin.orIfInvalid(tokenBegin()); }
+    name = Name() "{"
+    ( st = ModuleStmt() { statements = add(statements, st); } )*
+    "}"
+    { return new ModuleDeclaration(range(begin, tokenEnd()), annotations, name, open, statements); }
+}
+
+CompilationUnit ModuleInfo():
+{
+	NodeList<ImportDeclaration> imports = emptyList();
+	ImportDeclaration in = null;
+	ModuleDeclaration module = null;
+}
+{
+    ( ";" )*
+    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
+    [ module = ModuleDeclaration() ]
+    (";")*
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new CompilationUnit(range(Position.HOME, tokenEnd()), null, imports, emptyList(), module); }
+}
+

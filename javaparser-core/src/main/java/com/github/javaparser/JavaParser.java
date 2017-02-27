@@ -288,7 +288,7 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parse errors
      */
     public static CompilationUnit parseModuleInfo(final String moduleInfo) {
-        return ModuleInfoParser.parse(moduleInfo);
+        return simplifiedParse(GeneratedJavaParser::ModuleInfo, provider(moduleInfo));
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.github.javaparser.modules;
 
-import com.github.javaparser.ModuleInfoParser;
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -11,14 +11,20 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseModuleInfo;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class ModuleDeclarationTest {
     @Test
+    public void moduleInfoKeywordsAreSeenAsIdentifiers() {
+        JavaParser.parse("class module { }");
+    }
+
+    @Test
     public void jlsExample1() {
-        CompilationUnit cu = ModuleInfoParser.parse(
+        CompilationUnit cu = parseModuleInfo(
                 "@Foo(1) @Foo(2) @Bar " +
                         "module M.N {" +
                         "  requires A.B;" +
@@ -69,7 +75,7 @@ public class ModuleDeclarationTest {
 
     @Test
     public void jlsExample2HasAnOpenModule() {
-        CompilationUnit cu = ModuleInfoParser.parse("open module M.N {}");
+        CompilationUnit cu = parseModuleInfo("open module M.N {}");
 
         ModuleDeclaration module = cu.getModule().get();
         assertEquals("M.N", module.getNameAsString());
@@ -78,7 +84,7 @@ public class ModuleDeclarationTest {
 
     @Test
     public void testPrettyPrinting() {
-        CompilationUnit cu = ModuleInfoParser.parse(
+        CompilationUnit cu = parseModuleInfo(
                 "@Foo(1) @Foo(2) @Bar " +
                         "module M.N {" +
                         "  requires A.B;" +
@@ -115,7 +121,7 @@ public class ModuleDeclarationTest {
 
     @Test
     public void testCsmPrinting() {
-        CompilationUnit cu = ModuleInfoParser.parse(
+        CompilationUnit cu = parseModuleInfo(
                 "@Foo(1) @Foo(2) @Bar " +
                         "open module M.N {" +
                         "  requires A.B;" +
@@ -132,7 +138,7 @@ public class ModuleDeclarationTest {
                         "  uses V.W;" +
                         "  provides X.Y with Z1.Z2, Z3.Z4;" +
                         "}");
-        
+
         assertEquals(
                 "@Foo(1) @Foo(2) @Bar" + EOL +
                         "open module M.N {" + EOL +
