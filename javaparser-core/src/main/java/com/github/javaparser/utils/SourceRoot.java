@@ -3,11 +3,9 @@ package com.github.javaparser.utils;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -16,19 +14,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
+import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
+import static com.github.javaparser.utils.SourceRoot.Callback.Result.SAVE;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system.
  * Files can be parsed and written back one by one or all together.
  */
 public class SourceRoot {
+    public interface Callback {
+        enum Result {SAVE, DONT_SAVE}
+
+        Result process(Path file, BasicFileAttributes attrs, ParseResult<CompilationUnit> result);
+    }
+
     private final Path root;
     private final Map<Path, ParseResult<CompilationUnit>> content = new HashMap<>();
 
@@ -38,7 +47,8 @@ public class SourceRoot {
     }
 
     /**
-     * Parses all .java files in a package recursively.
+     * Parses all .java files in a package recursively, caches them, and returns all files ever parsed with this source
+     * root.
      */
     public Map<Path, ParseResult<CompilationUnit>> tryToParse(String startPackage, JavaParser parser) throws IOException {
         Log.info("Parsing package \"%s\"", startPackage);
@@ -56,6 +66,31 @@ public class SourceRoot {
     }
 
     /**
+     * Parses a package recursively with a callback.
+     * The advantage: it doesn't keep all files and AST's in memory.
+     * The disadvantage: you have to do your processing directly.
+     */
+    public void parse(String startPackage, JavaParser javaParser, Callback callback) throws IOException {
+        Log.info("Parsing package \"%s\"", startPackage);
+        final Path path = packageAbsolutePath(root, startPackage);
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
+                    Log.trace("Parsing %s", path);
+                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
+                    if (callback.process(file, attrs, result) == SAVE) {
+                        if (result.getResult().isPresent()) {
+                            save(result.getResult().get(), path);
+                        }
+                    }
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    /**
      * Parse every .java file in this source root.
      */
     public Map<Path, ParseResult<CompilationUnit>> tryToParse(JavaParser parser) throws IOException {
@@ -65,24 +100,35 @@ public class SourceRoot {
     /**
      * Save all files back to where they were found.
      */
-    public void saveAll() throws FileNotFoundException, UnsupportedEncodingException {
+    public void saveAll() throws IOException {
         saveAll(root);
     }
 
     /**
      * Save all files back to another path.
      */
-    public void saveAll(Path root) throws FileNotFoundException, UnsupportedEncodingException {
+    public void saveAll(Path root) throws IOException {
         Log.info("Saving all files (%s) to %s", content.size(), root);
         for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : content.entrySet()) {
             final Path path = root.resolve(cu.getKey());
-            Log.trace("Saving %s", path);
-            path.getParent().toFile().mkdirs();
-
-            final String code = new PrettyPrinter().print(cu.getValue().getResult().get());
-            try (PrintWriter out = new PrintWriter(path.toFile(), UTF8.toString())) {
-                out.println(code);
+            if (cu.getValue().getResult().isPresent()) {
+                Log.trace("Saving %s", path);
+                save(cu.getValue().getResult().get(), path);
             }
+        }
+    }
+
+    private void save(CompilationUnit cu, Path path) throws IOException {
+        boolean made = path.getParent().toFile().mkdirs();
+        if (!made) {
+            throw new IOException(String.format("Couldn't make directory structure for %s", path));
+        }
+
+        final String code = new PrettyPrinter().print(cu);
+        try (PrintWriter out = new PrintWriter(path.toFile(), UTF8.toString())) {
+            out.println(code);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -123,6 +169,7 @@ public class SourceRoot {
 
     /**
      * Try to parse a single Java file and return it.
+     *
      * @throws ParseProblemException when something went wrong.
      */
     public CompilationUnit parse(String packag, String filename, JavaParser javaParser) {
