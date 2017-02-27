@@ -35,7 +35,7 @@ public class CsmToken implements CsmElement {
     public static int NEWLINE_TOKEN = 3;
     public static int SPACE_TOKEN = 1;
     public static int SPACE_TOKEN_ALT = 32;
-    public static int TAB_TOKEN = 31;
+    public static int TAB_TOKEN = 2;
     public static int EOF_TOKEN = 0;
 
     public interface TokenContentCalculator {
@@ -111,6 +111,7 @@ public class CsmToken implements CsmElement {
     }
 
     public boolean isWhiteSpace() {
-        return tokenType == NEWLINE_TOKEN || tokenType == SPACE_TOKEN || tokenType == EOF_TOKEN || tokenType == TAB_TOKEN || tokenType == SPACE_TOKEN_ALT;
+        return tokenType == NEWLINE_TOKEN || tokenType == SPACE_TOKEN || tokenType == EOF_TOKEN
+                || tokenType == TAB_TOKEN || tokenType == SPACE_TOKEN_ALT;
     }
 }
