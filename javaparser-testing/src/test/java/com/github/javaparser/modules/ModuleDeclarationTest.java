@@ -117,7 +117,7 @@ public class ModuleDeclarationTest {
     public void testCsmPrinting() {
         CompilationUnit cu = ModuleInfoParser.parse(
                 "@Foo(1) @Foo(2) @Bar " +
-                        "module M.N {" +
+                        "open module M.N {" +
                         "  requires A.B;" +
                         "  requires transitive C.D;" +
                         "  requires static E.F;" +
@@ -134,8 +134,8 @@ public class ModuleDeclarationTest {
                         "}");
         
         assertEquals(
-                "@Foo(1) @Foo(2) @Bar " + EOL +
-                        "module M.N {" + EOL +
+                "@Foo(1) @Foo(2) @Bar" + EOL +
+                        "open module M.N {" + EOL +
                         "    requires A.B;" + EOL +
                         "    requires transitive C.D;" + EOL +
                         "    requires static E.F;" + EOL +

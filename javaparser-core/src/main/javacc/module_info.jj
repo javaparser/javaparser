@@ -3386,15 +3386,15 @@ ModuleStmt ModuleStmt():
 }
 {
     (
-        "requires" {begin=tokenBegin();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, tokenEnd()), modifiers.modifiers, name);}
+        <REQUIRES> {begin=tokenBegin();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, tokenEnd()), modifiers.modifiers, name);}
     |
-        "exports" {begin=tokenBegin();} name=Name() ["to" tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, tokenEnd()), name, names);}
+        <EXPORTS> {begin=tokenBegin();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, tokenEnd()), name, names);}
     |
-        "opens" {begin=tokenBegin();} name=Name() ["to" tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, tokenEnd()), name, names);}
+        <OPENS> {begin=tokenBegin();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, tokenEnd()), name, names);}
     |
-        "uses" { begin=tokenBegin();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, tokenEnd()), type);}
+        <USES> { begin=tokenBegin();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, tokenEnd()), type);}
     |
-        "provides" { begin=tokenBegin();} type=Type() "with" tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, tokenEnd()), type, types);}
+        <PROVIDES> { begin=tokenBegin();} type=Type() <WITH> tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, tokenEnd()), type, types);}
     )
     { return stmt; }
 }
@@ -3410,8 +3410,8 @@ ModuleDeclaration ModuleDeclaration():
 }
 {
     annotations = Annotations()
-    [ "open" {open=true; begin = begin.orIfInvalid(tokenBegin());} ]
-    "module" { begin = begin.orIfInvalid(tokenBegin()); }
+    [ <OPEN> {open=true; begin = begin.orIfInvalid(tokenBegin());} ]
+    <MODULE> { begin = begin.orIfInvalid(tokenBegin()); }
     name = Name() "{"
     ( st = ModuleStmt() { statements = add(statements, st); } )*
     "}"

@@ -66,7 +66,7 @@ public class ConcreteSyntaxModel {
     }
 
     private static CsmElement annotations() {
-        return list(ObservableProperty.ANNOTATIONS, none(), none(), newline());
+        return list(ObservableProperty.ANNOTATIONS, space(), none(), newline());
     }
 
     private static CsmElement typeParameters() {
@@ -829,59 +829,58 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(ModuleDeclaration.class, CsmElement.sequence(
                 annotations(),
-                CsmElement.newline(),
-                CsmElement.conditional(ObservableProperty.OPEN, FLAG, CsmElement.sequence(CsmElement.token(GeneratedModuleInfoParserConstants.OPEN), CsmElement.space())),
-                CsmElement.token(GeneratedModuleInfoParserConstants.MODULE),
+                CsmElement.conditional(ObservableProperty.OPEN, FLAG, CsmElement.sequence(CsmElement.token(GeneratedModuleInfoParserConstants.OPEN, SourceGrammar.MODULE_INFO), CsmElement.space())),
+                CsmElement.token(GeneratedModuleInfoParserConstants.MODULE, SourceGrammar.MODULE_INFO),
                 CsmElement.space(),
                 CsmElement.child(ObservableProperty.NAME),
                 CsmElement.space(),
-                CsmElement.token(GeneratedModuleInfoParserConstants.LBRACE),
+                CsmElement.token(GeneratedModuleInfoParserConstants.LBRACE, SourceGrammar.MODULE_INFO),
                 CsmElement.newline(),
                 CsmElement.indent(),
                 CsmElement.list(ObservableProperty.MODULE_STMTS),
                 CsmElement.unindent(),
-                CsmElement.token(GeneratedModuleInfoParserConstants.RBRACE),
+                CsmElement.token(GeneratedModuleInfoParserConstants.RBRACE, SourceGrammar.MODULE_INFO),
                 CsmElement.newline()
         ));
 
         concreteSyntaxModelByClass.put(ModuleExportsStmt.class, CsmElement.sequence(
-                CsmElement.token(GeneratedModuleInfoParserConstants.EXPORTS),
+                CsmElement.token(GeneratedModuleInfoParserConstants.EXPORTS, SourceGrammar.MODULE_INFO),
                 CsmElement.space(),
                 CsmElement.child(ObservableProperty.NAME),
                 CsmElement.list(ObservableProperty.MODULE_NAMES,
                         CsmElement.sequence(CsmElement.comma(), CsmElement.space()),
-                        CsmElement.sequence(CsmElement.space(), CsmElement.token(GeneratedModuleInfoParserConstants.TO), CsmElement.space()),
+                        CsmElement.sequence(CsmElement.space(), CsmElement.token(GeneratedModuleInfoParserConstants.TO, SourceGrammar.MODULE_INFO), CsmElement.space()),
                         CsmElement.none()),
                 CsmElement.semicolon(),
                 CsmElement.newline()
         ));
 
         concreteSyntaxModelByClass.put(ModuleOpensStmt.class, CsmElement.sequence(
-                CsmElement.token(GeneratedModuleInfoParserConstants.OPENS),
+                CsmElement.token(GeneratedModuleInfoParserConstants.OPENS, SourceGrammar.MODULE_INFO),
                 CsmElement.space(),
                 CsmElement.child(ObservableProperty.NAME),
                 CsmElement.list(ObservableProperty.MODULE_NAMES,
                         CsmElement.sequence(CsmElement.comma(), CsmElement.space()),
-                        CsmElement.sequence(CsmElement.space(), CsmElement.token(GeneratedModuleInfoParserConstants.TO), CsmElement.space()),
+                        CsmElement.sequence(CsmElement.space(), CsmElement.token(GeneratedModuleInfoParserConstants.TO, SourceGrammar.MODULE_INFO), CsmElement.space()),
                         CsmElement.none()),
                 CsmElement.semicolon(),
                 CsmElement.newline()
         ));
 
         concreteSyntaxModelByClass.put(ModuleProvidesStmt.class, CsmElement.sequence(
-                CsmElement.token(GeneratedModuleInfoParserConstants.PROVIDES),
+                CsmElement.token(GeneratedModuleInfoParserConstants.PROVIDES, SourceGrammar.MODULE_INFO),
                 CsmElement.space(),
-                CsmElement.child(ObservableProperty.NAME),
+                CsmElement.child(ObservableProperty.TYPE),
                 CsmElement.list(ObservableProperty.WITH_TYPES,
                         CsmElement.sequence(CsmElement.comma(), CsmElement.space()),
-                        CsmElement.sequence(CsmElement.space(), CsmElement.token(GeneratedModuleInfoParserConstants.WITH), CsmElement.space()),
+                        CsmElement.sequence(CsmElement.space(), CsmElement.token(GeneratedModuleInfoParserConstants.WITH, SourceGrammar.MODULE_INFO), CsmElement.space()),
                         CsmElement.none()),
                 CsmElement.semicolon(),
                 CsmElement.newline()
         ));
 
         concreteSyntaxModelByClass.put(ModuleRequiresStmt.class, CsmElement.sequence(
-                CsmElement.token(GeneratedModuleInfoParserConstants.REQUIRES),
+                CsmElement.token(GeneratedModuleInfoParserConstants.REQUIRES, SourceGrammar.MODULE_INFO),
                 CsmElement.space(),
                 modifiers(),
                 CsmElement.child(ObservableProperty.NAME),
@@ -890,7 +889,7 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(ModuleUsesStmt.class, CsmElement.sequence(
-                CsmElement.token(GeneratedModuleInfoParserConstants.USES),
+                CsmElement.token(GeneratedModuleInfoParserConstants.USES, SourceGrammar.MODULE_INFO),
                 CsmElement.space(),
                 CsmElement.child(ObservableProperty.TYPE),
                 CsmElement.semicolon(),
