@@ -34,6 +34,8 @@ import com.github.javaparser.ast.type.VoidType;
 
 import java.util.EnumSet;
 
+import static com.github.javaparser.JavaParser.parseName;
+
 public class ClassCreator {
 
     public static void main(String[] args) throws Exception {
@@ -50,7 +52,7 @@ public class ClassCreator {
     private static CompilationUnit createCU() {
         CompilationUnit cu = new CompilationUnit();
         // set the package
-        cu.setPackageDeclaration(new PackageDeclaration(Name.parse("java.parser.test")));
+        cu.setPackageDeclaration(new PackageDeclaration(parseName("java.parser.test")));
 
         // or a shortcut
         cu.setPackageDeclaration("java.parser.test");

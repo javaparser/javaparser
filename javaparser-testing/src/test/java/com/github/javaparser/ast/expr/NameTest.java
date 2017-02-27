@@ -21,25 +21,27 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ParseProblemException;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseName;
 import static org.junit.Assert.assertEquals;
 
 public class NameTest {
     @Test
     public void outerNameExprIsTheRightMostIdentifier() {
-        Name name = Name.parse("a.b.c");
+        Name name = parseName("a.b.c");
         assertEquals("c", name.getIdentifier());
     }
 
     @Test
     public void parsingAndUnparsingWorks() {
-        Name name = Name.parse("a.b.c");
+        Name name = parseName("a.b.c");
         assertEquals("a.b.c", name.asString());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = ParseProblemException.class)
     public void parsingEmptyNameThrowsException() {
-        Name.parse("");
+        parseName("");
     }
 }

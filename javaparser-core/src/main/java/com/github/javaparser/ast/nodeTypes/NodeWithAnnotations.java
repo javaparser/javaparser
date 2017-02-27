@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.*;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
+import static com.github.javaparser.JavaParser.parseName;
+
 /**
  * A node that can be annotated.
  *
@@ -64,7 +66,7 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     default NormalAnnotationExpr addAnnotation(String name) {
         NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                Name.parse(name), new NodeList<>());
+                parseName(name), new NodeList<>());
         getAnnotations().add(normalAnnotationExpr);
         return normalAnnotationExpr;
     }
@@ -89,7 +91,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                Name.parse(name));
+                parseName(name));
         getAnnotations().add(markerAnnotationExpr);
         return (N) this;
     }
@@ -115,7 +117,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                Name.parse(name), new NameExpr(value));
+                parseName(name), new NameExpr(value));
         getAnnotations().add(singleMemberAnnotationExpr);
         return (N) this;
     }

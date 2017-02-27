@@ -48,13 +48,13 @@ public class TypeConstructionTest {
         ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
         PrimitiveType elementType = (PrimitiveType) arrayType4.getComponentType();
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
-        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("X")));
-        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("Y")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));
+        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("Y")));
 
         assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.INT);
-        assertThat(fieldDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
+        assertThat(fieldDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
 
         assertThat(arrayType1.getParentNode().get().getParentNode().get()).isSameAs(fieldDeclaration);
     }
@@ -70,13 +70,13 @@ public class TypeConstructionTest {
         ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
         PrimitiveType elementType = (PrimitiveType) arrayType4.getComponentType();
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
-        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("X")));
-        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("Y")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(arrayType3.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("X")));
+        assertThat(arrayType4.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("Y")));
 
         assertThat(elementType.getType()).isEqualTo(PrimitiveType.Primitive.INT);
-        assertThat(variableDeclarationExpr.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
+        assertThat(variableDeclarationExpr.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
 
         assertThat(arrayType1.getParentNode().get().getParentNode().get()).isSameAs(variableDeclarationExpr);
     }
@@ -89,9 +89,9 @@ public class TypeConstructionTest {
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
         Assertions.assertThat(arrayType2.getComponentType()).isInstanceOf(PrimitiveType.class);
 
-        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
-        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
-        assertThat(methodDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
+        assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
+        assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(methodDeclaration.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
 
         assertThat(methodDeclaration.getType().getParentNode().get()).isSameAs(methodDeclaration);
     }
@@ -108,9 +108,9 @@ public class TypeConstructionTest {
         PrimitiveType elementType = (PrimitiveType) innerArrayType.getComponentType();
 
         assertThat(elementType).isInstanceOf(PrimitiveType.class);
-        assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("A")));
-        assertThat(innerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("B")));
-        assertThat(parameter.getAnnotations()).containsExactly(new MarkerAnnotationExpr(Name.parse("C")));
+        assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
+        assertThat(innerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
+        assertThat(parameter.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("C")));
 
         assertThat(parameter.getType().getParentNode().get()).isSameAs(parameter);
     }
