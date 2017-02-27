@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import com.github.javaparser.GeneratedModuleInfoParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.Utils;
@@ -53,12 +54,8 @@ public class CsmToken implements CsmElement {
     }
 
     public CsmToken(int tokenType) {
-        this(tokenType, SourceGrammar.JAVAPARSER);
-    }
-
-    public CsmToken(int tokenType, SourceGrammar sourceGrammar) {
         this.tokenType = tokenType;
-        this.content = sourceGrammar.getTokenImage(tokenType);
+        this.content = GeneratedModuleInfoParserConstants.tokenImage[tokenType];
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }

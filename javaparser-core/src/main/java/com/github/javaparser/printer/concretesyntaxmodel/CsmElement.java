@@ -71,10 +71,6 @@ public interface CsmElement {
         return new CsmToken(tokenType, tokenContentCalculator);
     }
 
-    static CsmElement token(int tokenType, SourceGrammar sourceGrammar) {
-        return new CsmToken(tokenType, sourceGrammar);
-    }
-
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
         return new CsmConditional(property, condition, thenElement);
     }
