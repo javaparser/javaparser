@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedModuleInfoParserConstants;
 import com.github.javaparser.ast.Node;
 
 public abstract class TextElement implements TextElementMatcher {
@@ -31,9 +31,9 @@ public abstract class TextElement implements TextElementMatcher {
     abstract boolean isToken(int tokenKind);
 
     final boolean isCommentToken() {
-        return isToken(ASTParserConstants.JAVA_DOC_COMMENT)
-                || isToken(ASTParserConstants.SINGLE_LINE_COMMENT)
-                || isToken(ASTParserConstants.MULTI_LINE_COMMENT);
+        return isToken(GeneratedModuleInfoParserConstants.JAVA_DOC_COMMENT)
+                || isToken(GeneratedModuleInfoParserConstants.SINGLE_LINE_COMMENT)
+                || isToken(GeneratedModuleInfoParserConstants.MULTI_LINE_COMMENT);
     }
 
     @Override

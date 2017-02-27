@@ -1,6 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedModuleInfoParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -218,13 +218,13 @@ class LexicalDifferenceCalculator {
     private int toToken(Modifier modifier) {
         switch (modifier) {
             case PUBLIC:
-                return ASTParserConstants.PUBLIC;
+                return GeneratedModuleInfoParserConstants.PUBLIC;
             case PRIVATE:
-                return ASTParserConstants.PRIVATE;
+                return GeneratedModuleInfoParserConstants.PRIVATE;
             case PROTECTED:
-                return ASTParserConstants.PROTECTED;
+                return GeneratedModuleInfoParserConstants.PROTECTED;
             case STATIC:
-                return ASTParserConstants.STATIC;
+                return GeneratedModuleInfoParserConstants.STATIC;
             default:
                 throw new UnsupportedOperationException(modifier.name());
         }
