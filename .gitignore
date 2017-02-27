@@ -25,3 +25,4 @@ build
 /.project
 out
 **/.DS_Store
+release

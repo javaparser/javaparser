@@ -83,7 +83,7 @@ subprojects {
   }
 
   task generatePom << {
-    pom {
+    def generatedPom = pom {
       project {
         name project.name
         description descriptions[project.name]
@@ -113,7 +113,8 @@ subprojects {
           }
         }
       }
-    }.writeTo("$buildDir/pom.xml")
+    }
+    generatedPom.writeTo("$buildDir/pom.xml")
   }
 }
 
