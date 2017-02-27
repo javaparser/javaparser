@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Function;
 
 /**
  * Any kind of utility.
@@ -147,28 +148,6 @@ public class Utils {
     }
 
     /**
-     * Capitalizes the first character in the string.
-     */
-    public static String capitalize(String original) {
-        if (original.isEmpty()) {
-            throw new IllegalArgumentException("This string is empty");
-        } else {
-            return original.substring(0, 1).toUpperCase() + original.substring(1);
-        }
-    }
-
-    /**
-     * Lower-cases the first character in the string.
-     */
-    public static String decapitalize(String string) {
-        if (string.isEmpty()) {
-            throw new IllegalArgumentException("This string is empty");
-        }
-        return string.substring(0, 1).toLowerCase() + string.substring(1);
-    }
-
-
-    /**
      * Return the next word of the string, in other words it stops when a space is encountered.
      */
     public static String nextWord(String string) {
@@ -177,5 +156,53 @@ public class Utils {
             index++;
         }
         return string.substring(0, index);
+    }
+
+    /**
+     * Capitalizes the first character in the string.
+     */
+    public static String capitalize(String s) {
+        return stringTransformer(s, "capitalize", it -> it.toUpperCase());
+    }
+
+    /**
+     * Lower-cases the first character in the string.
+     */
+    public static String decapitalize(String s) {
+        return stringTransformer(s, "decapitalize", it -> it.toLowerCase());
+    }
+
+    private static String stringTransformer(String s, String operationDescription, Function<String, String> transformation) {
+        if (s.isEmpty()) {
+            throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(transformation.apply(s.substring(0, 1)));
+        sb.append(s.substring(1));
+        return sb.toString();
+    }
+
+    /**
+     * Return true if the value is null, an empty Optional or an empty String.
+     * @param value
+     * @return
+     */
+    public static boolean valueIsNullOrEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof Optional) {
+            if (((Optional) value).isPresent()) {
+                value = ((Optional) value).get();
+            } else {
+                return true;
+            }
+        }
+        if (value instanceof Collection) {
+            if (((Collection) value).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

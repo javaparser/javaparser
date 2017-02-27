@@ -45,7 +45,7 @@ public class ParseResult<T> {
      * @param problems a list of encountered parsing problems.
      * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
-    ParseResult(T result, List<Problem> problems, List<JavaToken> tokens, CommentsCollection commentsCollection) {
+    public ParseResult(T result, List<Problem> problems, List<JavaToken> tokens, CommentsCollection commentsCollection) {
         this.commentsCollection = commentsCollection;
         this.result = result;
         this.problems = problems;
