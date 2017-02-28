@@ -35,7 +35,12 @@ public class SourceRoot {
     public interface Callback {
         enum Result {SAVE, DONT_SAVE}
 
-        Result process(Path file, BasicFileAttributes attrs, ParseResult<CompilationUnit> result);
+        /**
+         * @param localPath the path to the file that was parsed, relative to the source root path.
+         * @param absolutePath the absolute path to the file that was parsed.
+         * @param result the result of of parsing the file.
+         */
+        Result process(Path localPath, Path absolutePath, ParseResult<CompilationUnit> result) throws IOException;
     }
 
     private final Path root;
@@ -75,11 +80,12 @@ public class SourceRoot {
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
-                    Log.trace("Parsing %s", path);
-                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
-                    if (callback.process(file, attrs, result) == SAVE) {
+            public FileVisitResult visitFile(Path absolutePath, BasicFileAttributes attrs) throws IOException {
+                if (!attrs.isDirectory() && absolutePath.toString().endsWith(".java")) {
+                    Path localPath = root.relativize(absolutePath);
+                    Log.trace("Parsing %s", localPath);
+                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(absolutePath));
+                    if (callback.process(localPath, absolutePath, result) == SAVE) {
                         if (result.getResult().isPresent()) {
                             save(result.getResult().get(), path);
                         }
@@ -192,5 +198,12 @@ public class SourceRoot {
         final Path path = fileInPackageRelativePath(pkg, filename);
         final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
         content.put(path, parseResult);
+    }
+
+    /**
+     * The path that was passed in the constructor.
+     */
+    public Path getRoot() {
+        return root;
     }
 }
