@@ -3,7 +3,6 @@ package com.github.javaparser.utils;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
 
@@ -121,20 +120,9 @@ public class SourceRoot {
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", path);
-        final ParseResult<CompilationUnit> result = innerParse(packag, filename, path);
+        final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
         content.put(relativePath, result);
         return result;
-    }
-
-    /**
-     * Contains the inner parsing logic.
-     * It was made overridable so you can influence the way files with module info are treated.
-     */
-    protected ParseResult<CompilationUnit> innerParse(String packag, String filename, Path path) throws IOException {
-        if (filename.equals("module-info.java")) {
-            return javaParser.parse(ParseStart.MODULE_INFO, provider(path));
-        }
-        return javaParser.parse(COMPILATION_UNIT, provider(path));
     }
 
     /**

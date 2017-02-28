@@ -1329,15 +1329,30 @@ CompilationUnit CompilationUnit():
 	NodeList<ImportDeclaration> imports = emptyList();
 	ImportDeclaration in = null;
 	NodeList<TypeDeclaration<?>> types = emptyList();
+   ModifierHolder modifier;
 	TypeDeclaration tn = null;
+	ModuleDeclaration module = null;
 }
 {
     ( ";" )*
     [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
     ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
-    ( tn = TypeDeclaration() { types = add(types, tn); } | ";")*
+    (
+        modifier = Modifiers()
+        (
+            tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+        |
+            tn = EnumDeclaration(modifier) { types = add(types, tn); }
+        |
+            tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+        |
+            module = ModuleDeclaration(modifier)
+        |
+            ";"
+        )
+    )*
     (<EOF> | "\u001A" /** ctrl+z char **/)
-    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types, null); }
+    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types, module); }
 }
 
 PackageDeclaration PackageDeclaration():
@@ -1421,23 +1436,6 @@ ModifierHolder Modifiers():
 /*
  * Declaration syntax follows.
  */
-TypeDeclaration TypeDeclaration():
-{
-   ModifierHolder modifier;
-   TypeDeclaration ret;
-}
-{
-    modifier = Modifiers()
-    (
-        ret = ClassOrInterfaceDeclaration(modifier)
-    |
-        ret = EnumDeclaration(modifier)
-    |
-        ret = AnnotationTypeDeclaration(modifier)
-    )
-  { return ret; }
-}
-
 
 ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier):
 {
@@ -3428,37 +3426,19 @@ ModuleStmt ModuleStmt():
     { return stmt; }
 }
 
-ModuleDeclaration ModuleDeclaration():
+ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
 {
-    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     NodeList<ModuleStmt> statements = new NodeList<ModuleStmt>();
     boolean open=false;
     ModuleStmt st;
     Name name;
-    Position begin=INVALID;
+    Position begin = modifier.begin;
 }
 {
-    annotations = Annotations()
     [ <OPEN> {open=true; begin = begin.orIfInvalid(tokenBegin());} ]
     <MODULE> { begin = begin.orIfInvalid(tokenBegin()); }
     name = Name() "{"
     ( st = ModuleStmt() { statements = add(statements, st); } )*
     "}"
-    { return new ModuleDeclaration(range(begin, tokenEnd()), annotations, name, open, statements); }
+    { return new ModuleDeclaration(range(begin, tokenEnd()), modifier.annotations, name, open, statements); }
 }
-
-CompilationUnit ModuleInfo():
-{
-	NodeList<ImportDeclaration> imports = emptyList();
-	ImportDeclaration in = null;
-	ModuleDeclaration module = null;
-}
-{
-    ( ";" )*
-    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
-    [ module = ModuleDeclaration() ]
-    (";")*
-    (<EOF> | "\u001A" /** ctrl+z char **/)
-    { return new CompilationUnit(range(Position.HOME, tokenEnd()), null, imports, emptyList(), module); }
-}
-

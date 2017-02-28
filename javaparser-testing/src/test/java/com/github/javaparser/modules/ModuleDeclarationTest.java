@@ -1,6 +1,5 @@
 package com.github.javaparser.modules;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
@@ -11,7 +10,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.parseModuleInfo;
+import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -19,12 +18,12 @@ import static org.junit.Assert.assertEquals;
 public class ModuleDeclarationTest {
     @Test
     public void moduleInfoKeywordsAreSeenAsIdentifiers() {
-        JavaParser.parse("class module { }");
+        parse("class module { }");
     }
 
     @Test
     public void jlsExample1() {
-        CompilationUnit cu = parseModuleInfo(
+        CompilationUnit cu = parse(
                 "@Foo(1) @Foo(2) @Bar " +
                         "module M.N {" +
                         "  requires A.B;" +
@@ -75,7 +74,7 @@ public class ModuleDeclarationTest {
 
     @Test
     public void jlsExample2HasAnOpenModule() {
-        CompilationUnit cu = parseModuleInfo("open module M.N {}");
+        CompilationUnit cu = parse("open module M.N {}");
 
         ModuleDeclaration module = cu.getModule().get();
         assertEquals("M.N", module.getNameAsString());
@@ -84,7 +83,7 @@ public class ModuleDeclarationTest {
 
     @Test
     public void testPrettyPrinting() {
-        CompilationUnit cu = parseModuleInfo(
+        CompilationUnit cu = parse(
                 "@Foo(1) @Foo(2) @Bar " +
                         "module M.N {" +
                         "  requires A.B;" +
@@ -121,7 +120,7 @@ public class ModuleDeclarationTest {
 
     @Test
     public void testCsmPrinting() {
-        CompilationUnit cu = parseModuleInfo(
+        CompilationUnit cu = parse(
                 "@Foo(1) @Foo(2) @Bar " +
                         "open module M.N {" +
                         "  requires A.B;" +
