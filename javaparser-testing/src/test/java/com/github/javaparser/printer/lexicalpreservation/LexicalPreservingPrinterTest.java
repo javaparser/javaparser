@@ -454,4 +454,22 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("class A {Function<String,String> f = a -> a;}", lpp.print(cu));
     }
 
+    @Test
+    public void printAModuleInfoSpecificKeywordUsedAsIdentifier1() {
+        considerCode("class module { }");
+
+        cu.getClassByName("module").get().setName("xyz");
+
+        assertEquals("class xyz { }", lpp.print(cu));
+    }
+
+    @Test
+    public void printAModuleInfoSpecificKeywordUsedAsIdentifier2() {
+        considerCode("class xyz { }");
+
+        cu.getClassByName("xyz").get().setName("module");
+
+        assertEquals("class module { }", lpp.print(cu));
+    }
+
 }
