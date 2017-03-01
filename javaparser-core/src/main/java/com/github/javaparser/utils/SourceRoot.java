@@ -125,10 +125,7 @@ public class SourceRoot {
     }
 
     private void save(CompilationUnit cu, Path path) throws IOException {
-        boolean made = path.getParent().toFile().mkdirs();
-        if (!made) {
-            throw new IOException(String.format("Couldn't make directory structure for %s", path));
-        }
+        path.getParent().toFile().mkdirs();
 
         final String code = new PrettyPrinter().print(cu);
         try (PrintWriter out = new PrintWriter(path.toFile(), UTF8.toString())) {
