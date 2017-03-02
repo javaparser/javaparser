@@ -21,8 +21,8 @@ import static com.github.javaparser.utils.Utils.capitalize;
 
 
 public class RemoveMethodGenerator extends NodeGenerator {
-    public RemoveMethodGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot);
+    public RemoveMethodGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
     }
 
     @Override

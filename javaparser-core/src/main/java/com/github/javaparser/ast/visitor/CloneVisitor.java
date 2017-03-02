@@ -22,11 +22,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import java.util.Optional;
@@ -37,819 +35,820 @@ import java.util.Optional;
 public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
-    public Visitable visit(CompilationUnit _n, Object _arg) {
-        NodeList<ImportDeclaration> imports = cloneList(_n.getImports(), _arg);
-        PackageDeclaration packageDeclaration = cloneNode(_n.getPackageDeclaration(), _arg);
-        NodeList<TypeDeclaration<?>> types = cloneList(_n.getTypes(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        CompilationUnit r = new CompilationUnit(_n.getRange().orElse(null), packageDeclaration, imports, types);
+    public Visitable visit(CompilationUnit n, Object arg) {
+        NodeList<ImportDeclaration> imports = cloneList(n.getImports(), arg);
+        ModuleDeclaration module = cloneNode(n.getModule(), arg);
+        PackageDeclaration packageDeclaration = cloneNode(n.getPackageDeclaration(), arg);
+        NodeList<TypeDeclaration<?>> types = cloneList(n.getTypes(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        CompilationUnit r = new CompilationUnit(n.getRange().orElse(null), packageDeclaration, imports, types, module);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(PackageDeclaration _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Name name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        PackageDeclaration r = new PackageDeclaration(_n.getRange().orElse(null), annotations, name);
+    public Visitable visit(PackageDeclaration n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        PackageDeclaration r = new PackageDeclaration(n.getRange().orElse(null), annotations, name);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(TypeParameter _n, Object _arg) {
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<ClassOrInterfaceType> typeBound = cloneList(_n.getTypeBound(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        TypeParameter r = new TypeParameter(_n.getRange().orElse(null), name, typeBound, annotations);
+    public Visitable visit(TypeParameter n, Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<ClassOrInterfaceType> typeBound = cloneList(n.getTypeBound(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        TypeParameter r = new TypeParameter(n.getRange().orElse(null), name, typeBound, annotations);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(LineComment _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        LineComment r = new LineComment(_n.getRange().orElse(null), _n.getContent());
+    public Visitable visit(LineComment n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        LineComment r = new LineComment(n.getRange().orElse(null), n.getContent());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(BlockComment _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        BlockComment r = new BlockComment(_n.getRange().orElse(null), _n.getContent());
+    public Visitable visit(BlockComment n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        BlockComment r = new BlockComment(n.getRange().orElse(null), n.getContent());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ClassOrInterfaceDeclaration _n, Object _arg) {
-        NodeList<ClassOrInterfaceType> extendedTypes = cloneList(_n.getExtendedTypes(), _arg);
-        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(_n.getImplementedTypes(), _arg);
-        NodeList<TypeParameter> typeParameters = cloneList(_n.getTypeParameters(), _arg);
-        NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, _n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, members);
+    public Visitable visit(ClassOrInterfaceDeclaration n, Object arg) {
+        NodeList<ClassOrInterfaceType> extendedTypes = cloneList(n.getExtendedTypes(), arg);
+        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, members);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(EnumDeclaration _n, Object _arg) {
-        NodeList<EnumConstantDeclaration> entries = cloneList(_n.getEntries(), _arg);
-        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(_n.getImplementedTypes(), _arg);
-        NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        EnumDeclaration r = new EnumDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, name, implementedTypes, entries, members);
+    public Visitable visit(EnumDeclaration n, Object arg) {
+        NodeList<EnumConstantDeclaration> entries = cloneList(n.getEntries(), arg);
+        NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
+        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        EnumDeclaration r = new EnumDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, name, implementedTypes, entries, members);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(EnumConstantDeclaration _n, Object _arg) {
-        NodeList<Expression> arguments = cloneList(_n.getArguments(), _arg);
-        NodeList<BodyDeclaration<?>> classBody = cloneList(_n.getClassBody(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        EnumConstantDeclaration r = new EnumConstantDeclaration(_n.getRange().orElse(null), annotations, name, arguments, classBody);
+    public Visitable visit(EnumConstantDeclaration n, Object arg) {
+        NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
+        NodeList<BodyDeclaration<?>> classBody = cloneList(n.getClassBody(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        EnumConstantDeclaration r = new EnumConstantDeclaration(n.getRange().orElse(null), annotations, name, arguments, classBody);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(AnnotationDeclaration _n, Object _arg) {
-        NodeList<BodyDeclaration<?>> members = cloneList(_n.getMembers(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        AnnotationDeclaration r = new AnnotationDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, name, members);
+    public Visitable visit(AnnotationDeclaration n, Object arg) {
+        NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        AnnotationDeclaration r = new AnnotationDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, name, members);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(AnnotationMemberDeclaration _n, Object _arg) {
-        Expression defaultValue = cloneNode(_n.getDefaultValue(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Type type = cloneNode(_n.getType(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, type, name, defaultValue);
+    public Visitable visit(AnnotationMemberDeclaration n, Object arg) {
+        Expression defaultValue = cloneNode(n.getDefaultValue(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        Type type = cloneNode(n.getType(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, type, name, defaultValue);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(FieldDeclaration _n, Object _arg) {
-        NodeList<VariableDeclarator> variables = cloneList(_n.getVariables(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        FieldDeclaration r = new FieldDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, variables);
+    public Visitable visit(FieldDeclaration n, Object arg) {
+        NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        FieldDeclaration r = new FieldDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, variables);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(VariableDeclarator _n, Object _arg) {
-        Expression initializer = cloneNode(_n.getInitializer(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Type type = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        VariableDeclarator r = new VariableDeclarator(_n.getRange().orElse(null), type, name, initializer);
+    public Visitable visit(VariableDeclarator n, Object arg) {
+        Expression initializer = cloneNode(n.getInitializer(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        Type type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        VariableDeclarator r = new VariableDeclarator(n.getRange().orElse(null), type, name, initializer);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ConstructorDeclaration _n, Object _arg) {
-        BlockStmt body = cloneNode(_n.getBody(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<Parameter> parameters = cloneList(_n.getParameters(), _arg);
-        NodeList<ReferenceType> thrownExceptions = cloneList(_n.getThrownExceptions(), _arg);
-        NodeList<TypeParameter> typeParameters = cloneList(_n.getTypeParameters(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ConstructorDeclaration r = new ConstructorDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body);
+    public Visitable visit(ConstructorDeclaration n, Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ConstructorDeclaration r = new ConstructorDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(MethodDeclaration _n, Object _arg) {
-        BlockStmt body = cloneNode(_n.getBody(), _arg);
-        Type type = cloneNode(_n.getType(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        NodeList<Parameter> parameters = cloneList(_n.getParameters(), _arg);
-        NodeList<ReferenceType> thrownExceptions = cloneList(_n.getThrownExceptions(), _arg);
-        NodeList<TypeParameter> typeParameters = cloneList(_n.getTypeParameters(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        MethodDeclaration r = new MethodDeclaration(_n.getRange().orElse(null), _n.getModifiers(), annotations, typeParameters, type, name, _n.isDefault(), parameters, thrownExceptions, body);
+    public Visitable visit(MethodDeclaration n, Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        Type type = cloneNode(n.getType(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        MethodDeclaration r = new MethodDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, typeParameters, type, name, n.isDefault(), parameters, thrownExceptions, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(Parameter _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Type type = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        Parameter r = new Parameter(_n.getRange().orElse(null), _n.getModifiers(), annotations, type, _n.isVarArgs(), name);
+    public Visitable visit(Parameter n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        Type type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        Parameter r = new Parameter(n.getRange().orElse(null), n.getModifiers(), annotations, type, n.isVarArgs(), name);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(EmptyMemberDeclaration _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        EmptyMemberDeclaration r = new EmptyMemberDeclaration(_n.getRange().orElse(null));
+    public Visitable visit(EmptyMemberDeclaration n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        EmptyMemberDeclaration r = new EmptyMemberDeclaration(n.getRange().orElse(null));
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(InitializerDeclaration _n, Object _arg) {
-        BlockStmt body = cloneNode(_n.getBody(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        InitializerDeclaration r = new InitializerDeclaration(_n.getRange().orElse(null), _n.isStatic(), body);
+    public Visitable visit(InitializerDeclaration n, Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        InitializerDeclaration r = new InitializerDeclaration(n.getRange().orElse(null), n.isStatic(), body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(JavadocComment _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        JavadocComment r = new JavadocComment(_n.getRange().orElse(null), _n.getContent());
+    public Visitable visit(JavadocComment n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        JavadocComment r = new JavadocComment(n.getRange().orElse(null), n.getContent());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ClassOrInterfaceType _n, Object _arg) {
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        ClassOrInterfaceType scope = cloneNode(_n.getScope(), _arg);
-        NodeList<Type> typeArguments = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ClassOrInterfaceType r = new ClassOrInterfaceType(_n.getRange().orElse(null), scope, name, typeArguments);
+    public Visitable visit(ClassOrInterfaceType n, Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        ClassOrInterfaceType scope = cloneNode(n.getScope(), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ClassOrInterfaceType r = new ClassOrInterfaceType(n.getRange().orElse(null), scope, name, typeArguments);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(PrimitiveType _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        PrimitiveType r = new PrimitiveType(_n.getRange().orElse(null), _n.getType());
+    public Visitable visit(PrimitiveType n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        PrimitiveType r = new PrimitiveType(n.getRange().orElse(null), n.getType());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ArrayType _n, Object _arg) {
-        Type componentType = cloneNode(_n.getComponentType(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ArrayType r = new ArrayType(_n.getRange().orElse(null), componentType, annotations);
+    public Visitable visit(ArrayType n, Object arg) {
+        Type componentType = cloneNode(n.getComponentType(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ArrayType r = new ArrayType(n.getRange().orElse(null), componentType, annotations);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ArrayCreationLevel _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Expression dimension = cloneNode(_n.getDimension(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ArrayCreationLevel r = new ArrayCreationLevel(_n.getRange().orElse(null), dimension, annotations);
+    public Visitable visit(ArrayCreationLevel n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Expression dimension = cloneNode(n.getDimension(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ArrayCreationLevel r = new ArrayCreationLevel(n.getRange().orElse(null), dimension, annotations);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(IntersectionType _n, Object _arg) {
-        NodeList<ReferenceType> elements = cloneList(_n.getElements(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        IntersectionType r = new IntersectionType(_n.getRange().orElse(null), elements);
+    public Visitable visit(IntersectionType n, Object arg) {
+        NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        IntersectionType r = new IntersectionType(n.getRange().orElse(null), elements);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(UnionType _n, Object _arg) {
-        NodeList<ReferenceType> elements = cloneList(_n.getElements(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        UnionType r = new UnionType(_n.getRange().orElse(null), elements);
+    public Visitable visit(UnionType n, Object arg) {
+        NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        UnionType r = new UnionType(n.getRange().orElse(null), elements);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(VoidType _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        VoidType r = new VoidType(_n.getRange().orElse(null));
+    public Visitable visit(VoidType n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        VoidType r = new VoidType(n.getRange().orElse(null));
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(WildcardType _n, Object _arg) {
-        ReferenceType extendedType = cloneNode(_n.getExtendedType(), _arg);
-        ReferenceType superType = cloneNode(_n.getSuperType(), _arg);
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        WildcardType r = new WildcardType(_n.getRange().orElse(null), extendedType, superType);
+    public Visitable visit(WildcardType n, Object arg) {
+        ReferenceType extendedType = cloneNode(n.getExtendedType(), arg);
+        ReferenceType superType = cloneNode(n.getSuperType(), arg);
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        WildcardType r = new WildcardType(n.getRange().orElse(null), extendedType, superType);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(UnknownType _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        UnknownType r = new UnknownType(_n.getRange().orElse(null));
+    public Visitable visit(UnknownType n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        UnknownType r = new UnknownType(n.getRange().orElse(null));
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ArrayAccessExpr _n, Object _arg) {
-        Expression index = cloneNode(_n.getIndex(), _arg);
-        Expression name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ArrayAccessExpr r = new ArrayAccessExpr(_n.getRange().orElse(null), name, index);
+    public Visitable visit(ArrayAccessExpr n, Object arg) {
+        Expression index = cloneNode(n.getIndex(), arg);
+        Expression name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ArrayAccessExpr r = new ArrayAccessExpr(n.getRange().orElse(null), name, index);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ArrayCreationExpr _n, Object _arg) {
-        Type elementType = cloneNode(_n.getElementType(), _arg);
-        ArrayInitializerExpr initializer = cloneNode(_n.getInitializer(), _arg);
-        NodeList<ArrayCreationLevel> levels = cloneList(_n.getLevels(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ArrayCreationExpr r = new ArrayCreationExpr(_n.getRange().orElse(null), elementType, levels, initializer);
+    public Visitable visit(ArrayCreationExpr n, Object arg) {
+        Type elementType = cloneNode(n.getElementType(), arg);
+        ArrayInitializerExpr initializer = cloneNode(n.getInitializer(), arg);
+        NodeList<ArrayCreationLevel> levels = cloneList(n.getLevels(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ArrayCreationExpr r = new ArrayCreationExpr(n.getRange().orElse(null), elementType, levels, initializer);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ArrayInitializerExpr _n, Object _arg) {
-        NodeList<Expression> values = cloneList(_n.getValues(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ArrayInitializerExpr r = new ArrayInitializerExpr(_n.getRange().orElse(null), values);
+    public Visitable visit(ArrayInitializerExpr n, Object arg) {
+        NodeList<Expression> values = cloneList(n.getValues(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ArrayInitializerExpr r = new ArrayInitializerExpr(n.getRange().orElse(null), values);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(AssignExpr _n, Object _arg) {
-        Expression target = cloneNode(_n.getTarget(), _arg);
-        Expression value = cloneNode(_n.getValue(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        AssignExpr r = new AssignExpr(_n.getRange().orElse(null), target, value, _n.getOperator());
+    public Visitable visit(AssignExpr n, Object arg) {
+        Expression target = cloneNode(n.getTarget(), arg);
+        Expression value = cloneNode(n.getValue(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        AssignExpr r = new AssignExpr(n.getRange().orElse(null), target, value, n.getOperator());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(BinaryExpr _n, Object _arg) {
-        Expression left = cloneNode(_n.getLeft(), _arg);
-        Expression right = cloneNode(_n.getRight(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        BinaryExpr r = new BinaryExpr(_n.getRange().orElse(null), left, right, _n.getOperator());
+    public Visitable visit(BinaryExpr n, Object arg) {
+        Expression left = cloneNode(n.getLeft(), arg);
+        Expression right = cloneNode(n.getRight(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        BinaryExpr r = new BinaryExpr(n.getRange().orElse(null), left, right, n.getOperator());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(CastExpr _n, Object _arg) {
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        Type type = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        CastExpr r = new CastExpr(_n.getRange().orElse(null), type, expression);
+    public Visitable visit(CastExpr n, Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Type type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        CastExpr r = new CastExpr(n.getRange().orElse(null), type, expression);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ClassExpr _n, Object _arg) {
-        Type type = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ClassExpr r = new ClassExpr(_n.getRange().orElse(null), type);
+    public Visitable visit(ClassExpr n, Object arg) {
+        Type type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ClassExpr r = new ClassExpr(n.getRange().orElse(null), type);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ConditionalExpr _n, Object _arg) {
-        Expression condition = cloneNode(_n.getCondition(), _arg);
-        Expression elseExpr = cloneNode(_n.getElseExpr(), _arg);
-        Expression thenExpr = cloneNode(_n.getThenExpr(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ConditionalExpr r = new ConditionalExpr(_n.getRange().orElse(null), condition, thenExpr, elseExpr);
+    public Visitable visit(ConditionalExpr n, Object arg) {
+        Expression condition = cloneNode(n.getCondition(), arg);
+        Expression elseExpr = cloneNode(n.getElseExpr(), arg);
+        Expression thenExpr = cloneNode(n.getThenExpr(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ConditionalExpr r = new ConditionalExpr(n.getRange().orElse(null), condition, thenExpr, elseExpr);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(EnclosedExpr _n, Object _arg) {
-        Expression inner = cloneNode(_n.getInner(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        EnclosedExpr r = new EnclosedExpr(_n.getRange().orElse(null), inner);
+    public Visitable visit(EnclosedExpr n, Object arg) {
+        Expression inner = cloneNode(n.getInner(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        EnclosedExpr r = new EnclosedExpr(n.getRange().orElse(null), inner);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(FieldAccessExpr _n, Object _arg) {
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Expression scope = cloneNode(_n.getScope(), _arg);
-        NodeList<Type> typeArguments = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        FieldAccessExpr r = new FieldAccessExpr(_n.getRange().orElse(null), scope, typeArguments, name);
+    public Visitable visit(FieldAccessExpr n, Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        Expression scope = cloneNode(n.getScope(), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        FieldAccessExpr r = new FieldAccessExpr(n.getRange().orElse(null), scope, typeArguments, name);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(InstanceOfExpr _n, Object _arg) {
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        ReferenceType<?> type = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        InstanceOfExpr r = new InstanceOfExpr(_n.getRange().orElse(null), expression, type);
+    public Visitable visit(InstanceOfExpr n, Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        ReferenceType<?> type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        InstanceOfExpr r = new InstanceOfExpr(n.getRange().orElse(null), expression, type);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(StringLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        StringLiteralExpr r = new StringLiteralExpr(_n.getRange().orElse(null), _n.getValue());
+    public Visitable visit(StringLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        StringLiteralExpr r = new StringLiteralExpr(n.getRange().orElse(null), n.getValue());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(IntegerLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        IntegerLiteralExpr r = new IntegerLiteralExpr(_n.getRange().orElse(null), _n.getValue());
+    public Visitable visit(IntegerLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        IntegerLiteralExpr r = new IntegerLiteralExpr(n.getRange().orElse(null), n.getValue());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(LongLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        LongLiteralExpr r = new LongLiteralExpr(_n.getRange().orElse(null), _n.getValue());
+    public Visitable visit(LongLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        LongLiteralExpr r = new LongLiteralExpr(n.getRange().orElse(null), n.getValue());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(CharLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        CharLiteralExpr r = new CharLiteralExpr(_n.getRange().orElse(null), _n.getValue());
+    public Visitable visit(CharLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        CharLiteralExpr r = new CharLiteralExpr(n.getRange().orElse(null), n.getValue());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(DoubleLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        DoubleLiteralExpr r = new DoubleLiteralExpr(_n.getRange().orElse(null), _n.getValue());
+    public Visitable visit(DoubleLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        DoubleLiteralExpr r = new DoubleLiteralExpr(n.getRange().orElse(null), n.getValue());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(BooleanLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        BooleanLiteralExpr r = new BooleanLiteralExpr(_n.getRange().orElse(null), _n.getValue());
+    public Visitable visit(BooleanLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        BooleanLiteralExpr r = new BooleanLiteralExpr(n.getRange().orElse(null), n.getValue());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(NullLiteralExpr _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        NullLiteralExpr r = new NullLiteralExpr(_n.getRange().orElse(null));
+    public Visitable visit(NullLiteralExpr n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        NullLiteralExpr r = new NullLiteralExpr(n.getRange().orElse(null));
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(MethodCallExpr _n, Object _arg) {
-        NodeList<Expression> arguments = cloneList(_n.getArguments(), _arg);
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Expression scope = cloneNode(_n.getScope(), _arg);
-        NodeList<Type> typeArguments = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        MethodCallExpr r = new MethodCallExpr(_n.getRange().orElse(null), scope, typeArguments, name, arguments);
+    public Visitable visit(MethodCallExpr n, Object arg) {
+        NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
+        SimpleName name = cloneNode(n.getName(), arg);
+        Expression scope = cloneNode(n.getScope(), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        MethodCallExpr r = new MethodCallExpr(n.getRange().orElse(null), scope, typeArguments, name, arguments);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(NameExpr _n, Object _arg) {
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        NameExpr r = new NameExpr(_n.getRange().orElse(null), name);
+    public Visitable visit(NameExpr n, Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        NameExpr r = new NameExpr(n.getRange().orElse(null), name);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ObjectCreationExpr _n, Object _arg) {
-        NodeList<BodyDeclaration<?>> anonymousClassBody = cloneList(_n.getAnonymousClassBody().orElse(null), _arg);
-        NodeList<Expression> arguments = cloneList(_n.getArguments(), _arg);
-        Expression scope = cloneNode(_n.getScope(), _arg);
-        ClassOrInterfaceType type = cloneNode(_n.getType(), _arg);
-        NodeList<Type> typeArguments = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ObjectCreationExpr r = new ObjectCreationExpr(_n.getRange().orElse(null), scope, type, typeArguments, arguments, anonymousClassBody);
+    public Visitable visit(ObjectCreationExpr n, Object arg) {
+        NodeList<BodyDeclaration<?>> anonymousClassBody = cloneList(n.getAnonymousClassBody().orElse(null), arg);
+        NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
+        Expression scope = cloneNode(n.getScope(), arg);
+        ClassOrInterfaceType type = cloneNode(n.getType(), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ObjectCreationExpr r = new ObjectCreationExpr(n.getRange().orElse(null), scope, type, typeArguments, arguments, anonymousClassBody);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(Name _n, Object _arg) {
-        Name qualifier = cloneNode(_n.getQualifier(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        Name r = new Name(_n.getRange().orElse(null), qualifier, _n.getIdentifier());
+    public Visitable visit(Name n, Object arg) {
+        Name qualifier = cloneNode(n.getQualifier(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        Name r = new Name(n.getRange().orElse(null), qualifier, n.getIdentifier());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(SimpleName _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        SimpleName r = new SimpleName(_n.getRange().orElse(null), _n.getIdentifier());
+    public Visitable visit(SimpleName n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        SimpleName r = new SimpleName(n.getRange().orElse(null), n.getIdentifier());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ThisExpr _n, Object _arg) {
-        Expression classExpr = cloneNode(_n.getClassExpr(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ThisExpr r = new ThisExpr(_n.getRange().orElse(null), classExpr);
+    public Visitable visit(ThisExpr n, Object arg) {
+        Expression classExpr = cloneNode(n.getClassExpr(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ThisExpr r = new ThisExpr(n.getRange().orElse(null), classExpr);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(SuperExpr _n, Object _arg) {
-        Expression classExpr = cloneNode(_n.getClassExpr(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        SuperExpr r = new SuperExpr(_n.getRange().orElse(null), classExpr);
+    public Visitable visit(SuperExpr n, Object arg) {
+        Expression classExpr = cloneNode(n.getClassExpr(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SuperExpr r = new SuperExpr(n.getRange().orElse(null), classExpr);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(UnaryExpr _n, Object _arg) {
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        UnaryExpr r = new UnaryExpr(_n.getRange().orElse(null), expression, _n.getOperator());
+    public Visitable visit(UnaryExpr n, Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        UnaryExpr r = new UnaryExpr(n.getRange().orElse(null), expression, n.getOperator());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(VariableDeclarationExpr _n, Object _arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(_n.getAnnotations(), _arg);
-        NodeList<VariableDeclarator> variables = cloneList(_n.getVariables(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        VariableDeclarationExpr r = new VariableDeclarationExpr(_n.getRange().orElse(null), _n.getModifiers(), annotations, variables);
+    public Visitable visit(VariableDeclarationExpr n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        VariableDeclarationExpr r = new VariableDeclarationExpr(n.getRange().orElse(null), n.getModifiers(), annotations, variables);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(MarkerAnnotationExpr _n, Object _arg) {
-        Name name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        MarkerAnnotationExpr r = new MarkerAnnotationExpr(_n.getRange().orElse(null), name);
+    public Visitable visit(MarkerAnnotationExpr n, Object arg) {
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        MarkerAnnotationExpr r = new MarkerAnnotationExpr(n.getRange().orElse(null), name);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(SingleMemberAnnotationExpr _n, Object _arg) {
-        Expression memberValue = cloneNode(_n.getMemberValue(), _arg);
-        Name name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        SingleMemberAnnotationExpr r = new SingleMemberAnnotationExpr(_n.getRange().orElse(null), name, memberValue);
+    public Visitable visit(SingleMemberAnnotationExpr n, Object arg) {
+        Expression memberValue = cloneNode(n.getMemberValue(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SingleMemberAnnotationExpr r = new SingleMemberAnnotationExpr(n.getRange().orElse(null), name, memberValue);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(NormalAnnotationExpr _n, Object _arg) {
-        NodeList<MemberValuePair> pairs = cloneList(_n.getPairs(), _arg);
-        Name name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        NormalAnnotationExpr r = new NormalAnnotationExpr(_n.getRange().orElse(null), name, pairs);
+    public Visitable visit(NormalAnnotationExpr n, Object arg) {
+        NodeList<MemberValuePair> pairs = cloneList(n.getPairs(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        NormalAnnotationExpr r = new NormalAnnotationExpr(n.getRange().orElse(null), name, pairs);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(MemberValuePair _n, Object _arg) {
-        SimpleName name = cloneNode(_n.getName(), _arg);
-        Expression value = cloneNode(_n.getValue(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        MemberValuePair r = new MemberValuePair(_n.getRange().orElse(null), name, value);
+    public Visitable visit(MemberValuePair n, Object arg) {
+        SimpleName name = cloneNode(n.getName(), arg);
+        Expression value = cloneNode(n.getValue(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        MemberValuePair r = new MemberValuePair(n.getRange().orElse(null), name, value);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ExplicitConstructorInvocationStmt _n, Object _arg) {
-        NodeList<Expression> arguments = cloneList(_n.getArguments(), _arg);
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        NodeList<Type> typeArguments = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ExplicitConstructorInvocationStmt r = new ExplicitConstructorInvocationStmt(_n.getRange().orElse(null), typeArguments, _n.isThis(), expression, arguments);
+    public Visitable visit(ExplicitConstructorInvocationStmt n, Object arg) {
+        NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
+        Expression expression = cloneNode(n.getExpression(), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ExplicitConstructorInvocationStmt r = new ExplicitConstructorInvocationStmt(n.getRange().orElse(null), typeArguments, n.isThis(), expression, arguments);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(LocalClassDeclarationStmt _n, Object _arg) {
-        ClassOrInterfaceDeclaration classDeclaration = cloneNode(_n.getClassDeclaration(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        LocalClassDeclarationStmt r = new LocalClassDeclarationStmt(_n.getRange().orElse(null), classDeclaration);
+    public Visitable visit(LocalClassDeclarationStmt n, Object arg) {
+        ClassOrInterfaceDeclaration classDeclaration = cloneNode(n.getClassDeclaration(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LocalClassDeclarationStmt r = new LocalClassDeclarationStmt(n.getRange().orElse(null), classDeclaration);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(AssertStmt _n, Object _arg) {
-        Expression check = cloneNode(_n.getCheck(), _arg);
-        Expression message = cloneNode(_n.getMessage(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        AssertStmt r = new AssertStmt(_n.getRange().orElse(null), check, message);
+    public Visitable visit(AssertStmt n, Object arg) {
+        Expression check = cloneNode(n.getCheck(), arg);
+        Expression message = cloneNode(n.getMessage(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        AssertStmt r = new AssertStmt(n.getRange().orElse(null), check, message);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(BlockStmt _n, Object _arg) {
-        NodeList<Statement> statements = cloneList(_n.getStatements(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        BlockStmt r = new BlockStmt(_n.getRange().orElse(null), statements);
+    public Visitable visit(BlockStmt n, Object arg) {
+        NodeList<Statement> statements = cloneList(n.getStatements(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        BlockStmt r = new BlockStmt(n.getRange().orElse(null), statements);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(LabeledStmt _n, Object _arg) {
-        SimpleName label = cloneNode(_n.getLabel(), _arg);
-        Statement statement = cloneNode(_n.getStatement(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        LabeledStmt r = new LabeledStmt(_n.getRange().orElse(null), label, statement);
+    public Visitable visit(LabeledStmt n, Object arg) {
+        SimpleName label = cloneNode(n.getLabel(), arg);
+        Statement statement = cloneNode(n.getStatement(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LabeledStmt r = new LabeledStmt(n.getRange().orElse(null), label, statement);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(EmptyStmt _n, Object _arg) {
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        EmptyStmt r = new EmptyStmt(_n.getRange().orElse(null));
+    public Visitable visit(EmptyStmt n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        EmptyStmt r = new EmptyStmt(n.getRange().orElse(null));
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ExpressionStmt _n, Object _arg) {
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ExpressionStmt r = new ExpressionStmt(_n.getRange().orElse(null), expression);
+    public Visitable visit(ExpressionStmt n, Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ExpressionStmt r = new ExpressionStmt(n.getRange().orElse(null), expression);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(SwitchStmt _n, Object _arg) {
-        NodeList<SwitchEntryStmt> entries = cloneList(_n.getEntries(), _arg);
-        Expression selector = cloneNode(_n.getSelector(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        SwitchStmt r = new SwitchStmt(_n.getRange().orElse(null), selector, entries);
+    public Visitable visit(SwitchStmt n, Object arg) {
+        NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
+        Expression selector = cloneNode(n.getSelector(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SwitchStmt r = new SwitchStmt(n.getRange().orElse(null), selector, entries);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(SwitchEntryStmt _n, Object _arg) {
-        Expression label = cloneNode(_n.getLabel(), _arg);
-        NodeList<Statement> statements = cloneList(_n.getStatements(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        SwitchEntryStmt r = new SwitchEntryStmt(_n.getRange().orElse(null), label, statements);
+    public Visitable visit(SwitchEntryStmt n, Object arg) {
+        Expression label = cloneNode(n.getLabel(), arg);
+        NodeList<Statement> statements = cloneList(n.getStatements(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SwitchEntryStmt r = new SwitchEntryStmt(n.getRange().orElse(null), label, statements);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(BreakStmt _n, Object _arg) {
-        SimpleName label = cloneNode(_n.getLabel(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        BreakStmt r = new BreakStmt(_n.getRange().orElse(null), label);
+    public Visitable visit(BreakStmt n, Object arg) {
+        SimpleName label = cloneNode(n.getLabel(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        BreakStmt r = new BreakStmt(n.getRange().orElse(null), label);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ReturnStmt _n, Object _arg) {
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ReturnStmt r = new ReturnStmt(_n.getRange().orElse(null), expression);
+    public Visitable visit(ReturnStmt n, Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ReturnStmt r = new ReturnStmt(n.getRange().orElse(null), expression);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(IfStmt _n, Object _arg) {
-        Expression condition = cloneNode(_n.getCondition(), _arg);
-        Statement elseStmt = cloneNode(_n.getElseStmt(), _arg);
-        Statement thenStmt = cloneNode(_n.getThenStmt(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        IfStmt r = new IfStmt(_n.getRange().orElse(null), condition, thenStmt, elseStmt);
+    public Visitable visit(IfStmt n, Object arg) {
+        Expression condition = cloneNode(n.getCondition(), arg);
+        Statement elseStmt = cloneNode(n.getElseStmt(), arg);
+        Statement thenStmt = cloneNode(n.getThenStmt(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        IfStmt r = new IfStmt(n.getRange().orElse(null), condition, thenStmt, elseStmt);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(WhileStmt _n, Object _arg) {
-        Statement body = cloneNode(_n.getBody(), _arg);
-        Expression condition = cloneNode(_n.getCondition(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        WhileStmt r = new WhileStmt(_n.getRange().orElse(null), condition, body);
+    public Visitable visit(WhileStmt n, Object arg) {
+        Statement body = cloneNode(n.getBody(), arg);
+        Expression condition = cloneNode(n.getCondition(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        WhileStmt r = new WhileStmt(n.getRange().orElse(null), condition, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ContinueStmt _n, Object _arg) {
-        SimpleName label = cloneNode(_n.getLabel(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ContinueStmt r = new ContinueStmt(_n.getRange().orElse(null), label);
+    public Visitable visit(ContinueStmt n, Object arg) {
+        SimpleName label = cloneNode(n.getLabel(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ContinueStmt r = new ContinueStmt(n.getRange().orElse(null), label);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(DoStmt _n, Object _arg) {
-        Statement body = cloneNode(_n.getBody(), _arg);
-        Expression condition = cloneNode(_n.getCondition(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        DoStmt r = new DoStmt(_n.getRange().orElse(null), body, condition);
+    public Visitable visit(DoStmt n, Object arg) {
+        Statement body = cloneNode(n.getBody(), arg);
+        Expression condition = cloneNode(n.getCondition(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        DoStmt r = new DoStmt(n.getRange().orElse(null), body, condition);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ForeachStmt _n, Object _arg) {
-        Statement body = cloneNode(_n.getBody(), _arg);
-        Expression iterable = cloneNode(_n.getIterable(), _arg);
-        VariableDeclarationExpr variable = cloneNode(_n.getVariable(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ForeachStmt r = new ForeachStmt(_n.getRange().orElse(null), variable, iterable, body);
+    public Visitable visit(ForeachStmt n, Object arg) {
+        Statement body = cloneNode(n.getBody(), arg);
+        Expression iterable = cloneNode(n.getIterable(), arg);
+        VariableDeclarationExpr variable = cloneNode(n.getVariable(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ForeachStmt r = new ForeachStmt(n.getRange().orElse(null), variable, iterable, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ForStmt _n, Object _arg) {
-        Statement body = cloneNode(_n.getBody(), _arg);
-        Expression compare = cloneNode(_n.getCompare(), _arg);
-        NodeList<Expression> initialization = cloneList(_n.getInitialization(), _arg);
-        NodeList<Expression> update = cloneList(_n.getUpdate(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ForStmt r = new ForStmt(_n.getRange().orElse(null), initialization, compare, update, body);
+    public Visitable visit(ForStmt n, Object arg) {
+        Statement body = cloneNode(n.getBody(), arg);
+        Expression compare = cloneNode(n.getCompare(), arg);
+        NodeList<Expression> initialization = cloneList(n.getInitialization(), arg);
+        NodeList<Expression> update = cloneList(n.getUpdate(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ForStmt r = new ForStmt(n.getRange().orElse(null), initialization, compare, update, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(ThrowStmt _n, Object _arg) {
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ThrowStmt r = new ThrowStmt(_n.getRange().orElse(null), expression);
+    public Visitable visit(ThrowStmt n, Object arg) {
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ThrowStmt r = new ThrowStmt(n.getRange().orElse(null), expression);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(SynchronizedStmt _n, Object _arg) {
-        BlockStmt body = cloneNode(_n.getBody(), _arg);
-        Expression expression = cloneNode(_n.getExpression(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        SynchronizedStmt r = new SynchronizedStmt(_n.getRange().orElse(null), expression, body);
+    public Visitable visit(SynchronizedStmt n, Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        Expression expression = cloneNode(n.getExpression(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        SynchronizedStmt r = new SynchronizedStmt(n.getRange().orElse(null), expression, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(TryStmt _n, Object _arg) {
-        NodeList<CatchClause> catchClauses = cloneList(_n.getCatchClauses(), _arg);
-        BlockStmt finallyBlock = cloneNode(_n.getFinallyBlock(), _arg);
-        NodeList<VariableDeclarationExpr> resources = cloneList(_n.getResources(), _arg);
-        BlockStmt tryBlock = cloneNode(_n.getTryBlock(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        TryStmt r = new TryStmt(_n.getRange().orElse(null), resources, tryBlock, catchClauses, finallyBlock);
+    public Visitable visit(TryStmt n, Object arg) {
+        NodeList<CatchClause> catchClauses = cloneList(n.getCatchClauses(), arg);
+        BlockStmt finallyBlock = cloneNode(n.getFinallyBlock(), arg);
+        NodeList<VariableDeclarationExpr> resources = cloneList(n.getResources(), arg);
+        BlockStmt tryBlock = cloneNode(n.getTryBlock(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        TryStmt r = new TryStmt(n.getRange().orElse(null), resources, tryBlock, catchClauses, finallyBlock);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(CatchClause _n, Object _arg) {
-        BlockStmt body = cloneNode(_n.getBody(), _arg);
-        Parameter parameter = cloneNode(_n.getParameter(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        CatchClause r = new CatchClause(_n.getRange().orElse(null), parameter, body);
+    public Visitable visit(CatchClause n, Object arg) {
+        BlockStmt body = cloneNode(n.getBody(), arg);
+        Parameter parameter = cloneNode(n.getParameter(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        CatchClause r = new CatchClause(n.getRange().orElse(null), parameter, body);
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(LambdaExpr _n, Object _arg) {
-        Statement body = cloneNode(_n.getBody(), _arg);
-        NodeList<Parameter> parameters = cloneList(_n.getParameters(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        LambdaExpr r = new LambdaExpr(_n.getRange().orElse(null), parameters, body, _n.isEnclosingParameters());
+    public Visitable visit(LambdaExpr n, Object arg) {
+        Statement body = cloneNode(n.getBody(), arg);
+        NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        LambdaExpr r = new LambdaExpr(n.getRange().orElse(null), parameters, body, n.isEnclosingParameters());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(MethodReferenceExpr _n, Object _arg) {
-        Expression scope = cloneNode(_n.getScope(), _arg);
-        NodeList<Type> typeArguments = cloneList(_n.getTypeArguments().orElse(null), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        MethodReferenceExpr r = new MethodReferenceExpr(_n.getRange().orElse(null), scope, typeArguments, _n.getIdentifier());
+    public Visitable visit(MethodReferenceExpr n, Object arg) {
+        Expression scope = cloneNode(n.getScope(), arg);
+        NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        MethodReferenceExpr r = new MethodReferenceExpr(n.getRange().orElse(null), scope, typeArguments, n.getIdentifier());
         r.setComment(comment);
         return r;
     }
 
     @Override
-    public Visitable visit(TypeExpr _n, Object _arg) {
-        Type type = cloneNode(_n.getType(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        TypeExpr r = new TypeExpr(_n.getRange().orElse(null), type);
+    public Visitable visit(TypeExpr n, Object arg) {
+        Type type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        TypeExpr r = new TypeExpr(n.getRange().orElse(null), type);
         r.setComment(comment);
         return r;
     }
@@ -867,20 +866,40 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Node visit(ImportDeclaration _n, Object _arg) {
-        Name name = cloneNode(_n.getName(), _arg);
-        Comment comment = cloneNode(_n.getComment(), _arg);
-        ImportDeclaration r = new ImportDeclaration(_n.getRange().orElse(null), name, _n.isStatic(), _n.isAsterisk());
+    public Node visit(ImportDeclaration n, Object arg) {
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ImportDeclaration r = new ImportDeclaration(n.getRange().orElse(null), name, n.isStatic(), n.isAsterisk());
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(ModuleDeclaration n, Object arg) {
+        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
+        NodeList<ModuleStmt> moduleStmts = cloneList(n.getModuleStmts(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModuleDeclaration r = new ModuleDeclaration(n.getRange().orElse(null), annotations, name, n.isOpen(), moduleStmts);
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(ModuleRequiresStmt n, Object arg) {
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModuleRequiresStmt r = new ModuleRequiresStmt(n.getRange().orElse(null), n.getModifiers(), name);
         r.setComment(comment);
         return r;
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends Node> T cloneNode(Optional<T> _node, Object _arg) {
-        if (!_node.isPresent()) {
+    protected <T extends Node> T cloneNode(Optional<T> node, Object arg) {
+        if (!node.isPresent()) {
             return null;
         }
-        Node r = (Node) _node.get().accept(this, _arg);
+        Node r = (Node) node.get().accept(this, arg);
         if (r == null) {
             return null;
         }
@@ -888,22 +907,61 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends Node> T cloneNode(T _node, Object _arg) {
-        if (_node == null) {
+    protected <T extends Node> T cloneNode(T node, Object arg) {
+        if (node == null) {
             return null;
         }
-        Node r = (Node) _node.accept(this, _arg);
+        Node r = (Node) node.accept(this, arg);
         if (r == null) {
             return null;
         }
         return (T) r;
     }
 
-    private <N extends Node> NodeList<N> cloneList(NodeList<N> list, Object _arg) {
+    private <N extends Node> NodeList<N> cloneList(NodeList<N> list, Object arg) {
         if (list == null) {
             return null;
         }
-        return (NodeList<N>) list.accept(this, _arg);
+        return (NodeList<N>) list.accept(this, arg);
+    }
+
+    @Override
+    public Visitable visit(ModuleExportsStmt n, Object arg) {
+        NodeList<Name> moduleNames = cloneList(n.getModuleNames(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModuleExportsStmt r = new ModuleExportsStmt(n.getRange().orElse(null), name, moduleNames);
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(ModuleProvidesStmt n, Object arg) {
+        Type type = cloneNode(n.getType(), arg);
+        NodeList<Type> withTypes = cloneList(n.getWithTypes(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModuleProvidesStmt r = new ModuleProvidesStmt(n.getRange().orElse(null), type, withTypes);
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(ModuleUsesStmt n, Object arg) {
+        Type type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModuleUsesStmt r = new ModuleUsesStmt(n.getRange().orElse(null), type);
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    public Visitable visit(ModuleOpensStmt n, Object arg) {
+        NodeList<Name> moduleNames = cloneList(n.getModuleNames(), arg);
+        Name name = cloneNode(n.getName(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        ModuleOpensStmt r = new ModuleOpensStmt(n.getRange().orElse(null), name, moduleNames);
+        r.setComment(comment);
+        return r;
     }
 }
 

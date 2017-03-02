@@ -14,8 +14,8 @@ import java.util.List;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class TreeStructureVisitorGenerator extends VisitorGenerator {
-    public TreeStructureVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "TreeStructureVisitor", "void", "Integer", true);
+    public TreeStructureVisitorGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot, "com.github.javaparser.ast.visitor", "TreeStructureVisitor", "void", "Integer", true);
     }
 
     @Override

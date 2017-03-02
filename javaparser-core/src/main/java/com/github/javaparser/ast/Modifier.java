@@ -37,7 +37,8 @@ public enum Modifier {
     VOLATILE,
     SYNCHRONIZED,
     NATIVE,
-    STRICTFP;
+    STRICTFP,
+    TRANSITIVE;
 
     final String codeRepresentation;
 

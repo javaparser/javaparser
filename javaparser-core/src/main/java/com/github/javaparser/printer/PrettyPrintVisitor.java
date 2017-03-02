@@ -28,10 +28,12 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
 import java.util.*;
@@ -139,6 +141,34 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print(")");
     }
 
+    private void printPrePostFixOptionalList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+        if (!args.isEmpty()) {
+            printer.print(prefix);
+            for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
+                final Visitable v = i.next();
+                v.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(separator);
+                }
+            }
+            printer.print(postfix);
+        }
+    }
+
+    private void printPrePostFixRequiredList(final NodeList<? extends Visitable> args, final Void arg, String prefix, String separator, String postfix) {
+        printer.print(prefix);
+        if (!args.isEmpty()) {
+            for (final Iterator<? extends Visitable> i = args.iterator(); i.hasNext(); ) {
+                final Visitable v = i.next();
+                v.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(separator);
+                }
+            }
+        }
+        printer.print(postfix);
+    }
+
     private void printJavaComment(final Optional<Comment> javacomment, final Void arg) {
         javacomment.ifPresent(c -> c.accept(this, arg));
     }
@@ -163,6 +193,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                 printer.println();
             }
         }
+
+        n.getModule().ifPresent(m -> m.accept(this, arg));
 
         printOrphanCommentsEnding(n);
     }
@@ -1348,6 +1380,60 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(";");
 
         printOrphanCommentsEnding(n);
+    }
+
+
+    @Override
+    public void visit(ModuleDeclaration n, Void arg) {
+        printAnnotations(n.getAnnotations(), false, arg);
+        printer.println();
+        if (n.isOpen()) {
+            printer.print("open ");
+        }
+        printer.print("module ");
+        n.getName().accept(this, arg);
+        printer.println(" {").indent();
+        n.getModuleStmts().accept(this, arg);
+        printer.unindent().println("}");
+    }
+
+    @Override
+    public void visit(ModuleRequiresStmt n, Void arg) {
+        printer.print("requires ");
+        printModifiers(n.getModifiers());
+        n.getName().accept(this, arg);
+        printer.println(";");
+    }
+
+    @Override
+    public void visit(ModuleExportsStmt n, Void arg) {
+        printer.print("exports ");
+        n.getName().accept(this, arg);
+        printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
+        printer.println(";");
+    }
+
+    @Override
+    public void visit(ModuleProvidesStmt n, Void arg) {
+        printer.print("provides ");
+        n.getType().accept(this, arg);
+        printPrePostFixRequiredList(n.getWithTypes(), arg, " with ", ", ", "");
+        printer.println(";");
+    }
+
+    @Override
+    public void visit(ModuleUsesStmt n, Void arg) {
+        printer.print("uses ");
+        n.getType().accept(this, arg);
+        printer.println(";");
+    }
+
+    @Override
+    public void visit(ModuleOpensStmt n, Void arg) {
+        printer.print("opens ");
+        n.getName().accept(this, arg);
+        printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
+        printer.println(";");
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {

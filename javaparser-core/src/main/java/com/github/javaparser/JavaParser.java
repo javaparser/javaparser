@@ -53,7 +53,7 @@ public final class JavaParser {
     private final CommentsInserter commentsInserter;
     private final ParserConfiguration configuration;
 
-    private ASTParser astParser = null;
+    private GeneratedJavaParser astParser = null;
 
     /**
      * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on
@@ -73,9 +73,9 @@ public final class JavaParser {
         commentsInserter = new CommentsInserter(configuration);
     }
 
-    private ASTParser getParserForProvider(Provider provider) {
+    private GeneratedJavaParser getParserForProvider(Provider provider) {
         if (astParser == null) {
-            astParser = new ASTParser(provider);
+            astParser = new GeneratedJavaParser(provider);
         } else {
             astParser.reset(provider);
         }
@@ -96,7 +96,7 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
-        final ASTParser parser = getParserForProvider(provider);
+        final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
             N resultNode = start.parse(parser);
             if (configuration.isAttributeComments()) {
@@ -299,10 +299,7 @@ public final class JavaParser {
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
         ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
-        if (result.isSuccessful()) {
-            return result.getResult().get();
-        }
-        throw new ParseProblemException(result.getProblems());
+        return result.getResult().orElseThrow(() -> new ParseProblemException(result.getProblems()));
     }
 
     /**
@@ -421,4 +418,5 @@ public final class JavaParser {
     public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
         return simplifiedParse(EXPLICIT_CONSTRUCTOR_INVOCATION_STMT, provider(statement));
     }
+
 }

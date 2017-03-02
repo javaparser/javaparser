@@ -1,6 +1,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.TokenConstants;
@@ -301,7 +302,7 @@ public class Difference {
         res.addAll(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isToken(NEWLINE_TOKEN) || e.isToken(ASTParserConstants.SINGLE_LINE_COMMENT)) {
+            if (e.isToken(NEWLINE_TOKEN) || e.isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)) {
                 res.clear();
                 afterNl = true;
             } else {
@@ -333,7 +334,7 @@ public class Difference {
     }
 
     private boolean isAfterLBrace(NodeText nodeText, int nodeTextIndex) {
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(ASTParserConstants.LBRACE)) {
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(GeneratedJavaParserConstants.LBRACE)) {
             return true;
         }
         if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
@@ -528,7 +529,7 @@ public class Difference {
 
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
-        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(ASTParserConstants.RBRACE)) {
+        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(GeneratedJavaParserConstants.RBRACE)) {
             indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTANTION_SIZE, indentationAdj.size()));
         }
         for (TextElement e : indentationAdj) {
@@ -545,13 +546,13 @@ public class Difference {
         if (textElement instanceof TokenTextElement) {
             TokenTextElement tokenTextElement = (TokenTextElement)textElement;
             int tokenKind = tokenTextElement.getTokenKind();
-            return tokenKind == ASTParserConstants.BYTE
-                || tokenKind == ASTParserConstants.CHAR
-                || tokenKind == ASTParserConstants.SHORT
-                || tokenKind == ASTParserConstants.INT
-                || tokenKind == ASTParserConstants.LONG
-                || tokenKind == ASTParserConstants.FLOAT
-                || tokenKind == ASTParserConstants.DOUBLE;
+            return tokenKind == GeneratedJavaParserConstants.BYTE
+                || tokenKind == GeneratedJavaParserConstants.CHAR
+                || tokenKind == GeneratedJavaParserConstants.SHORT
+                || tokenKind == GeneratedJavaParserConstants.INT
+                || tokenKind == GeneratedJavaParserConstants.LONG
+                || tokenKind == GeneratedJavaParserConstants.FLOAT
+                || tokenKind == GeneratedJavaParserConstants.DOUBLE;
         } else {
             return false;
         }

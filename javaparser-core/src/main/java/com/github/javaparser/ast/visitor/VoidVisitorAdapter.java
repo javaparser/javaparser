@@ -24,6 +24,7 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -164,6 +165,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     public void visit(final CompilationUnit n, final A arg) {
         n.getImports().forEach( p -> p.accept(this, arg));
+        n.getModule().ifPresent( l -> l.accept(this, arg));
         n.getPackageDeclaration().ifPresent( l -> l.accept(this, arg));
         n.getTypes().forEach( p -> p.accept(this, arg));
         n.getComment().ifPresent( l -> l.accept(this, arg));
@@ -616,6 +618,45 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final ImportDeclaration n, final A arg) {
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent( l -> l.accept(this, arg));
+    }
+
+    public void visit(ModuleDeclaration n, A arg) {
+        n.getAnnotations().forEach( p -> p.accept(this, arg));
+        n.getModuleStmts().forEach( p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent( l -> l.accept(this, arg));
+    }
+
+    public void visit(ModuleRequiresStmt n, A arg) {
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent( l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(ModuleExportsStmt n, A arg) {
+        n.getModuleNames().forEach( p -> p.accept(this, arg));
+        n.getName().accept(this, arg);
+        n.getComment().ifPresent( l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(ModuleProvidesStmt n, A arg) {
+        n.getType().accept(this, arg);
+        n.getWithTypes().forEach( p -> p.accept(this, arg));
+        n.getComment().ifPresent( l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(ModuleUsesStmt n, A arg) {
+        n.getType().accept(this, arg);
+        n.getComment().ifPresent( l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(ModuleOpensStmt n, A arg) {
+        n.getModuleNames().forEach( p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getComment().ifPresent( l -> l.accept(this, arg));
     }

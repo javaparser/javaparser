@@ -46,7 +46,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ASTParserConstants.JAVA_DOC_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
 import static com.github.javaparser.printer.TokenConstants.NEWLINE_TOKEN;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
@@ -121,7 +121,7 @@ public class LexicalPreservingPrinter {
                     } else if (oldValue != null && newValue == null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment javadocComment = (JavadocComment)oldValue;
-                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(ASTParserConstants.JAVA_DOC_COMMENT)
+                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT)
                             && ((TokenTextElement)e).getText().equals("/**"+javadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
                             if (matchingTokens.size() != 1) {
                                 throw new IllegalStateException();
@@ -137,7 +137,7 @@ public class LexicalPreservingPrinter {
                     } else if (oldValue != null && newValue != null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment oldJavadocComment = (JavadocComment)oldValue;
-                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(ASTParserConstants.JAVA_DOC_COMMENT)
+                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT)
                                     && ((TokenTextElement)e).getText().equals("/**"+oldJavadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
                             if (matchingTokens.size() != 1) {
                                 throw new IllegalStateException();
@@ -288,7 +288,7 @@ public class LexicalPreservingPrinter {
             PrimitiveType primitiveType = (PrimitiveType)node;
             switch (primitiveType.getType()) {
                 case INT:
-                    nodeText.addToken(ASTParserConstants.INT, node.toString());
+                    nodeText.addToken(GeneratedJavaParserConstants.INT, node.toString());
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -297,7 +297,7 @@ public class LexicalPreservingPrinter {
         }
         if (node instanceof JavadocComment) {
             NodeText nodeText = new NodeText(this);
-            nodeText.addToken(ASTParserConstants.JAVA_DOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
+            nodeText.addToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
             return nodeText;
         }
 
@@ -333,7 +333,7 @@ public class LexicalPreservingPrinter {
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
-            if (tte.getTokenKind() == ASTParserConstants.SINGLE_LINE_COMMENT
+            if (tte.getTokenKind() == GeneratedJavaParserConstants.SINGLE_LINE_COMMENT
                     || tte.getTokenKind() == TokenConstants.NEWLINE_TOKEN) {
                 break;
             } else {

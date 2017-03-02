@@ -51,7 +51,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("}", lpp.getTextForNode(classA).getTextElement(5).expand());
         assertEquals("", lpp.getTextForNode(classA).getTextElement(6).expand());
         assertEquals(true, lpp.getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
-        assertEquals(ASTParserConstants.EOF, ((TokenTextElement)lpp.getTextForNode(classA).getTextElement(6)).getTokenKind());
+        assertEquals(GeneratedJavaParserConstants.EOF, ((TokenTextElement)lpp.getTextForNode(classA).getTextElement(6)).getTokenKind());
     }
 
     @Test
@@ -452,6 +452,24 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerCode(code);
 
         assertEquals("class A {Function<String,String> f = a -> a;}", lpp.print(cu));
+    }
+
+    @Test
+    public void printAModuleInfoSpecificKeywordUsedAsIdentifier1() {
+        considerCode("class module { }");
+
+        cu.getClassByName("module").get().setName("xyz");
+
+        assertEquals("class xyz { }", lpp.print(cu));
+    }
+
+    @Test
+    public void printAModuleInfoSpecificKeywordUsedAsIdentifier2() {
+        considerCode("class xyz { }");
+
+        cu.getClassByName("xyz").get().setName("module");
+
+        assertEquals("class module { }", lpp.print(cu));
     }
 
 }
