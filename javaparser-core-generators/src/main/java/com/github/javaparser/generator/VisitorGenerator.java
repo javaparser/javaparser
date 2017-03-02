@@ -4,6 +4,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Log;
@@ -25,8 +27,8 @@ public abstract class VisitorGenerator extends Generator {
     private final String argumentType;
     private final boolean createMissingVisitMethods;
 
-    protected VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
-        super(javaParser, sourceRoot);
+    protected VisitorGenerator(SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
+        super(sourceRoot);
         this.pkg = pkg;
         this.visitorClassName = visitorClassName;
         this.returnType = returnType;
@@ -37,7 +39,7 @@ public abstract class VisitorGenerator extends Generator {
     public final void generate() throws Exception {
         Log.info("Running %s", getClass().getSimpleName());
 
-        final CompilationUnit compilationUnit = sourceRoot.tryToParse(pkg, visitorClassName + ".java", javaParser).getResult().get();
+        final CompilationUnit compilationUnit = sourceRoot.tryToParse(pkg, visitorClassName + ".java").getResult().get();
 
         Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
         if (!visitorClassOptional.isPresent()) {
@@ -64,10 +66,15 @@ public abstract class VisitorGenerator extends Generator {
         if (visitMethod.isPresent()) {
             generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC)
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
                     .addParameter(argumentType, "arg")
                     .setType(returnType);
+            if (!visitorClass.isInterface()) {
+                methodDeclaration
+                        .addAnnotation(new MarkerAnnotationExpr(new Name("Override")))
+                        .addModifier(PUBLIC);
+            }
             generateVisitMethodBody(node, methodDeclaration, compilationUnit);
         }
     }

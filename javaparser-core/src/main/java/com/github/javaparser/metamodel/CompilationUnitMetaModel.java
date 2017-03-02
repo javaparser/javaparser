@@ -10,6 +10,8 @@ public class CompilationUnitMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel importsPropertyMetaModel;
 
+    public PropertyMetaModel modulePropertyMetaModel;
+
     public PropertyMetaModel packageDeclarationPropertyMetaModel;
 
     public PropertyMetaModel typesPropertyMetaModel;

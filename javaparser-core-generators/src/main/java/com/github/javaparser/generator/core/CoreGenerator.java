@@ -25,23 +25,21 @@ public class CoreGenerator {
     }
 
     private void run(SourceRoot sourceRoot) throws Exception {
-        final JavaParser javaParser = new JavaParser();
+        new GenericListVisitorAdapterGenerator(sourceRoot).generate();
+        new GenericVisitorAdapterGenerator(sourceRoot).generate();
+        new EqualsVisitorGenerator(sourceRoot).generate();
+        new VoidVisitorAdapterGenerator(sourceRoot).generate();
+        new VoidVisitorGenerator(sourceRoot).generate();
+        new GenericVisitorGenerator(sourceRoot).generate();
+        new HashCodeVisitorGenerator(sourceRoot).generate();
+        new CloneVisitorGenerator(sourceRoot).generate();
+        new TreeStructureVisitorGenerator(sourceRoot).generate();
+        new ModifierVisitorGenerator(sourceRoot).generate();
 
-        new GenericListVisitorAdapterGenerator(javaParser, sourceRoot).generate();
-        new GenericVisitorAdapterGenerator(javaParser, sourceRoot).generate();
-        new EqualsVisitorGenerator(javaParser, sourceRoot).generate();
-        new VoidVisitorAdapterGenerator(javaParser, sourceRoot).generate();
-        new VoidVisitorGenerator(javaParser, sourceRoot).generate();
-        new GenericVisitorGenerator(javaParser, sourceRoot).generate();
-        new HashCodeVisitorGenerator(javaParser, sourceRoot).generate();
-        new CloneVisitorGenerator(javaParser, sourceRoot).generate();
-        new TreeStructureVisitorGenerator(javaParser, sourceRoot).generate();
-        new ModifierVisitorGenerator(javaParser, sourceRoot).generate();
-
-        new GetNodeListsGenerator(javaParser, sourceRoot).generate();
-        new PropertyGenerator(javaParser, sourceRoot).generate();
-        new RemoveMethodGenerator(javaParser, sourceRoot).generate();
-        new CloneGenerator(javaParser, sourceRoot).generate();
-        new GetMetaModelGenerator(javaParser, sourceRoot).generate();
+        new GetNodeListsGenerator(sourceRoot).generate();
+        new PropertyGenerator(sourceRoot).generate();
+        new RemoveMethodGenerator(sourceRoot).generate();
+        new CloneGenerator(sourceRoot).generate();
+        new GetMetaModelGenerator(sourceRoot).generate();
     }
 }

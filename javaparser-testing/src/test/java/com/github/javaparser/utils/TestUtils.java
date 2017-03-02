@@ -11,6 +11,8 @@ import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static org.junit.Assert.assertTrue;
+
 public class TestUtils {
     /**
      * Takes care of setting all the end of line character to platform specific ones.
@@ -25,6 +27,10 @@ public class TestUtils {
             }
             return builder.toString();
         }
+    }
+
+    public static void assertInstanceOf(Class<? extends Throwable> expectedType, Throwable instance) {
+        assertTrue(expectedType.isAssignableFrom(instance.getClass()));
     }
 
     /**

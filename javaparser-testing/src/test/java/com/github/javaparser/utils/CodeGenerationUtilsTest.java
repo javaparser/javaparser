@@ -1,4 +1,4 @@
-package com.github.javaparser.generator.utils;
+package com.github.javaparser.utils;
 
 import org.junit.Test;
 

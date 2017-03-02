@@ -26,6 +26,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -208,5 +209,17 @@ public interface GenericVisitor<R, A> {
     R visit(SimpleName n, A arg);
 
     R visit(ImportDeclaration n, A arg);
+
+    R visit(ModuleDeclaration n, A arg);
+
+    R visit(ModuleRequiresStmt n, A arg);
+
+    R visit(ModuleExportsStmt n, A arg);
+
+    R visit(ModuleProvidesStmt n, A arg);
+
+    R visit(ModuleUsesStmt n, A arg);
+
+    R visit(ModuleOpensStmt n, A arg);
 }
 

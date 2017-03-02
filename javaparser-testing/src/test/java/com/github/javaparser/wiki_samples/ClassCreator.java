@@ -80,7 +80,7 @@ public class ClassCreator {
         BlockStmt block = new BlockStmt();
         method.setBody(block);
 
-        // add a statement do the method body
+        // add a statement to the method body
         NameExpr clazz = new NameExpr("System");
         FieldAccessExpr field = new FieldAccessExpr(clazz, "out");
         MethodCallExpr call = new MethodCallExpr(field, "println");

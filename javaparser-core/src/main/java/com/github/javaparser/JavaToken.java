@@ -72,10 +72,10 @@ public class JavaToken {
         // So given the image could be wrong but the type is correct, we look at the type of the token and we fix
         // the image. Everybody is happy and we can keep this horrible thing as our little secret.
 
-        if (token.kind == ASTParserConstants.GT) {
+        if (token.kind == GeneratedJavaParserConstants.GT) {
             range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.beginColumn);
             text = ">";
-        } else if (token.kind == ASTParserConstants.RSIGNEDSHIFT) {
+        } else if (token.kind == GeneratedJavaParserConstants.RSIGNEDSHIFT) {
             range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.beginColumn + 1);
             text = ">>";
         }

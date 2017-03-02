@@ -15,8 +15,8 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * Generates JavaParser's VoidVisitorAdapter.
  */
 public class VoidVisitorAdapterGenerator extends VisitorGenerator {
-    public VoidVisitorAdapterGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorAdapter", "void", "A", true);
+    public VoidVisitorAdapterGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot, "com.github.javaparser.ast.visitor", "VoidVisitorAdapter", "void", "A", true);
     }
 
     @Override
