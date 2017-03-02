@@ -18,11 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.printer;
 
-/**
- * Something that has a printable form. I.e., it can be converted to a user-facing String.
- */
-public interface Printable {
-    String asString();
+package com.github.javaparser.printer.lexicalpreservation;
+
+public interface TextElementMatcher {
+
+    boolean match(TextElement textElement);
+
 }
