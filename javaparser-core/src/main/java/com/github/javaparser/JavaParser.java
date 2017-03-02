@@ -42,6 +42,7 @@ import java.nio.file.Path;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -96,18 +97,23 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
+        final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
-            final GeneratedJavaParser parser = getParserForProvider(provider);
             N resultNode = start.parse(parser);
             if (configuration.isAttributeComments()) {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
 
-            return new ParseResult<>(resultNode, parser.problems, astParser.getTokens(),
-                    astParser.getCommentsCollection());
+            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
+                    parser.getCommentsCollection());
+        } catch (ParseException p) {
+            final Token token = p.currentToken;
+            final Range range = range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
+            parser.problems.add(new Problem("Parse error", range, p));
+            return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
-            return new ParseResult<>(e);
+            return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } finally {
             try {
                 provider.close();

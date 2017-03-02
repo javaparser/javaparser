@@ -28,6 +28,8 @@ import org.junit.Test;
 
 import java.util.Optional;
 
+import static com.github.javaparser.Range.*;
+import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static org.junit.Assert.assertEquals;
 
 public class JavaParserTest {
@@ -36,7 +38,7 @@ public class JavaParserTest {
     public void rangeOfAnnotationMemberDeclarationIsCorrect() {
         String code = "@interface AD { String foo(); }";
         CompilationUnit cu = JavaParser.parse(code);
-        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration) cu.getAnnotationDeclarationByName("AD").get().getMember(0);
         assertEquals(true, memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
@@ -78,5 +80,15 @@ public class JavaParserTest {
         range = expression.getLevels().get(1).getRange();
         assertEquals(true, range.isPresent());
         assertEquals(new Range(new Position(1, 10), new Position(1, 11)), range.get());
+    }
+
+    @Test
+    public void parseErrorContainsLocation() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider("class X { // blah"));
+
+        Problem problem = result.getProblem(0);
+        assertEquals(range(1, 9, 1, 9), problem.getRange().get());
+        assertEquals("Parse error", problem.getMessage());
+        assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 }
