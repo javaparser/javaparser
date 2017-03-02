@@ -1,4 +1,4 @@
-package com.github.javaparser.utils;
+package com.github.javaparser.utils.format;
 
 /**
  * A factory for retrieving different formatting instructions.
@@ -6,6 +6,7 @@ package com.github.javaparser.utils;
  * @version 3.1.0
  * @since 3.1.0
  * @see TreeStructureVisitor
+ * @see Format
  * @author Ryan Beckett
  *
  */
@@ -15,14 +16,22 @@ public class FormatInstructionsFactory {
     private final static XMLFormatInstructions XML__FORMAT_INSTANCE = new XMLFormatInstructions();
     private final static JSONFormatInstructions JSON_FORMAT_INSTANCE = new JSONFormatInstructions();
 
-    public static enum Format {
-        DEFAULT, XML, JSON
-    };
-
+    /**
+     * Get the singleton instance of the default formatting instructions.
+     *
+     * @return The instructions for the default format.
+     */
     public static FormatInstructions getFormatInstructions() {
         return getFormatInstructions(Format.DEFAULT);
     }
 
+    /**
+     * Get the singleton instance of the specified formatting instructions.
+     *
+     * @param format The format whose instructions are to be retrieved.
+     *
+     * @return The corresponding instructions for the given format.
+     */
     public static FormatInstructions getFormatInstructions(Format format) {
         switch (format) {
             case XML:

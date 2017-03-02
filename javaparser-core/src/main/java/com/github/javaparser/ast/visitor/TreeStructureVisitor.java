@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.ast.visitor;
 
-import java.io.PrintStream;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -110,57 +110,120 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.type.WildcardType;
-import com.github.javaparser.utils.FormatInstructions;
-import com.github.javaparser.utils.FormatInstructionsFactory;
+import com.github.javaparser.metamodel.BaseNodeMetaModel;
+import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.format.FormatInstructions;
+import com.github.javaparser.utils.format.FormatInstructionsFactory;
 
 /**
- * A visitor that creates a simple visualisation of the AST.
+ * A visitor that creates a formatted visualization of the AST as a string.
+ * This visitor expects a {@link FormatInstructions} to be supplied to specify how
+ * to format the AST. If none is provided, a default implementation is used. The
+ * resultant string is retrieved calling {@link #getResult()}, which calls
+ * {@link FormatInstructions#postProcess(String)} before returning.
+ *
+ * @see TreeStructureVisitorGenerator
+ * @see FormatInstructions
+ * @see BaseNodeMetaModel
+ * @see PropertyMetaModel
+ * @version 3.1.0
+ * @since 3.1.0
+ * @author Danny van Bruggen
+ * @author Ryan Beckett
  */
 public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
 
     private FormatInstructions instructions;
-    private PrintStream printStream;
+    private StringBuilder stringBuilder;
+    private boolean useIndent;
+    private boolean elementOnNewline;
 
+    /**
+     * Create a new tree structure visitor with the default formatting instructions, where each encompassed
+     * element (i.e. node or property) is on a new line and is indented one tab further than its parent.
+     */
     public TreeStructureVisitor() {
-        this(FormatInstructionsFactory.getFormatInstructions(), System.out);
+        this(true, true);
     }
 
-    public TreeStructureVisitor(PrintStream printStream) {
-        this(FormatInstructionsFactory.getFormatInstructions(), printStream);
-    }
-
+    /**
+     * Create a new tree structure visitor with the specified formatting instructions, where each encompassed
+     * element (i.e. node or property) is on a new line and is indented one tab further than its parent.
+     *
+     * @param instructions The formatting instructions to apply.
+     */
     public TreeStructureVisitor(FormatInstructions instructions) {
-        this(instructions, System.out);
+        this(instructions, true, true);
     }
 
-    public TreeStructureVisitor(FormatInstructions instructions, PrintStream printStream) {
+    /**
+     * Create a new tree structure visitor with the default formatting instructions, and the specified indentation
+     * and new line options.
+     *
+     * @param useIndent <i>True</i> if each compassed element (i.e. node or property) is indented one tab
+     *            further than its parent.
+     * @param elementOnNewline <i>True</i> if each compassed element (i.e. node or property) is on a new line.
+     */
+    public TreeStructureVisitor(boolean useIndent, boolean elementOnNewline) {
+        this(FormatInstructionsFactory.getFormatInstructions(), useIndent, elementOnNewline);
+    }
+
+    /**
+     * Create a new tree structure visitor with the specified formatting instructions, and the specified indentation
+     * and new line options.
+     *
+     * @param instructions The formatting instructions to apply.
+     * @param useIndent <i>True</i> if each compassed element (i.e. node or property) is indented one tab
+     *            further than its parent.
+     * @param elementOnNewline <i>True</i> if each compassed element (i.e. node or property) is on a new line.
+     */
+    public TreeStructureVisitor(FormatInstructions instructions, boolean useIndent, boolean elementOnNewline) {
         this.instructions = instructions;
-        this.printStream = printStream;
+        this.stringBuilder = new StringBuilder();
+        this.useIndent = useIndent;
+        this.elementOnNewline = elementOnNewline;
     }
 
-    protected void printIndented(int indentLevel, String text) {
+    /**
+     * Get the resultant formatted string generated from running this visitor.
+     * {@link FormatInstructions#postProcess(String)}
+     * is called before returning from this method.
+     *
+     * @return The resultant formatted string after post-processing.
+     */
+    public String getResult() {
+        return instructions.postProcess(stringBuilder.toString());
+    }
+
+    protected void appendToBuilder(int indentLevel, String text) {
         if (text.isEmpty())
             return;
-        for (int i = 0; i < indentLevel; i++) {
-            printStream.print("\t");
+        if (useIndent) {
+            for (int i = 0; i < indentLevel; i++) {
+                stringBuilder.append("\t");
+            }
         }
-        printStream.println(text);
+        if (elementOnNewline)
+            stringBuilder.append(text + "\n");
+        else
+            stringBuilder.append(text);
     }
 
     protected void exitNode(Node n, Integer indent) {
-        printIndented(indent, instructions.exitNode(n));
+        appendToBuilder(indent, instructions.exitNode(n));
     }
 
     protected void enterNode(Node n, Integer indent) {
-        printIndented(indent, instructions.enterNode(n));
+        appendToBuilder(indent, instructions.enterNode(n));
     }
 
     protected void outputProperty(Node node, String name, EnumSet<Modifier> modifiers, Integer indent) {
-        printIndented(indent, instructions.outputProperty(node, name, modifiers));
+        List<String> contents = modifiers.stream().map(Enum::name).collect(Collectors.toList());
+        appendToBuilder(indent, instructions.outputProperty(node, name, contents));
     }
 
     protected void outputProperty(Node node, String name, String content, Integer indent) {
-        printIndented(indent, instructions.outputProperty(node, name, content));
+        appendToBuilder(indent, instructions.outputProperty(node, name, content));
     }
 
     protected void outputProperty(Node node, String name, Enum<?> e, Integer indent) {

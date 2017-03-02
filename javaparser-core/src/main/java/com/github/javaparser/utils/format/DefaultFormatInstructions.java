@@ -1,9 +1,9 @@
-package com.github.javaparser.utils;
+package com.github.javaparser.utils.format;
 
-import java.util.EnumSet;
+import java.util.List;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.TreeStructureVisitor;
 
 /**
  * An implementation for the default formatting scheme.
@@ -17,23 +17,28 @@ import com.github.javaparser.ast.Node;
 class DefaultFormatInstructions implements FormatInstructions {
 
     @Override
-    public String enterNode(Node n) {
-        return n.getClass().getSimpleName();
+    public String enterNode(Node node) {
+        return node.getClass().getSimpleName();
     }
 
     @Override
-    public String exitNode(Node n) {
+    public String exitNode(Node node) {
         return "";
     }
 
     @Override
-    public String outputProperty(Node node, String name, EnumSet<Modifier> modifiers) {
-        return name + ": " + modifiers;
+    public String outputProperty(Node node, String name, List<String> contents) {
+        return name + ": " + contents;
     }
 
     @Override
     public String outputProperty(Node node, String name, String content) {
         return name + ": " + content;
+    }
+
+    @Override
+    public String postProcess(String result) {
+        return result;
     }
 
 }

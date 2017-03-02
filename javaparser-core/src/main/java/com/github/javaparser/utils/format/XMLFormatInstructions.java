@@ -1,9 +1,9 @@
-package com.github.javaparser.utils;
+package com.github.javaparser.utils.format;
 
-import java.util.EnumSet;
+import java.util.List;
 
-import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.TreeStructureVisitor;
 
 /**
  * An implementation of XML formatting.
@@ -17,19 +17,19 @@ import com.github.javaparser.ast.Node;
 class XMLFormatInstructions implements FormatInstructions {
 
     @Override
-    public String enterNode(Node n) {
-        return "<" + n.getClass().getSimpleName() + ">";
+    public String enterNode(Node node) {
+        return "<" + node.getClass().getSimpleName() + ">";
     }
 
     @Override
-    public String exitNode(Node n) {
-        return "</" + n.getClass().getSimpleName() + ">";
+    public String exitNode(Node node) {
+        return "</" + node.getClass().getSimpleName() + ">";
     }
 
     @Override
-    public String outputProperty(Node node, String name, EnumSet<Modifier> modifiers) {
+    public String outputProperty(Node node, String name, List<String> contents) {
         final StringBuilder sb = new StringBuilder("<" + name + ">");
-        modifiers.forEach(m -> sb.append(m.name() + ", "));
+        contents.forEach(c -> sb.append(c + ", "));
         int index = sb.lastIndexOf(", ");
         if (index != -1)
             sb.delete(index, index + 2);
@@ -42,4 +42,8 @@ class XMLFormatInstructions implements FormatInstructions {
         return "<" + name + ">" + content + "</" + name + ">";
     }
 
+    @Override
+    public String postProcess(String result) {
+        return result;
+    }
 }
