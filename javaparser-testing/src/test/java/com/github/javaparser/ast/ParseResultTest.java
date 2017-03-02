@@ -25,7 +25,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.ast.CompilationUnit;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
@@ -55,9 +54,11 @@ public class ParseResultTest {
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);
-        assertThat(problem.getMessage()).startsWith("Encountered unexpected token: \"{\" \"{\"");
-        assertThat(result.getTokens().isPresent()).isFalse();
+        assertThat(problem.getMessage()).isEqualTo("Parse error");
+        assertThat(result.getTokens().isPresent()).isTrue();
 
-        assertThat(result.toString()).startsWith("Parsing failed:" + EOL + "Encountered unexpected token:");
+        assertThat(result.toString()).startsWith("Parsing failed:" + EOL +
+                "Parse error at (line 1,col 1)" + EOL +
+                "Problem stacktrace :");
     }
 }
