@@ -99,4 +99,28 @@ public final class CodeGenerationUtils {
     public static Path packageAbsolutePath(Path root, String pkg) {
         return packageAbsolutePath(root.toString(), pkg);
     }
+
+    /**
+     * @return the root directory of the classloader for class c.
+     */
+    public static Path classLoaderRoot(Class<?> c) {
+        return Paths.get(c.getProtectionDomain().getCodeSource().getLocation().getPath());
+    }
+
+    /**
+     * Useful for locating source code in your Maven project. Finds the classpath for class c, then backs up out of
+     * "target/(test-)classes", giving the directory containing the pom.xml.
+     */
+    public static Path mavenModuleRoot(Class<?> c) {
+        return classLoaderRoot(c).resolve(Paths.get("..", "..")).normalize();
+    }
+
+    /**
+     * Useful for locating source code in your Maven project.
+     * Finds the classpath for the JavaParser code (which is probably the classpath for your code too,)
+     * then backs up out of "target/(test-)classes", giving the directory containing the pom.xml.
+     */
+    public static Path mavenModuleRoot() {
+        return mavenModuleRoot(CodeGenerationUtils.class);
+    }
 }
