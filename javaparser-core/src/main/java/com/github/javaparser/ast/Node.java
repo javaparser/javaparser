@@ -455,7 +455,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable 
         }
     }
 
-    protected <P> void notifyPropertyChange(ObservableProperty property, P oldValue, P newValue) {
+    public <P> void notifyPropertyChange(ObservableProperty property, P oldValue, P newValue) {
         this.observers.forEach( o -> o.propertyChange(this, property, oldValue, newValue));
     }
 

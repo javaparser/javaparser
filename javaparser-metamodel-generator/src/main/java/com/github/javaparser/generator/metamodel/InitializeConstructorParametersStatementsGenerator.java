@@ -37,7 +37,7 @@ public class InitializeConstructorParametersStatementsGenerator {
             }
             nodeClass = nodeClass.getSuperclass();
         } while (nodeClass != null);
-        throw new AssertionError(f("Couldn't find constructor parameter %s as a field", name));
+        throw new AssertionError(f("Couldn't find constructor parameter %s as a field, class %s", name, nodeClass.getSimpleName()));
     }
 
     private Constructor<?> findAllFieldsConstructor(Class<? extends Node> nodeClass) {

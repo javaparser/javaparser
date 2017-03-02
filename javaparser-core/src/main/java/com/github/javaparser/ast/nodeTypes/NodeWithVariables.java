@@ -28,6 +28,9 @@ import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.DerivedProperty;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * A node which has a list of variables.
  */
@@ -107,6 +110,10 @@ public interface NodeWithVariables<N extends Node> {
      */
     @DerivedProperty
     default Type getMaximumCommonType() {
+        return calculateMaximumCommonType(this.getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
+    }
+
+    static Type calculateMaximumCommonType(List<Type> types) {
         // we use a local class because we cannot use an helper static method in an interface
         class Helper {
             // Conceptually: given a type we start from the Element Type and get as many array levels as indicated
@@ -118,6 +125,9 @@ public interface NodeWithVariables<N extends Node> {
                     return null;
                 }
                 for (int i = type.getArrayLevel(); i > level; i--) {
+                    if (!(type instanceof ArrayType)) {
+                        throw new AssertionError("The variables do not have a common type.");
+                    }
                     type = ((ArrayType) type).getComponentType();
                 }
                 return type;
@@ -134,8 +144,8 @@ public interface NodeWithVariables<N extends Node> {
             // Now, given that equality on nodes consider the position the simplest way is to compare
             // the pretty-printed string got for a node. We just check all them are the same and if they
             // are we just just is not null
-            Object[] values = this.getVariables().stream().map(v -> {
-                Type t = helper.toArrayLevel(v.getType(), currentLevel);
+            Object[] values = types.stream().map(v -> {
+                Type t = helper.toArrayLevel(v, currentLevel);
                 return t == null ? null : t.toString();
             }).distinct().toArray();
             if (values.length == 1 && values[0] != null) {
@@ -144,7 +154,7 @@ public interface NodeWithVariables<N extends Node> {
                 keepGoing = false;
             }
         }
-        return helper.toArrayLevel(this.getVariables().get(0).getType(), --level);
+        return helper.toArrayLevel(types.get(0), --level);
     }
 
 }

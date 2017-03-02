@@ -66,10 +66,12 @@ public class NodeTest {
 
         cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean"), changes);
 
         cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam"), changes);
     }
@@ -122,15 +124,18 @@ public class NodeTest {
 
         cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean"), changes);
 
         cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam"), changes);
 
         cu.getClassByName("MyCoolClass").get().addField("int", "bar").getVariables().get(0).setInitializer("0");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam"), changes);
     }
@@ -155,10 +160,12 @@ public class NodeTest {
 
         cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean"), changes);
 
         cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam"), changes);
 
@@ -166,6 +173,7 @@ public class NodeTest {
                 .addField("int", "bar")
                 .getVariables().get(0).setInitializer("0");
         assertEquals(Arrays.asList("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                "FieldDeclaration.maximum_common_type changed from int to boolean",
                 "VariableDeclarator.type changed from int to boolean",
                 "Parameter.name changed from p to myParam",
                 "VariableDeclarator.initializer changed from null to 0"), changes);
