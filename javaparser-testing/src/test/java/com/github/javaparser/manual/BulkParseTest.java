@@ -58,7 +58,7 @@ public class BulkParseTest {
                     writer.write(localPath.toString());
                     writer.newLine();
                     for (Problem problem : result.getProblems()) {
-                        writer.write(problem.getMessage());
+                        writer.write(problem.toString());
                         writer.newLine();
                     }
                 }
