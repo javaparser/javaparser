@@ -1,6 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -51,12 +51,12 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
         int i = 0;
-        assertEquals(new CsmToken(ASTParserConstants.AT), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.INTERFACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getName()), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.LBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.LBRACE), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(0)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
@@ -70,7 +70,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(5)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.RBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.RBRACE), csm.elements.get(i++));
         assertEquals(i, csm.elements.size());
     }
 
@@ -81,14 +81,14 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.MODIFIERS, EnumSet.noneOf(Modifier.class), EnumSet.of(Modifier.PUBLIC));
         int i = 0;
-        assertEquals(new CsmToken(ASTParserConstants.PUBLIC), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.PUBLIC), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.AT), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.INTERFACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getName()), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.LBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.LBRACE), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(0)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
@@ -102,7 +102,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(5)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.RBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.RBRACE), csm.elements.get(i++));
         assertEquals(i, csm.elements.size());
     }
 
@@ -115,12 +115,12 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.NAME,
                 annotationDeclaration.getName(), newName);
         int i = 0;
-        assertEquals(new CsmToken(ASTParserConstants.AT), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.INTERFACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(newName), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.LBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.LBRACE), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(0)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
@@ -134,7 +134,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(5)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.RBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.RBRACE), csm.elements.get(i++));
         assertEquals(i, csm.elements.size());
     }
 
@@ -145,14 +145,14 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
         int i = 0;
-        assertEquals(new CsmToken(ASTParserConstants.PUBLIC), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.PUBLIC), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.AT), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.INTERFACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getName()), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.LBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.LBRACE), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(0)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
@@ -166,7 +166,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(5)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.RBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.RBRACE), csm.elements.get(i++));
         assertEquals(i, csm.elements.size());
     }
 
@@ -178,14 +178,14 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         JavadocComment comment = new JavadocComment("Cool this annotation!");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.COMMENT, null, comment);
         int i = 0;
-        assertEquals(new CsmToken(ASTParserConstants.PUBLIC), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.PUBLIC), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.AT), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.INTERFACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getName()), csm.elements.get(i++));
         assertEquals(new CsmToken(1), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.LBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.LBRACE), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(0)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
@@ -199,7 +199,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         assertEquals(new CsmToken(3), csm.elements.get(i++));
         assertEquals(new LexicalDifferenceCalculator.CsmChild(annotationDeclaration.getMember(5)), csm.elements.get(i++));
         assertEquals(new CsmToken(3), csm.elements.get(i++));
-        assertEquals(new CsmToken(ASTParserConstants.RBRACE), csm.elements.get(i++));
+        assertEquals(new CsmToken(GeneratedJavaParserConstants.RBRACE), csm.elements.get(i++));
         assertEquals(i, csm.elements.size());
     }
 

@@ -26,6 +26,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import java.util.EnumSet;
@@ -242,6 +243,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
     public void visit(CompilationUnit n, Integer arg) {
         enterNode(n, arg);
         n.getImports().accept(this, arg + 1);
+        n.getModule().ifPresent( c -> c.accept(this, arg + 1));
         n.getPackageDeclaration().ifPresent( c -> c.accept(this, arg + 1));
         n.getTypes().accept(this, arg + 1);
         n.getComment().ifPresent( c -> c.accept(this, arg + 1));
@@ -760,6 +762,59 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getExtendedType().ifPresent( c -> c.accept(this, arg + 1));
         n.getSuperType().ifPresent( c -> c.accept(this, arg + 1));
         n.getAnnotations().accept(this, arg + 1);
+        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        exitNode(n, arg);
+    }
+
+    public void visit(ModuleDeclaration n, Integer arg) {
+        enterNode(n, arg);
+        outputProperty(n, "isOpen", n.isOpen(), arg + 1);
+        n.getAnnotations().accept(this, arg + 1);
+        n.getModuleStmts().accept(this, arg + 1);
+        n.getName().accept(this, arg + 1);
+        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        exitNode(n, arg);
+    }
+
+    public void visit(ModuleRequiresStmt n, Integer arg) {
+        enterNode(n, arg);
+        outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
+        n.getName().accept(this, arg + 1);
+        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        exitNode(n, arg);
+    }
+
+    @Override()
+    public void visit(ModuleExportsStmt n, Integer arg) {
+        enterNode(n, arg);
+        n.getModuleNames().accept(this, arg + 1);
+        n.getName().accept(this, arg + 1);
+        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        exitNode(n, arg);
+    }
+
+    @Override()
+    public void visit(ModuleProvidesStmt n, Integer arg) {
+        enterNode(n, arg);
+        n.getType().accept(this, arg + 1);
+        n.getWithTypes().accept(this, arg + 1);
+        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        exitNode(n, arg);
+    }
+
+    @Override()
+    public void visit(ModuleUsesStmt n, Integer arg) {
+        enterNode(n, arg);
+        n.getType().accept(this, arg + 1);
+        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        exitNode(n, arg);
+    }
+
+    @Override
+    public void visit(ModuleOpensStmt n, Integer arg) {
+        enterNode(n, arg);
+        n.getModuleNames().accept(this, arg + 1);
+        n.getName().accept(this, arg + 1);
         n.getComment().ifPresent( c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }

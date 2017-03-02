@@ -27,7 +27,7 @@ import org.junit.Test;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.github.javaparser.ASTParserConstants.*;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static org.junit.Assert.assertEquals;

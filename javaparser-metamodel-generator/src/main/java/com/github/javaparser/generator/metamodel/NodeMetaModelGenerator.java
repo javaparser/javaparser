@@ -29,9 +29,6 @@ public class NodeMetaModelGenerator {
 
     public void generate(Class<? extends Node> nodeClass, ClassOrInterfaceDeclaration metaModelCoid, NodeList<Statement> initializeNodeMetaModelsStatements, NodeList<Statement> initializePropertyMetaModelsStatements, NodeList<Statement> initializeConstructorParametersStatements, SourceRoot sourceRoot) throws NoSuchMethodException {
         final String className = nodeMetaModelName(nodeClass);
-        if(nodeClass== StringLiteralExpr.class){
-            System.out.println();
-        }
         final String nodeMetaModelFieldName = decapitalize(className);
         metaModelCoid.getFieldByName(nodeMetaModelFieldName).ifPresent(Node::remove);
 

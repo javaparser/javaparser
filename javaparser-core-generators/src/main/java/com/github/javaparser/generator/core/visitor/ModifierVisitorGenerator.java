@@ -14,8 +14,8 @@ import com.github.javaparser.utils.SourceRoot;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class ModifierVisitorGenerator extends VisitorGenerator {
-    public ModifierVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "ModifierVisitor", "Visitable", "A", true);
+    public ModifierVisitorGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot, "com.github.javaparser.ast.visitor", "ModifierVisitor", "Visitable", "A", true);
     }
 
     @Override

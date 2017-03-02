@@ -43,18 +43,18 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
  */
 @FunctionalInterface
 public interface ParseStart<R> {
-    ParseStart<CompilationUnit> COMPILATION_UNIT = ASTParser::CompilationUnit;
-    ParseStart<BlockStmt> BLOCK = ASTParser::Block;
-    ParseStart<Statement> STATEMENT = ASTParser::BlockStatement;
-    ParseStart<ImportDeclaration> IMPORT_DECLARATION = ASTParser::ImportDeclaration;
-    ParseStart<Expression> EXPRESSION = ASTParser::Expression;
-    ParseStart<AnnotationExpr> ANNOTATION = ASTParser::Annotation;
-    ParseStart<BodyDeclaration<?>> ANNOTATION_BODY = ASTParser::AnnotationBodyDeclaration;
+    ParseStart<CompilationUnit> COMPILATION_UNIT = GeneratedJavaParser::CompilationUnit;
+    ParseStart<BlockStmt> BLOCK = GeneratedJavaParser::Block;
+    ParseStart<Statement> STATEMENT = GeneratedJavaParser::BlockStatement;
+    ParseStart<ImportDeclaration> IMPORT_DECLARATION = GeneratedJavaParser::ImportDeclaration;
+    ParseStart<Expression> EXPRESSION = GeneratedJavaParser::Expression;
+    ParseStart<AnnotationExpr> ANNOTATION = GeneratedJavaParser::Annotation;
+    ParseStart<BodyDeclaration<?>> ANNOTATION_BODY = GeneratedJavaParser::AnnotationBodyDeclaration;
     ParseStart<BodyDeclaration<?>> CLASS_BODY = p -> p.ClassOrInterfaceBodyDeclaration(false);
     ParseStart<BodyDeclaration<?>> INTERFACE_BODY = p -> p.ClassOrInterfaceBodyDeclaration(true);
-    ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = ASTParser::ClassOrInterfaceType;
-    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = ASTParser::VariableDeclarationExpression;
-    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = ASTParser::ExplicitConstructorInvocation;
+    ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = GeneratedJavaParser::ClassOrInterfaceType;
+    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpression;
+    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocation;
 
-    R parse(ASTParser parser) throws ParseException;
+    R parse(GeneratedJavaParser parser) throws ParseException;
 }
