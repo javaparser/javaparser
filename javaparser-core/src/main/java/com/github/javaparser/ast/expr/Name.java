@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
@@ -99,15 +100,12 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      *
      * @param qualifiedName qualified name
      * @return instanceof {@link Name}
+     * @deprecated use JavaParser.parseName instead
      */
+    @Deprecated
     public static Name parse(String qualifiedName) {
         assertNonEmpty(qualifiedName);
-        String[] split = qualifiedName.split("\\.");
-        Name ret = new Name(split[0]);
-        for (int i = 1; i < split.length; i++) {
-            ret = new Name(ret, split[i]);
-        }
-        return ret;
+        return JavaParser.parseName(qualifiedName);
     }
 
     /**

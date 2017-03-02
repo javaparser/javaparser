@@ -42,6 +42,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -238,7 +240,7 @@ public final class CompilationUnit extends Node {
      * @return this, the {@link CompilationUnit}
      */
     public CompilationUnit setPackageDeclaration(String name) {
-        setPackageDeclaration(new PackageDeclaration(Name.parse(name)));
+        setPackageDeclaration(new PackageDeclaration(parseName(name)));
         return this;
     }
 
