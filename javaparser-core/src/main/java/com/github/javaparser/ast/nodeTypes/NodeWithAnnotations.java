@@ -62,24 +62,50 @@ public interface NodeWithAnnotations<N extends Node> {
      * Annotates this
      *
      * @param name the name of the annotation
-     * @return the {@link NormalAnnotationExpr} added
+     * @return this
      */
-    default NormalAnnotationExpr addAnnotation(String name) {
-        NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                parseName(name), new NodeList<>());
-        getAnnotations().add(normalAnnotationExpr);
-        return normalAnnotationExpr;
+    @SuppressWarnings("unchecked")
+    default N addAnnotation(String name) {
+        NormalAnnotationExpr annotation = new NormalAnnotationExpr(
+                Name.parse(name), new NodeList<>());
+        getAnnotations().add(annotation);
+        return (N) this;
     }
 
     /**
-     * Annotates this and automatically add the import
+     * Annotates this
+     *
+     * @param name the name of the annotation
+     * @return the {@link NormalAnnotationExpr} added
+     */
+    @SuppressWarnings("unchecked")
+    default NormalAnnotationExpr addAndGetAnnotation(String name) {
+        NormalAnnotationExpr annotation = new NormalAnnotationExpr(
+                parseName(name), new NodeList<>());
+        getAnnotations().add(annotation);
+        return annotation;
+    }
+
+    /**
+     * Annotates this node and automatically add the import
+     *
+     * @param clazz the class of the annotation
+     * @return this
+     */
+    default N addAnnotation(Class<? extends Annotation> clazz) {
+        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        return addAnnotation(clazz.getSimpleName());
+    }
+
+    /**
+     * Annotates this node and automatically add the import
      *
      * @param clazz the class of the annotation
      * @return the {@link NormalAnnotationExpr} added
      */
-    default NormalAnnotationExpr addAnnotation(Class<? extends Annotation> clazz) {
+    default NormalAnnotationExpr addAndGetAnnotation(Class<? extends Annotation> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
-        return addAnnotation(clazz.getSimpleName());
+        return addAndGetAnnotation(clazz.getSimpleName());
     }
 
     /**

@@ -1,9 +1,9 @@
 package com.github.javaparser.printer;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 
 /**
- * It complements ASTParserConstants
+ * It complements GeneratedJavaParserConstants
  */
 public class TokenConstants {
     public static int EOF_TOKEN = 0;
@@ -27,8 +27,8 @@ public class TokenConstants {
     }
 
     public static boolean isComment(int tokenType) {
-        return tokenType == ASTParserConstants.SINGLE_LINE_COMMENT
-                || tokenType == ASTParserConstants.MULTI_LINE_COMMENT
-                || tokenType == ASTParserConstants.JAVA_DOC_COMMENT;
+        return tokenType == GeneratedJavaParserConstants.SINGLE_LINE_COMMENT
+                || tokenType == GeneratedJavaParserConstants.MULTI_LINE_COMMENT
+                || tokenType == GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
     }
 }

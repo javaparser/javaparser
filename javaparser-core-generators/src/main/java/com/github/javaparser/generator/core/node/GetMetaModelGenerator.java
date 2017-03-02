@@ -13,8 +13,8 @@ import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetMetaModelGenerator extends NodeGenerator {
-    public GetMetaModelGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot);
+    public GetMetaModelGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot);
     }
 
     @Override

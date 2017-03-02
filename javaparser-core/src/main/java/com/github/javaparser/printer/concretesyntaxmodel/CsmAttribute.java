@@ -21,10 +21,9 @@
 
 package com.github.javaparser.printer.concretesyntaxmodel;
 
-import com.github.javaparser.ASTParserConstants;
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmAttribute implements CsmElement {
@@ -46,11 +45,11 @@ public class CsmAttribute implements CsmElement {
 
     public int getTokenType(String text) {
         if (property == ObservableProperty.IDENTIFIER) {
-            return ASTParserConstants.IDENTIFIER;
+            return GeneratedJavaParserConstants.IDENTIFIER;
         }
         if (property == ObservableProperty.TYPE) {
-            for (int i=0;i<ASTParserConstants.tokenImage.length;i++) {
-                if (ASTParserConstants.tokenImage[i].equals("\"" + text.toLowerCase() + "\"")) {
+            for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
+                if (GeneratedJavaParserConstants.tokenImage[i].equals("\"" + text.toLowerCase() + "\"")) {
                     return i;
                 }
             }

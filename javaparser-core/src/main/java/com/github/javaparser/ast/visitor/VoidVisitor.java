@@ -26,6 +26,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -203,5 +204,17 @@ public interface VoidVisitor<A> {
     void visit(WhileStmt n, A arg);
 
     void visit(WildcardType n, A arg);
+
+    void visit(ModuleDeclaration n, A arg);
+
+    void visit(ModuleRequiresStmt n, A arg);
+
+    void visit(ModuleExportsStmt n, A arg);
+
+    void visit(ModuleProvidesStmt n, A arg);
+
+    void visit(ModuleUsesStmt n, A arg);
+
+    void visit(ModuleOpensStmt n, A arg);
 }
 
