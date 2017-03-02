@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
@@ -417,6 +418,17 @@ public final class JavaParser {
      */
     public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
         return simplifiedParse(EXPLICIT_CONSTRUCTOR_INVOCATION_STMT, provider(statement));
+    }
+
+    /**
+     * Parses a qualified name (one that can have "."s in it) and returns it as a Name.
+     *
+     * @param qualifiedName a name like "com.laamella.parameter_source"
+     * @return the AST for the name
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Name parseName(String qualifiedName) {
+        return simplifiedParse(NAME, provider(qualifiedName));
     }
 
 }
