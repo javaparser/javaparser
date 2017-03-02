@@ -45,6 +45,7 @@ import org.jbehave.core.annotations.When;
 import java.util.EnumSet;
 import java.util.Map;
 
+import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
@@ -124,7 +125,7 @@ public class ManipulationSteps {
     @When("the package declaration is set to \"$packageName\"")
     public void whenThePackageDeclarationIsSetTo(String packageName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        compilationUnit.setPackageDeclaration(new PackageDeclaration(Name.parse(packageName)));
+        compilationUnit.setPackageDeclaration(new PackageDeclaration(parseName(packageName)));
         state.put("cu1", compilationUnit);
     }
 
