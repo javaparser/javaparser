@@ -20,8 +20,9 @@ public class ProblemTest {
     public void testVerboseMessage() {
         Problem problem = new Problem("Parse error", range(10, 10, 20, 20), null);
 
-        assertEquals("Parse error at (line 10,col 10)", problem.getVerboseMessage());
+        assertEquals("(line 10,col 10) Parse error", problem.getVerboseMessage());
     }
+
     @Test
     public void testVerboseMessageWithoutLocation() {
         Problem problem = new Problem("Parse error", null, null);

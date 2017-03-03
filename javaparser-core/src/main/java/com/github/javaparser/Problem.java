@@ -68,7 +68,7 @@ public class Problem {
      * @return the message plus location information.
      */
     public String getVerboseMessage() {
-        return getLocation().map(l -> message + " at " + l.begin).orElse(message);
+        return getLocation().map(l -> l.begin + " " + message).orElse(message);
     }
 
     /**

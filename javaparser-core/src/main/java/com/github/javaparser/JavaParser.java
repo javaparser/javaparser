@@ -39,6 +39,7 @@ import com.github.javaparser.javadoc.Javadoc;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.TreeSet;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.*;
@@ -110,7 +111,7 @@ public final class JavaParser {
         } catch (ParseException p) {
             final Token token = p.currentToken;
             final Range range = range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
-            parser.problems.add(new Problem("Parse error", range, p));
+            parser.problems.add(new Problem(makeMessageForParseException(p), range, p));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
             parser.problems.add(new Problem(e.getMessage(), null, e));
@@ -122,6 +123,58 @@ public final class JavaParser {
                 // Since we're done parsing and have our result, we don't care about any errors.
             }
         }
+    }
+
+    /**
+     * This is the code from ParseException.initialise, modified to be more horizontal.
+     */
+    private String makeMessageForParseException(ParseException exception) {
+        final StringBuilder sb = new StringBuilder("Parse error. Found ");
+        final StringBuilder expected = new StringBuilder();
+
+        int maxExpectedTokenSequenceLength = 0;
+        TreeSet<String> sortedOptions = new TreeSet<>();
+        for (int i = 0; i < exception.expectedTokenSequences.length; i++) {
+            if (maxExpectedTokenSequenceLength < exception.expectedTokenSequences[i].length) {
+                maxExpectedTokenSequenceLength = exception.expectedTokenSequences[i].length;
+            }
+            for (int j = 0; j < exception.expectedTokenSequences[i].length; j++) {
+                sortedOptions.add(exception.tokenImage[exception.expectedTokenSequences[i][j]]);
+            }
+        }
+
+        for (String option : sortedOptions) {
+            expected.append(" ").append(option);
+        }
+
+        sb.append("");
+
+        Token token = exception.currentToken.next;
+        for (int i = 0; i < maxExpectedTokenSequenceLength; i++) {
+            String tokenText = token.image;
+            String escapedTokenText = ParseException.add_escapes(tokenText);
+            if (i != 0) {
+                sb.append(" ");
+            }
+            if (token.kind == 0) {
+                sb.append(exception.tokenImage[0]);
+                break;
+            }
+            sb.append(" \"")
+                    .append(escapedTokenText)
+                    .append("\" ")
+                    .append(exception.tokenImage[token.kind]);
+            token = token.next;
+        }
+
+        if (exception.expectedTokenSequences.length != 0) {
+            int numExpectedTokens = exception.expectedTokenSequences.length;
+            sb.append(", expected")
+                    .append(numExpectedTokens == 1 ? "" : " one of ")
+                    .append(expected.toString());
+        } 
+        return sb.toString();
+
     }
 
     /**
