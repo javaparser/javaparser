@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static com.github.javaparser.utils.TestUtils.download;
+import static com.github.javaparser.utils.TestUtils.temporaryDirectory;
 import static com.github.javaparser.utils.TestUtils.unzip;
 
 public class BulkParseTest {
@@ -28,7 +29,7 @@ public class BulkParseTest {
     }
 
     private void parseOpenJdk() throws IOException {
-        Path workdir = CodeGenerationUtils.mavenModuleRoot().resolve(Paths.get("target", "tmp"));
+        Path workdir = CodeGenerationUtils.mavenModuleRoot().resolve(Paths.get(temporaryDirectory(), "javaparser_openjdk_download"));
         workdir.toFile().mkdirs();
         Path openJdkZipPath = workdir.resolve("openjdk.zip");
         if (Files.notExists(openJdkZipPath)) {
@@ -58,7 +59,7 @@ public class BulkParseTest {
                     writer.write(localPath.toString());
                     writer.newLine();
                     for (Problem problem : result.getProblems()) {
-                        writer.write(problem.toString());
+                        writer.write(problem.getVerboseMessage());
                         writer.newLine();
                     }
                 }

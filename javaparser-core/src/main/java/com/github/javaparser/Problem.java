@@ -23,8 +23,7 @@ package com.github.javaparser;
 
 import java.util.Optional;
 
-import com.github.javaparser.utils.Utils;
-
+import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -32,42 +31,64 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class Problem {
     private final String message;
-    private final Range range;
+    private final Range location;
     private final Throwable cause;
 
-    Problem(String message, Range range, Throwable cause) {
+    public Problem(String message, Range location, Throwable cause) {
         assertNotNull(message);
 
         this.message = message;
-        this.range = range;
+        this.location = location;
         this.cause = cause;
     }
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder(message);
-        if (range != null)
-            str.append(" at ").append(range.begin);
+        final StringBuilder str = new StringBuilder(getVerboseMessage());
         if (cause != null) {
-            str.append(Utils.EOL).append("Problem stacktrace : ").append(Utils.EOL);
+            str.append(EOL).append("Problem stacktrace : ").append(EOL);
             for (int i = 0; i < cause.getStackTrace().length; i++) {
                 StackTraceElement ste = cause.getStackTrace()[i];
                 str.append("  ").append(ste.toString());
                 if (i + 1 != cause.getStackTrace().length)
-                    str.append(Utils.EOL);
+                    str.append(EOL);
             }
         }
         return str.toString();
     }
 
+    /**
+     * @return the message that was passed into the constructor.
+     */
     public String getMessage() {
         return message;
     }
 
-    public Optional<Range> getRange() {
-        return Optional.ofNullable(range);
+    /**
+     * @return the message plus location information.
+     */
+    public String getVerboseMessage() {
+        return getLocation().map(l -> l.begin + " " + message).orElse(message);
     }
 
+    /**
+     * @return the location that was passed into the constructor.
+     */
+    public Optional<Range> getLocation() {
+        return Optional.ofNullable(location);
+    }
+
+    /**
+     * @deprecated use getLocation()
+     */
+    @Deprecated
+    public Optional<Range> getRange() {
+        return getLocation();
+    }
+
+    /**
+     * @return the cause that was passed into the constructor.
+     */
     public Optional<Throwable> getCause() {
         return Optional.ofNullable(cause);
     }
