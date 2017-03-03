@@ -1194,6 +1194,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final Name n, final A arg) {
         R result;
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getQualifier().isPresent()) {
             result = n.getQualifier().get().accept(this, arg);
             if (result != null)

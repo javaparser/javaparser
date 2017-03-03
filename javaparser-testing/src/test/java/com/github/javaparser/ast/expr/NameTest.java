@@ -22,9 +22,14 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseImport;
 import static com.github.javaparser.JavaParser.parseName;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class NameTest {
@@ -43,5 +48,27 @@ public class NameTest {
     @Test(expected = ParseProblemException.class)
     public void parsingEmptyNameThrowsException() {
         parseName("");
+    }
+
+    @Test
+    public void nameCanHaveAnnotationsInside() {
+        Name name = parseName("a.@A b. @C c");
+        assertEquals("a.b.c", name.asString());
+        assertThat(name.getAnnotations()).containsExactly(new MarkerAnnotationExpr("C"));
+        assertThat(name.getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("A"));
+    }
+    
+    @Test
+    public void importName() {
+        ImportDeclaration importDeclaration = parseImport("import java.@Abc util.List;");
+        
+        assertThat(importDeclaration.getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
+    }
+
+    @Test
+    public void packageName() {
+        CompilationUnit cu = parse("package @Abc p1.p2;");
+        
+        assertThat(cu.getPackageDeclaration().get().getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
     }
 }
