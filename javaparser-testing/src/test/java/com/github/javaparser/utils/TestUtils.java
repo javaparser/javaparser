@@ -82,4 +82,7 @@ public class TestUtils {
         Files.write(destination, response.body().bytes());
     }
 
+    public static String temporaryDirectory() {
+        return System.getProperty("java.io.tmpdir");
+    }
 }

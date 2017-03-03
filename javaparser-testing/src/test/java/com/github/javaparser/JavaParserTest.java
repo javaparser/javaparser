@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static org.junit.Assert.assertEquals;
@@ -84,11 +85,11 @@ public class JavaParserTest {
 
     @Test
     public void parseErrorContainsLocation() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider("class X { // blah"));
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, Providers.provider("class X { // blah"));
 
         Problem problem = result.getProblem(0);
-        assertEquals(range(1, 9, 1, 9), problem.getRange().get());
-        assertEquals("Parse error", problem.getMessage());
+        assertEquals(range(1, 9, 1, 9), problem.getLocation().get());
+        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 }
