@@ -160,10 +160,16 @@ public final class JavaParser {
                 sb.append(exception.tokenImage[0]);
                 break;
             }
-            sb.append(" \"")
-                    .append(escapedTokenText)
-                    .append("\" ")
-                    .append(exception.tokenImage[token.kind]);
+            escapedTokenText="\""+escapedTokenText+"\"";
+            String image = exception.tokenImage[token.kind];
+            if (image.equals(escapedTokenText)) {
+                sb.append(image);
+            } else {
+                sb.append(" ")
+                        .append(escapedTokenText)
+                        .append(" ")
+                        .append(image);
+            }
             token = token.next;
         }
 
@@ -172,7 +178,7 @@ public final class JavaParser {
             sb.append(", expected")
                     .append(numExpectedTokens == 1 ? "" : " one of ")
                     .append(expected.toString());
-        } 
+        }
         return sb.toString();
 
     }
@@ -264,8 +270,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param path path to a resource containing Java source code. As resource is
-     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
@@ -278,8 +284,8 @@ public final class JavaParser {
      * Parses the Java code contained in a resource and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param path path to a resource containing Java source code. As resource is
-     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -294,8 +300,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      *
      * @param classLoader the classLoader that is asked to load the resource
-     * @param path path to a resource containing Java source code. As resource is
-     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
@@ -442,7 +448,8 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr} that represents it.
+     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr}
+     * that represents it.
      *
      * @param declaration a variable declaration like <code>int x=2;</code>
      * @return VariableDeclarationExpr representing the type
@@ -453,7 +460,8 @@ public final class JavaParser {
     }
 
     /**
-     * Parses the content of a JavadocComment and returns a {@link com.github.javaparser.javadoc.Javadoc} that represents it.
+     * Parses the content of a JavadocComment and returns a {@link com.github.javaparser.javadoc.Javadoc} that
+     * represents it.
      *
      * @param content a variable declaration like <code>content of my javadoc\n * second line\n * third line</code>
      * @return Javadoc representing the content of the comment
