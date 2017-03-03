@@ -113,6 +113,7 @@ public final class JavaParser {
             parser.problems.add(new Problem("Parse error", range, p));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
+            parser.problems.add(new Problem(e.getMessage(), null, e));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } finally {
             try {

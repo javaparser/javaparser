@@ -87,7 +87,7 @@ public class JavaParserTest {
         ParseResult<CompilationUnit> result = new JavaParser().parse(ParseStart.COMPILATION_UNIT, Providers.provider("class X { // blah"));
 
         Problem problem = result.getProblem(0);
-        assertEquals(range(1, 9, 1, 9), problem.getRange().get());
+        assertEquals(range(1, 9, 1, 9), problem.getLocation().get());
         assertEquals("Parse error", problem.getMessage());
         assertInstanceOf(ParseException.class, problem.getCause().get());
     }
