@@ -96,6 +96,6 @@ A more detailed description of the architecture of the project is available in [
 
 I would absolutely love every possible kind of contributions: if you have questions, ideas, need help or want to propose a change just open an issue. Pull-requests are greatly appreciated.
 
-Thanks to Malte Langkabel, Ayman Abdelghany, Evan Rittenhouse, Rachel Pau, Pavel Eremeev, Simone Basso, Rafael Vargas, Christophe Creeten and Fred Lefévère-Laoide for their contributions!
+Thanks to Malte Langkabel, Ayman Abdelghany, Evan Rittenhouse, Rachel Pau, Pavel Eremeev, Simone Basso, Rafael Vargas, Christophe Creeten, Fred Lefévère-Laoide, and Genadz Batsyan for their contributions!
 
 The project has been created by [Federico Tomassetti](https://tomassetti.me) and it is currently co-maintained by the JavaParser team.
