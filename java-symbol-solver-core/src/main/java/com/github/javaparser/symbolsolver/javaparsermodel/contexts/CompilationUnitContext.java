@@ -132,7 +132,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if (!importDecl.isStatic()) {
                     if (!importDecl.isAsterisk()) {
                         String qName = importDecl.getNameAsString();
-                        boolean found = qName.equals(name) || qName.endsWith("." + name);
+                        boolean defaultPackage = !qName.contains(".");
+                        boolean found = !defaultPackage && (qName.equals(name) || qName.endsWith("." + name));
                         if (!found) {
                             if (prefix != null) {
                                 found = qName.endsWith("." + prefix);
@@ -162,6 +163,13 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look in current package
         if (this.wrappedNode.getPackageDeclaration().isPresent()) {
             String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
+            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            if (ref.isSolved()) {
+                return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+            }
+        } else {
+            // look for classes in the default package
+            String qName = name;
             SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
                 return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);

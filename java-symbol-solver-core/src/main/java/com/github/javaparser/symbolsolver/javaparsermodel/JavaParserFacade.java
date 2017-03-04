@@ -66,7 +66,7 @@ public class JavaParserFacade {
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;
     private Map<Node, Type> cacheWithLambdasSolved = new IdentityHashMap<>();
-    private Map<Node, Type> cacheWithoutLambadsSolved = new IdentityHashMap<>();
+    private Map<Node, Type> cacheWithoutLambdasSolved = new IdentityHashMap<>();
     private TypeExtractor typeExtractor;
 
     private JavaParserFacade(TypeSolver typeSolver) {
@@ -274,10 +274,10 @@ public class JavaParserFacade {
             if (res.isPresent()) {
                 return res.get();
             }
-            res = find(cacheWithoutLambadsSolved, node);
+            res = find(cacheWithoutLambdasSolved, node);
             if (!res.isPresent()) {
                 Type resType = getTypeConcrete(node, solveLambdas);
-                cacheWithoutLambadsSolved.put(node, resType);
+                cacheWithoutLambdasSolved.put(node, resType);
                 logger.finer("getType on " + node + " (no solveLambdas) -> " + res);
                 return resType;
             }
@@ -381,6 +381,10 @@ public class JavaParserFacade {
             throw new IllegalArgumentException("Unknown type");
         }
         return convertToUsage(type, JavaParserFactory.getContext(context, typeSolver));
+    }
+
+    public Type convertToUsage(com.github.javaparser.ast.type.Type type) {
+        return convertToUsage(type, type);
     }
 
     // This is an hack around an issue in JavaParser
