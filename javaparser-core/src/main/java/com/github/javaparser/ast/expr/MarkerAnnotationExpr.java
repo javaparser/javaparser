@@ -30,6 +30,8 @@ import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.JavaParser.parseName;
 
+import static com.github.javaparser.JavaParser.parseName;
+
 /**
  * An annotation that uses only the annotation type name.
  * <br/><code>@Override</code>
