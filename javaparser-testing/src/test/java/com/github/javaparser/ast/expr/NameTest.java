@@ -24,11 +24,11 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
-import static com.github.javaparser.JavaParser.parse;
-import static com.github.javaparser.JavaParser.parseImport;
-import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.JavaParser.*;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -57,18 +57,24 @@ public class NameTest {
         assertThat(name.getAnnotations()).containsExactly(new MarkerAnnotationExpr("C"));
         assertThat(name.getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("A"));
     }
-    
+
     @Test
     public void importName() {
         ImportDeclaration importDeclaration = parseImport("import java.@Abc util.List;");
-        
+
         assertThat(importDeclaration.getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
+
+        assertEquals("import java.@Abc util.List;" + EOL, importDeclaration.toString());
+        assertEquals("import java.@Abc util.List;", ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
     @Test
     public void packageName() {
         CompilationUnit cu = parse("package @Abc p1.p2;");
-        
+
         assertThat(cu.getPackageDeclaration().get().getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
+
+        assertEquals("package @Abc p1.p2;" + EOL + EOL, cu.toString());
+        assertEquals("package @Abc p1.p2;", ConcreteSyntaxModel.genericPrettyPrint(cu));
     }
 }
