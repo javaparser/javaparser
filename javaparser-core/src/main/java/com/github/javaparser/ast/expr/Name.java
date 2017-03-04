@@ -24,15 +24,20 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NameMetaModel;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.NameMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -46,29 +51,36 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
-public class Name extends Node implements NodeWithIdentifier<Name> {
+public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnnotations<Name> {
 
     private String identifier;
 
     private Name qualifier;
 
+    private NodeList<AnnotationExpr> annotations;
+
     public Name() {
-        this(null, null, "empty");
+        this(null, null, "empty", new NodeList<>());
     }
 
     public Name(final String identifier) {
-        this(null, null, identifier);
+        this(null, null, identifier, new NodeList<>());
+    }
+
+    public Name(Name qualifier, final String identifier) {
+        this(null, qualifier, identifier, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public Name(Name qualifier, final String identifier) {
-        this(null, qualifier, identifier);
+    public Name(Name qualifier, final String identifier, NodeList<AnnotationExpr> annotations) {
+        this(null, qualifier, identifier, annotations);
     }
 
-    public Name(Range range, Name qualifier, final String identifier) {
+    public Name(Range range, Name qualifier, final String identifier, NodeList<AnnotationExpr> annotations) {
         super(range);
         setIdentifier(identifier);
         setQualifier(qualifier);
+        setAnnotations(annotations);
     }
 
     @Override
@@ -135,6 +147,12 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
     public boolean remove(Node node) {
         if (node == null)
             return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
         if (qualifier != null) {
             if (node == qualifier) {
                 removeQualifier();
@@ -146,6 +164,27 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
 
     public Name removeQualifier() {
         return setQualifier((Name) null);
+    }
+
+    @Override
+    public NodeList<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public Name setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
+        return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
     }
 
     @Override

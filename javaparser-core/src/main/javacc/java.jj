@@ -2100,10 +2100,12 @@ Name Name():
  */
 {
 	Name ret;
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  Identifier() { ret = new Name(tokenRange(), null, token.image); }
-  ( LOOKAHEAD(2) "." Identifier() { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image); } )*
+  annotations=Annotations() Identifier() { ret = new Name(tokenRange(), null, token.image, annotations); }
+  ( LOOKAHEAD("." Annotations() Identifier()) 
+  "." annotations=Annotations() Identifier() { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image, annotations); } )*
   { return ret; }
 }
 
