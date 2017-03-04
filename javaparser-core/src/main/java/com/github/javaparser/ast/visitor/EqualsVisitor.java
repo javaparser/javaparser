@@ -374,6 +374,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodeEquals(n.getType(), n2.getType()))
             return false;
+        if (!nodesEquals(n.getVarArgsAnnotations(), n2.getVarArgsAnnotations()))
+            return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
         return true;

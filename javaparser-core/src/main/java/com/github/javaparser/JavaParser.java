@@ -25,6 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -491,6 +492,17 @@ public final class JavaParser {
      */
     public static Name parseName(String qualifiedName) {
         return simplifiedParse(NAME, provider(qualifiedName));
+    }
+
+    /**
+     * Parses a single parameter (a type and a name) and returns it as a Parameter.
+     *
+     * @param parameter a parameter like "int[] x"
+     * @return the AST for the parameter
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Parameter parseParameter(String parameter) {
+        return simplifiedParse(PARAMETER, provider(parameter));
     }
 
 }

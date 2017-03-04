@@ -694,12 +694,14 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         Type type = (Type) n.getType().accept(this, arg);
+        NodeList<AnnotationExpr> varArgsAnnotations = modifyList(n.getVarArgsAnnotations(), arg);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null || type == null)
             return null;
         n.setAnnotations(annotations);
         n.setName(name);
         n.setType(type);
+        n.setVarArgsAnnotations(varArgsAnnotations);
         n.setComment(comment);
         return n;
     }

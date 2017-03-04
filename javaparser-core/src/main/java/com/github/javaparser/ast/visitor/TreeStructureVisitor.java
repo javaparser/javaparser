@@ -589,6 +589,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getAnnotations().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getType().accept(this, arg + 1);
+        n.getVarArgsAnnotations().accept(this, arg + 1);
         n.getComment().ifPresent( c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }

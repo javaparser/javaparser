@@ -171,14 +171,14 @@ final class GeneratedJavaParser {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
             if (inner.isPresent() && inner.get() instanceof NameExpr) {
                 SimpleName id = ((NameExpr)inner.get()).getName();
-                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
+                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id));
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
             } else {
                 ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr)ret).getName();
-            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id));
+            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id));
             ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
@@ -1800,9 +1800,9 @@ NodeList<Parameter> InferredLambdaParameters():
 }
 {
     ","
-    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id.a));}
+    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
     (
-        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id.a)); }
+        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
     )*
     { return ret;  }
 }
@@ -1813,12 +1813,13 @@ Parameter FormalParameter():
 	Type partialType;
 	boolean isVarArg = false;
 	Pair<SimpleName, List<ArrayBracketPair>> id;
+	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
 }
 {
-  modifier = Modifiers() partialType = Type() [ "..." { isVarArg = true;} ] id = VariableDeclaratorId()
+  modifier = Modifiers() partialType = Type() [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] id = VariableDeclaratorId()
   {
         Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
-        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, id.a);
+        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
   }
 }
 
@@ -1927,9 +1928,9 @@ ReferenceType ReferenceType():
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
+   type = PrimitiveType() ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(2) arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+   type = ClassOrInterfaceType()  ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
   { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
 }
@@ -2546,7 +2547,7 @@ Expression PrimaryPrefix():
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = ((NameExpr)ret).getName();
-	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, id);
+	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id);
 	  		  		  }
 
 	  		  		}
@@ -3169,7 +3170,7 @@ TryStmt TryStatement():
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(range(type.getRange().get().begin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, exceptId.a);
+				Parameter catchType = new Parameter(range(type.getRange().get().begin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
