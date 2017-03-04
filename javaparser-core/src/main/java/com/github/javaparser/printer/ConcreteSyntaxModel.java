@@ -225,7 +225,9 @@ public class ConcreteSyntaxModel {
                 list(ObservableProperty.ANNOTATIONS, CsmElement.space(), CsmElement.none(), CsmElement.space()),
                 modifiers(),
                 child(ObservableProperty.TYPE),
-                conditional(ObservableProperty.VAR_ARGS, FLAG, token(GeneratedJavaParserConstants.ELLIPSIS)),
+                conditional(ObservableProperty.VAR_ARGS, FLAG, CsmElement.sequence(
+                        list(ObservableProperty.VAR_ARGS_ANNOTATIONS, CsmElement.space(), CsmElement.none(), CsmElement.none()),
+                        token(GeneratedJavaParserConstants.ELLIPSIS))),
                 space(),
                 child(ObservableProperty.NAME)));
 
@@ -793,12 +795,12 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(CompilationUnit.class, sequence(
-                    comment(),
-                    child(ObservableProperty.PACKAGE_DECLARATION),
-                    list(ObservableProperty.IMPORTS, none(), none(), newline()),
-                    list(TYPES, newline(), CsmElement.newline(), CsmElement.none(), CsmElement.newline()),
-                    child(ObservableProperty.MODULE),
-                    orphanCommentsEnding()));
+                comment(),
+                child(ObservableProperty.PACKAGE_DECLARATION),
+                list(ObservableProperty.IMPORTS, none(), none(), newline()),
+                list(TYPES, newline(), CsmElement.newline(), CsmElement.none(), CsmElement.newline()),
+                child(ObservableProperty.MODULE),
+                orphanCommentsEnding()));
 
         concreteSyntaxModelByClass.put(ImportDeclaration.class, sequence(
                 comment(),
@@ -910,7 +912,7 @@ public class ConcreteSyntaxModel {
     private static class JavadocContentTokenCalculator implements CsmToken.TokenContentCalculator {
         @Override
         public String calculate(Node node) {
-            return "/**" + ((JavadocComment)node).getContent() + "*";
+            return "/**" + ((JavadocComment) node).getContent() + "*";
         }
 
         @Override

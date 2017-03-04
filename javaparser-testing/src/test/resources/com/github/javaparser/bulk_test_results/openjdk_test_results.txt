@@ -5,13 +5,9 @@ Lexical error at line 33, column 1.  Encountered: "\\" (92), after : ""
 openjdk/langtools/test/com/sun/javadoc/testUnnamedPackage/BadSource.java
 (line 0,col 0) Parse error. Found  "Just" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 openjdk/langtools/test/com/sun/javadoc/testTypeAnnotations/typeannos/Receivers.java
-(line 32,col 23) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
-openjdk/langtools/test/com/sun/javadoc/testTypeAnnotations/typeannos/Varargs.java
-(line 37,col 30) Parse error. Found "...", expected "["
-openjdk/langtools/test/com/sun/javadoc/testTypeAnnotations/typeannos/MethodReturnType.java
-(line 40,col 14) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "void" "with" <IDENTIFIER>
+(line 32,col 23) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/com/sun/javadoc/typeAnnotations/smoke/pkg/TargetTypes.java
-(line 97,col 23) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 70,col 19) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/T4994049/T4994049.java
 (line 11,col 5) Parse error. Found  "BAR" <IDENTIFIER>, expected one of  "," ";" "}"
 openjdk/langtools/test/tools/javac/processing/6994946/SyntaxErrorTest.java
@@ -19,7 +15,7 @@ openjdk/langtools/test/tools/javac/processing/6994946/SyntaxErrorTest.java
 openjdk/langtools/test/tools/javac/processing/errors/CrashOnNonExistingAnnotation/Source.java
 (line 39,col 102) Parse error. Found ".", expected one of  ")" "," "@" "["
 openjdk/langtools/test/tools/javac/processing/errors/TestParseErrors/ParseErrors.java
-(line 37,col 36) Parse error. Found ",", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 37,col 36) Parse error. Found ",", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/api/T6265137a.java
 (line 24,col 1) Parse error. Found <EOF>, expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/6440583/A.java
@@ -39,7 +35,7 @@ openjdk/langtools/test/tools/javac/Parens3.java
 openjdk/langtools/test/tools/javac/diags/examples/AssertAsIdentifier.java
 (line 28,col 5) Parse error. Found "assert", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/ReceiverParameterNotApplicableConstructor.java
-(line 27,col 47) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 27,col 47) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/IllegalNonAsciiDigit.java
 Lexical error at line 27, column 14.  Encountered: "\u0660" (1632), after : ""
 openjdk/langtools/test/tools/javac/diags/examples/IllegalEscapeChar.java
@@ -75,7 +71,7 @@ openjdk/langtools/test/tools/javac/diags/examples/Expected3.java
 openjdk/langtools/test/tools/javac/diags/examples/TryWithoutCatchOrFinallyOrResource.java
 (line 29,col 9) Try has no finally, no catch, and no resources
 openjdk/langtools/test/tools/javac/diags/examples/IncorrectReceiverType.java
-(line 27,col 12) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 27,col 12) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/IntfAnnotationsCantHaveTypeParams.java
 (line 26,col 14) Parse error. Found "<", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/CantExtendIntfAnno.java
@@ -95,11 +91,11 @@ openjdk/langtools/test/tools/javac/diags/examples/EnumAsIdentifier2.java
 openjdk/langtools/test/tools/javac/diags/examples/CallMustBeFirst.java
 (line 29,col 9) Parse error. Found "(", expected one of  "." "::"
 openjdk/langtools/test/tools/javac/diags/examples/IllegalDot.java
-(line 29,col 12) Parse error. Found ".", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 29,col 12) Parse error. Found ".", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/UnclosedStringLiteral.java
 Lexical error at line 27, column 21.  Encountered: "\n" (10), after : "\"abc;"
 openjdk/langtools/test/tools/javac/diags/examples/ArrayAndReceiver.java
-(line 30,col 12) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 30,col 12) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/TypeReqClassArray.java
 (line 30,col 34) Parse error. Found ")", expected "["
 openjdk/langtools/test/tools/javac/diags/examples/AssertAsIdentifier2.java
@@ -121,7 +117,7 @@ openjdk/langtools/test/tools/javac/diags/examples/NotAllowedVariable.java
 openjdk/langtools/test/tools/javac/diags/examples/IllegalStartOfExpr.java
 (line 27,col 11) Parse error. Found "=", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 openjdk/langtools/test/tools/javac/diags/examples/IncorrectConstructorReceiverName.java
-(line 28,col 15) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 28,col 15) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/diags/examples/DotClassExpected.java
 (line 27,col 11) Parse error. Found "int", expected one of  "!" "(" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 openjdk/langtools/test/tools/javac/diags/examples/UnclosedCharLiteral.java
@@ -200,6 +196,8 @@ openjdk/langtools/test/tools/javac/T6882235.java
 (line 11,col 11) Parse error. Found ";", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 openjdk/langtools/test/tools/javac/T8026963/TypeAnnotationsCrashWithErroneousTreeTest.java
 (line 9,col 19) Parse error. Found "this", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "double" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
+openjdk/langtools/test/tools/javac/warnings/suppress/TypeAnnotations.java
+(line 17,col 46) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/parser/7157165/T7157165.java
 (line 11,col 19) Parse error. Found "|", expected one of  "," ">"
 openjdk/langtools/test/tools/javac/parser/T4881269.java
@@ -224,62 +222,50 @@ openjdk/langtools/test/tools/javac/enum/EnumMembersOrder.java
 (line 11,col 10) Parse error. Found  "d" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 openjdk/langtools/test/tools/javac/enum/LocalEnum.java
 (line 34,col 14) Parse error. Found "enum", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/api/AnnotatedArrayOrder.java
-(line 120,col 34) Parse error. Found "...", expected "["
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/api/ArrayPositionConsistency.java
-(line 129,col 35) Parse error. Found "...", expected "["
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/TargetTypes.java
-(line 94,col 19) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 69,col 19) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/classfile/TestNewCastArray.java
-(line 238,col 56) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 238,col 56) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/StaticFields.java
 (line 13,col 10) Parse error. Found "@", expected one of  "(" "++" "--" ";" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/IncompleteArray.java
-(line 11,col 14) Parse error. Found  "var" <IDENTIFIER>, expected one of  "["
+(line 11,col 11) Parse error. Found "@", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/target/IncompleteArray.java
-(line 9,col 14) Parse error. Found  "var" <IDENTIFIER>, expected one of  "["
+(line 9,col 11) Parse error. Found "@", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/target/DotClass.java
 (line 47,col 25) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/IndexArray.java
 (line 12,col 11) Parse error. Found "@", expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/WrongType.java
-(line 41,col 17) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 41,col 17) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/DeclarationAnnotation.java
-(line 14,col 18) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 14,col 18) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/DuplicateAnnotationValue.java
-(line 10,col 38) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 10,col 38) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/DuplicateTypeAnnotation.java
-(line 10,col 19) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 10,col 19) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/MissingAnnotationValue.java
-(line 9,col 16) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 9,col 16) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/Nesting.java
-(line 39,col 17) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 39,col 17) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/StaticThings.java
-(line 33,col 21) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 33,col 21) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/common/receiver/InvalidLocation.java
-(line 10,col 16) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/AnnotatedPackage2.java
-(line 0,col 0) Parse error. Found "package", expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/AnnotatedImport.java
-(line 11,col 12) Parse error. Found "@", expected "*"
+(line 10,col 16) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/OldArray.java
-(line 12,col 3) Parse error. Found "[", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 12,col 10) Parse error. Found "@", expected one of  "]"
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/BadCast.java
 (line 12,col 16) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/failures/AnnotatedPackage1.java
-(line 0,col 0) Parse error. Found "package", expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/TypeUseTarget.java
-(line 39,col 36) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 39,col 36) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/newlocations/BasicTest.java
-(line 70,col 33) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 60,col 23) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/newlocations/Receivers.java
-(line 34,col 17) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/newlocations/Varargs.java
-(line 39,col 30) Parse error. Found "...", expected "["
-openjdk/langtools/test/tools/javac/annotations/typeAnnotations/newlocations/MethodReturnType.java
-(line 43,col 12) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "void" "with" <IDENTIFIER>
+(line 34,col 17) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+openjdk/langtools/test/tools/javac/annotations/typeAnnotations/newlocations/Expressions.java
+(line 36,col 19) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/attribution/Scopes.java
-(line 37,col 23) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 37,col 23) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/6967002/T6967002.java
 (line 33,col 16) Parse error. Found "...", expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 openjdk/langtools/test/tools/javac/annotations/AnnotationTypeElementModifiers.java
@@ -327,10 +313,10 @@ openjdk/langtools/test/tools/javadoc/sourceOption/p/A.java
 openjdk/jdk/test/java/util/WeakHashMap/GCDuringIteration.java
 (line 118,col 39) Parse error. Found  "equal" <IDENTIFIER>, expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 openjdk/jdk/test/java/lang/annotation/typeAnnotations/GetAnnotatedReceiverType.java
-(line 34,col 25) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 34,col 25) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/jdk/test/java/lang/annotation/typeAnnotations/ConstructorReceiverTest.java
 (line 111,col 69) Parse error. Found ".", expected one of  ")" "," "@" "["
 openjdk/jdk/test/tools/pack200/typeannos/TargetTypes.java
-(line 93,col 19) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 68,col 19) Parse error. Found "@", expected one of  "boolean" "byte" "char" "double" "exports" "float" "int" "long" "module" "open" "opens" "provides" "requires" "short" "to" "transitive" "uses" "with" <IDENTIFIER>
 openjdk/jdk/test/tools/pack200/typeannos/TypeUseTarget.java
-(line 39,col 36) Parse error. Found "this", expected one of  "..." "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 39,col 36) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>

@@ -56,7 +56,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     public CatchClause(final EnumSet<Modifier> exceptModifier, final NodeList<AnnotationExpr> exceptAnnotations, final ClassOrInterfaceType exceptType, final SimpleName exceptName, final BlockStmt body) {
-        this(null, new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, exceptName), body);
+        this(null, new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, new NodeList<>(), exceptName), body);
     }
 
     @AllFieldsConstructor

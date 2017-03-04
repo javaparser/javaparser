@@ -807,6 +807,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getType().accept(this, arg);
         }
         if (n.isVarArgs()) {
+            printAnnotations(n.getVarArgsAnnotations(), false, arg);
             printer.print("...");
         }
         printer.print(" ");
