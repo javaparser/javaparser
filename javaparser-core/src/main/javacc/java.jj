@@ -2298,10 +2298,14 @@ Expression InstanceOfExpression():
 {
 	Expression ret;
 	ReferenceType type;
+	NodeList<AnnotationExpr> annotations;
 }
 {
-  ret = RelationalExpression() [ "instanceof" type = ReferenceType() { ret = new InstanceOfExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, type); } ]
-  { return ret; }
+    ret = RelationalExpression() [ "instanceof" annotations = Annotations() type = ReferenceType() {
+        type.getAnnotations().addAll(annotations);
+        ret = new InstanceOfExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, type); 
+    } ]
+    { return ret; }
 }
 
 Expression RelationalExpression():
