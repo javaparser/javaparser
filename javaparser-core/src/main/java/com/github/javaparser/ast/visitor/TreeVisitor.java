@@ -78,11 +78,7 @@ public abstract class TreeVisitor {
      */
     @Deprecated
     public void visitDepthFirst(Node node) {
-        process(node);
-        final List<Node> copy = new ArrayList<>(node.getChildNodes());
-        for (Node child : copy) {
-            visitDepthFirst(child);
-        }
+        visitPreOrder(node);
     }
 
     /**

@@ -21,9 +21,8 @@
 
 package com.github.javaparser.javadoc.description;
 
-import com.github.javaparser.utils.Utils;
-
 import static com.github.javaparser.utils.Utils.nextWord;
+import static com.github.javaparser.utils.Utils.screamingToCamelCase;
 
 /**
  * An inline tag contained in a Javadoc description.
@@ -61,7 +60,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
         UNKNOWN;
 
         Type() {
-            this.keyword = Utils.toCamelCase(name());
+            this.keyword = screamingToCamelCase(name());
         }
 
         private String keyword;

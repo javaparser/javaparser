@@ -105,7 +105,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void addingExtendedTypes() throws IOException {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
-        cid.addExtends("Foo");
+        cid.addExtendedType("Foo");
         assertTransformedToString("class A extends Foo {}", cid);
     }
 
@@ -128,7 +128,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void addingImplementedTypes() throws IOException {
         ClassOrInterfaceDeclaration cid = consider("class A {}");
-        cid.addImplements("Foo");
+        cid.addImplementedType("Foo");
         assertTransformedToString("class A implements Foo {}", cid);
     }
 

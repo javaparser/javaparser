@@ -67,7 +67,7 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addAnnotation(String name) {
         NormalAnnotationExpr annotation = new NormalAnnotationExpr(
-                Name.parse(name), new NodeList<>());
+                parseName(name), new NodeList<>());
         getAnnotations().add(annotation);
         return (N) this;
     }

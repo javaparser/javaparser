@@ -22,11 +22,11 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import com.github.javaparser.utils.Utils;
 
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.nextWord;
+import static com.github.javaparser.utils.Utils.screamingToCamelCase;
 
 /**
  * A block tag.
@@ -60,7 +60,7 @@ public class JavadocBlockTag {
         UNKNOWN;
 
         Type() {
-            this.keyword = Utils.toCamelCase(name());
+            this.keyword = screamingToCamelCase(name());
         }
 
         private String keyword;
