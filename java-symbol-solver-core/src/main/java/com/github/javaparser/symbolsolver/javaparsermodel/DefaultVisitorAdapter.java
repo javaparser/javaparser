@@ -6,6 +6,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -429,6 +430,36 @@ public class DefaultVisitorAdapter implements GenericVisitor<Type, Boolean> {
 
     @Override
     public Type visit(ImportDeclaration node, Boolean aBoolean) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(ModuleDeclaration node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(ModuleRequiresStmt node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(ModuleExportsStmt node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(ModuleProvidesStmt node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(ModuleUsesStmt node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(ModuleOpensStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 }
