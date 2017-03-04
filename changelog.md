@@ -1,6 +1,19 @@
+Version 3.1.1
+------------------
+Beta: `TreeStructureVisitor`, `ConcreteSyntaxModel`, and `LexicalPreservingPrinter`.
+
+* 654 124 lexical preservation (printing source code with the same formatting it had when parsing) has been added.
+    Thank you @ftomassetti for a lot of work! 
+* 554 800 first (big) step towards Java 9 support: JavaParser can read project Jigsaw module definitions.
+* 795 786 751 extend the TreeVisitor with more traversal options. Thanks @ryan-beckett!
+* 791 `GenericListVisitorAdapter` has been added which collects its results in a list. Thanks @Gottox!
+* 815 798 797 813 clean up Problem text
+* 819 818 817 816 441 809 808 807 fix various absurd annotation related issues. 
+* 777 805 802 796 790 792 793 781 784 785 783 782 779 357 799 763 smaller improvements and fixes
+
 Version 3.1.0
 ------------------
-`TreeStructureVisitor` and `ConcreteSyntaxModel` are still unstable.
+Beta: `TreeStructureVisitor` and `ConcreteSyntaxModel`.
 
 * 705 755 Add the concrete syntax model, which will give you information about the exact syntax a certain nodes matches.
 
