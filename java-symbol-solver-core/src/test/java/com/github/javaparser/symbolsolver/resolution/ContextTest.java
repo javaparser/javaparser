@@ -137,7 +137,7 @@ public class ContextTest extends AbstractTest {
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.unsolved(ClassDeclaration.class));
+        //expect(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.unsolved(ClassDeclaration.class));
         expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
@@ -239,7 +239,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
         MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim");
 
-        File src = new File("src/test/resources");
+        File src = adaptPath(new File("src/test/resources"));
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("trim", Collections.emptyList(), callToTrim);
