@@ -54,7 +54,15 @@ public class ReflectionTypeSolver implements TypeSolver {
     public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
         if (!jreOnly || (name.startsWith("java.") || name.startsWith("javax."))) {
             try {
-                Class<?> clazz = ReflectionTypeSolver.class.getClassLoader().loadClass(name);
+                ClassLoader classLoader = ReflectionTypeSolver.class.getClassLoader();
+
+                // Some implementations could return null when the class was loaded through the bootstrap classloader
+                // see https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getClassLoader--
+                if (classLoader == null) {
+                    throw new RuntimeException("The ReflectionTypeSolver has been probably loaded through the bootstrap class loader. This usage is not supported by the JavaSymbolSolver");
+                }
+
+                Class<?> clazz = classLoader.loadClass(name);
                 return SymbolReference.solved(ReflectionFactory.typeDeclarationFor(clazz, getRoot()));
             } catch (ClassNotFoundException e) {
                 // it could be an inner class
