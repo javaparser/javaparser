@@ -114,7 +114,8 @@ public final class JavaParser {
             parser.problems.add(new Problem(makeMessageForParseException(p), range, p));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
-            parser.problems.add(new Problem(e.getMessage(), null, e));
+            final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
+            parser.problems.add(new Problem(message, null, e));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } finally {
             try {
@@ -160,7 +161,7 @@ public final class JavaParser {
                 sb.append(exception.tokenImage[0]);
                 break;
             }
-            escapedTokenText="\""+escapedTokenText+"\"";
+            escapedTokenText = "\"" + escapedTokenText + "\"";
             String image = exception.tokenImage[token.kind];
             if (image.equals(escapedTokenText)) {
                 sb.append(image);
