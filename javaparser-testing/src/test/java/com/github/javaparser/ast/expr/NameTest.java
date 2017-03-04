@@ -56,6 +56,9 @@ public class NameTest {
         assertEquals("a.b.c", name.asString());
         assertThat(name.getAnnotations()).containsExactly(new MarkerAnnotationExpr("C"));
         assertThat(name.getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("A"));
+
+        assertEquals("a.@A b.@C c", name.toString());
+        assertEquals("a.@A b.@C c", ConcreteSyntaxModel.genericPrettyPrint(name));
     }
 
     @Test
@@ -65,7 +68,7 @@ public class NameTest {
         assertThat(importDeclaration.getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
 
         assertEquals("import java.@Abc util.List;" + EOL, importDeclaration.toString());
-        assertEquals("import java.@Abc util.List;", ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
+        assertEquals("import java.@Abc util.List;" + EOL, ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
     @Test
@@ -75,6 +78,6 @@ public class NameTest {
         assertThat(cu.getPackageDeclaration().get().getName().getQualifier().get().getAnnotations()).containsExactly(new MarkerAnnotationExpr("Abc"));
 
         assertEquals("package @Abc p1.p2;" + EOL + EOL, cu.toString());
-        assertEquals("package @Abc p1.p2;", ConcreteSyntaxModel.genericPrettyPrint(cu));
+        assertEquals("package @Abc p1.p2;" + EOL + EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
     }
 }
