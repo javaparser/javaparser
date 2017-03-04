@@ -1303,6 +1303,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(Name n, A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        {
+            tmp = n.getAnnotations().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         if (n.getQualifier().isPresent()) {
             tmp = n.getQualifier().get().accept(this, arg);
             if (tmp != null)

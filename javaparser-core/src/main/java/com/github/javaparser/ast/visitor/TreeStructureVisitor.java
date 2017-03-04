@@ -544,6 +544,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
     public void visit(Name n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "identifier", n.getIdentifier(), arg + 1);
+        n.getAnnotations().accept(this, arg + 1);
         n.getQualifier().ifPresent( c -> c.accept(this, arg + 1));
         n.getComment().ifPresent( c -> c.accept(this, arg + 1));
         exitNode(n, arg);
