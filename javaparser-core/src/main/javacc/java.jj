@@ -259,7 +259,14 @@ final class GeneratedJavaParser {
     public static Range tokenRange(Token token) {
         return range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
     }
-    
+        
+    private Position nodeListBegin(NodeList<?> l) {
+        if(l.isEmpty()){
+            return INVALID;
+        }
+        return l.get(0).getBegin().get();
+    }
+
     public void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
@@ -1735,12 +1742,14 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 	NodeList<ReferenceType> throws_ = emptyList();
 	BlockStmt body = null;
+	NodeList<AnnotationExpr> annotations;
 	Position begin = modifier.begin;
 	ReferenceType throwType;
 }
 {
     // Modifiers already matched in the caller!
     [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
+    annotations = Annotations() { modifier.annotations.addAll(annotations); begin = begin.orIfInvalid(nodeListBegin(annotations)); }
     type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
     name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }

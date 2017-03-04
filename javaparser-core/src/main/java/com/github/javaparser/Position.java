@@ -76,7 +76,8 @@ public class Position implements Comparable<Position> {
     }
 
     public Position orIfInvalid(Position anotherPosition) {
-        if (valid()) {
+        assertNotNull(anotherPosition);
+        if (valid() || anotherPosition.invalid()) {
             return this;
         }
         return anotherPosition;
