@@ -708,8 +708,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final Name n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Name qualifier = n.getQualifier().map( s -> (Name) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
         n.setQualifier(qualifier);
         n.setComment(comment);
         return n;

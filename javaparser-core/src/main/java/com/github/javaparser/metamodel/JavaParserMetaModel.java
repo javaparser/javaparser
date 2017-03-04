@@ -134,6 +134,7 @@ public final class JavaParserMetaModel {
         nameExprMetaModel.getConstructorParameters().add(nameExprMetaModel.namePropertyMetaModel);
         nameMetaModel.getConstructorParameters().add(nameMetaModel.qualifierPropertyMetaModel);
         nameMetaModel.getConstructorParameters().add(nameMetaModel.identifierPropertyMetaModel);
+        nameMetaModel.getConstructorParameters().add(nameMetaModel.annotationsPropertyMetaModel);
         normalAnnotationExprMetaModel.getConstructorParameters().add(annotationExprMetaModel.namePropertyMetaModel);
         normalAnnotationExprMetaModel.getConstructorParameters().add(normalAnnotationExprMetaModel.pairsPropertyMetaModel);
         objectCreationExprMetaModel.getConstructorParameters().add(objectCreationExprMetaModel.scopePropertyMetaModel);
@@ -528,6 +529,8 @@ public final class JavaParserMetaModel {
         methodReferenceExprMetaModel.getDerivedPropertyMetaModels().add(methodReferenceExprMetaModel.usingDiamondOperatorPropertyMetaModel);
         nameExprMetaModel.namePropertyMetaModel = new PropertyMetaModel(nameExprMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false, false);
         nameExprMetaModel.getDeclaredPropertyMetaModels().add(nameExprMetaModel.namePropertyMetaModel);
+        nameMetaModel.annotationsPropertyMetaModel = new PropertyMetaModel(nameMetaModel, "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, Optional.of(annotationExprMetaModel), false, false, true, false, false);
+        nameMetaModel.getDeclaredPropertyMetaModels().add(nameMetaModel.annotationsPropertyMetaModel);
         nameMetaModel.identifierPropertyMetaModel = new PropertyMetaModel(nameMetaModel, "identifier", java.lang.String.class, Optional.empty(), false, true, false, false, false);
         nameMetaModel.getDeclaredPropertyMetaModels().add(nameMetaModel.identifierPropertyMetaModel);
         nameMetaModel.qualifierPropertyMetaModel = new PropertyMetaModel(nameMetaModel, "qualifier", com.github.javaparser.ast.expr.Name.class, Optional.of(nameMetaModel), true, false, false, false, false);

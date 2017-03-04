@@ -226,6 +226,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getQualifier().get().accept(this, arg);
             printer.print(".");
         }
+        printAnnotations(n.getAnnotations(), false, arg);
         printer.print(n.getIdentifier());
 
         printOrphanCommentsEnding(n);
