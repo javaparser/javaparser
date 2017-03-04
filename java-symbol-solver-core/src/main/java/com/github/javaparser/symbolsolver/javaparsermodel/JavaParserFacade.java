@@ -28,6 +28,7 @@ import com.github.javaparser.ast.type.WildcardType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.declarations.AnnotationDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -239,6 +240,17 @@ public class JavaParserFacade {
             placeholder.setMethod(res);
         }
         return res;
+    }
+
+    public SymbolReference<AnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
+        Context context = JavaParserFactory.getContext(annotationExpr, typeSolver);
+        SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString(), typeSolver);
+        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
+        if (typeDeclarationSymbolReference.isSolved()) {
+            return SymbolReference.solved(annotationDeclaration);
+        } else {
+            return SymbolReference.unsolved(AnnotationDeclaration.class);
+        }
     }
 
     public Type getType(Node node) {
@@ -502,6 +514,8 @@ public class JavaParserFacade {
             return getTypeDeclaration((ClassOrInterfaceDeclaration) typeDeclaration);
         } else if (typeDeclaration instanceof EnumDeclaration) {
             return new JavaParserEnumDeclaration((EnumDeclaration) typeDeclaration, typeSolver);
+        } else if (typeDeclaration instanceof com.github.javaparser.ast.body.AnnotationDeclaration) {
+            return new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) typeDeclaration, typeSolver);
         } else {
             throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
         }
