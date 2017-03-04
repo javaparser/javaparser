@@ -29,6 +29,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
+import static com.github.javaparser.JavaParser.parseName;
+
 /**
  * An annotation that uses only the annotation type name.
  * <br/><code>@Override</code>
@@ -39,6 +41,10 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
 
     public MarkerAnnotationExpr() {
         this(null, new Name());
+    }
+
+    public MarkerAnnotationExpr(final String name) {
+        this(null, parseName(name));
     }
 
     @AllFieldsConstructor
