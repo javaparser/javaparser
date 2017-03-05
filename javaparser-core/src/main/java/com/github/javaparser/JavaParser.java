@@ -35,6 +35,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
 
 import java.io.*;
@@ -57,6 +58,7 @@ public final class JavaParser {
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
+    private static ParserConfiguration staticConfiguration = new ParserConfiguration();
 
     /**
      * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on
@@ -74,6 +76,22 @@ public final class JavaParser {
     public JavaParser(ParserConfiguration configuration) {
         this.configuration = configuration;
         commentsInserter = new CommentsInserter(configuration);
+    }
+
+    /**
+     * Get the configuration for the static parse... methods.
+     * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
+     */
+    public static ParserConfiguration getStaticConfiguration() {
+        return staticConfiguration;
+    }
+
+    /**
+     * Set the configuration for the static parse... methods.
+     * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
+     */
+    public static void setStaticConfiguration(ParserConfiguration staticConfiguration) {
+        JavaParser.staticConfiguration = staticConfiguration;
     }
 
     private GeneratedJavaParser getParserForProvider(Provider provider) {
@@ -106,6 +124,8 @@ public final class JavaParser {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
+
+            configuration.getValidator().validate(resultNode, new ProblemReporter(parser.problems));
 
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
@@ -361,8 +381,11 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
-        return result.getResult().orElseThrow(() -> new ParseProblemException(result.getProblems()));
+        ParseResult<T> result = new JavaParser(staticConfiguration).parse(context, provider);
+        if (result.isSuccessful()) {
+            return result.getResult().get();
+        }
+        throw new ParseProblemException(result.getProblems());
     }
 
     /**
