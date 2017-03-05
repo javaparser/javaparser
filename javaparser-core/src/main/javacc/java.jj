@@ -1474,10 +1474,6 @@ NodeList<ClassOrInterfaceType> ExtendsList(boolean isInterface):
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
-   {
-      if (extendsMoreThanOne && !isInterface)
-         addProblem("A class cannot extend more than one other class");
-   }
    { return ret; }
 }
 
@@ -1489,10 +1485,6 @@ NodeList<ClassOrInterfaceType> ImplementsList(boolean isInterface):
 {
    "implements" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
-   {
-      if (isInterface)
-         addProblem("An interface cannot implement other interfaces");
-   }
    { return ret; }
 }
 
