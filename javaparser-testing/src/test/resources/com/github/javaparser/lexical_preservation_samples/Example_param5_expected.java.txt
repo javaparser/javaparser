@@ -1,0 +1,6 @@
+// This is my class, with my comment
+class A {
+    int foo(int p1, char p2) {
+        return p1;
+    }
+}

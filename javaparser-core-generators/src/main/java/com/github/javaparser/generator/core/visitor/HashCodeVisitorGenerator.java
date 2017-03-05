@@ -5,10 +5,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.VisitorGenerator;
-import com.github.javaparser.generator.utils.SeparatedItemStringBuilder;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
+import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.util.List;
@@ -19,8 +18,8 @@ import static com.github.javaparser.JavaParser.parseStatement;
  * Generates JavaParser's HashCodeVisitor.
  */
 public class HashCodeVisitorGenerator extends VisitorGenerator {
-    public HashCodeVisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot) {
-        super(javaParser, sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true);
+    public HashCodeVisitorGenerator(SourceRoot sourceRoot) {
+        super(sourceRoot, "com.github.javaparser.ast.visitor", "HashCodeVisitor", "Integer", "Void", true);
     }
 
     @Override

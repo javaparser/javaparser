@@ -51,11 +51,15 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     private List<AstObserver> observers = new ArrayList<>();
 
     public NodeList() {
-        this(null);
+        this((Node) null);
     }
 
     public NodeList(Node parent) {
         setParentNode(parent);
+    }
+
+    public NodeList(NodeList<N> n) {
+        this.addAll(n);
     }
 
     @Override
@@ -129,8 +133,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public N set(int index, N element) {
-        notifyElementRemoved(index, innerList.get(index));
-        notifyElementAdded(index, element);
+        notifyElementReplaced(index, element);
         setAsParentNodeOf(element);
         return innerList.set(index, element);
     }
@@ -410,6 +413,10 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         this.observers.forEach(o -> o.listChange(this, AstObserver.ListChangeType.REMOVAL, index, nodeAddedOrRemoved));
     }
 
+    private void notifyElementReplaced(int index, Node nodeAddedOrRemoved) {
+        this.observers.forEach(o -> o.listReplacement(this, index, this.get(index), nodeAddedOrRemoved));
+    }
+
     @Override
     public void unregister(AstObserver observer) {
         this.observers.remove(observer);
@@ -425,4 +432,17 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return this.observers.contains(observer);
     }
 
+    /**
+     * Replaces the first node that is equal to "old" with "replacement".
+     *
+     * @return true if a replacement has happened.
+     */
+    public boolean replace(N old, N replacement) {
+        int i = indexOf(old);
+        if (i == -1) {
+            return false;
+        }
+        set(i, replacement);
+        return true;
+    }
 }

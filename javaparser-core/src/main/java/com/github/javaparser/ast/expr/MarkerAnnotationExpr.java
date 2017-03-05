@@ -24,6 +24,13 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import static com.github.javaparser.JavaParser.parseName;
+
+import static com.github.javaparser.JavaParser.parseName;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -35,6 +42,10 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
 
     public MarkerAnnotationExpr() {
         this(null, new Name());
+    }
+
+    public MarkerAnnotationExpr(final String name) {
+        this(null, parseName(name));
     }
 
     @AllFieldsConstructor
@@ -54,6 +65,23 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     @Override
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public MarkerAnnotationExpr clone() {
+        return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public MarkerAnnotationExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }
 }
 

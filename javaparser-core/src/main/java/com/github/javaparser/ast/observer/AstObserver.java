@@ -32,7 +32,7 @@ public interface AstObserver {
     /**
      * Type of change occurring on a List
      */
-    public enum ListChangeType {
+    enum ListChangeType {
         ADDITION,
         REMOVAL
     }
@@ -65,4 +65,6 @@ public interface AstObserver {
      * @param nodeAddedOrRemoved element added or removed
      */
     void listChange(NodeList observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved);
+
+    void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode);
 }

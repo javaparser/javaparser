@@ -30,6 +30,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ForeachStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A for-each statement.
@@ -117,6 +121,23 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         this.variable = variable;
         setAsParentNodeOf(variable);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public ForeachStmt clone() {
+        return (ForeachStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ForeachStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.foreachStmtMetaModel;
     }
 }
 

@@ -33,12 +33,12 @@ public class SourcePrinter {
         this.indentation = indentation;
     }
 
-    SourcePrinter indent() {
+    public SourcePrinter indent() {
         level++;
         return this;
     }
 
-    SourcePrinter unindent() {
+    public SourcePrinter unindent() {
         level--;
         return this;
     }

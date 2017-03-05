@@ -33,7 +33,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.Type;
 
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Integer.signum;

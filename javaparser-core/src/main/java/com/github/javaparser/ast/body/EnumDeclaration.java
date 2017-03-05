@@ -33,10 +33,13 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.EnumDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
@@ -126,13 +129,41 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         assertNonEmpty(name);
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
-        enumConstant.setParentNode(this);
         return enumConstant;
     }
 
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getEntries(), getImplementedTypes(), getMembers(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i) == node) {
+                entries.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < implementedTypes.size(); i++) {
+            if (implementedTypes.get(i) == node) {
+                implementedTypes.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public EnumDeclaration clone() {
+        return (EnumDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public EnumDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.enumDeclarationMetaModel;
     }
 }
 

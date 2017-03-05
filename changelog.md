@@ -1,3 +1,53 @@
+Version 3.1.1
+------------------
+Beta: `TreeStructureVisitor`, `ConcreteSyntaxModel`, and `LexicalPreservingPrinter`.
+
+* 654 124 lexical preservation (printing source code with the same formatting it had when parsing) has been added.
+    Thank you @ftomassetti for a lot of work! 
+* 554 800 first (big) step towards Java 9 support: JavaParser can read project Jigsaw module definitions.
+* 795 786 751 extend the TreeVisitor with more traversal options. Thanks @ryan-beckett!
+* 791 `GenericListVisitorAdapter` has been added which collects its results in a list. Thanks @Gottox!
+* 815 798 797 813 clean up Problem text
+* 819 818 817 816 441 809 808 807 fix various absurd annotation related issues. 
+* 777 805 802 796 790 792 793 781 784 785 783 782 779 357 799 763 smaller improvements and fixes
+
+Version 3.1.0
+------------------
+Beta: `TreeStructureVisitor` and `ConcreteSyntaxModel`.
+
+* 705 755 Add the concrete syntax model, which will give you information about the exact syntax a certain nodes matches.
+
+* 777 smaller improvements and fixes
+
+Version 3.1.0-beta.2
+------------------
+This version is a beta because `TreeStructureVisitor` is not in its definite state yet.
+
+* 762 761 772 merge `javaparser-metamodel` and `javaparser-generator-utils` into `javaparser-core`.
+* 766 the `ModifierVisitor` is now created by a code generator. Its behaviour has been made logical, and may give different results than before.
+* 755 `ConstructorDeclaration` and `MethodDeclaration` now share a parent: `CallableDeclaration`
+* 687 759 773 769 768 767 765 759 smaller improvements and fixes
+
+Version 3.1.0-beta.1
+------------------
+This version is a beta because there are a lot of new features that may still change.
+
+This version needs a minor version increase because of a backwards compatability issue: 
+* 719 `getJavadoc`, `getJavadocComment` and `getComment` could return null. Our promise was to return `Optional`, so that is what they do now.
+
+New:
+* 658 718 736 737 we have created a metamodel.
+It gives information about the structure of the various AST nodes, as if you are introspecting them.
+You can find it in `javaparser-metamodel`, the main class is `JavaParserMetaModel`
+* 353 365 visitors are no longer hand made, they are now generated from the metamodel. This should make them 100% reliable.
+Affected visitors are: `GenericVisitorAdapter`, `EqualsVisitor`, `VoidVisitorAdapter`, `VoidVisitor`, `GenericVisitor`, `HashCodeVisitor`, `CloneVisitor`.
+
+If you want to generate your own visitors, you can use the `VisitorGenerator` class from `javaparser-core-generators`
+
+If you want to reuse the code generation utilities, look at module `javaparser-generator-utils` - there is a very useful `SourceRoot` class in there that takes away a lot of file management troubles.
+* 538 735 `TreeStructureVisitor` has been added, which should be considered beta.
+* 220 733 717 749 745 750 743 748 666 732 746 734 733 smaller improvements and fixes
+
 Version 3.0.1
 ------------------
 * 699 433 325 Javadoc can now be parsed
@@ -154,7 +204,7 @@ Version 2.3.0
 * Improved documentation
 * AST: lists are now lazy initialized
 
-Version 2.1.0-SNAPSHOT
+Version 2.1.0
 -------------
 * Features
   * [#75 performance improvement for `PositionUtils.sortByBeginPosition`](https://github.com/javaparser/javaparser/issues/75)
@@ -177,3 +227,147 @@ Version 2.1.0-SNAPSHOT
 Version 2.0.0
 -------------
 * support Java 8
+
+Version 1.0.8 (2010-01-17)
+-------------
+* Fixed issues:
+	* Issue 17: A refactor suggestion for AnnotationExpr and its subclasses
+	* Issue 21: Java 5 JavaParser compiled JARs
+	* Issue 22: Please use java.lang.reflect.Modifier constants in japa.parser.ast.body.ModifierSet
+	* Issue 27: Implement the "equal" method
+	* Issue 30: equals and hashCode methods
+
+Version 1.0.7 (2009-04-12)
+-------------
+* Issue 19 fixed: 
+* Tests changed to run with junit 4 
+
+Version 1.0.6 (2009-01-11)
+-------------
+* Issue 11 fixed: changed method get/setPakage to get/setPackage in the class CompilationUnit
+* Created new visitor adapter to help AST modification: ModifierVisitorAdapter
+* Changed visitor adapters to abstract  
+
+Version 1.0.5 (2008-10-26)
+-------------
+* Created simplified constructors in the nodes of the AST (without positional arguments) 
+* Created ASTHelper class with some helpful methods (more methods are still needed)
+
+Version 1.0.4 (2008-10-07)
+-------------
+* Moved to javacc 4.1.
+* The java_1_5.jj can be build alone without compilation errors
+
+Version 1.0.3 (2008-09-06)
+-------------
+* Removed SuperMemberAccessExpr class, it was no longer used
+* Removed the methods get/setTypeArgs() from ArrayCreationExpr, this node shouldn't have these methods.
+* Fixed the bug with start/end position of the nodes IntegerLiteralMinValueExpr and LongLiteralMinValueExpr  
+* The methods get/setAnnotations() from all BodyDeclaration subclasses were pushed down to BodyDeclaration class 
+
+Version 1.0.2 (2008-07-20)
+-------------
+* Issue fixed: Issue 1: Add support for editing AST nodes or create new ones
+
+Version 1.0.1 (2008-07-01)
+-------------
+* Issue fixed: Issue 5: end line and end column equal to begin line and begin column
+
+Version 1.0.0 (2008-06-25)
+-------------
+* Changed version numbering, starting version 1.0.0
+* Javadoc done for packages:
+    * japa.parser
+    * japa.parser.ast
+* Corrected bug when parsing in multithread: 
+    * JavaParser.setCacheParser(false) must be called before to use the parser concurrent 
+
+2008-06-19
+-------------
+* No code changes, added binary distribution to download page 
+
+2008-06-11
+-------------
+* Bug corrected: NPE in VoidVisitorAdapter 
+	* http://code.google.com/p/javaparser/issues/detail?id=2
+
+2008-06-09
+-------------
+* Added Adapters for de visitors
+
+2008-05-28
+-------------
+* This project now is published at Google Code:
+	* http://code.google.com/p/javaparser/
+
+2008-05-25
+-------------
+* Added support for comments and javadoc to the tree. 
+	* Javadocs are stored directly to members (BodyDeclaration and all deriveds (classes, methods, fields, etc.)), accessible by the method getJavadoc().
+	* All comments are stored in the CompilationUnit, accessible by the method getComments().
+
+2008-04-01
+-------------
+* Changed all nodes public attributes to be private and created getters to access them
+* Changed the methods of the Node getLine e getColumn to getBeginLine and getBeginColumn
+* Added the methods getEndLine and getEndColumn to the Node class (works only in the BlockNode)
+
+2007-12-22
+-------------
+* Corrected ConditionalExpression bug
+
+2007-10-21
+-------------
+* Added LGPL License
+
+2007-10-21
+-------------
+* Bugs corrected:  
+  * Created PackageDeclaration member of CompilationUnit to add suport for annotations in the package declaration
+  * Parameterized anonymous constructor invocation
+  * Explicit constructor invotation Type Arguments
+  * ctrl+z ("\u001A") ar end of compilation unit
+
+2007-10-09
+-------------
+* EnumConstantDeclaration annotation support corrected
+* Parssing Java Unicode escape characters suport added
+
+2007-10-03
+-------------
+* Bug corrected: "MotifComboPopup.this.super()" statement was generating parser error
+	                    
+2007-10-01
+-------------
+* Bug corrected: Casting signed primitive values
+```
+	double d = (double) -1;
+	                    ^
+```
+2007-08-06
+-------------
+* Bug with the single line comments in the final of the unit corrected
+
+2007-07-31
+-------------
+* Fixed the bug with the following expression:  `Class c = (int.class);`
+
+2007-06-26
+-------------
+* Bug fixes from Leon Poyyayil work
+	* suport for hex floating point
+	* unicode digits in indentifier 
+	* MemberValueArrayInitializer
+
+2007-03-09
+-------------
+* Long and Integer literal MIN_VALUE bug	
+
+2007-02-24
+-------------
+* '\0' bug fixed	
+
+2007-02-01
+-------------
+* Many bug fixes
+* Added line/column to nodes

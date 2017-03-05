@@ -24,7 +24,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
@@ -36,6 +35,9 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A base class for all types of type declarations.
@@ -139,6 +141,29 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         List<NodeList<?>> res = new LinkedList<>(super.getNodeLists());
         res.add(members);
         return res;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < members.size(); i++) {
+            if (members.get(i) == node) {
+                members.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public TypeDeclaration<?> clone() {
+        return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public TypeDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeDeclarationMetaModel;
     }
 }
 

@@ -40,6 +40,9 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ParameterMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -55,6 +58,8 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
 
     private boolean isVarArgs;
 
+    private NodeList<AnnotationExpr> varArgsAnnotations;
+
     private EnumSet<Modifier> modifiers;
 
     private NodeList<AnnotationExpr> annotations;
@@ -62,11 +67,11 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     private SimpleName name;
 
     public Parameter() {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new SimpleName());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new NodeList<>(), new SimpleName());
     }
 
     public Parameter(Type type, SimpleName name) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, name);
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new NodeList<>(), name);
     }
 
     /**
@@ -76,25 +81,26 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
      * @param name name of the parameter
      */
     public Parameter(Type type, String name) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new SimpleName(name));
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new NodeList<>(), new SimpleName(name));
     }
 
     public Parameter(EnumSet<Modifier> modifiers, Type type, SimpleName name) {
-        this(null, modifiers, new NodeList<>(), type, false, name);
+        this(null, modifiers, new NodeList<>(), type, false, new NodeList<>(), name);
     }
 
     @AllFieldsConstructor
-    public Parameter(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, SimpleName name) {
-        this(null, modifiers, annotations, type, isVarArgs, name);
+    public Parameter(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
+        this(null, modifiers, annotations, type, isVarArgs, varArgsAnnotations, name);
     }
 
-    public Parameter(final Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, SimpleName name) {
+    public Parameter(final Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setName(name);
         setType(type);
         setVarArgs(isVarArgs);
+        setVarArgsAnnotations(varArgsAnnotations);
     }
 
     @Override
@@ -193,7 +199,50 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
 
     @Override
     public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnnotations());
+        return Arrays.asList(getAnnotations(), getVarArgsAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < varArgsAnnotations.size(); i++) {
+            if (varArgsAnnotations.get(i) == node) {
+                varArgsAnnotations.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public NodeList<AnnotationExpr> getVarArgsAnnotations() {
+        return varArgsAnnotations;
+    }
+
+    public Parameter setVarArgsAnnotations(final NodeList<AnnotationExpr> varArgsAnnotations) {
+        assertNotNull(varArgsAnnotations);
+        notifyPropertyChange(ObservableProperty.VAR_ARGS_ANNOTATIONS, this.varArgsAnnotations, varArgsAnnotations);
+        if (this.varArgsAnnotations != null)
+            this.varArgsAnnotations.setParentNode(null);
+        this.varArgsAnnotations = varArgsAnnotations;
+        setAsParentNodeOf(varArgsAnnotations);
+        return this;
+    }
+
+    @Override
+    public Parameter clone() {
+        return (Parameter) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.parameterMetaModel;
     }
 }
 

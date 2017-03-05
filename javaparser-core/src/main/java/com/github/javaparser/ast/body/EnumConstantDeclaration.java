@@ -23,7 +23,6 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -34,9 +33,12 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.EnumConstantDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
@@ -128,6 +130,35 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getArguments(), getClassBody(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < classBody.size(); i++) {
+            if (classBody.get(i) == node) {
+                classBody.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public EnumConstantDeclaration clone() {
+        return (EnumConstantDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public EnumConstantDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.enumConstantDeclarationMetaModel;
     }
 }
 

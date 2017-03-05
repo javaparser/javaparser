@@ -25,9 +25,11 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
@@ -38,9 +40,11 @@ import com.github.javaparser.javadoc.Javadoc;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.TreeSet;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -52,7 +56,7 @@ public final class JavaParser {
     private final CommentsInserter commentsInserter;
     private final ParserConfiguration configuration;
 
-    private ASTParser astParser = null;
+    private GeneratedJavaParser astParser = null;
 
     /**
      * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on
@@ -72,9 +76,9 @@ public final class JavaParser {
         commentsInserter = new CommentsInserter(configuration);
     }
 
-    private ASTParser getParserForProvider(Provider provider) {
+    private GeneratedJavaParser getParserForProvider(Provider provider) {
         if (astParser == null) {
-            astParser = new ASTParser(provider);
+            astParser = new GeneratedJavaParser(provider);
         } else {
             astParser.reset(provider);
         }
@@ -95,18 +99,25 @@ public final class JavaParser {
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
+        final GeneratedJavaParser parser = getParserForProvider(provider);
         try {
-            final ASTParser parser = getParserForProvider(provider);
             N resultNode = start.parse(parser);
             if (configuration.isAttributeComments()) {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
 
-            return new ParseResult<>(resultNode, parser.problems, astParser.getTokens(),
-                    astParser.getCommentsCollection());
+            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
+                    parser.getCommentsCollection());
+        } catch (ParseException p) {
+            final Token token = p.currentToken;
+            final Range range = range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
+            parser.problems.add(new Problem(makeMessageForParseException(p), range, p));
+            return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
-            return new ParseResult<>(e);
+            final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
+            parser.problems.add(new Problem(message, null, e));
+            return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } finally {
             try {
                 provider.close();
@@ -114,6 +125,64 @@ public final class JavaParser {
                 // Since we're done parsing and have our result, we don't care about any errors.
             }
         }
+    }
+
+    /**
+     * This is the code from ParseException.initialise, modified to be more horizontal.
+     */
+    private String makeMessageForParseException(ParseException exception) {
+        final StringBuilder sb = new StringBuilder("Parse error. Found ");
+        final StringBuilder expected = new StringBuilder();
+
+        int maxExpectedTokenSequenceLength = 0;
+        TreeSet<String> sortedOptions = new TreeSet<>();
+        for (int i = 0; i < exception.expectedTokenSequences.length; i++) {
+            if (maxExpectedTokenSequenceLength < exception.expectedTokenSequences[i].length) {
+                maxExpectedTokenSequenceLength = exception.expectedTokenSequences[i].length;
+            }
+            for (int j = 0; j < exception.expectedTokenSequences[i].length; j++) {
+                sortedOptions.add(exception.tokenImage[exception.expectedTokenSequences[i][j]]);
+            }
+        }
+
+        for (String option : sortedOptions) {
+            expected.append(" ").append(option);
+        }
+
+        sb.append("");
+
+        Token token = exception.currentToken.next;
+        for (int i = 0; i < maxExpectedTokenSequenceLength; i++) {
+            String tokenText = token.image;
+            String escapedTokenText = ParseException.add_escapes(tokenText);
+            if (i != 0) {
+                sb.append(" ");
+            }
+            if (token.kind == 0) {
+                sb.append(exception.tokenImage[0]);
+                break;
+            }
+            escapedTokenText = "\"" + escapedTokenText + "\"";
+            String image = exception.tokenImage[token.kind];
+            if (image.equals(escapedTokenText)) {
+                sb.append(image);
+            } else {
+                sb.append(" ")
+                        .append(escapedTokenText)
+                        .append(" ")
+                        .append(image);
+            }
+            token = token.next;
+        }
+
+        if (exception.expectedTokenSequences.length != 0) {
+            int numExpectedTokens = exception.expectedTokenSequences.length;
+            sb.append(", expected")
+                    .append(numExpectedTokens == 1 ? "" : " one of ")
+                    .append(expected.toString());
+        }
+        return sb.toString();
+
     }
 
     /**
@@ -203,8 +272,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param path path to a resource containing Java source code. As resource is
-     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
@@ -217,8 +286,8 @@ public final class JavaParser {
      * Parses the Java code contained in a resource and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param path path to a resource containing Java source code. As resource is
-     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -233,8 +302,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      *
      * @param classLoader the classLoader that is asked to load the resource
-     * @param path path to a resource containing Java source code. As resource is
-     * accessed through a class loader, a leading "/" is not allowed in pathToResource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws IOException the path could not be accessed
@@ -293,10 +362,7 @@ public final class JavaParser {
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
         ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
-        if (result.isSuccessful()) {
-            return result.getResult().get();
-        }
-        throw new ParseProblemException(result.getProblems());
+        return result.getResult().orElseThrow(() -> new ParseProblemException(result.getProblems()));
     }
 
     /**
@@ -384,7 +450,8 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr} that represents it.
+     * Parses a variable declaration expression and returns a {@link com.github.javaparser.ast.expr.VariableDeclarationExpr}
+     * that represents it.
      *
      * @param declaration a variable declaration like <code>int x=2;</code>
      * @return VariableDeclarationExpr representing the type
@@ -395,7 +462,8 @@ public final class JavaParser {
     }
 
     /**
-     * Parses the content of a JavadocComment and returns a {@link com.github.javaparser.javadoc.Javadoc} that represents it.
+     * Parses the content of a JavadocComment and returns a {@link com.github.javaparser.javadoc.Javadoc} that
+     * represents it.
      *
      * @param content a variable declaration like <code>content of my javadoc\n * second line\n * third line</code>
      * @return Javadoc representing the content of the comment
@@ -415,4 +483,27 @@ public final class JavaParser {
     public static ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
         return simplifiedParse(EXPLICIT_CONSTRUCTOR_INVOCATION_STMT, provider(statement));
     }
+
+    /**
+     * Parses a qualified name (one that can have "."s in it) and returns it as a Name.
+     *
+     * @param qualifiedName a name like "com.laamella.parameter_source"
+     * @return the AST for the name
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Name parseName(String qualifiedName) {
+        return simplifiedParse(NAME, provider(qualifiedName));
+    }
+
+    /**
+     * Parses a single parameter (a type and a name) and returns it as a Parameter.
+     *
+     * @param parameter a parameter like "int[] x"
+     * @return the AST for the parameter
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Parameter parseParameter(String parameter) {
+        return simplifiedParse(PARAMETER, provider(parameter));
+    }
+
 }

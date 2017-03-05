@@ -18,805 +18,1047 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
+import com.github.javaparser.utils.Pair;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
  * to be changed. To do that just extend this class and override the methods
  * from the nodes who needs to be changed, returning the changed node.
  * Returning null will remove the node.
+ * 
+ * If a node is removed that was required in its parent node, 
+ * the parent node will be removed too. 
  *
  * @author Julio Vilmar Gesser
  */
 public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
-    private void removeNulls(final List<?> list) {
-        for (int i = list.size() - 1; i >= 0; i--) {
-            if (list.get(i) == null) {
-                list.remove(i);
-            }
-        }
-    }
-
     @Override
     public Visitable visit(final AnnotationDeclaration n, final A arg) {
-        visitAnnotations(n, arg);
-        visitComment(n, arg);
-        n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
+        NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setMembers(members);
+        n.setName(name);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
-    }
-
-    private void visitAnnotations(NodeWithAnnotations<?> n, A arg) {
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
     }
 
     @Override
     public Visitable visit(final AnnotationMemberDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setType((Type) n.getType().accept(this, arg));
-        if (n.getDefaultValue().isPresent()) {
-            n.setDefaultValue((Expression) n.getDefaultValue().get().accept(this, arg));
-        }
+        Expression defaultValue = n.getDefaultValue().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || type == null)
+            return null;
+        n.setDefaultValue(defaultValue);
+        n.setName(name);
+        n.setType(type);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ArrayAccessExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setName((Expression) n.getName().accept(this, arg));
-        n.setIndex((Expression) n.getIndex().accept(this, arg));
+        Expression index = (Expression) n.getIndex().accept(this, arg);
+        Expression name = (Expression) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (index == null || name == null)
+            return null;
+        n.setIndex(index);
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ArrayCreationExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setElementType((Type) n.getElementType().accept(this, arg));
-
-        n.setLevels((NodeList<ArrayCreationLevel>) n.getLevels().accept(this, arg));
-
-        if (n.getInitializer().isPresent()) {
-            n.setInitializer((ArrayInitializerExpr) n.getInitializer().get().accept(this, arg));
-        }
+        Type elementType = (Type) n.getElementType().accept(this, arg);
+        ArrayInitializerExpr initializer = n.getInitializer().map( s -> (ArrayInitializerExpr) s.accept(this, arg)).orElse(null);
+        NodeList<ArrayCreationLevel> levels = modifyList(n.getLevels(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (elementType == null || levels.isEmpty())
+            return null;
+        n.setElementType(elementType);
+        n.setInitializer(initializer);
+        n.setLevels(levels);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ArrayInitializerExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setValues((NodeList<Expression>) n.getValues().accept(this, arg));
+        NodeList<Expression> values = modifyList(n.getValues(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setValues(values);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final AssertStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setCheck((Expression) n.getCheck().accept(this, arg));
-        if (n.getMessage().isPresent()) {
-            n.setMessage((Expression) n.getMessage().get().accept(this, arg));
-        }
+        Expression check = (Expression) n.getCheck().accept(this, arg);
+        Expression message = n.getMessage().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (check == null)
+            return null;
+        n.setCheck(check);
+        n.setMessage(message);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final AssignExpr n, final A arg) {
-        visitComment(n, arg);
-        final Expression target = (Expression) n.getTarget().accept(this, arg);
-        if (target == null) {
+        Expression target = (Expression) n.getTarget().accept(this, arg);
+        Expression value = (Expression) n.getValue().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (target == null || value == null)
             return null;
-        }
         n.setTarget(target);
-
-        final Expression value = (Expression) n.getValue().accept(this, arg);
-        if (value == null) {
-            return null;
-        }
         n.setValue(value);
-
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final BinaryExpr n, final A arg) {
-        visitComment(n, arg);
-        final Expression left = (Expression) n.getLeft().accept(this, arg);
-        final Expression right = (Expression) n.getRight().accept(this, arg);
-        if (left == null) {
+        Expression left = (Expression) n.getLeft().accept(this, arg);
+        Expression right = (Expression) n.getRight().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (left == null)
             return right;
-        }
-        if (right == null) {
+        if (right == null)
             return left;
-        }
         n.setLeft(left);
         n.setRight(right);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final BlockStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setStatements((NodeList<Statement>) n.getStatements().accept(this, arg));
+        NodeList<Statement> statements = modifyList(n.getStatements(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setStatements(statements);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final BooleanLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final BreakStmt n, final A arg) {
-        visitComment(n, arg);
-        n.getLabel().ifPresent(l -> n.setLabel((SimpleName) l.accept(this, arg)));
+        SimpleName label = n.getLabel().map( s -> (SimpleName) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setLabel(label);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final CastExpr n, final A arg) {
-        visitComment(n, arg);
-        final Type type = (Type) n.getType().accept(this, arg);
-        final Expression expr = (Expression) n.getExpression().accept(this, arg);
-        if (type == null) {
-            return expr;
-        }
-        if (expr == null) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null || type == null)
             return null;
-        }
+        n.setExpression(expression);
         n.setType(type);
-        n.setExpression(expr);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final CatchClause n, final A arg) {
-        visitComment(n, arg);
-        n.setParameter((Parameter) n.getParameter().accept(this, arg));
-        n.setBody((BlockStmt) n.getBody().accept(this, arg));
+        BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
+        Parameter parameter = (Parameter) n.getParameter().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || parameter == null)
+            return null;
+        n.setBody(body);
+        n.setParameter(parameter);
+        n.setComment(comment);
         return n;
-
     }
 
     @Override
     public Visitable visit(final CharLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ClassExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setType((Type) n.getType().accept(this, arg));
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setType(type);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ClassOrInterfaceDeclaration n, final A arg) {
-        visitAnnotations(n, arg);
-        visitComment(n, arg);
-        n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
-        n.setExtendedTypes(modifyList(n.getExtendedTypes(), arg));
-        n.setImplementedTypes(modifyList(n.getImplementedTypes(), arg));
-        n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
-        return n;
-    }
-
-    private <N extends Node> NodeList<N> modifyList(NodeList<N> list, A arg) {
-        if (list == null) {
+        NodeList<ClassOrInterfaceType> extendedTypes = modifyList(n.getExtendedTypes(), arg);
+        NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
+        NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
+        NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
             return null;
-        }
-        return (NodeList<N>) list.accept(this, arg);
+        n.setExtendedTypes(extendedTypes);
+        n.setImplementedTypes(implementedTypes);
+        n.setTypeParameters(typeParameters);
+        n.setMembers(members);
+        n.setName(name);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
+        return n;
     }
 
     @Override
     public Visitable visit(final ClassOrInterfaceType n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        if (n.getScope().isPresent()) {
-            n.setScope((ClassOrInterfaceType) n.getScope().get().accept(this, arg));
-        }
-        n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        ClassOrInterfaceType scope = n.getScope().map( s -> (ClassOrInterfaceType) s.accept(this, arg)).orElse(null);
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setScope(scope);
+        n.setTypeArguments(typeArguments);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final CompilationUnit n, final A arg) {
-        visitComment(n, arg);
-        if (n.getPackageDeclaration().isPresent()) {
-            n.setPackageDeclaration((PackageDeclaration) n.getPackageDeclaration().get().accept(this, arg));
-        }
-        n.setImports((NodeList<ImportDeclaration>) n.getImports().accept(this, arg));
-        n.setTypes((NodeList<TypeDeclaration<?>>) n.getTypes().accept(this, arg));
+        NodeList<ImportDeclaration> imports = modifyList(n.getImports(), arg);
+        ModuleDeclaration module = n.getModule().map( s -> (ModuleDeclaration) s.accept(this, arg)).orElse(null);
+        PackageDeclaration packageDeclaration = n.getPackageDeclaration().map( s -> (PackageDeclaration) s.accept(this, arg)).orElse(null);
+        NodeList<TypeDeclaration<?>> types = modifyList(n.getTypes(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setImports(imports);
+        n.setModule(module);
+        n.setPackageDeclaration(packageDeclaration);
+        n.setTypes(types);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ConditionalExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setCondition((Expression) n.getCondition().accept(this, arg));
-        n.setThenExpr((Expression) n.getThenExpr().accept(this, arg));
-        n.setElseExpr((Expression) n.getElseExpr().accept(this, arg));
+        Expression condition = (Expression) n.getCondition().accept(this, arg);
+        Expression elseExpr = (Expression) n.getElseExpr().accept(this, arg);
+        Expression thenExpr = (Expression) n.getThenExpr().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (condition == null || elseExpr == null || thenExpr == null)
+            return null;
+        n.setCondition(condition);
+        n.setElseExpr(elseExpr);
+        n.setThenExpr(thenExpr);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ConstructorDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
-        n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrownExceptions((NodeList<ReferenceType>) n.getThrownExceptions().accept(this, arg));
-        n.setBody((BlockStmt) n.getBody().accept(this, arg));
+        BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
+        NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || name == null)
+            return null;
+        n.setBody(body);
+        n.setName(name);
+        n.setParameters(parameters);
+        n.setThrownExceptions(thrownExceptions);
+        n.setTypeParameters(typeParameters);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ContinueStmt n, final A arg) {
-        visitComment(n, arg);
-        n.getLabel().ifPresent(l -> n.setLabel((SimpleName) l.accept(this, arg)));
+        SimpleName label = n.getLabel().map( s -> (SimpleName) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setLabel(label);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final DoStmt n, final A arg) {
-        visitComment(n, arg);
-        final Statement body = (Statement) n.getBody().accept(this, arg);
-        if (body == null) {
+        Statement body = (Statement) n.getBody().accept(this, arg);
+        Expression condition = (Expression) n.getCondition().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || condition == null)
             return null;
-        }
         n.setBody(body);
-
-        final Expression condition = (Expression) n.getCondition().accept(this, arg);
-        if (condition == null) {
-            return null;
-        }
         n.setCondition(condition);
-
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final DoubleLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final EmptyMemberDeclaration n, final A arg) {
-        visitComment(n, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final EmptyStmt n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final EnclosedExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getInner().isPresent())
-            n.setInner((Expression) n.getInner().get().accept(this, arg));
+        Expression inner = n.getInner().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setInner(inner);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final EnumConstantDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
-        n.setClassBody((NodeList<BodyDeclaration<?>>) n.getClassBody().accept(this, arg));
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
+        NodeList<BodyDeclaration<?>> classBody = modifyList(n.getClassBody(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setArguments(arguments);
+        n.setClassBody(classBody);
+        n.setName(name);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final EnumDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setImplementedTypes((NodeList<ClassOrInterfaceType>) n.getImplementedTypes().accept(this, arg));
-        n.setEntries((NodeList<EnumConstantDeclaration>) n.getEntries().accept(this, arg));
-        n.setMembers((NodeList<BodyDeclaration<?>>) n.getMembers().accept(this, arg));
+        NodeList<EnumConstantDeclaration> entries = modifyList(n.getEntries(), arg);
+        NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
+        NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setEntries(entries);
+        n.setImplementedTypes(implementedTypes);
+        n.setMembers(members);
+        n.setName(name);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ExplicitConstructorInvocationStmt n, final A arg) {
-        visitComment(n, arg);
-        if (!n.isThis() && n.getExpression().isPresent()) {
-            n.setExpression((Expression) n.getExpression().get().accept(this, arg));
-        }
-        n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
+        Expression expression = n.getExpression().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setArguments(arguments);
+        n.setExpression(expression);
+        n.setTypeArguments(typeArguments);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ExpressionStmt n, final A arg) {
-        visitComment(n, arg);
-        final Expression expr = (Expression) n.getExpression().accept(this, arg);
-        if (expr == null) {
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
             return null;
-        }
-        n.setExpression(expr);
+        n.setExpression(expression);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final FieldAccessExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getScope().isPresent()) {
-            final Expression scope = (Expression) n.getScope().get().accept(this, arg);
-            n.setScope(scope);
-            return n;
-        } else
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Expression scope = n.getScope().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
             return null;
+        n.setName(name);
+        n.setScope(scope);
+        n.setTypeArguments(typeArguments);
+        n.setComment(comment);
+        return n;
     }
 
     @Override
     public Visitable visit(final FieldDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setVariables((NodeList<VariableDeclarator>) n.getVariables().accept(this, arg));
-        if (n.getVariables().isEmpty()) {
+        NodeList<VariableDeclarator> variables = modifyList(n.getVariables(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (variables.isEmpty())
             return null;
-        }
+        n.setVariables(variables);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ForeachStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setVariable((VariableDeclarationExpr) n.getVariable().accept(this, arg));
-        n.setIterable((Expression) n.getIterable().accept(this, arg));
-        n.setBody((Statement) n.getBody().accept(this, arg));
+        Statement body = (Statement) n.getBody().accept(this, arg);
+        Expression iterable = (Expression) n.getIterable().accept(this, arg);
+        VariableDeclarationExpr variable = (VariableDeclarationExpr) n.getVariable().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || iterable == null || variable == null)
+            return null;
+        n.setBody(body);
+        n.setIterable(iterable);
+        n.setVariable(variable);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ForStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setInitialization((NodeList<Expression>) n.getInitialization().accept(this, arg));
-        if (n.getCompare().isPresent()) {
-            n.setCompare((Expression) n.getCompare().get().accept(this, arg));
-        }
-        n.setUpdate((NodeList<Expression>) n.getUpdate().accept(this, arg));
-        n.setBody((Statement) n.getBody().accept(this, arg));
+        Statement body = (Statement) n.getBody().accept(this, arg);
+        Expression compare = n.getCompare().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        NodeList<Expression> initialization = modifyList(n.getInitialization(), arg);
+        NodeList<Expression> update = modifyList(n.getUpdate(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null)
+            return null;
+        n.setBody(body);
+        n.setCompare(compare);
+        n.setInitialization(initialization);
+        n.setUpdate(update);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final IfStmt n, final A arg) {
-        visitComment(n, arg);
-        final Expression condition = (Expression) n.getCondition().accept(this, arg);
-        if (condition == null) {
+        Expression condition = (Expression) n.getCondition().accept(this, arg);
+        Statement elseStmt = n.getElseStmt().map( s -> (Statement) s.accept(this, arg)).orElse(null);
+        Statement thenStmt = (Statement) n.getThenStmt().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (condition == null || thenStmt == null)
             return null;
-        }
         n.setCondition(condition);
-        final Statement thenStmt = (Statement) n.getThenStmt().accept(this, arg);
-        if (thenStmt == null) {
-            // Remove the entire statement if the then-clause was removed.
-            // PrettyPrintVisitor, used for toString, has no null check for the
-            // then-clause.
-            return null;
-        }
+        n.setElseStmt(elseStmt);
         n.setThenStmt(thenStmt);
-        if (n.getElseStmt().isPresent()) {
-            n.setElseStmt((Statement) n.getElseStmt().get().accept(this, arg));
-        }
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final InitializerDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setBody((BlockStmt) n.getBody().accept(this, arg));
+        BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null)
+            return null;
+        n.setBody(body);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final InstanceOfExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setExpression((Expression) n.getExpression().accept(this, arg));
-        n.setType((ReferenceType) n.getType().accept(this, arg));
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        ReferenceType<?> type = (ReferenceType<?>) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null || type == null)
+            return null;
+        n.setExpression(expression);
+        n.setType(type);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final IntegerLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final JavadocComment n, final A arg) {
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final LabeledStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setStatement((Statement) n.getStatement().accept(this, arg));
+        SimpleName label = (SimpleName) n.getLabel().accept(this, arg);
+        Statement statement = (Statement) n.getStatement().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (label == null || statement == null)
+            return null;
+        n.setLabel(label);
+        n.setStatement(statement);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final LongLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final MarkerAnnotationExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setName((Name) n.getName().accept(this, arg));
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final MemberValuePair n, final A arg) {
-        visitComment(n, arg);
-        n.setValue((Expression) n.getValue().accept(this, arg));
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Expression value = (Expression) n.getValue().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || value == null)
+            return null;
+        n.setName(name);
+        n.setValue(value);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final MethodCallExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getScope().isPresent()) {
-            n.setScope((Expression) n.getScope().get().accept(this, arg));
-        }
-        n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Expression scope = n.getScope().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setArguments(arguments);
+        n.setName(name);
+        n.setScope(scope);
+        n.setTypeArguments(typeArguments);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final MethodDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setTypeParameters(modifyList(n.getTypeParameters(), arg));
-        n.setType((Type) n.getType().accept(this, arg));
-        n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        n.setThrownExceptions((NodeList<ReferenceType>) n.getThrownExceptions().accept(this, arg));
-        if (n.getBody().isPresent()) {
-            n.setBody((BlockStmt) n.getBody().get().accept(this, arg));
-        }
+        BlockStmt body = n.getBody().map( s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Type type = (Type) n.getType().accept(this, arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
+        NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
+        NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null || name == null)
+            return null;
+        n.setBody(body);
+        n.setType(type);
+        n.setName(name);
+        n.setParameters(parameters);
+        n.setThrownExceptions(thrownExceptions);
+        n.setTypeParameters(typeParameters);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final NameExpr n, final A arg) {
-        visitComment(n, arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final NormalAnnotationExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setName((Name) n.getName().accept(this, arg));
-        n.setPairs((NodeList<MemberValuePair>) n.getPairs().accept(this, arg));
+        NodeList<MemberValuePair> pairs = modifyList(n.getPairs(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setPairs(pairs);
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final NullLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ObjectCreationExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getScope().isPresent()) {
-            n.setScope((Expression) n.getScope().get().accept(this, arg));
-        }
-        n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        n.setType((ClassOrInterfaceType) n.getType().accept(this, arg));
-        n.setArguments((NodeList<Expression>) n.getArguments().accept(this, arg));
-        if (n.getAnonymousClassBody().isPresent())
-            n.setAnonymousClassBody((NodeList<BodyDeclaration<?>>) n.getAnonymousClassBody().get().accept(this, arg));
+        NodeList<BodyDeclaration<?>> anonymousClassBody = modifyList(n.getAnonymousClassBody(), arg);
+        NodeList<Expression> arguments = modifyList(n.getArguments(), arg);
+        Expression scope = n.getScope().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        ClassOrInterfaceType type = (ClassOrInterfaceType) n.getType().accept(this, arg);
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setAnonymousClassBody(anonymousClassBody);
+        n.setArguments(arguments);
+        n.setScope(scope);
+        n.setType(type);
+        n.setTypeArguments(typeArguments);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final PackageDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setName((Name) n.getName().accept(this, arg));
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final Parameter n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        n.setName((SimpleName) n.getName().accept(this, arg));
-        n.setType((Type) n.getType().accept(this, arg));
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
+        NodeList<AnnotationExpr> varArgsAnnotations = modifyList(n.getVarArgsAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || type == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setName(name);
+        n.setType(type);
+        n.setVarArgsAnnotations(varArgsAnnotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final Name n, final A arg) {
-        visitComment(n, arg);
-        if (n.getQualifier().isPresent()) {
-            n.setQualifier((Name) n.getQualifier().get().accept(this, arg));
-        }
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Name qualifier = n.getQualifier().map( s -> (Name) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setQualifier(qualifier);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final PrimitiveType n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(SimpleName n, A arg) {
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(ArrayType n, A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        n.setComponentType((Type) n.getComponentType().accept(this, arg));
+        Type componentType = (Type) n.getComponentType().accept(this, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (componentType == null)
+            return null;
+        n.setComponentType(componentType);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(ArrayCreationLevel n, A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        if (n.getDimension().isPresent()) {
-            n.setDimension((Expression) n.getDimension().get().accept(this, arg));
-        }
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Expression dimension = n.getDimension().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setDimension(dimension);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final IntersectionType n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        n.setElements((NodeList<ReferenceType>) n.getElements().accept(this, arg));
+        NodeList<ReferenceType> elements = modifyList(n.getElements(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (elements.isEmpty())
+            return null;
+        n.setElements(elements);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final UnionType n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        n.setElements((NodeList<ReferenceType>) n.getElements().accept(this, arg));
+        NodeList<ReferenceType> elements = modifyList(n.getElements(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (elements.isEmpty())
+            return null;
+        n.setElements(elements);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ReturnStmt n, final A arg) {
-        visitComment(n, arg);
-        if (n.getExpression().isPresent()) {
-            n.setExpression((Expression) n.getExpression().get().accept(this, arg));
-        }
+        Expression expression = n.getExpression().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setExpression(expression);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final SingleMemberAnnotationExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setName((Name) n.getName().accept(this, arg));
-        n.setMemberValue((Expression) n.getMemberValue().accept(this, arg));
+        Expression memberValue = (Expression) n.getMemberValue().accept(this, arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (memberValue == null || name == null)
+            return null;
+        n.setMemberValue(memberValue);
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final StringLiteralExpr n, final A arg) {
-        visitComment(n, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final SuperExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getClassExpr().isPresent()) {
-            n.setClassExpr((Expression) n.getClassExpr().get().accept(this, arg));
-        }
+        Expression classExpr = n.getClassExpr().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setClassExpr(classExpr);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final SwitchEntryStmt n, final A arg) {
-        visitComment(n, arg);
-        if (n.getLabel().isPresent()) {
-            n.setLabel((Expression) n.getLabel().get().accept(this, arg));
-        }
-        n.setStatements((NodeList<Statement>) n.getStatements().accept(this, arg));
+        Expression label = n.getLabel().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        NodeList<Statement> statements = modifyList(n.getStatements(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setLabel(label);
+        n.setStatements(statements);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final SwitchStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setSelector((Expression) n.getSelector().accept(this, arg));
-        n.setEntries((NodeList<SwitchEntryStmt>) n.getEntries().accept(this, arg));
+        NodeList<SwitchEntryStmt> entries = modifyList(n.getEntries(), arg);
+        Expression selector = (Expression) n.getSelector().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (selector == null)
+            return null;
+        n.setEntries(entries);
+        n.setSelector(selector);
+        n.setComment(comment);
         return n;
-
     }
 
     @Override
     public Visitable visit(final SynchronizedStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setExpression((Expression) n.getExpression().accept(this, arg));
-        n.setBody((BlockStmt) n.getBody().accept(this, arg));
+        BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || expression == null)
+            return null;
+        n.setBody(body);
+        n.setExpression(expression);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ThisExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getClassExpr().isPresent()) {
-            n.setClassExpr((Expression) n.getClassExpr().get().accept(this, arg));
-        }
+        Expression classExpr = n.getClassExpr().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setClassExpr(classExpr);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final ThrowStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setExpression((Expression) n.getExpression().accept(this, arg));
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
+        n.setExpression(expression);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final TryStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setResources((NodeList<VariableDeclarationExpr>) n.getResources().accept(this, arg));
-        if (n.getTryBlock().isPresent()) {
-            n.setTryBlock((BlockStmt) n.getTryBlock().get().accept(this, arg));
-        }
-        n.setCatchClauses((NodeList<CatchClause>) n.getCatchClauses().accept(this, arg));
-        if (n.getFinallyBlock().isPresent()) {
-            n.setFinallyBlock((BlockStmt) n.getFinallyBlock().get().accept(this, arg));
-        }
+        NodeList<CatchClause> catchClauses = modifyList(n.getCatchClauses(), arg);
+        BlockStmt finallyBlock = n.getFinallyBlock().map( s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        NodeList<VariableDeclarationExpr> resources = modifyList(n.getResources(), arg);
+        BlockStmt tryBlock = n.getTryBlock().map( s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setCatchClauses(catchClauses);
+        n.setFinallyBlock(finallyBlock);
+        n.setResources(resources);
+        n.setTryBlock(tryBlock);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final LocalClassDeclarationStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setClassDeclaration((ClassOrInterfaceDeclaration) n.getClassDeclaration().accept(this, arg));
+        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) n.getClassDeclaration().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (classDeclaration == null)
+            return null;
+        n.setClassDeclaration(classDeclaration);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final TypeParameter n, final A arg) {
-        visitComment(n, arg);
-        n.setTypeBound((NodeList<ClassOrInterfaceType>) n.getTypeBound().accept(this, arg));
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        NodeList<ClassOrInterfaceType> typeBound = modifyList(n.getTypeBound(), arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setTypeBound(typeBound);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final UnaryExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setExpression((Expression) n.getExpression().accept(this, arg));
+        Expression expression = (Expression) n.getExpression().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (expression == null)
+            return null;
+        n.setExpression(expression);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final UnknownType n, final A arg) {
-        visitComment(n, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final VariableDeclarationExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setAnnotations((NodeList<AnnotationExpr>) n.getAnnotations().accept(this, arg));
-        n.setVariables((NodeList<VariableDeclarator>) n.getVariables().accept(this, arg));
-        if (n.getVariables().isEmpty()) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<VariableDeclarator> variables = modifyList(n.getVariables(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (variables.isEmpty())
             return null;
-        }
+        n.setAnnotations(annotations);
+        n.setVariables(variables);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final VariableDeclarator n, final A arg) {
-        visitComment(n, arg);
-        final SimpleName id = (SimpleName) n.getName().accept(this, arg);
-        if (id == null) {
-            return null;
-        }
-        n.setName(id);
+        Expression initializer = n.getInitializer().map( s -> (Expression) s.accept(this, arg)).orElse(null);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
         Type type = (Type) n.getType().accept(this, arg);
-        if (type == null) {
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || type == null)
             return null;
-        }
+        n.setInitializer(initializer);
+        n.setName(name);
         n.setType(type);
-        if (n.getInitializer().isPresent()) {
-            n.setInitializer((Expression) n.getInitializer().get().accept(this, arg));
-        }
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final VoidType n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final WhileStmt n, final A arg) {
-        visitComment(n, arg);
-        n.setCondition((Expression) n.getCondition().accept(this, arg));
-        n.setBody((Statement) n.getBody().accept(this, arg));
+        Statement body = (Statement) n.getBody().accept(this, arg);
+        Expression condition = (Expression) n.getCondition().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null || condition == null)
+            return null;
+        n.setBody(body);
+        n.setCondition(condition);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final WildcardType n, final A arg) {
-        visitComment(n, arg);
-        visitAnnotations(n, arg);
-        if (n.getExtendedTypes().isPresent()) {
-            n.setExtendedTypes((ReferenceType) n.getExtendedTypes().get().accept(this, arg));
-        }
-        if (n.getSuperTypes().isPresent()) {
-            n.setSuperTypes((ReferenceType) n.getSuperTypes().get().accept(this, arg));
-        }
+        ReferenceType extendedType = n.getExtendedType().map( s -> (ReferenceType) s.accept(this, arg)).orElse(null);
+        ReferenceType superType = n.getSuperType().map( s -> (ReferenceType) s.accept(this, arg)).orElse(null);
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setExtendedType(extendedType);
+        n.setSuperType(superType);
+        n.setAnnotations(annotations);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final LambdaExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setParameters((NodeList<Parameter>) n.getParameters().accept(this, arg));
-        if (n.getBody() != null) {
-            n.setBody((Statement) n.getBody().accept(this, arg));
-        }
+        Statement body = (Statement) n.getBody().accept(this, arg);
+        NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (body == null)
+            return null;
+        n.setBody(body);
+        n.setParameters(parameters);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final MethodReferenceExpr n, final A arg) {
-        visitComment(n, arg);
-        n.setTypeArguments(modifyList(n.getTypeArguments().orElse(null), arg));
-        if (n.getScope() != null) {
-            n.setScope((Expression) n.getScope().accept(this, arg));
-        }
+        Expression scope = (Expression) n.getScope().accept(this, arg);
+        NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (scope == null)
+            return null;
+        n.setScope(scope);
+        n.setTypeArguments(typeArguments);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final TypeExpr n, final A arg) {
-        visitComment(n, arg);
-        if (n.getType() != null) {
-            n.setType((Type) n.getType().accept(this, arg));
-        }
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setType(type);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(NodeList n, A arg) {
-        for (int i = 0; i < n.size(); i++) {
-            n.set(i, (Node) n.get(i).accept(this, arg));
+        if (n.isEmpty()) {
+            return n;
         }
-        for (int i = n.size() - 1; i >= 0; i--) {
-            if (n.get(i) == null) {
-                n.remove(i);
+        final List<Pair<Node, Node>> changeList = new ArrayList<>();
+        final List<Node> listCopy = new ArrayList<>(n);
+        for (Node node : listCopy) {
+            final Node newNode = (Node) node.accept(this, arg);
+            changeList.add(new Pair<>(node, newNode));
+        }
+        for (Pair<Node, Node> change : changeList) {
+            if (change.b == null) {
+                n.remove(change.a);
+            } else {
+                final int i = n.indexOf(change.a);
+                // If the user removed this item by hand, ignore the change.
+                if (i != -1) {
+                    n.set(i, change.b);
+                }
             }
         }
         return n;
@@ -824,24 +1066,109 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Node visit(final ImportDeclaration n, final A arg) {
-        visitComment(n, arg);
-        n.setName((Name) n.getName().accept(this, arg));
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final BlockComment n, final A arg) {
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
     @Override
     public Visitable visit(final LineComment n, final A arg) {
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
         return n;
     }
 
-    private void visitComment(Node n, final A arg) {
-        if (n != null && n.getComment().isPresent()) {
-            n.setComment((Comment) n.getComment().get().accept(this, arg));
-        }
+    private <N extends Node> NodeList<N> modifyList(NodeList<N> list, A arg) {
+        return (NodeList<N>) list.accept(this, arg);
+    }
+
+    private <N extends Node> NodeList<N> modifyList(Optional<NodeList<N>> list, A arg) {
+        return list.map( ns -> modifyList(ns, arg)).orElse(null);
+    }
+
+    public Visitable visit(ModuleDeclaration n, A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        NodeList<ModuleStmt> moduleStmts = modifyList(n.getModuleStmts(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setModuleStmts(moduleStmts);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    public Visitable visit(ModuleRequiresStmt n, A arg) {
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override()
+    public Visitable visit(ModuleExportsStmt n, A arg) {
+        NodeList<Name> moduleNames = modifyList(n.getModuleNames(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setModuleNames(moduleNames);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override()
+    public Visitable visit(ModuleProvidesStmt n, A arg) {
+        Type type = (Type) n.getType().accept(this, arg);
+        NodeList<Type> withTypes = modifyList(n.getWithTypes(), arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setType(type);
+        n.setWithTypes(withTypes);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override()
+    public Visitable visit(ModuleUsesStmt n, A arg) {
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setType(type);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(ModuleOpensStmt n, A arg) {
+        NodeList<Name> moduleNames = modifyList(n.getModuleNames(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map( s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setModuleNames(moduleNames);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
     }
 }
+

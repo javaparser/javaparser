@@ -36,6 +36,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -153,6 +157,41 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getExtendedTypes(), getImplementedTypes(), getTypeParameters(), getMembers(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < extendedTypes.size(); i++) {
+            if (extendedTypes.get(i) == node) {
+                extendedTypes.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < implementedTypes.size(); i++) {
+            if (implementedTypes.get(i) == node) {
+                implementedTypes.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < typeParameters.size(); i++) {
+            if (typeParameters.get(i) == node) {
+                typeParameters.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public ClassOrInterfaceDeclaration clone() {
+        return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ClassOrInterfaceDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
     }
 }
 

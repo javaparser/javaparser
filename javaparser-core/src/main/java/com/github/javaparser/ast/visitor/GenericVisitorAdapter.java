@@ -23,10 +23,10 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 
@@ -411,6 +411,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getImports().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getModule().isPresent()) {
+            result = n.getModule().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1002,6 +1007,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
                 return result;
         }
         {
+            result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
             result = n.getName().accept(this, arg);
             if (result != null)
                 return result;
@@ -1013,11 +1023,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getThrownExceptions().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        {
-            result = n.getType().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1162,6 +1167,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        {
+            result = n.getVarArgsAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)
@@ -1189,6 +1199,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(Name n, A arg) {
         R result;
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getQualifier().isPresent()) {
             result = n.getQualifier().get().accept(this, arg);
             if (result != null)
@@ -1648,13 +1663,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(WildcardType n, A arg) {
         R result;
-        if (n.getExtendedTypes().isPresent()) {
-            result = n.getExtendedTypes().get().accept(this, arg);
+        if (n.getExtendedType().isPresent()) {
+            result = n.getExtendedType().get().accept(this, arg);
             if (result != null)
                 return result;
         }
-        if (n.getSuperTypes().isPresent()) {
-            result = n.getSuperTypes().get().accept(this, arg);
+        if (n.getSuperType().isPresent()) {
+            result = n.getSuperType().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1774,6 +1789,127 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null) {
                 return result;
             }
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(ModuleDeclaration n, A arg) {
+        R result;
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getModuleStmts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(ModuleRequiresStmt n, A arg) {
+        R result;
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override()
+    public R visit(ModuleExportsStmt n, A arg) {
+        R result;
+        {
+            result = n.getModuleNames().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override()
+    public R visit(ModuleProvidesStmt n, A arg) {
+        R result;
+        {
+            result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getWithTypes().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override()
+    public R visit(ModuleUsesStmt n, A arg) {
+        R result;
+        {
+            result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(ModuleOpensStmt n, A arg) {
+        R result;
+        {
+            result = n.getModuleNames().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
         }
         return null;
     }

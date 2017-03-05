@@ -29,6 +29,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DoStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A do-while.
@@ -95,6 +99,23 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public DoStmt clone() {
+        return (DoStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public DoStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.doStmtMetaModel;
     }
 }
 

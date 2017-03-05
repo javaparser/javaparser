@@ -29,6 +29,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
+import com.github.javaparser.metamodel.IfStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -116,6 +121,43 @@ public final class IfStmt extends Statement {
         this.thenStmt = thenStmt;
         setAsParentNodeOf(thenStmt);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (elseStmt != null) {
+            if (node == elseStmt) {
+                removeElseStmt();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public IfStmt removeElseStmt() {
+        return setElseStmt((Statement) null);
+    }
+
+    @DerivedProperty
+    public boolean hasThenBlock() {
+        return thenStmt instanceof BlockStmt;
+    }
+
+    @DerivedProperty
+    public boolean hasElseBlock() {
+        return elseStmt instanceof BlockStmt || elseStmt instanceof IfStmt;
+    }
+
+    @Override
+    public IfStmt clone() {
+        return (IfStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public IfStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.ifStmtMetaModel;
     }
 }
 

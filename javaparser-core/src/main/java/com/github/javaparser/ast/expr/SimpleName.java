@@ -28,6 +28,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SimpleNameMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A name that consists of a single identifier.
@@ -74,6 +77,23 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public SimpleName clone() {
+        return (SimpleName) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public SimpleNameMetaModel getMetaModel() {
+        return JavaParserMetaModel.simpleNameMetaModel;
     }
 }
 

@@ -33,6 +33,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TypeParameterMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A type parameter.
@@ -140,6 +144,29 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeBound(), getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < typeBound.size(); i++) {
+            if (typeBound.get(i) == node) {
+                typeBound.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public TypeParameter clone() {
+        return (TypeParameter) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public TypeParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeParameterMetaModel;
     }
 }
 

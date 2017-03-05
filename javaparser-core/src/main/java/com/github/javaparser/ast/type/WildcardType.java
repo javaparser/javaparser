@@ -31,6 +31,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.WildcardTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A wildcard type argument.
@@ -42,27 +46,27 @@ import java.util.Optional;
  */
 public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
 
-    private ReferenceType extendedTypes;
+    private ReferenceType extendedType;
 
-    private ReferenceType superTypes;
+    private ReferenceType superType;
 
     public WildcardType() {
         this(null, null, null);
     }
 
-    public WildcardType(final ReferenceType extendedTypes) {
-        this(null, extendedTypes, null);
+    public WildcardType(final ReferenceType extendedType) {
+        this(null, extendedType, null);
     }
 
     @AllFieldsConstructor
-    public WildcardType(final ReferenceType extendedTypes, final ReferenceType superTypes) {
-        this(null, extendedTypes, superTypes);
+    public WildcardType(final ReferenceType extendedType, final ReferenceType superType) {
+        this(null, extendedType, superType);
     }
 
-    public WildcardType(final Range range, final ReferenceType extendedTypes, final ReferenceType superTypes) {
+    public WildcardType(final Range range, final ReferenceType extendedType, final ReferenceType superType) {
         super(range, new NodeList<>());
-        setExtendedTypes(extendedTypes);
-        setSuperTypes(superTypes);
+        setExtendedType(extendedType);
+        setSuperType(superType);
     }
 
     @Override
@@ -75,42 +79,78 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         v.visit(this, arg);
     }
 
+    public Optional<ReferenceType> getExtendedType() {
+        return Optional.ofNullable(extendedType);
+    }
+
+    public Optional<ReferenceType> getSuperType() {
+        return Optional.ofNullable(superType);
+    }
+
+    @Deprecated
     public Optional<ReferenceType> getExtendedTypes() {
-        return Optional.ofNullable(extendedTypes);
+        return getExtendedType();
     }
 
+    @Deprecated
     public Optional<ReferenceType> getSuperTypes() {
-        return Optional.ofNullable(superTypes);
+        return getSuperType();
     }
 
     /**
-     * Sets the extends
+     * Sets the extended type
      *
-     * @param ext the extends, can be null
+     * @param extendedType the extends, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setExtendedTypes(final ReferenceType extendedTypes) {
-        notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
-        if (this.extendedTypes != null)
-            this.extendedTypes.setParentNode(null);
-        this.extendedTypes = extendedTypes;
-        setAsParentNodeOf(extendedTypes);
+    public WildcardType setExtendedType(final ReferenceType extendedType) {
+        notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
+        if (this.extendedType != null)
+            this.extendedType.setParentNode(null);
+        this.extendedType = extendedType;
+        setAsParentNodeOf(extendedType);
         return this;
     }
 
     /**
-     * Sets the super
+     * Sets the extended type
      *
-     * @param sup the super, can be null
+     * @param extendedType the extends, can be null
+     * @return this, the WildcardType
+     *
+     * @deprecated use setExtendedType instead,
+     */
+    @Deprecated
+    public WildcardType setExtendedTypes(final ReferenceType extendedType) {
+        return setExtendedType(extendedType);
+    }
+
+    /**
+     * Sets the supertype
+     *
+     * @param superType the super, can be null
      * @return this, the WildcardType
      */
-    public WildcardType setSuperTypes(final ReferenceType superTypes) {
-        notifyPropertyChange(ObservableProperty.SUPER_TYPES, this.superTypes, superTypes);
-        if (this.superTypes != null)
-            this.superTypes.setParentNode(null);
-        this.superTypes = superTypes;
-        setAsParentNodeOf(superTypes);
+    public WildcardType setSuperType(final ReferenceType superType) {
+        notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
+        if (this.superType != null)
+            this.superType.setParentNode(null);
+        this.superType = superType;
+        setAsParentNodeOf(superType);
         return this;
+    }
+
+    /**
+     * Sets the supertype
+     *
+     * @param superType the super, can be null
+     * @return this, the WildcardType
+     *
+     * @deprecated use setSuperType instead
+     */
+    @Deprecated
+    public WildcardType setSuperTypes(final ReferenceType superType) {
+        return setSuperType(superType);
     }
 
     @Override
@@ -121,6 +161,53 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (extendedType != null) {
+            if (node == extendedType) {
+                removeExtendedType();
+                return true;
+            }
+        }
+        if (superType != null) {
+            if (node == superType) {
+                removeSuperType();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Deprecated
+    public WildcardType removeExtendedTypes() {
+        return removeExtendedType();
+    }
+
+    @Deprecated
+    public WildcardType removeSuperTypes() {
+        return removeSuperType();
+    }
+
+    public WildcardType removeExtendedType() {
+        return setExtendedType((ReferenceType) null);
+    }
+
+    public WildcardType removeSuperType() {
+        return setSuperType((ReferenceType) null);
+    }
+
+    @Override
+    public WildcardType clone() {
+        return (WildcardType) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public WildcardTypeMetaModel getMetaModel() {
+        return JavaParserMetaModel.wildcardTypeMetaModel;
     }
 }
 

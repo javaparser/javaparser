@@ -33,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class NodeWithAnnotationsBuildersTest {
-    CompilationUnit cu;
+    private CompilationUnit cu;
     private ClassOrInterfaceDeclaration testClass;
 
     @Before
@@ -54,7 +54,7 @@ public class NodeWithAnnotationsBuildersTest {
 
     @Test
     public void testAddAnnotation() {
-        NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
+        NormalAnnotationExpr annotation = testClass.addAndGetAnnotation(hey.class);
         assertEquals("import com.github.javaparser.builders.NodeWithAnnotationsBuildersTest$hey;", cu.getImport(0).toString().trim());
         assertEquals(1, testClass.getAnnotations().size());
         assertEquals(annotation, testClass.getAnnotation(0));
@@ -82,13 +82,13 @@ public class NodeWithAnnotationsBuildersTest {
 
     @Test
     public void testGetAnnotationByName() {
-        NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
+        NormalAnnotationExpr annotation = testClass.addAndGetAnnotation(hey.class);
         assertEquals(annotation, testClass.getAnnotationByName("hey").get());
     }
 
     @Test
     public void testGetAnnotationByClass() {
-        NormalAnnotationExpr annotation = testClass.addAnnotation(hey.class);
+        NormalAnnotationExpr annotation = testClass.addAndGetAnnotation(hey.class);
         assertEquals(annotation, testClass.getAnnotationByClass(hey.class).get());
     }
 }

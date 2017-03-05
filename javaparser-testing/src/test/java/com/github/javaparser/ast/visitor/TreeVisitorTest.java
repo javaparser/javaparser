@@ -23,29 +23,14 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.ArrayInitializerExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class TreeVisitorTest {
-    @Test
-    public void depthFirst() {
-        Expression expression = JavaParser.parseExpression("(2+3)+(4+5)");
-
-        StringBuilder result = new StringBuilder();
-
-        TreeVisitor visitor = new TreeVisitor() {
-            @Override
-            public void process(Node node) {
-                result.append("<").append(node).append("> ");
-            }
-        };
-
-        visitor.visitDepthFirst(expression);
-        assertEquals("<(2 + 3) + (4 + 5)> <(2 + 3)> <2 + 3> <2> <3> <(4 + 5)> <4 + 5> <4> <5> ", result.toString());
-    }
-
     @Test
     public void breadthFirst() {
         Expression expression = JavaParser.parseExpression("(2+3)+(4+5)");
@@ -61,5 +46,74 @@ public class TreeVisitorTest {
 
         visitor.visitBreadthFirst(expression);
         assertEquals("<(2 + 3) + (4 + 5)> <(2 + 3)> <(4 + 5)> <2 + 3> <4 + 5> <2> <3> <4> <5> ", result.toString());
+    }
+
+    @Test
+    public void issue743ConcurrentModificationProblem() {
+        Expression expression = JavaParser.parseExpression("new int[]{1,2,3,4}");
+
+        StringBuilder result = new StringBuilder();
+        TreeVisitor visitor = new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                if (node instanceof IntegerLiteralExpr) {
+                    node.getParentNode().ifPresent(
+                            parent -> ((ArrayInitializerExpr) parent).getValues().add(new IntegerLiteralExpr("1")));
+                }
+                result.append("<").append(node).append("> ");
+            }
+        };
+        visitor.visitPreOrder(expression);
+        System.out.println(result);
+    }
+
+    @Test
+    public void isValidPreOrderTraversal() {
+        StringBuilder result = new StringBuilder();
+        new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                result.append("<").append(node).append("> ");
+            }
+        }.visitPreOrder(JavaParser.parseExpression("(2+3)+(4+5)"));
+        assertEquals("<(2 + 3) + (4 + 5)> <(2 + 3)> <2 + 3> <2> <3> <(4 + 5)> <4 + 5> <4> <5> ", result.toString());
+    }
+
+    @Test
+    public void isValidPostOrderTraversal() {
+        StringBuilder result = new StringBuilder();
+        new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                result.append("<").append(node).append("> ");
+            }
+        }.visitPostOrder(JavaParser.parseExpression("(2+3)+(4+5)"));
+        assertEquals("<2> <3> <2 + 3> <(2 + 3)> <4> <5> <4 + 5> <(4 + 5)> <(2 + 3) + (4 + 5)> ", result.toString());
+    }
+
+    @Test
+    public void preOrderConcurrentModificationIsOk() {
+        new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                if (node instanceof IntegerLiteralExpr) {
+                    node.getParentNode().ifPresent(
+                            parent -> ((ArrayInitializerExpr) parent).getValues().add(new IntegerLiteralExpr("1")));
+                }
+            }
+        }.visitPreOrder(JavaParser.parseExpression("new int[]{1,2,3,4}"));
+    }
+
+    @Test
+    public void postOrderConcurrentModificationIsOk() {
+        new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                if (node instanceof IntegerLiteralExpr) {
+                    node.getParentNode().ifPresent(
+                            parent -> ((ArrayInitializerExpr) parent).getValues().add(new IntegerLiteralExpr("1")));
+                }
+            }
+        }.visitPostOrder(JavaParser.parseExpression("new int[]{1,2,3,4}"));
     }
 }

@@ -26,6 +26,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.EnclosedExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * An expression between ( ).
@@ -78,6 +82,33 @@ public final class EnclosedExpr extends Expression {
         this.inner = inner;
         setAsParentNodeOf(inner);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (inner != null) {
+            if (node == inner) {
+                removeInner();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public EnclosedExpr removeInner() {
+        return setInner((Expression) null);
+    }
+
+    @Override
+    public EnclosedExpr clone() {
+        return (EnclosedExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public EnclosedExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.enclosedExprMetaModel;
     }
 }
 

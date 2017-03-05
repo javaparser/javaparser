@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2017 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,6 +23,7 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import org.junit.Test;
@@ -58,6 +59,15 @@ public class NodeWithJavadocTest {
         decl.setComment(new JavadocComment("A comment"));
         assertEquals(true, decl.removeJavaDocComment());
         assertFalse(decl.getComment().isPresent());
+    }
+
+    @Test
+    public void getJavadocOnMethodWithLineCommentShouldReturnEmptyOptional() {
+        MethodDeclaration method = new MethodDeclaration();
+        method.setLineComment("Lorem Ipsum.");
+
+        assertFalse(method.getJavadocComment().isPresent());
+        assertFalse(method.getJavadoc().isPresent());
     }
 
 }

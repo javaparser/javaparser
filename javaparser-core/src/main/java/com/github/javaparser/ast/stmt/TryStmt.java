@@ -31,6 +31,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.TryStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The try statement.
@@ -148,6 +152,55 @@ public final class TryStmt extends Statement {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getCatchClauses(), getResources());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < catchClauses.size(); i++) {
+            if (catchClauses.get(i) == node) {
+                catchClauses.remove(i);
+                return true;
+            }
+        }
+        if (finallyBlock != null) {
+            if (node == finallyBlock) {
+                removeFinallyBlock();
+                return true;
+            }
+        }
+        for (int i = 0; i < resources.size(); i++) {
+            if (resources.get(i) == node) {
+                resources.remove(i);
+                return true;
+            }
+        }
+        if (tryBlock != null) {
+            if (node == tryBlock) {
+                removeTryBlock();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public TryStmt removeFinallyBlock() {
+        return setFinallyBlock((BlockStmt) null);
+    }
+
+    public TryStmt removeTryBlock() {
+        return setTryBlock((BlockStmt) null);
+    }
+
+    @Override
+    public TryStmt clone() {
+        return (TryStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public TryStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.tryStmtMetaModel;
     }
 }
 

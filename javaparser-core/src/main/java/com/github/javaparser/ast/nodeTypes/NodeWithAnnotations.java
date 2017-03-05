@@ -28,6 +28,8 @@ import com.github.javaparser.ast.expr.*;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
+import static com.github.javaparser.JavaParser.parseName;
+
 /**
  * A node that can be annotated.
  *
@@ -60,25 +62,50 @@ public interface NodeWithAnnotations<N extends Node> {
      * Annotates this
      *
      * @param name the name of the annotation
-     * @return the {@link NormalAnnotationExpr} added
+     * @return this
      */
-    default NormalAnnotationExpr addAnnotation(String name) {
-        NormalAnnotationExpr normalAnnotationExpr = new NormalAnnotationExpr(
-                Name.parse(name), new NodeList<>());
-        getAnnotations().add(normalAnnotationExpr);
-        normalAnnotationExpr.setParentNode((Node) this);
-        return normalAnnotationExpr;
+    @SuppressWarnings("unchecked")
+    default N addAnnotation(String name) {
+        NormalAnnotationExpr annotation = new NormalAnnotationExpr(
+                parseName(name), new NodeList<>());
+        getAnnotations().add(annotation);
+        return (N) this;
     }
 
     /**
-     * Annotates this and automatically add the import
+     * Annotates this
+     *
+     * @param name the name of the annotation
+     * @return the {@link NormalAnnotationExpr} added
+     */
+    @SuppressWarnings("unchecked")
+    default NormalAnnotationExpr addAndGetAnnotation(String name) {
+        NormalAnnotationExpr annotation = new NormalAnnotationExpr(
+                parseName(name), new NodeList<>());
+        getAnnotations().add(annotation);
+        return annotation;
+    }
+
+    /**
+     * Annotates this node and automatically add the import
+     *
+     * @param clazz the class of the annotation
+     * @return this
+     */
+    default N addAnnotation(Class<? extends Annotation> clazz) {
+        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        return addAnnotation(clazz.getSimpleName());
+    }
+
+    /**
+     * Annotates this node and automatically add the import
      *
      * @param clazz the class of the annotation
      * @return the {@link NormalAnnotationExpr} added
      */
-    default NormalAnnotationExpr addAnnotation(Class<? extends Annotation> clazz) {
+    default NormalAnnotationExpr addAndGetAnnotation(Class<? extends Annotation> clazz) {
         ((Node) this).tryAddImportToParentCompilationUnit(clazz);
-        return addAnnotation(clazz.getSimpleName());
+        return addAndGetAnnotation(clazz.getSimpleName());
     }
 
     /**
@@ -90,9 +117,8 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addMarkerAnnotation(String name) {
         MarkerAnnotationExpr markerAnnotationExpr = new MarkerAnnotationExpr(
-                Name.parse(name));
+                parseName(name));
         getAnnotations().add(markerAnnotationExpr);
-        markerAnnotationExpr.setParentNode((Node) this);
         return (N) this;
     }
 
@@ -117,9 +143,8 @@ public interface NodeWithAnnotations<N extends Node> {
     @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, String value) {
         SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                Name.parse(name), new NameExpr(value));
+                parseName(name), new NameExpr(value));
         getAnnotations().add(singleMemberAnnotationExpr);
-        singleMemberAnnotationExpr.setParentNode((Node) this);
         return (N) this;
     }
 

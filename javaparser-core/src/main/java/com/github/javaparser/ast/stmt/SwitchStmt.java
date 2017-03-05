@@ -31,6 +31,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SwitchStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A switch statement.
@@ -116,6 +120,29 @@ public final class SwitchStmt extends Statement {
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getEntries());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i) == node) {
+                entries.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public SwitchStmt clone() {
+        return (SwitchStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public SwitchStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.switchStmtMetaModel;
     }
 }
 

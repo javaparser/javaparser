@@ -26,6 +26,11 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.AssignExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.Printable;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -36,7 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class AssignExpr extends Expression {
 
-    public enum Operator {
+    public enum Operator implements Printable {
 
         ASSIGN("="), PLUS("+="), MINUS("-="), MULTIPLY("*="), DIVIDE("/="), AND("&="), OR("|="), XOR("^="), REMAINDER("%="), LEFT_SHIFT("<<="), SIGNED_RIGHT_SHIFT(">>="), UNSIGNED_RIGHT_SHIFT(">>>=");
 
@@ -120,6 +125,23 @@ public final class AssignExpr extends Expression {
         this.value = value;
         setAsParentNodeOf(value);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public AssignExpr clone() {
+        return (AssignExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public AssignExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.assignExprMetaModel;
     }
 }
 

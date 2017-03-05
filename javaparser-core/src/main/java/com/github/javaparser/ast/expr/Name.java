@@ -20,15 +20,24 @@
  */
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithIdentifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NameMetaModel;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -42,29 +51,36 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
-public class Name extends Node implements NodeWithIdentifier<Name> {
+public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnnotations<Name> {
 
     private String identifier;
 
     private Name qualifier;
 
+    private NodeList<AnnotationExpr> annotations;
+
     public Name() {
-        this(null, null, "empty");
+        this(null, null, "empty", new NodeList<>());
     }
 
     public Name(final String identifier) {
-        this(null, null, identifier);
+        this(null, null, identifier, new NodeList<>());
+    }
+
+    public Name(Name qualifier, final String identifier) {
+        this(null, qualifier, identifier, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public Name(Name qualifier, final String identifier) {
-        this(null, qualifier, identifier);
+    public Name(Name qualifier, final String identifier, NodeList<AnnotationExpr> annotations) {
+        this(null, qualifier, identifier, annotations);
     }
 
-    public Name(Range range, Name qualifier, final String identifier) {
+    public Name(Range range, Name qualifier, final String identifier, NodeList<AnnotationExpr> annotations) {
         super(range);
         setIdentifier(identifier);
         setQualifier(qualifier);
+        setAnnotations(annotations);
     }
 
     @Override
@@ -96,15 +112,12 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      *
      * @param qualifiedName qualified name
      * @return instanceof {@link Name}
+     * @deprecated use JavaParser.parseName instead
      */
+    @Deprecated
     public static Name parse(String qualifiedName) {
         assertNonEmpty(qualifiedName);
-        String[] split = qualifiedName.split("\\.");
-        Name ret = new Name(split[0]);
-        for (int i = 1; i < split.length; i++) {
-            ret = new Name(ret, split[i]);
-        }
-        return ret;
+        return JavaParser.parseName(qualifiedName);
     }
 
     /**
@@ -128,6 +141,60 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         this.qualifier = qualifier;
         setAsParentNodeOf(qualifier);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        if (qualifier != null) {
+            if (node == qualifier) {
+                removeQualifier();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public Name removeQualifier() {
+        return setQualifier((Name) null);
+    }
+
+    @Override
+    public NodeList<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public Name setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
+        return this;
+    }
+
+    @Override
+    public List<NodeList<?>> getNodeLists() {
+        return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public Name clone() {
+        return (Name) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public NameMetaModel getMetaModel() {
+        return JavaParserMetaModel.nameMetaModel;
     }
 }
 

@@ -32,6 +32,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.SwitchEntryStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * One case in a switch statement.
@@ -120,6 +124,39 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getStatements());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (label != null) {
+            if (node == label) {
+                removeLabel();
+                return true;
+            }
+        }
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public SwitchEntryStmt removeLabel() {
+        return setLabel((Expression) null);
+    }
+
+    @Override
+    public SwitchEntryStmt clone() {
+        return (SwitchEntryStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public SwitchEntryStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.switchEntryStmtMetaModel;
     }
 }
 

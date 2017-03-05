@@ -31,6 +31,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A package declaration.
@@ -128,6 +132,29 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public PackageDeclaration clone() {
+        return (PackageDeclaration) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public PackageDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.packageDeclarationMetaModel;
     }
 }
 

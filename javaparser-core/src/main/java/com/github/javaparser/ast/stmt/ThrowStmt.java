@@ -29,6 +29,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ThrowStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Usage of the throw statement.
@@ -78,6 +82,23 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public ThrowStmt clone() {
+        return (ThrowStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ThrowStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.throwStmtMetaModel;
     }
 }
 

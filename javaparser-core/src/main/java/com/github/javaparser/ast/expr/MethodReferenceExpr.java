@@ -34,6 +34,10 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.MethodReferenceExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -131,6 +135,31 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeArguments().orElse(null));
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
+                    return true;
+                }
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public MethodReferenceExpr clone() {
+        return (MethodReferenceExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public MethodReferenceExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.methodReferenceExprMetaModel;
     }
 }
 

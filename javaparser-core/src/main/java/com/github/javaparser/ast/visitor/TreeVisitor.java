@@ -23,7 +23,9 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.Node;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -31,16 +33,52 @@ import java.util.Queue;
  */
 public abstract class TreeVisitor {
 
-    /**
-     * https://en.wikipedia.org/wiki/Depth-first_search
-     *
-     * @param node the start node, and the first one that is passed to process(node).
-     */
-    public void visitDepthFirst(Node node) {
-        process(node);
+    public void visitLeavesFirst(Node node) {
         for (Node child : node.getChildNodes()) {
-            visitDepthFirst(child);
+            visitLeavesFirst(child);
         }
+        process(node);
+    }
+
+    /**
+     * Performs a pre-order node traversal starting with a given node. When each node is visited,
+     * {@link #process(Node)} is called for further processing.
+     *
+     * @param node The node at which the traversal begins.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
+     */
+    public void visitPreOrder(Node node) {
+        process(node);
+        new ArrayList<>(node.getChildNodes()).forEach(child -> visitPreOrder(child));
+    }
+
+    /**
+     * Performs a post-order node traversal starting with a given node. When each node is visited,
+     * {@link #process(Node)} is called for further processing.
+     *
+     * @param node The node at which the traversal begins.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
+     */
+    public void visitPostOrder(Node node) {
+        new ArrayList<>(node.getChildNodes()).forEach(child -> visitPostOrder(child));
+        process(node);
+    }
+
+    /**
+     * Performs a pre-order node traversal starting with a given node. When each node is visited,
+     * {@link #process(Node)} is called for further processing.
+     *
+     * @deprecated As of release 3.1.0, replaced by {@link #visitPreOrder(Node)}
+     *
+     * @param node The node at which the traversal begins.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
+     */
+    @Deprecated
+    public void visitDepthFirst(Node node) {
+        visitPreOrder(node);
     }
 
     /**
@@ -49,10 +87,10 @@ public abstract class TreeVisitor {
      * @param node the start node, and the first one that is passed to process(node).
      */
     public void visitBreadthFirst(Node node) {
-        Queue<Node> queue = new LinkedList<>();
+        final Queue<Node> queue = new LinkedList<>();
         queue.offer(node);
         while (queue.size() > 0) {
-            Node head = queue.peek();
+            final Node head = queue.peek();
             for (Node child : head.getChildNodes()) {
                 queue.offer(child);
             }
@@ -60,5 +98,10 @@ public abstract class TreeVisitor {
         }
     }
 
+    /**
+     * Process the given node.
+     *
+     * @param node The current node to process.
+     */
     public abstract void process(Node node);
 }

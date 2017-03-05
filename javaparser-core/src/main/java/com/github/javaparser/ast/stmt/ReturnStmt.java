@@ -28,6 +28,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.ReturnStmtMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The return statement, with an optional expression to return.
@@ -86,6 +90,33 @@ public final class ReturnStmt extends Statement {
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (expression != null) {
+            if (node == expression) {
+                removeExpression();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public ReturnStmt removeExpression() {
+        return setExpression((Expression) null);
+    }
+
+    @Override
+    public ReturnStmt clone() {
+        return (ReturnStmt) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public ReturnStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.returnStmtMetaModel;
     }
 }
 

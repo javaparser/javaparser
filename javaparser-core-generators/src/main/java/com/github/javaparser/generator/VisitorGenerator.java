@@ -4,16 +4,16 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.util.Optional;
 
 import static com.github.javaparser.ast.Modifier.PUBLIC;
-import static com.github.javaparser.generator.utils.GeneratorUtils.f;
 
 /**
  * Makes it easier to generate visitor classes.
@@ -21,15 +21,14 @@ import static com.github.javaparser.generator.utils.GeneratorUtils.f;
  * and will ask you to fill in the bodies of the visit methods.
  */
 public abstract class VisitorGenerator extends Generator {
-    private final Logger log = LoggerFactory.getLogger(VisitorGenerator.class);
     private final String pkg;
     private final String visitorClassName;
     private final String returnType;
     private final String argumentType;
     private final boolean createMissingVisitMethods;
 
-    protected VisitorGenerator(JavaParser javaParser, SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
-        super(javaParser, sourceRoot);
+    protected VisitorGenerator(SourceRoot sourceRoot, String pkg, String visitorClassName, String returnType, String argumentType, boolean createMissingVisitMethods) {
+        super(sourceRoot);
         this.pkg = pkg;
         this.visitorClassName = visitorClassName;
         this.returnType = returnType;
@@ -38,9 +37,9 @@ public abstract class VisitorGenerator extends Generator {
     }
 
     public final void generate() throws Exception {
-        log.info(f("Running %s", getClass().getSimpleName()));
+        Log.info("Running %s", getClass().getSimpleName());
 
-        final CompilationUnit compilationUnit = sourceRoot.parse(pkg, visitorClassName + ".java", javaParser).get();
+        final CompilationUnit compilationUnit = sourceRoot.tryToParse(pkg, visitorClassName + ".java").getResult().get();
 
         Optional<ClassOrInterfaceDeclaration> visitorClassOptional = compilationUnit.getClassByName(visitorClassName);
         if (!visitorClassOptional.isPresent()) {
@@ -65,21 +64,19 @@ public abstract class VisitorGenerator extends Generator {
                 .findFirst();
 
         if (visitMethod.isPresent()) {
-            MethodDeclaration method = visitMethod.get();
-            fixMethodSignature(node, method);
-            generateVisitMethodBody(node, method, compilationUnit);
+            generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit", PUBLIC);
-            fixMethodSignature(node, methodDeclaration);
+            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
+                    .addParameter(node.getTypeNameGenerified(), "n")
+                    .addParameter(argumentType, "arg")
+                    .setType(returnType);
+            if (!visitorClass.isInterface()) {
+                methodDeclaration
+                        .addAnnotation(new MarkerAnnotationExpr(new Name("Override")))
+                        .addModifier(PUBLIC);
+            }
             generateVisitMethodBody(node, methodDeclaration, compilationUnit);
         }
-    }
-
-    private void fixMethodSignature(BaseNodeMetaModel node, MethodDeclaration method) {
-        method.getParameters().clear();
-        method.setType(returnType);
-        method.addParameter(node.getTypeNameGenerified(), "n")
-                .addParameter(argumentType, "arg");
     }
 
     protected abstract void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit);

@@ -8,9 +8,10 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.generator.utils.SourceRoot;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,11 +21,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.github.javaparser.generator.utils.GeneratorUtils.decapitalize;
-import static com.github.javaparser.generator.utils.GeneratorUtils.getJavaParserBasePath;
+import static com.github.javaparser.utils.Utils.decapitalize;
 
 public class MetaModelGenerator {
-    static final String NODE_META_MODEL = "BaseNodeMetaModel";
+    static final String BASE_NODE_META_MODEL = "BaseNodeMetaModel";
     private static List<Class<? extends Node>> ALL_NODE_CLASSES = new ArrayList<Class<? extends Node>>() {{
         /* Base classes go first, so we don't have to do any sorting to make sure
          generated classes can refer to their base generated classes without
@@ -32,15 +32,21 @@ public class MetaModelGenerator {
         add(Node.class);
 
         add(BodyDeclaration.class);
+        add(CallableDeclaration.class);
         add(Statement.class);
         add(Expression.class);
         add(Type.class);
 
         add(AnnotationExpr.class);
         add(TypeDeclaration.class);
-        add(LiteralExpr.class);
         add(ReferenceType.class);
+
+        add(LiteralExpr.class);
+        add(LiteralStringValueExpr.class);
         add(StringLiteralExpr.class);
+
+        add(ModuleDeclaration.class);
+        add(ModuleStmt.class);
 
         //
         add(ArrayCreationLevel.class);
@@ -132,37 +138,44 @@ public class MetaModelGenerator {
         add(UnknownType.class);
         add(VoidType.class);
         add(WildcardType.class);
+
+        add(ModuleRequiresStmt.class);
+        add(ModuleExportsStmt.class);
+        add(ModuleProvidesStmt.class);
+        add(ModuleUsesStmt.class);
+        add(ModuleOpensStmt.class);
     }};
 
     static String METAMODEL_PACKAGE = "com.github.javaparser.metamodel";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException {
-        new MetaModelGenerator().run();
-    }
+        if (args.length != 1) {
+            throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
+        }
+        final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
+        final SourceRoot sourceRoot = new SourceRoot(root);
 
-    private void run() throws IOException, NoSuchMethodException {
-        final Path root = getJavaParserBasePath().resolve(Paths.get("javaparser-metamodel", "src", "main", "java"));
-
-        JavaParser javaParser = new JavaParser();
-
-        SourceRoot sourceRoot = new SourceRoot(root);
-
-        CompilationUnit javaParserMetaModel = sourceRoot.parse(METAMODEL_PACKAGE, "JavaParserMetaModel.java", javaParser).get();
-
-        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
+        new MetaModelGenerator().run(sourceRoot);
 
         sourceRoot.saveAll();
     }
 
+    private void run(SourceRoot sourceRoot) throws IOException, NoSuchMethodException {
+        final CompilationUnit javaParserMetaModel = sourceRoot.tryToParse(METAMODEL_PACKAGE, "JavaParserMetaModel.java").getResult().get();
+
+        generateNodeMetaModels(javaParserMetaModel, sourceRoot);
+    }
+
     private void generateNodeMetaModels(CompilationUnit javaParserMetaModelCu, SourceRoot sourceRoot) throws NoSuchMethodException {
-        ClassOrInterfaceDeclaration metaModelCoid = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
-        NodeList<Statement> initializeNodeMetaModelsStatements = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializePropertyMetaModelsStatements = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
-        NodeList<Statement> initializeConstructorParametersStatements = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
+        final ClassOrInterfaceDeclaration metaModelCoid = javaParserMetaModelCu.getClassByName("JavaParserMetaModel").get();
+        final NodeList<Statement> initializeNodeMetaModelsStatements = metaModelCoid.getMethodsByName("initializeNodeMetaModels").get(0).getBody().get().getStatements();
+        final NodeList<Statement> initializePropertyMetaModelsStatements = metaModelCoid.getMethodsByName("initializePropertyMetaModels").get(0).getBody().get().getStatements();
+        final NodeList<Statement> initializeConstructorParametersStatements = metaModelCoid.getMethodsByName("initializeConstructorParameters").get(0).getBody().get().getStatements();
         initializeNodeMetaModelsStatements.clear();
         initializePropertyMetaModelsStatements.clear();
         initializeConstructorParametersStatements.clear();
 
+        metaModelCoid.getFields().stream().filter(f -> f.getVariable(0).getNameAsString().endsWith("MetaModel")).forEach(Node::remove);
         final NodeMetaModelGenerator nodeMetaModelGenerator = new NodeMetaModelGenerator();
         for (Class<? extends Node> nodeClass : ALL_NODE_CLASSES) {
             nodeMetaModelGenerator.generate(nodeClass, metaModelCoid, initializeNodeMetaModelsStatements, initializePropertyMetaModelsStatements, initializeConstructorParametersStatements, sourceRoot);

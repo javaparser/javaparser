@@ -23,14 +23,53 @@ package com.github.javaparser.utils;
 
 import org.junit.Test;
 
+import static com.github.javaparser.utils.Utils.*;
 import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
 
     @Test
-    public void testToCamelCase() {
-        assertEquals("abc", Utils.toCamelCase("ABC"));
-        assertEquals("abcDef", Utils.toCamelCase("ABC_DEF"));
-        assertEquals("abc", Utils.toCamelCase("ABC_"));
+    public void testScreamingToCamelCase() {
+        assertEquals("abc", screamingToCamelCase("ABC"));
+        assertEquals("abcDef", screamingToCamelCase("ABC_DEF"));
+        assertEquals("abc", screamingToCamelCase("ABC_"));
+    }
+
+    @Test
+    public void screamingEmptyString() {
+        assertEquals("", camelCaseToScreaming(""));
+        assertEquals("ABC", camelCaseToScreaming("abc"));
+        assertEquals("HELLO_HELLO", camelCaseToScreaming("HelloHello"));
+        assertEquals("APE_TAIL", camelCaseToScreaming("apeTail"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void capitalizeOnEmptyString() {
+        capitalize("");
+    }
+
+    @Test
+    public void capitalizeOnStringOfOneCharacter() {
+        assertEquals("F", capitalize("f"));
+    }
+
+    @Test
+    public void capitalizeOnStringOfTwoCharacters() {
+        assertEquals("Fo", capitalize("fo"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decapitalizeOnEmptyString() {
+        decapitalize("");
+    }
+
+    @Test
+    public void decapitalizeOnStringOfOneCharacter() {
+        assertEquals("f", decapitalize("F"));
+    }
+
+    @Test
+    public void decapitalizeOnStringOfTwoCharacters() {
+        assertEquals("fo", decapitalize("Fo"));
     }
 }

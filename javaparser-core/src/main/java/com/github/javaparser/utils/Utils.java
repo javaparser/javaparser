@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Function;
 
 /**
  * Any kind of utility.
@@ -36,6 +37,9 @@ public class Utils {
 
     public static final Predicate<String> STRING_NOT_EMPTY = s -> !s.isEmpty();
 
+    /**
+     * @deprecated This is no longer in use by JavaParser, please write your own replacement.
+     */
     public static <T> List<T> ensureNotNull(List<T> list) {
         return list == null ? new ArrayList<>() : list;
     }
@@ -94,6 +98,8 @@ public class Utils {
     /**
      * Puts varargs in a mutable list.
      * This does not have the disadvantage of Arrays#asList that it has a static size.
+     *
+     * @deprecated This is no longer in use by JavaParser, please write your own replacement.
      */
     public static <T> List<T> arrayToList(T[] array) {
         List<T> list = new LinkedList<>();
@@ -102,11 +108,18 @@ public class Utils {
     }
 
     /**
+     * @deprecated use screamingToCamelCase
+     */
+    public static String toCamelCase(String original) {
+        return screamingToCamelCase(original);
+    }
+
+    /**
      * Transform a string to the camel case conversion.
      * <p>
      * For example "ABC_DEF" becomes "abcDef"
      */
-    public static String toCamelCase(String original) {
+    public static String screamingToCamelCase(String original) {
         StringBuilder sb = new StringBuilder();
         String[] parts = original.toLowerCase().split("_");
         for (int i = 0; i < parts.length; i++) {
@@ -115,14 +128,23 @@ public class Utils {
         return sb.toString();
     }
 
-    public static String capitalize(String original) {
-        if (original.length() < 1) {
-            throw new IllegalArgumentException("This string is empty");
-        } else if (original.length() == 1) {
-            return original.toUpperCase();
-        } else {
-            return original.substring(0, 1).toUpperCase() + original.substring(1);
+
+    /**
+     * @param input "aCamelCaseString"
+     * @return "A_CAMEL_CASE_STRING"
+     */
+    public static String camelCaseToScreaming(String input) {
+        if (input.isEmpty()) {
+            return "";
         }
+        StringBuilder scream = new StringBuilder(input.substring(0, 1).toUpperCase());
+        for (char c : input.substring(1).toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                scream.append("_");
+            }
+            scream.append(Character.toUpperCase(c));
+        }
+        return scream.toString();
     }
 
     /**
@@ -144,5 +166,53 @@ public class Utils {
             builder.append("\t");
         }
         return builder;
+    }
+
+    /**
+     * Capitalizes the first character in the string.
+     */
+    public static String capitalize(String s) {
+        return stringTransformer(s, "capitalize", it -> it.toUpperCase());
+    }
+
+    /**
+     * Lower-cases the first character in the string.
+     */
+    public static String decapitalize(String s) {
+        return stringTransformer(s, "decapitalize", it -> it.toLowerCase());
+    }
+
+    private static String stringTransformer(String s, String operationDescription, Function<String, String> transformation) {
+        if (s.isEmpty()) {
+            throw new IllegalArgumentException(String.format("You cannot %s an empty string", operationDescription));
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(transformation.apply(s.substring(0, 1)));
+        sb.append(s.substring(1));
+        return sb.toString();
+    }
+
+    /**
+     * Return true if the value is null, an empty Optional or an empty String.
+     * @param value
+     * @return
+     */
+    public static boolean valueIsNullOrEmpty(Object value) {
+        if (value == null) {
+            return true;
+        }
+        if (value instanceof Optional) {
+            if (((Optional) value).isPresent()) {
+                value = ((Optional) value).get();
+            } else {
+                return true;
+            }
+        }
+        if (value instanceof Collection) {
+            if (((Collection) value).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -35,6 +35,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.EnumSet;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CatchClauseMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The catch part of a try-catch-finally. <br/>In <code>try { ... } catch (Exception e) { ... }</code> the CatchClause
@@ -53,7 +56,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     public CatchClause(final EnumSet<Modifier> exceptModifier, final NodeList<AnnotationExpr> exceptAnnotations, final ClassOrInterfaceType exceptType, final SimpleName exceptName, final BlockStmt body) {
-        this(null, new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, exceptName), body);
+        this(null, new Parameter(null, exceptModifier, exceptAnnotations, exceptType, false, new NodeList<>(), exceptName), body);
     }
 
     @AllFieldsConstructor
@@ -110,6 +113,23 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         this.body = body;
         setAsParentNodeOf(body);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        return super.remove(node);
+    }
+
+    @Override
+    public CatchClause clone() {
+        return (CatchClause) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public CatchClauseMetaModel getMetaModel() {
+        return JavaParserMetaModel.catchClauseMetaModel;
     }
 }
 

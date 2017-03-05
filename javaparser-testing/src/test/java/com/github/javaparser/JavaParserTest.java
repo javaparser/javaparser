@@ -21,15 +21,16 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
 import java.util.Optional;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Range.*;
+import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static org.junit.Assert.assertEquals;
 
 public class JavaParserTest {
@@ -38,7 +39,7 @@ public class JavaParserTest {
     public void rangeOfAnnotationMemberDeclarationIsCorrect() {
         String code = "@interface AD { String foo(); }";
         CompilationUnit cu = JavaParser.parse(code);
-        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration) cu.getAnnotationDeclarationByName("AD").get().getMember(0);
         assertEquals(true, memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
@@ -55,7 +56,7 @@ public class JavaParserTest {
     @Test
     public void rangeOfArrayCreationLevelWithExpressionIsCorrect() {
         String code = "new int[123][456]";
-        ArrayCreationExpr expression = (ArrayCreationExpr)JavaParser.parseExpression(code);
+        ArrayCreationExpr expression = JavaParser.parseExpression(code);
         Optional<Range> range;
 
         range = expression.getLevels().get(0).getRange();
@@ -70,7 +71,7 @@ public class JavaParserTest {
     @Test
     public void rangeOfArrayCreationLevelWithoutExpressionIsCorrect() {
         String code = "new int[][]";
-        ArrayCreationExpr expression = (ArrayCreationExpr)JavaParser.parseExpression(code);
+        ArrayCreationExpr expression = JavaParser.parseExpression(code);
         Optional<Range> range;
 
         range = expression.getLevels().get(0).getRange();
@@ -80,5 +81,15 @@ public class JavaParserTest {
         range = expression.getLevels().get(1).getRange();
         assertEquals(true, range.isPresent());
         assertEquals(new Range(new Position(1, 10), new Position(1, 11)), range.get());
+    }
+
+    @Test
+    public void parseErrorContainsLocation() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, Providers.provider("class X { // blah"));
+
+        Problem problem = result.getProblem(0);
+        assertEquals(range(1, 9, 1, 9), problem.getLocation().get());
+        assertEquals("Parse error. Found <EOF>, expected one of  \";\" \"<\" \"@\" \"abstract\" \"boolean\" \"byte\" \"char\" \"class\" \"default\" \"double\" \"enum\" \"exports\" \"final\" \"float\" \"int\" \"interface\" \"long\" \"module\" \"native\" \"open\" \"opens\" \"private\" \"protected\" \"provides\" \"public\" \"requires\" \"short\" \"static\" \"strictfp\" \"synchronized\" \"to\" \"transient\" \"transitive\" \"uses\" \"void\" \"volatile\" \"with\" \"{\" \"}\" <IDENTIFIER>", problem.getMessage());
+        assertInstanceOf(ParseException.class, problem.getCause().get());
     }
 }

@@ -86,7 +86,6 @@ public interface NodeWithExtends<N extends Node> {
     default N addExtendedType(String name) {
         ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
         getExtendedTypes().add(classOrInterfaceType);
-        classOrInterfaceType.setParentNode((Node) this);
         return (N) this;
     }
 }

@@ -28,13 +28,20 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * The declaration of a variable.<br/><code>int x = 14;</code>
@@ -82,6 +89,37 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         setName(name);
         setInitializer(initializer);
         setType(type);
+        registerObserversForDerivedProperties();
+    }
+
+    private void registerObserversForDerivedProperties() {
+        // We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
+        // because it is derived from the type of the variables it contains, for this reason we notify about the change
+        this.register(new AstObserverAdapter() {
+
+            @Override
+            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                if (property == ObservableProperty.TYPE) {
+                    VariableDeclarator vd = VariableDeclarator.this;
+                    if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
+                        NodeWithVariables nodeWithVariables = (NodeWithVariables) vd.getParentNode().get();
+                        // We calculate the value the property will assume after the change will be completed
+                        Type currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
+                        List<Type> types = new LinkedList<>();
+                        int index = nodeWithVariables.getVariables().indexOf(vd);
+                        for (int i = 0; i < nodeWithVariables.getVariables().size(); i++) {
+                            if (i == index) {
+                                types.add((Type) newValue);
+                            } else {
+                                types.add(nodeWithVariables.getVariable(i).getType());
+                            }
+                        }
+                        Type newMaxCommonType = NodeWithVariables.calculateMaximumCommonType(types);
+                        ((Node) nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType, newMaxCommonType);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -153,6 +191,33 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         this.type = type;
         setAsParentNodeOf(type);
         return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (initializer != null) {
+            if (node == initializer) {
+                removeInitializer();
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    public VariableDeclarator removeInitializer() {
+        return setInitializer((Expression) null);
+    }
+
+    @Override
+    public VariableDeclarator clone() {
+        return (VariableDeclarator) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public VariableDeclaratorMetaModel getMetaModel() {
+        return JavaParserMetaModel.variableDeclaratorMetaModel;
     }
 }
 
