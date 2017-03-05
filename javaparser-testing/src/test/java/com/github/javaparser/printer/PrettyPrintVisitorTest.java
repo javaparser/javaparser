@@ -25,8 +25,12 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -105,6 +109,15 @@ public class PrettyPrintVisitorTest {
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
         assertEquals("Runnable r = (Runnable & Serializable) (() -> {" + EOL + "});", print(methodDeclaration.getBody().get().getStatements().get(0)));
+    }
+
+    @Test
+    public void printIntersectionType() {
+        String code = "(Runnable & Serializable) (() -> {})";
+        Expression expression = JavaParser.parseExpression(code);
+        Type type = ((CastExpr)expression).getType();
+
+        assertEquals("Runnable & Serializable", print(type));
     }
 
     @Test
