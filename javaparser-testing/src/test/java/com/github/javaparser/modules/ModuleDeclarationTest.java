@@ -11,6 +11,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -55,11 +56,11 @@ public class ModuleDeclarationTest {
 
         ModuleExportsStmt moduleExportsStmt = (ModuleExportsStmt) module.getModuleStmts().get(5);
         assertThat(moduleExportsStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleExportsStmt.getModuleNames()).containsExactly(Name.parse("T1.U1"), Name.parse("T2.U2"));
+        assertThat(moduleExportsStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
         ModuleOpensStmt moduleOpensStmt = (ModuleOpensStmt) module.getModuleStmts().get(7);
         assertThat(moduleOpensStmt.getNameAsString()).isEqualTo("R.S");
-        assertThat(moduleOpensStmt.getModuleNames()).containsExactly(Name.parse("T1.U1"), Name.parse("T2.U2"));
+        assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
         ModuleUsesStmt moduleUsesStmt = (ModuleUsesStmt) module.getModuleStmts().get(8);
         assertThat(moduleUsesStmt.getType().toString()).isEqualTo("V.W");
