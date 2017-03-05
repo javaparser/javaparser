@@ -2843,7 +2843,6 @@ Statement BlockStatement():
 {
   (
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
-  	  {  }
 	  modifier = Modifiers()
 	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
 	|

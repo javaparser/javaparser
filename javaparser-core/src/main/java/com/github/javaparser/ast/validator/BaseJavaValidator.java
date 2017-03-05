@@ -77,7 +77,8 @@ public class BaseJavaValidator extends Validators {
                             }.validate(n, reporter);
                         }
                     }
-                }
+                },
+                new BaseModifierValidator()
         );
     }
 }
