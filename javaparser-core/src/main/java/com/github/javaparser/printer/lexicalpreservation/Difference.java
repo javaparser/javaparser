@@ -408,7 +408,7 @@ public class Difference {
                 }
             } else if (diffIndex >= this.elements.size() && nodeTextIndex < nodeText.getElements().size()) {
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
-                if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
+                if (nodeTextEl.isWhiteSpaceOrComment()) {
                     nodeTextIndex++;
                 } else {
                     throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "

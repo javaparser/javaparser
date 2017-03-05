@@ -118,7 +118,8 @@ class TokenTextElement extends TextElement {
         return TokenConstants.isSpaceOrTab(tokenKind);
     }
 
-    boolean isWhiteSpaceOrComment() {
+    @Override
+    public boolean isWhiteSpaceOrComment() {
         return TokenConstants.isWhitespaceOrComment(tokenKind);
     }
 
