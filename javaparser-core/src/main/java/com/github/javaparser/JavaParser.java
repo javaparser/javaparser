@@ -35,9 +35,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.validator.BaseJavaValidator;
 import com.github.javaparser.ast.validator.ProblemReporter;
-import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.javadoc.Javadoc;
 
 import java.io.*;
@@ -60,6 +58,7 @@ public final class JavaParser {
     private final ParserConfiguration configuration;
 
     private GeneratedJavaParser astParser = null;
+    private static ParserConfiguration staticConfiguration = new ParserConfiguration();
 
     /**
      * Instantiate the parser with default configuration. Note that parsing can also be done with the static methods on
@@ -79,6 +78,22 @@ public final class JavaParser {
         commentsInserter = new CommentsInserter(configuration);
     }
 
+    /**
+     * Get the configuration for the static parse... methods.
+     * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
+     */
+    public static ParserConfiguration getStaticConfiguration() {
+        return staticConfiguration;
+    }
+
+    /**
+     * Set the configuration for the static parse... methods.
+     * This is a STATIC field, so modifying it will directly change how all static parse... methods work!
+     */
+    public static void setStaticConfiguration(ParserConfiguration staticConfiguration) {
+        JavaParser.staticConfiguration = staticConfiguration;
+    }
+
     private GeneratedJavaParser getParserForProvider(Provider provider) {
         if (astParser == null) {
             astParser = new GeneratedJavaParser(provider);
@@ -90,13 +105,6 @@ public final class JavaParser {
     }
 
     /**
-     * @deprecated use the other parse method.
-     */
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return parse(start, provider, new BaseJavaValidator());
-    }
-    
-    /**
      * Parses source code.
      * It takes the source code from a Provider.
      * The start indicates what can be found in the source code (compilation unit, block, import...)
@@ -106,7 +114,7 @@ public final class JavaParser {
      * @param <N> the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider, Validator validator) {
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
         assertNotNull(start);
         assertNotNull(provider);
         final GeneratedJavaParser parser = getParserForProvider(provider);
@@ -116,8 +124,8 @@ public final class JavaParser {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
-            
-            validator.validate(resultNode, new ProblemReporter(parser.problems));
+
+            configuration.getValidator().validate(resultNode, new ProblemReporter(parser.problems));
 
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
@@ -373,7 +381,7 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider, new BaseJavaValidator());
+        ParseResult<T> result = new JavaParser(staticConfiguration).parse(context, provider);
         if (result.isSuccessful()) {
             return result.getResult().get();
         }
