@@ -25,7 +25,7 @@ public class B {
 
     Runnable runnable = () -> System.out.println("running");
 
-    Consumer<Integer> consumer =  i -> {
+    Consumer<Integer> consumer = i -> {
         i += 1;
         System.out.println(i);
     };

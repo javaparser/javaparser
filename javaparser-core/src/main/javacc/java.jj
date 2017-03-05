@@ -1474,10 +1474,6 @@ NodeList<ClassOrInterfaceType> ExtendsList(boolean isInterface):
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
-   {
-      if (extendsMoreThanOne && !isInterface)
-         addProblem("A class cannot extend more than one other class");
-   }
    { return ret; }
 }
 
@@ -1489,10 +1485,6 @@ NodeList<ClassOrInterfaceType> ImplementsList(boolean isInterface):
 {
    "implements" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
-   {
-      if (isInterface)
-         addProblem("An interface cannot implement other interfaces");
-   }
    { return ret; }
 }
 
@@ -1609,22 +1601,11 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
   (
 	  LOOKAHEAD(2)
 	  ret = InitializerDeclaration()
-	  {
-	     if (isInterface)
-	        addProblem("An interface cannot have initializers");
-	  }
 	|
-	  modifier = Modifiers() [ "default" modifier2= Modifiers()
-	  {
-	    if(!isInterface)
-	    {
-	      addProblem("A class cannot have default members");
-	    }
-	    isDefault = true;
-	  }]
+      // Just get all the modifiers out of the way. If you want to do
+      // more checks, pass the modifiers down to the member
+	  modifier = Modifiers() [ "default" modifier2= Modifiers() { isDefault = true; }]
 
-				// Just get all the modifiers out of the way. If you want to do
-	              // more checks, pass the modifiers down to the member
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
 	    |
@@ -1640,10 +1621,6 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	    |
 	      ret = MethodDeclaration(modifier)
 	      {
-	        if(isDefault && ret!= null && ((MethodDeclaration)ret).getBody() == null)
-	        {
-	          addProblem("\"default\" methods must have a body");
-	        }
 	        ((MethodDeclaration)ret).setDefault(isDefault);
 	        if(modifier2!= null)
 	        {
@@ -2481,8 +2458,9 @@ Expression CastExpression():
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
   	        ret = new CastExpr(range(begin, tokenEnd()), new IntersectionType(range(begin, tokenEnd()), typesOfMultiCast), ret);
+  	    } else {
+  	        ret = new CastExpr(range(begin, tokenEnd()), referenceType, ret);
   	    }
-  	    ret = new CastExpr(range(begin, tokenEnd()), referenceType, ret);
   	  }
  )
   { return ret; }
@@ -3193,12 +3171,7 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  {
-    if (finallyBlock == null && catchs.isEmpty() && resources.isEmpty()) {
-      addProblem("Try has no finally, no catch, and no resources");
-    }
-    return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
-  }
+  { return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock); }
 }
 
 
