@@ -45,8 +45,10 @@ public interface NodeWithModifiers<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N addModifier(Modifier... modifiers) {
-        getModifiers().addAll(Arrays.stream(modifiers)
+        EnumSet<Modifier> newModifiers = getModifiers().clone();
+        newModifiers.addAll(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        setModifiers(newModifiers);
         return (N) this;
     }
 
