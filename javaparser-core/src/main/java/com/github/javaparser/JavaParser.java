@@ -35,8 +35,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.validator.DefaultValidator;
-import com.github.javaparser.ast.validator.NoProblemsValidator;
+import com.github.javaparser.ast.validator.BaseJavaValidator;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.javadoc.Javadoc;
@@ -94,7 +93,7 @@ public final class JavaParser {
      * @deprecated use the other parse method.
      */
     public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
-        return parse(start, provider, new DefaultValidator());
+        return parse(start, provider, new BaseJavaValidator());
     }
     
     /**
@@ -374,7 +373,7 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider, new DefaultValidator());
+        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider, new BaseJavaValidator());
         if (result.isSuccessful()) {
             return result.getResult().get();
         }

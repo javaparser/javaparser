@@ -1601,22 +1601,11 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
   (
 	  LOOKAHEAD(2)
 	  ret = InitializerDeclaration()
-	  {
-	     if (isInterface)
-	        addProblem("An interface cannot have initializers");
-	  }
 	|
-	  modifier = Modifiers() [ "default" modifier2= Modifiers()
-	  {
-	    if(!isInterface)
-	    {
-	      addProblem("A class cannot have default members");
-	    }
-	    isDefault = true;
-	  }]
+      // Just get all the modifiers out of the way. If you want to do
+      // more checks, pass the modifiers down to the member
+	  modifier = Modifiers() [ "default" modifier2= Modifiers() { isDefault = true; }]
 
-				// Just get all the modifiers out of the way. If you want to do
-	              // more checks, pass the modifiers down to the member
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
 	    |
@@ -1632,10 +1621,6 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	    |
 	      ret = MethodDeclaration(modifier)
 	      {
-	        if(isDefault && ret!= null && ((MethodDeclaration)ret).getBody() == null)
-	        {
-	          addProblem("\"default\" methods must have a body");
-	        }
 	        ((MethodDeclaration)ret).setDefault(isDefault);
 	        if(modifier2!= null)
 	        {
