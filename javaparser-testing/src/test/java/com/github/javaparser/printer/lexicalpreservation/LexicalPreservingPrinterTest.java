@@ -486,11 +486,11 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void printLambdaIntersectionTypeAssignment() {
-        String code = "class A {\n" +
-                "  void f() {\n" +
-                "    Runnable r = (Runnable & Serializable) (() -> {});\n" +
-                "    r = (Runnable & Serializable)() -> {};\n" +
-                "    r = (Runnable & I)() -> {};\n" +
+        String code = "class A {" + EOL +
+                "  void f() {" + EOL +
+                "    Runnable r = (Runnable & Serializable) (() -> {});" + EOL +
+                "    r = (Runnable & Serializable)() -> {};" + EOL +
+                "    r = (Runnable & I)() -> {};" + EOL +
                 "  }}";
         considerCode(code);
 
@@ -499,9 +499,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void printLambdaIntersectionTypeReturn() {
-        String code = "class A {"
-                + "  Object f() {"
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); "
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
         considerCode(code);
 
