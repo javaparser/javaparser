@@ -4,6 +4,8 @@ import com.github.javaparser.ast.Node;
 
 import java.util.Optional;
 
+import static com.github.javaparser.metamodel.Multiplicity.MANY;
+import static com.github.javaparser.metamodel.Multiplicity.ONE;
 import static com.github.javaparser.utils.CodeGenerationUtils.getterName;
 import static com.github.javaparser.utils.CodeGenerationUtils.setterName;
 
@@ -76,7 +78,7 @@ public class PropertyMetaModel {
     }
 
     /**
-     * @return if this property is a String or a NodeList: whether it may be empty.
+     * @return whether this field may contain an empty String.
      */
     public boolean isNonEmpty() {
         return isNonEmpty;
@@ -129,13 +131,6 @@ public class PropertyMetaModel {
      */
     public boolean hasWildcard() {
         return hasWildcard;
-    }
-
-    /**
-     * @return whether this property is not a list or set.
-     */
-    public boolean isSingular() {
-        return !(isNodeList || isEnumSet);
     }
 
     @Override
@@ -215,6 +210,20 @@ public class PropertyMetaModel {
      */
     public String getMetaModelFieldName() {
         return getName() + "PropertyMetaModel";
+    }
+
+    /**
+     * @return is this property an attribute, meaning: not a node?
+     */
+    public boolean isAttribute() {
+        return !isNode();
+    }
+
+    /**
+     * @return how many times can this property appear?
+     */
+    public Multiplicity getMultiplicity() {
+        return isNodeList() || isEnumSet() ? MANY : ONE;
     }
 
 }
