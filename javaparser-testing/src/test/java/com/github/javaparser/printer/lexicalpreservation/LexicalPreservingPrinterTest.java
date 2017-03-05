@@ -472,4 +472,16 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals("class module { }", lpp.print(cu));
     }
 
+    // Issue 823: setPackageDeclaration on CU starting with a comment
+    @Test
+    public void reactToSetPackageDeclarationOnCuStartingWithComment() {
+        considerCode("// Hey, this is a comment\n" +
+                "\n" +
+                "\n" +
+                "// Another one\n" +
+                "\n" +
+                "class A {}");
+        cu.setPackageDeclaration("org.javaparser.lexicalpreservation.examples");
+    }
+
 }

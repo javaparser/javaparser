@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.Comment;
 
 /**
  * Represent the position of a child node in the NodeText of its parent.
@@ -95,4 +96,10 @@ class ChildTextElement extends TextElement {
     public boolean isNewline() {
         return false;
     }
+
+    @Override
+    public boolean isComment() {
+        return child instanceof Comment;
+    }
+
 }

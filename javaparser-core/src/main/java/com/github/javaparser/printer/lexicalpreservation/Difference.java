@@ -408,7 +408,7 @@ public class Difference {
                 }
             } else if (diffIndex >= this.elements.size() && nodeTextIndex < nodeText.getElements().size()) {
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
-                if ((nodeTextEl instanceof TokenTextElement) && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
+                if (nodeTextEl.isWhiteSpaceOrComment()) {
                     nodeTextIndex++;
                 } else {
                     throw new UnsupportedOperationException("NodeText: " + nodeText + ". Difference: "
@@ -449,7 +449,9 @@ public class Difference {
                     diffIndex++;
                 } else if (diffEl instanceof Kept) {
                     Kept kept = (Kept)diffEl;
-                    if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
+                    if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl.isComment()) {
+                        nodeTextIndex++;
+                    } else if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         diffIndex++;
                         nodeTextIndex++;
                     } else if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof TokenTextElement) {
