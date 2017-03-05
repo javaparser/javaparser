@@ -35,6 +35,10 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.validator.DefaultValidator;
+import com.github.javaparser.ast.validator.NoProblemsValidator;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.javadoc.Javadoc;
 
 import java.io.*;
@@ -87,6 +91,13 @@ public final class JavaParser {
     }
 
     /**
+     * @deprecated use the other parse method.
+     */
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+        return parse(start, provider, new DefaultValidator());
+    }
+    
+    /**
      * Parses source code.
      * It takes the source code from a Provider.
      * The start indicates what can be found in the source code (compilation unit, block, import...)
@@ -96,7 +107,7 @@ public final class JavaParser {
      * @param <N> the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
-    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider) {
+    public <N extends Node> ParseResult<N> parse(ParseStart<N> start, Provider provider, Validator validator) {
         assertNotNull(start);
         assertNotNull(provider);
         final GeneratedJavaParser parser = getParserForProvider(provider);
@@ -106,6 +117,8 @@ public final class JavaParser {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
+            
+            validator.validate(resultNode, new ProblemReporter(parser.problems));
 
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
@@ -361,8 +374,11 @@ public final class JavaParser {
     }
 
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
-        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider);
-        return result.getResult().orElseThrow(() -> new ParseProblemException(result.getProblems()));
+        ParseResult<T> result = new JavaParser(new ParserConfiguration()).parse(context, provider, new DefaultValidator());
+        if (result.isSuccessful()) {
+            return result.getResult().get();
+        }
+        throw new ParseProblemException(result.getProblems());
     }
 
     /**

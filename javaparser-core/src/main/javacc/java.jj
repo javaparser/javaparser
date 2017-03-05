@@ -3193,12 +3193,7 @@ TryStmt TryStatement():
   	|
   		"finally" finallyBlock = Block()
   )
-  {
-    if (finallyBlock == null && catchs.isEmpty() && resources.isEmpty()) {
-      addProblem("Try has no finally, no catch, and no resources");
-    }
-    return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
-  }
+  { return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock); }
 }
 
 
