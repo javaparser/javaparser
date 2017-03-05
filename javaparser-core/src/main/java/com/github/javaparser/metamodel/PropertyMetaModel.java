@@ -2,6 +2,7 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Node;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import static com.github.javaparser.metamodel.Multiplicity.MANY;
@@ -133,6 +134,13 @@ public class PropertyMetaModel {
         return hasWildcard;
     }
 
+    /**
+     * @return whether this property is not a list or set.
+     */
+    public boolean isSingular() {
+        return !(isNodeList || isEnumSet);
+    }
+
     @Override
     public String toString() {
         return "(" + getTypeName() + ")\t" + containingNodeMetaModel + "#" + name;
@@ -226,4 +234,24 @@ public class PropertyMetaModel {
         return isNodeList() || isEnumSet() ? MANY : ONE;
     }
 
+    /**
+     * Introspects the node to get the value from this field.
+     * Note that an optional empty field will return null here.
+     */
+    public Object getValue(Node node) {
+        try {
+            for (Class<?> c = node.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+                    if (classField.getName().equals(getName())) {
+                        classField.setAccessible(true);
+                        return classField.get(node);
+                    }
+                }
+            }
+            throw new NoSuchFieldError(getName());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

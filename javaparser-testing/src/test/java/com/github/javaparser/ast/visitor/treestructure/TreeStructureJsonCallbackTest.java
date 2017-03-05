@@ -9,23 +9,21 @@ import static org.junit.Assert.*;
 public class TreeStructureJsonCallbackTest {
     @Test
     public void testWithType() {
-        StringBuilder stringBuilder = new StringBuilder();
-        TreeStructureVisitor visitor = new TreeStructureVisitor(new TreeStructureJsonCallback(stringBuilder, true));
+        JsonDump jsonDump = new JsonDump(true);
         Expression expression = JavaParser.parseExpression("x(1,1)");
 
-        expression.accept(visitor, new Context());
+        String output = jsonDump.output(expression);
 
-        assertEquals("{\"root\":{\"type\":\"MethodCallExpr\",\"name\":{\"type\":\"SimpleName\",\"identifier\":\"x\"},\"arguments\":{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"},\"arguments\":{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"}}}", stringBuilder.toString());
+        assertEquals("{\"type\":\"MethodCallExpr\",\"name\":{\"type\":\"SimpleName\",\"identifier\":\"x\"},\"arguments\":[{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"},{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"}]}", output);
     }
 
     @Test
     public void testWithoutType() {
-        StringBuilder stringBuilder = new StringBuilder();
-        TreeStructureVisitor visitor = new TreeStructureVisitor(new TreeStructureJsonCallback(stringBuilder, false));
+        JsonDump jsonDump = new JsonDump(false);
         Expression expression = JavaParser.parseExpression("1+1");
 
-        expression.accept(visitor, new Context());
+        String output = jsonDump.output(expression);
 
-        assertEquals("{\"root\":{\"operator\":\"PLUS\",\"left\":{\"value\":\"1\"},\"right\":{\"value\":\"1\"}}}", stringBuilder.toString());
+        assertEquals("{\"operator\":\"PLUS\",\"left\":{\"value\":\"1\"},\"right\":{\"value\":\"1\"}}", output);
     }
 }
