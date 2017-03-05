@@ -98,7 +98,7 @@ class ChildTextElement extends TextElement {
     }
 
     @Override
-    public boolean isWhiteSpaceOrComment() {
+    public boolean isComment() {
         return child instanceof Comment;
     }
 

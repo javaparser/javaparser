@@ -449,7 +449,9 @@ public class Difference {
                     diffIndex++;
                 } else if (diffEl instanceof Kept) {
                     Kept kept = (Kept)diffEl;
-                    if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
+                    if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl.isComment()) {
+                        nodeTextIndex++;
+                    } else if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         diffIndex++;
                         nodeTextIndex++;
                     } else if ((kept.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof TokenTextElement) {
