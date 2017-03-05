@@ -22,9 +22,15 @@
 package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.type.IntersectionType;
+import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -89,5 +95,40 @@ public class PrettyPrintVisitorTest {
                 + EOL +
                 "    int a;" + EOL +
                 "}" + EOL, print(node));
+    }
+
+    @Test
+    public void printLambdaIntersectionTypeAssignment() {
+        String code = "class A {" + EOL +
+                "  void f() {" + EOL +
+                "    Runnable r = (Runnable & Serializable) (() -> {});" + EOL +
+                "    r = (Runnable & Serializable)() -> {};" + EOL +
+                "    r = (Runnable & I)() -> {};" + EOL +
+                "  }}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
+
+        assertEquals("Runnable r = (Runnable & Serializable) (() -> {" + EOL + "});", print(methodDeclaration.getBody().get().getStatements().get(0)));
+    }
+
+    @Test
+    public void printIntersectionType() {
+        String code = "(Runnable & Serializable) (() -> {})";
+        Expression expression = JavaParser.parseExpression(code);
+        Type type = ((CastExpr)expression).getType();
+
+        assertEquals("Runnable & Serializable", print(type));
+    }
+
+    @Test
+    public void printLambdaIntersectionTypeReturn() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
+
+        assertEquals("return (Comparator<Map.Entry<K, V>> & Serializable) (c1, c2) -> c1.getKey().compareTo(c2.getKey());", print(methodDeclaration.getBody().get().getStatements().get(0)));
     }
 }
