@@ -2458,8 +2458,9 @@ Expression CastExpression():
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
   	        ret = new CastExpr(range(begin, tokenEnd()), new IntersectionType(range(begin, tokenEnd()), typesOfMultiCast), ret);
+  	    } else {
+  	        ret = new CastExpr(range(begin, tokenEnd()), referenceType, ret);
   	    }
-  	    ret = new CastExpr(range(begin, tokenEnd()), referenceType, ret);
   	  }
  )
   { return ret; }

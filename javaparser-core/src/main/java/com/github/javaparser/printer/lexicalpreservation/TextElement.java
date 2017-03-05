@@ -48,4 +48,11 @@ public abstract class TextElement implements TextElementMatcher {
     public abstract boolean isSpaceOrTab();
 
     public abstract boolean isNewline();
+
+    public abstract boolean isComment();
+
+    public final boolean isWhiteSpaceOrComment() {
+        return isWhiteSpace() || isComment();
+    }
+
 }

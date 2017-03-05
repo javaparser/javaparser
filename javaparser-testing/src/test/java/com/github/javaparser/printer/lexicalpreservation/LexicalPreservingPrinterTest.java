@@ -1,7 +1,10 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.*;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
@@ -12,13 +15,10 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
-import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -470,6 +470,42 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         cu.getClassByName("xyz").get().setName("module");
 
         assertEquals("class module { }", lpp.print(cu));
+    }
+
+    // Issue 823: setPackageDeclaration on CU starting with a comment
+    @Test
+    public void reactToSetPackageDeclarationOnCuStartingWithComment() {
+        considerCode("// Hey, this is a comment\n" +
+                "\n" +
+                "\n" +
+                "// Another one\n" +
+                "\n" +
+                "class A {}");
+        cu.setPackageDeclaration("org.javaparser.lexicalpreservation.examples");
+    }
+
+    @Test
+    public void printLambdaIntersectionTypeAssignment() {
+        String code = "class A {" + EOL +
+                "  void f() {" + EOL +
+                "    Runnable r = (Runnable & Serializable) (() -> {});" + EOL +
+                "    r = (Runnable & Serializable)() -> {};" + EOL +
+                "    r = (Runnable & I)() -> {};" + EOL +
+                "  }}";
+        considerCode(code);
+
+        assertEquals(code, lpp.print(cu));
+    }
+
+    @Test
+    public void printLambdaIntersectionTypeReturn() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        considerCode(code);
+
+        assertEquals(code, lpp.print(cu));
     }
 
 }
