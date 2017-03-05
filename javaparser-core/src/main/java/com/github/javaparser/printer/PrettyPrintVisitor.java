@@ -803,14 +803,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printModifiers(n.getModifiers());
-        if (n.getType() != null) {
-            n.getType().accept(this, arg);
-        }
+        n.getType().accept(this, arg);
         if (n.isVarArgs()) {
             printAnnotations(n.getVarArgsAnnotations(), false, arg);
             printer.print("...");
         }
-        if (n.getType() != null && !(n.getType() instanceof UnknownType)) {
+        if (!(n.getType() instanceof UnknownType)) {
             printer.print(" ");
         }
         n.getName().accept(this, arg);
