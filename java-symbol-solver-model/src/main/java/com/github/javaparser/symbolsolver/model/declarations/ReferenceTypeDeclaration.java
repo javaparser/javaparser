@@ -42,7 +42,7 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
     default List<ReferenceType> getAllAncestors() {     
         List<ReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(getQualifiedName().equals(Object.class.getCanonicalName()))) {            
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {       
             for (ReferenceType ancestor : getAncestors()) {
                 ancestors.add(ancestor);    
                 for (ReferenceType inheritedAncestor : ancestor.getAllAncestors()) {

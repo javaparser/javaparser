@@ -75,7 +75,7 @@ public class JavaParserTypeDeclarationAdapter {
                 .filter(m -> m.getName().equals(name))
                 .collect(Collectors.toList());
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!typeDeclaration.getQualifiedName().equals(Object.class.getCanonicalName())) {
+        if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ReferenceType ancestor : typeDeclaration.getAncestors()) {
                 SymbolReference<MethodDeclaration> res = MethodResolutionLogic
                         .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver);
