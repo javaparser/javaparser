@@ -14,9 +14,7 @@ import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.github.javaparser.ast.Modifier.*;
 import static java.util.Arrays.binarySearch;
@@ -25,19 +23,28 @@ import static java.util.Arrays.binarySearch;
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class BaseModifierValidator extends VisitorValidator {
-    // ClassOrInterfaceDeclaration
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         n.getParentNode().ifPresent(parent -> {
             if (parent instanceof CompilationUnit) {
-                // Top level class
-                validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, FINAL, STRICTFP);
+                // top level
+                if (n.isInterface()) {
+                    validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP);
+                } else {
+                    validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP);
+                }
             } else if (parent instanceof ClassOrInterfaceDeclaration) {
-                // Inner class
-                validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
+                // nested
+                if (n.isInterface()) {
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP);
+                } else {
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
+                }
             } else if (parent instanceof LocalClassDeclarationStmt) {
-                // Local class
-                validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
+                if (!n.isInterface()) {
+                    // local class
+                    validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
+                }
             }
             // Can't validate this class without a context
             super.visit(n, reporter);
