@@ -112,7 +112,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
         ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
         if (superclass!=this)
-        	fields.addAll(superclass.getAllFields());
+            fields.addAll(superclass.getAllFields());
 
         getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
             fields.add(f);
@@ -218,8 +218,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             return true;
         }
         ClassDeclaration superclass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-        if (superclass != null && superclass.canBeAssignedTo(other)) {
-            return true;
+        if (superclass != null) {
+            // We want to avoid infinite recursion in case of Object having Object as ancestor
+            if (superclass.getQualifiedName().equals(Object.class.getCanonicalName())) {
+                return true;
+            }
+            if (superclass.canBeAssignedTo(other)) {
+                return true;
+            }
         }
 
         if (this.wrappedNode.getImplementedTypes() != null) {
