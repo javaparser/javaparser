@@ -18,24 +18,27 @@ public class BaseJavaValidator extends Validators {
                         if (n.getCatchClauses().isEmpty()
                                 && n.getResources().isEmpty()
                                 && !n.getFinallyBlock().isPresent()) {
-                            reporter.report("Try has no finally, no catch, and no resources", n);
+                            reporter.report(n, "Try has no finally, no catch, and no resources");
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (!n.isInterface() && n.getExtendedTypes().size() > 1) {
-                            reporter.report("A class cannot extend more than one other class", n.getExtendedTypes(1));
+                            reporter.report(n.getExtendedTypes(1), "A class cannot extend more than one other class");
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (n.isInterface() && !n.getImplementedTypes().isEmpty()) {
-                            reporter.report("An interface cannot implement other interfaces", n.getImplementedTypes(0));
+                            reporter.report(n.getImplementedTypes(0), "An interface cannot implement other interfaces");
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
@@ -44,10 +47,11 @@ public class BaseJavaValidator extends Validators {
                         if (n.isInterface()) {
                             new VisitorValidator() {
                                 public void visit(InitializerDeclaration n, ProblemReporter reporter1) {
-                                    reporter.report("An interface cannot have initializers", n);
+                                    reporter.report(n, "An interface cannot have initializers");
                                 }
                             }.validate(n, reporter);
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
@@ -57,11 +61,13 @@ public class BaseJavaValidator extends Validators {
                             new VisitorValidator() {
                                 public void visit(MethodDeclaration n, ProblemReporter reporter1) {
                                     if (n.isDefault() && !n.getBody().isPresent()) {
-                                        reporter.report("\"default\" methods must have a body", n);
+                                        reporter.report(n, "\"default\" methods must have a body");
                                     }
+                                    super.visit(n, reporter);
                                 }
                             }.validate(n, reporter);
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
@@ -71,11 +77,13 @@ public class BaseJavaValidator extends Validators {
                             new VisitorValidator() {
                                 public void visit(MethodDeclaration n, ProblemReporter reporter1) {
                                     if (n.isDefault()) {
-                                        reporter.report("A class cannot have default members", n);
+                                        reporter.report(n, "A class cannot have default members");
                                     }
+                                    super.visit(n, reporter);
                                 }
                             }.validate(n, reporter);
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new BaseModifierValidator()

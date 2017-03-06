@@ -50,9 +50,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType> thrownExceptions;
+    private NodeList<ReferenceType<?>> thrownExceptions;
 
-    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
+    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -106,11 +106,11 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
-    public NodeList<ReferenceType> getThrownExceptions() {
+    public NodeList<ReferenceType<?>> getThrownExceptions() {
         return thrownExceptions;
     }
 
-    public T setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public T setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
         assertNotNull(thrownExceptions);
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
         if (this.thrownExceptions != null)
@@ -148,7 +148,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         StringBuilder sb = new StringBuilder();
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType thr : getThrownExceptions()) {
+            for (ReferenceType<?> thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");

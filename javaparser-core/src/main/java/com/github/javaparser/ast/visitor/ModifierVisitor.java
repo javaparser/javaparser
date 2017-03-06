@@ -297,7 +297,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
-        NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
+        NodeList<ReferenceType<?>> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -609,7 +609,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Type type = (Type) n.getType().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
-        NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
+        NodeList<ReferenceType<?>> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
@@ -759,7 +759,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final IntersectionType n, final A arg) {
-        NodeList<ReferenceType> elements = modifyList(n.getElements(), arg);
+        NodeList<ReferenceType<?>> elements = modifyList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (elements.isEmpty())
@@ -772,7 +772,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final UnionType n, final A arg) {
-        NodeList<ReferenceType> elements = modifyList(n.getElements(), arg);
+        NodeList<ReferenceType<?>> elements = modifyList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (elements.isEmpty())

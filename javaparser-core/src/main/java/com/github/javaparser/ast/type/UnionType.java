@@ -43,27 +43,27 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
-    private NodeList<ReferenceType> elements;
+    private NodeList<ReferenceType<?>> elements;
 
     public UnionType() {
         this(null, new NodeList<>());
     }
 
-    public UnionType(Range range, NodeList<ReferenceType> elements) {
+    public UnionType(Range range, NodeList<ReferenceType<?>> elements) {
         super(range, new NodeList<>());
         setElements(elements);
     }
 
     @AllFieldsConstructor
-    public UnionType(NodeList<ReferenceType> elements) {
+    public UnionType(NodeList<ReferenceType<?>> elements) {
         this(null, elements);
     }
 
-    public NodeList<ReferenceType> getElements() {
+    public NodeList<ReferenceType<?>> getElements() {
         return elements;
     }
 
-    public UnionType setElements(final NodeList<ReferenceType> elements) {
+    public UnionType setElements(final NodeList<ReferenceType<?>> elements) {
         assertNotNull(elements);
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         if (this.elements != null)
