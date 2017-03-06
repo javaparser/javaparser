@@ -12,20 +12,29 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestUtils {
     /**
      * Takes care of setting all the end of line character to platform specific ones.
      */
-    public static String readFileWith(String resourceName) throws IOException {
-        try (final InputStream inputStream = TestUtils.class.getClassLoader().getResourceAsStream(resourceName);
-             final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"))) {
-            final StringBuilder builder = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                builder.append(line).append(Utils.EOL);
+    public static String readResource(String resourceName) throws IOException {
+        if (resourceName.startsWith("/")) {
+            resourceName = resourceName.substring(1);
+        }
+        try (final InputStream resourceAsStream = TestUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
+            if (resourceAsStream == null) {
+                fail("not found: " + resourceName);
             }
-            return builder.toString();
+            try (final InputStreamReader reader = new InputStreamReader(resourceAsStream, "utf-8");
+                 final BufferedReader br = new BufferedReader(reader)) {
+                final StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    builder.append(line).append(Utils.EOL);
+                }
+                return builder.toString();
+            }
         }
     }
 
