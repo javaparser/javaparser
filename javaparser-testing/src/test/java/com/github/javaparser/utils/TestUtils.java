@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -20,7 +19,10 @@ public class TestUtils {
      * Takes care of setting all the end of line character to platform specific ones.
      */
     public static String readResource(String resourceName) throws IOException {
-        try (final InputStream resourceAsStream = TestUtils.class.getClassLoader().getResourceAsStream(Paths.get(resourceName).toString())) {
+        if (resourceName.startsWith("/")) {
+            resourceName = resourceName.substring(1);
+        }
+        try (final InputStream resourceAsStream = TestUtils.class.getClassLoader().getResourceAsStream(resourceName)) {
             if (resourceAsStream == null) {
                 fail("not found: " + resourceName);
             }

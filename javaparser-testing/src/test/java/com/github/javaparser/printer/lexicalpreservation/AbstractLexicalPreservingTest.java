@@ -68,7 +68,7 @@ public abstract class AbstractLexicalPreservingTest {
     }
 
     protected String readExample(String resourceName) throws IOException {
-        return readResource("/com/github/javaparser/lexical_preservation_samples/" + resourceName + ".java.txt");
+        return readResource("com/github/javaparser/lexical_preservation_samples/" + resourceName + ".java.txt");
     }
 
     protected void assertTransformed(String exampleName, Node node) throws IOException {

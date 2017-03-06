@@ -119,13 +119,4 @@ public final class CodeGenerationUtils {
     public static Path mavenModuleRoot(Class<?> c) {
         return classLoaderRoot(c).resolve(Paths.get("..", "..")).normalize();
     }
-
-    /**
-     * Useful for locating source code in your Maven project.
-     * Finds the classpath for the JavaParser code (which is probably the classpath for your code too,)
-     * then backs up out of "target/(test-)classes", giving the directory containing the pom.xml.
-     */
-    public static Path mavenModuleRoot() {
-        return mavenModuleRoot(CodeGenerationUtils.class);
-    }
 }
