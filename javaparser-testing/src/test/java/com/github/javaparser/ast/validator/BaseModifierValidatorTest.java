@@ -20,6 +20,8 @@ public class BaseModifierValidatorTest {
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
                 "(line 1,col 1) 'transient' is not allowed here.",
                 "(line 1,col 1) 'volatile' is not allowed here.",
+                "(line 1,col 1) 'private' is not allowed here.",
+                "(line 1,col 1) 'protected' is not allowed here.",
                 "(line 1,col 1) 'synchronized' is not allowed here.",
                 "(line 1,col 1) 'native' is not allowed here.",
                 "(line 1,col 1) 'transitive' is not allowed here.",
@@ -28,7 +30,7 @@ public class BaseModifierValidatorTest {
     }
 
     @Test
-    public void innerClass() {
+    public void nestedClass() {
         ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "class I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
@@ -40,7 +42,7 @@ public class BaseModifierValidatorTest {
                 "(line 1,col 9) 'transitive' is not allowed here."
         );
     }
-    
+
     @Test
     public void localClass() {
         ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "class I{}}}"));
@@ -56,6 +58,47 @@ public class BaseModifierValidatorTest {
                 "(line 1,col 20) 'public' is not allowed here.",
                 "(line 1,col 20) 'private' is not allowed here.",
                 "(line 1,col 20) 'protected' is not allowed here."
+        );
+    }
+
+    @Test
+    public void topInterface() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(allModifiers + "interface X{}"));
+        assertProblems(result,
+                "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 1) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 1) 'transient' is not allowed here.",
+                "(line 1,col 1) 'volatile' is not allowed here.",
+                "(line 1,col 1) 'synchronized' is not allowed here.",
+                "(line 1,col 1) 'native' is not allowed here.",
+                "(line 1,col 1) 'transitive' is not allowed here.",
+                "(line 1,col 1) 'static' is not allowed here.",
+                "(line 1,col 1) 'final' is not allowed here.",
+                "(line 1,col 1) 'private' is not allowed here.",
+                "(line 1,col 1) 'protected' is not allowed here."
+        );
+    }
+
+    @Test
+    public void nestedInterface() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "interface I{}}"));
+        assertProblems(result,
+                "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) 'transient' is not allowed here.",
+                "(line 1,col 9) 'volatile' is not allowed here.",
+                "(line 1,col 9) 'final' is not allowed here.",
+                "(line 1,col 9) 'synchronized' is not allowed here.",
+                "(line 1,col 9) 'native' is not allowed here.",
+                "(line 1,col 9) 'transitive' is not allowed here."
+        );
+    }
+
+    @Test
+    public void localInterface() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
+        assertProblems(result,
+                "(line 1,col 20) There is no such thing as a local interface."
         );
     }
 
