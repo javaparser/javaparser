@@ -278,16 +278,17 @@ PARSER_END(GeneratedJavaParser)
 
 SPECIAL_TOKEN :
 {
-  " "
-| "\t"
-| "\n"
-| "\r"
-| "\f"
-| "\u0085"
-| "\u00A0"
-| "\u1680"
-| "\u180e"
-| "\u2000"
+  <SPACE: " ">
+| <WINDOWS_EOL : "\r\n">
+| <TAB: "\t">
+| <UNIX_EOL: "\n">
+| <OLD_MAC_EOL: "\r">
+| <FORM_FEED: "\f">
+| <NEXT_LINE: "\u0085">
+| <NON_BREAKING_SPACE: "\u00A0">
+| <OGHAM_SPACE: "\u1680">
+| <MONGOLIAN_VOWEL_SEPARATOR: "\u180e">
+| <EN_QUAD: "\u2000">
 | "\u2001"
 | "\u2002"
 | "\u2003"
@@ -307,7 +308,7 @@ SPECIAL_TOKEN :
 | "\u205f"
 | "\u2060"
 | "\u3000"
-| "\ufeff"
+| <ZERO_WIDTH_NO_BREAK_SPACE: "\ufeff">
 }
 
 TOKEN_MGR_DECLS :

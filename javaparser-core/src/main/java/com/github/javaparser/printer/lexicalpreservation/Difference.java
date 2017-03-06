@@ -1,6 +1,5 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.TokenConstants;
@@ -10,8 +9,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 import java.util.*;
 
-import static com.github.javaparser.printer.TokenConstants.CARRIAGE_RETURN_TOKEN;
-import static com.github.javaparser.printer.TokenConstants.SPACE_TOKEN;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -21,7 +19,7 @@ import static com.github.javaparser.printer.TokenConstants.SPACE_TOKEN;
  */
 public class Difference {
 
-    private int STANDARD_INDENTANTION_SIZE = 4;
+    private int STANDARD_INDENTATION_SIZE = 4;
 
     private List<DifferenceElement> elements;
 
@@ -301,7 +299,7 @@ public class Difference {
         res.addAll(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isToken(CARRIAGE_RETURN_TOKEN) || e.isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)) {
+            if (e.isNewline() || e.isToken(SINGLE_LINE_COMMENT)) {
                 res.clear();
                 afterNl = true;
             } else {
@@ -317,10 +315,10 @@ public class Difference {
 
     private List<TextElement> indentationBlock() {
         List<TextElement> res = new LinkedList<>();
-        res.add(new TokenTextElement(SPACE_TOKEN));
-        res.add(new TokenTextElement(SPACE_TOKEN));
-        res.add(new TokenTextElement(SPACE_TOKEN));
-        res.add(new TokenTextElement(SPACE_TOKEN));
+        res.add(new TokenTextElement(SPACE));
+        res.add(new TokenTextElement(SPACE));
+        res.add(new TokenTextElement(SPACE));
+        res.add(new TokenTextElement(SPACE));
         return res;
     }
 
@@ -333,7 +331,7 @@ public class Difference {
     }
 
     private boolean isAfterLBrace(NodeText nodeText, int nodeTextIndex) {
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(GeneratedJavaParserConstants.LBRACE)) {
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(LBRACE)) {
             return true;
         }
         if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
@@ -419,15 +417,15 @@ public class Difference {
                 if (diffEl instanceof Added) {
                     TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
                     boolean used = false;
-                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(CARRIAGE_RETURN_TOKEN)) {
+                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     } else if (isAfterLBrace(nodeText, nodeTextIndex) && !isAReplacement(diffIndex)) {
-                        if (textElement.isToken(CARRIAGE_RETURN_TOKEN)) {
+                        if (textElement.isNewline()) {
                             used = true;
                         }
-                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(CARRIAGE_RETURN_TOKEN));
+                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenConstants.eolToken()));
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
                         }
@@ -491,7 +489,7 @@ public class Difference {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         nodeText.removeElement(nodeTextIndex);
-                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(TokenConstants.CARRIAGE_RETURN_TOKEN)) {
+                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isNewline()) {
                             nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
                         } else {
                             if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
@@ -530,8 +528,8 @@ public class Difference {
 
     private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
-        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(GeneratedJavaParserConstants.RBRACE)) {
-            indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTANTION_SIZE, indentationAdj.size()));
+        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(RBRACE)) {
+            indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTATION_SIZE, indentationAdj.size()));
         }
         for (TextElement e : indentationAdj) {
             nodeText.getElements().add(nodeTextIndex++, e);
@@ -547,13 +545,13 @@ public class Difference {
         if (textElement instanceof TokenTextElement) {
             TokenTextElement tokenTextElement = (TokenTextElement)textElement;
             int tokenKind = tokenTextElement.getTokenKind();
-            return tokenKind == GeneratedJavaParserConstants.BYTE
-                || tokenKind == GeneratedJavaParserConstants.CHAR
-                || tokenKind == GeneratedJavaParserConstants.SHORT
-                || tokenKind == GeneratedJavaParserConstants.INT
-                || tokenKind == GeneratedJavaParserConstants.LONG
-                || tokenKind == GeneratedJavaParserConstants.FLOAT
-                || tokenKind == GeneratedJavaParserConstants.DOUBLE;
+            return tokenKind == BYTE
+                || tokenKind == CHAR
+                || tokenKind == SHORT
+                || tokenKind == INT
+                || tokenKind == LONG
+                || tokenKind == FLOAT
+                || tokenKind == DOUBLE;
         } else {
             return false;
         }

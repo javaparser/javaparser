@@ -25,7 +25,8 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.TokenConstants;
-import com.github.javaparser.utils.Utils;
+
+import static com.github.javaparser.utils.Utils.EOL;
 
 class TokenTextElement extends TextElement {
 
@@ -33,7 +34,7 @@ class TokenTextElement extends TextElement {
     private String text;
 
     public static TokenTextElement newLine() {
-        return new TokenTextElement(TokenConstants.CARRIAGE_RETURN_TOKEN, Utils.EOL);
+        return new TokenTextElement(TokenConstants.eolToken(), EOL);
     }
 
     TokenTextElement(JavaToken token) {
@@ -50,9 +51,9 @@ class TokenTextElement extends TextElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (tokenKind == TokenConstants.CARRIAGE_RETURN_TOKEN) {
-            content = Utils.EOL;
-        } else if (tokenKind == TokenConstants.SPACE_TOKEN) {
+        if (TokenConstants.isEndOfLineCharacter(tokenKind)) {
+            content = EOL;
+        } else if (TokenConstants.isWhitespace(tokenKind)) {
             content = " ";
         }
         this.tokenKind = tokenKind;

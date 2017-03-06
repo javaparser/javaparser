@@ -22,7 +22,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.TokenConstants;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -126,7 +125,7 @@ class NodeText {
     //
 
     void remove(TextElementMatcher matcher) {
-        elements.removeIf(e -> matcher.match(e));
+        elements.removeIf(matcher::match);
     }
 
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
@@ -136,7 +135,7 @@ class NodeText {
                 elements.remove(e);
                 if (potentiallyFollowingWhitespace) {
                     if (i < elements.size()) {
-                        if (elements.get(i).isToken(TokenConstants.SPACE_TOKEN)) {
+                        if (elements.get(i).isWhiteSpace()) {
                             elements.remove(i);
                         }
                     } else {
