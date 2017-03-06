@@ -26,15 +26,13 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.Providers;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.utils.Pair;
 import org.junit.Before;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
+import static com.github.javaparser.utils.TestUtils.readResource;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractLexicalPreservingTest {
@@ -70,21 +68,7 @@ public abstract class AbstractLexicalPreservingTest {
     }
 
     protected String readExample(String resourceName) throws IOException {
-        InputStream is = this.getClass().getResourceAsStream("/com/github/javaparser/lexical_preservation_samples/" + resourceName + ".java.txt");
-        if (is == null) {
-            throw new IllegalArgumentException("Example not found: " + resourceName);
-        }
-        return read(is);
-    }
-
-    protected String read(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream result = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) != -1) {
-            result.write(buffer, 0, length);
-        }
-        return result.toString("UTF-8");
+        return readResource("/com/github/javaparser/lexical_preservation_samples/" + resourceName + ".java.txt");
     }
 
     protected void assertTransformed(String exampleName, Node node) throws IOException {

@@ -1,7 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.TokenConstants;
@@ -11,7 +10,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 import java.util.*;
 
-import static com.github.javaparser.printer.TokenConstants.NEWLINE_TOKEN;
+import static com.github.javaparser.printer.TokenConstants.CARRIAGE_RETURN_TOKEN;
 import static com.github.javaparser.printer.TokenConstants.SPACE_TOKEN;
 
 /**
@@ -302,7 +301,7 @@ public class Difference {
         res.addAll(indentation);
         boolean afterNl = false;
         for (TextElement e : prevElements) {
-            if (e.isToken(NEWLINE_TOKEN) || e.isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)) {
+            if (e.isToken(CARRIAGE_RETURN_TOKEN) || e.isToken(GeneratedJavaParserConstants.SINGLE_LINE_COMMENT)) {
                 res.clear();
                 afterNl = true;
             } else {
@@ -326,7 +325,7 @@ public class Difference {
     }
 
     private int considerCleaningTheLine(NodeText nodeText, int nodeTextIndex) {
-        while (nodeTextIndex >=1 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
+        while (nodeTextIndex >=1 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
             nodeText.removeElement(nodeTextIndex - 1);
             nodeTextIndex--;
         }
@@ -337,7 +336,7 @@ public class Difference {
         if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(GeneratedJavaParserConstants.LBRACE)) {
             return true;
         }
-        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isToken(3)) {
+        if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace() && !nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
             return isAfterLBrace(nodeText, nodeTextIndex - 1);
         }
         return false;
@@ -420,15 +419,15 @@ public class Difference {
                 if (diffEl instanceof Added) {
                     TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
                     boolean used = false;
-                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(NEWLINE_TOKEN)) {
+                    if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isToken(CARRIAGE_RETURN_TOKEN)) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
                     } else if (isAfterLBrace(nodeText, nodeTextIndex) && !isAReplacement(diffIndex)) {
-                        if (textElement.isToken(NEWLINE_TOKEN)) {
+                        if (textElement.isToken(CARRIAGE_RETURN_TOKEN)) {
                             used = true;
                         }
-                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(NEWLINE_TOKEN));
+                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(CARRIAGE_RETURN_TOKEN));
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
                         }
@@ -492,7 +491,7 @@ public class Difference {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof LexicalDifferenceCalculator.CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         nodeText.removeElement(nodeTextIndex);
-                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(TokenConstants.NEWLINE_TOKEN)) {
+                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(TokenConstants.CARRIAGE_RETURN_TOKEN)) {
                             nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
                         } else {
                             if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {

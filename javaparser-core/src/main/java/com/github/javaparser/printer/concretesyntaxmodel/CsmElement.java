@@ -25,6 +25,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.TokenConstants;
 
 import java.util.Arrays;
 
@@ -80,7 +81,7 @@ public interface CsmElement {
     }
 
     static CsmElement space() {
-        return new CsmToken(1, " ");
+        return new CsmToken(TokenConstants.SPACE_TOKEN, " ");
     }
 
     static CsmElement semicolon() {
@@ -90,7 +91,7 @@ public interface CsmElement {
     static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
-        return new CsmToken(3, EOL);
+        return new CsmToken(TokenConstants.LINEFEED_TOKEN, EOL);
     }
 
     static CsmElement none() {
