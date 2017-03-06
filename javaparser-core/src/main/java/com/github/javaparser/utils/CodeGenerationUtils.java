@@ -1,6 +1,7 @@
 package com.github.javaparser.utils;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -104,7 +105,11 @@ public final class CodeGenerationUtils {
      * @return the root directory of the classloader for class c.
      */
     public static Path classLoaderRoot(Class<?> c) {
-        return Paths.get(c.getProtectionDomain().getCodeSource().getLocation().getPath());
+        try {
+            return Paths.get(c.getProtectionDomain().getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException e) {
+            throw new AssertionError("Bug in JavaParser, please report.", e);
+        }
     }
 
     /**

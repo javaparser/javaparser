@@ -15,9 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
-import static com.github.javaparser.utils.TestUtils.download;
-import static com.github.javaparser.utils.TestUtils.temporaryDirectory;
-import static com.github.javaparser.utils.TestUtils.unzip;
+import static com.github.javaparser.utils.TestUtils.*;
 
 public class BulkParseTest {
     /**
@@ -55,12 +53,14 @@ public class BulkParseTest {
         testResults = testResults.resolve(testResultsFileName);
         try (BufferedWriter writer = Files.newBufferedWriter(testResults)) {
             sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
-                if (!result.isSuccessful()) {
-                    writer.write(localPath.toString());
-                    writer.newLine();
-                    for (Problem problem : result.getProblems()) {
-                        writer.write(problem.getVerboseMessage());
+                if (!localPath.toString().contains("target")) {
+                    if (!result.isSuccessful()) {
+                        writer.write(localPath.toString().replace("\\", "/"));
                         writer.newLine();
+                        for (Problem problem : result.getProblems()) {
+                            writer.write(problem.getVerboseMessage());
+                            writer.newLine();
+                        }
                     }
                 }
                 return DONT_SAVE;
