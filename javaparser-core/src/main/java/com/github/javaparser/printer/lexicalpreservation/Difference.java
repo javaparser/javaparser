@@ -2,7 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.printer.TokenConstants;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
@@ -303,7 +303,7 @@ public class Difference {
                 res.clear();
                 afterNl = true;
             } else {
-                if (afterNl && e instanceof TokenTextElement && TokenConstants.isWhitespace(((TokenTextElement)e).getTokenKind())) {
+                if (afterNl && e instanceof TokenTextElement && TokenTypes.isWhitespace(((TokenTextElement)e).getTokenKind())) {
                     res.add(e);
                 } else {
                     afterNl = false;
@@ -386,7 +386,7 @@ public class Difference {
                     Kept kept = (Kept) diffEl;
                     if (kept.element instanceof CsmToken) {
                         CsmToken csmToken = (CsmToken) kept.element;
-                        if (TokenConstants.isWhitespaceOrComment(csmToken.getTokenType())) {
+                        if (TokenTypes.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
                         } else {
                             throw new IllegalStateException("Cannot keep element because we reached the end of nodetext: "
@@ -425,7 +425,7 @@ public class Difference {
                         if (textElement.isNewline()) {
                             used = true;
                         }
-                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenConstants.eolToken()));
+                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenTypes.eolToken()));
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
                         }
@@ -473,7 +473,7 @@ public class Difference {
                         if (csmToken.getTokenType() == nodeTextToken.getTokenKind()) {
                             nodeTextIndex++;
                             diffIndex++;
-                        } else if (TokenConstants.isWhitespaceOrComment(csmToken.getTokenType())) {
+                        } else if (TokenTypes.isWhitespaceOrComment(csmToken.getTokenType())) {
                             diffIndex++;
                         } else if (nodeTextToken.isWhiteSpaceOrComment()) {
                             nodeTextIndex++;

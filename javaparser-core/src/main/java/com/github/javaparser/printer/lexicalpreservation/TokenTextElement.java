@@ -24,7 +24,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.TokenConstants;
+import com.github.javaparser.TokenTypes;
 
 import static com.github.javaparser.utils.Utils.EOL;
 
@@ -34,7 +34,7 @@ class TokenTextElement extends TextElement {
     private String text;
 
     public static TokenTextElement newLine() {
-        return new TokenTextElement(TokenConstants.eolToken(), EOL);
+        return new TokenTextElement(TokenTypes.eolToken(), EOL);
     }
 
     TokenTextElement(JavaToken token) {
@@ -51,9 +51,9 @@ class TokenTextElement extends TextElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (TokenConstants.isEndOfLineCharacter(tokenKind)) {
+        if (TokenTypes.isEndOfLineCharacter(tokenKind)) {
             content = EOL;
-        } else if (TokenConstants.isWhitespace(tokenKind)) {
+        } else if (TokenTypes.isWhitespace(tokenKind)) {
             content = " ";
         }
         this.tokenKind = tokenKind;
@@ -111,21 +111,21 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isWhiteSpace() {
-        return TokenConstants.isWhitespace(tokenKind);
+        return TokenTypes.isWhitespace(tokenKind);
     }
 
     @Override
     public boolean isSpaceOrTab() {
-        return TokenConstants.isSpaceOrTab(tokenKind);
+        return TokenTypes.isSpaceOrTab(tokenKind);
     }
 
     @Override
     public boolean isComment() {
-        return TokenConstants.isComment(tokenKind);
+        return TokenTypes.isComment(tokenKind);
     }
 
     @Override
     public boolean isNewline() {
-        return TokenConstants.isEndOfLineCharacter(tokenKind);
+        return TokenTypes.isEndOfLineCharacter(tokenKind);
     }
 }

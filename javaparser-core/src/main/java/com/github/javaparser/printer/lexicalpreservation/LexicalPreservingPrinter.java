@@ -32,7 +32,6 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.TokenConstants;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.utils.Pair;
@@ -47,7 +46,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
-import static com.github.javaparser.printer.TokenConstants.eolToken;
+import static com.github.javaparser.TokenTypes.eolToken;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**

@@ -28,8 +28,8 @@ import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.Arrays;
 
-import static com.github.javaparser.printer.TokenConstants.eolToken;
-import static com.github.javaparser.printer.TokenConstants.spaceToken;
+import static com.github.javaparser.TokenTypes.eolToken;
+import static com.github.javaparser.TokenTypes.spaceToken;
 import static com.github.javaparser.utils.Utils.EOL;
 
 

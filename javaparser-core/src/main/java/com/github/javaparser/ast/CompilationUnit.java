@@ -289,7 +289,7 @@ public final class CompilationUnit extends Node {
         }
         i.append(";");
         ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
-        if (getImports().stream().anyMatch( im -> im.toString().equals(importDeclaration.toString())))
+        if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
             return this;
         else {
             getImports().add(importDeclaration);
@@ -395,7 +395,7 @@ public final class CompilationUnit extends Node {
      * @param className the class name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map( t -> (ClassOrInterfaceDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
@@ -404,7 +404,7 @@ public final class CompilationUnit extends Node {
      * @param interfaceName the interface name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getInterfaceByName(String interfaceName) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(interfaceName) && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map( t -> (ClassOrInterfaceDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName) && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
@@ -413,7 +413,7 @@ public final class CompilationUnit extends Node {
      * @param enumName the enum name (case-sensitive)
      */
     public Optional<EnumDeclaration> getEnumByName(String enumName) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(enumName) && type instanceof EnumDeclaration).findFirst().map( t -> (EnumDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(enumName) && type instanceof EnumDeclaration).findFirst().map(t -> (EnumDeclaration) t);
     }
 
     /**
@@ -422,7 +422,7 @@ public final class CompilationUnit extends Node {
      * @param annotationName the annotation name (case-sensitive)
      */
     public Optional<AnnotationDeclaration> getAnnotationDeclarationByName(String annotationName) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map( t -> (AnnotationDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map(t -> (AnnotationDeclaration) t);
     }
 
     @Override

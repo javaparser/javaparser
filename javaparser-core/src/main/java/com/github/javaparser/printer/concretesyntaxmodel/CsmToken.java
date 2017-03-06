@@ -24,11 +24,11 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.printer.TokenConstants;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.utils.Utils;
 
-import static com.github.javaparser.printer.TokenConstants.isEndOfLineCharacter;
-import static com.github.javaparser.printer.TokenConstants.isSpaceOrTab;
+import static com.github.javaparser.TokenTypes.isEndOfLineCharacter;
+import static com.github.javaparser.TokenTypes.isSpaceOrTab;
 
 
 public class CsmToken implements CsmElement {
@@ -109,6 +109,6 @@ public class CsmToken implements CsmElement {
     }
 
     public boolean isWhiteSpace() {
-        return TokenConstants.isWhitespace(tokenType);
+        return TokenTypes.isWhitespace(tokenType);
     }
 }

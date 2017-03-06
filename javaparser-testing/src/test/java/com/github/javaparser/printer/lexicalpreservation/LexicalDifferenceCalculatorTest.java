@@ -18,8 +18,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.EnumSet;
 
-import static com.github.javaparser.printer.TokenConstants.eolToken;
-import static com.github.javaparser.printer.TokenConstants.spaceToken;
+import static com.github.javaparser.TokenTypes.eolToken;
+import static com.github.javaparser.TokenTypes.spaceToken;
 import static org.junit.Assert.assertEquals;
 
 public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
