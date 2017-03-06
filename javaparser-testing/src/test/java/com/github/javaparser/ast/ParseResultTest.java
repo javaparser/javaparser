@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParseResultTest {
@@ -56,6 +57,6 @@ public class ParseResultTest {
         assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"exports\" \"module\" \"open\" \"opens\" \"provides\" \"requires\" \"to\" \"transitive\" \"uses\" \"with\" <IDENTIFIER>");
         assertThat(result.getTokens().isPresent()).isTrue();
 
-        assertThat(result.toString()).startsWith("Parsing failed:\n(line 1,col 1) Parse error.");
+        assertThat(result.toString()).startsWith("Parsing failed:" + EOL + "(line 1,col 1) Parse error.");
     }
 }

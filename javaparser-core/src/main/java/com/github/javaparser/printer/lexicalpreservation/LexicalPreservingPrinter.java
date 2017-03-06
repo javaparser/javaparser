@@ -32,7 +32,6 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.TokenConstants;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.utils.Pair;
@@ -47,7 +46,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
-import static com.github.javaparser.printer.TokenConstants.NEWLINE_TOKEN;
+import static com.github.javaparser.TokenTypes.eolToken;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
@@ -117,7 +116,7 @@ public class LexicalPreservingPrinter {
                         // Find the position of the comment node and put in front of it the comment and a newline
                         int index = nodeText.findChild(observedNode);
                         nodeText.addChild(index, (Comment)newValue);
-                        nodeText.addToken(index + 1, NEWLINE_TOKEN, Utils.EOL);
+                        nodeText.addToken(index + 1, eolToken(), Utils.EOL);
                     } else if (oldValue != null && newValue == null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment javadocComment = (JavadocComment)oldValue;
@@ -128,7 +127,7 @@ public class LexicalPreservingPrinter {
                             }
                             int index = nodeText.findElement(matchingTokens.get(0));
                             nodeText.removeElement(index);
-                            if (nodeText.getElements().get(index).isToken(NEWLINE_TOKEN)) {
+                            if (nodeText.getElements().get(index).isNewline()) {
                                 nodeText.removeElement(index);
                             }
                         } else {
@@ -334,7 +333,7 @@ public class LexicalPreservingPrinter {
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
             if (tte.getTokenKind() == GeneratedJavaParserConstants.SINGLE_LINE_COMMENT
-                    || tte.getTokenKind() == TokenConstants.NEWLINE_TOKEN) {
+                    || tte.isNewline()) {
                 break;
             } else {
                 followingNewlines.add(tte);

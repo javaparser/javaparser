@@ -28,6 +28,8 @@ import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.Arrays;
 
+import static com.github.javaparser.TokenTypes.eolToken;
+import static com.github.javaparser.TokenTypes.spaceToken;
 import static com.github.javaparser.utils.Utils.EOL;
 
 
@@ -80,7 +82,7 @@ public interface CsmElement {
     }
 
     static CsmElement space() {
-        return new CsmToken(1, " ");
+        return new CsmToken(spaceToken(), " ");
     }
 
     static CsmElement semicolon() {
@@ -90,7 +92,7 @@ public interface CsmElement {
     static CsmElement comment() { return new CsmComment(); }
 
     static CsmElement newline() {
-        return new CsmToken(3, EOL);
+        return new CsmToken(eolToken(), EOL);
     }
 
     static CsmElement none() {

@@ -278,36 +278,37 @@ PARSER_END(GeneratedJavaParser)
 
 SPECIAL_TOKEN :
 {
-  " "
-| "\t"
-| "\n"
-| "\r"
-| "\f"
-| "\u0085"
-| "\u00A0"
-| "\u1680"
-| "\u180e"
-| "\u2000"
-| "\u2001"
-| "\u2002"
-| "\u2003"
-| "\u2004"
-| "\u2005"
-| "\u2006"
-| "\u2007"
-| "\u2008"
-| "\u2009"
-| "\u200a"
-| "\u200b"
-| "\u200c"
-| "\u200d"
-| "\u2028"
-| "\u2029"
-| "\u202f"
-| "\u205f"
-| "\u2060"
-| "\u3000"
-| "\ufeff"
+  <SPACE: " ">
+| <WINDOWS_EOL : "\r\n">
+| <TAB: "\t">
+| <UNIX_EOL: "\n">
+| <OLD_MAC_EOL: "\r">
+| <FORM_FEED: "\f">
+| <NEXT_LINE: "\u0085">
+| <NON_BREAKING_SPACE: "\u00A0">
+| <OGHAM_SPACE: "\u1680">
+| <MONGOLIAN_VOWEL_SEPARATOR: "\u180e">
+| <EN_QUAD: "\u2000">
+| <EM_QUAD: "\u2001">
+| <EN_SPACE: "\u2002">
+| <EM_SPACE: "\u2003">
+| <THREE_PER_EM_SPACE: "\u2004">
+| <FOUR_PER_EM_SPACE: "\u2005">
+| <SIX_PER_EM_SPACE: "\u2006">
+| <FIGURE_SPACE: "\u2007">
+| <PUNCTUATION_SPACE: "\u2008">
+| <THIN_SPACE: "\u2009">
+| <HAIR_SPACE: "\u200a">
+| <ZERO_WIDTH_SPACE: "\u200b">
+| <ZERO_WIDTH_NON_JOINER: "\u200c">
+| <ZERO_WIDTH_JOINER: "\u200d">
+| <LINE_SEPARATOR: "\u2028">
+| <PARAGRAPH_SEPARATOR: "\u2029">
+| <NARROW_NO_BREAK_SPACE: "\u202f">
+| <MEDIUM_MATHEMATICAL_SPACE: "\u205f">
+| <WORD_JOINER: "\u2060">
+| <IDEOGRAPHIC_SPACE: "\u3000">
+| <ZERO_WIDTH_NO_BREAK_SPACE: "\ufeff">
 }
 
 TOKEN_MGR_DECLS :

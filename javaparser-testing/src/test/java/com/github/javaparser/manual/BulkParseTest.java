@@ -15,9 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
-import static com.github.javaparser.utils.TestUtils.download;
-import static com.github.javaparser.utils.TestUtils.temporaryDirectory;
-import static com.github.javaparser.utils.TestUtils.unzip;
+import static com.github.javaparser.utils.TestUtils.*;
 
 public class BulkParseTest {
     /**
@@ -29,7 +27,7 @@ public class BulkParseTest {
     }
 
     private void parseOpenJdk() throws IOException {
-        Path workdir = CodeGenerationUtils.mavenModuleRoot().resolve(Paths.get(temporaryDirectory(), "javaparser_openjdk_download"));
+        Path workdir = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get(temporaryDirectory(), "javaparser_openjdk_download"));
         workdir.toFile().mkdirs();
         Path openJdkZipPath = workdir.resolve("openjdk.zip");
         if (Files.notExists(openJdkZipPath)) {
@@ -46,21 +44,23 @@ public class BulkParseTest {
 
     @Test
     public void parseOwnSourceCode() throws IOException {
-        bulkTest(new SourceRoot(CodeGenerationUtils.mavenModuleRoot().resolve("..")), "javaparser_test_results.txt");
+        bulkTest(new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), "javaparser_test_results.txt");
     }
 
     public void bulkTest(SourceRoot sourceRoot, String testResultsFileName) throws IOException {
-        Path testResults = CodeGenerationUtils.mavenModuleRoot().resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
+        Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
         try (BufferedWriter writer = Files.newBufferedWriter(testResults)) {
             sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
-                if (!result.isSuccessful()) {
-                    writer.write(localPath.toString());
-                    writer.newLine();
-                    for (Problem problem : result.getProblems()) {
-                        writer.write(problem.getVerboseMessage());
+                if (!localPath.toString().contains("target")) {
+                    if (!result.isSuccessful()) {
+                        writer.write(localPath.toString().replace("\\", "/"));
                         writer.newLine();
+                        for (Problem problem : result.getProblems()) {
+                            writer.write(problem.getVerboseMessage());
+                            writer.newLine();
+                        }
                     }
                 }
                 return DONT_SAVE;

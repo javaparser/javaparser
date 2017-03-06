@@ -68,7 +68,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
 
     @Override
     public void visit(NodeList n, Integer arg) {
-        ((NodeList<Node>) n).forEach( x -> x.accept(this, arg));
+        ((NodeList<Node>) n).forEach(x -> x.accept(this, arg));
     }
 
     public void visit(AnnotationDeclaration n, Integer arg) {
@@ -77,18 +77,18 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getMembers().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(AnnotationMemberDeclaration n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
-        n.getDefaultValue().ifPresent( c -> c.accept(this, arg + 1));
+        n.getDefaultValue().ifPresent(c -> c.accept(this, arg + 1));
         n.getName().accept(this, arg + 1);
         n.getType().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -96,31 +96,31 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getIndex().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ArrayCreationExpr n, Integer arg) {
         enterNode(n, arg);
         n.getElementType().accept(this, arg + 1);
-        n.getInitializer().ifPresent( c -> c.accept(this, arg + 1));
+        n.getInitializer().ifPresent(c -> c.accept(this, arg + 1));
         n.getLevels().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ArrayCreationLevel n, Integer arg) {
         enterNode(n, arg);
         n.getAnnotations().accept(this, arg + 1);
-        n.getDimension().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getDimension().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ArrayInitializerExpr n, Integer arg) {
         enterNode(n, arg);
         n.getValues().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -128,15 +128,15 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getComponentType().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(AssertStmt n, Integer arg) {
         enterNode(n, arg);
         n.getCheck().accept(this, arg + 1);
-        n.getMessage().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getMessage().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -145,7 +145,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "operator", n.getOperator(), arg + 1);
         n.getTarget().accept(this, arg + 1);
         n.getValue().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -154,35 +154,35 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "operator", n.getOperator(), arg + 1);
         n.getLeft().accept(this, arg + 1);
         n.getRight().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(BlockComment n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "content", n.getContent(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(BlockStmt n, Integer arg) {
         enterNode(n, arg);
         n.getStatements().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(BooleanLiteralExpr n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "value", n.getValue(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(BreakStmt n, Integer arg) {
         enterNode(n, arg);
-        n.getLabel().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getLabel().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -190,7 +190,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getExpression().accept(this, arg + 1);
         n.getType().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -198,21 +198,21 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getBody().accept(this, arg + 1);
         n.getParameter().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(CharLiteralExpr n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "value", n.getValue(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ClassExpr n, Integer arg) {
         enterNode(n, arg);
         n.getType().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -226,27 +226,27 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getMembers().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ClassOrInterfaceType n, Integer arg) {
         enterNode(n, arg);
         n.getName().accept(this, arg + 1);
-        n.getScope().ifPresent( c -> c.accept(this, arg + 1));
-        n.getTypeArguments().ifPresent( c -> c.accept(this, arg + 1));
+        n.getScope().ifPresent(c -> c.accept(this, arg + 1));
+        n.getTypeArguments().ifPresent(c -> c.accept(this, arg + 1));
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(CompilationUnit n, Integer arg) {
         enterNode(n, arg);
         n.getImports().accept(this, arg + 1);
-        n.getModule().ifPresent( c -> c.accept(this, arg + 1));
-        n.getPackageDeclaration().ifPresent( c -> c.accept(this, arg + 1));
+        n.getModule().ifPresent(c -> c.accept(this, arg + 1));
+        n.getPackageDeclaration().ifPresent(c -> c.accept(this, arg + 1));
         n.getTypes().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -255,7 +255,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getCondition().accept(this, arg + 1);
         n.getElseExpr().accept(this, arg + 1);
         n.getThenExpr().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -268,14 +268,14 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getThrownExceptions().accept(this, arg + 1);
         n.getTypeParameters().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ContinueStmt n, Integer arg) {
         enterNode(n, arg);
-        n.getLabel().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getLabel().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -283,34 +283,34 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getBody().accept(this, arg + 1);
         n.getCondition().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(DoubleLiteralExpr n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "value", n.getValue(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(EmptyMemberDeclaration n, Integer arg) {
         enterNode(n, arg);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(EmptyStmt n, Integer arg) {
         enterNode(n, arg);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(EnclosedExpr n, Integer arg) {
         enterNode(n, arg);
-        n.getInner().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getInner().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -320,7 +320,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getClassBody().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -332,7 +332,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getMembers().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -340,25 +340,25 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "isThis", n.isThis(), arg + 1);
         n.getArguments().accept(this, arg + 1);
-        n.getExpression().ifPresent( c -> c.accept(this, arg + 1));
-        n.getTypeArguments().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getExpression().ifPresent(c -> c.accept(this, arg + 1));
+        n.getTypeArguments().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ExpressionStmt n, Integer arg) {
         enterNode(n, arg);
         n.getExpression().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(FieldAccessExpr n, Integer arg) {
         enterNode(n, arg);
         n.getName().accept(this, arg + 1);
-        n.getScope().ifPresent( c -> c.accept(this, arg + 1));
-        n.getTypeArguments().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getScope().ifPresent(c -> c.accept(this, arg + 1));
+        n.getTypeArguments().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -367,17 +367,17 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
         n.getVariables().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ForStmt n, Integer arg) {
         enterNode(n, arg);
         n.getBody().accept(this, arg + 1);
-        n.getCompare().ifPresent( c -> c.accept(this, arg + 1));
+        n.getCompare().ifPresent(c -> c.accept(this, arg + 1));
         n.getInitialization().accept(this, arg + 1);
         n.getUpdate().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -386,16 +386,16 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getBody().accept(this, arg + 1);
         n.getIterable().accept(this, arg + 1);
         n.getVariable().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(IfStmt n, Integer arg) {
         enterNode(n, arg);
         n.getCondition().accept(this, arg + 1);
-        n.getElseStmt().ifPresent( c -> c.accept(this, arg + 1));
+        n.getElseStmt().ifPresent(c -> c.accept(this, arg + 1));
         n.getThenStmt().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -404,7 +404,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "isAsterisk", n.isAsterisk(), arg + 1);
         outputProperty(n, "isStatic", n.isStatic(), arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -413,7 +413,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "isStatic", n.isStatic(), arg + 1);
         n.getBody().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -421,14 +421,14 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getExpression().accept(this, arg + 1);
         n.getType().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(IntegerLiteralExpr n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "value", n.getValue(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -436,14 +436,14 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getElements().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(JavadocComment n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "content", n.getContent(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -451,7 +451,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getLabel().accept(this, arg + 1);
         n.getStatement().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -460,35 +460,35 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "isEnclosingParameters", n.isEnclosingParameters(), arg + 1);
         n.getBody().accept(this, arg + 1);
         n.getParameters().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(LineComment n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "content", n.getContent(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(LocalClassDeclarationStmt n, Integer arg) {
         enterNode(n, arg);
         n.getClassDeclaration().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(LongLiteralExpr n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "value", n.getValue(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(MarkerAnnotationExpr n, Integer arg) {
         enterNode(n, arg);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -496,7 +496,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getName().accept(this, arg + 1);
         n.getValue().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -504,9 +504,9 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getArguments().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getScope().ifPresent( c -> c.accept(this, arg + 1));
-        n.getTypeArguments().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getScope().ifPresent(c -> c.accept(this, arg + 1));
+        n.getTypeArguments().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -514,14 +514,14 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "isDefault", n.isDefault(), arg + 1);
         outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
-        n.getBody().ifPresent( c -> c.accept(this, arg + 1));
+        n.getBody().ifPresent(c -> c.accept(this, arg + 1));
         n.getType().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
         n.getParameters().accept(this, arg + 1);
         n.getThrownExceptions().accept(this, arg + 1);
         n.getTypeParameters().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -529,15 +529,15 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "identifier", n.getIdentifier(), arg + 1);
         n.getScope().accept(this, arg + 1);
-        n.getTypeArguments().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getTypeArguments().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(NameExpr n, Integer arg) {
         enterNode(n, arg);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -545,8 +545,8 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "identifier", n.getIdentifier(), arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getQualifier().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getQualifier().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -554,24 +554,24 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getPairs().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(NullLiteralExpr n, Integer arg) {
         enterNode(n, arg);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ObjectCreationExpr n, Integer arg) {
         enterNode(n, arg);
-        n.getAnonymousClassBody().ifPresent( c -> c.accept(this, arg + 1));
+        n.getAnonymousClassBody().ifPresent(c -> c.accept(this, arg + 1));
         n.getArguments().accept(this, arg + 1);
-        n.getScope().ifPresent( c -> c.accept(this, arg + 1));
+        n.getScope().ifPresent(c -> c.accept(this, arg + 1));
         n.getType().accept(this, arg + 1);
-        n.getTypeArguments().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getTypeArguments().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -579,7 +579,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getAnnotations().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -591,7 +591,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getName().accept(this, arg + 1);
         n.getType().accept(this, arg + 1);
         n.getVarArgsAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -599,21 +599,21 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "type", n.getType(), arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ReturnStmt n, Integer arg) {
         enterNode(n, arg);
-        n.getExpression().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getExpression().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(SimpleName n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "identifier", n.getIdentifier(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -621,29 +621,29 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getMemberValue().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(StringLiteralExpr n, Integer arg) {
         enterNode(n, arg);
         outputProperty(n, "value", n.getValue(), arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(SuperExpr n, Integer arg) {
         enterNode(n, arg);
-        n.getClassExpr().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getClassExpr().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(SwitchEntryStmt n, Integer arg) {
         enterNode(n, arg);
-        n.getLabel().ifPresent( c -> c.accept(this, arg + 1));
+        n.getLabel().ifPresent(c -> c.accept(this, arg + 1));
         n.getStatements().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -651,7 +651,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getEntries().accept(this, arg + 1);
         n.getSelector().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -659,38 +659,38 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getBody().accept(this, arg + 1);
         n.getExpression().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ThisExpr n, Integer arg) {
         enterNode(n, arg);
-        n.getClassExpr().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getClassExpr().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(ThrowStmt n, Integer arg) {
         enterNode(n, arg);
         n.getExpression().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(TryStmt n, Integer arg) {
         enterNode(n, arg);
         n.getCatchClauses().accept(this, arg + 1);
-        n.getFinallyBlock().ifPresent( c -> c.accept(this, arg + 1));
+        n.getFinallyBlock().ifPresent(c -> c.accept(this, arg + 1));
         n.getResources().accept(this, arg + 1);
-        n.getTryBlock().ifPresent( c -> c.accept(this, arg + 1));
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getTryBlock().ifPresent(c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(TypeExpr n, Integer arg) {
         enterNode(n, arg);
         n.getType().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -699,7 +699,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getName().accept(this, arg + 1);
         n.getTypeBound().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -707,7 +707,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "operator", n.getOperator(), arg + 1);
         n.getExpression().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -715,14 +715,14 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getElements().accept(this, arg + 1);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(UnknownType n, Integer arg) {
         enterNode(n, arg);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -731,23 +731,23 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
         n.getAnnotations().accept(this, arg + 1);
         n.getVariables().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(VariableDeclarator n, Integer arg) {
         enterNode(n, arg);
-        n.getInitializer().ifPresent( c -> c.accept(this, arg + 1));
+        n.getInitializer().ifPresent(c -> c.accept(this, arg + 1));
         n.getName().accept(this, arg + 1);
         n.getType().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(VoidType n, Integer arg) {
         enterNode(n, arg);
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -755,16 +755,16 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getBody().accept(this, arg + 1);
         n.getCondition().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
     public void visit(WildcardType n, Integer arg) {
         enterNode(n, arg);
-        n.getExtendedType().ifPresent( c -> c.accept(this, arg + 1));
-        n.getSuperType().ifPresent( c -> c.accept(this, arg + 1));
+        n.getExtendedType().ifPresent(c -> c.accept(this, arg + 1));
+        n.getSuperType().ifPresent(c -> c.accept(this, arg + 1));
         n.getAnnotations().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -774,7 +774,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         n.getAnnotations().accept(this, arg + 1);
         n.getModuleStmts().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -782,7 +782,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         outputProperty(n, "modifiers", n.getModifiers(), arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -791,7 +791,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getModuleNames().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -800,7 +800,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getType().accept(this, arg + 1);
         n.getWithTypes().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -808,7 +808,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
     public void visit(ModuleUsesStmt n, Integer arg) {
         enterNode(n, arg);
         n.getType().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 
@@ -817,7 +817,7 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         enterNode(n, arg);
         n.getModuleNames().accept(this, arg + 1);
         n.getName().accept(this, arg + 1);
-        n.getComment().ifPresent( c -> c.accept(this, arg + 1));
+        n.getComment().ifPresent(c -> c.accept(this, arg + 1));
         exitNode(n, arg);
     }
 }
