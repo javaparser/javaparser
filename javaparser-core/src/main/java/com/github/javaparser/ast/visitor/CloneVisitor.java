@@ -171,7 +171,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         BlockStmt body = cloneNode(n.getBody(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
-        NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
+        NodeList<ReferenceType<?>> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -186,7 +186,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Type type = cloneNode(n.getType(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
-        NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
+        NodeList<ReferenceType<?>> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -277,7 +277,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(IntersectionType n, Object arg) {
-        NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
+        NodeList<ReferenceType<?>> elements = cloneList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         IntersectionType r = new IntersectionType(n.getRange().orElse(null), elements);
@@ -287,7 +287,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(UnionType n, Object arg) {
-        NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
+        NodeList<ReferenceType<?>> elements = cloneList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         UnionType r = new UnionType(n.getRange().orElse(null), elements);
