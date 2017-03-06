@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
 import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
@@ -128,7 +129,7 @@ public class SourceRoot {
     private void save(CompilationUnit cu, Path path) throws IOException {
         Files.createDirectories(path.getParent());
         final String code = new PrettyPrinter().print(cu);
-        Files.write(path, code.getBytes());
+        Files.write(path, code.getBytes(UTF8));
     }
 
     /**
