@@ -20,6 +20,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -103,7 +104,12 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
-        throw new UnsupportedOperationException();
+        for (AnnotationExpr annotationExpr : wrappedNode.getAnnotations()) {
+            if (solveType(annotationExpr.getName().getId(), typeSolver).getCorrespondingDeclaration().getQualifiedName().equals(canonicalName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
