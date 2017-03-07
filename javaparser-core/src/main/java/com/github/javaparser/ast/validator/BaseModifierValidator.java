@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.LambdaExpr;
@@ -10,7 +9,6 @@ import com.github.javaparser.ast.modules.ModuleRequiresStmt;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
 import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.ArrayList;
@@ -19,59 +17,60 @@ import java.util.List;
 import static com.github.javaparser.ast.Modifier.*;
 import static java.util.Arrays.binarySearch;
 
+
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class BaseModifierValidator extends VisitorValidator {
+
+
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
-        n.getParentNode().ifPresent(parent -> {
-            if (parent instanceof CompilationUnit) {
-                // top level
-                if (n.isInterface()) {
-                    validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP);
-                } else {
-                    validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP);
-                }
-            } else if (parent instanceof ClassOrInterfaceDeclaration) {
-                // nested
-                if (n.isInterface()) {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP);
-                } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
-                }
-            } else if (parent instanceof LocalClassDeclarationStmt) {
-                if (!n.isInterface()) {
-                    // local class
-                    validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
-                }
-            } else {
-                throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
-            }
-            super.visit(n, reporter);
-        });
+        if (n.isInterface()) {
+            validateInterfaceModifiers(n, reporter);
+        } else {
+            validateClassModifiers(n, reporter);
+        }
+        super.visit(n, reporter);
+    }
+
+    private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
+        if (n.isTopLevelType()) {
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP);
+        } else if (n.isNestedType()) {
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
+        } else if (n.isLocalClassDeclaration()) {
+            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
+        } else {
+            throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
+        }
+    }
+
+    private void validateInterfaceModifiers(TypeDeclaration<?> n, ProblemReporter reporter) {
+        if (n.isTopLevelType()) {
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP);
+        } else if (n.isNestedType()) {
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP);
+        }
     }
 
     @Override
     public void visit(EnumDeclaration n, ProblemReporter reporter) {
-        n.getParentNode().ifPresent(parent -> {
-                    if (parent instanceof CompilationUnit) {
-                        // top level
-                        validateModifiers(n, reporter, PUBLIC, STRICTFP);
-                    } else if (parent instanceof ClassOrInterfaceDeclaration) {
-                        // nested
-                        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
-                    } else {
-                        throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
-                    }
-                }
-        );
+        if (n.isTopLevelType()) {
+            validateModifiers(n, reporter, PUBLIC, STRICTFP);
+        } else if (n.isNestedType()) {
+            // nested
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
+        } else {
+            throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
+        }
         super.visit(n, reporter);
     }
 
     // AnnotationTypeDeclaration
     @Override
     public void visit(AnnotationDeclaration n, ProblemReporter reporter) {
+        validateInterfaceModifiers(n, reporter);
         super.visit(n, reporter);
     }
 
