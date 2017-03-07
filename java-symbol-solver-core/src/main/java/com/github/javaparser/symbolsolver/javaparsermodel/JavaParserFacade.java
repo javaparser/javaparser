@@ -55,6 +55,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 public class JavaParserFacade {
 
     private static Logger logger = Logger.getLogger(JavaParserFacade.class.getCanonicalName());
+    private Map<ClassOrInterfaceDeclaration, ReferenceTypeDeclaration> declarationsCache = new WeakHashMap<>();
 
     static {
         logger.setLevel(Level.INFO);
@@ -487,6 +488,13 @@ public class JavaParserFacade {
     }
 
     public ReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+        if (!declarationsCache.containsKey(classOrInterfaceDeclaration)) {
+            declarationsCache.put(classOrInterfaceDeclaration, getTypeDeclarationImpl(classOrInterfaceDeclaration));
+        }
+        return declarationsCache.get(classOrInterfaceDeclaration);
+    }
+
+    private ReferenceTypeDeclaration getTypeDeclarationImpl(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
         if (classOrInterfaceDeclaration.isInterface()) {
             return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration, typeSolver);
         } else {

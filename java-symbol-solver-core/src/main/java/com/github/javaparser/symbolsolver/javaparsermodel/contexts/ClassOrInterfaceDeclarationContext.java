@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
@@ -26,6 +27,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
+import com.github.javaparser.utils.Pair;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,7 +89,10 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
+        System.out.println("<" + System.identityHashCode(this)+ ">solvingType " + name + " START");
+        SymbolReference<TypeDeclaration> res = javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
+        System.out.println("<" + System.identityHashCode(this)+ ">solvingType " + name + " DONE");
+        return res;
     }
 
     @Override
@@ -104,10 +109,6 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     ///
 
     private ReferenceTypeDeclaration getDeclaration() {
-        if (this.wrappedNode.isInterface()) {
-            return new JavaParserInterfaceDeclaration(this.wrappedNode, typeSolver);
-        } else {
-            return new JavaParserClassDeclaration(this.wrappedNode, typeSolver);
-        }
+        return JavaParserFacade.get(typeSolver).getTypeDeclaration(this.wrappedNode);
     }
 }

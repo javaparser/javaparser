@@ -17,6 +17,7 @@ import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +29,7 @@ public class JavaParserTypeDeclarationAdapter {
     private TypeSolver typeSolver;
     private Context context;
     private ReferenceTypeDeclaration typeDeclaration;
+    private Stack<String> namesBeingSolved = new Stack<>();
 
     public JavaParserTypeDeclarationAdapter(com.github.javaparser.ast.body.TypeDeclaration<?> wrappedNode, TypeSolver typeSolver,
                                             ReferenceTypeDeclaration typeDeclaration,
@@ -39,6 +41,10 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+        boolean loop = namesBeingSolved.contains(name);
+
+        System.out.println("<"+System.identityHashCode(this)+">ADAPTER START ON "+name);
+        namesBeingSolved.add(name);
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
@@ -68,14 +74,18 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Look into extended classes and implemented interfaces
-        for (ReferenceType ancestor : this.typeDeclaration.getAncestors()) {
-            for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
-                if (internalTypeDeclaration.getName().equals(name)) {
-                    return SymbolReference.solved(internalTypeDeclaration);
+        if (!loop) {
+            for (ReferenceType ancestor : this.typeDeclaration.getAncestors()) {
+                for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+                    if (internalTypeDeclaration.getName().equals(name)) {
+                        return SymbolReference.solved(internalTypeDeclaration);
+                    }
                 }
             }
         }
 
+        System.out.println("<"+System.identityHashCode(this)+">ADAPTER START ON "+name+ " ABOUT TO END");
+        namesBeingSolved.remove(name);
         return context.getParent().solveType(name, typeSolver);
     }
 
