@@ -22,8 +22,6 @@ import static java.util.Arrays.binarySearch;
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class BaseModifierValidator extends VisitorValidator {
-
-
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isInterface()) {
@@ -41,8 +39,6 @@ public class BaseModifierValidator extends VisitorValidator {
             validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
         } else if (n.isLocalClassDeclaration()) {
             validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
-        } else {
-            throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
         }
     }
 
@@ -61,8 +57,6 @@ public class BaseModifierValidator extends VisitorValidator {
         } else if (n.isNestedType()) {
             // nested
             validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
-        } else {
-            throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
         }
         super.visit(n, reporter);
     }
