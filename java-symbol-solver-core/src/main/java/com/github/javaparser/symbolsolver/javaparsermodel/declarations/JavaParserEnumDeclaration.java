@@ -22,6 +22,7 @@ import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -304,5 +305,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     @Override
     public AccessLevel accessLevel() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<ReferenceTypeDeclaration> internalTypes() {
+        Set<ReferenceTypeDeclaration> res = new HashSet<>();
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+            }
+        }
+        return res;
     }
 }

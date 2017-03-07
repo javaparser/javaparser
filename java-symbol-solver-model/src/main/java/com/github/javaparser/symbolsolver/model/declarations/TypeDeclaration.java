@@ -35,7 +35,7 @@ public interface TypeDeclaration extends Declaration {
      * Get the list of types defined inside the current type.
      */
     default Set<ReferenceTypeDeclaration> internalTypes() {
-        throw new UnsupportedOperationException("InternalTypes not available for " + this);
+        throw new UnsupportedOperationException("InternalTypes not available for " + this.getClass().getCanonicalName());
     }
 
     /**
