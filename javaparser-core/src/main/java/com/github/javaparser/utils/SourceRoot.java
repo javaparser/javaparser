@@ -46,7 +46,7 @@ public class SourceRoot {
     private JavaParser javaParser = new JavaParser();
 
     public SourceRoot(Path root) {
-        if (Files.isRegularFile(root)) {
+        if (!Files.isDirectory(root)) {
             throw new IllegalArgumentException("Only directories are allowed as root path!");
         }
         this.root = root.normalize();
