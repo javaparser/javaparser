@@ -70,6 +70,11 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
         return res;
     }
 
+    @Override
+    public ParameterDeclaration asParameter() {
+        return this;
+    }
+
     /**
      * Returns the JavaParser node associated with this JavaParserParameterDeclaration.
      *
@@ -78,4 +83,6 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
     public Parameter getWrappedNode() {
         return wrappedNode;
     }
+
+
 }
