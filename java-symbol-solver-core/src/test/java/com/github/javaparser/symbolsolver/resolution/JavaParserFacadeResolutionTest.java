@@ -20,8 +20,10 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -92,5 +94,24 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isParameter());
         assertEquals("e", symbolReference.getCorrespondingDeclaration().asParameter().getName());
         assertEquals("java.lang.UnsupportedOperationException", symbolReference.getCorrespondingDeclaration().asParameter().getType().asReferenceType().getQualifiedName());
+    }
+
+    // See issue 47
+    @Test
+    public void solvingReferenceToAnAncestorInternalClass() {
+        String code = "public class Foo {\n" +
+                "    public class Base {\n" +
+                "        public class X {\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    public class Derived extends Base {\n" +
+                "        public X x = null;\n" +
+                "    }\n" +
+                "}";
+        FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(JavaParser.parse(code), FieldDeclaration.class);
+        Type jpType = fieldDeclaration.getCommonType();
+        com.github.javaparser.symbolsolver.model.typesystem.Type jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
+        assertEquals("Foo.Base.X", jssType.asReferenceType().getQualifiedName());
     }
 }

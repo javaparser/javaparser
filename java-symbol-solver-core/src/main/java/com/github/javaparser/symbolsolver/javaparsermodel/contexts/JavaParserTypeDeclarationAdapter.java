@@ -67,6 +67,15 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
+        // Look into extended classes and implemented interfaces
+        for (ReferenceType ancestor : this.typeDeclaration.getAncestors()) {
+            for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+                if (internalTypeDeclaration.getName().equals(name)) {
+                    return SymbolReference.solved(internalTypeDeclaration);
+                }
+            }
+        }
+
         return context.getParent().solveType(name, typeSolver);
     }
 
