@@ -18,6 +18,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 1) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 1) 'transient' is not allowed here.",
                 "(line 1,col 1) 'volatile' is not allowed here.",
                 "(line 1,col 1) 'private' is not allowed here.",
@@ -35,6 +37,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 9) 'transient' is not allowed here.",
                 "(line 1,col 9) 'volatile' is not allowed here.",
                 "(line 1,col 9) 'synchronized' is not allowed here.",
@@ -49,6 +53,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 20) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 20) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 20) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 20) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 20) 'transient' is not allowed here.",
                 "(line 1,col 20) 'volatile' is not allowed here.",
                 "(line 1,col 20) 'synchronized' is not allowed here.",
@@ -67,6 +73,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 1) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 1) 'transient' is not allowed here.",
                 "(line 1,col 1) 'volatile' is not allowed here.",
                 "(line 1,col 1) 'synchronized' is not allowed here.",
@@ -85,6 +93,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 9) 'transient' is not allowed here.",
                 "(line 1,col 9) 'volatile' is not allowed here.",
                 "(line 1,col 9) 'final' is not allowed here.",
@@ -108,6 +118,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 1) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 1) 'transient' is not allowed here.",
                 "(line 1,col 1) 'volatile' is not allowed here.",
                 "(line 1,col 1) 'synchronized' is not allowed here.",
@@ -127,6 +139,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 9) 'transient' is not allowed here.",
                 "(line 1,col 9) 'volatile' is not allowed here.",
                 "(line 1,col 9) 'abstract' is not allowed here.",
@@ -143,6 +157,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 1) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 1) 'transient' is not allowed here.",
                 "(line 1,col 1) 'volatile' is not allowed here.",
                 "(line 1,col 1) 'synchronized' is not allowed here.",
@@ -161,6 +177,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 9) 'transient' is not allowed here.",
                 "(line 1,col 9) 'volatile' is not allowed here.",
                 "(line 1,col 9) 'final' is not allowed here.",
@@ -176,6 +194,8 @@ public class BaseModifierValidatorTest {
         assertProblems(result,
                 "(line 1,col 14) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 14) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 14) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 14) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 14) 'transient' is not allowed here.",
                 "(line 1,col 14) 'volatile' is not allowed here.",
                 "(line 1,col 14) 'final' is not allowed here.",
@@ -191,10 +211,12 @@ public class BaseModifierValidatorTest {
 
     @Test
     public void moduleRequires() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("module x{requires " + allModifiers + " a;\n}"));
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("module x{requires " + allModifiers + " a;}"));
         assertProblems(result,
                 "(line 1,col 10) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 10) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 10) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 10) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
                 "(line 1,col 10) 'transient' is not allowed here.",
                 "(line 1,col 10) 'volatile' is not allowed here.",
                 "(line 1,col 10) 'final' is not allowed here.",
@@ -205,6 +227,48 @@ public class BaseModifierValidatorTest {
                 "(line 1,col 10) 'strictfp' is not allowed here.",
                 "(line 1,col 10) 'abstract' is not allowed here.",
                 "(line 1,col 10) 'public' is not allowed here."
+        );
+    }
+
+    @Test
+    public void constructor() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "X(){};}"));
+        assertProblems(result,
+                "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 9) 'transient' is not allowed here.",
+                "(line 1,col 9) 'volatile' is not allowed here.",
+                "(line 1,col 9) 'final' is not allowed here.",
+                "(line 1,col 9) 'synchronized' is not allowed here.",
+                "(line 1,col 9) 'native' is not allowed here.",
+                "(line 1,col 9) 'strictfp' is not allowed here.",
+                "(line 1,col 9) 'abstract' is not allowed here.",
+                "(line 1,col 9) 'static' is not allowed here.",
+                "(line 1,col 9) 'transitive' is not allowed here."
+        );
+    }
+
+    @Test
+    public void constructorParameter() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{X("+allModifiers +" int i){};}"));
+        assertProblems(result,
+                "(line 1,col 11) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 11) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 11) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 11) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 11) 'transient' is not allowed here.",
+                "(line 1,col 11) 'volatile' is not allowed here.",
+                "(line 1,col 11) 'synchronized' is not allowed here.",
+                "(line 1,col 11) 'native' is not allowed here.",
+                "(line 1,col 11) 'strictfp' is not allowed here.",
+                "(line 1,col 11) 'abstract' is not allowed here.",
+                "(line 1,col 11) 'static' is not allowed here.",
+                "(line 1,col 11) 'transitive' is not allowed here.",
+                "(line 1,col 11) 'private' is not allowed here.",
+                "(line 1,col 11) 'public' is not allowed here.",
+                "(line 1,col 11) 'protected' is not allowed here."
         );
     }
 

@@ -11,6 +11,7 @@ import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.*;
@@ -59,24 +60,22 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // AnnotationTypeDeclaration
     @Override
     public void visit(AnnotationDeclaration n, ProblemReporter reporter) {
         validateInterfaceModifiers(n, reporter);
         super.visit(n, reporter);
     }
 
-    // AnnotationTypeMemberDeclaration
     @Override
     public void visit(AnnotationMemberDeclaration n, ProblemReporter reporter) {
         validateModifiers(n, reporter, PUBLIC, ABSTRACT);
         super.visit(n, reporter);
     }
 
-    // ConstructorDeclaration
-    // Parameter in MethodDeclaration or ConstructorDeclaration
     @Override
     public void visit(ConstructorDeclaration n, ProblemReporter reporter) {
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE);
+        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
         super.visit(n, reporter);
     }
 
@@ -90,6 +89,8 @@ public class BaseModifierValidator extends VisitorValidator {
     // Parameter in MethodDeclaration or ConstructorDeclaration
     @Override
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
+        // TODO public protected private abstract static final synchronized native strictfp
+        n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
         super.visit(n, reporter);
     }
 
@@ -121,6 +122,18 @@ public class BaseModifierValidator extends VisitorValidator {
     private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
+        validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
+        if (n.isAbstract()) {
+            SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
+            for (Modifier m : Arrays.asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
+                if (n.getModifiers().contains(m)) {
+                    builder.append(m.asString());
+                }
+            }
+            if (builder.hasItems()) {
+                reporter.report(n, builder.toString());
+            }
+        }
         n.getModifiers().forEach(m -> {
             if (!arrayContains(allowedModifiers, m)) {
                 reporter.report(n, "'%s' is not allowed here.", m.asString());
