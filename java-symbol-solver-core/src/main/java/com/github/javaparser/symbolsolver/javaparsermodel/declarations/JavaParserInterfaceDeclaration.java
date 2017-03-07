@@ -250,7 +250,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 
     ///
