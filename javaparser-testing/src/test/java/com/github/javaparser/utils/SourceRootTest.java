@@ -27,4 +27,10 @@ public class SourceRootTest {
             }
         }
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void fileAsRootIsNotAllowed() {
+        String path = SourceRootTest.class.getResource("/com/github/javaparser/utils/Bla.java").getPath();
+        new SourceRoot(Paths.get(path));
+    }
 }

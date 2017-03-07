@@ -7,8 +7,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +24,6 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
 import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.SAVE;
-import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
-import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system.
@@ -50,6 +46,9 @@ public class SourceRoot {
     private JavaParser javaParser = new JavaParser();
 
     public SourceRoot(Path root) {
+        if (!Files.isDirectory(root)) {
+            throw new IllegalArgumentException("Only directories are allowed as root path!");
+        }
         this.root = root.normalize();
         Log.info("New source root at \"%s\"", this.root);
     }
@@ -128,14 +127,9 @@ public class SourceRoot {
     }
 
     private void save(CompilationUnit cu, Path path) throws IOException {
-        path.getParent().toFile().mkdirs();
-
+        Files.createDirectories(path.getParent());
         final String code = new PrettyPrinter().print(cu);
-        try (PrintWriter out = new PrintWriter(path.toFile(), UTF8.toString())) {
-            out.println(code);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        Files.write(path, code.getBytes(UTF8));
     }
 
     /**
