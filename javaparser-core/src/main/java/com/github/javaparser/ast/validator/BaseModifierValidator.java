@@ -45,41 +45,27 @@ public class BaseModifierValidator extends VisitorValidator {
                     // local class
                     validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP);
                 }
+            } else {
+                throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
             }
-            // Can't validate this class without a context
             super.visit(n, reporter);
         });
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
-        validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
-        validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
-        n.getModifiers().forEach(m -> {
-            if (binarySearch(allowedModifiers, m) < 0) {
-                reporter.report(n, "'%s' is not allowed here.", m.asString());
-            }
-        });
-    }
-
-    private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier... modifiers) {
-        List<Modifier> foundModifiers = new ArrayList<>();
-        for (Modifier m : modifiers) {
-            if (t.getModifiers().contains(m)) {
-                foundModifiers.add(m);
-            }
-        }
-        if (foundModifiers.size() > 1) {
-            SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Can have only one of '", "', '", "'.");
-            for (Modifier m : foundModifiers) {
-                builder.append(m.asString());
-            }
-            reporter.report(t, builder.toString());
-        }
-    }
-
-    // EnumDeclaration
     @Override
     public void visit(EnumDeclaration n, ProblemReporter reporter) {
+        n.getParentNode().ifPresent(parent -> {
+                    if (parent instanceof CompilationUnit) {
+                        // top level
+                        validateModifiers(n, reporter, PUBLIC, STRICTFP);
+                    } else if (parent instanceof ClassOrInterfaceDeclaration) {
+                        // nested
+                        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
+                    } else {
+                        throw new AssertionError("Class or interface not expected here. Please report a bug on JavaParser.");
+                    }
+                }
+        );
         super.visit(n, reporter);
     }
 
@@ -145,5 +131,30 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // Can't have public, protected, and/or private at the same time.
+    private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
+        validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
+        validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
+        n.getModifiers().forEach(m -> {
+            if (binarySearch(allowedModifiers, m) < 0) {
+                reporter.report(n, "'%s' is not allowed here.", m.asString());
+            }
+        });
+    }
+
+    private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier... modifiers) {
+        List<Modifier> foundModifiers = new ArrayList<>();
+        for (Modifier m : modifiers) {
+            if (t.getModifiers().contains(m)) {
+                foundModifiers.add(m);
+            }
+        }
+        if (foundModifiers.size() > 1) {
+            SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Can have only one of '", "', '", "'.");
+            for (Modifier m : foundModifiers) {
+                builder.append(m.asString());
+            }
+            reporter.report(t, builder.toString());
+        }
+    }
+
 }
