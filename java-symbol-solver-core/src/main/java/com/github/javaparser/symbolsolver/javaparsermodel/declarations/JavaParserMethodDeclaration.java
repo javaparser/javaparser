@@ -146,6 +146,6 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 }

@@ -308,7 +308,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 
     ///
