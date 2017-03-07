@@ -16,12 +16,15 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -38,5 +41,27 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         TypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(clazz);
         ReferenceType superclass = typeDeclaration.asClass().getSuperClass();
         assertEquals(Object.class.getCanonicalName(), superclass.getQualifiedName());
+    }
+
+    // See issue 42
+    @Test
+    public void solvingReferenceToUnsupportedOperationException() {
+        String code = "public class Bla {\n" +
+                "    public void main()\n" +
+                "    {\n" +
+                "        try\n" +
+                "        {\n" +
+                "            int i = 0;\n" +
+                "        }\n" +
+                "        catch (UnsupportedOperationException e)\n" +
+                "        {\n" +
+                "            String s;\n" +
+                "            e.getMessage();\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(methodCallExpr);
+        assertEquals("java.lang.Throwable.getMessage()", methodUsage.getQualifiedSignature());
     }
 }
