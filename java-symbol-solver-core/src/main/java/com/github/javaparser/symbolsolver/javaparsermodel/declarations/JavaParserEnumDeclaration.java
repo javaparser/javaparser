@@ -297,7 +297,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public AccessLevel accessLevel() {
-            throw new UnsupportedOperationException();
+            return Helper.toAccessLevel(enumDeclaration.getWrappedNode().getModifiers());
         }
     }
 

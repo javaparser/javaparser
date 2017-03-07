@@ -63,7 +63,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return Helper.toAccessLevel(wrapped.getModifiers());
     }
 
     @Override
