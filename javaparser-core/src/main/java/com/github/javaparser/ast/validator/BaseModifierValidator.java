@@ -4,7 +4,6 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.modules.ModuleRequiresStmt;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.*;
-import static java.util.Arrays.binarySearch;
 
 
 /**
@@ -71,12 +69,7 @@ public class BaseModifierValidator extends VisitorValidator {
     // AnnotationTypeMemberDeclaration
     @Override
     public void visit(AnnotationMemberDeclaration n, ProblemReporter reporter) {
-        super.visit(n, reporter);
-    }
-
-    // ModuleDeclaration
-    @Override
-    public void visit(ModuleDeclaration n, ProblemReporter reporter) {
+        validateModifiers(n, reporter, PUBLIC, ABSTRACT);
         super.visit(n, reporter);
     }
 
@@ -121,6 +114,7 @@ public class BaseModifierValidator extends VisitorValidator {
     // ModuleRequiresStmt
     @Override
     public void visit(ModuleRequiresStmt n, ProblemReporter reporter) {
+        validateModifiers(n, reporter, TRANSITIVE, STATIC);
         super.visit(n, reporter);
     }
 
@@ -128,10 +122,19 @@ public class BaseModifierValidator extends VisitorValidator {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         n.getModifiers().forEach(m -> {
-            if (binarySearch(allowedModifiers, m) < 0) {
+            if (!arrayContains(allowedModifiers, m)) {
                 reporter.report(n, "'%s' is not allowed here.", m.asString());
             }
         });
+    }
+
+    private boolean arrayContains(Object[] items, Object searchItem) {
+        for (Object o : items) {
+            if (o == searchItem) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier... modifiers) {
