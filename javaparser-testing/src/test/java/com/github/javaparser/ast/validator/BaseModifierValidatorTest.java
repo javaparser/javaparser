@@ -368,4 +368,26 @@ public class BaseModifierValidatorTest {
         );
     }
 
+    @Test
+    public void catchParameter() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch("+ allModifiers +" Integer x){}}}"));
+        assertProblems(result,
+                "(line 1,col 136) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 136) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 136) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 136) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 136) 'transient' is not allowed here.",
+                "(line 1,col 136) 'volatile' is not allowed here.",
+                "(line 1,col 136) 'synchronized' is not allowed here.",
+                "(line 1,col 136) 'native' is not allowed here.",
+                "(line 1,col 136) 'strictfp' is not allowed here.",
+                "(line 1,col 136) 'abstract' is not allowed here.",
+                "(line 1,col 136) 'static' is not allowed here.",
+                "(line 1,col 136) 'transitive' is not allowed here.",
+                "(line 1,col 136) 'private' is not allowed here.",
+                "(line 1,col 136) 'public' is not allowed here.",
+                "(line 1,col 136) 'protected' is not allowed here."
+        );
+    }
+
 }

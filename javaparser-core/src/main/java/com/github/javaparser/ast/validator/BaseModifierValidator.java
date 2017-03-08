@@ -100,9 +100,9 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // Parameter in CatchClause
     @Override
     public void visit(CatchClause n, ProblemReporter reporter) {
+        validateModifiers(n.getParameter(), reporter, FINAL);
         super.visit(n, reporter);
     }
 
