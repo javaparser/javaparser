@@ -268,7 +268,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ReferenceType> getAncestors() {
-        System.out.println("<"+System.identityHashCode(this)+"> getAncestors START");
         List<ReferenceType> ancestors = new ArrayList<>();
         ReferenceType superclass = getSuperClass();
         if (superclass != null) {
@@ -280,7 +279,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
                 ancestors.add(ancestor);
             }
         }
-        System.out.println("<"+System.identityHashCode(this)+"> getAncestors DONE");
         return ancestors;
     }
 
