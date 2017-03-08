@@ -29,7 +29,6 @@ public class JavaParserTypeDeclarationAdapter {
     private TypeSolver typeSolver;
     private Context context;
     private ReferenceTypeDeclaration typeDeclaration;
-    private Stack<String> namesBeingSolved = new Stack<>();
 
     public JavaParserTypeDeclarationAdapter(com.github.javaparser.ast.body.TypeDeclaration<?> wrappedNode, TypeSolver typeSolver,
                                             ReferenceTypeDeclaration typeDeclaration,
@@ -41,9 +40,6 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        boolean loop = namesBeingSolved.contains(name);
-
-        namesBeingSolved.add(name);
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
         }
@@ -73,17 +69,14 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Look into extended classes and implemented interfaces
-        if (!loop) {
-            for (ReferenceType ancestor : this.typeDeclaration.getAncestors()) {
-                for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
-                    if (internalTypeDeclaration.getName().equals(name)) {
-                        return SymbolReference.solved(internalTypeDeclaration);
-                    }
+        for (ReferenceType ancestor : this.typeDeclaration.getAncestors()) {
+            for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+                if (internalTypeDeclaration.getName().equals(name)) {
+                    return SymbolReference.solved(internalTypeDeclaration);
                 }
             }
         }
 
-        namesBeingSolved.remove(name);
         return context.getParent().solveType(name, typeSolver);
     }
 
