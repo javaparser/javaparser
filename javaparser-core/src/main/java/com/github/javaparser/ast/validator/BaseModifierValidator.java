@@ -86,6 +86,17 @@ public class BaseModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
+        if (n.isAbstract()) {
+            final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
+            for (Modifier m : Arrays.asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
+                if (n.getModifiers().contains(m)) {
+                    builder.append(m.asString());
+                }
+            }
+            if (builder.hasItems()) {
+                reporter.report(n, builder.toString());
+            }
+        }
         validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
         n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
         super.visit(n, reporter);
@@ -122,17 +133,6 @@ public class BaseModifierValidator extends VisitorValidator {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
-        if (n.isAbstract()) {
-            SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
-            for (Modifier m : Arrays.asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
-                if (n.getModifiers().contains(m)) {
-                    builder.append(m.asString());
-                }
-            }
-            if (builder.hasItems()) {
-                reporter.report(n, builder.toString());
-            }
-        }
         n.getModifiers().forEach(m -> {
             if (!arrayContains(allowedModifiers, m)) {
                 reporter.report(n, "'%s' is not allowed here.", m.asString());
