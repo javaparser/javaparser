@@ -103,4 +103,3 @@ public class ModuleOpensStmt extends ModuleStmt implements NodeWithName<ModuleOp
         return JavaParserMetaModel.moduleOpensStmtMetaModel;
     }
 }
-

@@ -222,4 +222,3 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return JavaParserMetaModel.fieldDeclarationMetaModel;
     }
 }
-

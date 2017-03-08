@@ -206,4 +206,3 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         return JavaParserMetaModel.fieldAccessExprMetaModel;
     }
 }
-

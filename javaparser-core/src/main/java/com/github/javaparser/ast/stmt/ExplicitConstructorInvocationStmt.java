@@ -212,4 +212,3 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return JavaParserMetaModel.explicitConstructorInvocationStmtMetaModel;
     }
 }
-

@@ -101,4 +101,3 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         return JavaParserMetaModel.classExprMetaModel;
     }
 }
-

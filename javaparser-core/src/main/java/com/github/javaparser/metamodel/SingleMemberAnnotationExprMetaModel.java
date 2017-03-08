@@ -10,4 +10,3 @@ public class SingleMemberAnnotationExprMetaModel extends AnnotationExprMetaModel
 
     public PropertyMetaModel memberValuePropertyMetaModel;
 }
-

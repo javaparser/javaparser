@@ -81,4 +81,3 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         return JavaParserMetaModel.integerLiteralExprMetaModel;
     }
 }
-

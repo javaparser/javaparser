@@ -12,4 +12,3 @@ public class AssertStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel messagePropertyMetaModel;
 }
-

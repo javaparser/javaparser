@@ -83,4 +83,3 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         return JavaParserMetaModel.emptyMemberDeclarationMetaModel;
     }
 }
-

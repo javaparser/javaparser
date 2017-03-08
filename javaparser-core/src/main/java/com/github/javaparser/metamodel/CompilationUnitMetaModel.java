@@ -16,4 +16,3 @@ public class CompilationUnitMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel typesPropertyMetaModel;
 }
-

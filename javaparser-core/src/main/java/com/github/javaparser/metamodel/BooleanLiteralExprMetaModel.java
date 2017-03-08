@@ -10,4 +10,3 @@ public class BooleanLiteralExprMetaModel extends LiteralExprMetaModel {
 
     public PropertyMetaModel valuePropertyMetaModel;
 }
-

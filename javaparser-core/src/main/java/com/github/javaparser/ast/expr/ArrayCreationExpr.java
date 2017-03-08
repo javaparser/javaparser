@@ -202,4 +202,3 @@ public final class ArrayCreationExpr extends Expression {
         return JavaParserMetaModel.arrayCreationExprMetaModel;
     }
 }
-

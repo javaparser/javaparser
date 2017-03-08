@@ -19,4 +19,3 @@ public class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

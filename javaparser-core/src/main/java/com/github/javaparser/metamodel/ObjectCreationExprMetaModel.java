@@ -20,4 +20,3 @@ public class ObjectCreationExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }
-

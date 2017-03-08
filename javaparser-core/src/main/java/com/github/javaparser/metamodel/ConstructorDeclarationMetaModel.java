@@ -10,4 +10,3 @@ public class ConstructorDeclarationMetaModel extends CallableDeclarationMetaMode
 
     public PropertyMetaModel bodyPropertyMetaModel;
 }
-

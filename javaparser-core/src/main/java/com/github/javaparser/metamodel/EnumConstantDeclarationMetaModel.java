@@ -14,4 +14,3 @@ public class EnumConstantDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

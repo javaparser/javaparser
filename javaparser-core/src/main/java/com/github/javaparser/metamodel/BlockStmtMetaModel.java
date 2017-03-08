@@ -10,4 +10,3 @@ public class BlockStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel statementsPropertyMetaModel;
 }
-

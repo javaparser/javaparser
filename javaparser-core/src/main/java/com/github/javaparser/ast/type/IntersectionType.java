@@ -119,4 +119,3 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         return JavaParserMetaModel.intersectionTypeMetaModel;
     }
 }
-

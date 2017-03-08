@@ -121,4 +121,3 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         return JavaParserMetaModel.instanceOfExprMetaModel;
     }
 }
-

@@ -72,4 +72,3 @@ public final class EmptyStmt extends Statement {
         return JavaParserMetaModel.emptyStmtMetaModel;
     }
 }
-

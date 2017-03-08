@@ -92,4 +92,3 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         return JavaParserMetaModel.booleanLiteralExprMetaModel;
     }
 }
-

@@ -8,4 +8,3 @@ public class MarkerAnnotationExprMetaModel extends AnnotationExprMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.MarkerAnnotationExpr.class, "MarkerAnnotationExpr", "com.github.javaparser.ast.expr", false, false);
     }
 }
-

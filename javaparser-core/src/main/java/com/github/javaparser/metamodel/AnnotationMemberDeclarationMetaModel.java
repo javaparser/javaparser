@@ -16,4 +16,3 @@ public class AnnotationMemberDeclarationMetaModel extends BodyDeclarationMetaMod
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

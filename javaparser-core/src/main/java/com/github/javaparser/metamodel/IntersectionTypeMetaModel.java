@@ -10,4 +10,3 @@ public class IntersectionTypeMetaModel extends TypeMetaModel {
 
     public PropertyMetaModel elementsPropertyMetaModel;
 }
-

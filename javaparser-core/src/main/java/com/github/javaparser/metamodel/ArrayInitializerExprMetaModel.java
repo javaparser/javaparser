@@ -10,4 +10,3 @@ public class ArrayInitializerExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel valuesPropertyMetaModel;
 }
-

@@ -185,4 +185,3 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return JavaParserMetaModel.arrayTypeMetaModel;
     }
 }
-

@@ -10,4 +10,3 @@ public class UnionTypeMetaModel extends TypeMetaModel {
 
     public PropertyMetaModel elementsPropertyMetaModel;
 }
-

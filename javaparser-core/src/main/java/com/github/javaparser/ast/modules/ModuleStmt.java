@@ -29,4 +29,3 @@ public abstract class ModuleStmt extends Node {
         return JavaParserMetaModel.moduleStmtMetaModel;
     }
 }
-

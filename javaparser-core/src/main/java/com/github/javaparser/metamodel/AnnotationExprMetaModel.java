@@ -15,4 +15,3 @@ public class AnnotationExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

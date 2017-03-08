@@ -83,4 +83,3 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
         return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }
 }
-

@@ -14,4 +14,3 @@ public class VariableDeclaratorMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

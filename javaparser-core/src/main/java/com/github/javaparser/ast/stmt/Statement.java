@@ -54,4 +54,3 @@ public abstract class Statement extends Node {
         return JavaParserMetaModel.statementMetaModel;
     }
 }
-

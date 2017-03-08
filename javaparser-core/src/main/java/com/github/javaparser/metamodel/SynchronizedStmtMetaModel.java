@@ -12,4 +12,3 @@ public class SynchronizedStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel expressionPropertyMetaModel;
 }
-

@@ -201,4 +201,3 @@ public enum ObservableProperty {
         return Utils.valueIsNullOrEmpty(getRawValue(node));
     }
 }
-

@@ -8,4 +8,3 @@ public class UnknownTypeMetaModel extends TypeMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.type.UnknownType.class, "UnknownType", "com.github.javaparser.ast.type", false, false);
     }
 }
-

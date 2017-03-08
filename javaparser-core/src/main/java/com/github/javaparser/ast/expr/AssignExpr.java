@@ -144,4 +144,3 @@ public final class AssignExpr extends Expression {
         return JavaParserMetaModel.assignExprMetaModel;
     }
 }
-

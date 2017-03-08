@@ -103,4 +103,3 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         return JavaParserMetaModel.nameExprMetaModel;
     }
 }
-

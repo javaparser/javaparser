@@ -68,4 +68,3 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         return JavaParserMetaModel.literalStringValueExprMetaModel;
     }
 }
-

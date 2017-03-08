@@ -16,4 +16,3 @@ public class ModuleDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

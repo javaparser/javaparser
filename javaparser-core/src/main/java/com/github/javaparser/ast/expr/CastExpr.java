@@ -120,4 +120,3 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         return JavaParserMetaModel.castExprMetaModel;
     }
 }
-

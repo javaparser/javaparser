@@ -111,4 +111,3 @@ public final class EnclosedExpr extends Expression {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }
 }
-

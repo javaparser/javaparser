@@ -245,4 +245,3 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return JavaParserMetaModel.parameterMetaModel;
     }
 }
-

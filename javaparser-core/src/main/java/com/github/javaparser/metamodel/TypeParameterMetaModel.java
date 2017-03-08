@@ -12,4 +12,3 @@ public class TypeParameterMetaModel extends ReferenceTypeMetaModel {
 
     public PropertyMetaModel typeBoundPropertyMetaModel;
 }
-

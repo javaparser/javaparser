@@ -102,4 +102,3 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         return JavaParserMetaModel.typeExprMetaModel;
     }
 }
-

@@ -414,4 +414,3 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
         return (n.getModuleNames().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }
-

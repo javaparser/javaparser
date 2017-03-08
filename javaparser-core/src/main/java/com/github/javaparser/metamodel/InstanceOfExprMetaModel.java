@@ -12,4 +12,3 @@ public class InstanceOfExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

@@ -93,4 +93,3 @@ public final class UnknownType extends Type {
         return JavaParserMetaModel.unknownTypeMetaModel;
     }
 }
-

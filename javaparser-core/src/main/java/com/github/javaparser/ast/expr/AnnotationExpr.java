@@ -84,4 +84,3 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         return JavaParserMetaModel.annotationExprMetaModel;
     }
 }
-

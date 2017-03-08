@@ -118,4 +118,3 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         return JavaParserMetaModel.whileStmtMetaModel;
     }
 }
-

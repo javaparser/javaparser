@@ -1270,4 +1270,3 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         return true;
     }
 }
-

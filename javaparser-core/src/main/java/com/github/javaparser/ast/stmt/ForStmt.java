@@ -190,4 +190,3 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return JavaParserMetaModel.forStmtMetaModel;
     }
 }
-

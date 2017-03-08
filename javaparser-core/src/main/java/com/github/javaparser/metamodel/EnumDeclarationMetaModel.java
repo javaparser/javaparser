@@ -12,4 +12,3 @@ public class EnumDeclarationMetaModel extends TypeDeclarationMetaModel {
 
     public PropertyMetaModel implementedTypesPropertyMetaModel;
 }
-

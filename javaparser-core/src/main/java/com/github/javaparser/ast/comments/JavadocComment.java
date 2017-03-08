@@ -82,4 +82,3 @@ public final class JavadocComment extends Comment {
         return JavaParserMetaModel.javadocCommentMetaModel;
     }
 }
-

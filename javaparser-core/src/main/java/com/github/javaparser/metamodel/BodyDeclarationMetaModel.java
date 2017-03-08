@@ -15,4 +15,3 @@ public class BodyDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel annotationsPropertyMetaModel;
 }
-

@@ -157,4 +157,3 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         return JavaParserMetaModel.packageDeclarationMetaModel;
     }
 }
-

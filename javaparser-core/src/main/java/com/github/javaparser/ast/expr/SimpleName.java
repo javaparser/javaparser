@@ -96,4 +96,3 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return JavaParserMetaModel.simpleNameMetaModel;
     }
 }
-
