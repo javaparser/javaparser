@@ -79,9 +79,9 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // FieldDeclaration
     @Override
     public void visit(FieldDeclaration n, ProblemReporter reporter) {
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE);
         super.visit(n, reporter);
     }
 

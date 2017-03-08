@@ -307,4 +307,20 @@ public class BaseModifierValidatorTest {
                 "(line 1,col 15) 'protected' is not allowed here."
         );
     }
+
+    @Test
+    public void field() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + " int i;}"));
+        assertProblems(result,
+                "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 9) 'synchronized' is not allowed here.",
+                "(line 1,col 9) 'native' is not allowed here.",
+                "(line 1,col 9) 'strictfp' is not allowed here.",
+                "(line 1,col 9) 'abstract' is not allowed here.",
+                "(line 1,col 9) 'transitive' is not allowed here."
+        );
+    }
 }
