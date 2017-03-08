@@ -104,9 +104,9 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // VariableDeclarationExpr
     @Override
     public void visit(VariableDeclarationExpr n, ProblemReporter reporter) {
+        validateModifiers(n, reporter, FINAL);
         super.visit(n, reporter);
     }
 

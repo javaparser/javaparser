@@ -310,7 +310,7 @@ public class BaseModifierValidatorTest {
 
     @Test
     public void field() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + " int i;}"));
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "int i;}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -323,4 +323,27 @@ public class BaseModifierValidatorTest {
                 "(line 1,col 9) 'transitive' is not allowed here."
         );
     }
+
+    @Test
+    public void localVariable() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(){" + allModifiers + "int i;}}"));
+        assertProblems(result,
+                "(line 1,col 17) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 17) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 17) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 17) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 17) 'transient' is not allowed here.",
+                "(line 1,col 17) 'volatile' is not allowed here.",
+                "(line 1,col 17) 'synchronized' is not allowed here.",
+                "(line 1,col 17) 'native' is not allowed here.",
+                "(line 1,col 17) 'strictfp' is not allowed here.",
+                "(line 1,col 17) 'abstract' is not allowed here.",
+                "(line 1,col 17) 'static' is not allowed here.",
+                "(line 1,col 17) 'transitive' is not allowed here.",
+                "(line 1,col 17) 'private' is not allowed here.",
+                "(line 1,col 17) 'public' is not allowed here.",
+                "(line 1,col 17) 'protected' is not allowed here."
+        );
+    }
+
 }
