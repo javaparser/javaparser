@@ -62,6 +62,8 @@ public class JavaParserFactory {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
         } else if (node instanceof SwitchEntryStmt) {
             return new SwitchEntryContext((SwitchEntryStmt) node, typeSolver);
+        } else if (node instanceof TryStmt) {
+            return new TryWithResourceContext((TryStmt) node, typeSolver);
         } else if (node instanceof Statement) {
             return new StatementContext<Statement>((Statement) node, typeSolver);
         } else if (node instanceof CatchClause) {

@@ -21,6 +21,7 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.Type;
@@ -113,5 +114,19 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         Type jpType = fieldDeclaration.getCommonType();
         com.github.javaparser.symbolsolver.model.typesystem.Type jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
         assertEquals("Foo.Base.X", jssType.asReferenceType().getQualifiedName());
+    }
+
+    // See issue 119
+    @Test
+    public void solveTryWithResourceVariable() {
+        String code = "import java.util.Scanner; class A { void foo() { try (Scanner sc = new Scanner(System.in)) {\n" +
+                "    sc.nextLine();\n" +
+                "} } }";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine");
+        Expression scope = methodCallExpr.getScope().get();
+        com.github.javaparser.symbolsolver.model.typesystem.Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);
+        assertEquals(true, type.isReferenceType());
+        assertEquals("java.util.Scanner", type.asReferenceType().getQualifiedName());
     }
 }
