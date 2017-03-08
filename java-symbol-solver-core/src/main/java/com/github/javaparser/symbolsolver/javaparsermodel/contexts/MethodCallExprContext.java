@@ -148,7 +148,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             try {
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("Issur calculating the type of the scope of " + this), e);
+                throw new RuntimeException(String.format("Issue calculating the type of the scope of " + this), e);
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
