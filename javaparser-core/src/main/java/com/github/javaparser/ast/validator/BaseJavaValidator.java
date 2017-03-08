@@ -53,7 +53,7 @@ public class BaseJavaValidator extends Validators {
                         if (n.isInterface()) {
                             n.getMethods().forEach(m -> {
                                 if (m.isDefault() && !m.getBody().isPresent()) {
-                                    reporter.report("\"default\" methods must have a body", n);
+                                    reporter.report("\"default\" methods must have a body", m);
                                 }
                             });
                         }
@@ -66,7 +66,7 @@ public class BaseJavaValidator extends Validators {
                         if (!n.isInterface()) {
                             n.getMethods().forEach(m -> {
                                 if (m.isDefault()) {
-                                    reporter.report("A class cannot have default members", n);
+                                    reporter.report("A class cannot have default members", m);
                                 }
                             });
                         }
