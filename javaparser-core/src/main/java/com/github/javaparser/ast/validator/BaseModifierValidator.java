@@ -85,11 +85,9 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // MethodDeclaration
-    // Parameter in MethodDeclaration or ConstructorDeclaration
     @Override
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
-        // TODO public protected private abstract static final synchronized native strictfp
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
         n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
         super.visit(n, reporter);
     }

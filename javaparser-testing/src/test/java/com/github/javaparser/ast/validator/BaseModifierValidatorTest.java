@@ -252,7 +252,7 @@ public class BaseModifierValidatorTest {
 
     @Test
     public void constructorParameter() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{X("+allModifiers +" int i){};}"));
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{X(" + allModifiers + " int i){};}"));
         assertProblems(result,
                 "(line 1,col 11) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 11) Can have only one of 'final', 'abstract'.",
@@ -272,4 +272,39 @@ public class BaseModifierValidatorTest {
         );
     }
 
+    @Test
+    public void method() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "int x(){};}"));
+        assertProblems(result,
+                "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 9) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 9) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 9) 'transient' is not allowed here.",
+                "(line 1,col 9) 'volatile' is not allowed here.",
+                "(line 1,col 9) 'transitive' is not allowed here."
+        );
+    }
+
+    @Test
+    public void methodParameter() {
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(" + allModifiers + " int i){};}"));
+        assertProblems(result,
+                "(line 1,col 15) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 15) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 15) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 15) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 15) 'transient' is not allowed here.",
+                "(line 1,col 15) 'volatile' is not allowed here.",
+                "(line 1,col 15) 'synchronized' is not allowed here.",
+                "(line 1,col 15) 'native' is not allowed here.",
+                "(line 1,col 15) 'strictfp' is not allowed here.",
+                "(line 1,col 15) 'abstract' is not allowed here.",
+                "(line 1,col 15) 'static' is not allowed here.",
+                "(line 1,col 15) 'transitive' is not allowed here.",
+                "(line 1,col 15) 'private' is not allowed here.",
+                "(line 1,col 15) 'public' is not allowed here.",
+                "(line 1,col 15) 'protected' is not allowed here."
+        );
+    }
 }
