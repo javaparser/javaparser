@@ -152,4 +152,3 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return JavaParserMetaModel.moduleDeclarationMetaModel;
     }
 }
-

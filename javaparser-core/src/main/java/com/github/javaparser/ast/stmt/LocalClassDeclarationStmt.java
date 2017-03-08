@@ -99,4 +99,3 @@ public final class LocalClassDeclarationStmt extends Statement {
         return JavaParserMetaModel.localClassDeclarationStmtMetaModel;
     }
 }
-

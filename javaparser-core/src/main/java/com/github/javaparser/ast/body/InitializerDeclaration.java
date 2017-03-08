@@ -119,4 +119,3 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         return JavaParserMetaModel.initializerDeclarationMetaModel;
     }
 }
-

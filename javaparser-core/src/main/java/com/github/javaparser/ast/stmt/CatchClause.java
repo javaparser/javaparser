@@ -132,4 +132,3 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return JavaParserMetaModel.catchClauseMetaModel;
     }
 }
-

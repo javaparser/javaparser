@@ -166,4 +166,3 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return JavaParserMetaModel.enumDeclarationMetaModel;
     }
 }
-

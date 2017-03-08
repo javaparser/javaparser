@@ -201,4 +201,3 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return JavaParserMetaModel.callableDeclarationMetaModel;
     }
 }
-

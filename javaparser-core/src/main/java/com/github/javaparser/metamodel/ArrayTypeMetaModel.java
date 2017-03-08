@@ -10,4 +10,3 @@ public class ArrayTypeMetaModel extends ReferenceTypeMetaModel {
 
     public PropertyMetaModel componentTypePropertyMetaModel;
 }
-

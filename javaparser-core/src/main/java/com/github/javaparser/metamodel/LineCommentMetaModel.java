@@ -8,4 +8,3 @@ public class LineCommentMetaModel extends CommentMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.LineComment.class, "LineComment", "com.github.javaparser.ast.comments", false, false);
     }
 }
-

@@ -141,4 +141,3 @@ public abstract class Comment extends Node {
         return JavaParserMetaModel.commentMetaModel;
     }
 }
-

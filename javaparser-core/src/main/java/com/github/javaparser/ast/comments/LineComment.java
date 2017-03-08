@@ -84,4 +84,3 @@ public final class LineComment extends Comment {
         return JavaParserMetaModel.lineCommentMetaModel;
     }
 }
-

@@ -116,4 +116,3 @@ public final class BreakStmt extends Statement {
         return JavaParserMetaModel.breakStmtMetaModel;
     }
 }
-

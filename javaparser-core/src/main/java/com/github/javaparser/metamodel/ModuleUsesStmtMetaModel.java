@@ -10,4 +10,3 @@ public class ModuleUsesStmtMetaModel extends ModuleStmtMetaModel {
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

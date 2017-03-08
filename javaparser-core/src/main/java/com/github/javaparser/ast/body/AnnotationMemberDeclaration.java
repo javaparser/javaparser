@@ -194,4 +194,3 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }
 }
-

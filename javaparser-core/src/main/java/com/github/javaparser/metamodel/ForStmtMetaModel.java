@@ -16,4 +16,3 @@ public class ForStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel updatePropertyMetaModel;
 }
-

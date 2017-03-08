@@ -206,4 +206,3 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }
 }
-

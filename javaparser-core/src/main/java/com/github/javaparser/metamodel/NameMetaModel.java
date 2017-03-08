@@ -14,4 +14,3 @@ public class NameMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel qualifierPropertyMetaModel;
 }
-

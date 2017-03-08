@@ -116,4 +116,3 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return JavaParserMetaModel.unionTypeMetaModel;
     }
 }
-

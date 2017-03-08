@@ -101,4 +101,3 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         return JavaParserMetaModel.throwStmtMetaModel;
     }
 }
-

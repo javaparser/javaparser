@@ -12,4 +12,3 @@ public class CatchClauseMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel parameterPropertyMetaModel;
 }
-

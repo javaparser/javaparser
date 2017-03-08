@@ -12,4 +12,3 @@ public class ModuleRequiresStmtMetaModel extends ModuleStmtMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

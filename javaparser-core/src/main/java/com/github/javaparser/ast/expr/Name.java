@@ -197,4 +197,3 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         return JavaParserMetaModel.nameMetaModel;
     }
 }
-

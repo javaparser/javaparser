@@ -92,4 +92,3 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         return JavaParserMetaModel.annotationDeclarationMetaModel;
     }
 }
-

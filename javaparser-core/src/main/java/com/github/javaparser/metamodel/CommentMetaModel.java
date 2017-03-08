@@ -15,4 +15,3 @@ public class CommentMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel contentPropertyMetaModel;
 }
-

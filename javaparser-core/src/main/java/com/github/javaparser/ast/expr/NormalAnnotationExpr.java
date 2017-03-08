@@ -128,4 +128,3 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }
 }
-

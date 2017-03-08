@@ -12,4 +12,3 @@ public class MemberValuePairMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel valuePropertyMetaModel;
 }
-

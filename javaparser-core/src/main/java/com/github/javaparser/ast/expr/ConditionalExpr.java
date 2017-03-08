@@ -130,4 +130,3 @@ public final class ConditionalExpr extends Expression {
         return JavaParserMetaModel.conditionalExprMetaModel;
     }
 }
-

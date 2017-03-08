@@ -12,4 +12,3 @@ public class WhileStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel conditionPropertyMetaModel;
 }
-

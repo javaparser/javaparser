@@ -8,4 +8,3 @@ public class VoidTypeMetaModel extends TypeMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.type.VoidType.class, "VoidType", "com.github.javaparser.ast.type", false, false);
     }
 }
-

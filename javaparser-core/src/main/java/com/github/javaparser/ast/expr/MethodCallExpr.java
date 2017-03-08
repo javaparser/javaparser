@@ -203,4 +203,3 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return JavaParserMetaModel.methodCallExprMetaModel;
     }
 }
-

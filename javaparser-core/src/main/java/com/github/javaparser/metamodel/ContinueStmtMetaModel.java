@@ -10,4 +10,3 @@ public class ContinueStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel labelPropertyMetaModel;
 }
-

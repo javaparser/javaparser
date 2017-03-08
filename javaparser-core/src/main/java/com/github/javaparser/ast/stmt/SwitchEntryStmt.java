@@ -159,4 +159,3 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return JavaParserMetaModel.switchEntryStmtMetaModel;
     }
 }
-

@@ -14,4 +14,3 @@ public class ConditionalExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel thenExprPropertyMetaModel;
 }
-

@@ -169,4 +169,3 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         return JavaParserMetaModel.typeParameterMetaModel;
     }
 }
-

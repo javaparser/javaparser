@@ -120,4 +120,3 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         return JavaParserMetaModel.memberValuePairMetaModel;
     }
 }
-

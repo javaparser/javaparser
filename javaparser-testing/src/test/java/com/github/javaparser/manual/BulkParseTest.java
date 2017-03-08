@@ -13,7 +13,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static com.github.javaparser.utils.TestUtils.*;
 
@@ -21,6 +25,7 @@ public class BulkParseTest {
     /**
      * Running this will download a version of the OpenJDK,
      * unzip it, and parse it.
+     * If it throws a stack overflow exception, increase the JVM's stack size.
      */
     public static void main(String[] args) throws IOException {
         new BulkParseTest().parseOpenJdk();
@@ -51,21 +56,32 @@ public class BulkParseTest {
         Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
-        try (BufferedWriter writer = Files.newBufferedWriter(testResults)) {
-            sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
-                if (!localPath.toString().contains("target")) {
-                    if (!result.isSuccessful()) {
-                        writer.write(localPath.toString().replace("\\", "/"));
-                        writer.newLine();
-                        for (Problem problem : result.getProblems()) {
-                            writer.write(problem.getVerboseMessage());
-                            writer.newLine();
-                        }
-                    }
+        TreeMap<Path, List<Problem>> results = new TreeMap<>();
+        sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
+            if (!localPath.toString().contains("target")) {
+                if (!result.isSuccessful()) {
+                    results.put(localPath, result.getProblems());
                 }
-                return DONT_SAVE;
-            });
+            }
+            return DONT_SAVE;
+        });
+        Log.info("Writing results...");
+
+        int problemTotal = 0;
+        try (BufferedWriter writer = Files.newBufferedWriter(testResults)) {
+            for (Map.Entry<Path, List<Problem>> file : results.entrySet()) {
+                writer.write(file.getKey().toString().replace("\\", "/"));
+                writer.newLine();
+                for (Problem problem : file.getValue()) {
+                    writer.write(problem.getVerboseMessage());
+                    writer.newLine();
+                    problemTotal++;
+                }
+                writer.newLine();
+            }
+            writer.write(f("%s problems in %s files", problemTotal, results.size()));
         }
+
         Log.info("Results are in %s", testResults);
     }
 }

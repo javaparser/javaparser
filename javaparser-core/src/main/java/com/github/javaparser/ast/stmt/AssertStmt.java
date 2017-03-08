@@ -134,4 +134,3 @@ public final class AssertStmt extends Statement {
         return JavaParserMetaModel.assertStmtMetaModel;
     }
 }
-

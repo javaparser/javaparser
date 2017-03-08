@@ -663,4 +663,3 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }
-

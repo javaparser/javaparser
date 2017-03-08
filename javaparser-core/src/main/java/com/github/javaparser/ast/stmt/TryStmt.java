@@ -203,4 +203,3 @@ public final class TryStmt extends Statement {
         return JavaParserMetaModel.tryStmtMetaModel;
     }
 }
-

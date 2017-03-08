@@ -14,4 +14,3 @@ public class ForeachStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel variablePropertyMetaModel;
 }
-

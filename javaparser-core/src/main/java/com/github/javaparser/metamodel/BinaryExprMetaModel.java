@@ -14,4 +14,3 @@ public class BinaryExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel rightPropertyMetaModel;
 }
-

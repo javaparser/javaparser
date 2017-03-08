@@ -73,4 +73,3 @@ public final class NullLiteralExpr extends LiteralExpr {
         return JavaParserMetaModel.nullLiteralExprMetaModel;
     }
 }
-

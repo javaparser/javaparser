@@ -80,4 +80,3 @@ public final class BlockComment extends Comment {
         return JavaParserMetaModel.blockCommentMetaModel;
     }
 }
-

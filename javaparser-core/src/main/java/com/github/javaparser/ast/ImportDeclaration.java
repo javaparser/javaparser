@@ -134,4 +134,3 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return JavaParserMetaModel.importDeclarationMetaModel;
     }
 }
-

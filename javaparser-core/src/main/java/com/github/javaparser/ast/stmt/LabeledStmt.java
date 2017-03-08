@@ -117,4 +117,3 @@ public final class LabeledStmt extends Statement {
         return JavaParserMetaModel.labeledStmtMetaModel;
     }
 }
-

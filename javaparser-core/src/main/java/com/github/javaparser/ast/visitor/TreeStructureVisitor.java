@@ -821,4 +821,3 @@ public class TreeStructureVisitor extends VoidVisitorAdapter<Integer> {
         exitNode(n, arg);
     }
 }
-

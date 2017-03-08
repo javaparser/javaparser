@@ -105,4 +105,3 @@ public abstract class Type extends Node {
         return JavaParserMetaModel.typeMetaModel;
     }
 }
-

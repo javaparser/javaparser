@@ -220,4 +220,3 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         return JavaParserMetaModel.variableDeclaratorMetaModel;
     }
 }
-

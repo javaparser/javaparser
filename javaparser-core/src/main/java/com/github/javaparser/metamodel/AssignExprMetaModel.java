@@ -14,4 +14,3 @@ public class AssignExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel valuePropertyMetaModel;
 }
-

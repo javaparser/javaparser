@@ -181,4 +181,3 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         return JavaParserMetaModel.primitiveTypeMetaModel;
     }
 }
-

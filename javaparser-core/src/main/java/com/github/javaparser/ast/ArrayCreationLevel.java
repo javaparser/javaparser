@@ -154,4 +154,3 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return JavaParserMetaModel.arrayCreationLevelMetaModel;
     }
 }
-

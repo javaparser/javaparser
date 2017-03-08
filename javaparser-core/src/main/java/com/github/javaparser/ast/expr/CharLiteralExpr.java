@@ -89,4 +89,3 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         return JavaParserMetaModel.charLiteralExprMetaModel;
     }
 }
-

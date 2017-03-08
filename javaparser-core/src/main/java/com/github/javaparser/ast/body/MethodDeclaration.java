@@ -256,4 +256,3 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return JavaParserMetaModel.methodDeclarationMetaModel;
     }
 }
-
