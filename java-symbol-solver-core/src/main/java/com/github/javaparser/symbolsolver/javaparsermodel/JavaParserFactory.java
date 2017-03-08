@@ -30,9 +30,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSy
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
@@ -40,16 +37,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
  */
 public class JavaParserFactory {
 
-    private static Map<Node, Context> cache = new WeakHashMap<>();
-
     public static Context getContext(Node node, TypeSolver typeSolver) {
-        if (!cache.containsKey(node)) {
-            cache.put(node, getContextImpl(node, typeSolver));
-        }
-        return cache.get(node);
-    }
-
-    private static Context getContextImpl(Node node, TypeSolver typeSolver) {
         if (node == null) {
             return null;
         } else if (node instanceof CompilationUnit) {

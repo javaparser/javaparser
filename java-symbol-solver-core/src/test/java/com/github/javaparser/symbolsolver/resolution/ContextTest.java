@@ -36,6 +36,7 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import org.junit.Test;
 
@@ -114,6 +115,8 @@ public class ContextTest extends AbstractTest {
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
+        expect(typeSolver.getRoot()).andReturn(typeSolver);
+        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
@@ -138,6 +141,8 @@ public class ContextTest extends AbstractTest {
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
         //expect(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.unsolved(ClassDeclaration.class));
+        expect(typeSolver.getRoot()).andReturn(typeSolver);
+        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
@@ -161,6 +166,8 @@ public class ContextTest extends AbstractTest {
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("my.packagez.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
+        expect(typeSolver.getRoot()).andReturn(typeSolver);
+        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         expect(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
@@ -185,6 +192,8 @@ public class ContextTest extends AbstractTest {
         expect(stringDecl.getQualifiedName()).andReturn("java.lang.String");
         TypeSolver typeSolver = createMock(TypeSolver.class);
         expect(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).andReturn(SymbolReference.unsolved(ReferenceTypeDeclaration.class));
+        expect(typeSolver.getRoot()).andReturn(typeSolver);
+        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         expect(typeSolver.tryToSolveType("java.lang.String")).andReturn(SymbolReference.solved(stringDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, stringDecl);
@@ -205,7 +214,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
 
         MethodUsage ref = symbolSolver.solveMethod("getTypes", Collections.emptyList(), callToGetTypes);
@@ -224,7 +233,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
-        JarTypeSolver typeSolver = new JarTypeSolver(pathToJar);
+        TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         MethodUsage ref = symbolSolver.solveMethod("stream", Collections.emptyList(), callToStream);
 
