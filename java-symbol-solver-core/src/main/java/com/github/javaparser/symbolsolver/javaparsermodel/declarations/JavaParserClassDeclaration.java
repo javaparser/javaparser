@@ -32,6 +32,7 @@ import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
@@ -45,8 +46,6 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class JavaParserClassDeclaration extends AbstractClassDeclaration {
-
-    private static Map<String, TypeDeclaration> cache = new HashMap<>();
 
     ///
     /// Fields
@@ -150,14 +149,10 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public ReferenceType getSuperClass() {
-        System.out.println("<"+System.identityHashCode(this)+"> getSuperClass START");
         if (wrappedNode.getExtendedTypes().isEmpty()) {
-            System.out.println("<"+System.identityHashCode(this)+"> getSuperClass DONE");
             return object();
         } else {
-            ReferenceType res = toReferenceType(wrappedNode.getExtendedTypes().get(0));
-            System.out.println("<"+System.identityHashCode(this)+"> getSuperClass DONE");
-            return res;
+            return toReferenceType(wrappedNode.getExtendedTypes().get(0));
         }
     }
 
@@ -255,11 +250,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Deprecated
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        System.out.println("<"+System.identityHashCode(this)+">Solving type "+name+" from class declaration "+this.getName()+ " STARTING");
-        if (cache.containsKey(name)) {
-            System.out.println("<"+System.identityHashCode(this)+">Solving type "+name+" from class declaration "+this.getName()+ " DONE FROM CACHE");
-            return SymbolReference.solved(cache.get(name));
-        }
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(this);
         }
@@ -273,12 +263,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             return new JavaParserClassDeclaration(this.wrappedNode, typeSolver).solveType(name.substring(prefix.length()), typeSolver);
         }
 
-        SymbolReference<TypeDeclaration> res = getContext().getParent().solveType(name, typeSolver);
-        if (res.isSolved()) {
-            cache.put(name, res.getCorrespondingDeclaration());
-        }
-        System.out.println("<"+System.identityHashCode(this)+">Solving type "+name+" from class declaration "+this.getName()+ " DONE");
-        return res;
+        return getContext().getParent().solveType(name, typeSolver);
     }
 
     @Override
@@ -345,7 +330,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     ///
 
     private ReferenceType toReferenceType(ClassOrInterfaceType classOrInterfaceType) {
-        System.out.println("<"+System.identityHashCode(this)+">Transforming "+classOrInterfaceType.getName()+ " to ReferenceType "+classOrInterfaceType + " " + System.identityHashCode(classOrInterfaceType) + " START");
         String className = classOrInterfaceType.getName().getId();
         if (classOrInterfaceType.getScope().isPresent()) {
             // look for the qualified name (for example class of type Rectangle2D.Double)
@@ -366,9 +350,8 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
             return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), typeSolver);
         }
         List<Type> superClassTypeParameters = classOrInterfaceType.getTypeArguments().get()
-                .stream().map(ta -> JavaParserFacade.get(typeSolver).convert(ta, ta))
+                .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
-        System.out.println("<"+System.identityHashCode(this)+">Transforming "+classOrInterfaceType.getName()+ " to ReferenceType "+classOrInterfaceType + " " + System.identityHashCode(classOrInterfaceType) + " DONE");
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
     }
 
