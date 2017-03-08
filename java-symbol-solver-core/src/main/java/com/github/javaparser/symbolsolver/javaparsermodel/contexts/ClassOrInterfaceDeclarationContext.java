@@ -89,10 +89,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        System.out.println("<" + System.identityHashCode(this)+ ">solvingType " + name + " START");
-        SymbolReference<TypeDeclaration> res = javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
-        System.out.println("<" + System.identityHashCode(this)+ ">solvingType " + name + " DONE");
-        return res;
+        return javaParserTypeDeclarationAdapter.solveType(name, typeSolver);
     }
 
     @Override

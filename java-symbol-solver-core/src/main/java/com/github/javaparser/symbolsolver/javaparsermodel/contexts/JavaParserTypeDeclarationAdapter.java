@@ -43,7 +43,6 @@ public class JavaParserTypeDeclarationAdapter {
     public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         boolean loop = namesBeingSolved.contains(name);
 
-        System.out.println("<"+System.identityHashCode(this)+">ADAPTER START ON "+name);
         namesBeingSolved.add(name);
         if (this.wrappedNode.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(wrappedNode));
@@ -84,7 +83,6 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        System.out.println("<"+System.identityHashCode(this)+">ADAPTER START ON "+name+ " ABOUT TO END");
         namesBeingSolved.remove(name);
         return context.getParent().solveType(name, typeSolver);
     }
