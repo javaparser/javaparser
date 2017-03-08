@@ -54,7 +54,6 @@ public class BaseModifierValidator extends VisitorValidator {
         if (n.isTopLevelType()) {
             validateModifiers(n, reporter, PUBLIC, STRICTFP);
         } else if (n.isNestedType()) {
-            // nested
             validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
         }
         super.visit(n, reporter);
@@ -92,9 +91,12 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // Parameter in LambdaExpr
     @Override
     public void visit(LambdaExpr n, ProblemReporter reporter) {
+        n.getParameters().forEach(p -> {
+            // Final is not allowed on inferred parameters, but those get caught by the parser.
+            validateModifiers(p, reporter, FINAL);
+        });
         super.visit(n, reporter);
     }
 
@@ -110,7 +112,6 @@ public class BaseModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    // ModuleRequiresStmt
     @Override
     public void visit(ModuleRequiresStmt n, ProblemReporter reporter) {
         validateModifiers(n, reporter, TRANSITIVE, STATIC);
