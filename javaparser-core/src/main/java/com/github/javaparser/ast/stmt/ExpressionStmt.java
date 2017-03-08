@@ -100,4 +100,3 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         return JavaParserMetaModel.expressionStmtMetaModel;
     }
 }
-

@@ -10,4 +10,3 @@ public class ThisExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel classExprPropertyMetaModel;
 }
-

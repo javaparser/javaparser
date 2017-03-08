@@ -114,4 +114,3 @@ public final class SuperExpr extends Expression {
         return JavaParserMetaModel.superExprMetaModel;
     }
 }
-

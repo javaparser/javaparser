@@ -161,4 +161,3 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return JavaParserMetaModel.enumConstantDeclarationMetaModel;
     }
 }
-

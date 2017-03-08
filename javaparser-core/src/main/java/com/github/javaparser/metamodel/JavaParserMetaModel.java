@@ -932,4 +932,3 @@ public final class JavaParserMetaModel {
         initializeConstructorParameters();
     }
 }
-

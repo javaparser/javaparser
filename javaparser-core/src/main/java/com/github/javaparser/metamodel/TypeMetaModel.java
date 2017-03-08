@@ -15,4 +15,3 @@ public class TypeMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel annotationsPropertyMetaModel;
 }
-

@@ -119,4 +119,3 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return JavaParserMetaModel.synchronizedStmtMetaModel;
     }
 }
-

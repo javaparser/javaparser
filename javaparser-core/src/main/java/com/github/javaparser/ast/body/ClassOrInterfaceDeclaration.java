@@ -194,4 +194,3 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
     }
 }
-

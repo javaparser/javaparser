@@ -217,4 +217,3 @@ public interface VoidVisitor<A> {
 
     void visit(ModuleOpensStmt n, A arg);
 }
-

@@ -89,4 +89,3 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
         return JavaParserMetaModel.voidTypeMetaModel;
     }
 }
-

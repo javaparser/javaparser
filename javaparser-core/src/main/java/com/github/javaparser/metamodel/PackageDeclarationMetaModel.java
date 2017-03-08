@@ -12,4 +12,3 @@ public class PackageDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

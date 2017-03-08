@@ -103,4 +103,3 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         return JavaParserMetaModel.moduleExportsStmtMetaModel;
     }
 }
-

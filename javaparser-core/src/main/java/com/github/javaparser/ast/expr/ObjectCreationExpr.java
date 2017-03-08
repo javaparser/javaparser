@@ -255,4 +255,3 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return JavaParserMetaModel.objectCreationExprMetaModel;
     }
 }
-

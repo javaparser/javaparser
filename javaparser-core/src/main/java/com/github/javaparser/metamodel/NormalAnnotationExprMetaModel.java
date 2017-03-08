@@ -10,4 +10,3 @@ public class NormalAnnotationExprMetaModel extends AnnotationExprMetaModel {
 
     public PropertyMetaModel pairsPropertyMetaModel;
 }
-

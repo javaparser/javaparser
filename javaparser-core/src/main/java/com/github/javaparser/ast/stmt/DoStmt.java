@@ -118,4 +118,3 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return JavaParserMetaModel.doStmtMetaModel;
     }
 }
-

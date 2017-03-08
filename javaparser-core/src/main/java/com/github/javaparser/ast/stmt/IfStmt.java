@@ -160,4 +160,3 @@ public final class IfStmt extends Statement {
         return JavaParserMetaModel.ifStmtMetaModel;
     }
 }
-

@@ -12,4 +12,3 @@ public class DoStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel conditionPropertyMetaModel;
 }
-

@@ -54,4 +54,3 @@ public abstract class Expression extends Node {
         return JavaParserMetaModel.expressionMetaModel;
     }
 }
-

@@ -140,4 +140,3 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return JavaParserMetaModel.foreachStmtMetaModel;
     }
 }
-

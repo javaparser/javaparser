@@ -492,4 +492,3 @@ public final class CompilationUnit extends Node {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }
 }
-

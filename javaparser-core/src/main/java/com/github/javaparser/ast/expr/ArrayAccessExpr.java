@@ -113,4 +113,3 @@ public final class ArrayAccessExpr extends Expression {
         return JavaParserMetaModel.arrayAccessExprMetaModel;
     }
 }
-

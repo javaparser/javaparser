@@ -12,4 +12,3 @@ public class SwitchEntryStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel statementsPropertyMetaModel;
 }
-

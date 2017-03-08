@@ -145,4 +145,3 @@ public final class BinaryExpr extends Expression {
         return JavaParserMetaModel.binaryExprMetaModel;
     }
 }
-

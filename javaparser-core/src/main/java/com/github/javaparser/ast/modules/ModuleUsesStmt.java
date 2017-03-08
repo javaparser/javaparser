@@ -72,4 +72,3 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
         return JavaParserMetaModel.moduleUsesStmtMetaModel;
     }
 }
-

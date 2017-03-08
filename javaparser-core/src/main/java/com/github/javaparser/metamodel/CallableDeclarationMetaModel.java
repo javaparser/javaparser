@@ -23,4 +23,3 @@ public class CallableDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     public PropertyMetaModel typeParametersPropertyMetaModel;
 }
-

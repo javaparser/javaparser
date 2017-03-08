@@ -8,4 +8,3 @@ public class NullLiteralExprMetaModel extends LiteralExprMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.NullLiteralExpr.class, "NullLiteralExpr", "com.github.javaparser.ast.expr", false, false);
     }
 }
-

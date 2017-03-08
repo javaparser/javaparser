@@ -104,4 +104,3 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         return JavaParserMetaModel.bodyDeclarationMetaModel;
     }
 }
-

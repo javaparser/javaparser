@@ -13,4 +13,3 @@ public class LiteralExprMetaModel extends ExpressionMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 }
-

@@ -104,4 +104,3 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return JavaParserMetaModel.moduleProvidesStmtMetaModel;
     }
 }
-

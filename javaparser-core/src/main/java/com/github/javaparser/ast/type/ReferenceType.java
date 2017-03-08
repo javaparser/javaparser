@@ -59,4 +59,3 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
         return JavaParserMetaModel.referenceTypeMetaModel;
     }
 }
-

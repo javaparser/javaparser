@@ -112,4 +112,3 @@ public final class ArrayInitializerExpr extends Expression {
         return JavaParserMetaModel.arrayInitializerExprMetaModel;
     }
 }
-

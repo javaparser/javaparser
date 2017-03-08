@@ -194,4 +194,3 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return JavaParserMetaModel.variableDeclarationExprMetaModel;
     }
 }
-

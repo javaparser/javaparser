@@ -210,4 +210,3 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return JavaParserMetaModel.wildcardTypeMetaModel;
     }
 }
-

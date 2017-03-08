@@ -1171,4 +1171,3 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         return n;
     }
 }
-

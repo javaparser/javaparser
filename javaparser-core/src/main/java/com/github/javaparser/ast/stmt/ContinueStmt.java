@@ -120,4 +120,3 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         return JavaParserMetaModel.continueStmtMetaModel;
     }
 }
-

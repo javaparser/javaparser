@@ -79,4 +79,3 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         return JavaParserMetaModel.doubleLiteralExprMetaModel;
     }
 }
-

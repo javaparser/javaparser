@@ -81,4 +81,3 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return JavaParserMetaModel.longLiteralExprMetaModel;
     }
 }
-

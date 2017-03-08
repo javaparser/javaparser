@@ -12,4 +12,3 @@ public class ArrayCreationLevelMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel dimensionPropertyMetaModel;
 }
-

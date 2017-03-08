@@ -8,4 +8,3 @@ public class EmptyMemberDeclarationMetaModel extends BodyDeclarationMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.body.EmptyMemberDeclaration.class, "EmptyMemberDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 }
-

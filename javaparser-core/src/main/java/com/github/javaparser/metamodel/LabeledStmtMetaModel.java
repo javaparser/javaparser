@@ -12,4 +12,3 @@ public class LabeledStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel statementPropertyMetaModel;
 }
-

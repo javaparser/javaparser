@@ -222,4 +222,3 @@ public interface GenericVisitor<R, A> {
 
     R visit(ModuleOpensStmt n, A arg);
 }
-

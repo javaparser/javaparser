@@ -145,4 +145,3 @@ public final class SwitchStmt extends Statement {
         return JavaParserMetaModel.switchStmtMetaModel;
     }
 }
-

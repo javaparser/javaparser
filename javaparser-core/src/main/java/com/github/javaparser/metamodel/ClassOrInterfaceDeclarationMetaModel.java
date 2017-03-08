@@ -16,4 +16,3 @@ public class ClassOrInterfaceDeclarationMetaModel extends TypeDeclarationMetaMod
 
     public PropertyMetaModel typeParametersPropertyMetaModel;
 }
-

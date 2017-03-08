@@ -95,4 +95,3 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         return JavaParserMetaModel.singleMemberAnnotationExprMetaModel;
     }
 }
-

@@ -13,4 +13,3 @@ public class ReferenceTypeMetaModel extends TypeMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 }
-

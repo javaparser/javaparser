@@ -183,4 +183,3 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         return JavaParserMetaModel.constructorDeclarationMetaModel;
     }
 }
-

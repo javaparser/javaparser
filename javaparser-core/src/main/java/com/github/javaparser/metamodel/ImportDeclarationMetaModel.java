@@ -14,4 +14,3 @@ public class ImportDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

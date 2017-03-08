@@ -163,4 +163,3 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return JavaParserMetaModel.lambdaExprMetaModel;
     }
 }
-

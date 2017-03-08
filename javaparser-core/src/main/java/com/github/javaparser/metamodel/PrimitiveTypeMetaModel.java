@@ -10,4 +10,3 @@ public class PrimitiveTypeMetaModel extends TypeMetaModel {
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

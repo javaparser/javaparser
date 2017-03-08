@@ -162,4 +162,3 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return JavaParserMetaModel.methodReferenceExprMetaModel;
     }
 }
-

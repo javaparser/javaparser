@@ -166,4 +166,3 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return JavaParserMetaModel.typeDeclarationMetaModel;
     }
 }
-

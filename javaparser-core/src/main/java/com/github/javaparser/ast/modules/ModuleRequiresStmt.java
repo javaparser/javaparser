@@ -96,4 +96,3 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithModifiers<
         return JavaParserMetaModel.moduleRequiresStmtMetaModel;
     }
 }
-

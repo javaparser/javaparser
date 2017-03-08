@@ -54,4 +54,3 @@ public abstract class LiteralExpr extends Expression {
         return JavaParserMetaModel.literalExprMetaModel;
     }
 }
-

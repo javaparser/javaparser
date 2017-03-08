@@ -108,4 +108,3 @@ public final class ThisExpr extends Expression {
         return JavaParserMetaModel.thisExprMetaModel;
     }
 }
-

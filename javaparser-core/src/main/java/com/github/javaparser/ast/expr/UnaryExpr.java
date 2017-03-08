@@ -155,4 +155,3 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return JavaParserMetaModel.unaryExprMetaModel;
     }
 }
-

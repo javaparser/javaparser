@@ -14,4 +14,3 @@ public class MethodDeclarationMetaModel extends CallableDeclarationMetaModel {
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

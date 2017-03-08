@@ -119,4 +119,3 @@ public final class ReturnStmt extends Statement {
         return JavaParserMetaModel.returnStmtMetaModel;
     }
 }
-

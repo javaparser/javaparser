@@ -16,4 +16,3 @@ public class ClassOrInterfaceTypeMetaModel extends ReferenceTypeMetaModel {
 
     public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }
-
