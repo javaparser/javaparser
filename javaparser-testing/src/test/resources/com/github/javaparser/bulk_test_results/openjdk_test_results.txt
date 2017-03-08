@@ -1,61 +1,11 @@
-openjdk/jdk/src/share/classes/java/security/KeyStore.java
-(line 419,col 9) A class cannot have default members
-
-openjdk/jdk/src/share/classes/java/util/jar/Pack200.java
-(line 597,col 9) A class cannot have default members
-(line 619,col 9) A class cannot have default members
-(line 756,col 9) A class cannot have default members
-(line 778,col 9) A class cannot have default members
-
-openjdk/jdk/src/share/sample/lambda/DefaultMethods/DiamondInheritance.java
-(line 83,col 9) A class cannot have default members
-(line 101,col 9) A class cannot have default members
-(line 111,col 17) A class cannot have default members
-
-openjdk/jdk/src/share/sample/lambda/DefaultMethods/Inheritance.java
-(line 56,col 17) A class cannot have default members
-(line 100,col 9) A class cannot have default members
-(line 112,col 17) A class cannot have default members
-
-openjdk/jdk/src/share/sample/lambda/DefaultMethods/MixIn.java
-(line 57,col 17) A class cannot have default members
-
-openjdk/jdk/src/share/sample/lambda/DefaultMethods/Reflection.java
-(line 58,col 17) A class cannot have default members
-(line 68,col 17) A class cannot have default members
-
-openjdk/jdk/src/share/sample/lambda/DefaultMethods/SimplestUsage.java
-(line 48,col 17) A class cannot have default members
-
-openjdk/jdk/test/javax/management/mxbean/MerlinMXBean.java
-(line 438,col 9) An interface cannot have initializers
-
 openjdk/jdk/test/java/lang/annotation/typeAnnotations/ConstructorReceiverTest.java
 (line 111,col 69) Parse error. Found ".", expected one of  ")" "," "@" "["
 
 openjdk/jdk/test/java/lang/annotation/typeAnnotations/GetAnnotatedReceiverType.java
 (line 34,col 25) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
-openjdk/jdk/test/java/lang/invoke/RevealDirectTest.java
-(line 83,col 17) A class cannot have default members
-
-openjdk/jdk/test/java/lang/reflect/Method/InterfaceStatic/StaticInterfaceMethodInWayOfDefault.java
-(line 45,col 17) A class cannot have default members
-(line 57,col 17) A class cannot have default members
-
-openjdk/jdk/test/java/lang/reflect/Method/IsDefaultTest.java
-(line 100,col 9) A class cannot have default members
-(line 150,col 9) A class cannot have default members
-
-openjdk/jdk/test/java/util/stream/bootlib/java/util/stream/OpTestCase.java
-(line 403,col 17) A class cannot have default members
-
 openjdk/jdk/test/java/util/WeakHashMap/GCDuringIteration.java
 (line 118,col 39) Parse error. Found  "equal" <IDENTIFIER>, expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
-
-openjdk/jdk/test/jdk/lambda/LambdaTranslationCompoundSamTest.java
-(line 45,col 17) A class cannot have default members
-(line 53,col 13) A class cannot have default members
 
 openjdk/jdk/test/tools/pack200/typeannos/TargetTypes.java
 (line 93,col 19) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -198,128 +148,6 @@ openjdk/langtools/test/tools/javac/BadHexConstant.java
 openjdk/langtools/test/tools/javac/declaration/method/MethodVoidParameter.java
 (line 7,col 16) Parse error. Found "void", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "double" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
 
-openjdk/langtools/test/tools/javac/defaultMethods/Assertions.java
-(line 44,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/BadClassfile.java
-(line 84,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/CheckACC_STRICTFlagOnDefaultMethodTest.java
-(line 92,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg01.java
-(line 8,col 28) A class cannot have default members
-(line 9,col 28) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg02.java
-(line 9,col 18) A class cannot have default members
-(line 13,col 18) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg03.java
-(line 9,col 17) A class cannot have default members
-(line 13,col 17) A class cannot have default members
-(line 17,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg04.java
-(line 9,col 41) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg05.java
-(line 8,col 29) A class cannot have default members
-(line 9,col 41) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg06.java
-(line 10,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg07.java
-(line 9,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg08.java
-(line 8,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg09.java
-(line 10,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg10.java
-(line 8,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg11.java
-(line 8,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg12.java
-(line 9,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg14.java
-(line 8,col 28) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg15.java
-(line 7,col 27) A class cannot have default members
-(line 8,col 37) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Neg16.java
-(line 7,col 27) A class cannot have default members
-(line 8,col 37) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos01.java
-(line 40,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos02.java
-(line 33,col 28) A class cannot have default members
-(line 34,col 28) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos04.java
-(line 33,col 27) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos05.java
-(line 34,col 18) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos06.java
-(line 34,col 18) A class cannot have default members
-(line 38,col 18) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos07.java
-(line 34,col 18) A class cannot have default members
-(line 35,col 18) A class cannot have default members
-(line 41,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos08.java
-(line 34,col 17) A class cannot have default members
-(line 38,col 17) A class cannot have default members
-(line 42,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos10.java
-(line 38,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos11.java
-(line 34,col 17) A class cannot have default members
-(line 38,col 17) A class cannot have default members
-(line 42,col 17) A class cannot have default members
-(line 46,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos13.java
-(line 44,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos14.java
-(line 32,col 27) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos15.java
-(line 32,col 27) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/Pos16.java
-(line 33,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/separate/pkg1/A.java
-(line 28,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/separate/Separate.java
-(line 37,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/TestDefaultBody.java
-(line 45,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/defaultMethods/TestNoBridgeOnDefaults.java
-(line 39,col 17) A class cannot have default members
-(line 45,col 17) A class cannot have default members
-
 openjdk/langtools/test/tools/javac/DefiniteAssignment/ConstantInfiniteWhile.java
 Lexical error at line 68, column 0.  Encountered: <EOF> after : ""
 
@@ -452,10 +280,6 @@ openjdk/langtools/test/tools/javac/diags/examples/NotAStatement.java
 openjdk/langtools/test/tools/javac/diags/examples/Orphaned.java
 (line 27,col 14) Parse error. Found "case", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
-openjdk/langtools/test/tools/javac/diags/examples/OverriddenDefault.java
-(line 28,col 27) A class cannot have default members
-(line 29,col 37) A class cannot have default members
-
 openjdk/langtools/test/tools/javac/diags/examples/PrematureEOF.java
 (line 26,col 20) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
@@ -464,10 +288,6 @@ openjdk/langtools/test/tools/javac/diags/examples/ProcessorWrongType/ProcessorWr
 
 openjdk/langtools/test/tools/javac/diags/examples/ReceiverParameterNotApplicableConstructor.java
 (line 27,col 47) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
-
-openjdk/langtools/test/tools/javac/diags/examples/RedundantSupertype.java
-(line 28,col 27) A class cannot have default members
-(line 29,col 37) A class cannot have default members
 
 openjdk/langtools/test/tools/javac/diags/examples/RepeatedModifier.java
 (line 27,col 12) Duplicated modifier
@@ -486,13 +306,6 @@ openjdk/langtools/test/tools/javac/diags/examples/TryWithoutCatchOrFinallyOrReso
 
 openjdk/langtools/test/tools/javac/diags/examples/TypeReqClassArray.java
 (line 30,col 34) Parse error. Found ")", expected "["
-
-openjdk/langtools/test/tools/javac/diags/examples/TypesIncompatibleAbstractDefault.java
-(line 28,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/diags/examples/TypesIncompatibleUnrelatedDefaults.java
-(line 28,col 17) A class cannot have default members
-(line 32,col 17) A class cannot have default members
 
 openjdk/langtools/test/tools/javac/diags/examples/UnclosedCharLiteral.java
 Lexical error at line 27, column 16.  Encountered: ";" (59), after : "\'a"
@@ -539,9 +352,6 @@ openjdk/langtools/test/tools/javac/failover/FailOver01.java
 openjdk/langtools/test/tools/javac/failover/FailOver15.java
 (line 17,col 9) Parse error. Found "}", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 
-openjdk/langtools/test/tools/javac/generics/bridges/tests/TestBridgeWithDefault.java
-(line 29,col 17) A class cannot have default members
-
 openjdk/langtools/test/tools/javac/generics/typevars/6680106/T6680106.java
 (line 11,col 24) Parse error. Found "[", expected one of  "&" "," ">"
 
@@ -560,38 +370,11 @@ openjdk/langtools/test/tools/javac/lambda/BadLambdaPos.java
 openjdk/langtools/test/tools/javac/lambda/BadStatementInLambda.java
 (line 18,col 21) Parse error. Found "+", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 
-openjdk/langtools/test/tools/javac/lambda/Defender01.java
-(line 37,col 17) A class cannot have default members
-
 openjdk/langtools/test/tools/javac/lambda/funcInterfaces/LambdaTest1_neg1.java
 (line 13,col 64) Parse error. Found "}", expected one of  "," ";"
 
-openjdk/langtools/test/tools/javac/lambda/FunctionalInterfaceAnno.java
-(line 23,col 27) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/lambda/LambdaExpr20.java
-(line 35,col 17) A class cannot have default members
-
 openjdk/langtools/test/tools/javac/lambda/lambdaExpression/InvalidExpression1.java
 (line 15,col 66) Parse error. Found "}", expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
-
-openjdk/langtools/test/tools/javac/lambda/LambdaWithInterfaceSuper.java
-(line 34,col 17) A class cannot have default members
-(line 38,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/lambda/SourceLevelTest.java
-(line 11,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/lambda/TargetType47.java
-(line 36,col 17) A class cannot have default members
-(line 40,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/lambda/TargetType48.java
-(line 40,col 17) A class cannot have default members
-(line 44,col 17) A class cannot have default members
-
-openjdk/langtools/test/tools/javac/lambda/TargetType49.java
-(line 11,col 17) A class cannot have default members
 
 openjdk/langtools/test/tools/javac/literals/BadBinaryLiterals.java
 (line 11,col 20) Parse error. Found  "2" <INTEGER_LITERAL>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -637,10 +420,6 @@ openjdk/langtools/test/tools/javac/rawDiags/Error.java
 
 openjdk/langtools/test/tools/javac/T4994049/T4994049.java
 (line 11,col 5) Parse error. Found  "BAR" <IDENTIFIER>, expected one of  "," ";" "}"
-
-openjdk/langtools/test/tools/javac/T6356530/SerializableAbstractClassWithNonAbstractMethodsTest.java
-(line 41,col 17) A class cannot have default members
-(line 46,col 17) A class cannot have default members
 
 openjdk/langtools/test/tools/javac/T6882235.java
 (line 11,col 11) Parse error. Found ";", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
@@ -690,3 +469,4 @@ openjdk/langtools/test/tools/javadoc/sourceOption/p/A.java
 openjdk/langtools/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
+157 problems in 157 files

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static com.github.javaparser.utils.TestUtils.*;
 
@@ -66,6 +67,7 @@ public class BulkParseTest {
         });
         Log.info("Writing results...");
 
+        int problemTotal = 0;
         try (BufferedWriter writer = Files.newBufferedWriter(testResults)) {
             for (Map.Entry<Path, List<Problem>> file : results.entrySet()) {
                 writer.write(file.getKey().toString().replace("\\", "/"));
@@ -73,9 +75,11 @@ public class BulkParseTest {
                 for (Problem problem : file.getValue()) {
                     writer.write(problem.getVerboseMessage());
                     writer.newLine();
+                    problemTotal++;
                 }
                 writer.newLine();
             }
+            writer.write(f("%s problems in %s files", problemTotal, results.size()));
         }
 
         Log.info("Results are in %s", testResults);

@@ -42,40 +42,35 @@ public class BaseJavaValidator extends Validators {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (n.isInterface()) {
-                            new VisitorValidator() {
-                                public void visit(InitializerDeclaration n, ProblemReporter reporter1) {
-                                    reporter.report("An interface cannot have initializers", n);
-                                }
-                            }.validate(n, reporter);
+                            n.getMembers().forEach(mem -> {if(mem instanceof InitializerDeclaration){reporter.report("An interface cannot have initializers", mem);}});
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (n.isInterface()) {
-                            new VisitorValidator() {
-                                public void visit(MethodDeclaration n, ProblemReporter reporter1) {
-                                    if (n.isDefault() && !n.getBody().isPresent()) {
-                                        reporter.report("\"default\" methods must have a body", n);
-                                    }
+                            n.getMethods().forEach(m -> {
+                                if (m.isDefault() && !m.getBody().isPresent()) {
+                                    reporter.report("\"default\" methods must have a body", n);
                                 }
-                            }.validate(n, reporter);
+                            });
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (!n.isInterface()) {
-                            new VisitorValidator() {
-                                public void visit(MethodDeclaration n, ProblemReporter reporter1) {
-                                    if (n.isDefault()) {
-                                        reporter.report("A class cannot have default members", n);
-                                    }
+                            n.getMethods().forEach(m -> {
+                                if (m.isDefault()) {
+                                    reporter.report("A class cannot have default members", n);
                                 }
-                            }.validate(n, reporter);
+                            });
                         }
+                        super.visit(n, reporter);
                     }
                 }
         );
