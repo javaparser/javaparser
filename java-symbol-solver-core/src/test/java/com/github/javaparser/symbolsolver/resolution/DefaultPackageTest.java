@@ -12,6 +12,8 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +39,12 @@ public class DefaultPackageTest {
 
         @Override
         public List<TypeParameterDeclaration> getTypeParameters() {
-            throw new UnsupportedOperationException();
+            return new LinkedList<>();
+        }
+
+        @Override
+        public Set<ReferenceTypeDeclaration> internalTypes() {
+            return new HashSet<ReferenceTypeDeclaration>();
         }
 
         @Override

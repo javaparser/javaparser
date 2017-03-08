@@ -18,10 +18,12 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -59,4 +61,5 @@ public abstract class AbstractTypeDeclaration implements ReferenceTypeDeclaratio
     public final boolean isFunctionalInterface() {
         return FunctionalInterfaceLogic.getFunctionalMethod(this).isPresent();
     }
+
 }

@@ -17,6 +17,7 @@ import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +64,15 @@ public class JavaParserTypeDeclarationAdapter {
                 TypeParameter astTp = astTpRaw;
                 if (astTp.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeParameter(astTp, typeSolver));
+                }
+            }
+        }
+
+        // Look into extended classes and implemented interfaces
+        for (ReferenceType ancestor : this.typeDeclaration.getAncestors()) {
+            for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+                if (internalTypeDeclaration.getName().equals(name)) {
+                    return SymbolReference.solved(internalTypeDeclaration);
                 }
             }
         }
