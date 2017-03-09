@@ -44,7 +44,7 @@ import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
- * The declaration of a variable.<br/><code>int x = 14;</code>
+ * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are VariableDeclarators.
  *
  * @author Julio Vilmar Gesser
  */

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.nodeTypes.modifiers.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -40,6 +41,10 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import static com.github.javaparser.ast.Modifier.*;
+import static com.github.javaparser.ast.Modifier.DEFAULT;
+import static com.github.javaparser.ast.Modifier.NATIVE;
+import static com.github.javaparser.ast.Modifier.SYNCHRONIZED;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -52,7 +57,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  *
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithModifiers<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
+public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration>, NodeWithAccessModifiers<MethodDeclaration>, NodeWithAbstractModifier<MethodDeclaration>, NodeWithStaticModifier<MethodDeclaration>, NodeWithFinalModifier<MethodDeclaration>, NodeWithStrictfpModifier<MethodDeclaration> {
 
     private Type type;
 
@@ -81,6 +86,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
         setDefault(isDefault);
     }
+
     public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
         super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
@@ -172,22 +178,22 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
-            AccessSpecifier accessSpecifier = Modifier.getAccessSpecifier(getModifiers());
+            AccessSpecifier accessSpecifier = getAccessSpecifier(getModifiers());
             sb.append(accessSpecifier.asString());
             sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ");
-            if (getModifiers().contains(Modifier.STATIC)) {
+            if (getModifiers().contains(STATIC)) {
                 sb.append("static ");
             }
-            if (getModifiers().contains(Modifier.ABSTRACT)) {
+            if (getModifiers().contains(ABSTRACT)) {
                 sb.append("abstract ");
             }
-            if (getModifiers().contains(Modifier.FINAL)) {
+            if (getModifiers().contains(FINAL)) {
                 sb.append("final ");
             }
-            if (getModifiers().contains(Modifier.NATIVE)) {
+            if (getModifiers().contains(NATIVE)) {
                 sb.append("native ");
             }
-            if (getModifiers().contains(Modifier.SYNCHRONIZED)) {
+            if (getModifiers().contains(SYNCHRONIZED)) {
                 sb.append("synchronized ");
             }
         }
@@ -215,6 +221,30 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         sb.append(")");
         sb.append(appendThrowsIfRequested(includingThrows));
         return sb.toString();
+    }
+
+    public boolean isNative() {
+        return getModifiers().contains(NATIVE);
+    }
+
+    public boolean isSynchronized() {
+        return getModifiers().contains(SYNCHRONIZED);
+    }
+
+    public boolean isDefault() {
+        return getModifiers().contains(DEFAULT);
+    }
+
+    public MethodDeclaration setNative(boolean set) {
+        return setModifier(NATIVE, set);
+    }
+
+    public MethodDeclaration setSynchronized(boolean set) {
+        return setModifier(SYNCHRONIZED, set);
+    }
+
+    public MethodDeclaration setDefault(boolean set) {
+        return setModifier(DEFAULT, set);
     }
 
     @Override
