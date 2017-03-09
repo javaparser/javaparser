@@ -345,7 +345,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo0", ImmutableList.of(), new ReflectionTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo0", ImmutableList.of(), false, new ReflectionTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -357,7 +357,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo1", ImmutableList.of(), new ReflectionTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo1", ImmutableList.of(), false, new ReflectionTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -369,7 +369,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo2", ImmutableList.of(), new ReflectionTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo2", ImmutableList.of(), false, new ReflectionTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("Super", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(0, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -383,7 +383,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Type intType = PrimitiveType.INT;
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo3", ImmutableList.of(intType), new ReflectionTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo3", ImmutableList.of(intType), false, new ReflectionTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -397,7 +397,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
 
         Type stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), new ReflectionTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo4", ImmutableList.of(stringType), false, new ReflectionTypeSolver());
         assertEquals(true, ref.isSolved());
         assertEquals("A", ref.getCorrespondingDeclaration().declaringType().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -409,7 +409,7 @@ public class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractRe
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), new ReflectionTypeSolver());
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false, new ReflectionTypeSolver());
     }
 
     @Test

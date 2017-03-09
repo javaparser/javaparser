@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -120,6 +121,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     @Override
     public boolean isDefaultMethod() {
         return method.isDefault();
+    }
+
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(method.getModifiers());
     }
 
     @Override

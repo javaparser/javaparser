@@ -80,7 +80,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 String className = ((NameExpr) scope).getName().getId();
                 SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
                 if (ref.isSolved()) {
-                    SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
+                    SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver, false);
                     if (m.isSolved()) {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
@@ -130,7 +130,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         if (wrappedNode.getScope().isPresent()) {
             Expression scope = wrappedNode.getScope().get();
 
@@ -140,7 +140,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 SymbolReference<TypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
                     TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
-                    return MethodResolutionLogic.solveMethodInType(typeDeclaration, name, argumentsTypes, typeSolver);
+                    return MethodResolutionLogic.solveMethodInType(typeDeclaration, name, argumentsTypes, typeSolver, false);
                 }
             }
 
@@ -152,27 +152,27 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
-                    return MethodResolutionLogic.solveMethodInType(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
+                    return MethodResolutionLogic.solveMethodInType(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
                 } else {
-                    return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
+                    return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver, false);
                 }
             } else if (typeOfScope.isArray()) {
                 // method call on array are Object methods
-                return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver);
+                return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver, false);
             } else if (typeOfScope.isTypeVariable()) {
                 for (TypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
-                    SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
+                    SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
                     if (res.isSolved()) {
                         return res;
                     }
                 }
                 return SymbolReference.unsolved(MethodDeclaration.class);
             } else {
-                return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
+                return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
             }
         } else {
             Type typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-            return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
+            return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
         }
     }
 

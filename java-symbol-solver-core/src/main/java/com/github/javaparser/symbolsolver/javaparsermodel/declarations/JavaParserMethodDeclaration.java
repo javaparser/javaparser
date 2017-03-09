@@ -135,6 +135,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
         return wrappedNode.isDefault();
     }
 
+    @Override
+    public boolean isStatic() {
+        return wrappedNode.isStatic();
+    }
+
     /**
      * Returns the JavaParser node associated with this JavaParserMethodDeclaration.
      *

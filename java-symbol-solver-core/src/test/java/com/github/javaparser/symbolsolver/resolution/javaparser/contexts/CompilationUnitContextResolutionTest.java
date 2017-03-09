@@ -207,7 +207,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         typeSolver.add(new ReflectionTypeSolver());
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveType.BOOLEAN), typeSolver);
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertFalse", ImmutableList.of(PrimitiveType.BOOLEAN), false, typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertFalse", ref.getCorrespondingDeclaration().getName());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
@@ -224,7 +224,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         typeSolver.add(new JarTypeSolver(adaptPath("src/test/resources/junit-4.8.1.jar")));
         typeSolver.add(new ReflectionTypeSolver());
 
-        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), typeSolver);
+        SymbolReference<MethodDeclaration> ref = context.solveMethod("assertEquals", ImmutableList.of(NullType.INSTANCE, NullType.INSTANCE), false, typeSolver);
         assertEquals(true, ref.isSolved());
         assertEquals("assertEquals", ref.getCorrespondingDeclaration().getName());
         assertEquals(2, ref.getCorrespondingDeclaration().getNumberOfParams());

@@ -79,14 +79,14 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver);
+    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
 
     /**
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
      * resolved type variables.
      */
     default Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, typeSolver);
+        SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false, typeSolver);
         if (methodSolved.isSolved()) {
             MethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
             MethodUsage methodUsage = ContextHelper.resolveTypeVariables(this, methodDeclaration, argumentsTypes);//methodDeclaration.resolveTypeVariables(this, argumentsTypes);

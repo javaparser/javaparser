@@ -32,10 +32,14 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.SyntheticAttribute;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -151,11 +155,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Deprecated
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly) {
         List<MethodDeclaration> candidates = new ArrayList<>();
+        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (CtMethod method : ctClass.getDeclaredMethods()) {
-            // TODO avoid bridge and synthetic methods
-            if (method.getName().equals(name)) {
+            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
+            boolean isNotBridge =  (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
                 candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
         }
@@ -163,7 +169,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes);
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
@@ -174,7 +180,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<MethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, argumentsTypes);
+                SymbolReference<MethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
