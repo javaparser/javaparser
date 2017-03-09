@@ -64,7 +64,8 @@ public class SourceRoot {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
-                    tryToParse(startPackage, file.getFileName().toString());
+                    Path relative = root.relativize(file.getParent());
+                    tryToParse(relative.toString(), file.getFileName().toString());
                 }
                 return FileVisitResult.CONTINUE;
             }
