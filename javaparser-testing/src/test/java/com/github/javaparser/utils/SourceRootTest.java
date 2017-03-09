@@ -8,24 +8,25 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 public class SourceRootTest {
+
     @Test
     public void parseTestDirectory() throws URISyntaxException, IOException {
-        SourceRoot sourceRoot = new SourceRoot(CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve(Paths.get("src", "test", "resources", "com", "github", "javaparser", "utils")));
-        Map<Path, ParseResult<CompilationUnit>> results = sourceRoot.tryToParse();
-        assertEquals(2, results.size());
+        String root = SourceRootTest.class.getResource("/com/github/javaparser/utils/").getPath();
+        SourceRoot sourceRoot = new SourceRoot(Paths.get(root));
 
-        for (ParseResult<CompilationUnit> curesult : results.values()) {
-            CompilationUnit cu = curesult.getResult().get();
-            if(!(cu.getModule().isPresent() || !cu.getTypes().isEmpty())){
-                fail();
-            }
-        }
+        Map<Path, ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
+        List<CompilationUnit> units = sourceRoot.getCompilationUnits();
+
+        assertEquals(3, units.size());
+        assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
+        assertTrue(parseResults.keySet().stream().anyMatch(path -> path.toString().contains("source/root")));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -33,4 +34,5 @@ public class SourceRootTest {
         String path = SourceRootTest.class.getResource("/com/github/javaparser/utils/Bla.java").getPath();
         new SourceRoot(Paths.get(path));
     }
+
 }
