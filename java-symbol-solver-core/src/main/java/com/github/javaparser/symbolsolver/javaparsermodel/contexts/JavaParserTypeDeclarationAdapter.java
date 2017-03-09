@@ -88,7 +88,7 @@ public class JavaParserTypeDeclarationAdapter {
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ReferenceType ancestor : typeDeclaration.getAncestors()) {
                 SymbolReference<MethodDeclaration> res = MethodResolutionLogic
-                        .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
+                        .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver, staticOnly);
                 // consider methods from superclasses and only default methods from interfaces :
                 // not true, we should keep abstract as a valid candidate
                 // abstract are removed in MethodResolutionLogic.isApplicable is necessary
@@ -100,7 +100,7 @@ public class JavaParserTypeDeclarationAdapter {
         // We want to avoid infinite recursion when a class is using its own method
         // see issue #75
         if (candidateMethods.isEmpty()) {
-            SymbolReference<MethodDeclaration> parentSolution = context.getParent().solveMethod(name, argumentsTypes, false, typeSolver);
+            SymbolReference<MethodDeclaration> parentSolution = context.getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
             if (parentSolution.isSolved()) {
                 candidateMethods.add(parentSolution.getCorrespondingDeclaration());
             }
