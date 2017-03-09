@@ -451,6 +451,20 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
+    public void resolveInheritedMethodFromInterface() throws ParseException {
+        CompilationUnit cu = parseSample("InterfaceInheritance");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "test");
+        MethodCallExpr call = Navigator.findMethodCall(method, "foobar");
+
+        File src = adaptPath(new File("src/test/resources"));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
+        Type type = JavaParserFacade.get(typeSolver).getType(call);
+
+        assertEquals("double", type.describe());
+    }
+
+    @Test
     public void resolveReferenceToOverloadMethodFindOnlyCompatible() throws ParseException, IOException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
