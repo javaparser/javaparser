@@ -2,7 +2,7 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 
 /**
@@ -18,31 +18,48 @@ public class BaseJavaValidator extends Validators {
                         if (n.getCatchClauses().isEmpty()
                                 && n.getResources().isEmpty()
                                 && !n.getFinallyBlock().isPresent()) {
-                            reporter.report("Try has no finally, no catch, and no resources", n);
+                            reporter.report(n, "Try has no finally, no catch, and no resources.");
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (!n.isInterface() && n.getExtendedTypes().size() > 1) {
-                            reporter.report("A class cannot extend more than one other class", n.getExtendedTypes(1));
+                            reporter.report(n.getExtendedTypes(1), "A class cannot extend more than one other class.");
                         }
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (n.isInterface() && !n.getImplementedTypes().isEmpty()) {
-                            reporter.report("An interface cannot implement other interfaces", n.getImplementedTypes(0));
+                            reporter.report(n.getImplementedTypes(0), "An interface cannot implement other interfaces.");
                         }
+                        super.visit(n, reporter);
+                    }
+                },
+                new VisitorValidator() {
+                    @Override
+                    public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
+                        n.getParentNode().ifPresent(p -> {
+                            if (p instanceof LocalClassDeclarationStmt && n.isInterface())
+                                reporter.report(n, "There is no such thing as a local interface.");
+                        });
+                        super.visit(n, reporter);
                     }
                 },
                 new VisitorValidator() {
                     @Override
                     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
                         if (n.isInterface()) {
-                            n.getMembers().forEach(mem -> {if(mem instanceof InitializerDeclaration){reporter.report("An interface cannot have initializers", mem);}});
+                            n.getMembers().forEach(mem -> {
+                                if (mem instanceof InitializerDeclaration) {
+                                    reporter.report(mem, "An interface cannot have initializers.");
+                                }
+                            });
                         }
                         super.visit(n, reporter);
                     }
@@ -53,7 +70,7 @@ public class BaseJavaValidator extends Validators {
                         if (n.isInterface()) {
                             n.getMethods().forEach(m -> {
                                 if (m.isDefault() && !m.getBody().isPresent()) {
-                                    reporter.report("\"default\" methods must have a body", m);
+                                    reporter.report(m, "'default' methods must have a body.");
                                 }
                             });
                         }
@@ -66,13 +83,14 @@ public class BaseJavaValidator extends Validators {
                         if (!n.isInterface()) {
                             n.getMethods().forEach(m -> {
                                 if (m.isDefault()) {
-                                    reporter.report("A class cannot have default members", m);
+                                    reporter.report(m, "A class cannot have default members.");
                                 }
                             });
                         }
                         super.visit(n, reporter);
                     }
-                }
+                },
+                new BaseModifierValidator()
         );
     }
 }

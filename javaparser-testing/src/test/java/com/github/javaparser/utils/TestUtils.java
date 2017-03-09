@@ -1,5 +1,7 @@
 package com.github.javaparser.utils;
 
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.Problem;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -8,9 +10,15 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -93,5 +101,32 @@ public class TestUtils {
 
     public static String temporaryDirectory() {
         return System.getProperty("java.io.tmpdir");
+    }
+
+    public static void assertCollections(Collection<?> expected, Collection<?> actual) {
+        final StringBuilder out = new StringBuilder();
+        for (Object e : expected) {
+            if (actual.contains(e)) {
+                actual.remove(e);
+            } else {
+                out.append("Missing: ").append(e).append(EOL);
+            }
+        }
+        for (Object a : actual) {
+            out.append("Unexpected: ").append(a).append(EOL);
+        }
+
+        String s = out.toString();
+        if (s.isEmpty()) {
+            return;
+        }
+        fail(s);
+    }
+
+    public static void assertProblems(ParseResult<?> result, String... expectedArg) {
+        Set<String> actual = result.getProblems().stream().map(Problem::toString).collect(Collectors.toSet());
+        Set<String> expected = new HashSet<>();
+        expected.addAll(Arrays.asList(expectedArg));
+        assertCollections(expected, actual);
     }
 }

@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.Modifier.*;
+
 /**
  * A Node with Modifiers.
  * Note that not all modifiers may be valid for this node.
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 public interface NodeWithModifiers<N extends Node> {
     /**
      * Return the modifiers of this variable declaration.
+     * Warning: modifying the returned set will not trigger observers,
+     * you have to use setModifiers for that.
      *
      * @return modifiers
      * @see Modifier
@@ -52,47 +56,121 @@ public interface NodeWithModifiers<N extends Node> {
         return (N) this;
     }
 
+    @SuppressWarnings("unchecked")
+    default N removeModifier(Modifier... m) {
+        EnumSet<Modifier> newModifiers = getModifiers().clone();
+        newModifiers.removeAll(Arrays.stream(m)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        setModifiers(newModifiers);
+        return (N) this;
+    }
+
+
     default boolean isStatic() {
-        return getModifiers().contains(Modifier.STATIC);
+        return getModifiers().contains(STATIC);
     }
 
     default boolean isAbstract() {
-        return getModifiers().contains(Modifier.ABSTRACT);
+        return getModifiers().contains(ABSTRACT);
     }
 
     default boolean isFinal() {
-        return getModifiers().contains(Modifier.FINAL);
+        return getModifiers().contains(FINAL);
     }
 
     default boolean isNative() {
-        return getModifiers().contains(Modifier.NATIVE);
+        return getModifiers().contains(NATIVE);
     }
 
     default boolean isPrivate() {
-        return getModifiers().contains(Modifier.PRIVATE);
+        return getModifiers().contains(PRIVATE);
     }
 
     default boolean isProtected() {
-        return getModifiers().contains(Modifier.PROTECTED);
+        return getModifiers().contains(PROTECTED);
     }
 
     default boolean isPublic() {
-        return getModifiers().contains(Modifier.PUBLIC);
+        return getModifiers().contains(PUBLIC);
     }
 
     default boolean isStrictfp() {
-        return getModifiers().contains(Modifier.STRICTFP);
+        return getModifiers().contains(STRICTFP);
     }
 
     default boolean isSynchronized() {
-        return getModifiers().contains(Modifier.SYNCHRONIZED);
+        return getModifiers().contains(SYNCHRONIZED);
     }
 
     default boolean isTransient() {
-        return getModifiers().contains(Modifier.TRANSIENT);
+        return getModifiers().contains(TRANSIENT);
     }
 
     default boolean isVolatile() {
-        return getModifiers().contains(Modifier.VOLATILE);
+        return getModifiers().contains(VOLATILE);
     }
+
+    @SuppressWarnings("unchecked")
+    default N setStatic(boolean set) {
+        return setModifier(STATIC, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setAbstract(boolean set) {
+        return setModifier(ABSTRACT, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setFinal(boolean set) {
+        return setModifier(FINAL, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setNative(boolean set) {
+        return setModifier(NATIVE, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setPrivate(boolean set) {
+        return setModifier(PRIVATE, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setProtected(boolean set) {
+        return setModifier(PROTECTED, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setPublic(boolean set) {
+        return setModifier(PUBLIC, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setStrictfp(boolean set) {
+        return setModifier(STRICTFP, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setSynchronized(boolean set) {
+        return setModifier(SYNCHRONIZED, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setTransient(boolean set) {
+        return setModifier(TRANSIENT, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setVolatile(boolean set) {
+        return setModifier(VOLATILE, set);
+    }
+
+    default N setModifier(Modifier m, boolean set) {
+        if (set) {
+            return addModifier(m);
+        } else {
+            return removeModifier(m);
+        }
+    }
+
 }

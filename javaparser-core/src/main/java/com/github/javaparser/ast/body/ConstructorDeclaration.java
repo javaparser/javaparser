@@ -61,11 +61,11 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @AllFieldsConstructor
-    public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public ConstructorDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions, BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
     }
 
-    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions, BlockStmt body) {
         super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setBody(body);
     }
@@ -118,7 +118,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @Override
-    public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
         return super.setThrownExceptions(thrownExceptions);
     }
 

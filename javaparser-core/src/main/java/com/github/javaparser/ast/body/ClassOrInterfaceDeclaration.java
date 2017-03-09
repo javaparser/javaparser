@@ -30,6 +30,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -192,5 +193,12 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public ClassOrInterfaceDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
+    }
+
+    /**
+     * @return is this class's parent a LocalClassDeclarationStmt ?
+     */
+    public boolean isLocalClassDeclaration() {
+        return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
     }
 }

@@ -49,6 +49,9 @@ openjdk/langtools/test/tools/javac/annotations/neg/NoDefaultAbstract.java
 openjdk/langtools/test/tools/javac/annotations/neg/NoStatic.java
 (line 9,col 18) Parse error. Found "{", expected one of  ";" "default"
 
+openjdk/langtools/test/tools/javac/annotations/neg/NoStaticAbstract.java
+(line 9,col 5) 'static' is not allowed here.
+
 openjdk/langtools/test/tools/javac/annotations/neg/Syntax1.java
 (line 40,col 21) Parse error. Found ",", expected one of  "!=" "%" "&" "&&" "(" ")" "*" "+" "-" "/" "<" "<=" "==" ">" ">=" "?" "^" "instanceof" "|" "||"
 
@@ -208,6 +211,9 @@ openjdk/langtools/test/tools/javac/diags/examples/IdentifierExpected.java
 openjdk/langtools/test/tools/javac/diags/examples/IllegalChar.java
 Lexical error at line 27, column 13.  Encountered: "`" (96), after : ""
 
+openjdk/langtools/test/tools/javac/diags/examples/IllegalComboModifiers.java
+(line 27,col 5) Can have only one of 'public', 'private'.
+
 openjdk/langtools/test/tools/javac/diags/examples/IllegalDot.java
 (line 29,col 12) Parse error. Found ".", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
@@ -244,6 +250,9 @@ openjdk/langtools/test/tools/javac/diags/examples/IncorrectReceiverName.java
 openjdk/langtools/test/tools/javac/diags/examples/IncorrectReceiverType.java
 (line 27,col 12) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
+openjdk/langtools/test/tools/javac/diags/examples/InterfaceNotAllowed.java
+(line 28,col 9) There is no such thing as a local interface.
+
 openjdk/langtools/test/tools/javac/diags/examples/IntfAnnotationCantHaveTypeParams.java
 (line 26,col 12) Parse error. Found "<", expected "{"
 
@@ -264,6 +273,9 @@ openjdk/langtools/test/tools/javac/diags/examples/LocalEnum.java
 
 openjdk/langtools/test/tools/javac/diags/examples/MalformedFpLit.java
 (line 28,col 15) Parse error. Found  "e" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
+
+openjdk/langtools/test/tools/javac/diags/examples/ModifierNotAllowed.java
+(line 26,col 1) 'synchronized' is not allowed here.
 
 openjdk/langtools/test/tools/javac/diags/examples/NoAnnotationsOnDotClass.java
 (line 30,col 14) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
@@ -299,10 +311,10 @@ openjdk/langtools/test/tools/javac/diags/examples/ThrowsNotAllowedInAnno.java
 (line 27,col 18) Parse error. Found "throws", expected one of  ";" "default"
 
 openjdk/langtools/test/tools/javac/diags/examples/TryWithoutCatchOrFinally.java
-(line 29,col 9) Try has no finally, no catch, and no resources
+(line 29,col 9) Try has no finally, no catch, and no resources.
 
 openjdk/langtools/test/tools/javac/diags/examples/TryWithoutCatchOrFinallyOrResource.java
-(line 28,col 9) Try has no finally, no catch, and no resources
+(line 28,col 9) Try has no finally, no catch, and no resources.
 
 openjdk/langtools/test/tools/javac/diags/examples/TypeReqClassArray.java
 (line 30,col 34) Parse error. Found ")", expected "["
@@ -334,6 +346,18 @@ openjdk/langtools/test/tools/javac/enum/EnumAsIdentifier.java
 openjdk/langtools/test/tools/javac/enum/EnumMembersOrder.java
 (line 11,col 10) Parse error. Found  "d" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
+openjdk/langtools/test/tools/javac/enum/ExplicitlyAbstractEnum1.java
+(line 33,col 1) 'abstract' is not allowed here.
+
+openjdk/langtools/test/tools/javac/enum/ExplicitlyAbstractEnum2.java
+(line 33,col 1) 'abstract' is not allowed here.
+
+openjdk/langtools/test/tools/javac/enum/ExplicitlyFinalEnum1.java
+(line 33,col 1) 'final' is not allowed here.
+
+openjdk/langtools/test/tools/javac/enum/ExplicitlyFinalEnum2.java
+(line 33,col 1) 'final' is not allowed here.
+
 openjdk/langtools/test/tools/javac/enum/LocalEnum.java
 (line 34,col 14) Parse error. Found "enum", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
@@ -351,6 +375,12 @@ openjdk/langtools/test/tools/javac/failover/FailOver01.java
 
 openjdk/langtools/test/tools/javac/failover/FailOver15.java
 (line 17,col 9) Parse error. Found "}", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+
+openjdk/langtools/test/tools/javac/FloatingPointChanges/BadConstructorModifiers.java
+(line 12,col 5) 'strictfp' is not allowed here.
+
+openjdk/langtools/test/tools/javac/generics/typevars/5060485/Compatibility02.java
+(line 36,col 9) 'static' is not allowed here.
 
 openjdk/langtools/test/tools/javac/generics/typevars/6680106/T6680106.java
 (line 11,col 24) Parse error. Found "[", expected one of  "&" "," ">"
@@ -388,6 +418,12 @@ openjdk/langtools/test/tools/javac/literals/T6891079.java
 openjdk/langtools/test/tools/javac/literals/UnderscoreLiterals.java
 (line 176,col 14) Parse error. Found  ".00_00_02" <FLOATING_POINT_LITERAL>, expected one of  "!=" "%" "%=" "&" "&&" "&=" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
+openjdk/langtools/test/tools/javac/overrridecrash/A.java
+(line 25,col 5) Can have only one of 'protected', 'private'.
+
+openjdk/langtools/test/tools/javac/overrridecrash/B.java
+(line 35,col 5) Can have only one of 'protected', 'private'.
+
 openjdk/langtools/test/tools/javac/Parens3.java
 (line 35,col 9) Parse error. Found ":", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 
@@ -418,6 +454,9 @@ Lexical error at line 8, column 9.  Encountered: "#" (35), after : ""
 openjdk/langtools/test/tools/javac/rawDiags/Error.java
 (line 9,col 17) Parse error. Found <EOF>, expected "("
 
+openjdk/langtools/test/tools/javac/SynchronizedClass.java
+(line 9,col 1) 'synchronized' is not allowed here.
+
 openjdk/langtools/test/tools/javac/T4994049/T4994049.java
 (line 11,col 5) Parse error. Found  "BAR" <IDENTIFIER>, expected one of  "," ";" "}"
 
@@ -431,7 +470,7 @@ openjdk/langtools/test/tools/javac/TryWithResources/BadTwrSyntax.java
 (line 14,col 42) Parse error. Found ";", expected ")"
 
 openjdk/langtools/test/tools/javac/TryWithResources/PlainTry.java
-(line 11,col 9) Try has no finally, no catch, and no resources
+(line 11,col 9) Try has no finally, no catch, and no resources.
 
 openjdk/langtools/test/tools/javac/TryWithResources/ResDeclOutsideTry.java
 (line 14,col 14) Parse error. Found "=", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -463,10 +502,13 @@ openjdk/langtools/test/tools/javadoc/6964914/Error.java
 openjdk/langtools/test/tools/javadoc/6964914/JavacWarning.java
 (line 25,col 5) Parse error. Found "enum", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
+openjdk/langtools/test/tools/javadoc/enum/docComments/pkg1/Operation.java
+(line 33,col 1) 'abstract' is not allowed here.
+
 openjdk/langtools/test/tools/javadoc/sourceOption/p/A.java
 (line 27,col 5) Parse error. Found "assert", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-157 problems in 157 files
+171 problems in 171 files
