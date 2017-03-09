@@ -77,19 +77,6 @@ public class BaseJavaValidator extends Validators {
                         super.visit(n, reporter);
                     }
                 },
-                new VisitorValidator() {
-                    @Override
-                    public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
-                        if (!n.isInterface()) {
-                            n.getMethods().forEach(m -> {
-                                if (m.isDefault()) {
-                                    reporter.report(m, "A class cannot have default members.");
-                                }
-                            });
-                        }
-                        super.visit(n, reporter);
-                    }
-                },
                 new BaseModifierValidator()
         );
     }

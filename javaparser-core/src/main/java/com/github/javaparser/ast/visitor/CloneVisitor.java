@@ -190,7 +190,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        MethodDeclaration r = new MethodDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, typeParameters, type, name, n.isDefault(), parameters, thrownExceptions, body);
+        MethodDeclaration r = new MethodDeclaration(n.getRange().orElse(null), n.getModifiers(), annotations, typeParameters, type, name, parameters, thrownExceptions, body);
         r.setComment(comment);
         return r;
     }

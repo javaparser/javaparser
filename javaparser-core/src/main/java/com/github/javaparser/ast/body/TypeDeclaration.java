@@ -35,11 +35,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
-
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -159,16 +157,6 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return super.remove(node);
     }
 
-    @Override
-    public TypeDeclaration<?> clone() {
-        return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    public TypeDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.typeDeclarationMetaModel;
-    }
-
     /**
      * @return is this type's parent a CompilationUnit?
      */
@@ -181,5 +169,15 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
      */
     public boolean isNestedType() {
         return getParentNode().map(p -> p instanceof TypeDeclaration).orElse(false);
+    }
+
+    @Override
+    public TypeDeclaration<?> clone() {
+        return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public TypeDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.typeDeclarationMetaModel;
     }
 }

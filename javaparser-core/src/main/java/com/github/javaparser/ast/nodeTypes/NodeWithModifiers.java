@@ -110,6 +110,10 @@ public interface NodeWithModifiers<N extends Node> {
         return getModifiers().contains(VOLATILE);
     }
 
+    default boolean isDefault() {
+        return getModifiers().contains(Modifier.DEFAULT);
+    }
+
     @SuppressWarnings("unchecked")
     default N setStatic(boolean set) {
         return setModifier(STATIC, set);
@@ -163,6 +167,11 @@ public interface NodeWithModifiers<N extends Node> {
     @SuppressWarnings("unchecked")
     default N setVolatile(boolean set) {
         return setModifier(VOLATILE, set);
+    }
+
+    @SuppressWarnings("unchecked")
+    default N setDefault(boolean set) {
+        return setModifier(DEFAULT, set);
     }
 
     default N setModifier(Modifier m, boolean set) {

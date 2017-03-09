@@ -54,33 +54,36 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithModifiers<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration> {
 
-    private boolean isDefault;
-
     private Type type;
 
     private BlockStmt body;
 
     public MethodDeclaration() {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), false, new NodeList<>(), new NodeList<>(), new BlockStmt());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
-        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), false, new NodeList<>(), new NodeList<>(), new BlockStmt());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type type, final NodeList<Parameter> parameters) {
-        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), false, parameters, new NodeList<>(), new BlockStmt());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), parameters, new NodeList<>(), new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
-        this(null, modifiers, annotations, typeParameters, type, name, isDefault, parameters, thrownExceptions, body);
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
     }
 
-    public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+    /** @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set. */
+    @Deprecated
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
+        setDefault(isDefault);
+    }
+    public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
         super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
-        setDefault(isDefault);
         setBody(body);
     }
 
@@ -154,16 +157,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         return super.setTypeParameters(typeParameters);
-    }
-
-    public boolean isDefault() {
-        return isDefault;
-    }
-
-    public MethodDeclaration setDefault(final boolean isDefault) {
-        notifyPropertyChange(ObservableProperty.DEFAULT, this.isDefault, isDefault);
-        this.isDefault = isDefault;
-        return this;
     }
 
     /**

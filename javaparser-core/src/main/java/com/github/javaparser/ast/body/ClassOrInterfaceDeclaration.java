@@ -185,6 +185,13 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return super.remove(node);
     }
 
+    /**
+     * @return is this class's parent a LocalClassDeclarationStmt ?
+     */
+    public boolean isLocalClassDeclaration() {
+        return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
+    }
+
     @Override
     public ClassOrInterfaceDeclaration clone() {
         return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
@@ -193,12 +200,5 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public ClassOrInterfaceDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
-    }
-
-    /**
-     * @return is this class's parent a LocalClassDeclarationStmt ?
-     */
-    public boolean isLocalClassDeclaration() {
-        return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
     }
 }
