@@ -33,7 +33,9 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -111,22 +113,24 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Deprecated
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly) {
         List<MethodDeclaration> methods = new ArrayList<>();
-        for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).sorted(new MethodComparator()).collect(Collectors.toList())) {
+        Predicate<Method> staticFilter = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
+        for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).filter(staticFilter)
+                                    .sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, typeSolver);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, typeSolver, false);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, typeSolver);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }

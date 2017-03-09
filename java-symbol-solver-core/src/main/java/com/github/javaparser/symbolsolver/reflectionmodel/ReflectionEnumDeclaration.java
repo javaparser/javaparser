@@ -28,7 +28,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * @author Federico Tomassetti
@@ -132,15 +134,14 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
     return reflectionClassAdapter.getTypeParameters();
   }
 
-  public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+  public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
     List<MethodDeclaration> methods = new ArrayList<>();
+    Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
     for (Method method : clazz.getMethods()) {
-      if (method.isBridge() || method.isSynthetic())
-        continue;
+      if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name)|| !staticOnlyCheck.test(method)) continue;
       MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
       methods.add(methodDeclaration);
     }
-
     return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
   }
 

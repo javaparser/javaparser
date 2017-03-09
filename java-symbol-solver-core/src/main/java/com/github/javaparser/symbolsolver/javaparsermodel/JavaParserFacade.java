@@ -235,7 +235,7 @@ public class JavaParserFacade {
 
         solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
-        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, typeSolver);
+        SymbolReference<MethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }

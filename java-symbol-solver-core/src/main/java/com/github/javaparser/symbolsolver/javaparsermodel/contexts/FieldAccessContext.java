@@ -64,8 +64,8 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, typeSolver);
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly, TypeSolver typeSolver) {
+        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, false, typeSolver);
     }
 
     @Override

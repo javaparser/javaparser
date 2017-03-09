@@ -541,41 +541,42 @@ public class MethodResolutionLogic {
      * @param typeDeclaration
      * @param name
      * @param argumentsTypes
+     * @param staticOnly
      * @return
      */
-    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver, boolean staticOnly) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, typeSolver);
+            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
             Context ctx = ((JavaParserInterfaceDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, typeSolver);
+            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserEnumDeclaration) {
             if (name.equals("values") && argumentsTypes.isEmpty()) {
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
             }
             Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
-            return ctx.solveMethod(name, argumentsTypes, typeSolver);
+            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
         }
         if (typeDeclaration instanceof ReflectionClassDeclaration) {
-            return ((ReflectionClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((ReflectionClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-          return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+          return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
           if (typeDeclaration instanceof ReflectionEnumDeclaration) {
-            return ((ReflectionEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((ReflectionEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
-            return ((JavassistInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((JavassistInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
-          return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+          return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
           if (typeDeclaration instanceof JavassistEnumDeclaration) {
-            return ((JavassistEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes);
+            return ((JavassistEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }

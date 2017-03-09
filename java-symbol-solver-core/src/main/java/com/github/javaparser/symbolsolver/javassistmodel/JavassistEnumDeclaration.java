@@ -28,11 +28,15 @@ import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import javassist.bytecode.AccessFlag;
+import javassist.bytecode.SyntheticAttribute;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author Federico Tomassetti
@@ -120,32 +124,34 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         return javassistTypeDeclarationAdapter.containerType();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes) {
-      List<MethodDeclaration> candidates = new ArrayList<>();
-      for (CtMethod method : ctClass.getDeclaredMethods()) {
-          // TODO avoid bridge and synthetic methods
-          if (method.getName().equals(name)) {
-              candidates.add(new JavassistMethodDeclaration(method, typeSolver));
-          }
-      }
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly) {
+        List<MethodDeclaration> candidates = new ArrayList<>();
+        Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
+        for (CtMethod method : ctClass.getDeclaredMethods()) {
+            boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
+            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
+                candidates.add(new JavassistMethodDeclaration(method, typeSolver));
+            }
+        }
 
-      try {
-          CtClass superClass = ctClass.getSuperclass();
-          if (superClass != null) {
-              SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes);
-              if (ref.isSolved()) {
-                  candidates.add(ref.getCorrespondingDeclaration());
-              }
-          }
-      } catch (NotFoundException e) {
-          throw new RuntimeException(e);
-      }
+        try {
+            CtClass superClass = ctClass.getSuperclass();
+            if (superClass != null) {
+                SymbolReference<MethodDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
+                if (ref.isSolved()) {
+                    candidates.add(ref.getCorrespondingDeclaration());
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
-      return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
+        return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
-      return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
+        return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
 
 }

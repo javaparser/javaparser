@@ -56,7 +56,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
-        return getContext().solveMethod(name, parameterTypes, typeSolver);
+        return getContext().solveMethod(name, parameterTypes, false, typeSolver);
     }
 
     @Override

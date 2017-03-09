@@ -80,7 +80,7 @@ public class SymbolSolver {
     }
 
     public MethodUsage solveMethod(String methodName, List<Type> argumentsTypes, Context context) {
-        SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, typeSolver);
+        SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false, typeSolver);
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context, methodName);
         }

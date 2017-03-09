@@ -52,6 +52,11 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(ctMethod.getModifiers());
+    }
+
+    @Override
     public String toString() {
         return "JavassistMethodDeclaration{" +
                 "ctMethod=" + ctMethod +

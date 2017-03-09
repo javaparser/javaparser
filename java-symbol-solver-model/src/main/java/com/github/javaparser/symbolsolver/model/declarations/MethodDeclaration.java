@@ -41,4 +41,9 @@ public interface MethodDeclaration extends MethodLikeDeclaration {
      */
     boolean isDefaultMethod();
 
+    /*
+     * Is this method static?
+     */
+    boolean isStatic();
+
 }

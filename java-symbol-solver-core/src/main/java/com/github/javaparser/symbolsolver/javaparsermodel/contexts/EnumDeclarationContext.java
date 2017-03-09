@@ -66,8 +66,8 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
     }
 
     @Override
-    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, typeSolver);
+    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
     }
 
     ///

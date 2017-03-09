@@ -1,0 +1,16 @@
+class Test{
+
+    interface Foo{
+        double foobar();
+    }
+
+    interface Bar extends Foo {
+
+    }
+
+    void test(){
+        Bar b = null;
+        b.foobar();
+    }
+
+}
