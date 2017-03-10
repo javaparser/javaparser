@@ -21,12 +21,14 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -34,6 +36,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 public abstract class LiteralStringValueExpr extends LiteralExpr {
 
     protected String value;
+
+    @AllFieldsConstructor
+    public LiteralStringValueExpr(final String value) {
+        this(null, value);
+    }
 
     public LiteralStringValueExpr(final Range range, final String value) {
         super(range);

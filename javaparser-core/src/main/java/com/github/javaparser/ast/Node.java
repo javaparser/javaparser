@@ -37,7 +37,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+
 import java.util.*;
+
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -139,6 +141,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     private List<AstObserver> observers = new ArrayList<>();
 
+    @AllFieldsConstructor
     public Node(Range range) {
         this.range = range;
     }
@@ -323,7 +326,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public static final int ABSOLUTE_END_LINE = -2;
 
-    /** @deprecated use getComment().isPresent() */
+    /**
+     * @deprecated use getComment().isPresent()
+     */
     @Deprecated
     public boolean hasComment() {
         return comment != null;
@@ -427,7 +432,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch(mode) {
+        switch (mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;

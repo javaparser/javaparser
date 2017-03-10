@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -42,6 +43,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         this(null, new Name());
     }
 
+    @AllFieldsConstructor
     public AnnotationExpr(Name name) {
         this(null, name);
     }

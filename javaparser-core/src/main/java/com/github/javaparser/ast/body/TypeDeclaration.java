@@ -21,10 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
@@ -65,6 +62,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         this(null, new NodeList<>(), modifiers, new SimpleName(name), new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public TypeDeclaration(NodeList<AnnotationExpr> annotations, EnumSet<Modifier> modifiers, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         this(null, annotations, modifiers, name, members);
     }

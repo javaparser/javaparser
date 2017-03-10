@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import java.util.Optional;
@@ -43,6 +44,11 @@ public abstract class Comment extends Node {
 
     private Node commentedNode;
 
+    @AllFieldsConstructor
+    public Comment(String content) {
+        this(null, content);
+    }
+    
     public Comment(Range range, String content) {
         super(range);
         setContent(content);

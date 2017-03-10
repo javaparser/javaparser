@@ -7,6 +7,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleStmtMetaModel;
 
 public abstract class ModuleStmt extends Node {
+    public ModuleStmt() {
+        this(null);
+    }
 
     public ModuleStmt(Range range) {
         super(range);

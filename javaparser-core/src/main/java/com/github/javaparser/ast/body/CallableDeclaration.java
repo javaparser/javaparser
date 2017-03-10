@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -51,6 +52,11 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     private NodeList<Parameter> parameters;
 
     private NodeList<ReferenceType<?>> thrownExceptions;
+
+    @AllFieldsConstructor
+    public CallableDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions) {
+        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+    }
 
     public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions) {
         super(range, annotations);
