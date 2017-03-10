@@ -22,6 +22,7 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Range;
+import com.github.javaparser.Tokens;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
@@ -37,9 +38,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-
 import java.util.*;
 
+import static com.github.javaparser.Range.*;
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -86,6 +87,8 @@ import static java.util.Collections.unmodifiableList;
  * @author Julio Vilmar Gesser
  */
 public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node> {
+
+    private Tokens tokens;
 
     /**
      * Different registration mode for observers on nodes.
@@ -141,8 +144,15 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     private List<AstObserver> observers = new ArrayList<>();
 
+    @Deprecated
     public Node(Range range) {
         this.range = range;
+        this.tokens = null;
+    }
+
+    public Node(Tokens tokens) {
+        this.tokens = tokens;
+        this.range = range(tokens.begin.range.begin, tokens.end.range.end);
     }
 
     /**
@@ -160,6 +170,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public Optional<Range> getRange() {
         return Optional.ofNullable(range);
     }
+
+    /**
+     * @return the range of tokens in the source code that this node covers.
+     */
+    public Optional<Tokens> getTokens() {
+        return Optional.ofNullable(tokens);
+    }
+
 
     /**
      * @param range the range of characters in the source code that this node covers. null can be used to indicate that
@@ -431,7 +449,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (mode == null) {
             throw new IllegalArgumentException("Mode should be not null");
         }
-        switch (mode) {
+        switch(mode) {
             case JUST_THIS_NODE:
                 register(observer);
                 break;
