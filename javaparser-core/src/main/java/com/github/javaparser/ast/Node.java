@@ -141,7 +141,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     private List<AstObserver> observers = new ArrayList<>();
 
-    @AllFieldsConstructor
     public Node(Range range) {
         this.range = range;
     }

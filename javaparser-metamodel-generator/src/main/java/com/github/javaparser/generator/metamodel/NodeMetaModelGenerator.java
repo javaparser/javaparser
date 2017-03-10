@@ -4,7 +4,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.utils.SourceRoot;
@@ -93,9 +92,7 @@ public class NodeMetaModelGenerator {
             }
         }
 
-        if (!typeAnalysis.isAbstract) {
-            initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
-        }
+        initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
 
         moveStaticInitializeToTheEndOfTheClassBecauseWeNeedTheFieldsToInitializeFirst(metaModelCoid);
     }
