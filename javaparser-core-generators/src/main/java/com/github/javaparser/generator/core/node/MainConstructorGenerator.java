@@ -2,6 +2,7 @@ package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.Tokens;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -22,6 +23,9 @@ public class MainConstructorGenerator extends NodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
+        if (nodeMetaModel.is(Node.class)) {
+            return;
+        }
         ConstructorDeclaration constructor = new ConstructorDeclaration()
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
@@ -30,7 +34,8 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         BlockStmt body = constructor.getBody();
 
-        SeparatedItemStringBuilder superCall = new SeparatedItemStringBuilder("super(tokens, ", ", ", ");");
+        SeparatedItemStringBuilder superCall = new SeparatedItemStringBuilder("super(", ", ", ");");
+        superCall.append("tokens");
         for (PropertyMetaModel parameter : nodeMetaModel.getConstructorParameters()) {
             constructor.addParameter(parameter.getTypeNameForSetter(), parameter.getName());
             if (nodeMetaModel.getDeclaredPropertyMetaModels().contains(parameter)) {
@@ -40,11 +45,10 @@ public class MainConstructorGenerator extends NodeGenerator {
             }
         }
 
-        if (superCall.hasItems()) {
-            body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
-        }
+        body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
 
         ConstructorDeclaration existingConstructorDeclaration = nodeCoid.getConstructors().get(nodeCoid.getConstructors().size() - 1);
         nodeCoid.getMembers().replace(existingConstructorDeclaration, constructor);
+        nodeCu.addImport(Tokens.class);
     }
 }
