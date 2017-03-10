@@ -31,21 +31,21 @@ class MethodCalls {
 
     void variadicTest(){
         String[] varArg = new String[2];
-        variadicMethod("a");
-        variadicMethod(varArg);
+        foobar("a");
+        foobar(varArg);
     }
 
-    int variadicMethod(String s){
+    int foobar(String s){
         return 1;
     }
 
-    void variadicMethod(String... s){
+    void foobar(String... s){
         return;
     }
 
-    void varidicMethod(String... s)
+    void variadicMethod(String... s)
     {
-        this.varidicMethod("test");
+        this.variadicMethod("test");
     }
 
 }

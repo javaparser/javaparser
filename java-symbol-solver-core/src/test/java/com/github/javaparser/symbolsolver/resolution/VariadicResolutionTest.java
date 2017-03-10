@@ -61,13 +61,13 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("MethodCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
-        MethodDeclaration method = Navigator.demandMethod(clazz, "varidicMethod");
-        MethodCallExpr callExpr = Navigator.findMethodCall(method, "varidicMethod");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "variadicMethod");
+        MethodCallExpr callExpr = Navigator.findMethodCall(method, "variadicMethod");
         
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage callee = javaParserFacade.solveMethodAsUsage(callExpr);
-        assertEquals("varidicMethod", callee.getName());
+        assertEquals("variadicMethod", callee.getName());
     }
 
     @Test
