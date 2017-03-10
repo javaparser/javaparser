@@ -50,14 +50,14 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
-    private NodeList<ReferenceType> elements;
+    private NodeList<ReferenceType<?>> elements;
 
     @AllFieldsConstructor
-    public IntersectionType(NodeList<ReferenceType> elements) {
+    public IntersectionType(NodeList<ReferenceType<?>> elements) {
         this(null, elements);
     }
 
-    public IntersectionType(Range range, NodeList<ReferenceType> elements) {
+    public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
         super(range, new NodeList<>());
         setElements(elements);
     }
@@ -72,11 +72,11 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         v.visit(this, arg);
     }
 
-    public NodeList<ReferenceType> getElements() {
+    public NodeList<ReferenceType<?>> getElements() {
         return elements;
     }
 
-    public IntersectionType setElements(final NodeList<ReferenceType> elements) {
+    public IntersectionType setElements(final NodeList<ReferenceType<?>> elements) {
         assertNotNull(elements);
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         if (this.elements != null)

@@ -1175,11 +1175,11 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	NodeList<Parameter> parameters = emptyList();
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
-	NodeList<ReferenceType> throws_ = emptyList();
+	NodeList<ReferenceType<?>> throws_ = emptyList();
 	BlockStmt body = null;
 	NodeList<AnnotationExpr> annotations;
 	Position begin = modifier.begin;
-	ReferenceType throwType;
+	ReferenceType<?> throwType;
 }
 {
     // Modifiers already matched in the caller!
@@ -1196,10 +1196,10 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     }
 }
 
-ReferenceType ReferenceTypeWithAnnotations():
+ReferenceType<?> ReferenceTypeWithAnnotations():
 {
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	ReferenceType type;
+	ReferenceType<?> type;
 }
 {
     annotations = Annotations() 
@@ -1272,12 +1272,12 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	SimpleName name;
 	NodeList<Parameter> parameters = emptyList();
-	NodeList<ReferenceType> throws_ = emptyList();
+	NodeList<ReferenceType<?>> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
     Position begin = modifier.begin;
 	Position blockBegin = INVALID;
-	ReferenceType throwType;
+	ReferenceType<?> throwType;
 }
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
@@ -1364,7 +1364,7 @@ Type Type():
  { return ret; }
 }
 
-ReferenceType ReferenceType():
+ReferenceType<?> ReferenceType():
 {
 	Type type;
 	ArrayBracketPair arrayBracketPair;
@@ -1376,7 +1376,7 @@ ReferenceType ReferenceType():
   |
    type = ClassOrInterfaceType()  ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
-  { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
+  { return (ReferenceType<?>)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
 ArrayBracketPair ArrayBracketPair():
@@ -1393,8 +1393,8 @@ ArrayBracketPair ArrayBracketPair():
 IntersectionType IntersectionType():
 {
 	Position begin;
-	ReferenceType elementType;
-	NodeList<ReferenceType> elements = emptyList();
+	ReferenceType<?> elementType;
+	NodeList<ReferenceType<?>> elements = emptyList();
 }
 {
     elementType=ReferenceType() { begin=elementType.getBegin().get(); elements = add(elements, elementType); }
@@ -1477,8 +1477,8 @@ Type TypeArgument():
 
 WildcardType Wildcard():
 {
-	ReferenceType ext = null;
-	ReferenceType sup = null;
+	ReferenceType<?> ext = null;
+	ReferenceType<?> sup = null;
 	Position begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
@@ -1733,7 +1733,7 @@ Expression EqualityExpression():
 Expression InstanceOfExpression():
 {
 	Expression ret;
-	ReferenceType type;
+	ReferenceType<?> type;
 	NodeList<AnnotationExpr> annotations;
 }
 {
@@ -1895,11 +1895,11 @@ Expression PostfixExpression():
 Expression CastExpression():
 {
 	Expression ret;
-	ReferenceType referenceType;
+	ReferenceType<?> referenceType;
 	PrimitiveType primitiveType;
 	Position begin = INVALID;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	NodeList<ReferenceType> typesOfMultiCast = emptyList();
+	NodeList<ReferenceType<?>> typesOfMultiCast = emptyList();
 }
 {
   "(" {begin=tokenBegin();}
@@ -2301,7 +2301,6 @@ Statement BlockStatement():
 {
   (
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
-  	  {  }
 	  modifier = Modifiers()
 	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
 	|
@@ -2591,8 +2590,8 @@ TryStmt TryStatement():
 	NodeList<CatchClause> catchs = emptyList();
 	BlockStmt catchBlock;
 	ModifierHolder exceptModifier;
-	ReferenceType exceptionType;
-	NodeList<ReferenceType> exceptionTypes = emptyList();
+	ReferenceType<?> exceptionType;
+	NodeList<ReferenceType<?>> exceptionTypes = emptyList();
 	Pair<SimpleName, List<ArrayBracketPair>> exceptId;
 	Position begin;
 	Position catchBegin;
