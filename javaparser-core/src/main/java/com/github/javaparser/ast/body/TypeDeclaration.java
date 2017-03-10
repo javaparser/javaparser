@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -31,13 +32,15 @@ import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
+
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A base class for all types of type declarations.
@@ -164,5 +167,19 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @Override
     public TypeDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.typeDeclarationMetaModel;
+    }
+
+    /**
+     * @return is this type's parent a CompilationUnit?
+     */
+    public boolean isTopLevelType() {
+        return getParentNode().map(p -> p instanceof CompilationUnit).orElse(false);
+    }
+
+    /**
+     * @return is this type's parent a TypeDeclaration?
+     */
+    public boolean isNestedType() {
+        return getParentNode().map(p -> p instanceof TypeDeclaration).orElse(false);
     }
 }
