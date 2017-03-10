@@ -82,29 +82,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
-        List<MethodDeclaration> methods = new ArrayList<>();
-        Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (Method method : clazz.getMethods()) {
-            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name)|| !staticOnlyCheck.test(method)) continue;
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-            methods.add(methodDeclaration);
-        }
-
-        for (ReferenceType ancestor : getAncestors()) {
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
-            if (ref.isSolved()) {
-                methods.add(ref.getCorrespondingDeclaration());
-            }
-        }
-
-        if (getAncestors().isEmpty()){
-            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
-            if (ref.isSolved()) {
-                methods.add(ref.getCorrespondingDeclaration());
-            }
-        }
-        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
+        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
+                typeSolver,this, clazz);
     }
 
     @Override

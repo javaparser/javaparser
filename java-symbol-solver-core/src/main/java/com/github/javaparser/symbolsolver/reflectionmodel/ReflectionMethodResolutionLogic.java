@@ -31,15 +31,45 @@ import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 class ReflectionMethodResolutionLogic {
+
+    static SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly,
+                                                          TypeSolver typeSolver, ReferenceTypeDeclaration scopeType,
+                                                          Class clazz){
+        List<MethodDeclaration> methods = new ArrayList<>();
+        Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
+        for (Method method : clazz.getMethods()) {
+            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name)|| !staticOnlyCheck.test(method)) continue;
+            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
+            methods.add(methodDeclaration);
+        }
+
+        for (ReferenceType ancestor : scopeType.getAncestors()) {
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
+            if (ref.isSolved()) {
+                methods.add(ref.getCorrespondingDeclaration());
+            }
+        }
+
+        if (scopeType.getAncestors().isEmpty()){
+            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
+            if (ref.isSolved()) {
+                methods.add(ref.getCorrespondingDeclaration());
+            }
+        }
+        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
+    }
 
     static Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues,
