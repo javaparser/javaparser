@@ -5,21 +5,24 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStaticModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresStmtMetaModel;
+
 import java.util.EnumSet;
+
+import static com.github.javaparser.ast.Modifier.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A require statement in module-info.java. <code>require a.b.C;</code>
  */
-public class ModuleRequiresStmt extends ModuleStmt implements NodeWithModifiers<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
+public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModifier<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -77,6 +80,14 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithModifiers<
         this.name = name;
         setAsParentNodeOf(name);
         return this;
+    }
+
+    public boolean isTransitive() {
+        return getModifiers().contains(TRANSITIVE);
+    }
+
+    public ModuleRequiresStmt setTransitive(boolean set) {
+        return setModifier(TRANSITIVE, set);
     }
 
     @Override

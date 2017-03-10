@@ -208,7 +208,6 @@ public class ConcreteSyntaxModel {
                 comment(),
                 memberAnnotations(),
                 modifiers(),
-                conditional(ObservableProperty.DEFAULT, FLAG, sequence(token(GeneratedJavaParserConstants._DEFAULT), space())),
                 typeParameters(),
                 child(ObservableProperty.TYPE),
                 space(),

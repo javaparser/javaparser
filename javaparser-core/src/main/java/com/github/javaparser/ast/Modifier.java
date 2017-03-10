@@ -38,7 +38,8 @@ public enum Modifier {
     SYNCHRONIZED,
     NATIVE,
     STRICTFP,
-    TRANSITIVE;
+    TRANSITIVE,
+    DEFAULT;
 
     final String codeRepresentation;
 

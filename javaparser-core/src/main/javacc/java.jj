@@ -889,6 +889,8 @@ ModifierHolder Modifiers():
   |
    "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(tokenBegin()); }
   |
+   "default" { addModifier(modifiers, Modifier.DEFAULT);  begin = begin.orIfInvalid(tokenBegin()); }
+  |
    ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); }
   )
  )*
@@ -1049,10 +1051,7 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface):
 BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 {
    ModifierHolder modifier;
-   ModifierHolder modifier2 = null;
-   EnumSet<Modifier> aux = null;
    BodyDeclaration<?> ret;
-   boolean isDefault = false;
 }
 {
   {  }
@@ -1062,8 +1061,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	|
       // Just get all the modifiers out of the way. If you want to do
       // more checks, pass the modifiers down to the member
-	  modifier = Modifiers() [ "default" modifier2= Modifiers() { isDefault = true; }]
-
+	  modifier = Modifiers()
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
 	    |
@@ -1078,22 +1076,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	      ret = FieldDeclaration(modifier)
 	    |
 	      ret = MethodDeclaration(modifier)
-	      {
-	        ((MethodDeclaration)ret).setDefault(isDefault);
-	        if(modifier2!= null)
-	        {
-	          aux = modifier2.modifiers;
-	        }
-	        addMultipleModifier(modifier.modifiers, aux);
-	        ((MethodDeclaration)ret).setModifiers(modifier.modifiers);
-	      }
 	  )
-	  {
-	    if(isDefault && ! (ret instanceof MethodDeclaration))
-	    {
-	      addProblem("Only methods can have the keyword \"default\".");
-	    }
-	  }
 	|
 	  ";" { ret = new EmptyMemberDeclaration(tokenRange()); }
   )
@@ -1192,7 +1175,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, false, parameters, throws_, body);
+        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
     }
 }
 
@@ -1330,7 +1313,7 @@ NodeList<Statement> Statements():
 	Statement stmt;
 }
 {
-	( stmt = BlockStatement() { ret = add(ret, stmt); } )*
+	( LOOKAHEAD(2) stmt = BlockStatement() { ret = add(ret, stmt); } )*
 	{ return ret; }
 }
 

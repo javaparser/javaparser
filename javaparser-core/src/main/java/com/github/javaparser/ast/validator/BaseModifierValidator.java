@@ -97,7 +97,15 @@ public class BaseModifierValidator extends VisitorValidator {
                 reporter.report(n, builder.toString());
             }
         }
-        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+        if (n.getParentNode().isPresent()) {
+            if (n.getParentNode().get() instanceof ClassOrInterfaceDeclaration) {
+                if (!((ClassOrInterfaceDeclaration) n.getParentNode().get()).isInterface()) {
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                } else {
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT);
+                }
+            }
+        }
         n.getParameters().forEach(p -> validateModifiers(p, reporter, FINAL));
         super.visit(n, reporter);
     }
