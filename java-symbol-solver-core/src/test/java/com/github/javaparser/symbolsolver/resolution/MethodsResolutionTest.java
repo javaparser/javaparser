@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -25,6 +26,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -54,5 +56,20 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
 
         MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(expression);
         assertEquals("noneOf", methodUsage.getName());
+    }
+
+    @Test
+    public void solveMethodInInterfaceParent() throws ParseException {
+        CompilationUnit cu = parseSample("MethodCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "inheritedInterfaceMethod");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "toString");
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(expression);
+        assertEquals("java.lang.Object.toString()", call1.getQualifiedSignature());
     }
 }
