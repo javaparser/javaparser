@@ -1,44 +1,44 @@
 class MethodCalls {
 
-	public int member;
-	
-	public MethodCalls getSelf()
-	{
-		return this;
-	}
+    public int member;
+    
+    public MethodCalls getSelf()
+    {
+        return this;
+    }
 
 
-	public void foo()
-	{
-	}
+    public void foo()
+    {
+    }
 
-	void bar1()
-	{
-		getSelf().getSelf().foo();
-	}
+    void bar1()
+    {
+        getSelf().getSelf().foo();
+    }
 
-	int bar2()
-	{
-		return getSelf().m;
-	}
+    int bar2()
+    {
+        return getSelf().m;
+    }
 
-	void variadicTest(){
-	    String[] varArg = new String[2];
-	    variadicMethod("a");
-	    variadicMethod(varArg);
-	}
+    void variadicTest(){
+        String[] varArg = new String[2];
+        variadicMethod("a");
+        variadicMethod(varArg);
+    }
 
-	int variadicMethod(String s){
-	    return 1;
-	}
+    int variadicMethod(String s){
+        return 1;
+    }
 
     void variadicMethod(String... s){
         return;
     }
 
-	void varidicMethod(String... s)
-	{
-		this.varidicMethod("test");
-	}
+    void varidicMethod(String... s)
+    {
+        this.varidicMethod("test");
+    }
 
 }
