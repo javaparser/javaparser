@@ -28,9 +28,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -65,6 +68,24 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage callee = javaParserFacade.solveMethodAsUsage(callExpr);
         assertEquals("varidicMethod", callee.getName());
+    }
+
+    @Test
+    public void selectMostSpecificVariadic() throws ParseException {
+        CompilationUnit cu = parseSample("MethodCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "variadicTest");
+        List<MethodCallExpr> calls = method.getNodesByType(MethodCallExpr.class);
+
+        File src = adaptPath(new File("src/test/resources"));
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0));
+        MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(1));
+        assertEquals("int", call1.returnType().describe());
+        assertEquals("void", call2.returnType().describe());
     }
 
 }

@@ -7,10 +7,11 @@ class MethodCalls {
 		return this;
 	}
 
+
 	public void foo()
 	{
 	}
-	
+
 	void bar1()
 	{
 		getSelf().getSelf().foo();
@@ -20,7 +21,21 @@ class MethodCalls {
 	{
 		return getSelf().m;
 	}
-	
+
+	void variadicTest(){
+	    String[] varArg = new String[2];
+	    variadicMethod("a");
+	    variadicMethod(varArg);
+	}
+
+	int variadicMethod(String s){
+	    return 1;
+	}
+
+    void variadicMethod(String... s){
+        return;
+    }
+
 	void varidicMethod(String... s)
 	{
 		this.varidicMethod("test");
