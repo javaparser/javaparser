@@ -89,12 +89,27 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
+
+        for (ReferenceType ancestor : getAncestors()) {
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
+            if (ref.isSolved()) {
+                methods.add(ref.getCorrespondingDeclaration());
+            }
+        }
+
+        if (getAncestors().isEmpty()){
+            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
+            if (ref.isSolved()) {
+                methods.add(ref.getCorrespondingDeclaration());
+            }
+        }
         return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
     }
 
     @Override
     public String toString() {
-        return "ReflectionClassDeclaration{" +
+        return "ReflectionInterfaceDeclaration{" +
                 "clazz=" + clazz.getCanonicalName() +
                 '}';
     }

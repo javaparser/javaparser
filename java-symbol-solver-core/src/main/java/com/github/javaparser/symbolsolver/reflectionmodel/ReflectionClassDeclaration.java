@@ -124,13 +124,13 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         }
         if (getSuperClass() != null) {
             ClassDeclaration superClass = (ClassDeclaration) getSuperClass().getTypeDeclaration();
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, typeSolver, false);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(superClass, name, argumentsTypes, staticOnly, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }
         }
         for (ReferenceType interfaceDeclaration : getInterfaces()) {
-            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, typeSolver, false);
+            SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(interfaceDeclaration.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
             if (ref.isSolved()) {
                 methods.add(ref.getCorrespondingDeclaration());
             }

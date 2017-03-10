@@ -74,6 +74,11 @@ public interface Type {
     }
 
     /**
+     * Is this a lambda constraint type?
+     */
+    default boolean isConstraint() { return false; }
+
+    /**
      * Can this be seen as a ReferenceTypeUsage?
      * In other words: is this a reference to a class, an interface or an enum?
      */
@@ -119,6 +124,10 @@ public interface Type {
 
     default Wildcard asWildcard() {
         throw new UnsupportedOperationException(String.format("%s is not a Wildcard", this));
+    }
+
+    default LambdaConstraintType asConstraintType() {
+        throw new UnsupportedOperationException(String.format("%s is not a constraint type", this));
     }
 
     ///

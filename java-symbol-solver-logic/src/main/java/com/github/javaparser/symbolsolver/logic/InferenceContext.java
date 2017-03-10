@@ -17,10 +17,7 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
+import com.github.javaparser.symbolsolver.model.typesystem.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,16 +38,16 @@ public class InferenceContext {
         this.objectProvider = objectProvider;
     }
 
-    private Map<TypeParameterDeclaration, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
+    private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
     private InferenceVariableType inferenceVariableTypeForTp(TypeParameterDeclaration tp) {
-        if (!inferenceVariableTypeMap.containsKey(tp)) {
+        if (!inferenceVariableTypeMap.containsKey(tp.getName())) {
             InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, objectProvider);
             inferenceVariableTypes.add(inferenceVariableType);
             inferenceVariableType.setCorrespondingTp(tp);
-            inferenceVariableTypeMap.put(tp, inferenceVariableType);
+            inferenceVariableTypeMap.put(tp.getName(), inferenceVariableType);
         }
-        return inferenceVariableTypeMap.get(tp);
+        return inferenceVariableTypeMap.get(tp.getName());
     }
 
     /**
@@ -115,6 +112,22 @@ public class InferenceContext {
                     ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualType);
                 }
             }
+            if (actualType.isWildcard()){
+                Wildcard formalWildcard = formalType.asWildcard();
+                Wildcard actualWildcard = actualType.asWildcard();
+                if(formalWildcard.isBounded() && formalWildcard.getBoundedType() instanceof InferenceVariableType){
+                    if (formalWildcard.isSuper() && actualWildcard.isSuper()){
+                        ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
+                    } else if (formalWildcard.isExtends() && actualWildcard.isExtends()){
+                        ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
+                    }
+                }
+            }
+        } else if (actualType.isConstraint()){
+            LambdaConstraintType constraintType = actualType.asConstraintType();
+            if (constraintType.getBound() instanceof InferenceVariableType){
+                ((InferenceVariableType) constraintType.getBound()).registerEquivalentType(formalType);
+            }
         } else if (actualType.isPrimitive()) {
             registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
         } else {
@@ -139,6 +152,8 @@ public class InferenceContext {
             return new ArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
         } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
+        } else if (type.isConstraint()){
+            return LambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
         } else if (type instanceof InferenceVariableType) {
             return type;
         } else {

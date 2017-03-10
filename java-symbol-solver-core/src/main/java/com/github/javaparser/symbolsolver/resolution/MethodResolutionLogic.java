@@ -272,10 +272,31 @@ public class MethodResolutionLogic {
         for (int i = 0; i < method.getNoParams(); i++) {
             Type expectedType = method.getParamType(i);
             Type expectedTypeWithoutSubstitutions = expectedType;
+            Type expectedTypeWithInference = method.getParamType(i);
             Type actualType = argumentsTypes.get(i);
 
             List<TypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
             typeParameters.addAll(method.declaringType().getTypeParameters());
+
+            if (expectedType.describe().equals(actualType.describe())){
+                return true;
+            }
+
+            Map<TypeParameterDeclaration, Type> derivedValues = new HashMap<>();
+            for (int j = 0; j < method.getParamTypes().size(); j++) {
+                ParameterDeclaration parameter = method.getDeclaration().getParam(i);
+                Type parameterType = parameter.getType();
+                if (parameter.isVariadic()) {
+                    parameterType = parameterType.asArrayType().getComponentType();
+                }
+                inferTypes(argumentsTypes.get(j), parameterType, derivedValues);
+            }
+
+            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()){
+                TypeParameterDeclaration tp = entry.getKey();
+                expectedTypeWithInference = expectedTypeWithInference.replaceTypeVariables(tp, entry.getValue());
+            }
+
             for (TypeParameterDeclaration tp : typeParameters) {
                 if (tp.getBounds(typeSolver).isEmpty()) {
                     //expectedType = expectedType.replaceTypeVariables(tp.getName(), new ReferenceTypeUsageImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver));
@@ -310,6 +331,7 @@ public class MethodResolutionLogic {
             }
             if (!expectedType.isAssignableBy(actualType)
                     && !expectedType2.isAssignableBy(actualType)
+                    && !expectedTypeWithInference.isAssignableBy(actualType)
                     && !expectedTypeWithoutSubstitutions.isAssignableBy(actualType)) {
                 return false;
             }
@@ -361,20 +383,7 @@ public class MethodResolutionLogic {
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
-        if (applicableMethods.size() > 1) {
-          // remove abstract method if there is a non abstract one
-          List<MethodDeclaration> abstractMethods = new ArrayList<>();
-          for (int i = 0; i < applicableMethods.size(); i++) {
-            if (applicableMethods.get(i).isAbstract()) {
-              abstractMethods.add(applicableMethods.get(i));
-            }
-          }
-          if (!abstractMethods.isEmpty() && abstractMethods.size() < applicableMethods.size()) {
-            // remove the abstract to keep the "real" methods
-            applicableMethods.removeAll(abstractMethods);
-          }
-          
-        }
+
         if (applicableMethods.size() > 1) {
           List<Integer> nullParamIndexes = new ArrayList<>();
           for (int i = 0; i < argumentsTypes.size(); i++) {
@@ -405,9 +414,9 @@ public class MethodResolutionLogic {
             boolean possibleAmbiguity = false;
             for (int i = 1; i < applicableMethods.size(); i++) {
                 other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other, typeSolver)) {
+                if (isMoreSpecific(winningCandidate, other, argumentsTypes, typeSolver)) {
                     possibleAmbiguity = false;
-                } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+                } else if (isMoreSpecific(other, winningCandidate, argumentsTypes, typeSolver)) {
                     possibleAmbiguity = false;
                     winningCandidate = other;
                 } else {
@@ -441,7 +450,7 @@ public class MethodResolutionLogic {
       return true;
     }
 
-    private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, TypeSolver typeSolver) {
+    private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, List<Type> argumentTypes, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
         if (methodA.getNumberOfParams() < methodB.getNumberOfParams()) {
             return true;
@@ -460,12 +469,34 @@ public class MethodResolutionLogic {
             if (tdA.isAssignableBy(tdB) && !tdB.isAssignableBy(tdA)) {
                 return false;
             }
-            // if it matches a variadic and a not variadic I pick the not variadic
-            // FIXME
-            if (i == (methodA.getNumberOfParams() - 1) && tdA.arrayLevel() > tdB.arrayLevel()) {
-                return true;
+        }
+
+        if (!oneMoreSpecificFound) {
+            int lastIndex = argumentTypes.size() - 1;
+
+            if (methodA.hasVariadicParameter() && !methodB.hasVariadicParameter()) {
+                // if the last argument is an array then m1 is more specific
+                if (argumentTypes.get(lastIndex).isArray()) {
+                    return true;
+                }
+
+                if (!argumentTypes.get(lastIndex).isArray()) {
+                    return false;
+                }
+            }
+            if (!methodA.hasVariadicParameter() && methodB.hasVariadicParameter()) {
+                // if the last argument is an array and m1 is not variadic then
+                // it is not more specific
+                if (argumentTypes.get(lastIndex).isArray()) {
+                    return false;
+                }
+
+                if (!argumentTypes.get(lastIndex).isArray()) {
+                    return true;
+                }
             }
         }
+
         return oneMoreSpecificFound;
     }
 
@@ -492,6 +523,7 @@ public class MethodResolutionLogic {
 
     public static Optional<MethodUsage> findMostApplicableUsage(List<MethodUsage> methods, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
         List<MethodUsage> applicableMethods = methods.stream().filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver)).collect(Collectors.toList());
+
         if (applicableMethods.isEmpty()) {
             return Optional.empty();
         }
@@ -535,16 +567,20 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    /**
-     * Replace TypeDeclaration.solveMethod
-     *
-     * @param typeDeclaration
-     * @param name
-     * @param argumentsTypes
-     * @param staticOnly
-     * @return
-     */
-    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver, boolean staticOnly) {
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+        return solveMethodInType(typeDeclaration, name, argumentsTypes, false, typeSolver);
+    }
+
+        /**
+         * Replace TypeDeclaration.solveMethod
+         *
+         * @param typeDeclaration
+         * @param name
+         * @param argumentsTypes
+         * @param staticOnly
+         * @return
+         */
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
@@ -580,5 +616,62 @@ public class MethodResolutionLogic {
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
+
+    private static void inferTypes(Type source, Type target, Map<TypeParameterDeclaration, Type> mappings) {
+
+
+        if (source.equals(target)) {
+            return;
+        }
+        if (source.isReferenceType() && target.isReferenceType()) {
+            ReferenceType sourceRefType = source.asReferenceType();
+            ReferenceType targetRefType = target.asReferenceType();
+            if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
+                if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+                    for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+                        inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+                    }
+                }
+            }
+            return;
+        }
+        if (source.isReferenceType() && target.isWildcard()) {
+            if (target.asWildcard().isBounded()) {
+                inferTypes(source, target.asWildcard().getBoundedType(), mappings);
+                return;
+            }
+            return;
+        }
+        if (source.isWildcard() && target.isWildcard()) {
+            return;
+        }
+        if (source.isReferenceType() && target.isTypeVariable()) {
+            mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+
+        if (source.isWildcard() && target.isReferenceType()){
+            if (source.asWildcard().isBounded()){
+                inferTypes(source.asWildcard().getBoundedType(), target, mappings);
+            }
+            return;
+        }
+
+        if (source.isWildcard() && target.isTypeVariable()) {
+            mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+        if (source.isTypeVariable() && target.isTypeVariable()) {
+            mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+        if (source.isPrimitive() || target.isPrimitive()) {
+            return;
+        }
+        if (source.isNull()) {
+            return;
+        }
+    }
+
 
 }

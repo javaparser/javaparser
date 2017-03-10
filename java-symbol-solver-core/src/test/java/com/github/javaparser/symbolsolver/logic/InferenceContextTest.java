@@ -54,6 +54,8 @@ public class InferenceContextTest {
         object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         listOfString = listOf(string);
         tpE = EasyMock.createMock(TypeParameterDeclaration.class);
+        EasyMock.expect(tpE.getName()).andReturn("T").anyTimes();
+        EasyMock.replay(tpE);
         listOfE = listOf(new TypeVariable(tpE));
     }
 
