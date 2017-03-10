@@ -172,12 +172,12 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             throw new IllegalArgumentException();
         }
 
-        Type result = this;
+        ReferenceType result = this;
         int i = 0;
         for (Type tp : this.typeParametersValues()) {
             Type transformedTp = tp.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
             // Identity comparison on purpose
-            if (tp.isTypeVariable()) {
+            if (tp.isTypeVariable() && tp.asTypeVariable().describe().equals(tpToReplace.getName())) {
                 inferredTypes.put(tp.asTypeParameter(), replaced);
             }
             if (true) {
@@ -188,15 +188,14 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             i++;
         }
 
-        if (result.isReferenceType() && result.asReferenceType().typeDeclaration.getTypeParameters().contains(tpToReplace)) {
-            List<Type> values = result.asReferenceType().typeParametersValues();
-            int index = result.asReferenceType().typeDeclaration.getTypeParameters().indexOf(tpToReplace);
-            // this is necessary to avoid an issue in which a type like List<String> becomes List<List<String>>
-            if (!(replaced.isReferenceType() && this.getQualifiedName().equals(replaced.asReferenceType().getQualifiedName()))) {
-                values.set(index, replaced);
-            }
-            return create(result.asReferenceType().getTypeDeclaration(), values, typeSolver);
+        List<Type> values = result.typeParametersValues();
+        if(values.contains(tpToReplace)){
+            int index = values.indexOf(tpToReplace);
+            values.set(index, replaced);
+            return create(result.getTypeDeclaration(), values, typeSolver);
         }
+
+
         return result;
     }
 

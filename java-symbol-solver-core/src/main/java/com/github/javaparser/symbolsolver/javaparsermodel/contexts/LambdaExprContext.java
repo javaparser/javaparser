@@ -32,6 +32,7 @@ import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
+import com.github.javaparser.symbolsolver.model.typesystem.LambdaConstraintType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 import javaslang.Tuple2;
@@ -64,7 +65,14 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         Type lambdaType = methodUsage.getParamTypes().get(i);
-                        Value value = new Value(lambdaType.asReferenceType().typeParametersValues().get(0), name);
+                        Type argType = lambdaType.asReferenceType().typeParametersValues().get(0);
+                        LambdaConstraintType conType;
+                        if (argType.isWildcard()){
+                            conType = LambdaConstraintType.bound(argType.asWildcard().getBoundedType());
+                        } else {
+                            conType = LambdaConstraintType.bound(argType);
+                        }
+                        Value value = new Value(conType, name);
                         return Optional.of(value);
                     } else if (getParentNode(wrappedNode) instanceof VariableDeclarator) {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) getParentNode(wrappedNode);

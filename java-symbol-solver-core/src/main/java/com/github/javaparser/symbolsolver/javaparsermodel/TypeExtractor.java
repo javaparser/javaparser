@@ -370,8 +370,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
                         Type actualType = facade.getType(expressionStmt.getExpression());
                         Type formalType = functionalMethod.get().returnType();
-                        inferenceContext.addPair(formalType, actualType);
-                        result = inferenceContext.resolve(inferenceContext.addSingle(result));
+
+                        // if the functional method returns void anyway
+                        // we don't need to bother inferring types
+                        if (!(formalType instanceof VoidType)){
+                            inferenceContext.addPair(formalType, actualType);
+                            result = inferenceContext.resolve(inferenceContext.addSingle(result));
+                        }
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -398,7 +403,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             logger.finest("getType on method reference expr " + refMethod.getCorrespondingDeclaration().getName());
             //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
             if (solveLambdas) {
-                Type result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+                MethodUsage usage = facade.solveMethodAsUsage(callExpr);
+                Type result = usage.getParamType(pos);
                 // We need to replace the type variables
                 Context ctx = JavaParserFactory.getContext(node, typeSolver);
                 result = facade.solveGenericTypes(result, ctx, typeSolver);

@@ -584,7 +584,7 @@ public class ReferenceTypeTest {
         ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
 
         com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
-        TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("R").get();
+        TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
         TypeVariable typeVariable = new TypeVariable(streamMapR);
         stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable).build());
 

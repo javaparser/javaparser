@@ -88,7 +88,7 @@ public class JavaParserTypeDeclarationAdapter {
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ReferenceType ancestor : typeDeclaration.getAncestors()) {
                 SymbolReference<MethodDeclaration> res = MethodResolutionLogic
-                        .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver, staticOnly);
+                        .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
                 // consider methods from superclasses and only default methods from interfaces :
                 // not true, we should keep abstract as a valid candidate
                 // abstract are removed in MethodResolutionLogic.isApplicable is necessary
@@ -108,7 +108,7 @@ public class JavaParserTypeDeclarationAdapter {
 
         // if is interface and candidate method list is empty, we should check the Object Methods
         if (candidateMethods.isEmpty() && typeDeclaration.isInterface()) {
-            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, typeSolver, false);
+            SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false, typeSolver);
             if (res.isSolved()) {
                 candidateMethods.add(res.getCorrespondingDeclaration());
             }

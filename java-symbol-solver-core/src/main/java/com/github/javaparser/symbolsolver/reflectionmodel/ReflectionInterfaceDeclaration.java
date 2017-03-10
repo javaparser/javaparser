@@ -82,19 +82,13 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
-        List<MethodDeclaration> methods = new ArrayList<>();
-        Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
-        for (Method method : clazz.getMethods()) {
-            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name)|| !staticOnlyCheck.test(method)) continue;
-            MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
-            methods.add(methodDeclaration);
-        }
-        return MethodResolutionLogic.findMostApplicable(methods, name, parameterTypes, typeSolver);
+        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
+                typeSolver,this, clazz);
     }
 
     @Override
     public String toString() {
-        return "ReflectionClassDeclaration{" +
+        return "ReflectionInterfaceDeclaration{" +
                 "clazz=" + clazz.getCanonicalName() +
                 '}';
     }
