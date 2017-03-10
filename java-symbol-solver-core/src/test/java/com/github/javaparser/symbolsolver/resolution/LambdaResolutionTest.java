@@ -74,6 +74,32 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void lambdaReduce() throws ParseException {
+        CompilationUnit cu = parseSample("Lambda");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "reduce");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expr = returnStmt.getExpression().get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        Type type1 = javaParserFacade.getType(expr);
+        assertEquals("java.util.Optional<java.lang.Integer>", type1.describe());
+    }
+
+    @Test
+    public void lambdaBifunc() throws ParseException {
+        CompilationUnit cu = parseSample("Lambda");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "bifunc");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expr = returnStmt.getExpression().get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        Type type1 = javaParserFacade.getType(expr);
+        assertEquals("double", type1.describe());
+    }
+
+    @Test
     public void lambdaCollectParam() throws ParseException {
         CompilationUnit cu = parseSample("LambdaCollect");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
@@ -100,6 +126,8 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Type type = javaParserFacade.getType(expression);
         assertEquals("java.util.List<java.lang.String>", type.describe());
     }
+
+
 
 
 }

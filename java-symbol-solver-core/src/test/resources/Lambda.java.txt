@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.function.BiFunction;
 
 @FunctionalInterface
 public interface Lambda {
@@ -13,6 +14,27 @@ public class Agenda {
 
     public void lambdaMap(String personName) {
         return persons.stream().map(p -> p.toLowerCase());
+    }
+
+    public void lambdaMap2(){
+        return persons.stream().map(p -> p.codePoints());
+    }
+
+    public void reduce(){
+        List<Integer> a;
+        return a.stream().reduce((x,y) -> x * y);
+    }
+
+    double test(BiFunction<Integer,List,String> func){
+        return 0;
+    }
+
+    public double bifunc(){
+        return test((x,y) -> String.valueOf(func(x,y)));
+    }
+
+    int func(int a, List b){
+        return 1;
     }
 
     public void testFunctionalVar() {
