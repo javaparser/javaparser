@@ -174,7 +174,7 @@ public class LexicalPreservingPrinter {
 
             @Override
             public void concreteListReplacement(NodeList changedList, int index, Node oldValue, Node newValue) {
-                NodeText nodeText = lpp.getTextForNode(changedList.getParentNodeForChildren());
+                NodeText nodeText = lpp.getOrCreateNodeText(changedList.getParentNodeForChildren());
                 new LexicalDifferenceCalculator().calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue).apply(nodeText, changedList.getParentNodeForChildren());
             }
         };
