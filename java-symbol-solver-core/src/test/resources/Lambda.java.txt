@@ -15,6 +15,10 @@ public class Agenda {
         return persons.stream().map(p -> p.toLowerCase());
     }
 
+    public void lambdaMap2(){
+        return persons.stream().map(p -> p.codePoints());
+    }
+
     public void testFunctionalVar() {
     	Lambda a = p -> p.toLowerCase();
     }

@@ -64,13 +64,18 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
     public void lambdaMap() throws ParseException {
         CompilationUnit cu = parseSample("Lambda");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
-        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
-        Expression expression = returnStmt.getExpression().get();
+        MethodDeclaration m1 = Navigator.demandMethod(clazz, "lambdaMap");
+        MethodDeclaration m2 = Navigator.demandMethod(clazz, "lambdaMap2");
+        ReturnStmt returnStmt1 = Navigator.findReturnStmt(m1);
+        ReturnStmt returnStmt2 = Navigator.findReturnStmt(m2);
+        Expression e1 = returnStmt1.getExpression().get();
+        Expression e2 = returnStmt2.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
-        assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
+        Type type1 = javaParserFacade.getType(e1);
+        Type type2 = javaParserFacade.getType(e2);
+        assertEquals("java.util.stream.Stream<java.lang.String>", type1.describe());
+        assertEquals("java.util.stream.Stream<java.util.stream.IntStream>", type2.describe());
     }
 
     @Test

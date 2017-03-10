@@ -1,29 +1,51 @@
+import java.util.List;
+
 class MethodCalls {
 
-	public int member;
-	
-	public MethodCalls getSelf()
-	{
-		return this;
-	}
+    public int member;
+    
+    public MethodCalls getSelf()
+    {
+        return this;
+    }
 
-	public void foo()
-	{
-	}
-	
-	void bar1()
-	{
-		getSelf().getSelf().foo();
-	}
 
-	int bar2()
-	{
-		return getSelf().m;
-	}
-	
-	void varidicMethod(String... s)
-	{
-		this.varidicMethod("test");
-	}
+    public void foo()
+    {
+    }
+
+    void bar1()
+    {
+        getSelf().getSelf().foo();
+    }
+
+    int bar2()
+    {
+        return getSelf().m;
+    }
+
+    void inheritedInterfaceMethod(){
+        List<Integer> list;
+        list.toString();
+    }
+
+    void variadicTest(){
+        String[] varArg = new String[2];
+        foobar("a");
+        foobar(varArg);
+    }
+
+    int foobar(String s){
+        return 1;
+    }
+
+    void foobar(String... s){
+        return;
+    }
+
+    void variadicMethod(String... s)
+    {
+        this.variadicMethod("test");
+    }
 
 }
