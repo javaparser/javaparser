@@ -20,9 +20,7 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * A map of values associated to TypeParameters.
@@ -111,6 +109,14 @@ public class TypeParametersMap {
         } else {
             return Optional.empty();
         }
+    }
+
+    public List<String> getNames(){
+        return new ArrayList<>(nameToValue.keySet());
+    }
+
+    public List<Type> getTypes(){
+        return new ArrayList<>(nameToValue.values());
     }
 
     public Builder toBuilder() {

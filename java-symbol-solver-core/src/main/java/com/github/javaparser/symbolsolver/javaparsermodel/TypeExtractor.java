@@ -356,7 +356,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 //lambdas
                 Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(result);
                 if (functionalMethod.isPresent()) {
-                    LambdaExpr lambdaExpr = (LambdaExpr) node;
+                    LambdaExpr lambdaExpr = node;
 
                     InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
                     // At this point parameterType
