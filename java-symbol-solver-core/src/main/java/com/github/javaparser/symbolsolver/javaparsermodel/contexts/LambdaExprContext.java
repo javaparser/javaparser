@@ -81,11 +81,11 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             int lambdaParamIndex;
                             for (lambdaParamIndex = 0; lambdaParamIndex < wrappedNode.getParameters().size(); lambdaParamIndex++){
                                 if (wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name)){
-                                    found =true;
+                                    found = true;
                                     break;
                                 }
                             }
-                            if (!found) return Optional.empty();
+                            if (!found) { return Optional.empty(); }
 
                             // Now resolve the argument type using the inference context
                             Type argType = inferenceContext.resolve(inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)));

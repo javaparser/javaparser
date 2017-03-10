@@ -75,9 +75,9 @@ public class InferenceContext {
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
                 List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
-                    List<ReferenceType> ancestors2 = formalTypeAsReference.getAllAncestors();
+                    ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
-                    List<Type> correspondingActualType = ancestors2.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
+                    List<Type> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
                     if (correspondingActualType.isEmpty()){
                         throw new ConfilictingGenericTypesException(formalType, actualType);
                     }
