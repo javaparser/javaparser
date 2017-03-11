@@ -23,7 +23,7 @@ openjdk/langtools/test/com/sun/javadoc/testTypeAnnotations/typeannos/Receivers.j
 (line 32,col 23) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
 openjdk/langtools/test/com/sun/javadoc/testUnnamedPackage/BadSource.java
-(line 0,col 0) Parse error. Found  "Just" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
+(line 0,col 0) Parse error. Found  "Just" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
 openjdk/langtools/test/com/sun/javadoc/typeAnnotations/smoke/pkg/TargetTypes.java
 (line 97,col 23) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -32,19 +32,38 @@ openjdk/langtools/test/tools/javac/6302184/T6302184.java
 Lexical error at line 29, column 9.  Encountered: "\ufffd" (65533), after : ""
 
 openjdk/langtools/test/tools/javac/6440583/A.java
-(line 26,col 9) Parse error. Found "+", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 25,col 28) Parse error. Found  "1" <INTEGER_LITERAL>, expected "}"
 
 openjdk/langtools/test/tools/javac/annotations/AnnotationTypeElementModifiers.java
-(line 42,col 38) Parse error. Found "default", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
+(line 17,col 5) 'private' is not allowed here.
+(line 18,col 5) 'private' is not allowed here.
+(line 20,col 5) 'protected' is not allowed here.
+(line 21,col 5) 'protected' is not allowed here.
+(line 23,col 5) 'static' is not allowed here.
+(line 24,col 5) 'static' is not allowed here.
+(line 26,col 5) 'final' is not allowed here.
+(line 27,col 5) 'final' is not allowed here.
+(line 29,col 5) 'synchronized' is not allowed here.
+(line 30,col 5) 'synchronized' is not allowed here.
+(line 32,col 5) 'volatile' is not allowed here.
+(line 33,col 5) 'volatile' is not allowed here.
+(line 35,col 5) 'transient' is not allowed here.
+(line 36,col 5) 'transient' is not allowed here.
+(line 38,col 5) 'native' is not allowed here.
+(line 39,col 5) 'native' is not allowed here.
+(line 41,col 5) 'strictfp' is not allowed here.
+(line 42,col 5) 'strictfp' is not allowed here.
+(line 44,col 5) 'default' is not allowed here.
+(line 45,col 5) 'default' is not allowed here.
 
 openjdk/langtools/test/tools/javac/annotations/neg/AnnComma.java
 (line 35,col 35) Parse error. Found ")", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/annotations/neg/NoDefault.java
-(line 7,col 22) Parse error. Found "default", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
+(line 8,col 19) Parse error. Found "{", expected one of  ";" "default"
 
 openjdk/langtools/test/tools/javac/annotations/neg/NoDefaultAbstract.java
-(line 7,col 30) Parse error. Found "default", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
+(line 8,col 5) 'default' is not allowed here.
 
 openjdk/langtools/test/tools/javac/annotations/neg/NoStatic.java
 (line 9,col 18) Parse error. Found "{", expected one of  ";" "default"
@@ -56,7 +75,7 @@ openjdk/langtools/test/tools/javac/annotations/neg/Syntax1.java
 (line 40,col 21) Parse error. Found ",", expected one of  "!=" "%" "&" "&&" "(" ")" "*" "+" "-" "/" "<" "<=" "==" ">" ">=" "?" "^" "instanceof" "|" "||"
 
 openjdk/langtools/test/tools/javac/annotations/neg/Z12.java
-(line 35,col 15) Parse error. Found "void", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
+(line 35,col 15) Parse error. Found "void", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/annotations/neg/Z13.java
 (line 34,col 11) Parse error. Found "throws", expected one of  ";" "default"
@@ -77,7 +96,7 @@ openjdk/langtools/test/tools/javac/annotations/neg/Z8.java
 (line 34,col 10) Parse error. Found "int", expected ")"
 
 openjdk/langtools/test/tools/javac/annotations/neg/Z9.java
-(line 33,col 15) Parse error. Found "<", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
+(line 33,col 15) Parse error. Found "<", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/annotations/typeAnnotations/6967002/T6967002.java
 (line 33,col 16) Parse error. Found "...", expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -149,7 +168,7 @@ openjdk/langtools/test/tools/javac/BadHexConstant.java
 (line 35,col 14) Parse error. Found  "xL" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
 openjdk/langtools/test/tools/javac/declaration/method/MethodVoidParameter.java
-(line 7,col 16) Parse error. Found "void", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "double" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
+(line 7,col 16) Parse error. Found "void", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "default" "double" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/DefiniteAssignment/ConstantInfiniteWhile.java
 Lexical error at line 68, column 0.  Encountered: <EOF> after : ""
@@ -167,13 +186,13 @@ openjdk/langtools/test/tools/javac/diags/examples/AssertAsIdentifier2.java
 (line 27,col 5) Parse error. Found "assert", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/diags/examples/CallMustBeFirst.java
-(line 29,col 9) Parse error. Found "(", expected one of  "." "::"
+(line 28,col 18) Parse error. Found "super", expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/CantExtendIntfAnno.java
 (line 28,col 12) Parse error. Found "extends", expected "{"
 
 openjdk/langtools/test/tools/javac/diags/examples/CatchWithoutTry.java
-(line 27,col 14) Parse error. Found "catch", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 14) Parse error. Found "catch", expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/DefaultAllowedInIntfAnnotationMember.java
 (line 27,col 18) Parse error. Found "default", expected one of  ";" "@" "[" "throws" "{"
@@ -182,7 +201,7 @@ openjdk/langtools/test/tools/javac/diags/examples/DotClassExpected.java
 (line 27,col 11) Parse error. Found "int", expected one of  "!" "(" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 openjdk/langtools/test/tools/javac/diags/examples/ElseWithoutIf.java
-(line 27,col 14) Parse error. Found "else", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 14) Parse error. Found "else", expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/EmptyCharLiteral.java
 Lexical error at line 29, column 15.  Encountered: "\'" (39), after : "\'"
@@ -194,13 +213,13 @@ openjdk/langtools/test/tools/javac/diags/examples/EnumAsIdentifier2.java
 (line 27,col 5) Parse error. Found "enum", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/diags/examples/Expected2.java
-(line 0,col 0) Parse error. Found "int", expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
+(line 0,col 0) Parse error. Found "int", expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
 openjdk/langtools/test/tools/javac/diags/examples/Expected3.java
-(line 0,col 0) Parse error. Found "int", expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
+(line 0,col 0) Parse error. Found "int", expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
 openjdk/langtools/test/tools/javac/diags/examples/FinallyWithoutTry.java
-(line 27,col 14) Parse error. Found "finally", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 14) Parse error. Found "finally", expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/ForeachBadInitialization.java
 (line 29,col 14) Parse error. Found ":", expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -260,7 +279,7 @@ openjdk/langtools/test/tools/javac/diags/examples/IntfAnnotationsCantHaveParams.
 (line 27,col 17) Parse error. Found "int", expected ")"
 
 openjdk/langtools/test/tools/javac/diags/examples/IntfAnnotationsCantHaveTypeParams.java
-(line 26,col 14) Parse error. Found "<", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
+(line 26,col 14) Parse error. Found "<", expected one of  ";" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" "}" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/diags/examples/InvalidBinaryNumber.java
 (line 30,col 13) Parse error. Found  "b201000010" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -269,7 +288,7 @@ openjdk/langtools/test/tools/javac/diags/examples/InvalidHexNumber.java
 (line 28,col 13) Parse error. Found  "xz1357abc" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
 openjdk/langtools/test/tools/javac/diags/examples/LocalEnum.java
-(line 27,col 14) Parse error. Found "enum", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 14) Parse error. Found "enum", expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/MalformedFpLit.java
 (line 28,col 15) Parse error. Found  "e" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -287,16 +306,16 @@ openjdk/langtools/test/tools/javac/diags/examples/NotAllowedVariable.java
 (line 28,col 17) Parse error. Found "int", expected one of  "(" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "super" "this" "to" "transitive" "true" "uses" "with" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 openjdk/langtools/test/tools/javac/diags/examples/NotAStatement.java
-(line 28,col 9) Parse error. Found "+", expected one of  "%=" "&=" "(" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 27,col 14) Parse error. Found  "x" <IDENTIFIER>, expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/Orphaned.java
-(line 27,col 14) Parse error. Found "case", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 14) Parse error. Found "case", expected "}"
 
 openjdk/langtools/test/tools/javac/diags/examples/PrematureEOF.java
 (line 26,col 20) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/diags/examples/ProcessorWrongType/ProcessorWrongType.java
-(line 0,col 0) Parse error. Found  "clas" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
+(line 0,col 0) Parse error. Found  "clas" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
 openjdk/langtools/test/tools/javac/diags/examples/ReceiverParameterNotApplicableConstructor.java
 (line 27,col 47) Parse error. Found "this", expected one of  "..." "@" "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -359,10 +378,10 @@ openjdk/langtools/test/tools/javac/enum/ExplicitlyFinalEnum2.java
 (line 33,col 1) 'final' is not allowed here.
 
 openjdk/langtools/test/tools/javac/enum/LocalEnum.java
-(line 34,col 14) Parse error. Found "enum", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 34,col 14) Parse error. Found "enum", expected "}"
 
 openjdk/langtools/test/tools/javac/EOI.java
-(line 33,col 16) Parse error. Found  "foobar\u001a" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "enum" "final" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
+(line 33,col 16) Parse error. Found  "foobar\u001a" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
 openjdk/langtools/test/tools/javac/ExtendArray.java
 (line 11,col 34) Parse error. Found "[", expected one of  "," "implements" "{"
@@ -386,10 +405,10 @@ openjdk/langtools/test/tools/javac/generics/typevars/6680106/T6680106.java
 (line 11,col 24) Parse error. Found "[", expected one of  "&" "," ">"
 
 openjdk/langtools/test/tools/javac/IllegalAnnotation.java
-(line 10,col 5) Parse error. Found "@", expected one of  "(" "++" "--" ";" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 10,col 5) Parse error. Found "@", expected "}"
 
 openjdk/langtools/test/tools/javac/incompleteStatements/T8000484.java
-(line 9,col 14) Parse error. Found "catch", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 9,col 14) Parse error. Found "catch", expected "}"
 
 openjdk/langtools/test/tools/javac/LabeledDeclaration.java
 (line 35,col 8) Parse error. Found "int", expected one of  "(" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "super" "this" "to" "transitive" "true" "uses" "with" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
@@ -398,7 +417,7 @@ openjdk/langtools/test/tools/javac/lambda/BadLambdaPos.java
 (line 18,col 26) Parse error. Found "+", expected one of  ")" ","
 
 openjdk/langtools/test/tools/javac/lambda/BadStatementInLambda.java
-(line 18,col 21) Parse error. Found "+", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 18,col 19) Parse error. Found  "1" <INTEGER_LITERAL>, expected "}"
 
 openjdk/langtools/test/tools/javac/lambda/funcInterfaces/LambdaTest1_neg1.java
 (line 13,col 64) Parse error. Found "}", expected one of  "," ";"
@@ -437,7 +456,7 @@ openjdk/langtools/test/tools/javac/parser/T4881269.java
 (line 32,col 10) Parse error. Found ".", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/policy/test3/A.java
-(line 4,col 9) Parse error. Found  "System" <IDENTIFIER>, expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 3,col 36) Parse error. Found  "0" <INTEGER_LITERAL>, expected "}"
 
 openjdk/langtools/test/tools/javac/processing/6994946/SyntaxErrorTest.java
 (line 12,col 9) Parse error. Found "}", expected "("
@@ -464,7 +483,7 @@ openjdk/langtools/test/tools/javac/T6882235.java
 (line 11,col 11) Parse error. Found ";", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 openjdk/langtools/test/tools/javac/T8026963/TypeAnnotationsCrashWithErroneousTreeTest.java
-(line 9,col 19) Parse error. Found "this", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "double" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
+(line 9,col 19) Parse error. Found "this", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "default" "double" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
 
 openjdk/langtools/test/tools/javac/TryWithResources/BadTwrSyntax.java
 (line 14,col 42) Parse error. Found ";", expected ")"
@@ -481,17 +500,11 @@ Lexical error at line 35, column 21.  Encountered: "\uff11" (65297), after : ""
 openjdk/langtools/test/tools/javac/unicode/NonasciiDigit2.java
 Lexical error at line 35, column 18.  Encountered: "\uff11" (65297), after : ""
 
-openjdk/langtools/test/tools/javac/unicode/SupplementaryJavaID4.java
-Lexical error at line 37, column 9.  Encountered: "\ud834" (55348), after : ""
-
-openjdk/langtools/test/tools/javac/unicode/SupplementaryJavaID5.java
-Lexical error at line 37, column 18.  Encountered: "\udd00" (56576), after : ""
-
 openjdk/langtools/test/tools/javac/unicode/TripleQuote.java
 Lexical error at line 35, column 15.  Encountered: "\'" (39), after : "\'"
 
 openjdk/langtools/test/tools/javac/UseEnum.java
-(line 36,col 44) Parse error. Found "enum", expected one of  "(" "++" "--" ";" "@" "abstract" "assert" "boolean" "break" "byte" "char" "class" "continue" "do" "double" "exports" "false" "final" "float" "for" "if" "int" "interface" "long" "module" "native" "new" "null" "open" "opens" "private" "protected" "provides" "public" "requires" "return" "short" "static" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transient" "transitive" "true" "try" "uses" "void" "volatile" "while" "with" "{" "}" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 36,col 44) Parse error. Found "enum", expected "}"
 
 openjdk/langtools/test/tools/javac/VoidArray.java
 (line 35,col 5) Parse error. Found "[", expected one of  "exports" "module" "open" "opens" "provides" "requires" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -511,4 +524,4 @@ openjdk/langtools/test/tools/javadoc/sourceOption/p/A.java
 openjdk/langtools/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-171 problems in 171 files
+188 problems in 169 files

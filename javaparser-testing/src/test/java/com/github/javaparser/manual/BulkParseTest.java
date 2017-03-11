@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
 import static com.github.javaparser.utils.TestUtils.*;
+import static java.util.Comparator.comparing;
 
 public class BulkParseTest {
     /**
@@ -56,7 +57,7 @@ public class BulkParseTest {
         Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);
-        TreeMap<Path, List<Problem>> results = new TreeMap<>();
+        TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
         sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
             if (!localPath.toString().contains("target")) {
                 if (!result.isSuccessful()) {
