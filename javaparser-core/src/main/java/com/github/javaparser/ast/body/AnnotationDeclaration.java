@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.AnnotationDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -43,7 +42,7 @@ import java.util.List;
  *
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> implements NodeWithAbstractModifier<AnnotationDeclaration>{
+public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> implements NodeWithAbstractModifier<AnnotationDeclaration> {
 
     public AnnotationDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new SimpleName(), new NodeList<>());
