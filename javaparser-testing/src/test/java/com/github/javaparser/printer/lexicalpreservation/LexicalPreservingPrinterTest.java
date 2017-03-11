@@ -511,19 +511,6 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEquals(code, lpp.print(cu));
     }
 
-    private void changeCU(CompilationUnit cu) {
-        cu.getTypes().stream()
-                .forEach(type -> {
-                    type.getMembers().stream()
-                            .forEach(member -> {
-                                if (member instanceof MethodDeclaration) {
-                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
-                                    methodDeclaration.addAnnotation("Override");
-                                }
-                            });
-                });
-    }
-
     // See issue #855
     @Test
     public void handleOverrideAnnotation() {
@@ -540,7 +527,26 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        changeCU(cu);
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    if (!methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                                        methodDeclaration.addAnnotation("Override");
+                                    }
+                                }
+                            });
+                });
+        assertEquals("public class TestPage extends Page {\n" +
+                "\n" +
+                "   @Override()\n" +
+                "   protected void test() {}\n" +
+                "\n" +
+                "   @Override\n" +
+                "   protected void initializePage() {}\n" +
+                "}", result.b.print(cu));
     }
 
 }
