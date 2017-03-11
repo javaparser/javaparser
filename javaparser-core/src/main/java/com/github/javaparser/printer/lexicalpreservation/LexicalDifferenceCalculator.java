@@ -209,7 +209,7 @@ class LexicalDifferenceCalculator {
         } else if (csm instanceof CsmAttribute) {
             CsmAttribute csmAttribute = (CsmAttribute)csm;
             Object value = change.getValue(csmAttribute.getProperty(), node);
-            throw new UnsupportedOperationException((String)value);
+            elements.add(new CsmToken(csmAttribute.getTokenType(value.toString()), value.toString()));
         } else {
             throw new UnsupportedOperationException(csm.getClass().getSimpleName());
         }
