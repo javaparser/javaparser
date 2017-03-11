@@ -1,10 +1,10 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.Providers;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.BinaryExpr;
@@ -15,9 +15,12 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -506,6 +509,38 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerCode(code);
 
         assertEquals(code, lpp.print(cu));
+    }
+
+    private void changeCU(CompilationUnit cu) {
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    methodDeclaration.addAnnotation("Override");
+                                }
+                            });
+                });
+    }
+
+    // See issue #855
+    @Test
+    public void handleOverrideAnnotation() {
+        String code = "public class TestPage extends Page {" + EOL +
+                EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+
+        changeCU(cu);
     }
 
 }
