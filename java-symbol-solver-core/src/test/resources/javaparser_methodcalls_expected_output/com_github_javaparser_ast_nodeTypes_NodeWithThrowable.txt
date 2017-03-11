@@ -6,7 +6,7 @@
   Line 35) clazz.getSimpleName() ==> java.lang.Class.getSimpleName()
   Line 45) isThrows(clazz.getSimpleName()) ==> com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)
   Line 45) clazz.getSimpleName() ==> java.lang.Class.getSimpleName()
-  Line 55) getThrows().stream().anyMatch( t -> t.toString().equals(throwableName)) ==> java.util.stream.Stream.anyMatch(java.util.function.Predicate<? super T>)
+  Line 55) getThrows().stream().anyMatch(t -> t.toString().equals(throwableName)) ==> java.util.stream.Stream.anyMatch(java.util.function.Predicate<? super T>)
   Line 55) getThrows().stream() ==> java.util.Collection.stream()
   Line 55) getThrows() ==> com.github.javaparser.ast.nodeTypes.NodeWithThrowable.getThrows()
   Line 55) t.toString().equals(throwableName) ==> java.lang.String.equals(java.lang.Object)

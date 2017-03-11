@@ -322,8 +322,11 @@ public class ReflectionClassDeclarationTest {
         assertEquals(ImmutableSet.of(), compilationUnit.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
 
         ReflectionClassDeclaration coid = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
+
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters"),
                 coid.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
@@ -341,8 +344,8 @@ public class ReflectionClassDeclarationTest {
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.N").get().asReferenceType().getQualifiedName());
 
         interfaze = constructorDeclaration.getInterfaces().get(1);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithModifiers", interfaze.getQualifiedName());
-        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithModifiers.N").get().asReferenceType().getQualifiedName());
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers.N").get().asReferenceType().getQualifiedName());
 
         interfaze = constructorDeclaration.getInterfaces().get(2);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavadoc", interfaze.getQualifiedName());
@@ -371,7 +374,8 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetAllInterfacesWithoutParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable", "com.github.javaparser.ast.observer.Observable", "com.github.javaparser.HasParentNode"), compilationUnit.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+        assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable", "com.github.javaparser.ast.observer.Observable",
+                "com.github.javaparser.HasParentNode", "com.github.javaparser.ast.nodeTypes.NodeWithRange"), compilationUnit.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
 
         ReflectionClassDeclaration coid = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
@@ -385,13 +389,20 @@ public class ReflectionClassDeclarationTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithJavadoc",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
                 "com.github.javaparser.ast.nodeTypes.NodeWithMembers",
-                "com.github.javaparser.ast.observer.Observable"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+                "com.github.javaparser.ast.observer.Observable",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithProtectedModifier",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPrivateModifier",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStaticModifier",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier",
+                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers", "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier", "com.github.javaparser.ast.nodeTypes.NodeWithRange"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
     public void testGetAllInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        assertEquals(13, constructorDeclaration.getAllInterfaces().size());
+        assertEquals(18, constructorDeclaration.getAllInterfaces().size());
 
         ReferenceType interfaze = null;
 
@@ -400,46 +411,66 @@ public class ReflectionClassDeclarationTest {
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.N").get().asReferenceType().getQualifiedName());
 
         interfaze = constructorDeclaration.getAllInterfaces().get(1);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(2);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(3);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithModifiers", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithModifiers.N").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(2);
+        interfaze = constructorDeclaration.getAllInterfaces().get(4);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPrivateModifier", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPrivateModifier.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(5);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithProtectedModifier", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithProtectedModifier.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(6);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavadoc", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithJavadoc.N").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(3);
+        interfaze = constructorDeclaration.getAllInterfaces().get(7);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithDeclaration", interfaze.getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(4);
+        interfaze = constructorDeclaration.getAllInterfaces().get(8);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithSimpleName", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithSimpleName.N").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(5);
+        interfaze = constructorDeclaration.getAllInterfaces().get(9);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithParameters", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithParameters.N").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(6);
+        interfaze = constructorDeclaration.getAllInterfaces().get(10);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithThrownExceptions", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithThrownExceptions.N").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(7);
+        interfaze = constructorDeclaration.getAllInterfaces().get(11);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.N").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(8);
+        interfaze = constructorDeclaration.getAllInterfaces().get(12);
         assertEquals("java.lang.Cloneable", interfaze.getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(9);
+        interfaze = constructorDeclaration.getAllInterfaces().get(13);
         assertEquals("com.github.javaparser.HasParentNode", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.Node", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.HasParentNode.T").get().asReferenceType().getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(10);
+        interfaze = constructorDeclaration.getAllInterfaces().get(14);
         assertEquals("com.github.javaparser.ast.observer.Observable", interfaze.getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(11);
+        interfaze = constructorDeclaration.getAllInterfaces().get(15);
         assertEquals("com.github.javaparser.ast.visitor.Visitable", interfaze.getQualifiedName());
 
-        interfaze = constructorDeclaration.getAllInterfaces().get(12);
+        interfaze = constructorDeclaration.getAllInterfaces().get(16);
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithRange", interfaze.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.Node", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithRange.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(17);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.N").get().asReferenceType().getQualifiedName());
     }
@@ -469,30 +500,34 @@ public class ReflectionClassDeclarationTest {
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithJavadoc.N").get().asReferenceType().getQualifiedName());
 
         ancestor = ancestors.get(4);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithModifiers", ancestor.getQualifiedName());
-        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithModifiers.N").get().asReferenceType().getQualifiedName());
-
-        ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithParameters", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithParameters.N").get().asReferenceType().getQualifiedName());
 
-        ancestor = ancestors.get(6);
+        ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithSimpleName", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithSimpleName.N").get().asReferenceType().getQualifiedName());
 
-        ancestor = ancestors.get(7);
+        ancestor = ancestors.get(6);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithThrownExceptions", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithThrownExceptions.N").get().asReferenceType().getQualifiedName());
 
-        ancestor = ancestors.get(8);
+        ancestor = ancestors.get(7);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.N").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.get(8);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers.N").get().asReferenceType().getQualifiedName());
+
     }
 
     @Test
     public void testGetAllAncestorsWithoutTypeParameters() {
         ReflectionClassDeclaration cu = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable", "com.github.javaparser.ast.observer.Observable", "com.github.javaparser.ast.Node", "java.lang.Object", "com.github.javaparser.HasParentNode"), cu.getAllAncestors().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+        assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable",
+                "com.github.javaparser.ast.observer.Observable",
+                "com.github.javaparser.ast.Node", "java.lang.Object", "com.github.javaparser.HasParentNode",
+                "com.github.javaparser.ast.nodeTypes.NodeWithRange"), cu.getAllAncestors().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
@@ -542,6 +577,10 @@ public class ReflectionClassDeclarationTest {
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithParameters.N").get().asReferenceType().getQualifiedName());
 
         ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithRange", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.Node", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithRange.N").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithSimpleName", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithSimpleName.N").get().asReferenceType().getQualifiedName());
 
@@ -552,6 +591,23 @@ public class ReflectionClassDeclarationTest {
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.N").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers.N").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPrivateModifier", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPrivateModifier.N").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithProtectedModifier", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithProtectedModifier.N").get().asReferenceType().getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier.N").get().asReferenceType().getQualifiedName());
+
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.observer.Observable", ancestor.getQualifiedName());

@@ -8,7 +8,7 @@ class ReferencesToField  {
 
 }
 
-private class ReferencesToFieldExtendingClass extends ReferencesToField {
+class ReferencesToFieldExtendingClass extends ReferencesToField {
 
     public void method2(){
         i = 2;
