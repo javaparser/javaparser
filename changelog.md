@@ -1,3 +1,12 @@
+Version 3.1.2
+------------------
+Beta: `TreeStructureVisitor`, `ConcreteSyntaxModel`, and `LexicalPreservingPrinter`.
+
+* 594 849 831 a validation framework was introduced to inform about problems in the AST without needing to change the grammar,
+and without requiring parsing code.
+It is open for extension by users.
+* 852 853 826 832 846 839 smaller improvements and fixes
+
 Version 3.1.1
 ------------------
 Beta: `TreeStructureVisitor`, `ConcreteSyntaxModel`, and `LexicalPreservingPrinter`.
