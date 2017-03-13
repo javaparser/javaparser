@@ -6,6 +6,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 
+import java.util.Optional;
+
 /**
  * Contains validations that are valid for every Java version.
  * Used by default by the static JavaParser methods.
@@ -83,6 +85,15 @@ public class BaseJavaValidator extends Validators {
                     public void visit(AssignExpr n, ProblemReporter reporter) {
                         // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.26
                         Expression target = n.getTarget();
+                        while (target instanceof EnclosedExpr) {
+                            Optional<Expression> inner = ((EnclosedExpr) target).getInner();
+                            if (!inner.isPresent()) {
+                                reporter.report(n.getTarget(), "Illegal left hand side of an assignment.");
+                                super.visit(n, reporter);
+                                return;
+                            }
+                            target = inner.get();
+                        }
                         if (target instanceof NameExpr
                                 || target instanceof ArrayAccessExpr
                                 || target instanceof FieldAccessExpr) {

@@ -42,7 +42,7 @@ public class BaseJavaValidatorTest {
     @Test
     public void defaultMethodWithoutBody() {
         ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
-        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+        assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");
     }
 
     @Test
@@ -61,5 +61,17 @@ public class BaseJavaValidatorTest {
     public void leftHandAssignmentCannotBeAConditional() {
         ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("(1==2)=3"));
         assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+    }
+
+    @Test
+    public void leftHandAssignmentCannotBeEmptyBraces() {
+        ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("()=3"));
+        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+    }
+
+    @Test
+    public void leftHandAssignmentCanBeInBraces() {
+        ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("(i) += (i) += 1"));
+        assertProblems(result);
     }
 }

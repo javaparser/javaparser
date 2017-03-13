@@ -473,6 +473,10 @@ Lexical error at line 8, column 9.  Encountered: "#" (35), after : ""
 openjdk/langtools/test/tools/javac/rawDiags/Error.java
 (line 9,col 17) Parse error. Found <EOF>, expected "("
 
+openjdk/langtools/test/tools/javac/StoreClass.java
+(line 35,col 9) Illegal left hand side of an assignment.
+(line 36,col 9) Illegal left hand side of an assignment.
+
 openjdk/langtools/test/tools/javac/SynchronizedClass.java
 (line 9,col 1) 'synchronized' is not allowed here.
 
@@ -524,4 +528,4 @@ openjdk/langtools/test/tools/javadoc/sourceOption/p/A.java
 openjdk/langtools/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-188 problems in 169 files
+190 problems in 170 files
