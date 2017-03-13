@@ -22,6 +22,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.validator.BaseJavaValidator;
+import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Validator;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -36,7 +37,7 @@ public class ParserConfiguration {
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
     private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
     private int tabSize = 1;
-    private Validator validator = new BaseJavaValidator();
+    private Validator validator = new Java8Validator();
 
     public boolean isAttributeComments() {
         return attributeComments;
