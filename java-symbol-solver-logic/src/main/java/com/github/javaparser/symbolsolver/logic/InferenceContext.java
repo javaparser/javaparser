@@ -75,7 +75,14 @@ public class InferenceContext {
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
                 List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
-                    throw new ConfilictingGenericTypesException(formalType, actualType);
+                    ancestors = formalTypeAsReference.getAllAncestors();
+                    final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
+                    List<Type> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
+                    if (correspondingActualType.isEmpty()){
+                        throw new ConfilictingGenericTypesException(formalType, actualType);
+                    }
+                    correspondingFormalType = correspondingActualType;
+
                 }
                 actualTypeAsReference = correspondingFormalType.get(0).asReferenceType();
             }
@@ -96,7 +103,7 @@ public class InferenceContext {
         } else if (formalType instanceof InferenceVariableType) {
             ((InferenceVariableType) formalType).registerEquivalentType(actualType);
             if (actualType instanceof InferenceVariableType) {
-                ((InferenceVariableType)actualType).registerEquivalentType(formalType);
+                ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             }
         } else if (actualType.isNull()) {
             // nothing to do
@@ -112,16 +119,22 @@ public class InferenceContext {
                     ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualType);
                 }
             }
-            if (actualType.isWildcard()){
+            if (actualType.isWildcard()) {
                 Wildcard formalWildcard = formalType.asWildcard();
                 Wildcard actualWildcard = actualType.asWildcard();
-                if(formalWildcard.isBounded() && formalWildcard.getBoundedType() instanceof InferenceVariableType){
-                    if (formalWildcard.isSuper() && actualWildcard.isSuper()){
+                if (formalWildcard.isBounded() && formalWildcard.getBoundedType() instanceof InferenceVariableType) {
+                    if (formalWildcard.isSuper() && actualWildcard.isSuper()) {
                         ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
-                    } else if (formalWildcard.isExtends() && actualWildcard.isExtends()){
+                    } else if (formalWildcard.isExtends() && actualWildcard.isExtends()) {
                         ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
                     }
                 }
+            }
+        } else if (actualType instanceof InferenceVariableType){
+            if (formalType instanceof ReferenceType){
+                ((InferenceVariableType) actualType).registerEquivalentType(formalType);
+            } else if (formalType instanceof InferenceVariableType){
+                ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             }
         } else if (actualType.isConstraint()){
             LambdaConstraintType constraintType = actualType.asConstraintType();
