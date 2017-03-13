@@ -2,6 +2,7 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 
@@ -74,6 +75,20 @@ public class BaseJavaValidator extends Validators {
                                 }
                             });
                         }
+                        super.visit(n, reporter);
+                    }
+                },
+                new VisitorValidator() {
+                    @Override
+                    public void visit(AssignExpr n, ProblemReporter reporter) {
+                        // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.26
+                        Expression target = n.getTarget();
+                        if (target instanceof NameExpr
+                                || target instanceof ArrayAccessExpr
+                                || target instanceof FieldAccessExpr) {
+                            return;
+                        }
+                        reporter.report(n.getTarget(), "Illegal left hand side of an assignment.");
                         super.visit(n, reporter);
                     }
                 },

@@ -2,11 +2,14 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
@@ -39,7 +42,7 @@ public class BaseJavaValidatorTest {
     @Test
     public void defaultMethodWithoutBody() {
         ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
-        assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");
+        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
     }
 
     @Test
@@ -54,4 +57,9 @@ public class BaseJavaValidatorTest {
         assertProblems(result, "(line 1,col 19) There is no such thing as a local interface.");
     }
 
+    @Test
+    public void leftHandAssignmentCannotBeAConditional() {
+        ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("(1==2)=3"));
+        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+    }
 }
