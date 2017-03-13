@@ -2,13 +2,17 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class BaseJavaValidatorTest {
@@ -54,4 +58,21 @@ public class BaseJavaValidatorTest {
         assertProblems(result, "(line 1,col 19) There is no such thing as a local interface.");
     }
 
+    @Test
+    public void leftHandAssignmentCannotBeAConditional() {
+        ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("(1==2)=3"));
+        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+    }
+
+    @Test
+    public void leftHandAssignmentCannotBeEmptyBraces() {
+        ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("()=3"));
+        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+    }
+
+    @Test
+    public void leftHandAssignmentCanBeInBraces() {
+        ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("(i) += (i) += 1"));
+        assertNoProblems(result);
+    }
 }

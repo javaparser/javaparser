@@ -129,4 +129,8 @@ public class TestUtils {
         expected.addAll(Arrays.asList(expectedArg));
         assertCollections(expected, actual);
     }
+
+    public static void assertNoProblems(ParseResult<?> result) {
+        assertProblems(result);
+    }
 }
