@@ -12,6 +12,7 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class BaseJavaValidatorTest {
@@ -72,6 +73,6 @@ public class BaseJavaValidatorTest {
     @Test
     public void leftHandAssignmentCanBeInBraces() {
         ParseResult<Expression> result = new JavaParser().parse(EXPRESSION, provider("(i) += (i) += 1"));
-        assertProblems(result);
+        assertNoProblems(result);
     }
 }
