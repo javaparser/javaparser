@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 public class JavaParserConstructorDeclaration implements ConstructorDeclaration {
 
     private ClassDeclaration classDeclaration;
-    private com.github.javaparser.ast.body.ConstructorDeclaration wrapped;
+    private com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
-    public JavaParserConstructorDeclaration(ClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrapped,
+    public JavaParserConstructorDeclaration(ClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
                                             TypeSolver typeSolver) {
         this.classDeclaration = classDeclaration;
-        this.wrapped = wrapped;
+        this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
 
@@ -45,7 +45,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
 
     @Override
     public int getNumberOfParams() {
-        return this.wrapped.getParameters().size();
+        return this.wrappedNode.getParameters().size();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
         if (i < 0 || i >= getNumberOfParams()) {
             throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
-        return new JavaParserParameterDeclaration(wrapped.getParameters().get(i), typeSolver);
+        return new JavaParserParameterDeclaration(wrappedNode.getParameters().get(i), typeSolver);
     }
 
     @Override
@@ -61,13 +61,22 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
         return this.classDeclaration.getName();
     }
 
+    /**
+     * Returns the JavaParser node associated with this JavaParserConstructorDeclaration.
+     *
+     * @return A visitable JavaParser node wrapped by this object.
+     */
+    public com.github.javaparser.ast.body.ConstructorDeclaration getWrappedNode() {
+        return wrappedNode;
+    }
+    
     @Override
     public AccessLevel accessLevel() {
-        return Helper.toAccessLevel(wrapped.getModifiers());
+        return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
-        return this.wrapped.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
+        return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 }
