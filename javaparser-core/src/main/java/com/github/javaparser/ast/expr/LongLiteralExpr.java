@@ -22,12 +22,12 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
 
 /**
  * All ways to specify a long literal.
@@ -54,6 +54,10 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         super(range, value);
     }
 
+    public LongLiteralExpr(final long value) {
+        this(null, String.valueOf(value));
+    }
+
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
@@ -69,6 +73,10 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    public long asLong() {
+        return Long.parseLong(value);
     }
 
     @Override

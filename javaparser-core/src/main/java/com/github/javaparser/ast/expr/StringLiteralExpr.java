@@ -78,6 +78,10 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    public String asString() {
+        return value;
+    }
+
     @Override
     public StringLiteralExpr clone() {
         return (StringLiteralExpr) accept(new CloneVisitor(), null);

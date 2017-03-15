@@ -52,6 +52,10 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         super(range, value);
     }
 
+    public DoubleLiteralExpr(final double value) {
+        this(null, String.valueOf(value));
+    }
+
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
@@ -67,6 +71,10 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    public double asDouble() {
+        return Double.parseDouble(value);
     }
 
     @Override

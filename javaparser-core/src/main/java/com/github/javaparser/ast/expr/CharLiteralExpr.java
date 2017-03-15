@@ -22,13 +22,13 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.utils.Utils;
 
 /**
  * A literal character.
@@ -49,6 +49,10 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     @AllFieldsConstructor
     public CharLiteralExpr(String value) {
         this(null, value);
+    }
+
+    public CharLiteralExpr(char value) {
+        this(null, String.valueOf(value));
     }
 
     public CharLiteralExpr(Range range, String value) {
@@ -77,6 +81,10 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    public char asChar() {
+        return value.charAt(0);
     }
 
     @Override

@@ -22,10 +22,10 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -36,7 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * <br/><code>022</code>
  * <br/><code>0B10101010</code>
  * <br/><code>99999999L</code>
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public class IntegerLiteralExpr extends LiteralStringValueExpr {
@@ -54,6 +54,10 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         super(range, value);
     }
 
+    public IntegerLiteralExpr(final int value) {
+        this(null, String.valueOf(value));
+    }
+
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
@@ -69,6 +73,10 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    public int asInt() {
+        return Integer.parseInt(value);
     }
 
     @Override
