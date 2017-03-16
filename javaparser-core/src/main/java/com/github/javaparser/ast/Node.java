@@ -108,7 +108,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * This can be used to sort nodes on position.
      */
-    public static Comparator<Node> NODE_BY_BEGIN_POSITION = (a, b) -> {
+    public static Comparator<NodeWithRange<?>> NODE_BY_BEGIN_POSITION = (a, b) -> {
         if (a.getRange().isPresent() && b.getRange().isPresent()) {
             return a.getRange().get().begin.compareTo(b.getRange().get().begin);
         }

@@ -51,5 +51,4 @@ public interface NodeWithRange<N> {
     default boolean isPositionedBefore(Position position) {
         return getRange().map(r -> r.isBefore(position)).orElse(false);
     }
-
 }
