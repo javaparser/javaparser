@@ -539,13 +539,13 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                                 }
                             });
                 });
-        assertEquals("public class TestPage extends Page {\n" +
-                "\n" +
-                "   @Override()\n" +
-                "   protected void test() {}\n" +
-                "\n" +
-                "   @Override\n" +
-                "   protected void initializePage() {}\n" +
+        assertEquals("public class TestPage extends Page {" + EOL +
+                EOL +
+                "   @Override()" + EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
     }
 

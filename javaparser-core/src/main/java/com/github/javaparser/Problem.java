@@ -21,6 +21,7 @@
 
 package com.github.javaparser;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -92,4 +93,22 @@ public class Problem {
     public Optional<Throwable> getCause() {
         return Optional.ofNullable(cause);
     }
+
+    /**
+     * Sorts problems on position.
+     */
+    public static Comparator<Problem> PROBLEM_BY_BEGIN_POSITION = (a, b) -> {
+        if (a.getLocation().isPresent() && b.getLocation().isPresent()) {
+            return a.getLocation().get().begin.compareTo(b.getLocation().get().begin);
+        }
+        if (a.getLocation().isPresent() || b.getLocation().isPresent()) {
+            if (a.getLocation().isPresent()) {
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
+    };
+
+
 }

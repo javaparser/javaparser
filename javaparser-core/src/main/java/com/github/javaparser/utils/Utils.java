@@ -159,6 +159,16 @@ public class Utils {
     }
 
     /**
+     * Make an indent by appending indentLevel tab characters to the builder.
+     */
+    public static StringBuilder indent(StringBuilder builder, int indentLevel) {
+        for (int i = 0; i < indentLevel; i++) {
+            builder.append("\t");
+        }
+        return builder;
+    }
+
+    /**
      * Capitalizes the first character in the string.
      */
     public static String capitalize(String s) {
