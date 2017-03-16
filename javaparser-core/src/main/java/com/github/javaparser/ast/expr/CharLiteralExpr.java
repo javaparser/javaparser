@@ -87,6 +87,11 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         return value.charAt(0);
     }
 
+    public CharLiteralExpr setChar(char value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
     public CharLiteralExpr clone() {
         return (CharLiteralExpr) accept(new CloneVisitor(), null);

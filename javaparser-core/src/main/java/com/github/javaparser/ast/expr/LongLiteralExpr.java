@@ -79,6 +79,11 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return Long.parseLong(value);
     }
 
+    public LongLiteralExpr setLong(long value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
     public LongLiteralExpr clone() {
         return (LongLiteralExpr) accept(new CloneVisitor(), null);

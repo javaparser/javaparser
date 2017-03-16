@@ -79,6 +79,11 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         return Integer.parseInt(value);
     }
 
+    public IntegerLiteralExpr setInt(int value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
     public IntegerLiteralExpr clone() {
         return (IntegerLiteralExpr) accept(new CloneVisitor(), null);

@@ -77,6 +77,11 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         return Double.parseDouble(value);
     }
 
+    public DoubleLiteralExpr setDouble(double value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
     public DoubleLiteralExpr clone() {
         return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
