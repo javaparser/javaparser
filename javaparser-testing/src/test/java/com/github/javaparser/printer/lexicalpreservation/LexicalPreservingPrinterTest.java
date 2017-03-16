@@ -538,7 +538,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
     }
-
+    
     @Test
     public void preserveSpaceAsIsForASimpleClassWithMoreFormatting() throws IOException {
         considerExample("ASimpleClassWithMoreFormatting");
@@ -770,6 +770,46 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 + "        String test = \"\";" + EOL
                 + "        String test2 = \"\";" + EOL
                 + "    }", lpp.print(methodDeclaration));
+    }
+
+    // See issue #866
+    @Test
+    public void moveOverrideAnnotations() {
+        String code = "public class TestPage extends Page {" + EOL +
+                EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   protected @Override void initializePage() {}" + EOL +
+                "}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                                        methodDeclaration.getAnnotations().stream()
+                                                .forEach(anno -> anno.remove());
+
+                                        methodDeclaration.addMarkerAnnotation("Override");
+                                    }
+                                }
+                            });
+                });
+        assertEquals("public class TestPage extends Page {" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}", result.b.print(cu));
     }
 
 }
