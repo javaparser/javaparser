@@ -44,6 +44,7 @@ import java.nio.file.Path;
 import java.util.TreeSet;
 
 import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.*;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -126,6 +127,7 @@ public final class JavaParser {
             }
 
             configuration.getValidator().validate(resultNode, new ProblemReporter(parser.problems));
+            parser.problems.sort(PROBLEM_BY_BEGIN_POSITION);
 
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
