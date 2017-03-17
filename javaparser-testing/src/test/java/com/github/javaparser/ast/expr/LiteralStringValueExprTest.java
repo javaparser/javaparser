@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.JavaParser;
+import org.assertj.core.data.Percentage;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,9 +76,15 @@ public class LiteralStringValueExprTest {
 
     @Test
     public void doubleLiteralsAreConverted() {
-        DoubleLiteralExpr literalExpr = new DoubleLiteralExpr(25.0d);
+        DoubleLiteralExpr posFloat = JavaParser.parseExpression("3.4028235e38f");
+        DoubleLiteralExpr negFloat = JavaParser.parseExpression("1.40e-45f");
+        DoubleLiteralExpr posDouble = JavaParser.parseExpression("1.7976931348623157e308");
+        DoubleLiteralExpr negDouble = JavaParser.parseExpression("4.9e-324");
 
-        assertThat(literalExpr.asDouble()).isEqualTo(25.0d);
+        assertThat(posFloat.asDouble()).isCloseTo(3.4028235e38f, Percentage.withPercentage(1));
+        assertThat(negFloat.asDouble()).isCloseTo(1.40e-45f, Percentage.withPercentage(1));
+        assertThat(posDouble.asDouble()).isEqualTo(1.7976931348623157e308);
+        assertThat(negDouble.asDouble()).isEqualTo(4.9e-324);
     }
 
 }
