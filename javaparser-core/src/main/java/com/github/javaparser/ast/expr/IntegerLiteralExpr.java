@@ -76,7 +76,17 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     public int asInt() {
-        return Integer.parseInt(value);
+        String result = value.replaceAll("_", "");
+        if (result.startsWith("0x")) {
+            return Integer.parseUnsignedInt(result.substring(2), 16);
+        }
+        if (result.startsWith("0b")) {
+            return Integer.parseUnsignedInt(result.substring(2), 2);
+        }
+        if (result.startsWith("0")) {
+            return Integer.parseUnsignedInt(result.substring(1), 8);
+        }
+        return Integer.parseInt(result);
     }
 
     public IntegerLiteralExpr setInt(int value) {

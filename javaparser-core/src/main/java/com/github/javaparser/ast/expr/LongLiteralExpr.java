@@ -76,7 +76,21 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     public long asLong() {
-        return Long.parseLong(value);
+        String result = value.replaceAll("_", "");
+        char lastChar = result.charAt(result.length() - 1);
+        if (lastChar == 'l' || lastChar == 'L') {
+            result = result.substring(0, result.length() - 1);
+        }
+        if (result.startsWith("0x")) {
+            return Long.parseUnsignedLong(result.substring(2), 16);
+        }
+        if (result.startsWith("0b")) {
+            return Long.parseUnsignedLong(result.substring(2), 2);
+        }
+        if (result.startsWith("0")) {
+            return Long.parseUnsignedLong(result.substring(1), 8);
+        }
+        return Long.parseLong(result);
     }
 
     public LongLiteralExpr setLong(long value) {
