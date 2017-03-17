@@ -49,7 +49,7 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return classDeclaration.getName();
     }
 
     @Override
