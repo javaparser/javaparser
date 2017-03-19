@@ -13,7 +13,7 @@ public class Java9Validator extends Validators {
     public Java9Validator() {
         super(
                 new CommonValidators(),
-                new ModifierValidator(),
+                new ModifierValidator(true),
                 new VisitorValidator() {
                     @Override
                     public void visit(Name n, ProblemReporter arg) {

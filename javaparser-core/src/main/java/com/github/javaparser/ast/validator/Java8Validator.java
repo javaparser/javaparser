@@ -10,7 +10,7 @@ public class Java8Validator extends Validators {
     public Java8Validator() {
         super(
                 new CommonValidators(),
-                new ModifierValidator()
+                new ModifierValidator(true)
         );
     }
 }

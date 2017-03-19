@@ -10,7 +10,7 @@ public class Java6Validator extends Validators {
     public Java6Validator() {
         super(
                 new CommonValidators(),
-                new ModifierValidator()
+                new ModifierValidator(true)
         );
     }
 }

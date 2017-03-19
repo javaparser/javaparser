@@ -10,7 +10,7 @@ public class Java1_4Validator extends Validators {
     public Java1_4Validator() {
         super(
                 new CommonValidators(),
-                new ModifierValidator()
+                new ModifierValidator(true)
         );
     }
 }

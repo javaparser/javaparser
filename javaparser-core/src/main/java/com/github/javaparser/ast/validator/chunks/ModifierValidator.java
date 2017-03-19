@@ -13,16 +13,22 @@ import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.*;
+import static java.util.Arrays.asList;
 
 
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
+    private final boolean hasStrictfp;
+
+    public ModifierValidator(boolean hasStrictfp) {
+        this.hasStrictfp = hasStrictfp;
+    }
+
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isInterface()) {
@@ -90,7 +96,7 @@ public class ModifierValidator extends VisitorValidator {
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
         if (n.isAbstract()) {
             final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
-            for (Modifier m : Arrays.asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
+            for (Modifier m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
                 if (n.getModifiers().contains(m)) {
                     builder.append(m.asString());
                 }
@@ -142,12 +148,18 @@ public class ModifierValidator extends VisitorValidator {
     private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
-        validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
-        n.getModifiers().forEach(m -> {
+        if (hasStrictfp) {
+            validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
+        } else {
+            final List<Modifier> newModifiers = new ArrayList<>(asList(allowedModifiers));
+            newModifiers.remove(STRICTFP);
+            allowedModifiers = newModifiers.toArray(new Modifier[0]);
+        }
+        for (Modifier m : n.getModifiers()) {
             if (!arrayContains(allowedModifiers, m)) {
                 reporter.report(n, "'%s' is not allowed here.", m.asString());
             }
-        });
+        }
     }
 
     private boolean arrayContains(Object[] items, Object searchItem) {
