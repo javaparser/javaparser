@@ -1,6 +1,6 @@
 ## Java Parser and Abstract Syntax Tree
 
-This package contains a Java 1.8 Parser with AST generation and visitor support.
+This package contains a Java 1.0 - Java 1.8 Parser with AST generation and visitor support.
 
 The AST records the source code structure.
 You can analyze source code for any purpose.
@@ -32,7 +32,7 @@ The project binaries are available in Maven Central.  Just add the following to 
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.1.2</version>
+    <version>3.1.3</version>
 </dependency>
 ```
 
@@ -41,7 +41,7 @@ If you would like to create visitors by generating code or are interested in how
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core-generators</artifactId>
-    <version>3.1.2</version>
+    <version>3.1.3</version>
 </dependency>
 ```
 
