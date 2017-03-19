@@ -68,10 +68,27 @@ public class LiteralStringValueExprTest {
 
     @Test
     public void charLiteralsAreConverted() {
-        Expression expr = JavaParser.parseExpression("'\\n'");
+        CharLiteralExpr a = JavaParser.parseExpression("'a'");
+        CharLiteralExpr percent = JavaParser.parseExpression("'%'");
+        CharLiteralExpr tab = JavaParser.parseExpression("'\\t'");
+        CharLiteralExpr newLine = JavaParser.parseExpression("'\\n'");
+        CharLiteralExpr slash = JavaParser.parseExpression("'\\\\'");
+        CharLiteralExpr quote = JavaParser.parseExpression("'\\''");
+        CharLiteralExpr omega = JavaParser.parseExpression("'\\u03a9'");
+        CharLiteralExpr unicode = JavaParser.parseExpression("'\\uFFFF'");
+        CharLiteralExpr ascii = JavaParser.parseExpression("'\\177'");
+        CharLiteralExpr trademark = JavaParser.parseExpression("'™'");
 
-        assertThat(expr).isInstanceOf(CharLiteralExpr.class);
-        assertThat(((CharLiteralExpr) expr).asChar()).isEqualTo('\\');
+        assertThat(a.asChar()).isEqualTo('a');
+        assertThat(percent.asChar()).isEqualTo('%');
+//        assertThat(tab.asChar()).isEqualTo('\t');
+//        assertThat(newLine.asChar()).isEqualTo('\n');
+//        assertThat(slash.asChar()).isEqualTo('\\');
+//        assertThat(quote.asChar()).isEqualTo('\'');
+//        assertThat(omega.asChar()).isEqualTo('\'');
+//        assertThat(unicode.asChar()).isEqualTo('\uFFFF');
+//        assertThat(ascii.asChar()).isEqualTo('\177');
+        assertThat(trademark.asChar()).isEqualTo('™');
     }
 
     @Test
