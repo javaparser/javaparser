@@ -1,20 +1,25 @@
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.chunks;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.validator.Java1_1Validator;
+import com.github.javaparser.ast.validator.Java8Validator;
+import com.github.javaparser.ast.validator.Java9Validator;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.validator.ValidatorTest.javaParser;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
-public class Java1_0ModifierValidatorTest {
+public class ModifierValidatorTest {
     private final String allModifiers = "public protected private abstract static final transient volatile synchronized native strictfp transitive default ";
 
     @Test
     public void topClass() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(allModifiers + "class X{}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "class X{}"));
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
@@ -33,7 +38,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void nestedClass() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "class I{}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "class I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -49,7 +54,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void localClass() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "class I{}}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "class I{}}}"));
         assertProblems(result,
                 "(line 1,col 20) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 20) Can have only one of 'final', 'abstract'.",
@@ -69,7 +74,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void topInterface() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(allModifiers + "interface X{}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "interface X{}"));
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
@@ -89,7 +94,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void nestedInterface() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "interface I{}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "interface I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -106,7 +111,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void localInterface() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
         assertProblems(result,
                 "(line 1,col 20) There is no such thing as a local interface."
         );
@@ -114,7 +119,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void topEnum() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(allModifiers + "enum X{}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "enum X{}"));
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
@@ -135,7 +140,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void nestedEnum() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "enum I{}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "enum I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -153,7 +158,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void topAnnotationDeclaration() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider(allModifiers + "@interface X{}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "@interface X{}"));
         assertProblems(result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
@@ -173,7 +178,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void nestedAnnotationDeclaration() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "@interface I{}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "@interface I{}}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -190,7 +195,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void annotationMember() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("@interface X{" + allModifiers + "int x();}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("@interface X{" + allModifiers + "int x();}"));
         assertProblems(result,
                 "(line 1,col 14) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 14) Can have only one of 'final', 'abstract'.",
@@ -211,7 +216,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void moduleRequires() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("module x{requires " + allModifiers + " a;}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("module x{requires " + allModifiers + " a;}"));
         assertProblems(result,
                 "(line 1,col 10) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 10) Can have only one of 'final', 'abstract'.",
@@ -232,7 +237,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void constructor() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "X(){};}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "X(){};}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -252,7 +257,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void constructorParameter() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{X(" + allModifiers + " int i){};}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{X(" + allModifiers + " int i){};}"));
         assertProblems(result,
                 "(line 1,col 11) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 11) Can have only one of 'final', 'abstract'.",
@@ -274,7 +279,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void classMethod() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "int x(){};}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "int x(){};}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -289,7 +294,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void interfaceMethod() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("interface X{" + allModifiers + "int x(){};}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("interface X{" + allModifiers + "int x(){};}"));
         assertProblems(result,
                 "(line 1,col 13) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 13) Can have only one of 'final', 'abstract'.",
@@ -303,7 +308,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void methodParameter() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(" + allModifiers + " int i){};}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(" + allModifiers + " int i){};}"));
         assertProblems(result,
                 "(line 1,col 15) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 15) Can have only one of 'final', 'abstract'.",
@@ -325,7 +330,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void field() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "int i;}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "int i;}"));
         assertProblems(result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
@@ -341,7 +346,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void localVariable() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(){" + allModifiers + "int i;}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(){" + allModifiers + "int i;}}"));
         assertProblems(result,
                 "(line 1,col 17) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 17) Can have only one of 'final', 'abstract'.",
@@ -363,7 +368,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void lambdaParameter() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(){ a(("+ allModifiers +" Integer x) -> 10);}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(){ a(("+ allModifiers +" Integer x) -> 10);}}"));
         assertProblems(result,
                 "(line 1,col 21) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 21) Can have only one of 'final', 'abstract'.",
@@ -385,7 +390,7 @@ public class Java1_0ModifierValidatorTest {
 
     @Test
     public void catchParameter() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch("+ allModifiers +" Integer x){}}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch("+ allModifiers +" Integer x){}}}"));
         assertProblems(result,
                 "(line 1,col 144) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 144) Can have only one of 'final', 'abstract'.",
@@ -402,6 +407,20 @@ public class Java1_0ModifierValidatorTest {
                 "(line 1,col 144) 'private' is not allowed here.",
                 "(line 1,col 144) 'public' is not allowed here.",
                 "(line 1,col 144) 'protected' is not allowed here."
+        );
+    }
+
+    @Test
+    public void java1_1noStrictfp() {
+        ParseResult<CompilationUnit> result = new JavaParser(new ParserConfiguration().setValidator(new Java1_1Validator())).parse(COMPILATION_UNIT, provider("interface X{" + allModifiers + "int x(){};}"));
+        assertProblems(result,
+                "(line 1,col 13) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 13) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 13) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 13) 'transient' is not allowed here.",
+                "(line 1,col 13) 'strictfp' is not allowed here.",
+                "(line 1,col 13) 'volatile' is not allowed here.",
+                "(line 1,col 13) 'transitive' is not allowed here."
         );
     }
 

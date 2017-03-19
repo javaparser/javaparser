@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.chunks;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
@@ -8,6 +8,8 @@ import com.github.javaparser.ast.modules.ModuleRequiresStmt;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
 import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import static com.github.javaparser.ast.Modifier.*;
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
-public class Java1_0ModifierValidator extends VisitorValidator {
+public class ModifierValidator extends VisitorValidator {
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isInterface()) {

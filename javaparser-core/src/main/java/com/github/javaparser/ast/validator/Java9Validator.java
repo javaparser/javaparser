@@ -3,6 +3,8 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.validator.chunks.CommonValidators;
+import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 
 /**
  * This validator validates according to Java 9 syntax rules.
@@ -10,7 +12,8 @@ import com.github.javaparser.ast.expr.SimpleName;
 public class Java9Validator extends Validators {
     public Java9Validator() {
         super(
-                new Java1_0Validator(),
+                new CommonValidators(),
+                new ModifierValidator(),
                 new VisitorValidator() {
                     @Override
                     public void visit(Name n, ProblemReporter arg) {
