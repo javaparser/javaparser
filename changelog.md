@@ -1,3 +1,20 @@
+Version 3.1.3
+------------------
+Beta: `TreeStructureVisitor`, and `LexicalPreservingPrinter`.
+
+A start has been made on source level support. The default level is Java 8.
+It can be set to Java 9 like this for a parser *instance*:
+```java
+private final JavaParser parser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
+```
+and like this for the static parse methods:
+```java
+JavaParser.getStaticConfiguration().setValidator(new Java9Validator());
+```
+
+* 862 552 "_" is an illegal identifier on source level 9.
+* 869 867 109 855 857 smaller improvements and fixes
+
 Version 3.1.2
 ------------------
 Beta: `TreeStructureVisitor`, `ConcreteSyntaxModel`, and `LexicalPreservingPrinter`.
