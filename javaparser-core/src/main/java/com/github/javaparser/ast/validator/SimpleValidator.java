@@ -9,21 +9,12 @@ import java.util.function.Predicate;
  * Runs a validator on all nodes of a certain type,
  * and adds a problem for all nodes that pass a condition.
  */
-public class SimpleValidator<N extends Node> implements Validator {
-    private final Class<N> type;
-    private final TypedValidator<N> validator;
-
+public class SimpleValidator<N extends Node> extends SingleNodeTypeValidator<N> {
     public SimpleValidator(Class<N> type, Predicate<N> condition, BiConsumer<N, ProblemReporter> problemSupplier) {
-        this.type = type;
-        this.validator = (node, problemReporter) -> {
+        super(type, (node, problemReporter) -> {
             if (condition.test(node)) {
                 problemSupplier.accept(node, problemReporter);
             }
-        };
-    }
-
-    @Override
-    public void accept(Node node, ProblemReporter problemReporter) {
-        node.getNodesByType(type).forEach(n -> validator.accept(n, problemReporter));
+        });
     }
 }
