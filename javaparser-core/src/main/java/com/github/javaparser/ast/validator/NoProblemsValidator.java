@@ -7,6 +7,6 @@ import com.github.javaparser.ast.Node;
  */
 public class NoProblemsValidator implements Validator {
     @Override
-    public void validate(Node node, ProblemReporter problemReporter) {
+    public void accept(Node node, ProblemReporter problemReporter) {
     }
 }

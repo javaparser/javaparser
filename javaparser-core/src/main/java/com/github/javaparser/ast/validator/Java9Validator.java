@@ -10,7 +10,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 public class Java9Validator extends Validators {
     public Java9Validator() {
         super(
-                new BaseJavaValidator(),
+                new Java1_0Validator(),
                 new VisitorValidator() {
                     @Override
                     public void visit(Name n, ProblemReporter arg) {

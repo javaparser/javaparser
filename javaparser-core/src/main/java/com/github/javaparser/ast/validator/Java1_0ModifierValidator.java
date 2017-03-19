@@ -20,7 +20,7 @@ import static com.github.javaparser.ast.Modifier.*;
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
-public class BaseModifierValidator extends VisitorValidator {
+public class Java1_0ModifierValidator extends VisitorValidator {
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isInterface()) {

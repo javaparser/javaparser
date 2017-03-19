@@ -126,7 +126,7 @@ public final class JavaParser {
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
 
-            configuration.getValidator().validate(resultNode, new ProblemReporter(parser.problems));
+            configuration.getValidator().accept(resultNode, new ProblemReporter(parser.problems));
             parser.problems.sort(PROBLEM_BY_BEGIN_POSITION);
 
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),

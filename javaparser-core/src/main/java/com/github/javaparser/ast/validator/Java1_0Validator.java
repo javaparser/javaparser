@@ -12,8 +12,8 @@ import java.util.Optional;
  * Contains validations that are valid for every Java version.
  * Used by default by the static JavaParser methods.
  */
-public class BaseJavaValidator extends Validators {
-    public BaseJavaValidator() {
+public class Java1_0Validator extends Validators {
+    public Java1_0Validator() {
         super(
                 new VisitorValidator() {
                     @Override
@@ -103,7 +103,7 @@ public class BaseJavaValidator extends Validators {
                         super.visit(n, reporter);
                     }
                 },
-                new BaseModifierValidator()
+                new Java1_0ModifierValidator()
         );
     }
 }

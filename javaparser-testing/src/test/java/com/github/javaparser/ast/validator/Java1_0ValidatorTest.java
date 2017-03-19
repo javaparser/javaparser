@@ -15,7 +15,7 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
-public class BaseJavaValidatorTest {
+public class Java1_0ValidatorTest {
     @Test
     public void tryWithoutAnything() {
         ParseResult<Statement> result = new JavaParser().parse(STATEMENT, provider("try{}"));

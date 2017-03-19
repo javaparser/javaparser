@@ -9,7 +9,7 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
-public class BaseModifierValidatorTest {
+public class Java1_0ModifierValidatorTest {
     private final String allModifiers = "public protected private abstract static final transient volatile synchronized native strictfp transitive default ";
 
     @Test

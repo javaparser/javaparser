@@ -21,7 +21,7 @@ public class Validators implements Validator {
     }
 
     @Override
-    public void validate(Node node, ProblemReporter problemReporter) {
-        validators.forEach(v -> v.validate(node, problemReporter));
+    public void accept(Node node, ProblemReporter problemReporter) {
+        validators.forEach(v -> v.accept(node, problemReporter));
     }
 }
