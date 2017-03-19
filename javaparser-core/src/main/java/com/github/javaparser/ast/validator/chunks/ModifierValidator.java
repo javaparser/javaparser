@@ -151,15 +151,20 @@ public class ModifierValidator extends VisitorValidator {
         if (hasStrictfp) {
             validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
         } else {
-            final List<Modifier> newModifiers = new ArrayList<>(asList(allowedModifiers));
-            newModifiers.remove(STRICTFP);
-            allowedModifiers = newModifiers.toArray(new Modifier[0]);
+            allowedModifiers = removeModifierFromArray(STRICTFP, allowedModifiers);
         }
         for (Modifier m : n.getModifiers()) {
             if (!arrayContains(allowedModifiers, m)) {
                 reporter.report(n, "'%s' is not allowed here.", m.asString());
             }
         }
+    }
+
+    private Modifier[] removeModifierFromArray(Modifier m, Modifier[] allowedModifiers) {
+        final List<Modifier> newModifiers = new ArrayList<>(asList(allowedModifiers));
+        newModifiers.remove(m);
+        allowedModifiers = newModifiers.toArray(new Modifier[0]);
+        return allowedModifiers;
     }
 
     private boolean arrayContains(Object[] items, Object searchItem) {
