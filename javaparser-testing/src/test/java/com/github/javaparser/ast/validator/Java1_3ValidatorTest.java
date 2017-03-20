@@ -13,8 +13,6 @@ public class Java1_3ValidatorTest {
     @Test
     public void noAssert() {
         ParseResult<Statement> result = javaParser1_3.parse(STATEMENT, provider("assert a;"));
-        assertProblems(result,
-                "(line 1,col 1) 'assert' keyword is not supported"
-        );
+        assertProblems(result, "(line 1,col 1) 'assert' keyword is not supported.");
     }
 }

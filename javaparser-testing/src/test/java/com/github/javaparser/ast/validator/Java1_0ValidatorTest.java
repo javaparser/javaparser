@@ -70,7 +70,12 @@ public class Java1_0ValidatorTest {
     @Test
     public void noInnerClasses() {
         ParseResult<CompilationUnit> result = javaParser1_0.parse(COMPILATION_UNIT, provider("class X{class Y{}}"));
-        assertProblems(result,
-                "(line 1,col 9) inner classes or interfaces are not supported");
+        assertProblems(result, "(line 1,col 9) inner classes or interfaces are not supported.");
+    }
+
+    @Test
+    public void noReflection() {
+        ParseResult<Expression> result = javaParser1_0.parse(EXPRESSION, provider("Abc.class"));
+        assertProblems(result, "(line 1,col 1) Reflection is not supported.");
     }
 }

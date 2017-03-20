@@ -1,6 +1,7 @@
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
@@ -12,11 +13,15 @@ public class Java1_0Validator extends Validators {
     protected final Validator modifiersWithoutStrictfp = new ModifierValidator(false);
     protected final Validator noAssertKeyword = new SimpleValidator<>(AssertStmt.class,
             n -> true,
-            (n, reporter) -> reporter.report(n, "'assert' keyword is not supported")
+            (n, reporter) -> reporter.report(n, "'assert' keyword is not supported.")
     );
     protected final Validator noInnerClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class,
             n -> !n.isTopLevelType(),
-            (n, reporter) -> reporter.report(n, "inner classes or interfaces are not supported")
+            (n, reporter) -> reporter.report(n, "inner classes or interfaces are not supported.")
+    );
+    protected final Validator noReflection = new SimpleValidator<>(ClassExpr.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "Reflection is not supported.")
     );
 
     public Java1_0Validator() {
@@ -24,7 +29,7 @@ public class Java1_0Validator extends Validators {
         add(modifiersWithoutStrictfp);
         add(noAssertKeyword);
         add(noInnerClasses);
-        // TODO validate "no reflection"
+        add(noReflection);
         // TODO validate "no generics"
         // TODO validate "no annotations"
         // TODO validate "no enums"

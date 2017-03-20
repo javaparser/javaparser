@@ -1,14 +1,13 @@
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_0;
 import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_1;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
@@ -353,7 +352,7 @@ public class Java1_1ValidatorTest {
 
     @Test
     public void lambdaParameter() {
-        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{int x(){ a(("+ allModifiers +" Integer x) -> 10);}}"));
+        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{int x(){ a((" + allModifiers + " Integer x) -> 10);}}"));
         assertProblems(result,
                 "(line 1,col 21) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 21) Can have only one of 'final', 'abstract'.",
@@ -375,7 +374,7 @@ public class Java1_1ValidatorTest {
 
     @Test
     public void catchParameter() {
-        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch("+ allModifiers +" Integer x){}}}"));
+        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch(" + allModifiers + " Integer x){}}}"));
         assertProblems(result,
                 "(line 1,col 144) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 144) Can have only one of 'final', 'abstract'.",
@@ -403,8 +402,13 @@ public class Java1_1ValidatorTest {
     @Test
     public void localInterface() {
         ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
-        assertProblems(result,
-                "(line 1,col 20) There is no such thing as a local interface."
+        assertProblems(result, "(line 1,col 20) There is no such thing as a local interface."
         );
+    }
+
+    @Test
+    public void reflection() {
+        ParseResult<Expression> result = javaParser1_1.parse(EXPRESSION, provider("Abc.class"));
+        assertNoProblems(result);
     }
 }
