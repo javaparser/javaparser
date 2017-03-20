@@ -6,5 +6,7 @@ package com.github.javaparser.ast.validator;
 public class Java1_1Validator extends Java1_0Validator {
     public Java1_1Validator() {
         super();
+        // TODO validate inner classes
+        // TODO validate reflection
     }
 }
