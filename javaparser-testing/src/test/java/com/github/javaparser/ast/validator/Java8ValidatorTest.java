@@ -1,57 +1,17 @@
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParseStart.EXPRESSION;
-import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
+import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_1;
 import static com.github.javaparser.ast.validator.ValidatorTest.javaParser8;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java8ValidatorTest {
-    @Test
-    public void tryWithoutAnything() {
-        ParseResult<Statement> result = javaParser8.parse(STATEMENT, provider("try{}"));
-        assertProblems(result, "(line 1,col 1) Try has no finally, no catch, and no resources.");
-    }
-
-    @Test
-    public void classExtendingMoreThanOne() {
-        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("class X extends Y, Z {}"));
-        assertProblems(result, "(line 1,col 20) A class cannot extend more than one other class.");
-    }
-
-    @Test
-    public void interfaceUsingImplements() {
-        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("interface X implements Y {}"));
-        assertProblems(result, "(line 1,col 24) An interface cannot implement other interfaces.");
-    }
-
-    @Test
-    public void interfaceWithInitializer() {
-        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("interface X {{}}"));
-        assertProblems(result, "(line 1,col 14) An interface cannot have initializers.");
-    }
-
-    @Test
-    public void defaultMethodWithoutBody() {
-        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
-        assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");
-    }
-
-    @Test
-    public void defaultInClass() {
-        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("class X {default void a(){};}"));
-        assertProblems(result, "(line 1,col 10) 'default' is not allowed here.");
-    }
-
     @Test
     public void localInterface() {
         ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("class X {void a(){interface I{}};}"));
@@ -59,20 +19,24 @@ public class Java8ValidatorTest {
     }
 
     @Test
-    public void leftHandAssignmentCannotBeAConditional() {
-        ParseResult<Expression> result = javaParser8.parse(EXPRESSION, provider("(1==2)=3"));
-        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
-    }
-
-    @Test
-    public void leftHandAssignmentCannotBeEmptyBraces() {
-        ParseResult<Expression> result = javaParser8.parse(EXPRESSION, provider("()=3"));
-        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
-    }
-
-    @Test
-    public void leftHandAssignmentCanBeInBraces() {
-        ParseResult<Expression> result = javaParser8.parse(EXPRESSION, provider("(i) += (i) += 1"));
-        assertNoProblems(result);
-    }
-}
+    public void lambdaParameter() {
+        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("class X{int x(){ a((" + allModifiers + " Integer x) -> 10);}}"));
+        assertProblems(result,
+                "(line 1,col 21) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 21) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 21) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 21) 'transient' is not allowed here.",
+                "(line 1,col 21) 'volatile' is not allowed here.",
+                "(line 1,col 21) 'synchronized' is not allowed here.",
+                "(line 1,col 21) 'strictfp' is not allowed here.",
+                "(line 1,col 21) 'default' is not allowed here.",
+                "(line 1,col 21) 'native' is not allowed here.",
+                "(line 1,col 21) 'strictfp' is not allowed here.",
+                "(line 1,col 21) 'abstract' is not allowed here.",
+                "(line 1,col 21) 'static' is not allowed here.",
+                "(line 1,col 21) 'transitive' is not allowed here.",
+                "(line 1,col 21) 'private' is not allowed here.",
+                "(line 1,col 21) 'public' is not allowed here.",
+                "(line 1,col 21) 'protected' is not allowed here."
+        );
+    }}

@@ -13,7 +13,7 @@ import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java1_1ValidatorTest {
-    private final String allModifiers = "public protected private abstract static final transient volatile synchronized native strictfp transitive default ";
+    public static final String allModifiers = "public protected private abstract static final transient volatile synchronized native strictfp transitive default ";
 
     @Test
     public void topClass() {
@@ -350,27 +350,6 @@ public class Java1_1ValidatorTest {
         );
     }
 
-    @Test
-    public void lambdaParameter() {
-        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{int x(){ a((" + allModifiers + " Integer x) -> 10);}}"));
-        assertProblems(result,
-                "(line 1,col 21) Can have only one of 'public', 'protected', 'private'.",
-                "(line 1,col 21) Can have only one of 'final', 'abstract'.",
-                "(line 1,col 21) 'transient' is not allowed here.",
-                "(line 1,col 21) 'volatile' is not allowed here.",
-                "(line 1,col 21) 'synchronized' is not allowed here.",
-                "(line 1,col 21) 'strictfp' is not allowed here.",
-                "(line 1,col 21) 'default' is not allowed here.",
-                "(line 1,col 21) 'native' is not allowed here.",
-                "(line 1,col 21) 'strictfp' is not allowed here.",
-                "(line 1,col 21) 'abstract' is not allowed here.",
-                "(line 1,col 21) 'static' is not allowed here.",
-                "(line 1,col 21) 'transitive' is not allowed here.",
-                "(line 1,col 21) 'private' is not allowed here.",
-                "(line 1,col 21) 'public' is not allowed here.",
-                "(line 1,col 21) 'protected' is not allowed here."
-        );
-    }
 
     @Test
     public void catchParameter() {
