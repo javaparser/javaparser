@@ -1,7 +1,6 @@
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -14,7 +13,7 @@ import com.github.javaparser.ast.validator.chunks.ModifierValidator;
  * This validator validates according to Java 1.0 syntax rules.
  */
 public class Java1_0Validator extends Validators {
-    protected final Validator modifiersWithoutStrictfp = new ModifierValidator(false);
+    protected final Validator modifiersWithoutStrictfpAndDefault = new ModifierValidator(false, false);
     protected final Validator noAssertKeyword = new SimpleValidator<>(AssertStmt.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "'assert' keyword is not supported.")
@@ -45,7 +44,7 @@ public class Java1_0Validator extends Validators {
 
     public Java1_0Validator() {
         super(new CommonValidators());
-        add(modifiersWithoutStrictfp);
+        add(modifiersWithoutStrictfpAndDefault);
         add(noAssertKeyword);
         add(noInnerClasses);
         add(noReflection);

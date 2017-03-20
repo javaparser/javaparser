@@ -7,7 +7,7 @@ import org.junit.Test;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
-import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_1;
+import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_0;
 import static com.github.javaparser.ast.validator.ValidatorTest.javaParser8;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
@@ -39,4 +39,12 @@ public class Java8ValidatorTest {
                 "(line 1,col 21) 'public' is not allowed here.",
                 "(line 1,col 21) 'protected' is not allowed here."
         );
-    }}
+    }
+
+    @Test
+    public void defaultMethodWithoutBody() {
+        ParseResult<CompilationUnit> result = javaParser8.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
+        assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");
+    }
+
+}

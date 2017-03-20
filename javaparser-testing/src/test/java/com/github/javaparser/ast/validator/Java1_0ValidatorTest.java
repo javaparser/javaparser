@@ -38,12 +38,6 @@ public class Java1_0ValidatorTest {
     }
 
     @Test
-    public void defaultMethodWithoutBody() {
-        ParseResult<CompilationUnit> result = javaParser1_0.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
-        assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");
-    }
-
-    @Test
     public void defaultInClass() {
         ParseResult<CompilationUnit> result = javaParser1_0.parse(COMPILATION_UNIT, provider("class X {default void a(){};}"));
         assertProblems(result, "(line 1,col 10) 'default' is not allowed here.");

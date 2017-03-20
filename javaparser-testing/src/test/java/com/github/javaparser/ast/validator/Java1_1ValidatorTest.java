@@ -289,6 +289,7 @@ public class Java1_1ValidatorTest {
                 "(line 1,col 13) 'transient' is not allowed here.",
                 "(line 1,col 13) 'strictfp' is not allowed here.",
                 "(line 1,col 13) 'volatile' is not allowed here.",
+                "(line 1,col 13) 'default' is not allowed here.",
                 "(line 1,col 13) 'transitive' is not allowed here."
         );
     }

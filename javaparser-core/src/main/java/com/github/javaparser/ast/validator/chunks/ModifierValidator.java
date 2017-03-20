@@ -24,9 +24,11 @@ import static java.util.Arrays.asList;
  */
 public class ModifierValidator extends VisitorValidator {
     private final boolean hasStrictfp;
+    private final boolean hasDefault;
 
-    public ModifierValidator(boolean hasStrictfp) {
+    public ModifierValidator(boolean hasStrictfp, boolean hasDefault) {
         this.hasStrictfp = hasStrictfp;
+        this.hasDefault = hasDefault;
     }
 
     @Override
@@ -110,7 +112,11 @@ public class ModifierValidator extends VisitorValidator {
                 if (!((ClassOrInterfaceDeclaration) n.getParentNode().get()).isInterface()) {
                     validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
                 } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT);
+                    if (hasDefault) {
+                        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT);
+                    } else {
+                        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                    }
                 }
             }
         }
