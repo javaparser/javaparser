@@ -3,6 +3,7 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -49,12 +50,15 @@ public class Java1_0Validator extends Validators {
             reporter.report(n, "Catch with resource is not supported.");
         }
     });
-
     protected final Validator noAnnotations = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof AnnotationExpr || node instanceof AnnotationDeclaration) {
             reporter.report(node, "Annotations are not supported.");
         }
     });
+    protected final Validator noEnums = new SimpleValidator<>(EnumDeclaration.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "enumerations are not supported.")
+    );
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -65,7 +69,7 @@ public class Java1_0Validator extends Validators {
         add(noGenerics);
         add(tryWithoutResources);
         add(noAnnotations);
-        // TODO validate "no enums"
+        add(noEnums);
         // TODO validate "no varargs"
         // TODO validate "no for-each"
         // TODO validate "no static imports"

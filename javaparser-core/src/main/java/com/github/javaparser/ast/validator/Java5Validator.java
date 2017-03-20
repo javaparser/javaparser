@@ -27,8 +27,8 @@ public class Java5Validator extends Java1_4Validator {
         // TODO validate annotations on classes, fields and methods but nowhere else
         // The following is probably too simple.
         remove(noAnnotations);
-        
-        // TODO validate enums
+
+        remove(noEnums);
         // TODO validate varargs
         // TODO validate for-each
         // TODO validate static imports

@@ -108,44 +108,6 @@ public class Java1_2ValidatorTest {
     }
 
     @Test
-    public void topEnum() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "enum X{}"));
-        assertProblems(result,
-                "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
-                "(line 1,col 1) Can have only one of 'final', 'abstract'.",
-                "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
-                "(line 1,col 1) 'transient' is not allowed here.",
-                "(line 1,col 1) 'volatile' is not allowed here.",
-                "(line 1,col 1) 'synchronized' is not allowed here.",
-                "(line 1,col 1) 'default' is not allowed here.",
-                "(line 1,col 1) 'native' is not allowed here.",
-                "(line 1,col 1) 'transitive' is not allowed here.",
-                "(line 1,col 1) 'static' is not allowed here.",
-                "(line 1,col 1) 'abstract' is not allowed here.",
-                "(line 1,col 1) 'final' is not allowed here.",
-                "(line 1,col 1) 'private' is not allowed here.",
-                "(line 1,col 1) 'protected' is not allowed here."
-        );
-    }
-
-    @Test
-    public void nestedEnum() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "enum I{}}"));
-        assertProblems(result,
-                "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
-                "(line 1,col 9) Can have only one of 'final', 'abstract'.",
-                "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
-                "(line 1,col 9) 'transient' is not allowed here.",
-                "(line 1,col 9) 'volatile' is not allowed here.",
-                "(line 1,col 9) 'default' is not allowed here.",
-                "(line 1,col 9) 'abstract' is not allowed here.",
-                "(line 1,col 9) 'final' is not allowed here.",
-                "(line 1,col 9) 'synchronized' is not allowed here.",
-                "(line 1,col 9) 'native' is not allowed here.",
-                "(line 1,col 9) 'transitive' is not allowed here."
-        );
-    }
-    @Test
     public void moduleRequires() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("module x{requires " + allModifiers + " a;}"));
         assertProblems(result,
