@@ -22,6 +22,8 @@ import static org.apache.commons.lang3.text.translate.EntityArrays.JAVA_CTRL_CHA
 import static org.apache.commons.lang3.text.translate.EntityArrays.JAVA_CTRL_CHARS_UNESCAPE;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ *
  * <p>Escapes and unescapes {@code String}s for
  * Java, Java Script, HTML and XML.</p>
  * <p>

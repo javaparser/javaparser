@@ -17,6 +17,8 @@
 package org.apache.commons.lang3.text.translate;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ * <p>
  * Translates codepoints to their Unicode escaped value suitable for Java source.
  *
  * @since 3.2

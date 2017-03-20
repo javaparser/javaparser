@@ -1,6 +1,8 @@
 package org.apache.commons.lang3;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ *
  * <p>Operations on arrays, primitive arrays (like {@code int[]}) and
  * primitive wrapper arrays (like {@code Integer[]}).
  * <p>

@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ *
  * Translates escaped Unicode values of the form \\u+\d\d\d\d back to
  * Unicode. It supports multiple 'u' characters and will work with or
  * without the +.

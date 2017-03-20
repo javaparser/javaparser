@@ -17,6 +17,8 @@
 package org.apache.commons.lang3.text.translate;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ * <p>
  * Class holding various entity data for HTML and XML - generally for use with
  * the LookupTranslator.
  * All arrays are of length [*][2].

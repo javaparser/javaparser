@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ * <p>
  * Translates a value using a lookup table.
  *
  * @since 3.0

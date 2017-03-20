@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ * <p>
  * Executes a sequence of translators one after the other. Execution ends whenever
  * the first translator consumes codepoints from the input.
  *

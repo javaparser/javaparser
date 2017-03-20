@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * Adapted from apache commons-lang3 project.
+ * <p>
  * Translates codepoints to their Unicode escaped value.
  *
  * @since 3.0
