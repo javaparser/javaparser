@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Utils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * A literal character.
@@ -84,7 +85,7 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     }
 
     public char asChar() {
-        return value.charAt(0);
+        return StringEscapeUtils.unescapeJava(value).charAt(0);
     }
 
     public CharLiteralExpr setChar(char value) {

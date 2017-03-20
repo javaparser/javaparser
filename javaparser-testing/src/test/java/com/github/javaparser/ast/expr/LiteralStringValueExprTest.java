@@ -81,13 +81,13 @@ public class LiteralStringValueExprTest {
 
         assertThat(a.asChar()).isEqualTo('a');
         assertThat(percent.asChar()).isEqualTo('%');
-//        assertThat(tab.asChar()).isEqualTo('\t');
-//        assertThat(newLine.asChar()).isEqualTo('\n');
-//        assertThat(slash.asChar()).isEqualTo('\\');
-//        assertThat(quote.asChar()).isEqualTo('\'');
-//        assertThat(omega.asChar()).isEqualTo('\'');
-//        assertThat(unicode.asChar()).isEqualTo('\uFFFF');
-//        assertThat(ascii.asChar()).isEqualTo('\177');
+        assertThat(tab.asChar()).isEqualTo('\t');
+        assertThat(newLine.asChar()).isEqualTo('\n');
+        assertThat(slash.asChar()).isEqualTo('\\');
+        assertThat(quote.asChar()).isEqualTo('\'');
+        assertThat(omega.asChar()).isEqualTo('\u03a9');
+        assertThat(unicode.asChar()).isEqualTo('\uFFFF');
+        assertThat(ascii.asChar()).isEqualTo('\177');
         assertThat(trademark.asChar()).isEqualTo('™');
     }
 
