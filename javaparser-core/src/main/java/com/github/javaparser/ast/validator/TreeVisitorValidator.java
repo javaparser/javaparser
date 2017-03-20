@@ -5,14 +5,18 @@ import com.github.javaparser.ast.Node;
 /**
  * A validator that walks the whole tree, visiting every node.
  */
-public abstract class TreeVisitorValidator implements Validator {
+public class TreeVisitorValidator implements Validator {
+    private final Validator validator;
+
+    public TreeVisitorValidator(Validator validator) {
+        this.validator = validator;
+    }
+
     @Override
     public final void accept(Node node, ProblemReporter reporter) {
-        process(node, reporter);
+        validator.accept(node, reporter);
         for (Node child : node.getChildNodes()) {
             accept(child, reporter);
         }
     }
-
-    public abstract void process(Node node, ProblemReporter reporter);
 }

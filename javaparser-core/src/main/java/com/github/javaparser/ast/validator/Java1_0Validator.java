@@ -1,7 +1,9 @@
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
@@ -27,21 +29,18 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Reflection is not supported.")
     );
-    protected final Validator noGenerics = new TreeVisitorValidator() {
-        @Override
-        public void process(Node node, ProblemReporter reporter) {
-            if (node instanceof NodeWithTypeArguments) {
-                if (((NodeWithTypeArguments<? extends Node>) node).getTypeArguments().isPresent()) {
-                    reporter.report(node, "Generics are not supported.");
-                }
-            }
-            if (node instanceof NodeWithTypeParameters) {
-                if (((NodeWithTypeParameters<? extends Node>) node).getTypeParameters().isNonEmpty()) {
-                    reporter.report(node, "Generics are not supported.");
-                }
+    protected final Validator noGenerics = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof NodeWithTypeArguments) {
+            if (((NodeWithTypeArguments<? extends Node>) node).getTypeArguments().isPresent()) {
+                reporter.report(node, "Generics are not supported.");
             }
         }
-    };
+        if (node instanceof NodeWithTypeParameters) {
+            if (((NodeWithTypeParameters<? extends Node>) node).getTypeParameters().isNonEmpty()) {
+                reporter.report(node, "Generics are not supported.");
+            }
+        }
+    });
     protected final SingleNodeTypeValidator<TryStmt> tryWithoutResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
         if (n.getCatchClauses().isEmpty() && !n.getFinallyBlock().isPresent()) {
             reporter.report(n, "Try has no finally and no catch.");
@@ -51,6 +50,11 @@ public class Java1_0Validator extends Validators {
         }
     });
 
+    protected final Validator noAnnotations = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof AnnotationExpr || node instanceof AnnotationDeclaration) {
+            reporter.report(node, "Annotations are not supported.");
+        }
+    });
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -60,7 +64,7 @@ public class Java1_0Validator extends Validators {
         add(noReflection);
         add(noGenerics);
         add(tryWithoutResources);
-        // TODO validate "no annotations"
+        add(noAnnotations);
         // TODO validate "no enums"
         // TODO validate "no varargs"
         // TODO validate "no for-each"

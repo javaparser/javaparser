@@ -17,7 +17,7 @@ public class Java1_4ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java1_4Validator()));
 
     @Test
-    public void noAssert() {
+    public void yesAssert() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("assert a;"));
         assertNoProblems(result);
     }
@@ -28,6 +28,16 @@ public class Java1_4ValidatorTest {
         assertProblems(result,
                 "(line 1,col 12) Generics are not supported.",
                 "(line 1,col 1) Generics are not supported."
+        );
+    }
+
+    @Test
+    public void noAnnotations() {
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("@Abc @Def() @Ghi(a=3) @interface X{}"));
+        assertProblems(result,
+                "(line 1,col 6) Annotations are not supported.",
+                "(line 1,col 13) Annotations are not supported.",
+                "(line 1,col 1) Annotations are not supported."
         );
     }
 }

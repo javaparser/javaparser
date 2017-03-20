@@ -11,22 +11,23 @@ import java.util.Optional;
  * This validator validates according to Java 5 syntax rules.
  */
 public class Java5Validator extends Java1_4Validator {
-    protected Validator genericsWithoutDiamondOperator = new TreeVisitorValidator() {
-        @Override
-        public void process(Node node, ProblemReporter reporter) {
-            if (node instanceof NodeWithTypeArguments) {
-                Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
-                if(typeArguments.isPresent() &&typeArguments.get().isEmpty()){
-                    reporter.report(node, "The diamond operator is not supported.");
-                }
+    protected Validator genericsWithoutDiamondOperator = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof NodeWithTypeArguments) {
+            Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
+            if (typeArguments.isPresent() && typeArguments.get().isEmpty()) {
+                reporter.report(node, "The diamond operator is not supported.");
             }
         }
-    };
+    });
 
     public Java5Validator() {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
+        
         // TODO validate annotations on classes, fields and methods but nowhere else
+        // The following is probably too simple.
+        remove(noAnnotations);
+        
         // TODO validate enums
         // TODO validate varargs
         // TODO validate for-each
