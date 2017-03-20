@@ -6,11 +6,8 @@ import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 /**
  * This validator validates according to Java 8 syntax rules.
  */
-public class Java1_4Validator extends Validators {
+public class Java1_4Validator extends Java1_3Validator {
     public Java1_4Validator() {
-        super(
-                new CommonValidators(),
-                new ModifierValidator(true)
-        );
+        super();
     }
 }
