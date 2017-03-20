@@ -19,7 +19,7 @@ public class Java7ValidatorTest {
     }
     @Test
     public void defaultMethodWithoutBody() {
-        ParseResult<CompilationUnit> result = javaParser7.parse(COMPILATION_UNIT, provider("interface X {default void a(){};}"));
+        ParseResult<CompilationUnit> result = javaParser7.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
         assertProblems(result, "(line 1,col 14) 'default' is not allowed here.");
     }
 

@@ -42,17 +42,6 @@ public class CommonValidators extends Validators {
                             }
                         }
                 ),
-                new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class,
-                        (n, reporter) -> {
-                            if (n.isInterface()) {
-                                n.getMethods().forEach(m -> {
-                                    if (m.isDefault() && !m.getBody().isPresent()) {
-                                        reporter.report(m, "'default' methods must have a body.");
-                                    }
-                                });
-                            }
-                        }
-                ),
                 new SingleNodeTypeValidator<>(AssignExpr.class,
                         (n, reporter) -> {
                             // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.26
