@@ -31,6 +31,9 @@ import static org.apache.commons.lang3.text.translate.EntityArrays.JAVA_CTRL_CHA
  */
 public class StringEscapeUtils {
 
+    private StringEscapeUtils() {
+    }
+
     /**
      * Translator object for escaping Java.
      * <p>
@@ -75,22 +78,6 @@ public class StringEscapeUtils {
                             })
             );
 
-    /**
-     * <p>{@code StringEscapeUtils} instances should NOT be constructed in
-     * standard programming.</p>
-     * <p>
-     * <p>Instead, the class should be used as:</p>
-     * <pre>StringEscapeUtils.escapeJava("foo");</pre>
-     *
-     * <p>This constructor is public to permit tools that require a JavaBean
-     * instance to operate.</p>
-     */
-    public StringEscapeUtils() {
-        super();
-    }
-
-    // Java and JavaScript
-    //--------------------------------------------------------------------------
 
     /**
      * <p>Escapes the characters in a {@code String} using Java String rules.</p>
@@ -112,7 +99,7 @@ public class StringEscapeUtils {
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
      */
-    public static final String escapeJava(final String input) {
+    public static String escapeJava(final String input) {
         return ESCAPE_JAVA.translate(input);
     }
 
@@ -125,7 +112,7 @@ public class StringEscapeUtils {
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
-    public static final String unescapeJava(final String input) {
+    public static String unescapeJava(final String input) {
         return UNESCAPE_JAVA.translate(input);
     }
 }
