@@ -6,6 +6,7 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.AssertStmt;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 
@@ -30,17 +31,26 @@ public class Java1_0Validator extends Validators {
         @Override
         public void process(Node node, ProblemReporter reporter) {
             if (node instanceof NodeWithTypeArguments) {
-                if(((NodeWithTypeArguments<? extends Node>) node).getTypeArguments().isPresent()){
+                if (((NodeWithTypeArguments<? extends Node>) node).getTypeArguments().isPresent()) {
                     reporter.report(node, "Generics are not supported.");
                 }
             }
             if (node instanceof NodeWithTypeParameters) {
-                if(((NodeWithTypeParameters<? extends Node>) node).getTypeParameters().isNonEmpty()){
+                if (((NodeWithTypeParameters<? extends Node>) node).getTypeParameters().isNonEmpty()) {
                     reporter.report(node, "Generics are not supported.");
                 }
             }
         }
     };
+    protected final SingleNodeTypeValidator<TryStmt> tryWithoutResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
+        if (n.getCatchClauses().isEmpty() && !n.getFinallyBlock().isPresent()) {
+            reporter.report(n, "Try has no finally and no catch.");
+        }
+        if (n.getResources().isNonEmpty()) {
+            reporter.report(n, "Catch with resource is not supported.");
+        }
+    });
+
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -49,13 +59,13 @@ public class Java1_0Validator extends Validators {
         add(noInnerClasses);
         add(noReflection);
         add(noGenerics);
+        add(tryWithoutResources);
         // TODO validate "no annotations"
         // TODO validate "no enums"
         // TODO validate "no varargs"
         // TODO validate "no for-each"
         // TODO validate "no static imports"
         // TODO validate "no strings in switch"
-        // TODO validate "no resource management in try statement"
         // TODO validate "no binary integer literals"
         // TODO validate "no underscores in numeric literals"
         // TODO validate "no multi-catch"

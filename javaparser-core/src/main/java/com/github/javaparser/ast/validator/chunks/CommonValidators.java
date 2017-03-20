@@ -17,12 +17,6 @@ import java.util.Optional;
 public class CommonValidators extends Validators {
     public CommonValidators() {
         super(
-                new SimpleValidator<>(TryStmt.class,
-                        n -> n.getCatchClauses().isEmpty()
-                                && n.getResources().isEmpty()
-                                && !n.getFinallyBlock().isPresent(),
-                        (n, reporter) -> reporter.report(n, "Try has no finally, no catch, and no resources.")
-                ),
                 new SimpleValidator<>(ClassOrInterfaceDeclaration.class,
                         n -> !n.isInterface() && n.getExtendedTypes().size() > 1,
                         (n, reporter) -> reporter.report(n.getExtendedTypes(1), "A class cannot extend more than one other class.")
