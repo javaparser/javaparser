@@ -32,12 +32,6 @@ public class CommonValidators extends Validators {
                         (n, reporter) -> reporter.report(n.getImplementedTypes(0), "An interface cannot implement other interfaces.")
                 ),
                 new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class,
-                        (n, reporter) -> n.getParentNode().ifPresent(p -> {
-                            if (p instanceof LocalClassDeclarationStmt && n.isInterface())
-                                reporter.report(n, "There is no such thing as a local interface.");
-                        })
-                ),
-                new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class,
                         (n, reporter) -> {
                             if (n.isInterface()) {
                                 n.getMembers().forEach(mem -> {

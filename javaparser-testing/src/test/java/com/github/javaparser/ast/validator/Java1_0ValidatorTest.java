@@ -50,12 +50,6 @@ public class Java1_0ValidatorTest {
     }
 
     @Test
-    public void localInterface() {
-        ParseResult<CompilationUnit> result = javaParser1_0.parse(COMPILATION_UNIT, provider("class X {void a(){interface I{}};}"));
-        assertProblems(result, "(line 1,col 19) There is no such thing as a local interface.");
-    }
-
-    @Test
     public void leftHandAssignmentCannotBeAConditional() {
         ParseResult<Expression> result = javaParser1_0.parse(EXPRESSION, provider("(1==2)=3"));
         assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
@@ -71,5 +65,12 @@ public class Java1_0ValidatorTest {
     public void leftHandAssignmentCanBeInBraces() {
         ParseResult<Expression> result = javaParser1_0.parse(EXPRESSION, provider("(i) += (i) += 1"));
         assertNoProblems(result);
+    }
+
+    @Test
+    public void noInnerClasses() {
+        ParseResult<CompilationUnit> result = javaParser1_0.parse(COMPILATION_UNIT, provider("class X{class Y{}}"));
+        assertProblems(result,
+                "(line 1,col 9) inner classes or interfaces are not supported");
     }
 }

@@ -8,7 +8,9 @@ import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_0;
 import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_1;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java1_1ValidatorTest {
@@ -103,14 +105,6 @@ public class Java1_1ValidatorTest {
                 "(line 1,col 9) 'synchronized' is not allowed here.",
                 "(line 1,col 9) 'native' is not allowed here.",
                 "(line 1,col 9) 'transitive' is not allowed here."
-        );
-    }
-
-    @Test
-    public void localInterface() {
-        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
-        assertProblems(result,
-                "(line 1,col 20) There is no such thing as a local interface."
         );
     }
 
@@ -397,6 +391,20 @@ public class Java1_1ValidatorTest {
                 "(line 1,col 144) 'private' is not allowed here.",
                 "(line 1,col 144) 'public' is not allowed here.",
                 "(line 1,col 144) 'protected' is not allowed here."
+        );
+    }
+
+    @Test
+    public void innerClasses() {
+        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{class Y{}}"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    public void localInterface() {
+        ParseResult<CompilationUnit> result = javaParser1_1.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
+        assertProblems(result,
+                "(line 1,col 20) There is no such thing as a local interface."
         );
     }
 }
