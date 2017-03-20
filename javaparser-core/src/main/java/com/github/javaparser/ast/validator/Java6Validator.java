@@ -1,10 +1,7 @@
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.ast.validator.chunks.CommonValidators;
-import com.github.javaparser.ast.validator.chunks.ModifierValidator;
-
 /**
- * This validator validates according to Java 8 syntax rules.
+ * This validator validates according to Java 6 syntax rules.
  */
 public class Java6Validator extends Java5Validator{
     public Java6Validator() {

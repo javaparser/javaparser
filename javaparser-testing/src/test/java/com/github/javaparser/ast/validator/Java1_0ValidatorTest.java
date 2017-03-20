@@ -1,16 +1,12 @@
 package com.github.javaparser.ast.validator;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParseStart.EXPRESSION;
-import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.ValidatorTest.javaParser1_0;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
