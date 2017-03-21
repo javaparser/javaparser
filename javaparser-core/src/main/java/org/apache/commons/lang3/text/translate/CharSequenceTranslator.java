@@ -19,7 +19,6 @@ package org.apache.commons.lang3.text.translate;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Locale;
 
 /**
  * Adapted from apache commons-lang3 project.
@@ -31,8 +30,6 @@ import java.util.Locale;
  * @since 3.0
  */
 public abstract class CharSequenceTranslator {
-
-    static final char[] HEX_DIGITS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     /**
      * Translate a set of codepoints, represented by an int index into a CharSequence,
@@ -122,17 +119,6 @@ public abstract class CharSequenceTranslator {
         newArray[0] = this;
         System.arraycopy(translators, 0, newArray, 1, translators.length);
         return new AggregateTranslator(newArray);
-    }
-
-    /**
-     * <p>Returns an upper case hexadecimal <code>String</code> for the given
-     * character.</p>
-     *
-     * @param codepoint The codepoint to convert.
-     * @return An upper case hexadecimal <code>String</code>
-     */
-    public static String hex(final int codepoint) {
-        return Integer.toHexString(codepoint).toUpperCase(Locale.ENGLISH);
     }
 
 }

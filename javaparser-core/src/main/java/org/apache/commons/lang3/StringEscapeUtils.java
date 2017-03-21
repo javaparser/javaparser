@@ -18,12 +18,9 @@ package org.apache.commons.lang3;
 
 import org.apache.commons.lang3.text.translate.*;
 
-import static org.apache.commons.lang3.text.translate.EntityArrays.JAVA_CTRL_CHARS_ESCAPE;
-import static org.apache.commons.lang3.text.translate.EntityArrays.JAVA_CTRL_CHARS_UNESCAPE;
-
 /**
  * Adapted from apache commons-lang3 project.
- *
+ * <p>
  * <p>Escapes and unescapes {@code String}s for
  * Java, Java Script, HTML and XML.</p>
  * <p>
@@ -36,25 +33,13 @@ public class StringEscapeUtils {
     private StringEscapeUtils() {
     }
 
-    /**
-     * Translator object for escaping Java.
-     * <p>
-     * While {@link #escapeJava(String)} is the expected method of use, this
-     * object allows the Java escaping functionality to be used
-     * as the foundation for a custom translator.
-     *
-     * @since 3.0
-     */
-    public static final CharSequenceTranslator ESCAPE_JAVA =
-            new LookupTranslator(
-                    new String[][]{
-                            {"\"", "\\\""},
-                            {"\\", "\\\\"},
-                    }).with(
-                    new LookupTranslator(JAVA_CTRL_CHARS_ESCAPE())
-            ).with(
-                    JavaUnicodeEscaper.outsideOf(32, 0x7f)
-            );
+    private static final String[][] JAVA_CTRL_CHARS_UNESCAPE = {
+            {"\\b", "\b"},
+            {"\\n", "\n"},
+            {"\\t", "\t"},
+            {"\\f", "\f"},
+            {"\\r", "\r"}
+    };
 
     /**
      * Translator object for unescaping escaped Java.
@@ -70,7 +55,7 @@ public class StringEscapeUtils {
             new AggregateTranslator(
                     new OctalUnescaper(),     // .between('\1', '\377'),
                     new UnicodeUnescaper(),
-                    new LookupTranslator(JAVA_CTRL_CHARS_UNESCAPE()),
+                    new LookupTranslator(JAVA_CTRL_CHARS_UNESCAPE.clone()),
                     new LookupTranslator(
                             new String[][]{
                                     {"\\\\", "\\"},
@@ -79,31 +64,6 @@ public class StringEscapeUtils {
                                     {"\\", ""}
                             })
             );
-
-
-    /**
-     * <p>Escapes the characters in a {@code String} using Java String rules.</p>
-     * <p>
-     * <p>Deals correctly with quotes and control-chars (tab, backslash, cr, ff, etc.) </p>
-     * <p>
-     * <p>So a tab becomes the characters {@code '\\'} and
-     * {@code 't'}.</p>
-     * <p>
-     * <p>The only difference between Java strings and JavaScript strings
-     * is that in JavaScript, a single quote and forward-slash (/) are escaped.</p>
-     * <p>
-     * <p>Example:</p>
-     * <pre>
-     * input string: He didn't say, "Stop!"
-     * output string: He didn't say, \"Stop!\"
-     * </pre>
-     *
-     * @param input String to escape values in, may be null
-     * @return String with escaped values, {@code null} if null string input
-     */
-    public static String escapeJava(final String input) {
-        return ESCAPE_JAVA.translate(input);
-    }
 
     /**
      * <p>Unescapes any Java literals found in the {@code String}.
