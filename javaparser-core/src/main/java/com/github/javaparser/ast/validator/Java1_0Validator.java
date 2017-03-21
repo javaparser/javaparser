@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -59,6 +60,10 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "enumerations are not supported.")
     );
+    protected final Validator noVarargs = new SimpleValidator<>(Parameter.class,
+            Parameter::isVarArgs,
+            (n, reporter) -> reporter.report(n, "Varargs are not supported.")
+    );
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -70,7 +75,7 @@ public class Java1_0Validator extends Validators {
         add(tryWithoutResources);
         add(noAnnotations);
         add(noEnums);
-        // TODO validate "no varargs"
+        add(noVarargs);
         // TODO validate "no for-each"
         // TODO validate "no static imports"
         // TODO validate "no strings in switch"

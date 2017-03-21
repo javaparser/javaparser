@@ -2,11 +2,14 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
@@ -39,5 +42,11 @@ public class Java1_4ValidatorTest {
                 "(line 1,col 13) Annotations are not supported.",
                 "(line 1,col 1) Annotations are not supported."
         );
+    }
+
+    @Test
+    public void novarargs() {
+        ParseResult<Parameter> result = javaParser.parse(PARAMETER, provider("String... x"));
+        assertProblems(result, "(line 1,col 1) Varargs are not supported.");
     }
 }

@@ -2,13 +2,17 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.Parameter;
 import org.junit.Test;
 
+import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java5ValidatorTest {
@@ -117,4 +121,9 @@ public class Java5ValidatorTest {
         );
     }
 
+    @Test
+    public void varargs() {
+        ParseResult<Parameter> result = javaParser.parse(PARAMETER, provider("String... x"));
+        assertNoProblems(result);
+    }
 }
