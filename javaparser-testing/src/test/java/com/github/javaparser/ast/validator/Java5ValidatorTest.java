@@ -133,4 +133,10 @@ public class Java5ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){};"));
         assertNoProblems(result);
     }
+
+    @Test
+    public void staticImport() {
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
+        assertNoProblems(result);
+    }
 }

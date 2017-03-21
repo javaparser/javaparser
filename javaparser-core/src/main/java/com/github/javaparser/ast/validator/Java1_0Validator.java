@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.validator;
 
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -69,6 +70,10 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "For-each loops are not supported.")
     );
+    protected final Validator noStaticImports = new SimpleValidator<>(ImportDeclaration.class,
+            ImportDeclaration::isStatic,
+            (n, reporter) -> reporter.report(n, "Static imports are not supported.")
+    );
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -82,7 +87,7 @@ public class Java1_0Validator extends Validators {
         add(noEnums);
         add(noVarargs);
         add(noForEach);
-        // TODO validate "no static imports"
+        add(noStaticImports);
         // TODO validate "no strings in switch"
         // TODO validate "no binary integer literals"
         // TODO validate "no underscores in numeric literals"
