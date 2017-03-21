@@ -30,7 +30,7 @@ public class Java5Validator extends Java1_4Validator {
 
         remove(noEnums);
         remove(noVarargs);
-        // TODO validate for-each
+        remove(noForEach);
         // TODO validate static imports
     }
 }

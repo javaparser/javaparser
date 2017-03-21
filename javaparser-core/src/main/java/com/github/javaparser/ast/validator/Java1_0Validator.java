@@ -10,6 +10,7 @@ import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.AssertStmt;
+import com.github.javaparser.ast.stmt.ForeachStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
@@ -58,11 +59,15 @@ public class Java1_0Validator extends Validators {
     });
     protected final Validator noEnums = new SimpleValidator<>(EnumDeclaration.class,
             n -> true,
-            (n, reporter) -> reporter.report(n, "enumerations are not supported.")
+            (n, reporter) -> reporter.report(n, "Enumerations are not supported.")
     );
     protected final Validator noVarargs = new SimpleValidator<>(Parameter.class,
             Parameter::isVarArgs,
             (n, reporter) -> reporter.report(n, "Varargs are not supported.")
+    );
+    protected final Validator noForEach = new SimpleValidator<>(ForeachStmt.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "For-each loops are not supported.")
     );
 
     public Java1_0Validator() {
@@ -76,7 +81,7 @@ public class Java1_0Validator extends Validators {
         add(noAnnotations);
         add(noEnums);
         add(noVarargs);
-        // TODO validate "no for-each"
+        add(noForEach);
         // TODO validate "no static imports"
         // TODO validate "no strings in switch"
         // TODO validate "no binary integer literals"

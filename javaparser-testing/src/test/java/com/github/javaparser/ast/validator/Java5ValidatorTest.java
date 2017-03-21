@@ -6,6 +6,7 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.*;
@@ -124,6 +125,12 @@ public class Java5ValidatorTest {
     @Test
     public void varargs() {
         ParseResult<Parameter> result = javaParser.parse(PARAMETER, provider("String... x"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    public void foreach() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){};"));
         assertNoProblems(result);
     }
 }
