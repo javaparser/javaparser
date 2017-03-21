@@ -29,7 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Utils;
-import org.apache.commons.lang3.StringEscapeUtils;
+import com.github.javaparser.utils.StringEscapeUtils;
 
 /**
  * A literal character.
