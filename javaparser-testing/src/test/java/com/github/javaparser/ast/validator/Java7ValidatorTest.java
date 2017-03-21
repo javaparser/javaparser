@@ -34,5 +34,9 @@ public class Java7ValidatorTest {
         assertProblems(result, "(line 1,col 1) Try has no finally, no catch, and no resources.");
     }
 
-
+    @Test
+    public void stringsInSwitch() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case \"abc\": ;}"));
+        assertNoProblems(result);
+    }
 }

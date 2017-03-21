@@ -17,7 +17,7 @@ public class Java7Validator extends Java6Validator {
         super();
         remove(genericsWithoutDiamondOperator);
         replace(tryWithoutResources, tryWithResources);
-        // TODO validate "strings in switch"
+        remove(noStringsInSwitch);
         // TODO validate "binary integer literals"
         // TODO validate "underscores in numeric literals"
         // TODO validate "multi-catch"

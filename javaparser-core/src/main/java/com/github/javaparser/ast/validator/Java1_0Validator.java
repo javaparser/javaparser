@@ -8,10 +8,12 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.ForeachStmt;
+import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
@@ -74,6 +76,10 @@ public class Java1_0Validator extends Validators {
             ImportDeclaration::isStatic,
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
+    protected final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntryStmt.class,
+            n -> n.getLabel().map(l -> l instanceof StringLiteralExpr).orElse(false),
+            (n, reporter) -> reporter.report(n.getLabel().get(), "Strings in switch statements are not supported.")
+    );
 
     public Java1_0Validator() {
         super(new CommonValidators());
@@ -88,7 +94,7 @@ public class Java1_0Validator extends Validators {
         add(noVarargs);
         add(noForEach);
         add(noStaticImports);
-        // TODO validate "no strings in switch"
+        add(noStringsInSwitch);
         // TODO validate "no binary integer literals"
         // TODO validate "no underscores in numeric literals"
         // TODO validate "no multi-catch"
