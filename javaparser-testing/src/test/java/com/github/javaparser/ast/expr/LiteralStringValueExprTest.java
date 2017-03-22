@@ -56,6 +56,10 @@ public class LiteralStringValueExprTest {
         assertThat(new DoubleLiteralExpr("0.0F").asDouble()).isEqualTo(0.0);
         assertThat(new DoubleLiteralExpr("0.0d").asDouble()).isEqualTo(0.0);
         assertThat(new DoubleLiteralExpr("0.0D").asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr(0.0F).asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr(0.0f).asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr(0.0D).asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr(0.0d).asDouble()).isEqualTo(0.0);
     }
 
     @Test
