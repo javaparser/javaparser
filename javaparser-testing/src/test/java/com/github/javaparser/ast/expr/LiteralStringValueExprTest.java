@@ -29,26 +29,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LiteralStringValueExprTest {
 
     @Test
-    public void longLiteralsAreConverted() {
-        LongLiteralExpr dec = JavaParser.parseExpression("9223372036854775807L");
-        LongLiteralExpr posOct = JavaParser.parseExpression("07_7777_7777_7777_7777_7777L");
-        LongLiteralExpr negOct = JavaParser.parseExpression("010_0000_0000_0000_0000_0000L");
-        LongLiteralExpr posHex = JavaParser.parseExpression("0x7fff_ffff_ffff_ffffL");
-        LongLiteralExpr negHex = JavaParser.parseExpression("0xffff_ffff_ffff_ffffL");
-        LongLiteralExpr posBin = JavaParser.parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L");
-        LongLiteralExpr negBin = JavaParser.parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L");
+    public void trivialLiteralsAreConverted() {
+        assertThat(new IntegerLiteralExpr("0B0").asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr("0b0").asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr("0X0").asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr("0x0").asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr(0).asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr(00).asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr(0B0).asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr(0b0).asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr(0X0).asInt()).isEqualTo(0);
+        assertThat(new IntegerLiteralExpr(0x0).asInt()).isEqualTo(0);
 
-        assertThat(dec.asLong()).isEqualTo(9223372036854775807L);
-        assertThat(posOct.asLong()).isEqualTo(9223372036854775807L); // 07_7777_7777_7777_7777_7777L
-        assertThat(negOct.asLong()).isEqualTo(-9223372036854775808L); // 010_0000_0000_0000_0000_0000L
-        assertThat(posHex.asLong()).isEqualTo(0x7fff_ffff_ffff_ffffL);
-        assertThat(negHex.asLong()).isEqualTo(0xffff_ffff_ffff_ffffL);
-        assertThat(posBin.asLong()).isEqualTo(0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L);
-        assertThat(negBin.asLong()).isEqualTo(0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L);
+        assertThat(new LongLiteralExpr("0B0L").asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr("0b0L").asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr("0X0L").asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr("0x0L").asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(0L).asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(00L).asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(0B0L).asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(0b0L).asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(0X0L).asLong()).isEqualTo(0);
+        assertThat(new LongLiteralExpr(0x0L).asLong()).isEqualTo(0);
+
+        assertThat(new DoubleLiteralExpr("0.0f").asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr("0.0F").asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr("0.0d").asDouble()).isEqualTo(0.0);
+        assertThat(new DoubleLiteralExpr("0.0D").asDouble()).isEqualTo(0.0);
     }
 
     @Test
-    public void integerLiteralsAreConverted() {
+    public void lowerAndUpperBoundIntegersAreConverted() {
         IntegerLiteralExpr dec = JavaParser.parseExpression("2147483647");
         IntegerLiteralExpr posOct = JavaParser.parseExpression("0177_7777_7777");
         IntegerLiteralExpr negOct = JavaParser.parseExpression("0377_7777_7777");
@@ -64,6 +75,25 @@ public class LiteralStringValueExprTest {
         assertThat(negHex.asInt()).isEqualTo(0xffff_ffff);
         assertThat(posBin.asInt()).isEqualTo(0b0111_1111_1111_1111_1111_1111_1111_1111);
         assertThat(negBin.asInt()).isEqualTo(0b1000_0000_0000_0000_0000_0000_0000_0000);
+    }
+
+    @Test
+    public void lowerAndUpperBoundLongsAreConverted() {
+        LongLiteralExpr dec = JavaParser.parseExpression("9223372036854775807L");
+        LongLiteralExpr posOct = JavaParser.parseExpression("07_7777_7777_7777_7777_7777L");
+        LongLiteralExpr negOct = JavaParser.parseExpression("010_0000_0000_0000_0000_0000L");
+        LongLiteralExpr posHex = JavaParser.parseExpression("0x7fff_ffff_ffff_ffffL");
+        LongLiteralExpr negHex = JavaParser.parseExpression("0xffff_ffff_ffff_ffffL");
+        LongLiteralExpr posBin = JavaParser.parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L");
+        LongLiteralExpr negBin = JavaParser.parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L");
+
+        assertThat(dec.asLong()).isEqualTo(9223372036854775807L);
+        assertThat(posOct.asLong()).isEqualTo(9223372036854775807L); // 07_7777_7777_7777_7777_7777L
+        assertThat(negOct.asLong()).isEqualTo(-9223372036854775808L); // 010_0000_0000_0000_0000_0000L
+        assertThat(posHex.asLong()).isEqualTo(0x7fff_ffff_ffff_ffffL);
+        assertThat(negHex.asLong()).isEqualTo(0xffff_ffff_ffff_ffffL);
+        assertThat(posBin.asLong()).isEqualTo(0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L);
+        assertThat(negBin.asLong()).isEqualTo(0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L);
     }
 
     @Test
@@ -92,7 +122,7 @@ public class LiteralStringValueExprTest {
     }
 
     @Test
-    public void doubleLiteralsAreConverted() {
+    public void lowerAndUpperBoundDoublesAreConverted() {
         DoubleLiteralExpr posFloat = JavaParser.parseExpression("3.4028235e38f");
         DoubleLiteralExpr negFloat = JavaParser.parseExpression("1.40e-45f");
         DoubleLiteralExpr posDouble = JavaParser.parseExpression("1.7976931348623157e308");

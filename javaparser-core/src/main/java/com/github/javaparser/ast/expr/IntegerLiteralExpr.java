@@ -77,13 +77,13 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     public int asInt() {
         String result = value.replaceAll("_", "");
-        if (result.startsWith("0x")) {
+        if (result.startsWith("0x") || result.startsWith("0X")) {
             return Integer.parseUnsignedInt(result.substring(2), 16);
         }
-        if (result.startsWith("0b")) {
+        if (result.startsWith("0b") || result.startsWith("0B")) {
             return Integer.parseUnsignedInt(result.substring(2), 2);
         }
-        if (result.startsWith("0")) {
+        if (result.length() > 1 && result.startsWith("0")) {
             return Integer.parseUnsignedInt(result.substring(1), 8);
         }
         return Integer.parseInt(result);
