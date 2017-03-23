@@ -8,6 +8,8 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
+import java.util.function.Supplier;
+
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
@@ -58,5 +60,11 @@ public class Java7ValidatorTest {
     public void noMultiCatch() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try{}catch(Abc|Def e){}"));
         assertNoProblems(result);
+    }
+
+    @Test
+    public void noLambdas() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("a(() -> 1);"));
+        assertProblems(result, "(line 1,col 3) Lambdas are not supported.");
     }
 }

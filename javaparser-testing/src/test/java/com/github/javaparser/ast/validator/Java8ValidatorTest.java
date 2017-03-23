@@ -4,11 +4,14 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java8ValidatorTest {
@@ -49,4 +52,9 @@ public class Java8ValidatorTest {
         assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");
     }
 
+    @Test
+    public void lambdas() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("a(() -> 1);"));
+        assertNoProblems(result);
+    }
 }

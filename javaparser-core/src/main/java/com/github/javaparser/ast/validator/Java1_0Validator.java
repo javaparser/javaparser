@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
@@ -89,6 +90,11 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Multi-catch is not supported.")
     );
+    protected final Validator noLambdas= new SimpleValidator<>(LambdaExpr.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "Lambdas are not supported.")
+    );
+
 
 
     public Java1_0Validator() {
@@ -108,7 +114,7 @@ public class Java1_0Validator extends Validators {
         add(noBinaryIntegerLiterals);
         add(noUnderscoresInIntegerLiterals);
         add(noMultiCatch);
-        // TODO validate "no lambdas"
+        add(noLambdas);
         // TODO validate "no modules"
         // TODO validate "no default interface methods"
         // TODO validate "no private interface methods"

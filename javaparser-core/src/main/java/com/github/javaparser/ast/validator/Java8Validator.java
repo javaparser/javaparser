@@ -24,6 +24,8 @@ public class Java8Validator extends Java7Validator {
         super();
         replace(modifiersWithoutDefault, modifiers);
         add(defaultMethodsInInterface);
+        remove(noLambdas);
+
         // TODO validate more annotation locations http://openjdk.java.net/jeps/104
         // TODO validate repeating annotations http://openjdk.java.net/jeps/120
     }
