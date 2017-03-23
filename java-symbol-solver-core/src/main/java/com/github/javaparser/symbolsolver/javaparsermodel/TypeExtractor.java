@@ -328,8 +328,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     if (scope instanceof NameExpr) {
                         NameExpr nameExpr = (NameExpr) scope;
                         try {
-                            JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName().getId(), typeSolver);
-                            staticCall = true;
+                            SymbolReference<TypeDeclaration> type = JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName().getId(), typeSolver);
+                            if (type.isSolved()){
+                                staticCall = true;
+                            }
                         } catch (Exception e) {
 
                         }
@@ -369,7 +371,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         Type formalType = functionalMethod.get().returnType();
 
                         // Infer the functional interfaces' return vs actual type
-                        funcInterfaceCtx.addPair(actualType, formalType);
+                        funcInterfaceCtx.addPair(formalType, actualType);
                         // Substitute to obtain a new type
                         Type functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
 
