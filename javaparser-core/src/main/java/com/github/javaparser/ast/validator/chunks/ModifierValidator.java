@@ -23,12 +23,18 @@ import static java.util.Arrays.asList;
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
 public class ModifierValidator extends VisitorValidator {
-    private final boolean hasStrictfp;
-    private final boolean hasDefault;
+    private final Modifier[] interfaceWithNothingSpecial = new Modifier[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
+    private final Modifier[] interfaceWithStaticAndDefault = new Modifier[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier[] interfaceWithStaticAndDefaultAndPrivate = new Modifier[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
 
-    public ModifierValidator(boolean hasStrictfp, boolean hasDefault) {
+    private final boolean hasStrictfp;
+    private final boolean hasDefaultAndStaticInterfaceMethods;
+    private final boolean hasPrivateInterfaceMethods;
+
+    public ModifierValidator(boolean hasStrictfp, boolean hasDefaultAndStaticInterfaceMethods, boolean hasPrivateInterfaceMethods) {
         this.hasStrictfp = hasStrictfp;
-        this.hasDefault = hasDefault;
+        this.hasDefaultAndStaticInterfaceMethods = hasDefaultAndStaticInterfaceMethods;
+        this.hasPrivateInterfaceMethods = hasPrivateInterfaceMethods;
     }
 
     @Override
@@ -109,14 +115,18 @@ public class ModifierValidator extends VisitorValidator {
         }
         if (n.getParentNode().isPresent()) {
             if (n.getParentNode().get() instanceof ClassOrInterfaceDeclaration) {
-                if (!((ClassOrInterfaceDeclaration) n.getParentNode().get()).isInterface()) {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
-                } else {
-                    if (hasDefault) {
-                        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT);
+                if (((ClassOrInterfaceDeclaration) n.getParentNode().get()).isInterface()) {
+                    if (hasDefaultAndStaticInterfaceMethods) {
+                        if (hasPrivateInterfaceMethods) {
+                            validateModifiers(n, reporter, interfaceWithStaticAndDefaultAndPrivate);
+                        } else {
+                            validateModifiers(n, reporter, interfaceWithStaticAndDefault);
+                        }
                     } else {
-                        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                        validateModifiers(n, reporter, interfaceWithNothingSpecial);
                     }
+                } else {
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
                 }
             }
         }

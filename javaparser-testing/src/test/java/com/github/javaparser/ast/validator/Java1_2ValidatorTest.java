@@ -175,7 +175,9 @@ public class Java1_2ValidatorTest {
                 "(line 1,col 13) 'transient' is not allowed here.",
                 "(line 1,col 13) 'volatile' is not allowed here.",
                 "(line 1,col 13) 'default' is not allowed here.",
-                "(line 1,col 13) 'transitive' is not allowed here."
+                "(line 1,col 13) 'transitive' is not allowed here.",
+                "(line 1,col 13) 'private' is not allowed here.",
+                "(line 1,col 13) 'static' is not allowed here."
         );
     }
 
@@ -241,7 +243,7 @@ public class Java1_2ValidatorTest {
 
     @Test
     public void catchParameter() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch("+ allModifiers +" Integer x){}}}"));
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{int x(){ try{}catch(" + allModifiers + " Integer x){}}}"));
         assertProblems(result,
                 "(line 1,col 144) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 144) Can have only one of 'final', 'abstract'.",

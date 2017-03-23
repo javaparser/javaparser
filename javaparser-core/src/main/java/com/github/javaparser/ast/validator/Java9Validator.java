@@ -1,5 +1,6 @@
 package com.github.javaparser.ast.validator;
 
+import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 import com.github.javaparser.ast.validator.chunks.UnderscoreKeywordValidator;
 
 /**
@@ -7,12 +8,13 @@ import com.github.javaparser.ast.validator.chunks.UnderscoreKeywordValidator;
  */
 public class Java9Validator extends Java8Validator {
     protected final Validator underscoreKeywordValidator = new UnderscoreKeywordValidator();
+    protected final Validator modifiers = new ModifierValidator(true, true, true);
 
     public Java9Validator() {
         super();
         add(underscoreKeywordValidator);
         remove(noLambdas);
         remove(noModules);
-        // TODO validate private interface methods
+        replace(modifiersWithoutPrivateInterfaceMethods, modifiers);
     }
 }

@@ -47,6 +47,21 @@ public class Java8ValidatorTest {
     }
 
     @Test
+    public void interfaceMethod() {
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("interface X{" + allModifiers + "int x(){};}"));
+        assertProblems(result,
+                "(line 1,col 13) Can have only one of 'public', 'protected', 'private'.",
+                "(line 1,col 13) Can have only one of 'final', 'abstract'.",
+                "(line 1,col 13) Can have only one of 'native', 'strictfp'.",
+                "(line 1,col 13) Cannot be 'abstract' and also 'private', 'static', 'final', 'native', 'strictfp', 'synchronized'.",
+                "(line 1,col 13) 'transient' is not allowed here.",
+                "(line 1,col 13) 'volatile' is not allowed here.",
+                "(line 1,col 13) 'transitive' is not allowed here.",
+                "(line 1,col 13) 'private' is not allowed here."
+        );
+    }
+
+    @Test
     public void defaultMethodWithoutBody() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
         assertProblems(result, "(line 1,col 14) 'default' methods must have a body.");

@@ -2,10 +2,7 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
@@ -27,7 +24,8 @@ import com.github.javaparser.ast.validator.chunks.NoUnderscoresInIntegerLiterals
  * This validator validates according to Java 1.0 syntax rules.
  */
 public class Java1_0Validator extends Validators {
-    protected final Validator modifiersWithoutStrictfpAndDefault = new ModifierValidator(false, false);
+    protected final Validator modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods
+            = new ModifierValidator(false, false, false);
     protected final Validator noAssertKeyword = new SimpleValidator<>(AssertStmt.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "'assert' keyword is not supported.")
@@ -100,10 +98,9 @@ public class Java1_0Validator extends Validators {
             (n, reporter) -> reporter.report(n, "Modules are not supported.")
     );
 
-
     public Java1_0Validator() {
         super(new CommonValidators());
-        add(modifiersWithoutStrictfpAndDefault);
+        add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
         add(noAssertKeyword);
         add(noInnerClasses);
         add(noReflection);
@@ -120,7 +117,5 @@ public class Java1_0Validator extends Validators {
         add(noMultiCatch);
         add(noLambdas);
         add(noModules);
-        // TODO validate "no default interface methods"
-        // TODO validate "no private interface methods"
     }
 }
