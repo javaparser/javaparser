@@ -1,6 +1,6 @@
 ## Java Parser and Abstract Syntax Tree
 
-This package contains a Java 1.0 - Java 1.8 Parser with AST generation and visitor support.
+This package contains a Java 1.0 - Java 9 Parser with AST generation and visitor support.
 
 The AST records the source code structure.
 You can analyze source code for any purpose.
@@ -79,7 +79,7 @@ The libraries javadoc can be found [here](http://www.javadoc.io/doc/com.github.j
 
 This parser is based on work by Sreenivasa Viswanadha and Júlio Vilmar Gesser. The original project, now inactive, was originally hosted at [Google Code](http://code.google.com/p/javaparser/) and supported only parsing Java 1.5.
 
-The project now supports parsing Java 1.8 and aims to continue support for features in future versions of the Java language.
+The project now supports parsing Java 9 and aims to continue support for features in future versions of the Java language.
 
 ## Related projects
 
