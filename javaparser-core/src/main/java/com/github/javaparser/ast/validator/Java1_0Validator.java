@@ -15,6 +15,7 @@ import com.github.javaparser.ast.stmt.AssertStmt;
 import com.github.javaparser.ast.stmt.ForeachStmt;
 import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 import com.github.javaparser.ast.validator.chunks.NoBinaryIntegerLiteralsValidator;
@@ -84,6 +85,10 @@ public class Java1_0Validator extends Validators {
     );
     protected final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
     protected final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();
+    protected final Validator noMultiCatch = new SimpleValidator<>(UnionType.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "Multi-catch is not supported.")
+    );
 
 
     public Java1_0Validator() {
@@ -102,7 +107,7 @@ public class Java1_0Validator extends Validators {
         add(noStringsInSwitch);
         add(noBinaryIntegerLiterals);
         add(noUnderscoresInIntegerLiterals);
-        // TODO validate "no multi-catch"
+        add(noMultiCatch);
         // TODO validate "no lambdas"
         // TODO validate "no modules"
         // TODO validate "no default interface methods"

@@ -53,4 +53,10 @@ public class Java7ValidatorTest {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("1_000_000"));
         assertNoProblems(result);
     }
+
+    @Test
+    public void noMultiCatch() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try{}catch(Abc|Def e){}"));
+        assertNoProblems(result);
+    }
 }

@@ -20,7 +20,6 @@ public class Java7Validator extends Java6Validator {
         remove(noStringsInSwitch);
         remove(noBinaryIntegerLiterals);
         remove(noUnderscoresInIntegerLiterals);
-        // TODO validate "multi-catch"
-
+        remove(noMultiCatch);
     }
 }
