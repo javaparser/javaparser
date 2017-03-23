@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
@@ -122,7 +123,9 @@ public class InferenceVariableType implements Type {
         if (concreteEquivalent.size() == 1) {
             return concreteEquivalent.iterator().next();
         }
-        Set<Type> notTypeVariables = equivalentTypes.stream().filter(t -> !t.isTypeVariable()).collect(Collectors.toSet());
+        Set<Type> notTypeVariables = equivalentTypes.stream()
+                                                    .filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t))
+                                                    .collect(Collectors.toSet());
         if (notTypeVariables.size() == 1) {
             return notTypeVariables.iterator().next();
         } else if (notTypeVariables.size() == 0 && !superTypes.isEmpty()) {
@@ -134,5 +137,28 @@ public class InferenceVariableType implements Type {
         } else {
             throw new IllegalStateException("Equivalent types are: " + equivalentTypes);
         }
+    }
+
+    private boolean hasInferenceVariables(Type type){
+        if (type instanceof InferenceVariableType){
+            return true;
+        }
+
+        if (type.isReferenceType()){
+            ReferenceType refType = type.asReferenceType();
+            for (Type t : refType.typeParametersValues()){
+                if (hasInferenceVariables(t)){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        if (type.isWildcard()){
+            Wildcard wildcardType = type.asWildcard();
+            return hasInferenceVariables(wildcardType.getBoundedType());
+        }
+
+        return false;
     }
 }

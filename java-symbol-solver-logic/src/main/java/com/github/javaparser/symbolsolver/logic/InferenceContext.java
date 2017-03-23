@@ -130,6 +130,12 @@ public class InferenceContext {
                     }
                 }
             }
+
+            if (actualType.isReferenceType()){
+                if (formalType.asWildcard().isBounded()){
+                    registerCorrespondance(formalType.asWildcard().getBoundedType(), actualType);
+                }
+            }
         } else if (actualType instanceof InferenceVariableType){
             if (formalType instanceof ReferenceType){
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);

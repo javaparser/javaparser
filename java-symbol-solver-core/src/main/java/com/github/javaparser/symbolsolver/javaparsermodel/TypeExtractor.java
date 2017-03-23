@@ -11,6 +11,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
 import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
@@ -308,7 +309,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         if (getParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) getParentNode(node);
             int pos = JavaParserSymbolDeclaration.getParamPos(node);
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> refMethod = facade.solve(callExpr);
+            SymbolReference<MethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName().getId());
             }
@@ -319,11 +320,6 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 // The type parameter referred here should be the java.util.stream.Stream.T
                 Type result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
 
-                // FIXME: here we should replace the type parameters that can be resolved
-                //        for example when invoking myListOfStrings.stream().filter(s -> s.length > 0);
-                //        the MethodDeclaration of filter is:
-                //        Stream<T> filter(Predicate<? super T> predicate)
-                //        but T in this case is equal to String
                 if (callExpr.getScope().isPresent()) {
                     Expression scope = callExpr.getScope().get();
 
@@ -358,24 +354,30 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 if (functionalMethod.isPresent()) {
                     LambdaExpr lambdaExpr = node;
 
-                    InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                    InferenceContext lambdaCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+                    InferenceContext funcInterfaceCtx = new InferenceContext(MyObjectProvider.INSTANCE);
+
                     // At this point parameterType
                     // if Function<T=? super Stream.T, ? extends map.R>
                     // we should replace Stream.T
                     Type functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
-                    //inferenceContext.addPair(parameterType, functionalInterfaceType);
-                    //inferenceContext.addPair(parameterType, result);
-                    inferenceContext.addPair(result, functionalInterfaceType);
+
+                    lambdaCtx.addPair(result, functionalInterfaceType);
                     if (lambdaExpr.getBody() instanceof ExpressionStmt) {
                         ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
                         Type actualType = facade.getType(expressionStmt.getExpression());
                         Type formalType = functionalMethod.get().returnType();
 
+                        // Infer the functional interfaces' return vs actual type
+                        funcInterfaceCtx.addPair(actualType, formalType);
+                        // Substitute to obtain a new type
+                        Type functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
+
                         // if the functional method returns void anyway
                         // we don't need to bother inferring types
                         if (!(formalType instanceof VoidType)){
-                            inferenceContext.addPair(formalType, actualType);
-                            result = inferenceContext.resolve(inferenceContext.addSingle(result));
+                            lambdaCtx.addPair(result, functionalTypeWithReturn);
+                            result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
                         }
                     } else {
                         throw new UnsupportedOperationException();
