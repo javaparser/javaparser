@@ -24,7 +24,7 @@ public class SourceRootTest {
         Map<Path, ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
 
-        assertEquals(3, units.size());
+        assertEquals(2, units.size());
         assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
         assertTrue(parseResults.keySet().stream().anyMatch(path -> path.toString().contains("source" + File.separator + "root")));
     }
