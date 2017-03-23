@@ -217,6 +217,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
 
+            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()){
+                methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
+            }
+
             Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             if (returnType != methodUsage.returnType()) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
@@ -255,6 +259,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isWildcard() && target.isWildcard()) {
+            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()){
+                inferTypes(source.asWildcard().getBoundedType(), target.asWildcard().getBoundedType(), mappings);
+            }
             return;
         }
         if (source.isReferenceType() && target.isTypeVariable()) {

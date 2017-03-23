@@ -1,0 +1,15 @@
+import java.util.*;
+import java.util.stream.*;
+
+public class JavaTest {
+
+    public void foo(){
+        List<String> myList = Arrays.asList("a1", "a2", "b1", "c2", "c1");
+
+        Stream<String> myStream = myList.stream();
+
+        myStream.map(s -> s + ":)")
+        	        .filter(s -> s.length()>1)
+        		    .flatMap(s -> Arrays.stream(s.split("")));
+    }
+}
