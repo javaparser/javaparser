@@ -57,4 +57,10 @@ public class Java8ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("a(() -> 1);"));
         assertNoProblems(result);
     }
+
+    @Test
+    public void noModules() {
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("open module x {}"));
+        assertProblems(result, "(line 1,col 1) Modules are not supported.");
+    }
 }

@@ -12,7 +12,7 @@ public class Java9Validator extends Java8Validator {
         super();
         add(underscoreKeywordValidator);
         remove(noLambdas);
-        // TODO validate modules
+        remove(noModules);
         // TODO validate private interface methods
     }
 }

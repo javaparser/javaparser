@@ -10,6 +10,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.stmt.AssertStmt;
@@ -90,11 +91,14 @@ public class Java1_0Validator extends Validators {
             n -> true,
             (n, reporter) -> reporter.report(n, "Multi-catch is not supported.")
     );
-    protected final Validator noLambdas= new SimpleValidator<>(LambdaExpr.class,
+    protected final Validator noLambdas = new SimpleValidator<>(LambdaExpr.class,
             n -> true,
             (n, reporter) -> reporter.report(n, "Lambdas are not supported.")
     );
-
+    protected final Validator noModules = new SimpleValidator<>(ModuleDeclaration.class,
+            n -> true,
+            (n, reporter) -> reporter.report(n, "Modules are not supported.")
+    );
 
 
     public Java1_0Validator() {
@@ -115,7 +119,7 @@ public class Java1_0Validator extends Validators {
         add(noUnderscoresInIntegerLiterals);
         add(noMultiCatch);
         add(noLambdas);
-        // TODO validate "no modules"
+        add(noModules);
         // TODO validate "no default interface methods"
         // TODO validate "no private interface methods"
     }
