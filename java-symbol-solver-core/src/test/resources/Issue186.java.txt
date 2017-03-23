@@ -12,4 +12,12 @@ public class JavaTest {
         	        .filter(s -> s.length()>1)
         		    .flatMap(s -> Arrays.stream(s.split("")));
     }
+
+    public void bar(){
+        Stream<String> myStream;
+        myStream.filter(s -> s.contains("Hamlet"))
+            .map(l -> l.length())
+            .filter(s -> s > 15)
+            .count();
+    }
 }
