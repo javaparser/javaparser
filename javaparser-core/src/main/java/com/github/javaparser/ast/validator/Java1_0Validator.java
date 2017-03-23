@@ -18,6 +18,7 @@ import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 import com.github.javaparser.ast.validator.chunks.NoBinaryIntegerLiteralsValidator;
+import com.github.javaparser.ast.validator.chunks.NoUnderscoresInIntegerLiteralsValidator;
 
 /**
  * This validator validates according to Java 1.0 syntax rules.
@@ -82,6 +83,7 @@ public class Java1_0Validator extends Validators {
             (n, reporter) -> reporter.report(n.getLabel().get(), "Strings in switch statements are not supported.")
     );
     protected final Validator noBinaryIntegerLiterals = new NoBinaryIntegerLiteralsValidator();
+    protected final Validator noUnderscoresInIntegerLiterals = new NoUnderscoresInIntegerLiteralsValidator();
 
 
     public Java1_0Validator() {
@@ -99,7 +101,7 @@ public class Java1_0Validator extends Validators {
         add(noStaticImports);
         add(noStringsInSwitch);
         add(noBinaryIntegerLiterals);
-        // TODO validate "no underscores in numeric literals"
+        add(noUnderscoresInIntegerLiterals);
         // TODO validate "no multi-catch"
         // TODO validate "no lambdas"
         // TODO validate "no modules"

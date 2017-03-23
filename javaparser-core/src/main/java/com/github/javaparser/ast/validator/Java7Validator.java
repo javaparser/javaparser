@@ -19,7 +19,7 @@ public class Java7Validator extends Java6Validator {
         replace(tryWithoutResources, tryWithResources);
         remove(noStringsInSwitch);
         remove(noBinaryIntegerLiterals);
-        // TODO validate "underscores in numeric literals"
+        remove(noUnderscoresInIntegerLiterals);
         // TODO validate "multi-catch"
 
     }

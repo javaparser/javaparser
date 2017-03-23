@@ -47,4 +47,10 @@ public class Java7ValidatorTest {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("0b01"));
         assertNoProblems(result);
     }
+
+    @Test
+    public void noUnderscoresInIntegerLiterals() {
+        ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("1_000_000"));
+        assertNoProblems(result);
+    }
 }

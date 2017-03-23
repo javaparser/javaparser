@@ -10,6 +10,7 @@ import org.junit.Test;
 import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java6ValidatorTest {
@@ -27,5 +28,9 @@ public class Java6ValidatorTest {
         assertProblems(result, "(line 1,col 1) Binary literal values are not supported.");
     }
 
-
+    @Test
+    public void noUnderscoresInIntegerLiterals() {
+        ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("1_000_000"));
+        assertProblems(result, "(line 1,col 1) Underscores in literal values are not supported.");
+    }
 }
