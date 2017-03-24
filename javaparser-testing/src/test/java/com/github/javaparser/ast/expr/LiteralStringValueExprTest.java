@@ -140,11 +140,15 @@ public class LiteralStringValueExprTest {
         DoubleLiteralExpr negFloat = JavaParser.parseExpression("1.40e-45f");
         DoubleLiteralExpr posDouble = JavaParser.parseExpression("1.7976931348623157e308");
         DoubleLiteralExpr negDouble = JavaParser.parseExpression("4.9e-324");
+        DoubleLiteralExpr posHexFloat = JavaParser.parseExpression("0x1.fffffffffffffp1023");
+        DoubleLiteralExpr negHexFloat = JavaParser.parseExpression("0x0.0000000000001P-1022");
 
         assertThat(posFloat.asDouble()).isCloseTo(3.4028235e38f, Percentage.withPercentage(1));
         assertThat(negFloat.asDouble()).isCloseTo(1.40e-45f, Percentage.withPercentage(1));
         assertThat(posDouble.asDouble()).isEqualTo(1.7976931348623157e308);
         assertThat(negDouble.asDouble()).isEqualTo(4.9e-324);
+        assertThat(posHexFloat.asDouble()).isEqualTo(0x1.fffffffffffffp1023);
+        assertThat(negHexFloat.asDouble()).isEqualTo(0x0.0000000000001P-1022);
     }
 
 }
