@@ -100,7 +100,7 @@ public class InferenceContext {
                     }
                 }
             }
-        } else if (formalType instanceof InferenceVariableType) {
+        } else if (formalType instanceof InferenceVariableType && !actualType.isPrimitive()) {
             ((InferenceVariableType) formalType).registerEquivalentType(actualType);
             if (actualType instanceof InferenceVariableType) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
