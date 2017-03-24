@@ -32,6 +32,43 @@ public class StringEscapeUtils {
     private StringEscapeUtils() {
     }
 
+    /**
+     * <p>Escapes the characters in a {@code String} using Java String rules.</p>
+     * <p>
+     * <p>Deals correctly with quotes and control-chars (tab, backslash, cr, ff, etc.) </p>
+     * <p>
+     * <p>So a tab becomes the characters {@code '\\'} and
+     * {@code 't'}.</p>
+     * <p>
+     * <p>The only difference between Java strings and JavaScript strings
+     * is that in JavaScript, a single quote and forward-slash (/) are escaped.</p>
+     * <p>
+     * <p>Example:</p>
+     * <pre>
+     * input string: He didn't say, "Stop!"
+     * output string: He didn't say, \"Stop!\"
+     * </pre>
+     *
+     * @param input String to escape values in, may be null
+     * @return String with escaped values, {@code null} if null string input
+     */
+    public static final String escapeJava(final String input) {
+        return ESCAPE_JAVA.translate(input);
+    }
+
+    /**
+     * <p>Unescapes any Java literals found in the {@code String}.
+     * For example, it will turn a sequence of {@code '\'} and
+     * {@code 'n'} into a newline character, unless the {@code '\'}
+     * is preceded by another {@code '\'}.</p>
+     *
+     * @param input the {@code String} to unescape, may be null
+     * @return a new unescaped {@code String}, {@code null} if null string input
+     */
+    public static String unescapeJava(final String input) {
+        return UNESCAPE_JAVA.translate(input);
+    }
+
     private static final String[][] JAVA_CTRL_CHARS_UNESCAPE = {
             {"\\b", "\b"},
             {"\\n", "\n"},
@@ -39,6 +76,24 @@ public class StringEscapeUtils {
             {"\\f", "\f"},
             {"\\r", "\r"}
     };
+
+    private static final String[][] JAVA_CTRL_CHARS_ESCAPE = {
+            {"\b", "\\b"},
+            {"\n", "\\n"},
+            {"\t", "\\t"},
+            {"\f", "\\f"},
+            {"\r", "\\r"}
+    };
+
+    private static final CharSequenceTranslator ESCAPE_JAVA =
+            new AggregateTranslator(
+                    new LookupTranslator(
+                            new String[][]{
+                                    {"\"", "\\\""},
+                                    {"\\", "\\\\"},
+                            }),
+                    new LookupTranslator(JAVA_CTRL_CHARS_ESCAPE.clone())
+            );
 
     private static final CharSequenceTranslator UNESCAPE_JAVA =
             new AggregateTranslator(
@@ -55,19 +110,6 @@ public class StringEscapeUtils {
             );
 
     /**
-     * <p>Unescapes any Java literals found in the {@code String}.
-     * For example, it will turn a sequence of {@code '\'} and
-     * {@code 'n'} into a newline character, unless the {@code '\'}
-     * is preceded by another {@code '\'}.</p>
-     *
-     * @param input the {@code String} to unescape, may be null
-     * @return a new unescaped {@code String}, {@code null} if null string input
-     */
-    public static String unescapeJava(final String input) {
-        return UNESCAPE_JAVA.translate(input);
-    }
-
-    /**
      * Adapted from apache commons-lang3 project.
      * <p>
      * An API for translating text.
@@ -76,7 +118,6 @@ public class StringEscapeUtils {
      *
      * @since 3.0
      */
-
     private static abstract class CharSequenceTranslator {
 
         /**

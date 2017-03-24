@@ -26,10 +26,19 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("OctalInteger")
 public class LiteralStringValueExprTest {
 
     @Test
     public void trivialLiteralsAreConverted() {
+        assertThat(new CharLiteralExpr('\t').getValue()).isEqualTo("\\t");
+        assertThat(new CharLiteralExpr('\b').getValue()).isEqualTo("\\b");
+        assertThat(new CharLiteralExpr('\f').getValue()).isEqualTo("\\f");
+        assertThat(new CharLiteralExpr('\r').getValue()).isEqualTo("\\r");
+        assertThat(new CharLiteralExpr('\n').getValue()).isEqualTo("\\n");
+        assertThat(new CharLiteralExpr('\\').getValue()).isEqualTo("\\\\");
+        assertThat(new CharLiteralExpr('\"').getValue()).isEqualTo("\\\"");
+
         assertThat(new IntegerLiteralExpr("0B0").asInt()).isEqualTo(0);
         assertThat(new IntegerLiteralExpr("0b0").asInt()).isEqualTo(0);
         assertThat(new IntegerLiteralExpr("0X0").asInt()).isEqualTo(0);
