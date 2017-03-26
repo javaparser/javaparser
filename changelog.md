@@ -1,3 +1,11 @@
+Version 3.1.4
+------------------
+This is the first version to parse Java 9.
+
+Beta: `TreeStructureVisitor`, and `LexicalPreservingPrinter`.
+
+* 872 873 874 787 Remaining Java 9 work.
+
 Version 3.1.3
 ------------------
 Beta: `TreeStructureVisitor`, and `LexicalPreservingPrinter`.
