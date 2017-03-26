@@ -445,4 +445,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         set(i, replacement);
         return true;
     }
+
+    /**
+     * @return the opposite of isEmpty()
+     */
+    public boolean isNonEmpty() {
+        return !isEmpty();
+    }
 }

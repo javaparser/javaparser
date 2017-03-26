@@ -5,13 +5,12 @@ import com.github.javaparser.ast.Node;
 import java.util.function.BiConsumer;
 
 /**
- * A validator that can be run on a node to check for semantic errors.
- * It is fully up to the implementor how to do this.
+ * A validator that validates a known node type.
  */
-public interface Validator extends TypedValidator<Node> {
+public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemReporter> {
     /**
      * @param node the node that wants to be validated
      * @param problemReporter when found, validation errors can be reported here
      */
-    void accept(Node node, ProblemReporter problemReporter);
+    void accept(N node, ProblemReporter problemReporter);
 }

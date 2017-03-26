@@ -20,8 +20,24 @@ public class Validators implements Validator {
         return validators;
     }
 
+    public Validators remove(Validator validator) {
+        validators.remove(validator);
+        return this;
+    }
+
+    public Validators replace(Validator oldValidator, Validator newValidator) {
+        remove(oldValidator);
+        add(newValidator);
+        return this;
+    }
+
+    public Validators add(Validator newValidator) {
+        validators.add(newValidator);
+        return this;
+    }
+
     @Override
-    public void validate(Node node, ProblemReporter problemReporter) {
-        validators.forEach(v -> v.validate(node, problemReporter));
+    public void accept(Node node, ProblemReporter problemReporter) {
+        validators.forEach(v -> v.accept(node, problemReporter));
     }
 }

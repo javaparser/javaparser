@@ -15,7 +15,7 @@
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
     <inceptionYear>2007</inceptionYear>
-    <description>Java 1.8 Parser Parser and Abstract Syntax Tree for Java</description>
+    <description>Java 9 Parser Parser and Abstract Syntax Tree for Java</description>
 
     <licenses>
         <license>

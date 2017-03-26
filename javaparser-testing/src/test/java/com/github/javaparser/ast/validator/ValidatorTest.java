@@ -11,6 +11,8 @@ import static com.github.javaparser.Providers.provider;
 import static org.junit.Assert.assertEquals;
 
 public class ValidatorTest {
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
+
     @Test
     public void noProblemsHere() {
         ParseResult<Statement> result =

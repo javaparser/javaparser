@@ -10,7 +10,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  */
 public abstract class VisitorValidator extends VoidVisitorAdapter<ProblemReporter> implements Validator {
     @Override
-    public void validate(Node node, ProblemReporter problemReporter) {
+    public void accept(Node node, ProblemReporter problemReporter) {
         node.accept(this, problemReporter);
     }
 }
