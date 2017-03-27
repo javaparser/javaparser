@@ -151,4 +151,13 @@ public class LiteralStringValueExprTest {
         assertThat(negHexFloat.asDouble()).isEqualTo(0x0.0000000000001P-1022);
     }
 
+    @Test
+    public void specialCharactersInStringsAreEscaped() {
+        assertThat(new StringLiteralExpr("\n").getValue()).isEqualTo("\\n");
+        assertThat(new StringLiteralExpr("\r").getValue()).isEqualTo("\\r");
+        assertThat(new StringLiteralExpr("").setEscapedValue("\n").getValue()).isEqualTo("\\n");
+        assertThat(new StringLiteralExpr("").setEscapedValue("\r").getValue()).isEqualTo("\\r");
+        assertThat(new StringLiteralExpr("\n\r").asString()).isEqualTo("\n\r");
+    }
+
 }

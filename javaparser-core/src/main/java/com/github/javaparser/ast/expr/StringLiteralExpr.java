@@ -22,13 +22,14 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
+import com.github.javaparser.utils.StringEscapeUtils;
+import com.github.javaparser.utils.Utils;
 
 /**
  * A literal string.
@@ -47,12 +48,15 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
 
     @AllFieldsConstructor
     public StringLiteralExpr(final String value) {
-        this(null, value);
+        this(null, Utils.escapeEndOfLines(value));
     }
 
     /**
      * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
+     *
+     * @Deprecated Use {{@link #StringLiteralExpr(String)}} instead.
      */
+    @Deprecated
     public static StringLiteralExpr escape(String string) {
         return new StringLiteralExpr(Utils.escapeEndOfLines(string));
     }
@@ -78,8 +82,13 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    public StringLiteralExpr setEscapedValue(String value) {
+        this.value = Utils.escapeEndOfLines(value);
+        return this;
+    }
+
     public String asString() {
-        return value;
+        return StringEscapeUtils.unescapeJava(value);
     }
 
     @Override
