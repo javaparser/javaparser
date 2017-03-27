@@ -203,8 +203,8 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIsScope(int statementPosition, int methodPosition,
                                                                      int classPosition, String expectedName) {
         ExpressionStmt statementUnderTest = (ExpressionStmt) getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        assertEquals(1, statementUnderTest.getNodesByType(MethodReferenceExpr.class).size());
-        MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getNodesByType(MethodReferenceExpr.class).get(0);
+        assertEquals(1, statementUnderTest.getChildNodesByType(MethodReferenceExpr.class).size());
+        MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getChildNodesByType(MethodReferenceExpr.class).get(0);
         assertThat(methodReferenceUnderTest.getScope().toString(), is(expectedName));
     }
 
@@ -212,8 +212,8 @@ public class ParsingSteps {
     public void thenMethodReferenceInStatementInMethodInClassIdentifierIsCompareByAge(int statementPosition, int methodPosition,
                                                                                       int classPosition, String expectedName) {
         Statement statementUnderTest = getStatementInMethodInClass(statementPosition, methodPosition, classPosition);
-        assertEquals(1, statementUnderTest.getNodesByType(MethodReferenceExpr.class).size());
-        MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getNodesByType(MethodReferenceExpr.class).get(0);
+        assertEquals(1, statementUnderTest.getChildNodesByType(MethodReferenceExpr.class).size());
+        MethodReferenceExpr methodReferenceUnderTest = statementUnderTest.getChildNodesByType(MethodReferenceExpr.class).get(0);
         assertThat(methodReferenceUnderTest.getIdentifier(), is(expectedName));
     }
 
@@ -335,7 +335,7 @@ public class ParsingSteps {
 
     private void setSelectedNodeFromCompilationUnit(Class<? extends Node> nodeType) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        List<? extends Node> nodes = compilationUnit.getNodesByType(nodeType);
+        List<? extends Node> nodes = compilationUnit.getChildNodesByType(nodeType);
         if (nodes.size() != 1) {
             throw new RuntimeException(format("Exactly one %s expected", nodeType.getSimpleName()));
         }

@@ -32,15 +32,15 @@ options {
 PARSER_BEGIN(GeneratedJavaParser)
 /*
  *
- * This file is part of Java 1.8 parser and Abstract Syntax Tree.
+ * This file is part of JavaParser 9.
  *
- * Java 1.8 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * JavaParser 9 is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.8 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with JavaParser 9.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.github.javaparser;
 

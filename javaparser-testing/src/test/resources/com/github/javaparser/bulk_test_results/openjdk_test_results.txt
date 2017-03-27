@@ -446,6 +446,9 @@ openjdk/langtools/test/tools/javac/overrridecrash/B.java
 openjdk/langtools/test/tools/javac/Parens3.java
 (line 35,col 9) Parse error. Found ":", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 
+openjdk/langtools/test/tools/javac/ParseConditional.java
+(line 41,col 13) Illegal left hand side of an assignment.
+
 openjdk/langtools/test/tools/javac/parser/7157165/T7157165.java
 (line 11,col 19) Parse error. Found "|", expected one of  "," ">"
 
@@ -528,4 +531,4 @@ openjdk/langtools/test/tools/javadoc/sourceOption/p/A.java
 openjdk/langtools/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-190 problems in 170 files
+191 problems in 171 files

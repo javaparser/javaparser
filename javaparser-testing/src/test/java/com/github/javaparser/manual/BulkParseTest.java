@@ -1,7 +1,9 @@
 package com.github.javaparser.manual;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
+import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
@@ -54,6 +56,7 @@ public class BulkParseTest {
     }
 
     public void bulkTest(SourceRoot sourceRoot, String testResultsFileName) throws IOException {
+        sourceRoot.setJavaParser(new JavaParser(new ParserConfiguration().setValidator(new Java9Validator())));
         Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
         testResults.toFile().mkdirs();
         testResults = testResults.resolve(testResultsFileName);

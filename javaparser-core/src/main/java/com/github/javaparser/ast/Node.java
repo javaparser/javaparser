@@ -338,7 +338,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @param clazz the type of node to find.
      */
-    public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
+    public <N extends Node> List<N> getChildNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
         for (Node child : getChildNodes()) {
             if (clazz.isInstance(child)) {
@@ -347,6 +347,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             nodes.addAll(child.getNodesByType(clazz));
         }
         return nodes;
+    }
+
+    /**
+     * @deprecated use getChildNodesByType
+     */
+    @Deprecated
+    public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
+        return getChildNodesByType(clazz);
     }
 
     /**

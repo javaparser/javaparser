@@ -21,7 +21,7 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.validator.BaseJavaValidator;
+import com.github.javaparser.ast.validator.Java1_0Validator;
 import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Validator;
 
@@ -89,7 +89,7 @@ public class ParserConfiguration {
 
     /**
      * The validator to run directly after parsing.
-     * By default it is {@link BaseJavaValidator}
+     * By default it is {@link Java1_0Validator}
      */
     public ParserConfiguration setValidator(Validator validator) {
         assertNotNull(validator);

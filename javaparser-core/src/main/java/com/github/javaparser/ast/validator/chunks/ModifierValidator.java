@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.validator;
+package com.github.javaparser.ast.validator.chunks;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
@@ -8,19 +8,35 @@ import com.github.javaparser.ast.modules.ModuleRequiresStmt;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
 import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.validator.ProblemReporter;
+import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.github.javaparser.ast.Modifier.*;
+import static java.util.Arrays.asList;
 
 
 /**
  * Verifies that only allowed modifiers are used where modifiers are expected.
  */
-public class BaseModifierValidator extends VisitorValidator {
+public class ModifierValidator extends VisitorValidator {
+    private final Modifier[] interfaceWithNothingSpecial = new Modifier[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP};
+    private final Modifier[] interfaceWithStaticAndDefault = new Modifier[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+    private final Modifier[] interfaceWithStaticAndDefaultAndPrivate = new Modifier[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT};
+
+    private final boolean hasStrictfp;
+    private final boolean hasDefaultAndStaticInterfaceMethods;
+    private final boolean hasPrivateInterfaceMethods;
+
+    public ModifierValidator(boolean hasStrictfp, boolean hasDefaultAndStaticInterfaceMethods, boolean hasPrivateInterfaceMethods) {
+        this.hasStrictfp = hasStrictfp;
+        this.hasDefaultAndStaticInterfaceMethods = hasDefaultAndStaticInterfaceMethods;
+        this.hasPrivateInterfaceMethods = hasPrivateInterfaceMethods;
+    }
+
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isInterface()) {
@@ -88,7 +104,7 @@ public class BaseModifierValidator extends VisitorValidator {
     public void visit(MethodDeclaration n, ProblemReporter reporter) {
         if (n.isAbstract()) {
             final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("Cannot be 'abstract' and also '", "', '", "'.");
-            for (Modifier m : Arrays.asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
+            for (Modifier m : asList(PRIVATE, STATIC, FINAL, NATIVE, STRICTFP, SYNCHRONIZED)) {
                 if (n.getModifiers().contains(m)) {
                     builder.append(m.asString());
                 }
@@ -99,10 +115,18 @@ public class BaseModifierValidator extends VisitorValidator {
         }
         if (n.getParentNode().isPresent()) {
             if (n.getParentNode().get() instanceof ClassOrInterfaceDeclaration) {
-                if (!((ClassOrInterfaceDeclaration) n.getParentNode().get()).isInterface()) {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
+                if (((ClassOrInterfaceDeclaration) n.getParentNode().get()).isInterface()) {
+                    if (hasDefaultAndStaticInterfaceMethods) {
+                        if (hasPrivateInterfaceMethods) {
+                            validateModifiers(n, reporter, interfaceWithStaticAndDefaultAndPrivate);
+                        } else {
+                            validateModifiers(n, reporter, interfaceWithStaticAndDefault);
+                        }
+                    } else {
+                        validateModifiers(n, reporter, interfaceWithNothingSpecial);
+                    }
                 } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT);
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP);
                 }
             }
         }
@@ -140,12 +164,23 @@ public class BaseModifierValidator extends VisitorValidator {
     private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
-        validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
-        n.getModifiers().forEach(m -> {
+        if (hasStrictfp) {
+            validateAtMostOneOf(n, reporter, NATIVE, STRICTFP);
+        } else {
+            allowedModifiers = removeModifierFromArray(STRICTFP, allowedModifiers);
+        }
+        for (Modifier m : n.getModifiers()) {
             if (!arrayContains(allowedModifiers, m)) {
                 reporter.report(n, "'%s' is not allowed here.", m.asString());
             }
-        });
+        }
+    }
+
+    private Modifier[] removeModifierFromArray(Modifier m, Modifier[] allowedModifiers) {
+        final List<Modifier> newModifiers = new ArrayList<>(asList(allowedModifiers));
+        newModifiers.remove(m);
+        allowedModifiers = newModifiers.toArray(new Modifier[0]);
+        return allowedModifiers;
     }
 
     private boolean arrayContains(Object[] items, Object searchItem) {

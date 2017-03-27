@@ -47,12 +47,12 @@ public class PrettyPrinterTest {
 
     private String prettyPrintField(String code) {
         CompilationUnit cu = JavaParser.parse(code);
-        return new PrettyPrinter().print(cu.getNodesByType(FieldDeclaration.class).get(0));
+        return new PrettyPrinter().print(cu.getChildNodesByType(FieldDeclaration.class).get(0));
     }
 
     private String prettyPrintVar(String code) {
         CompilationUnit cu = JavaParser.parse(code);
-        return new PrettyPrinter().print(cu.getNodesByType(VariableDeclarationExpr.class).get(0));
+        return new PrettyPrinter().print(cu.getChildNodesByType(VariableDeclarationExpr.class).get(0));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PrettyPrinterTest {
     private String prettyPrintConfigurable(String code) {
         CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinter printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorFactory(TestVisitor::new));
-        return printer.print(cu.getNodesByType(ClassOrInterfaceDeclaration.class).get(0));
+        return printer.print(cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0));
     }
 
     @Test
