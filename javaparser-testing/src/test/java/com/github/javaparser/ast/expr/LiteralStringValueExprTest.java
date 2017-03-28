@@ -157,7 +157,9 @@ public class LiteralStringValueExprTest {
         assertThat(new StringLiteralExpr("\r").getValue()).isEqualTo("\\r");
         assertThat(new StringLiteralExpr("").setEscapedValue("\n").getValue()).isEqualTo("\\n");
         assertThat(new StringLiteralExpr("").setEscapedValue("\r").getValue()).isEqualTo("\\r");
-        assertThat(new StringLiteralExpr("\n\r").asString()).isEqualTo("\n\r");
+        assertThat(new StringLiteralExpr("").setEscapedValue("\n").asString()).isEqualTo("\n");
+        assertThat(new StringLiteralExpr("").setEscapedValue("\r").asString()).isEqualTo("\r");
+        assertThat(new StringLiteralExpr("Hello\nWorld\rHello\"World\'").asString()).isEqualTo("Hello\nWorld\rHello\"World\'");
     }
 
 }

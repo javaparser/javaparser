@@ -75,6 +75,9 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    /**
+     * @return the literal value as an long while respecting different number representations
+     */
     public long asLong() {
         String result = value.replaceAll("_", "");
         char lastChar = result.charAt(result.length() - 1);

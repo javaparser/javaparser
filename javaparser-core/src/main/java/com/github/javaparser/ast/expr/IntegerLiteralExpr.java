@@ -75,6 +75,9 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    /**
+     * @return the literal value as an integer while respecting different number representations
+     */
     public int asInt() {
         String result = value.replaceAll("_", "");
         if (result.startsWith("0x") || result.startsWith("0X")) {

@@ -46,6 +46,11 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         this(null, "empty");
     }
 
+    /**
+     * Creates a string literal expression from given string. Escapes EOL characters.
+     *
+     * @param value the value of the literal
+     */
     @AllFieldsConstructor
     public StringLiteralExpr(final String value) {
         this(null, Utils.escapeEndOfLines(value));
@@ -54,7 +59,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     /**
      * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
      *
-     * @Deprecated Use {{@link #StringLiteralExpr(String)}} instead.
+     * @deprecated Use {@link #StringLiteralExpr(String)} instead.
      */
     @Deprecated
     public static StringLiteralExpr escape(String string) {
@@ -82,13 +87,33 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    /**
+     * Sets the content of this expressions to given value. Escapes EOL characters.
+     *
+     * @param value the new literal value
+     * @return self
+     */
     public StringLiteralExpr setEscapedValue(String value) {
         this.value = Utils.escapeEndOfLines(value);
         return this;
     }
 
+    /**
+     * @return the unescaped literal value
+     */
     public String asString() {
         return StringEscapeUtils.unescapeJava(value);
+    }
+
+    /**
+     * Escapes the given string from special characters and uses it as the literal value.
+     *
+     * @param value unescaped string
+     * @return this literal expression
+     */
+    public StringLiteralExpr setString(String value) {
+        this.value = StringEscapeUtils.escapeJava(value);
+        return this;
     }
 
     @Override

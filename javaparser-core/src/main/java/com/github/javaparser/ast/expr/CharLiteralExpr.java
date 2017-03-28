@@ -52,6 +52,11 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
+    /**
+     * Constructs a CharLiteralExpr with given escaped character.
+     *
+     * @param value a char
+     */
     public CharLiteralExpr(char value) {
         this(null, StringEscapeUtils.escapeJava(String.valueOf(value)));
     }
@@ -84,10 +89,19 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    /**
+     * @return the unescaped value character of this literal
+     */
     public char asChar() {
         return StringEscapeUtils.unescapeJava(value).charAt(0);
     }
 
+    /**
+     * Sets the given char as the literal value
+     *
+     * @param value a char
+     * @return this expression
+     */
     public CharLiteralExpr setChar(char value) {
         this.value = String.valueOf(value);
         return this;

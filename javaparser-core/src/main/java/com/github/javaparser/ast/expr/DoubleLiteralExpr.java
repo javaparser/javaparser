@@ -73,6 +73,9 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         return super.remove(node);
     }
 
+    /**
+     * @return the literal value as a double
+     */
     public double asDouble() {
         return Double.parseDouble(value);
     }
