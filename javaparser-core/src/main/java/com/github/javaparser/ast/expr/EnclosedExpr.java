@@ -76,6 +76,9 @@ public final class EnclosedExpr extends Expression {
      * @return this, the EnclosedExpr
      */
     public EnclosedExpr setInner(final Expression inner) {
+        if (inner == this.inner) {
+            return (EnclosedExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.INNER, this.inner, inner);
         if (this.inner != null)
             this.inner.setParentNode(null);

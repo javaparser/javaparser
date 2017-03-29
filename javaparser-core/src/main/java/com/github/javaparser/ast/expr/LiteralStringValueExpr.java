@@ -46,6 +46,9 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
 
     public final LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
+        if (value == this.value) {
+            return (LiteralStringValueExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
         return this;

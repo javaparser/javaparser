@@ -54,6 +54,9 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
 
     public ModuleUsesStmt setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (ModuleUsesStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);

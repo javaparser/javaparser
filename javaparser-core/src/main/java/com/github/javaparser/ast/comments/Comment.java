@@ -64,6 +64,9 @@ public abstract class Comment extends Node {
      */
     public Comment setContent(final String content) {
         assertNotNull(content);
+        if (content == this.content) {
+            return (Comment) this;
+        }
         notifyPropertyChange(ObservableProperty.CONTENT, this.content, content);
         this.content = content;
         return this;

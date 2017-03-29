@@ -134,6 +134,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      * @return this, the ObjectCreationExpr
      */
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
+        if (anonymousClassBody == this.anonymousClassBody) {
+            return (ObjectCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.ANONYMOUS_CLASS_BODY, this.anonymousClassBody, anonymousClassBody);
         if (this.anonymousClassBody != null)
             this.anonymousClassBody.setParentNode(null);
@@ -145,6 +148,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Override
     public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
+        if (arguments == this.arguments) {
+            return (ObjectCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
             this.arguments.setParentNode(null);
@@ -161,6 +167,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      */
     @Override
     public ObjectCreationExpr setScope(final Expression scope) {
+        if (scope == this.scope) {
+            return (ObjectCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
             this.scope.setParentNode(null);
@@ -172,6 +181,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Override
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (ObjectCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -193,6 +205,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      */
     @Override
     public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
+        if (typeArguments == this.typeArguments) {
+            return (ObjectCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
             this.typeArguments.setParentNode(null);

@@ -101,6 +101,9 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     @Override
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
+        if (identifier == this.identifier) {
+            return (Name) this;
+        }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
@@ -135,6 +138,9 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     }
 
     public Name setQualifier(final Name qualifier) {
+        if (qualifier == this.qualifier) {
+            return (Name) this;
+        }
         notifyPropertyChange(ObservableProperty.QUALIFIER, this.qualifier, qualifier);
         if (this.qualifier != null)
             this.qualifier.setParentNode(null);
@@ -174,6 +180,9 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     @Override
     public Name setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (Name) this;
+        }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);

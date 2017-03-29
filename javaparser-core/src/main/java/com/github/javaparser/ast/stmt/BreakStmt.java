@@ -81,6 +81,9 @@ public final class BreakStmt extends Statement {
      * @return this, the BreakStmt
      */
     public BreakStmt setLabel(final SimpleName label) {
+        if (label == this.label) {
+            return (BreakStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
         if (this.label != null)
             this.label.setParentNode(null);

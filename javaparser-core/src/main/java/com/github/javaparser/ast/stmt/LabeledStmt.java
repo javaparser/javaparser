@@ -78,6 +78,9 @@ public final class LabeledStmt extends Statement {
 
     public LabeledStmt setStatement(final Statement statement) {
         assertNotNull(statement);
+        if (statement == this.statement) {
+            return (LabeledStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
         if (this.statement != null)
             this.statement.setParentNode(null);
@@ -92,6 +95,9 @@ public final class LabeledStmt extends Statement {
 
     public LabeledStmt setLabel(final SimpleName label) {
         assertNotNull(label);
+        if (label == this.label) {
+            return (LabeledStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
         if (this.label != null)
             this.label.setParentNode(null);

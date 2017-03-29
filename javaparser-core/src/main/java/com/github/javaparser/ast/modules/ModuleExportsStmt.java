@@ -66,6 +66,9 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
 
     public ModuleExportsStmt setName(final Name name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ModuleExportsStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -80,6 +83,9 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
 
     public ModuleExportsStmt setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
+        if (moduleNames == this.moduleNames) {
+            return (ModuleExportsStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
         if (this.moduleNames != null)
             this.moduleNames.setParentNode(null);

@@ -145,6 +145,9 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
 
     public PrimitiveType setType(final Primitive type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (PrimitiveType) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         this.type = type;
         return this;

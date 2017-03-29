@@ -78,6 +78,9 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     public SynchronizedStmt setExpression(final Expression expression) {
         assertNotNull(expression);
+        if (expression == this.expression) {
+            return (SynchronizedStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
@@ -94,6 +97,9 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     @Override
     public SynchronizedStmt setBody(final BlockStmt body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (SynchronizedStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);

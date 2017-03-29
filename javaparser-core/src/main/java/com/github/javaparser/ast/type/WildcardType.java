@@ -104,6 +104,9 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @return this, the WildcardType
      */
     public WildcardType setExtendedType(final ReferenceType extendedType) {
+        if (extendedType == this.extendedType) {
+            return (WildcardType) this;
+        }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
         if (this.extendedType != null)
             this.extendedType.setParentNode(null);
@@ -132,6 +135,9 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @return this, the WildcardType
      */
     public WildcardType setSuperType(final ReferenceType superType) {
+        if (superType == this.superType) {
+            return (WildcardType) this;
+        }
         notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
         if (this.superType != null)
             this.superType.setParentNode(null);

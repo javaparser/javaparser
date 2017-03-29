@@ -76,6 +76,9 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     @Override
     public ThrowStmt setExpression(final Expression expression) {
         assertNotNull(expression);
+        if (expression == this.expression) {
+            return (ThrowStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
