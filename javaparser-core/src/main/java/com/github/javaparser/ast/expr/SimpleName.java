@@ -74,6 +74,9 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     @Override
     public SimpleName setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
+        if (identifier == this.identifier) {
+            return (SimpleName) this;
+        }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;

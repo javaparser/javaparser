@@ -103,6 +103,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Override
     public ForStmt setBody(final Statement body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -118,6 +121,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      * @return this, the ForStmt
      */
     public ForStmt setCompare(final Expression compare) {
+        if (compare == this.compare) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
         if (this.compare != null)
             this.compare.setParentNode(null);
@@ -128,6 +134,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
         assertNotNull(initialization);
+        if (initialization == this.initialization) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
         if (this.initialization != null)
             this.initialization.setParentNode(null);
@@ -138,6 +147,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     public ForStmt setUpdate(final NodeList<Expression> update) {
         assertNotNull(update);
+        if (update == this.update) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
         if (this.update != null)
             this.update.setParentNode(null);

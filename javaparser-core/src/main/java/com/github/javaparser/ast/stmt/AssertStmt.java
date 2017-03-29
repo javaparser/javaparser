@@ -84,6 +84,9 @@ public final class AssertStmt extends Statement {
 
     public AssertStmt setCheck(final Expression check) {
         assertNotNull(check);
+        if (check == this.check) {
+            return (AssertStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.CHECK, this.check, check);
         if (this.check != null)
             this.check.setParentNode(null);
@@ -99,6 +102,9 @@ public final class AssertStmt extends Statement {
      * @return this, the AssertStmt
      */
     public AssertStmt setMessage(final Expression message) {
+        if (message == this.message) {
+            return (AssertStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);
         if (this.message != null)
             this.message.setParentNode(null);

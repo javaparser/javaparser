@@ -79,6 +79,9 @@ public final class SuperExpr extends Expression {
      * @return this, the SuperExpr
      */
     public SuperExpr setClassExpr(final Expression classExpr) {
+        if (classExpr == this.classExpr) {
+            return (SuperExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
         if (this.classExpr != null)
             this.classExpr.setParentNode(null);

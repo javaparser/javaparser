@@ -76,6 +76,9 @@ public final class ArrayInitializerExpr extends Expression {
 
     public ArrayInitializerExpr setValues(final NodeList<Expression> values) {
         assertNotNull(values);
+        if (values == this.values) {
+            return (ArrayInitializerExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
         if (this.values != null)
             this.values.setParentNode(null);

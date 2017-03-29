@@ -95,6 +95,9 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     @Override
     public ForeachStmt setBody(final Statement body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (ForeachStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -105,6 +108,9 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 
     public ForeachStmt setIterable(final Expression iterable) {
         assertNotNull(iterable);
+        if (iterable == this.iterable) {
+            return (ForeachStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.ITERABLE, this.iterable, iterable);
         if (this.iterable != null)
             this.iterable.setParentNode(null);
@@ -115,6 +121,9 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
 
     public ForeachStmt setVariable(final VariableDeclarationExpr variable) {
         assertNotNull(variable);
+        if (variable == this.variable) {
+            return (ForeachStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.VARIABLE, this.variable, variable);
         if (this.variable != null)
             this.variable.setParentNode(null);

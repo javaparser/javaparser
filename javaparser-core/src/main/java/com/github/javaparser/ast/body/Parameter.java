@@ -125,6 +125,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     @Override
     public Parameter setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (Parameter) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -134,6 +137,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     public Parameter setVarArgs(final boolean isVarArgs) {
+        if (isVarArgs == this.isVarArgs) {
+            return (Parameter) this;
+        }
         notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
         this.isVarArgs = isVarArgs;
         return this;
@@ -170,6 +176,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     @Override
     public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (Parameter) this;
+        }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);
@@ -181,6 +190,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     @Override
     public Parameter setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (Parameter) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -192,6 +204,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     @Override
     public Parameter setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (Parameter) this;
+        }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
@@ -227,6 +242,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
 
     public Parameter setVarArgsAnnotations(final NodeList<AnnotationExpr> varArgsAnnotations) {
         assertNotNull(varArgsAnnotations);
+        if (varArgsAnnotations == this.varArgsAnnotations) {
+            return (Parameter) this;
+        }
         notifyPropertyChange(ObservableProperty.VAR_ARGS_ANNOTATIONS, this.varArgsAnnotations, varArgsAnnotations);
         if (this.varArgsAnnotations != null)
             this.varArgsAnnotations.setParentNode(null);

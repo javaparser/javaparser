@@ -83,6 +83,9 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
 
     public InitializerDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (InitializerDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -92,6 +95,9 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     public InitializerDeclaration setStatic(final boolean isStatic) {
+        if (isStatic == this.isStatic) {
+            return (InitializerDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;

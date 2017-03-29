@@ -83,6 +83,9 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     @Override
     public DoStmt setBody(final Statement body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (DoStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -93,6 +96,9 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
     public DoStmt setCondition(final Expression condition) {
         assertNotNull(condition);
+        if (condition == this.condition) {
+            return (DoStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         if (this.condition != null)
             this.condition.setParentNode(null);

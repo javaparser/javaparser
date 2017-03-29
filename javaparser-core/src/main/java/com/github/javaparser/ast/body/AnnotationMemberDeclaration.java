@@ -129,6 +129,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @return this, the AnnotationMemberDeclaration
      */
     public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
+        if (defaultValue == this.defaultValue) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
         if (this.defaultValue != null)
             this.defaultValue.setParentNode(null);
@@ -140,6 +143,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     @Override
     public AnnotationMemberDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
@@ -148,6 +154,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     @Override
     public AnnotationMemberDeclaration setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -159,6 +168,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     @Override
     public AnnotationMemberDeclaration setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);

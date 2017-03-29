@@ -96,6 +96,9 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     }
 
     public ImportDeclaration setAsterisk(final boolean isAsterisk) {
+        if (isAsterisk == this.isAsterisk) {
+            return (ImportDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.ASTERISK, this.isAsterisk, isAsterisk);
         this.isAsterisk = isAsterisk;
         return this;
@@ -103,6 +106,9 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
 
     public ImportDeclaration setName(final Name name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ImportDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -112,6 +118,9 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     }
 
     public ImportDeclaration setStatic(final boolean isStatic) {
+        if (isStatic == this.isStatic) {
+            return (ImportDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;

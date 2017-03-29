@@ -85,6 +85,9 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
      */
     @Override
     public ContinueStmt setLabel(final SimpleName label) {
+        if (label == this.label) {
+            return (ContinueStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
         if (this.label != null)
             this.label.setParentNode(null);

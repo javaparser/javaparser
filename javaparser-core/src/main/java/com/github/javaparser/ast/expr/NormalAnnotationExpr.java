@@ -72,6 +72,9 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 
     public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
         assertNotNull(pairs);
+        if (pairs == this.pairs) {
+            return (NormalAnnotationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.PAIRS, this.pairs, pairs);
         if (this.pairs != null)
             this.pairs.setParentNode(null);

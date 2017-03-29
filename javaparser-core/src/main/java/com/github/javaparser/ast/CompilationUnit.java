@@ -171,6 +171,9 @@ public final class CompilationUnit extends Node {
      */
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
+        if (imports == this.imports) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         if (this.imports != null)
             this.imports.setParentNode(null);
@@ -195,6 +198,9 @@ public final class CompilationUnit extends Node {
      * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
      */
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
+        if (packageDeclaration == this.packageDeclaration) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
         if (this.packageDeclaration != null)
             this.packageDeclaration.setParentNode(null);
@@ -208,6 +214,9 @@ public final class CompilationUnit extends Node {
      */
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
+        if (types == this.types) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         if (this.types != null)
             this.types.setParentNode(null);
@@ -470,6 +479,9 @@ public final class CompilationUnit extends Node {
     }
 
     public CompilationUnit setModule(final ModuleDeclaration module) {
+        if (module == this.module) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
         if (this.module != null)
             this.module.setParentNode(null);

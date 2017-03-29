@@ -116,6 +116,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 
     public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
+        if (arguments == this.arguments) {
+            return (ExplicitConstructorInvocationStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
             this.arguments.setParentNode(null);
@@ -131,6 +134,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @return this, the ExplicitConstructorInvocationStmt
      */
     public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
+        if (expression == this.expression) {
+            return (ExplicitConstructorInvocationStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
@@ -140,6 +146,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
+        if (isThis == this.isThis) {
+            return (ExplicitConstructorInvocationStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.THIS, this.isThis, isThis);
         this.isThis = isThis;
         return this;
@@ -158,6 +167,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      */
     @Override
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
+        if (typeArguments == this.typeArguments) {
+            return (ExplicitConstructorInvocationStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
             this.typeArguments.setParentNode(null);

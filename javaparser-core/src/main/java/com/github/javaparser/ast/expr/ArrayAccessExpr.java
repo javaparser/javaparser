@@ -78,6 +78,9 @@ public final class ArrayAccessExpr extends Expression {
 
     public ArrayAccessExpr setIndex(final Expression index) {
         assertNotNull(index);
+        if (index == this.index) {
+            return (ArrayAccessExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.INDEX, this.index, index);
         if (this.index != null)
             this.index.setParentNode(null);
@@ -88,6 +91,9 @@ public final class ArrayAccessExpr extends Expression {
 
     public ArrayAccessExpr setName(final Expression name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ArrayAccessExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);

@@ -95,6 +95,9 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     @Override
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (ConstructorDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);

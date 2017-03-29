@@ -75,6 +75,9 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     @Override
     public ExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
+        if (expression == this.expression) {
+            return (ExpressionStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);

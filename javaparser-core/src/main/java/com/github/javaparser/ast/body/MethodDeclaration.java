@@ -116,6 +116,9 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      */
     @Override
     public MethodDeclaration setBody(final BlockStmt body) {
+        if (body == this.body) {
+            return (MethodDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -132,6 +135,9 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Override
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (MethodDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);

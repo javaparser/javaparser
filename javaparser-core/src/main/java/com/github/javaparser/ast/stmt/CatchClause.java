@@ -91,6 +91,9 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     public CatchClause setParameter(final Parameter parameter) {
         assertNotNull(parameter);
+        if (parameter == this.parameter) {
+            return (CatchClause) this;
+        }
         notifyPropertyChange(ObservableProperty.PARAMETER, this.parameter, parameter);
         if (this.parameter != null)
             this.parameter.setParentNode(null);
@@ -107,6 +110,9 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     @Override
     public CatchClause setBody(final BlockStmt body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (CatchClause) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
