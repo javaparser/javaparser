@@ -33,8 +33,16 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         this.typeSolver = typeSolver;
     }
 
+    public String getPackageName() {
+        return Helper.getPackageName(wrappedNode);
+    }
+
+    public String getClassName() {
+        return Helper.getClassName("", wrappedNode);
+    }
+
     public String getQualifiedName() {
-        String containerName = Helper.containerName("", getParentNode(wrappedNode));
+        String containerName = Helper.containerName(getParentNode(wrappedNode));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
         } else {
