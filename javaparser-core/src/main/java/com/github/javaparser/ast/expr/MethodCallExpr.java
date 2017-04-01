@@ -107,6 +107,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
+        if (arguments == this.arguments) {
+            return (MethodCallExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.ARGUMENTS, this.arguments, arguments);
         if (this.arguments != null)
             this.arguments.setParentNode(null);
@@ -118,6 +121,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     @Override
     public MethodCallExpr setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (MethodCallExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -128,6 +134,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 
     @Override
     public MethodCallExpr setScope(final Expression scope) {
+        if (scope == this.scope) {
+            return (MethodCallExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
             this.scope.setParentNode(null);
@@ -149,6 +158,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
      */
     @Override
     public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
+        if (typeArguments == this.typeArguments) {
+            return (MethodCallExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
             this.typeArguments.setParentNode(null);

@@ -67,6 +67,9 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
 
     public ModuleProvidesStmt setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (ModuleProvidesStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -81,6 +84,9 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
 
     public ModuleProvidesStmt setWithTypes(final NodeList<Type> withTypes) {
         assertNotNull(withTypes);
+        if (withTypes == this.withTypes) {
+            return (ModuleProvidesStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.WITH_TYPES, this.withTypes, withTypes);
         if (this.withTypes != null)
             this.withTypes.setParentNode(null);

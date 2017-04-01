@@ -78,6 +78,9 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     public IntersectionType setElements(final NodeList<ReferenceType<?>> elements) {
         assertNotNull(elements);
+        if (elements == this.elements) {
+            return (IntersectionType) this;
+        }
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         if (this.elements != null)
             this.elements.setParentNode(null);

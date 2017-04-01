@@ -106,6 +106,9 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @Override
     public T setMembers(final NodeList<BodyDeclaration<?>> members) {
         assertNotNull(members);
+        if (members == this.members) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.MEMBERS, this.members, members);
         if (this.members != null)
             this.members.setParentNode(null);
@@ -118,6 +121,9 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @Override
     public T setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return (T) this;
@@ -127,6 +133,9 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     @Override
     public T setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);

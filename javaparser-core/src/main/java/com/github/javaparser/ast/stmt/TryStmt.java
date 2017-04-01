@@ -113,6 +113,9 @@ public final class TryStmt extends Statement {
 
     public TryStmt setCatchClauses(final NodeList<CatchClause> catchClauses) {
         assertNotNull(catchClauses);
+        if (catchClauses == this.catchClauses) {
+            return (TryStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.CATCH_CLAUSES, this.catchClauses, catchClauses);
         if (this.catchClauses != null)
             this.catchClauses.setParentNode(null);
@@ -122,6 +125,9 @@ public final class TryStmt extends Statement {
     }
 
     public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
+        if (finallyBlock == this.finallyBlock) {
+            return (TryStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.FINALLY_BLOCK, this.finallyBlock, finallyBlock);
         if (this.finallyBlock != null)
             this.finallyBlock.setParentNode(null);
@@ -131,6 +137,9 @@ public final class TryStmt extends Statement {
     }
 
     public TryStmt setTryBlock(final BlockStmt tryBlock) {
+        if (tryBlock == this.tryBlock) {
+            return (TryStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.TRY_BLOCK, this.tryBlock, tryBlock);
         if (this.tryBlock != null)
             this.tryBlock.setParentNode(null);
@@ -141,6 +150,9 @@ public final class TryStmt extends Statement {
 
     public TryStmt setResources(final NodeList<VariableDeclarationExpr> resources) {
         assertNotNull(resources);
+        if (resources == this.resources) {
+            return (TryStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.RESOURCES, this.resources, resources);
         if (this.resources != null)
             this.resources.setParentNode(null);

@@ -102,6 +102,9 @@ public final class AssignExpr extends Expression {
 
     public AssignExpr setOperator(final Operator operator) {
         assertNotNull(operator);
+        if (operator == this.operator) {
+            return (AssignExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
         return this;
@@ -109,6 +112,9 @@ public final class AssignExpr extends Expression {
 
     public AssignExpr setTarget(final Expression target) {
         assertNotNull(target);
+        if (target == this.target) {
+            return (AssignExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
         if (this.target != null)
             this.target.setParentNode(null);
@@ -119,6 +125,9 @@ public final class AssignExpr extends Expression {
 
     public AssignExpr setValue(final Expression value) {
         assertNotNull(value);
+        if (value == this.value) {
+            return (AssignExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         if (this.value != null)
             this.value.setParentNode(null);

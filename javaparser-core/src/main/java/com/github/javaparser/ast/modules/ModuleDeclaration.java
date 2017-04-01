@@ -70,6 +70,9 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     @Override
     public ModuleDeclaration setName(final Name name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -86,6 +89,9 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     @Override
     public ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);
@@ -123,6 +129,9 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     public ModuleDeclaration setOpen(final boolean isOpen) {
+        if (isOpen == this.isOpen) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.OPEN, this.isOpen, isOpen);
         this.isOpen = isOpen;
         return this;
@@ -134,6 +143,9 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
 
     public ModuleDeclaration setModuleStmts(final NodeList<ModuleStmt> moduleStmts) {
         assertNotNull(moduleStmts);
+        if (moduleStmts == this.moduleStmts) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.MODULE_STMTS, this.moduleStmts, moduleStmts);
         if (this.moduleStmts != null)
             this.moduleStmts.setParentNode(null);

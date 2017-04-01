@@ -70,6 +70,9 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
         assertNotNull(memberValue);
+        if (memberValue == this.memberValue) {
+            return (SingleMemberAnnotationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.MEMBER_VALUE, this.memberValue, memberValue);
         if (this.memberValue != null)
             this.memberValue.setParentNode(null);

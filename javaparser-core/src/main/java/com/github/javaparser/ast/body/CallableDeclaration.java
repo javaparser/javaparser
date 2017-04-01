@@ -73,6 +73,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     public T setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return (T) this;
@@ -84,6 +87,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     public T setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -98,6 +104,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
+        if (parameters == this.parameters) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
         if (this.parameters != null)
             this.parameters.setParentNode(null);
@@ -112,6 +121,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     public T setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
         assertNotNull(thrownExceptions);
+        if (thrownExceptions == this.thrownExceptions) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
         if (this.thrownExceptions != null)
             this.thrownExceptions.setParentNode(null);
@@ -126,6 +138,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
+        if (typeParameters == this.typeParameters) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
             this.typeParameters.setParentNode(null);

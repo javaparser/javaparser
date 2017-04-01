@@ -59,6 +59,9 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
     @Override
     public ModuleRequiresStmt setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (ModuleRequiresStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
@@ -72,6 +75,9 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
     @Override
     public ModuleRequiresStmt setName(final Name name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ModuleRequiresStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);

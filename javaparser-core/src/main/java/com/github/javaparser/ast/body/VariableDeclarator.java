@@ -144,6 +144,9 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     @Override
     public VariableDeclarator setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (VariableDeclarator) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -159,6 +162,9 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
      * @return this, the VariableDeclarator
      */
     public VariableDeclarator setInitializer(final Expression initializer) {
+        if (initializer == this.initializer) {
+            return (VariableDeclarator) this;
+        }
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         if (this.initializer != null)
             this.initializer.setParentNode(null);
@@ -185,6 +191,9 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     @Override
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (VariableDeclarator) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);

@@ -111,6 +111,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
+        if (extendedTypes == this.extendedTypes) {
+            return (ClassOrInterfaceDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPES, this.extendedTypes, extendedTypes);
         if (this.extendedTypes != null)
             this.extendedTypes.setParentNode(null);
@@ -122,6 +125,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
+        if (implementedTypes == this.implementedTypes) {
+            return (ClassOrInterfaceDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.IMPLEMENTED_TYPES, this.implementedTypes, implementedTypes);
         if (this.implementedTypes != null)
             this.implementedTypes.setParentNode(null);
@@ -131,6 +137,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
+        if (isInterface == this.isInterface) {
+            return (ClassOrInterfaceDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.INTERFACE, this.isInterface, isInterface);
         this.isInterface = isInterface;
         return this;
@@ -139,6 +148,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
+        if (typeParameters == this.typeParameters) {
+            return (ClassOrInterfaceDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
         if (this.typeParameters != null)
             this.typeParameters.setParentNode(null);

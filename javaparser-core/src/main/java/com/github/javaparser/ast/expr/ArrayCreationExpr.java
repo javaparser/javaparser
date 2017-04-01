@@ -105,6 +105,9 @@ public final class ArrayCreationExpr extends Expression {
      * @return this, the ArrayCreationExpr
      */
     public ArrayCreationExpr setInitializer(final ArrayInitializerExpr initializer) {
+        if (initializer == this.initializer) {
+            return (ArrayCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
         if (this.initializer != null)
             this.initializer.setParentNode(null);
@@ -115,6 +118,9 @@ public final class ArrayCreationExpr extends Expression {
 
     public ArrayCreationExpr setElementType(final Type elementType) {
         assertNotNull(elementType);
+        if (elementType == this.elementType) {
+            return (ArrayCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
         if (this.elementType != null)
             this.elementType.setParentNode(null);
@@ -129,6 +135,9 @@ public final class ArrayCreationExpr extends Expression {
 
     public ArrayCreationExpr setLevels(final NodeList<ArrayCreationLevel> levels) {
         assertNotNull(levels);
+        if (levels == this.levels) {
+            return (ArrayCreationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
         if (this.levels != null)
             this.levels.setParentNode(null);

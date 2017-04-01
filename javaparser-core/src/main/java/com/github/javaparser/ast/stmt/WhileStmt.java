@@ -83,6 +83,9 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     @Override
     public WhileStmt setBody(final Statement body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (WhileStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -93,6 +96,9 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
 
     public WhileStmt setCondition(final Expression condition) {
         assertNotNull(condition);
+        if (condition == this.condition) {
+            return (WhileStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         if (this.condition != null)
             this.condition.setParentNode(null);

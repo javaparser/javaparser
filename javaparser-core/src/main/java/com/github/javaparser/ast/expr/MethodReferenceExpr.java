@@ -90,6 +90,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     public MethodReferenceExpr setScope(final Expression scope) {
         assertNotNull(scope);
+        if (scope == this.scope) {
+            return (MethodReferenceExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
             this.scope.setParentNode(null);
@@ -111,6 +114,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
      */
     @Override
     public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
+        if (typeArguments == this.typeArguments) {
+            return (MethodReferenceExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
             this.typeArguments.setParentNode(null);
@@ -127,6 +133,9 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
+        if (identifier == this.identifier) {
+            return (MethodReferenceExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;

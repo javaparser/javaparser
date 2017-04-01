@@ -60,6 +60,7 @@ public class PropertyGenerator extends NodeGenerator {
 
         final BlockStmt body = setter.getBody().get();
         body.getStatements().clear();
+
         if (property.isRequired()) {
             Class<?> type = property.getType();
             if (property.isNonEmpty() && property.isSingular()) {
@@ -68,6 +69,8 @@ public class PropertyGenerator extends NodeGenerator {
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }
+        body.addStatement(f("if (%s == this.%s) { return (%s) this; }", name, name, setter.getType()));
+
         body.addStatement(f("notifyPropertyChange(ObservableProperty.%s, this.%s, %s);", observableName, name, name));
         if (property.isNode()) {
             body.addStatement(f("if (this.%s != null) this.%s.setParentNode(null);", name, name));
