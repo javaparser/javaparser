@@ -22,10 +22,10 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DoubleLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -52,6 +52,10 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         super(range, value);
     }
 
+    public DoubleLiteralExpr(final double value) {
+        this(null, String.valueOf(value));
+    }
+
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
@@ -67,6 +71,18 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    /**
+     * @return the literal value as a double
+     */
+    public double asDouble() {
+        return Double.parseDouble(value);
+    }
+
+    public DoubleLiteralExpr setDouble(double value) {
+        this.value = String.valueOf(value);
+        return this;
     }
 
     @Override

@@ -22,10 +22,10 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -36,7 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * <br/><code>022</code>
  * <br/><code>0B10101010</code>
  * <br/><code>99999999L</code>
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public class IntegerLiteralExpr extends LiteralStringValueExpr {
@@ -54,6 +54,10 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         super(range, value);
     }
 
+    public IntegerLiteralExpr(final int value) {
+        this(null, String.valueOf(value));
+    }
+
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
@@ -69,6 +73,28 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    /**
+     * @return the literal value as an integer while respecting different number representations
+     */
+    public int asInt() {
+        String result = value.replaceAll("_", "");
+        if (result.startsWith("0x") || result.startsWith("0X")) {
+            return Integer.parseUnsignedInt(result.substring(2), 16);
+        }
+        if (result.startsWith("0b") || result.startsWith("0B")) {
+            return Integer.parseUnsignedInt(result.substring(2), 2);
+        }
+        if (result.length() > 1 && result.startsWith("0")) {
+            return Integer.parseUnsignedInt(result.substring(1), 8);
+        }
+        return Integer.parseInt(result);
+    }
+
+    public IntegerLiteralExpr setInt(int value) {
+        this.value = String.valueOf(value);
+        return this;
     }
 
     @Override

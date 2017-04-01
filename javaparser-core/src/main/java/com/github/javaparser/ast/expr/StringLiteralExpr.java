@@ -22,13 +22,14 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Utils;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
+import com.github.javaparser.utils.StringEscapeUtils;
+import com.github.javaparser.utils.Utils;
 
 /**
  * A literal string.
@@ -45,14 +46,22 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         this(null, "empty");
     }
 
+    /**
+     * Creates a string literal expression from given string. Escapes EOL characters.
+     *
+     * @param value the value of the literal
+     */
     @AllFieldsConstructor
     public StringLiteralExpr(final String value) {
-        this(null, value);
+        this(null, Utils.escapeEndOfLines(value));
     }
 
     /**
      * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
+     *
+     * @deprecated Use {@link #StringLiteralExpr(String)} instead.
      */
+    @Deprecated
     public static StringLiteralExpr escape(String string) {
         return new StringLiteralExpr(Utils.escapeEndOfLines(string));
     }
@@ -76,6 +85,35 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    /**
+     * Sets the content of this expressions to given value. Escapes EOL characters.
+     *
+     * @param value the new literal value
+     * @return self
+     */
+    public StringLiteralExpr setEscapedValue(String value) {
+        this.value = Utils.escapeEndOfLines(value);
+        return this;
+    }
+
+    /**
+     * @return the unescaped literal value
+     */
+    public String asString() {
+        return StringEscapeUtils.unescapeJava(value);
+    }
+
+    /**
+     * Escapes the given string from special characters and uses it as the literal value.
+     *
+     * @param value unescaped string
+     * @return this literal expression
+     */
+    public StringLiteralExpr setString(String value) {
+        this.value = StringEscapeUtils.escapeJava(value);
+        return this;
     }
 
     @Override
