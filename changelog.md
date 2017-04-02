@@ -1,3 +1,11 @@
+Version 3.2.0
+------------------
+The lexical preservation code is stable!
+
+Beta: `TreeStructureVisitor`.
+
+* 885 884 879 878 smaller improvements and fixes
+
 Version 3.1.4
 ------------------
 This is the first version to parse Java 9.
