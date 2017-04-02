@@ -1204,11 +1204,7 @@ NodeList<Parameter> Parameters():
 	Parameter par;
 }
 {
-  "(" [ 
-        par = Parameter() { ret = add(ret, par); } 
-        ( "," par = Parameter() { ret = add(ret, par); } )* 
-        ] ")"
-
+  "(" [ par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )* ] ")"
   { return ret; }
 }
 
@@ -1243,15 +1239,41 @@ Parameter Parameter():
 	Type partialType;
 	boolean isVarArg = false;
 	Pair<SimpleName, List<ArrayBracketPair>> id;
+	SimpleName receiverId;
 	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
+	Parameter ret;
 }
 {
-  modifier = Modifiers() partialType = Type() [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] id = VariableDeclaratorId()
-  {
+  modifier = Modifiers() partialType = Type() [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
+  ( LOOKAHEAD(ReceiverParameterId())
+    receiverId = ReceiverParameterId()
+    {
         Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
-        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
-  }
+        ret = new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, partialType, isVarArg, varArgAnnotations, receiverId);
+    }
+  |
+    id = VariableDeclaratorId()
+    {
+        Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
+        ret = new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
+    }
+  )
+  { return ret; }
 }
+
+SimpleName ReceiverParameterId():
+{
+    String id;
+	String ret ="";
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    Position begin = INVALID;
+}
+{
+  ( id = Identifier() "." { ret = ret + id + "."; begin = begin.orIfInvalid(tokenBegin()); } )*
+  "this" { begin = begin.orIfInvalid(tokenBegin()); }
+  { return new SimpleName(range(begin, tokenEnd()), ret + "this"); }
+}
+
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
