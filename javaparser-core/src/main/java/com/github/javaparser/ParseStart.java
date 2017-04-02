@@ -58,7 +58,7 @@ public interface ParseStart<R> {
     ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpression;
     ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocation;
     ParseStart<Name> NAME = GeneratedJavaParser::Name;
-    ParseStart<Parameter> PARAMETER = GeneratedJavaParser::FormalParameter;
+    ParseStart<Parameter> PARAMETER = GeneratedJavaParser::Parameter;
 
     R parse(GeneratedJavaParser parser) throws ParseException;
 }

@@ -1169,7 +1169,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = begin.orIfInvalid(nodeListBegin(annotations)); }
     type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
-    name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
       ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
     ( body = Block() | ";" )
@@ -1198,25 +1198,28 @@ ReferenceType<?> ReferenceTypeWithAnnotations():
     }
 }
 
-NodeList<Parameter> FormalParameters():
+NodeList<Parameter> Parameters():
 {
 	NodeList<Parameter> ret = emptyList();
 	Parameter par;
 }
 {
-  "(" [ par = FormalParameter() { ret = add(ret, par); } ( "," par = FormalParameter() { ret = add(ret, par); } )* ] ")"
+  "(" [ 
+        par = Parameter() { ret = add(ret, par); } 
+        ( "," par = Parameter() { ret = add(ret, par); } )* 
+        ] ")"
 
   { return ret; }
 }
 
-NodeList<Parameter> FormalLambdaParameters():
+NodeList<Parameter> LambdaParameters():
 {
   NodeList<Parameter> ret = null;
   Parameter par;
 }
 {
    ","
-  	par = FormalParameter() {  ret = add(ret, par);  } ( "," par = FormalParameter() { ret = add(ret, par); } )*
+  	par = Parameter() {  ret = add(ret, par);  } ( "," par = Parameter() { ret = add(ret, par); } )*
   { return ret;  }
 }
 
@@ -1234,7 +1237,7 @@ NodeList<Parameter> InferredLambdaParameters():
     { return ret;  }
 }
 
-Parameter FormalParameter():
+Parameter Parameter():
 {
 	ModifierHolder modifier;
 	Type partialType;
@@ -1265,7 +1268,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); begin = begin.orIfInvalid(tokenBegin()); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); begin = begin.orIfInvalid(tokenBegin()); } parameters = Parameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
   ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
   "{" { blockBegin=tokenBegin(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
@@ -1969,7 +1972,7 @@ Expression PrimaryPrefix():
 	|
 	  "(" {begin=tokenBegin();}
 	  	[
-	  	( LOOKAHEAD(FormalParameter()) p = FormalParameter() { isLambda = true;} [params = FormalLambdaParameters()]
+	  	( LOOKAHEAD(Parameter()) p = Parameter() { isLambda = true;} [params = LambdaParameters()]
 	  	| ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ]
 	  	)
 	  	]
