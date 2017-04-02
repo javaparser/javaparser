@@ -164,6 +164,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * no range information is known, or that it is not of interest.
      */
     public Node setRange(Range range) {
+        if (this.range == range) {
+            return this;
+        }
         notifyPropertyChange(ObservableProperty.RANGE, this.range, range);
         this.range = range;
         return this;
@@ -175,6 +178,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @param comment to be set
      */
     public final Node setComment(final Comment comment) {
+        if (this.comment == comment) {
+            return this;
+        }
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
@@ -306,6 +312,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     @Override
     public Node setParentNode(Node parentNode) {
+        if (parentNode == this.parentNode) {
+            return this;
+        }
         observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
         // remove from old parent, if any
         if (this.parentNode != null) {
