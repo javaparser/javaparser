@@ -73,6 +73,14 @@ class Helper {
             } else {
                 return b + "." + cn;
             }
+        } else if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
+            String b = getClassName(base, getParentNode(container));
+            String cn = ((com.github.javaparser.ast.body.EnumDeclaration) container).getName().getId();
+            if (b.isEmpty()) {
+                return cn;
+            } else {
+                return b + "." + cn;
+            }
         } else if (container != null) {
             return getClassName(base, getParentNode(container));
         }
