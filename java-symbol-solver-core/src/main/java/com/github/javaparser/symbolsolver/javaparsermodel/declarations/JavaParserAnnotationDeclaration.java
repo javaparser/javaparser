@@ -55,6 +55,16 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
+    public String getPackageName() {
+        return Helper.getPackageName(wrappedNode);
+    }
+
+    @Override
+    public String getClassName() {
+        return Helper.getClassName("", wrappedNode);
+    }
+
+    @Override
     public String getQualifiedName() {
         String containerName = Helper.containerName(getParentNode(wrappedNode));
         if (containerName.isEmpty()) {

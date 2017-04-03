@@ -101,6 +101,20 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public String getPackageName() {
+        return ctClass.getPackageName();
+    }
+
+    @Override
+    public String getClassName() {
+        String className = ctClass.getName().replace('$', '.');
+        if (getPackageName() != null) {
+            return className.substring(getPackageName().length() + 1, className.length());
+        }
+        return className;
+    }
+
+    @Override
     public String getQualifiedName() {
         return ctClass.getName().replace('$', '.');
     }

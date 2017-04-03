@@ -123,6 +123,16 @@ public interface TypeDeclaration extends Declaration {
     }
 
     /**
+     * The package name of the type.
+     */
+    String getPackageName();
+
+    /**
+     * The class(es) wrapping this type.
+     */
+    String getClassName();
+
+    /**
      * The fully qualified name of the type declared.
      */
     String getQualifiedName();
