@@ -138,6 +138,18 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals("com.github.javaparser.ast", compilationUnit.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals("CompilationUnit", compilationUnit.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         JavaParserClassDeclaration compilationUnit = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals("com.github.javaparser.ast.CompilationUnit", compilationUnit.getQualifiedName());

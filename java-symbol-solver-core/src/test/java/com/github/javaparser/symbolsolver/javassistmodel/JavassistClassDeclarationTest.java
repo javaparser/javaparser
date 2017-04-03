@@ -105,6 +105,18 @@ public class JavassistClassDeclarationTest extends AbstractTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals("com.github.javaparser.ast", compilationUnit.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
+        assertEquals("CompilationUnit", compilationUnit.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals("com.github.javaparser.ast.CompilationUnit", compilationUnit.getQualifiedName());

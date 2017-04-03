@@ -97,6 +97,18 @@ public class JavassistInterfaceDeclarationTest extends AbstractTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        JavassistInterfaceDeclaration nodeWithAnnotations = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals("com.github.javaparser.ast.nodeTypes", nodeWithAnnotations.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        JavassistInterfaceDeclaration nodeWithAnnotations = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals("NodeWithAnnotations", nodeWithAnnotations.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         JavassistInterfaceDeclaration nodeWithAnnotations = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", nodeWithAnnotations.getQualifiedName());

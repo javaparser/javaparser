@@ -103,6 +103,16 @@ public class DefaultPackageTest {
         }
 
         @Override
+        public String getPackageName() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getClassName() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
         public String getQualifiedName() {
             return qualifiedName;
         }

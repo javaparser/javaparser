@@ -101,6 +101,18 @@ public class JavaParserEnumDeclarationTest extends AbstractTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        assertEquals("com.github.javaparser.ast", modifier.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        assertEquals("Modifier", modifier.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
         assertEquals("com.github.javaparser.ast.Modifier", modifier.getQualifiedName());

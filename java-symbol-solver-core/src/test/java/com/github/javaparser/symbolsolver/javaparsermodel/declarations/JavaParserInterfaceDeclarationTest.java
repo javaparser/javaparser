@@ -101,6 +101,18 @@ public class JavaParserInterfaceDeclarationTest extends AbstractTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals("com.github.javaparser.ast.nodeTypes", nodeWithAnnotations.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
+        assertEquals("NodeWithAnnotations", nodeWithAnnotations.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         JavaParserInterfaceDeclaration nodeWithAnnotations = (JavaParserInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", nodeWithAnnotations.getQualifiedName());
