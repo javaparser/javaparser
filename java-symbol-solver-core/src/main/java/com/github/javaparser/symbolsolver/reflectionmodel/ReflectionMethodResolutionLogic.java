@@ -127,13 +127,19 @@ class ReflectionMethodResolutionLogic {
     private static MethodUsage replaceParams(List<Type> typeParameterValues, ReferenceTypeDeclaration typeParametrizable, MethodDeclaration methodDeclaration) {
         MethodUsage methodUsage = new MethodUsage(methodDeclaration);
         int i = 0;
-        for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
-            methodUsage = methodUsage.replaceTypeParameter(tp, typeParameterValues.get(i));
-            i++;
+
+        // Only replace if we have enough values provided
+        if (typeParameterValues.size() == typeParametrizable.getTypeParameters().size()){
+            for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
+                methodUsage = methodUsage.replaceTypeParameter(tp, typeParameterValues.get(i));
+                i++;
+            }
         }
+
         for (TypeParameterDeclaration methodTypeParameter : methodDeclaration.getTypeParameters()) {
             methodUsage = methodUsage.replaceTypeParameter(methodTypeParameter, new TypeVariable(methodTypeParameter));
         }
+
         return methodUsage;
     }
 }
