@@ -76,6 +76,23 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
+    public String getPackageName() {
+        if (clazz.getPackage() != null) {
+            return clazz.getPackage().getName();
+        }
+        return null;
+    }
+
+    @Override
+    public String getClassName() {
+        String canonicalName = clazz.getCanonicalName();
+        if (canonicalName != null && getPackageName() != null) {
+            return canonicalName.substring(getPackageName().length() + 1, canonicalName.length());
+        }
+        return null;
+    }
+
+    @Override
     public String getQualifiedName() {
         return clazz.getCanonicalName();
     }

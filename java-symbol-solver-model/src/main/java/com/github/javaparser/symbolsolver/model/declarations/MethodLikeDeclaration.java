@@ -24,6 +24,19 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, HasAccessLevel {
+    /**
+     * The package name of the declaring type.
+     */
+    default String getPackageName() {
+        return declaringType().getPackageName();
+    }
+
+    /**
+     * The class(es) wrapping the declaring type.
+     */
+    default String getClassName() {
+        return declaringType().getClassName();
+    }
 
     /**
      * The qualified name of the method composed by the qualfied name of the declaring type

@@ -200,6 +200,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public String getPackageName() {
+        return javaParserTypeAdapter.getPackageName();
+    }
+
+    @Override
+    public String getClassName() {
+        return javaParserTypeAdapter.getClassName();
+    }
+
+    @Override
     public String getQualifiedName() {
         return javaParserTypeAdapter.getQualifiedName();
     }

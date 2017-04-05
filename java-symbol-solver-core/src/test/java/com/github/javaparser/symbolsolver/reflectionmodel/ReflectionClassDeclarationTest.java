@@ -222,6 +222,24 @@ public class ReflectionClassDeclarationTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        assertEquals("java.util", arraylist.getPackageName());
+        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        assertEquals("java.lang", string.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        assertEquals("ArrayList", arraylist.getClassName());
+        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        assertEquals("String", string.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);

@@ -136,6 +136,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
+    public String getPackageName() {
+        return javaParserTypeAdapter.getPackageName();
+    }
+
+    @Override
+    public String getClassName() {
+        return javaParserTypeAdapter.getClassName();
+    }
+
+    @Override
     public String getQualifiedName() {
         return javaParserTypeAdapter.getQualifiedName();
     }

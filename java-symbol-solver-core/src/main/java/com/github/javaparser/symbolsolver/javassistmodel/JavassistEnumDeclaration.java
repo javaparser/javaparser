@@ -65,8 +65,22 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
+    public String getPackageName() {
+        return ctClass.getPackageName();
+    }
+
+    @Override
+    public String getClassName() {
+        String name = ctClass.getName().replace('$', '.');
+        if (getPackageName() != null) {
+            return name.substring(getPackageName().length() + 1, name.length());
+        }
+        return name;
+    }
+
+    @Override
     public String getQualifiedName() {
-        return ctClass.getName();
+        return ctClass.getName().replace('$', '.');
     }
 
     @Override

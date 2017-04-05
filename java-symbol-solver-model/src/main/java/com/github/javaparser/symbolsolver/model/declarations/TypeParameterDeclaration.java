@@ -92,6 +92,22 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
     boolean declaredOnMethod();
 
     /**
+     * The package name of the type bound(s).
+     * This is unsupported because there is no package for a Type Parameter, only for its container.
+     */
+    default String getPackageName() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * The class(es) wrapping the type bound(s).
+     * This is unsupported because there is no class for a Type Parameter, only for its container.
+     */
+    default String getClassName() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * The qualified name of the Type Parameter.
      * It is composed by the qualified name of the container followed by a dot and the name of the Type Parameter.
      * The qualified name of a method is its qualified signature.

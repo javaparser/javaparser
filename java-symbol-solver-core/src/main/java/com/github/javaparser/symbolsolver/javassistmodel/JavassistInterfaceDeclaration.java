@@ -77,8 +77,22 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
+    public String getPackageName() {
+        return ctClass.getPackageName();
+    }
+
+    @Override
+    public String getClassName() {
+        String className = ctClass.getName().replace('$', '.');
+        if (getPackageName() != null) {
+            return className.substring(getPackageName().length() + 1, className.length());
+        }
+        return className;
+    }
+
+    @Override
     public String getQualifiedName() {
-        return ctClass.getName();
+        return ctClass.getName().replace('$', '.');
     }
 
     @Deprecated

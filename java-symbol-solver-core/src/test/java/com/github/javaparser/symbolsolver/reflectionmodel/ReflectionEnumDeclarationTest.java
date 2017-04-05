@@ -86,6 +86,18 @@ public class ReflectionEnumDeclarationTest extends AbstractTest {
     }
 
     @Test
+    public void testGetPackageName() {
+        ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        assertEquals("com.github.javaparser.ast", modifier.getPackageName());
+    }
+
+    @Test
+    public void testGetClassName() {
+        ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
+        assertEquals("Modifier", modifier.getClassName());
+    }
+
+    @Test
     public void testGetQualifiedName() {
         ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
         assertEquals("com.github.javaparser.ast.Modifier", modifier.getQualifiedName());
