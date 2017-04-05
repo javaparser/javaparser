@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
@@ -183,6 +184,28 @@ public class JavaParserFacade {
             placeholder.setMethod(res);
         }
         return res;
+    }
+
+    public SymbolReference<TypeDeclaration> solve(ThisExpr node){
+        // If 'this' is prefixed by a class eg. MyClass.this
+        if (node.getClassExpr().isPresent()){
+            // Get the class name
+            String className = node.getClassExpr().get().toString();
+            // Attempt to resolve using a typeSolver
+            SymbolReference<ReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
+            if (clazz.isSolved()){
+                return SymbolReference.solved(clazz.getCorrespondingDeclaration());
+            }
+            // Attempt to resolve locally in Compilation unit
+            Optional<CompilationUnit> cu = node.getAncestorOfType(CompilationUnit.class);
+            if (cu.isPresent()){
+                Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
+                if (classByName.isPresent()){
+                    return SymbolReference.solved(getTypeDeclaration(classByName.get()));
+                }
+            }
+        }
+        return SymbolReference.solved(getTypeDeclaration(findContainingTypeDecl(node)));
     }
 
     /**
