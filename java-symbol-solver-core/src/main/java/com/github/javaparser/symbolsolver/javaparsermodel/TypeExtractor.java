@@ -1,10 +1,13 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
@@ -314,7 +317,6 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 throw new UnsolvedSymbolException(getParentNode(node).toString(), callExpr.getName().getId());
             }
             logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName());
-            //logger.finest("Method param " + refMethod.getCorrespondingDeclaration().getParam(pos));
             if (solveLambdas) {
 
                 // The type parameter referred here should be the java.util.stream.Stream.T
@@ -365,24 +367,33 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     Type functionalInterfaceType = ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver);
 
                     lambdaCtx.addPair(result, functionalInterfaceType);
+
+                    Type actualType;
+
                     if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                        ExpressionStmt expressionStmt = (ExpressionStmt) lambdaExpr.getBody();
-                        Type actualType = facade.getType(expressionStmt.getExpression());
-                        Type formalType = functionalMethod.get().returnType();
+                        actualType = facade.getType(((ExpressionStmt)lambdaExpr.getBody()).getExpression());
+                    } else if (lambdaExpr.getBody() instanceof BlockStmt) {
+                        BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
+                        NodeList<Statement> statements = blockStmt.getStatements();
 
-                        // Infer the functional interfaces' return vs actual type
-                        funcInterfaceCtx.addPair(formalType, actualType);
-                        // Substitute to obtain a new type
-                        Type functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
-
-                        // if the functional method returns void anyway
-                        // we don't need to bother inferring types
-                        if (!(formalType instanceof VoidType)){
-                            lambdaCtx.addPair(result, functionalTypeWithReturn);
-                            result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
-                        }
+                        // Get the last statement in the block and use it's type
+                        actualType = facade.getType(statements.get(statements.size() - 1).getChildNodes().get(0));
                     } else {
                         throw new UnsupportedOperationException();
+                    }
+
+                    Type formalType = functionalMethod.get().returnType();
+
+                    // Infer the functional interfaces' return vs actual type
+                    funcInterfaceCtx.addPair(formalType, actualType);
+                    // Substitute to obtain a new type
+                    Type functionalTypeWithReturn = funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType));
+
+                    // if the functional method returns void anyway
+                    // we don't need to bother inferring types
+                    if (!(formalType instanceof VoidType)){
+                        lambdaCtx.addPair(result, functionalTypeWithReturn);
+                        result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
                     }
                 }
 

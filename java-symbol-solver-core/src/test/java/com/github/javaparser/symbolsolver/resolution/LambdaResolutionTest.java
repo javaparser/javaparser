@@ -132,6 +132,46 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         assertEquals("java.util.List<java.lang.String>", type.describe());
     }
 
+    @Test
+    public void lambdaBlockImpliedReturn() throws ParseException {
+        CompilationUnit cu = parseSample("LambdaMulti");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaImpliedReturn");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expression = returnStmt.getExpression().get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        Type type = javaParserFacade.getType(expression);
+        assertEquals("java.lang.String", type.describe());
+    }
+
+
+    @Test
+    public void lambdaBlockExplicitReturn() throws ParseException {
+        CompilationUnit cu = parseSample("LambdaMulti");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaSingleReturn");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expression = returnStmt.getExpression().get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        Type type = javaParserFacade.getType(expression);
+        assertEquals("java.lang.String", type.describe());
+    }
+
+    @Test
+    public void lambdaBlockMultiLineReturn() throws ParseException {
+        CompilationUnit cu = parseSample("LambdaMulti");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "multiLineReturn");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expression = returnStmt.getExpression().get();
+
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        Type type = javaParserFacade.getType(expression);
+        assertEquals("java.lang.String", type.describe());
+    }
+
 
 
 
