@@ -1,6 +1,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -13,10 +15,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -167,6 +166,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 // TODO here maybe we have to substitute type typeParametersValues
                 return ((ReferenceTypeDeclaration) typeAccessedStatically.getCorrespondingDeclaration()).getField(node.getField().getId()).getType();
             }
+        } else if (node.getScope().isPresent() && node.getScope().get() instanceof ThisExpr){
+            // If we are accessing through a 'this' expression, first resolve the type
+            // corresponding to 'this'
+            SymbolReference<TypeDeclaration> solve = facade.solve((ThisExpr) node.getScope().get());
+            // If found get it's declaration and get the field in there
+            if (solve.isSolved()){
+                TypeDeclaration correspondingDeclaration = solve.getCorrespondingDeclaration();
+                if (correspondingDeclaration instanceof ReferenceTypeDeclaration){
+                    return ((ReferenceTypeDeclaration) correspondingDeclaration).getField(node.getField().getId()).getType();
+                }
+            }
+
         } else if (node.getScope().isPresent() && node.getScope().get().toString().indexOf('.') > 0) {
             // try to find fully qualified name
             SymbolReference<ReferenceTypeDeclaration> sr = typeSolver.tryToSolveType(node.getScope().get().toString());
@@ -267,6 +278,25 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(ThisExpr node, Boolean solveLambdas) {
+        // If 'this' is prefixed by a class eg. MyClass.this
+        if (node.getClassExpr().isPresent()){
+            // Get the class name
+            String className = node.getClassExpr().get().toString();
+            // Attempt to resolve using a typeSolver
+            SymbolReference<ReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
+            if (clazz.isSolved()){
+                return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(),typeSolver);
+            }
+            // Attempt to resolve locally in Compilation unit
+            Optional<CompilationUnit> cu = node.getAncestorOfType(CompilationUnit.class);
+            if (cu.isPresent()){
+                Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
+                if (classByName.isPresent()){
+                    return new ReferenceTypeImpl(facade.getTypeDeclaration(classByName.get()), typeSolver);
+                }
+            }
+
+        }
         return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDecl(node)), typeSolver);
     }
 
