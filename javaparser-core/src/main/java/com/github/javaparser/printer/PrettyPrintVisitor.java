@@ -756,9 +756,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
-        if (n.isDefault()) {
-            printer.print("default ");
-        }
         printTypeParameters(n.getTypeParameters(), arg);
         if (!isNullOrEmpty(n.getTypeParameters())) {
             printer.print(" ");
