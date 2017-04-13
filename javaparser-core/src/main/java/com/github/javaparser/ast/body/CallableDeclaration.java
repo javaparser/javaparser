@@ -27,15 +27,18 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
@@ -204,6 +207,67 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
             }
         }
         return super.remove(node);
+    }
+
+    /**
+     * A method or constructor signature.
+     * <p/>Note that since JavaParser has no real knowledge of types - only the text found in the source file - using
+     * this will fail in some cases. (java.util.String != String for example, and generics are not taken into account.)
+     */
+    public static class Signature {
+
+        private final String name;
+
+        private final List<Type> parameterTypes;
+
+        public Signature(String name, List<Type> parameterTypes) {
+            this.name = name;
+            this.parameterTypes = parameterTypes;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public List<Type> getParameterTypes() {
+            return parameterTypes;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            Signature signature = (Signature) o;
+            if (!name.equals(signature.name))
+                return false;
+            if (!parameterTypes.equals(signature.parameterTypes))
+                return false;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name.hashCode();
+            result = 31 * result + parameterTypes.hashCode();
+            return result;
+        }
+    }
+
+    public Signature getSignature() {
+        return new Signature(getName().getIdentifier(), getParameters().stream().map(this::getTypeWithVarargsAsArray).collect(toList()));
+    }
+
+    private Type getTypeWithVarargsAsArray(Parameter p) {
+        /* A signature includes the varargs ellipsis.
+         This is a field on parameter which we lose when we only get the type,
+         so we represent it as an additional [] on the type. */
+        Type t = p.getType().clone();
+        if (p.isVarArgs()) {
+            t = new ArrayType(t);
+        }
+        return t;
     }
 
     @Override
