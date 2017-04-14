@@ -27,7 +27,6 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import com.sun.org.apache.bcel.internal.generic.RET;
 
 import java.util.List;
 import java.util.Optional;
