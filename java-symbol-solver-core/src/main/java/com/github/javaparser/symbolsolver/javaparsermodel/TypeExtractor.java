@@ -408,12 +408,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
                         NodeList<Statement> statements = blockStmt.getStatements();
 
+                        // Get all the return statements in the lambda block
                         List<ReturnStmt> returnStmts = blockStmt.getNodesByType(ReturnStmt.class);
-
 
                         if (returnStmts.size() > 0){
 
-                            actualType = returnStmts.stream().map(returnStmt -> {
+                            actualType = returnStmts.stream()
+                            .map(returnStmt -> {
                                 Optional<Expression> expression = returnStmt.getExpression();
                                 if (expression.isPresent()){
                                     return facade.getType(expression.get());
@@ -421,9 +422,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                                     return VoidType.INSTANCE;
                                 }
                             })
-                            .filter(x -> !x.isVoid())
-                            .findFirst().orElse(VoidType.INSTANCE);
-
+                            .filter(x -> !x.isVoid() && !x.isNull() && x != null)
+                            .findFirst()
+                            .orElse(VoidType.INSTANCE);
 
                         } else {
                             // Get the last statement in the block and use it's type
