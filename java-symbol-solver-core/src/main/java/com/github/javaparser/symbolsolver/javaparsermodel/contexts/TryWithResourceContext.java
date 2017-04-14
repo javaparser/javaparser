@@ -25,9 +25,12 @@ import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -35,6 +38,11 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     public TryWithResourceContext(TryStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+    }
+
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
+        return getParent().solveSymbolAsValue(name, typeSolver);
     }
 
     @Override
