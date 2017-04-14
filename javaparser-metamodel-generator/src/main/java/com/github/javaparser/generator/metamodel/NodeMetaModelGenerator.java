@@ -90,7 +90,7 @@ public class NodeMetaModelGenerator {
         methods.sort(Comparator.comparing(Method::getName));
         for (Method method : methods) {
             if (method.isAnnotationPresent(DerivedProperty.class)) {
-                initializePropertyMetaModelsStatementsGenerator.generateDerivedProperty(nodeClass, method, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
+                initializePropertyMetaModelsStatementsGenerator.generateDerivedProperty(method, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
             }
         }
 
@@ -124,6 +124,7 @@ public class NodeMetaModelGenerator {
             case "range":
             case "childNodes":
             case "commentedNode":
+            case "path":
             case "orphanComments":
                 return true;
         }

@@ -45,7 +45,7 @@ public class InitializePropertyMetaModelsStatementsGenerator {
         initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
     }
 
-    public void generateDerivedProperty(Class<?> nodeClass, Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
+    public void generateDerivedProperty(Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
 
         final AstTypeAnalysis fieldAnalysis = new AstTypeAnalysis(method.getGenericReturnType());
 

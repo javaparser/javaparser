@@ -14,7 +14,5 @@ public class CompilationUnitMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel packageDeclarationPropertyMetaModel;
 
-    public PropertyMetaModel pathPropertyMetaModel;
-
     public PropertyMetaModel typesPropertyMetaModel;
 }
