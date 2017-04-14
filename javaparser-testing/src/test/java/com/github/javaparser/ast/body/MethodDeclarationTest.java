@@ -37,6 +37,20 @@ public class MethodDeclarationTest {
     }
 
     @Test
+    public void signaturesEqualWhenGenericsDiffer() {
+        MethodDeclaration method1 = (MethodDeclaration) parseClassBodyDeclaration("void x(List<Long> a) { }");
+        MethodDeclaration method2 = (MethodDeclaration) parseClassBodyDeclaration("void x(List<Integer> a) { }");
+        assertEquals(method1.getSignature(), method2.getSignature());
+    }
+
+    @Test
+    public void signaturesEqualWhenAnnotationsDiffer() {
+        MethodDeclaration method1 = (MethodDeclaration) parseClassBodyDeclaration("void x(@A @B List a) { }");
+        MethodDeclaration method2 = (MethodDeclaration) parseClassBodyDeclaration("void x(@C List a) { }");
+        assertEquals(method1.getSignature(), method2.getSignature());
+    }
+
+    @Test
     public void signaturesDifferentName() {
         MethodDeclaration method1 = (MethodDeclaration) parseClassBodyDeclaration("void x(String a) { }");
         MethodDeclaration method2 = (MethodDeclaration) parseClassBodyDeclaration("int y(String z);");
@@ -55,5 +69,11 @@ public class MethodDeclarationTest {
         MethodDeclaration method1 = (MethodDeclaration) parseClassBodyDeclaration("int x(int z);");
         MethodDeclaration method2 = (MethodDeclaration) parseClassBodyDeclaration("int x(int... z);");
         assertNotEquals(method1.getSignature(), method2.getSignature());
+    }
+
+    @Test
+    public void signatureToString() {
+        MethodDeclaration method1 = (MethodDeclaration) parseClassBodyDeclaration("int x(int z, String q);");
+        assertEquals("x(int, String)", method1.getSignature().toString());
     }
 }

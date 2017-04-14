@@ -22,23 +22,25 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.ArrayTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ArrayTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -176,6 +178,11 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         if (node == null)
             return false;
         return super.remove(node);
+    }
+
+    @Override
+    public String asString() {
+        return componentType.asString() + "[]";
     }
 
     @Override

@@ -26,6 +26,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ReferenceType;
@@ -34,10 +36,13 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -215,12 +220,10 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
      * this will fail in some cases. (java.util.String != String for example, and generics are not taken into account.)
      */
     public static class Signature {
-
         private final String name;
-
         private final List<Type> parameterTypes;
 
-        public Signature(String name, List<Type> parameterTypes) {
+        private Signature(String name, List<Type> parameterTypes) {
             this.name = name;
             this.parameterTypes = parameterTypes;
         }
@@ -253,10 +256,37 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
             result = 31 * result + parameterTypes.hashCode();
             return result;
         }
+
+        public String asString() {
+            return parameterTypes.stream().map(Type::asString).collect(joining(", ", name + "(", ")"));
+        }
+
+        @Override
+        public String toString() {
+            return asString();
+        }
     }
 
     public Signature getSignature() {
-        return new Signature(getName().getIdentifier(), getParameters().stream().map(this::getTypeWithVarargsAsArray).collect(toList()));
+        return new Signature(getName().getIdentifier(), getParameters().stream()
+                .map(this::getTypeWithVarargsAsArray)
+                .map(this::stripGenerics)
+                .map(this::stripAnnotations)
+                .collect(toList()));
+    }
+
+    private Type stripAnnotations(Type type) {
+        if (type instanceof NodeWithAnnotations) {
+            ((NodeWithAnnotations) type).setAnnotations(new NodeList<>());
+        }
+        return type;
+    }
+
+    private Type stripGenerics(Type type) {
+        if (type instanceof NodeWithTypeArguments) {
+            ((NodeWithTypeArguments) type).setTypeArguments((NodeList<Type>) null);
+        }
+        return type;
     }
 
     private Type getTypeWithVarargsAsArray(Parameter p) {

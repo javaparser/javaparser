@@ -3,6 +3,7 @@ package com.github.javaparser.utils;
 /**
  * Builds a string containing a list of items with a prefix, a postfix, and a separator.
  * <br/>Example: (1,2,3) which has prefix "(", separator ",", postfix ")" and the items 1 through 3.
+ * <p/>Java 8 offers the very nice Collectors.joining(String, String, String) which does the same thing.
  */
 public class SeparatedItemStringBuilder {
     private final String separator;

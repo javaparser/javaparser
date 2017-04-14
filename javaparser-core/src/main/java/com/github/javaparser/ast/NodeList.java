@@ -452,4 +452,9 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public boolean isNonEmpty() {
         return !isEmpty();
     }
+
+    public void ifNonEmpty(Consumer<? super NodeList<N>> consumer) {
+        if (isNonEmpty())
+            consumer.accept(this);
+    }
 }
