@@ -21,12 +21,12 @@ public class SourceRootTest {
         Path root = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/");
         SourceRoot sourceRoot = new SourceRoot(root);
 
-        Map<Path, ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
+        List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
 
         assertEquals(2, units.size());
         assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
-        assertTrue(parseResults.keySet().stream().anyMatch(path -> path.toString().contains("source" + File.separator + "root")));
+        assertTrue(parseResults.stream().anyMatch(cu -> cu.getResult().get().getPath().toString().contains("source" + File.separator + "root")));
     }
 
     @Test(expected = IllegalArgumentException.class)

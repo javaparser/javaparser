@@ -54,10 +54,10 @@ public class SourceRoot {
     }
 
     /**
-     * Parses all .java files in a package recursively, caches them, and returns all files ever parsed with this source
+     * Tries to parse all .java files in a package recursively, caches them, and returns all files ever parsed with this source
      * root.
      */
-    public Map<Path, ParseResult<CompilationUnit>> tryToParse(String startPackage) throws IOException {
+    public List<ParseResult<CompilationUnit>> tryToParse(String startPackage) throws IOException {
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -70,7 +70,7 @@ public class SourceRoot {
                 return FileVisitResult.CONTINUE;
             }
         });
-        return content;
+        return getContent();
     }
 
     /**
@@ -78,7 +78,7 @@ public class SourceRoot {
      * The advantage: it doesn't keep all files and AST's in memory.
      * The disadvantage: you have to do your processing directly.
      */
-    public void parse(String startPackage, JavaParser javaParser, Callback callback) throws IOException {
+    public SourceRoot parse(String startPackage, JavaParser javaParser, Callback callback) throws IOException {
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -88,6 +88,7 @@ public class SourceRoot {
                     Path localPath = root.relativize(absolutePath);
                     Log.trace("Parsing %s", localPath);
                     final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(absolutePath));
+                    result.getResult().ifPresent(cu -> cu.setPath(absolutePath));
                     if (callback.process(localPath, absolutePath, result) == SAVE) {
                         if (result.getResult().isPresent()) {
                             save(result.getResult().get(), path);
@@ -97,26 +98,27 @@ public class SourceRoot {
                 return FileVisitResult.CONTINUE;
             }
         });
+        return this;
     }
 
     /**
-     * Parse every .java file in this source root.
+     * Try to parse every .java file in this source root.
      */
-    public Map<Path, ParseResult<CompilationUnit>> tryToParse() throws IOException {
+    public List<ParseResult<CompilationUnit>> tryToParse() throws IOException {
         return tryToParse("");
     }
 
     /**
      * Save all files back to where they were found.
      */
-    public void saveAll() throws IOException {
-        saveAll(root);
+    public SourceRoot saveAll() throws IOException {
+        return saveAll(root);
     }
 
     /**
      * Save all files back to another path.
      */
-    public void saveAll(Path root) throws IOException {
+    public SourceRoot saveAll(Path root) throws IOException {
         Log.info("Saving all files (%s) to %s", content.size(), root);
         for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : content.entrySet()) {
             final Path path = root.resolve(cu.getKey());
@@ -125,20 +127,23 @@ public class SourceRoot {
                 save(cu.getValue().getResult().get(), path);
             }
         }
+        return this;
     }
 
-    private void save(CompilationUnit cu, Path path) throws IOException {
+    private SourceRoot save(CompilationUnit cu, Path path) throws IOException {
+        path = cu.getPath().orElse(path);
         Files.createDirectories(path.getParent());
         final String code = new PrettyPrinter().print(cu);
         Files.write(path, code.getBytes(UTF8));
+        return this;
     }
 
     /**
      * The Java files that have been parsed by this source root object,
      * or have been added manually.
      */
-    public Map<Path, ParseResult<CompilationUnit>> getContent() {
-        return content;
+    public List<ParseResult<CompilationUnit>> getContent() {
+        return new ArrayList<>(content.values());
     }
 
     /**
@@ -164,6 +169,7 @@ public class SourceRoot {
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", path);
         final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
+        result.getResult().ifPresent(cu -> cu.setPath(path));
         content.put(relativePath, result);
         return result;
     }
@@ -188,11 +194,27 @@ public class SourceRoot {
     /**
      * Add a newly created Java file to this source root. It will be saved when saveAll is called.
      */
-    public void add(String pkg, String filename, CompilationUnit compilationUnit) {
+    public SourceRoot add(String pkg, String filename, CompilationUnit compilationUnit) {
         Log.trace("Adding new file %s.%s", pkg, filename);
         final Path path = fileInPackageRelativePath(pkg, filename);
         final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
         content.put(path, parseResult);
+        return this;
+    }
+
+    /**
+     * Add a newly created Java file to this source root. It needs to have its path set.
+     */
+    public SourceRoot add(CompilationUnit compilationUnit) {
+        if (compilationUnit.getPath().isPresent()) {
+            final Path path = compilationUnit.getPath().get();
+            Log.trace("Adding new file %s", path);
+            final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
+            content.put(path, parseResult);
+        } else {
+            throw new AssertionError("Files added with this method should have their path set.");
+        }
+        return this;
     }
 
     /**

@@ -374,6 +374,8 @@ public final class JavaParserMetaModel {
         compilationUnitMetaModel.getDeclaredPropertyMetaModels().add(compilationUnitMetaModel.modulePropertyMetaModel);
         compilationUnitMetaModel.packageDeclarationPropertyMetaModel = new PropertyMetaModel(compilationUnitMetaModel, "packageDeclaration", com.github.javaparser.ast.PackageDeclaration.class, Optional.of(packageDeclarationMetaModel), true, false, false, false, false);
         compilationUnitMetaModel.getDeclaredPropertyMetaModels().add(compilationUnitMetaModel.packageDeclarationPropertyMetaModel);
+        compilationUnitMetaModel.pathPropertyMetaModel = new PropertyMetaModel(compilationUnitMetaModel, "path", java.nio.file.Path.class, Optional.empty(), true, false, false, false, false);
+        compilationUnitMetaModel.getDeclaredPropertyMetaModels().add(compilationUnitMetaModel.pathPropertyMetaModel);
         compilationUnitMetaModel.typesPropertyMetaModel = new PropertyMetaModel(compilationUnitMetaModel, "types", com.github.javaparser.ast.body.TypeDeclaration.class, Optional.of(typeDeclarationMetaModel), false, false, true, false, true);
         compilationUnitMetaModel.getDeclaredPropertyMetaModels().add(compilationUnitMetaModel.typesPropertyMetaModel);
         packageDeclarationMetaModel.annotationsPropertyMetaModel = new PropertyMetaModel(packageDeclarationMetaModel, "annotations", com.github.javaparser.ast.expr.AnnotationExpr.class, Optional.of(annotationExprMetaModel), false, false, true, false, false);

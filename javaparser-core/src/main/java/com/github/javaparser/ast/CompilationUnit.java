@@ -37,6 +37,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.ClassUtils;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -68,6 +69,8 @@ public final class CompilationUnit extends Node {
     private NodeList<TypeDeclaration<?>> types;
 
     private ModuleDeclaration module;
+
+    private Path path;
 
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
@@ -492,6 +495,18 @@ public final class CompilationUnit extends Node {
 
     public CompilationUnit removeModule() {
         return setModule((ModuleDeclaration) null);
+    }
+
+    /**
+     * @return the path of the file this compilation unit was loaded from, or empty if it wasn't loaded from a file.
+     */
+    public Optional<Path> getPath() {
+        return Optional.ofNullable(path);
+    }
+
+    public CompilationUnit setPath(Path path) {
+        this.path = path;
+        return this;
     }
 
     @Override
