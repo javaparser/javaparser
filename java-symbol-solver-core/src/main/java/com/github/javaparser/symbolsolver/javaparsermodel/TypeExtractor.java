@@ -422,7 +422,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                                     return VoidType.INSTANCE;
                                 }
                             })
-                            .filter(x -> !x.isVoid() && !x.isNull() && x != null)
+                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
                             .findFirst()
                             .orElse(VoidType.INSTANCE);
 
