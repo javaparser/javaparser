@@ -4,7 +4,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.utils.SourceRoot;
@@ -87,7 +86,9 @@ public class NodeMetaModelGenerator {
 
             initializePropertyMetaModelsStatementsGenerator.generate(nodeClass, field, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
         }
-        for (Method method : nodeClass.getMethods()) {
+        final List<Method> methods = new ArrayList<>(Arrays.asList(nodeClass.getMethods()));
+        methods.sort(Comparator.comparing(Method::getName));
+        for (Method method : methods) {
             if (method.isAnnotationPresent(DerivedProperty.class)) {
                 initializePropertyMetaModelsStatementsGenerator.generateDerivedProperty(nodeClass, method, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
             }
