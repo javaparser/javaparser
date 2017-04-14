@@ -516,3 +516,14 @@ When the class is parsed by the Java parser
 Then it is printed as:
 interface A extends @X B, @Y C, @Z D {
 }
+
+Scenario: default modifier isn't printed twice
+Given the class:
+interface X {default String author(){}}
+When the annotation body declaration is parsed by the Java parser
+Then it is printed as:
+interface X {
+
+    default String author() {
+    }
+}
