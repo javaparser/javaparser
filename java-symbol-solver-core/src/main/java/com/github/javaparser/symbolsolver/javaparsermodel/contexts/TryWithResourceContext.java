@@ -42,7 +42,20 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        return getParent().solveSymbolAsValue(name, typeSolver);
+        for (VariableDeclarationExpr expr : wrappedNode.getResources()) {
+            for (VariableDeclarator v : expr.getVariables()) {
+                if (v.getName().getIdentifier().equals(name)) {
+                    JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
+                    return Optional.of(Value.from(decl));
+                }
+            }
+        }
+
+        if (getParentNode(wrappedNode) instanceof BlockStmt) {
+            return StatementContext.solveInBlockAsValue(name, typeSolver, wrappedNode);
+        } else {
+            return getParent().solveSymbolAsValue(name, typeSolver);
+        }
     }
 
     @Override
