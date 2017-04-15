@@ -38,6 +38,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodReferenceExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -56,6 +57,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
 
     private NodeList<Type> typeArguments;
 
+    @NonEmptyProperty
     private String identifier;
 
     public MethodReferenceExpr() {
