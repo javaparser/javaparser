@@ -4,11 +4,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Indicate a derived property of a Node,
- * meaning it does supply useful information,
- * but it does so by taking information from other properties.
+ * Indicate that leaving this property empty does not lead to a correct AST.
  * (Used during generation of the meta model.)
  */
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface DerivedProperty {
+public @interface NonEmptyProperty {
 }
