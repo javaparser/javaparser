@@ -27,6 +27,7 @@ import com.github.javaparser.ast.observer.Observable;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.InternalProperty;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -44,6 +45,7 @@ import java.util.stream.Stream;
  * @param <N> the type of nodes contained.
  */
 public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParentNode<NodeList<N>>, Visitable, Observable {
+    @InternalProperty
     private List<N> innerList = new ArrayList<>(0);
 
     private Node parentNode;
