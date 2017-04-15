@@ -4,7 +4,6 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.printer.PrettyPrinter;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -19,7 +18,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
 import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
@@ -42,7 +40,7 @@ public class SourceRoot {
     }
 
     private final Path root;
-    private final Map<Path, ParseResult<CompilationUnit>> content = new HashMap<>();
+    private final Map<Path, ParseResult<CompilationUnit>> cache = new HashMap<>();
     private JavaParser javaParser = new JavaParser();
 
     public SourceRoot(Path root) {
@@ -70,7 +68,7 @@ public class SourceRoot {
                 return FileVisitResult.CONTINUE;
             }
         });
-        return getContent();
+        return getCache();
     }
 
     /**
@@ -88,7 +86,7 @@ public class SourceRoot {
                     Path localPath = root.relativize(absolutePath);
                     Log.trace("Parsing %s", localPath);
                     final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(absolutePath));
-                    result.getResult().ifPresent(cu -> cu.setPath(absolutePath));
+                    result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
                     if (callback.process(localPath, absolutePath, result) == SAVE) {
                         if (result.getResult().isPresent()) {
                             save(result.getResult().get(), path);
@@ -119,8 +117,8 @@ public class SourceRoot {
      * Save all files back to another path.
      */
     public SourceRoot saveAll(Path root) throws IOException {
-        Log.info("Saving all files (%s) to %s", content.size(), root);
-        for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : content.entrySet()) {
+        Log.info("Saving all files (%s) to %s", cache.size(), root);
+        for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
             final Path path = root.resolve(cu.getKey());
             if (cu.getValue().getResult().isPresent()) {
                 Log.trace("Saving %s", path);
@@ -131,10 +129,8 @@ public class SourceRoot {
     }
 
     private SourceRoot save(CompilationUnit cu, Path path) throws IOException {
-        path = cu.getPath().orElse(path);
-        Files.createDirectories(path.getParent());
-        final String code = new PrettyPrinter().print(cu);
-        Files.write(path, code.getBytes(UTF8));
+        cu.setStorage(path);
+        cu.getStorage().get().save();
         return this;
     }
 
@@ -142,8 +138,8 @@ public class SourceRoot {
      * The Java files that have been parsed by this source root object,
      * or have been added manually.
      */
-    public List<ParseResult<CompilationUnit>> getContent() {
-        return new ArrayList<>(content.values());
+    public List<ParseResult<CompilationUnit>> getCache() {
+        return new ArrayList<>(cache.values());
     }
 
     /**
@@ -151,7 +147,7 @@ public class SourceRoot {
      * or have been added manually.
      */
     public List<CompilationUnit> getCompilationUnits() {
-        return content.values().stream()
+        return cache.values().stream()
                 .filter(ParseResult::isSuccessful)
                 .map(p -> p.getResult().get())
                 .collect(Collectors.toList());
@@ -162,15 +158,15 @@ public class SourceRoot {
      */
     public ParseResult<CompilationUnit> tryToParse(String packag, String filename) throws IOException {
         final Path relativePath = fileInPackageRelativePath(packag, filename);
-        if (content.containsKey(relativePath)) {
+        if (cache.containsKey(relativePath)) {
             Log.trace("Retrieving cached %s", relativePath);
-            return content.get(relativePath);
+            return cache.get(relativePath);
         }
         final Path path = root.resolve(relativePath);
         Log.trace("Parsing %s", path);
         final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(path));
-        result.getResult().ifPresent(cu -> cu.setPath(path));
-        content.put(relativePath, result);
+        result.getResult().ifPresent(cu -> cu.setStorage(path));
+        cache.put(relativePath, result);
         return result;
     }
 
@@ -198,7 +194,7 @@ public class SourceRoot {
         Log.trace("Adding new file %s.%s", pkg, filename);
         final Path path = fileInPackageRelativePath(pkg, filename);
         final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
-        content.put(path, parseResult);
+        cache.put(path, parseResult);
         return this;
     }
 
@@ -206,11 +202,11 @@ public class SourceRoot {
      * Add a newly created Java file to this source root. It needs to have its path set.
      */
     public SourceRoot add(CompilationUnit compilationUnit) {
-        if (compilationUnit.getPath().isPresent()) {
-            final Path path = compilationUnit.getPath().get();
+        if (compilationUnit.getStorage().isPresent()) {
+            final Path path = compilationUnit.getStorage().get().getPath();
             Log.trace("Adding new file %s", path);
             final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
-            content.put(path, parseResult);
+            cache.put(path, parseResult);
         } else {
             throw new AssertionError("Files added with this method should have their path set.");
         }

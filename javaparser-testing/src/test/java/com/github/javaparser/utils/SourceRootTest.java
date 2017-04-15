@@ -15,18 +15,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SourceRootTest {
+    private final Path root = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/");
+    private final SourceRoot sourceRoot = new SourceRoot(root);
 
     @Test
     public void parseTestDirectory() throws URISyntaxException, IOException {
-        Path root = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/");
-        SourceRoot sourceRoot = new SourceRoot(root);
 
         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
 
         assertEquals(2, units.size());
         assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
-        assertTrue(parseResults.stream().anyMatch(cu -> cu.getResult().get().getPath().toString().contains("source" + File.separator + "root")));
+        assertTrue(parseResults.stream().anyMatch(cu -> cu.getResult().get().getStorage().get().getPath().toString().contains("source" + File.separator + "root")));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -34,5 +34,7 @@ public class SourceRootTest {
         Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("/com/github/javaparser/utils/Bla.java");
         new SourceRoot(path);
     }
+    
+    
 
 }

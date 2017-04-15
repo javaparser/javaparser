@@ -244,7 +244,7 @@ public final class JavaParser {
      * @throws FileNotFoundException the file was not found
      */
     public static CompilationUnit parse(final File file, final Charset encoding) throws FileNotFoundException {
-        return simplifiedParse(COMPILATION_UNIT, provider(file, encoding)).setPath(file.toPath());
+        return simplifiedParse(COMPILATION_UNIT, provider(file, encoding)).setStorage(file.toPath());
     }
 
     /**
@@ -258,7 +258,7 @@ public final class JavaParser {
      * @throws FileNotFoundException the file was not found
      */
     public static CompilationUnit parse(final File file) throws FileNotFoundException {
-        return simplifiedParse(COMPILATION_UNIT, provider(file)).setPath(file.toPath());
+        return simplifiedParse(COMPILATION_UNIT, provider(file)).setStorage(file.toPath());
     }
 
     /**
@@ -272,7 +272,7 @@ public final class JavaParser {
      * @throws ParseProblemException if the source code has parser errors
      */
     public static CompilationUnit parse(final Path path, final Charset encoding) throws IOException {
-        return simplifiedParse(COMPILATION_UNIT, provider(path, encoding)).setPath(path);
+        return simplifiedParse(COMPILATION_UNIT, provider(path, encoding)).setStorage(path);
     }
 
     /**
@@ -286,7 +286,7 @@ public final class JavaParser {
      * @throws IOException the path could not be accessed
      */
     public static CompilationUnit parse(final Path path) throws IOException {
-        return simplifiedParse(COMPILATION_UNIT, provider(path)).setPath(path);
+        return simplifiedParse(COMPILATION_UNIT, provider(path)).setStorage(path);
     }
 
     /**
