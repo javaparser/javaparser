@@ -16,10 +16,12 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.ast.comments, \
     com.github.javaparser.ast.modules, \
     com.github.javaparser.ast.nodeTypes, \
+    com.github.javaparser.ast.nodeTypes.modifiers, \
     com.github.javaparser.ast.expr, \
     com.github.javaparser.ast.stmt, \
     com.github.javaparser.ast.type, \
     com.github.javaparser.ast.visitor, \
+    com.github.javaparser.ast.validator, \
     com.github.javaparser.ast.observer
 
 # Don't use the project's version for the packages
