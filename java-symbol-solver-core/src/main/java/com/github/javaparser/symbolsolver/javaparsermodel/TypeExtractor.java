@@ -427,8 +427,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                             .orElse(VoidType.INSTANCE);
 
                         } else {
-                            // Get the last statement in the block and use it's type
-                            actualType = facade.getType(statements.get(statements.size() - 1).getChildNodes().get(0));
+                            return VoidType.INSTANCE;
                         }
 
 
