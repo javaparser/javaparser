@@ -84,6 +84,11 @@ public final class UnknownType extends Type {
     }
 
     @Override
+    public String asString() {
+        return "";
+    }
+
+    @Override
     public UnknownType clone() {
         return (UnknownType) accept(new CloneVisitor(), null);
     }
