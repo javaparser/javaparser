@@ -32,10 +32,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntersectionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -116,6 +114,11 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
+    public String asString() {
+        return elements.stream().map(Type::asString).collect(joining("&"));
+    }
+
+    @Override
     public IntersectionType clone() {
         return (IntersectionType) accept(new CloneVisitor(), null);
     }
@@ -123,10 +126,5 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     @Override
     public IntersectionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.intersectionTypeMetaModel;
-    }
-
-    @Override
-    public String asString() {
-        return elements.stream().map(Type::asString).collect(joining("&"));
     }
 }

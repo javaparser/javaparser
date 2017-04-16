@@ -36,7 +36,6 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 import static java.util.stream.Collectors.joining;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
@@ -170,6 +169,13 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
+    public String asString() {
+        StringBuilder str = new StringBuilder(getNameAsString());
+        getTypeBound().ifNonEmpty(l -> str.append(l.stream().map(ClassOrInterfaceType::asString).collect(joining("&", " extends ", ""))));
+        return str.toString();
+    }
+
+    @Override
     public TypeParameter clone() {
         return (TypeParameter) accept(new CloneVisitor(), null);
     }
@@ -177,12 +183,5 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     @Override
     public TypeParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.typeParameterMetaModel;
-    }
-
-    @Override
-    public String asString() {
-        StringBuilder str = new StringBuilder(getNameAsString());
-        getTypeBound().ifNonEmpty(l -> str.append(l.stream().map(ClassOrInterfaceType::asString).collect(joining("&", " extends ", ""))));
-        return str.toString();
     }
 }
