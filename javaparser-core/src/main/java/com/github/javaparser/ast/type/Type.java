@@ -99,7 +99,7 @@ public abstract class Type extends Node {
     }
 
     public abstract String asString();
-    
+
     @Override
     public Type clone() {
         return (Type) accept(new CloneVisitor(), null);

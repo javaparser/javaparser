@@ -32,22 +32,13 @@ The project binaries are available in Maven Central.  Just add the following to 
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.2.0</version>
-</dependency>
-```
-
-If you would like to create visitors by generating code or are interested in how code generation can be done, take a look at:
-```xml
-<dependency>
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>javaparser-core-generators</artifactId>
-    <version>3.2.0</version>
+    <version>3.2.1</version>
 </dependency>
 ```
 
 ## How To Compile Sources
 
-If you have checkout the project from GitHub you can build the project with maven using:
+If you checked out the project from GitHub you can build the project with maven using:
 
 ```
 mvn clean install
