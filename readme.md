@@ -38,7 +38,7 @@ The project binaries are available in Maven Central.  Just add the following to 
 
 ## How To Compile Sources
 
-If you have checkout the project from GitHub you can build the project with maven using:
+If you checked out the project from GitHub you can build the project with maven using:
 
 ```
 mvn clean install
