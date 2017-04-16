@@ -6,6 +6,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.metamodel.DerivedProperty;
+import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.lang.reflect.Field;
@@ -90,7 +91,7 @@ public class NodeMetaModelGenerator {
         methods.sort(Comparator.comparing(Method::getName));
         for (Method method : methods) {
             if (method.isAnnotationPresent(DerivedProperty.class)) {
-                initializePropertyMetaModelsStatementsGenerator.generateDerivedProperty(nodeClass, method, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
+                initializePropertyMetaModelsStatementsGenerator.generateDerivedProperty(method, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
             }
         }
 
@@ -112,22 +113,7 @@ public class NodeMetaModelGenerator {
     }
 
     private boolean fieldShouldBeIgnored(Field reflectionField) {
-        if (java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers())) {
-            return true;
-        }
-        String name = reflectionField.getName();
-        switch (name) {
-            case "parentNode":
-            case "observers":
-            case "innerList":
-            case "data":
-            case "range":
-            case "childNodes":
-            case "commentedNode":
-            case "orphanComments":
-                return true;
-        }
-        return false;
+        return java.lang.reflect.Modifier.isStatic(reflectionField.getModifiers()) ||
+                reflectionField.isAnnotationPresent(InternalProperty.class);
     }
-
 }

@@ -33,6 +33,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.EqualsVisitor;
 import com.github.javaparser.ast.visitor.HashCodeVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
@@ -125,18 +126,24 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     protected static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
 
+    @InternalProperty
     private Range range;
 
+    @InternalProperty
     private Node parentNode;
 
+    @InternalProperty
     private List<Node> childNodes = new LinkedList<>();
 
+    @InternalProperty
     private List<Comment> orphanComments = new LinkedList<>();
 
+    @InternalProperty
     private IdentityHashMap<DataKey<?>, Object> data = null;
 
     private Comment comment;
 
+    @InternalProperty
     private List<AstObserver> observers = new ArrayList<>();
 
     public Node(Range range) {

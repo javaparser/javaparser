@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.VariableDeclarationExprMetaModel;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -57,6 +58,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
 
     private NodeList<AnnotationExpr> annotations;
 
+    @NonEmptyProperty
     private NodeList<VariableDeclarator> variables;
 
     public VariableDeclarationExpr() {

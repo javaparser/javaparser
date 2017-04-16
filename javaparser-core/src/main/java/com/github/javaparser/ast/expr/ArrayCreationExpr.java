@@ -39,6 +39,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -50,6 +51,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public final class ArrayCreationExpr extends Expression {
 
+    @NonEmptyProperty
     private NodeList<ArrayCreationLevel> levels;
 
     private Type elementType;

@@ -44,6 +44,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.FieldDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -62,6 +64,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     private EnumSet<Modifier> modifiers;
 
+    @NonEmptyProperty
     private NodeList<VariableDeclarator> variables;
 
     public FieldDeclaration() {

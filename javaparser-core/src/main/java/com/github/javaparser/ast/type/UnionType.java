@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.joining;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -45,6 +46,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
+    @NonEmptyProperty
     private NodeList<ReferenceType<?>> elements;
 
     public UnionType() {
