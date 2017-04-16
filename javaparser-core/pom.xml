@@ -104,7 +104,7 @@
                     <dependency>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>extra-enforcer-rules</artifactId>
-                        <version>1.0-beta-4</version>
+                        <version>1.0-beta-6</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -137,6 +137,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <compilerArgs>
+                        <!-- This stores method parameter names in the class file, which are used by the metamodel generator -->
                         <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>

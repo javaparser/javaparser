@@ -36,11 +36,9 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -220,7 +218,9 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
      * this will fail in some cases. (java.util.String != String for example, and generics are not taken into account.)
      */
     public static class Signature {
+
         private final String name;
+
         private final List<Type> parameterTypes;
 
         private Signature(String name, List<Type> parameterTypes) {
@@ -268,11 +268,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     }
 
     public Signature getSignature() {
-        return new Signature(getName().getIdentifier(), getParameters().stream()
-                .map(this::getTypeWithVarargsAsArray)
-                .map(this::stripGenerics)
-                .map(this::stripAnnotations)
-                .collect(toList()));
+        return new Signature(getName().getIdentifier(), getParameters().stream().map(this::getTypeWithVarargsAsArray).map(this::stripGenerics).map(this::stripAnnotations).collect(toList()));
     }
 
     private Type stripAnnotations(Type type) {

@@ -90,7 +90,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
             return false;
         return super.remove(node);
     }
-    
+
     public String asString() {
         return identifier;
     }
