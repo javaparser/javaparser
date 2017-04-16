@@ -38,6 +38,7 @@ import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -53,6 +54,7 @@ import static java.util.stream.Collectors.joining;
  */
 public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
+    @NonEmptyProperty
     private NodeList<ReferenceType<?>> elements;
 
     @AllFieldsConstructor

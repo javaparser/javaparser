@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.SimpleNameMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -40,6 +41,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
+    @NonEmptyProperty
     private String identifier;
 
     public SimpleName() {

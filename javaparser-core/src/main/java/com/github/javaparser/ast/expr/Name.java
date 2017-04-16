@@ -33,6 +33,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +55,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnnotations<Name> {
 
+    @NonEmptyProperty
     private String identifier;
 
     private Name qualifier;

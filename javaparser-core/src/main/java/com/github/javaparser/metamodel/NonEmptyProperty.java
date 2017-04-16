@@ -3,16 +3,16 @@ package com.github.javaparser.metamodel;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Indicate a derived property of a Node,
- * meaning it does supply useful information,
- * but it does so by taking information from other properties.
+ * Indicate that leaving this property empty does not lead to a correct AST.
+ * Empty means either empty string or empty collection.
  * (Used during generation of the meta model.)
  */
 @Retention(RUNTIME)
-@Target(METHOD)
-public @interface DerivedProperty {
+@Target({FIELD, METHOD})
+public @interface NonEmptyProperty {
 }

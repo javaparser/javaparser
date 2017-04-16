@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -45,7 +46,7 @@ public class InitializePropertyMetaModelsStatementsGenerator {
         initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
     }
 
-    public void generateDerivedProperty(Class<?> nodeClass, Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
+    public void generateDerivedProperty(Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
 
         final AstTypeAnalysis fieldAnalysis = new AstTypeAnalysis(method.getGenericReturnType());
 
@@ -71,21 +72,11 @@ public class InitializePropertyMetaModelsStatementsGenerator {
     }
 
     private boolean isNonEmpty(Field field) {
-        final String name = field.getName();
-        final Class<?> c = field.getDeclaringClass();
-        return (c == VariableDeclarator.class && name.equals("initializer")) ||
-                (c == MethodReferenceExpr.class && name.equals("identifier")) ||
-                (c == Name.class && name.equals("identifier")) ||
-                (c == SimpleName.class && name.equals("identifier")) ||
-                (c == ArrayCreationExpr.class && name.equals("levels")) ||
-                (c == FieldDeclaration.class && name.equals("variables")) ||
-                (c == IntersectionType.class && name.equals("elements")) ||
-                (c == UnionType.class && name.equals("elements")) ||
-                (c == VariableDeclarationExpr.class && name.equals("variables"));
+        return field.isAnnotationPresent(NonEmptyProperty.class);
     }
 
     private boolean isNonEmpty(Method method) {
-        return true;
+        return method.isAnnotationPresent(NonEmptyProperty.class);
     }
 
     private String getter(Field field) {
