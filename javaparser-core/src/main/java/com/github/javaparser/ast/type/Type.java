@@ -98,6 +98,8 @@ public abstract class Type extends Node {
         return super.remove(node);
     }
 
+    public abstract String asString();
+
     @Override
     public Type clone() {
         return (Type) accept(new CloneVisitor(), null);

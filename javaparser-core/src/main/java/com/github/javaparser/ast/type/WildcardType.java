@@ -22,19 +22,19 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.WildcardTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * A wildcard type argument.
@@ -120,7 +120,6 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      *
      * @param extendedType the extends, can be null
      * @return this, the WildcardType
-     *
      * @deprecated use setExtendedType instead,
      */
     @Deprecated
@@ -151,7 +150,6 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      *
      * @param superType the super, can be null
      * @return this, the WildcardType
-     *
      * @deprecated use setSuperType instead
      */
     @Deprecated
@@ -186,6 +184,14 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public String asString() {
+        StringBuilder str = new StringBuilder("?");
+        getExtendedType().ifPresent(t -> str.append(" extends ").append(t.asString()));
+        getSuperType().ifPresent(t -> str.append(" super ").append(t.asString()));
+        return str.toString();
     }
 
     @Deprecated

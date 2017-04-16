@@ -153,6 +153,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         return this;
     }
 
+    @Override
     public String asString() {
         return type.asString();
     }

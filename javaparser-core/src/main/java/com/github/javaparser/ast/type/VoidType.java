@@ -80,6 +80,11 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     }
 
     @Override
+    public String asString() {
+        return "void";
+    }
+
+    @Override
     public VoidType clone() {
         return (VoidType) accept(new CloneVisitor(), null);
     }

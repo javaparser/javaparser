@@ -45,6 +45,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.FieldDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;

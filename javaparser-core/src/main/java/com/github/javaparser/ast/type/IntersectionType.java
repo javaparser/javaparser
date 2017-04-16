@@ -22,19 +22,21 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.IntersectionTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.IntersectionTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+import static java.util.stream.Collectors.joining;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 
 /**
@@ -112,6 +114,11 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public String asString() {
+        return elements.stream().map(Type::asString).collect(joining("&"));
     }
 
     @Override
