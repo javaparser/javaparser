@@ -1,3 +1,11 @@
+Version 3.2.1
+------------------
+Beta: `TreeStructureVisitor`.
+
+* Maven dependencies were updated to their latest versions 
+* 890 the concept of "method signature" now exists in JavaParser
+* 896 891 889 887 882 789 smaller improvements and fixes
+
 Version 3.2.0
 ------------------
 The lexical preservation code is stable!
