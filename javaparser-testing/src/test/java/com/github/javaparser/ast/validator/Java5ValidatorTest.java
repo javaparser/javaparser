@@ -139,4 +139,10 @@ public class Java5ValidatorTest {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
         assertNoProblems(result);
     }
+
+    @Test
+    public void noPrimitiveTypeArguments() {
+        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X extends Y<int> {}"));
+        assertProblems(result, "(line 1,col 17) Type arguments may not be primitive.");
+    }
 }
