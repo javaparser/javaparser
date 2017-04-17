@@ -32,10 +32,14 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import javaslang.Tuple2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +87,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
                     if (m.isSolved()) {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
+                        methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
                         return Optional.of(methodUsage);
                     } else {
@@ -116,6 +121,24 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             return parentContext.solveMethodAsUsage(name, argumentsTypes, typeSolver);
         }
+    }
+
+    private MethodUsage resolveMethodTypeParametersFromExplicitList(TypeSolver typeSolver, MethodUsage methodUsage) {
+        if (wrappedNode.getTypeArguments().isPresent()) {
+            final List<Type> typeArguments = new ArrayList<>();
+            for (com.github.javaparser.ast.type.Type ty : wrappedNode.getTypeArguments().get()) {
+                typeArguments.add(JavaParserFacade.get(typeSolver).convertToUsage(ty));
+            }
+
+            List<TypeParameterDeclaration> tyParamDecls = methodUsage.getDeclaration().getTypeParameters();
+            if (tyParamDecls.size() == typeArguments.size()) {
+                for (int i = 0; i < tyParamDecls.size(); i++) {
+                    methodUsage = methodUsage.replaceTypeParameter(tyParamDecls.get(i), typeArguments.get(i));
+                }
+            }
+        }
+
+        return methodUsage;
     }
 
     @Override
@@ -188,6 +211,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, argumentsTypes, typeSolver, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
             MethodUsage methodUsage = ref.get();
+
+            methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
 
             // At this stage I should derive from the context and the value some information on the type parameters
             // for example, when calling:

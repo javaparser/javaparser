@@ -23,7 +23,10 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -31,8 +34,11 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.Test;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -41,24 +47,80 @@ import static org.junit.Assert.assertTrue;
  * @author Malte Langkabel
  */
 public class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
-
-    @Test
-    public void solveNestedMethodCallExprContextWithoutScope() throws ParseException {
+    private MethodCallExpr getMethodCallExpr(String methodName, String callingMethodName) throws ParseException {
         CompilationUnit cu = parseSample("MethodCalls");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
-        MethodDeclaration method = Navigator.demandMethod(clazz, "bar1");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "foo");
+        MethodDeclaration method = Navigator.demandMethod(clazz, methodName);
+        return Navigator.findMethodCall(method, callingMethodName);
+    }
 
+    private CombinedTypeSolver createTypeSolver() {
         File src = adaptPath(new File("src/test/resources"));
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
+        return combinedTypeSolver;
+    }
 
-        Context context = new MethodCallExprContext(methodCallExpr, combinedTypeSolver);
+    @Test
+    public void solveNestedMethodCallExprContextWithoutScope() throws ParseException {
+        MethodCallExpr methodCallExpr = getMethodCallExpr("bar1", "foo");
+        CombinedTypeSolver typeSolver = createTypeSolver();
 
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList(), combinedTypeSolver);
+        Context context = new MethodCallExprContext(methodCallExpr, typeSolver);
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo", Collections.emptyList(), typeSolver);
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
+    }
+
+    @Test
+    public void solveGenericMethodCallMustUseProvidedTypeArgs() throws ParseException {
+        assertCanSolveGenericMethodCallMustUseProvidedTypeArgs("genericMethod0");
+    }
+
+    @Test
+    public void solveStaticGenericMethodCallMustUseProvidedTypeArgs() throws ParseException {
+        assertCanSolveGenericMethodCallMustUseProvidedTypeArgs("staticGenericMethod0");
+    }
+
+    private void assertCanSolveGenericMethodCallMustUseProvidedTypeArgs(String callMethodName) throws ParseException {
+        MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", callMethodName);
+        CombinedTypeSolver typeSolver = createTypeSolver();
+
+        MethodCallExprContext context = new MethodCallExprContext(methodCallExpr, typeSolver);
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, Collections.emptyList(), typeSolver);
+        assertTrue(ref.isPresent());
+        assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
+        assertEquals(Collections.singletonList("java.lang.Integer"), ref.get().typeParametersMap().getTypes().stream().map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void solveGenericMethodCallCanInferFromArguments() throws ParseException {
+        assertCanSolveGenericMethodCallCanInferFromArguments("genericMethod1");
+    }
+
+    @Test
+    public void solveStaticGenericMethodCallCanInferFromArguments() throws ParseException {
+        assertCanSolveGenericMethodCallCanInferFromArguments("staticGenericMethod1");
+    }
+
+    private void assertCanSolveGenericMethodCallCanInferFromArguments(String callMethodName) throws ParseException {
+        MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", callMethodName);
+        CombinedTypeSolver typeSolver = createTypeSolver();
+
+        MethodCallExprContext context = new MethodCallExprContext(methodCallExpr, typeSolver);
+
+        ReferenceTypeDeclaration stringType = typeSolver.solveType("java.lang.String");
+
+        List<Type> argumentsTypes = new ArrayList<>();
+        argumentsTypes.add(new ReferenceTypeImpl(stringType, typeSolver));
+
+        Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes, typeSolver);
+        assertTrue(ref.isPresent());
+        assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
+        assertEquals(Collections.singletonList("java.lang.String"), ref.get().typeParametersMap().getTypes().stream().map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
     }
 }

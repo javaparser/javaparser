@@ -50,6 +50,7 @@ public class TypeParametersMap {
         }
 
         public Builder setValue(TypeParameterDeclaration typeParameter, Type value) {
+            // TODO: we shouldn't just silently overwrite existing types!
             String qualifiedName = typeParameter.getQualifiedName();
             nameToValue.put(qualifiedName, value);
             nameToDeclaration.put(qualifiedName, typeParameter);
