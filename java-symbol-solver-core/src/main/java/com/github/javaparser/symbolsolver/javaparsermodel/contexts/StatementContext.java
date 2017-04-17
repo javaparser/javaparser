@@ -71,6 +71,32 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         return JavaParserFactory.getContext(getParentNode(stmt), typeSolver).solveSymbol(name, typeSolver);
     }
 
+    public static Optional<Value> solveInBlockAsValue(String name, TypeSolver typeSolver, Statement stmt) {
+        if (!(getParentNode(stmt) instanceof NodeWithStatements)) {
+            throw new IllegalArgumentException();
+        }
+        NodeWithStatements<?> blockStmt = (NodeWithStatements<?>) getParentNode(stmt);
+        int position = -1;
+        for (int i = 0; i < blockStmt.getStatements().size(); i++) {
+            if (blockStmt.getStatements().get(i).equals(stmt)) {
+                position = i;
+            }
+        }
+        if (position == -1) {
+            throw new RuntimeException();
+        }
+        for (int i = position - 1; i >= 0; i--) {
+            SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver);
+            SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
+            if (symbolReference.isSolved()) {
+                return Optional.of(Value.from(symbolReference.getCorrespondingDeclaration()));
+            }
+        }
+
+        // if nothing is found we should ask the parent context
+        return JavaParserFactory.getContext(getParentNode(stmt), typeSolver).solveSymbolAsValue(name, typeSolver);
+    }
+
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
 

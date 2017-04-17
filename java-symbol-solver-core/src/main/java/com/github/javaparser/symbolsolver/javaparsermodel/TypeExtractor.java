@@ -9,6 +9,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -27,6 +28,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -406,8 +408,29 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
                         NodeList<Statement> statements = blockStmt.getStatements();
 
-                        // Get the last statement in the block and use it's type
-                        actualType = facade.getType(statements.get(statements.size() - 1).getChildNodes().get(0));
+                        // Get all the return statements in the lambda block
+                        List<ReturnStmt> returnStmts = blockStmt.getNodesByType(ReturnStmt.class);
+
+                        if (returnStmts.size() > 0){
+
+                            actualType = returnStmts.stream()
+                            .map(returnStmt -> {
+                                Optional<Expression> expression = returnStmt.getExpression();
+                                if (expression.isPresent()){
+                                    return facade.getType(expression.get());
+                                } else{
+                                    return VoidType.INSTANCE;
+                                }
+                            })
+                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
+                            .findFirst()
+                            .orElse(VoidType.INSTANCE);
+
+                        } else {
+                            return VoidType.INSTANCE;
+                        }
+
+
                     } else {
                         throw new UnsupportedOperationException();
                     }
