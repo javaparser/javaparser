@@ -208,10 +208,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         try {
             value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getField().getId(), node);
         } catch (UnsolvedSymbolException use) {
-            // Deal with badly parsed FieldAccessExpr that are in fact fqn classes
-            if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr) {
-                throw use;
-            }
+            // This node may have a package name as part of its fully qualified name.
+            // We should solve for the type declaration inside this package.
             SymbolReference<ReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
             if (sref.isSolved()) {
                 return new ReferenceTypeImpl(sref.getCorrespondingDeclaration(), typeSolver);
