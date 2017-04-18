@@ -59,4 +59,31 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
         assertEquals(true, javaParserFacade.solve(innerMethodCall).isSolved());
         assertEquals(true, javaParserFacade.solve(innerInnerMethodCall).isSolved());
     }
+
+    @Test
+    public void packageStaticMethodCalls() throws ParseException {
+        ClassOrInterfaceDeclaration clazz = ((JavaParserClassDeclaration) typeSolver.solveType("PackageDotExpressions")).getWrappedNode();
+        MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        MethodCallExpr staticMethodCall = Navigator.findMethodCall(mainMethod, "staticMethod");
+
+        MethodCallExpr methodCall = Navigator.findMethodCall(mainMethod, "methodCall");
+        MethodCallExpr innerMethodCall = Navigator.findMethodCall(mainMethod, "innerMethodCall");
+        MethodCallExpr innerInnerMethodCall = Navigator.findMethodCall(mainMethod, "innerInnerMethodCall");
+
+        MethodCallExpr firstFieldMethodCall = Navigator.findMethodCall(mainMethod, "firstContainerMethod");
+        MethodCallExpr secondFieldMethodCall = Navigator.findMethodCall(mainMethod, "secondContainerMethod");
+        MethodCallExpr thirdFieldMethodCall = Navigator.findMethodCall(mainMethod, "thirdContainerMethod");
+
+        assertEquals(true, javaParserFacade.solve(staticMethodCall).isSolved());
+
+        assertEquals(true, javaParserFacade.solve(methodCall).isSolved());
+        assertEquals(true, javaParserFacade.solve(innerMethodCall).isSolved());
+        assertEquals(true, javaParserFacade.solve(innerInnerMethodCall).isSolved());
+
+        assertEquals(true, javaParserFacade.solve(firstFieldMethodCall).isSolved());
+        assertEquals(true, javaParserFacade.solve(secondFieldMethodCall).isSolved());
+        assertEquals(true, javaParserFacade.solve(thirdFieldMethodCall).isSolved());
+    }
 }
