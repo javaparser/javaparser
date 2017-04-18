@@ -48,4 +48,17 @@ class MethodCalls {
         this.variadicMethod("test");
     }
 
+    <T> T genericMethod0() { return null; }
+    <T> T genericMethod1(T x) { return x; }
+
+    static <T> T staticGenericMethod0() { return null; }
+    static <T> T staticGenericMethod1(T x) { return x; }
+
+    void genericMethodTest() {
+        this.<Integer>genericMethod0();
+        this.genericMethod1("Hello");
+
+        MethodCalls.<Integer>staticGenericMethod0();
+        MethodCalls.staticGenericMethod1("Hello");
+    }
 }

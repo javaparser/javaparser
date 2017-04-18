@@ -47,10 +47,14 @@ public class MethodUsage implements TypeParametrized {
     }
 
     public MethodUsage(MethodDeclaration declaration, List<Type> paramTypes, Type returnType) {
-        this.typeParametersMap = TypeParametersMap.empty();
+        this(declaration, paramTypes, returnType, TypeParametersMap.empty());
+    }
+
+    private MethodUsage(MethodDeclaration declaration, List<Type> paramTypes, Type returnType, TypeParametersMap typeParametersMap) {
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
+        this.typeParametersMap = typeParametersMap;
     }
 
     @Override
@@ -87,14 +91,14 @@ public class MethodUsage implements TypeParametrized {
         }
         List<Type> newParams = new LinkedList<>(paramTypes);
         newParams.set(i, replaced);
-        return new MethodUsage(declaration, newParams, returnType);
+        return new MethodUsage(declaration, newParams, returnType, typeParametersMap);
     }
 
     public MethodUsage replaceReturnType(Type returnType) {
         if (returnType == this.returnType) {
             return this;
         } else {
-            return new MethodUsage(declaration, paramTypes, returnType);
+            return new MethodUsage(declaration, paramTypes, returnType, typeParametersMap);
         }
     }
 
@@ -116,8 +120,10 @@ public class MethodUsage implements TypeParametrized {
         if (type == null) {
             throw new IllegalArgumentException();
         }
+
         // TODO if the method declaration has a type param with that name ignore this call
-        MethodUsage res = this;
+        MethodUsage res = new MethodUsage(declaration, paramTypes, returnType, typeParametersMap.toBuilder().setValue(typeParameter, type).build());
+
         Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
         for (int i = 0; i < paramTypes.size(); i++) {
             Type originalParamType = paramTypes.get(i);
