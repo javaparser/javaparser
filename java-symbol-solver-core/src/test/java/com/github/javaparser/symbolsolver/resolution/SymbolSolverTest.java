@@ -37,6 +37,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Federico Tomassetti
@@ -91,5 +92,10 @@ public class SymbolSolverTest extends AbstractTest {
 
         SymbolReference<? extends ValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "parentNode");
         assertEquals(false, res.isSolved());
+    }
+
+    @Test
+    public void testSolvePackageLocalClass() {
+        assertTrue(typeSolverNewCode.solveType("com.github.javaparser.FooClass").isClass());
     }
 }
