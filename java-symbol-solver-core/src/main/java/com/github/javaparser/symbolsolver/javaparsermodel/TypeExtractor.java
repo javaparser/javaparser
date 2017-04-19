@@ -158,6 +158,22 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         return node.getInner().get().accept(this, solveLambdas);
     }
 
+    /**
+     * Java Parser can't differentiate between packages, internal types, and fields.
+     * All three are lumped together into FieldAccessExpr. We need to differentiate them.
+     */
+    private Type solveDotExpressionType(ReferenceTypeDeclaration parentType, FieldAccessExpr node) {
+        // Fields and internal type declarations cannot have the same name.
+        // Thus, these checks will always be mutually exclusive.
+        if (parentType.hasField(node.getName().getId())) {
+            return parentType.getField(node.getName().getId()).getType();
+        } else if (parentType.hasInternalType(node.getName().getId())) {
+            return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()), typeSolver);
+        } else {
+            throw new UnsolvedSymbolException(node.getName().getId());
+        }
+    }
+
     @Override
     public Type visit(FieldAccessExpr node, Boolean solveLambdas) {
         // We should understand if this is a static access
@@ -166,7 +182,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(node, typeSolver).solveType(staticValue.toString(), typeSolver);
             if (typeAccessedStatically.isSolved()) {
                 // TODO here maybe we have to substitute type typeParametersValues
-                return ((ReferenceTypeDeclaration) typeAccessedStatically.getCorrespondingDeclaration()).getField(node.getField().getId()).getType();
+                return solveDotExpressionType(
+                        typeAccessedStatically.getCorrespondingDeclaration().asReferenceType(), node);
             }
         } else if (node.getScope().isPresent() && node.getScope().get() instanceof ThisExpr){
             // If we are accessing through a 'this' expression, first resolve the type
@@ -176,7 +193,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (solve.isSolved()){
                 TypeDeclaration correspondingDeclaration = solve.getCorrespondingDeclaration();
                 if (correspondingDeclaration instanceof ReferenceTypeDeclaration){
-                    return ((ReferenceTypeDeclaration) correspondingDeclaration).getField(node.getField().getId()).getType();
+                    return solveDotExpressionType(correspondingDeclaration.asReferenceType(), node);
                 }
             }
 
@@ -184,17 +201,15 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             // try to find fully qualified name
             SymbolReference<ReferenceTypeDeclaration> sr = typeSolver.tryToSolveType(node.getScope().get().toString());
             if (sr.isSolved()) {
-                return sr.getCorrespondingDeclaration().getField(node.getField().getId()).getType();
+                return solveDotExpressionType(sr.getCorrespondingDeclaration(), node);
             }
         }
         Optional<Value> value = null;
         try {
             value = new SymbolSolver(typeSolver).solveSymbolAsValue(node.getField().getId(), node);
         } catch (UnsolvedSymbolException use) {
-            // Deal with badly parsed FieldAccessExpr that are in fact fqn classes
-            if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr) {
-                throw use;
-            }
+            // This node may have a package name as part of its fully qualified name.
+            // We should solve for the type declaration inside this package.
             SymbolReference<ReferenceTypeDeclaration> sref = typeSolver.tryToSolveType(node.toString());
             if (sref.isSolved()) {
                 return new ReferenceTypeImpl(sref.getCorrespondingDeclaration(), typeSolver);
