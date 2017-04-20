@@ -1,5 +1,7 @@
 ## Java Parser and Abstract Syntax Tree
 
+[![Join the chat at https://gitter.im/javaparser/javaparserbook](https://badges.gitter.im/javaparser/javaparserbook.svg)](https://gitter.im/javaparser/javaparserbook?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This package contains a Java 1.0 - Java 9 Parser with AST generation and visitor support.
 
 The AST records the source code structure.
