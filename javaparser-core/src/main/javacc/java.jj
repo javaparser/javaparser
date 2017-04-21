@@ -1476,7 +1476,7 @@ Type TypeArgument():
 {
  annotations = Annotations() 
  (
-   ret = ReferenceType()
+   ret = Type()
  |
    ret = Wildcard()
  )

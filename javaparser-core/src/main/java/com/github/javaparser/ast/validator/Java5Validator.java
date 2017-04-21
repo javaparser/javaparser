@@ -3,6 +3,7 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 
 import java.util.Optional;
@@ -20,9 +21,23 @@ public class Java5Validator extends Java1_4Validator {
         }
     });
 
+    protected Validator noPrimitiveGenericArguments = new TreeVisitorValidator((node, reporter) -> {
+        if (node instanceof NodeWithTypeArguments) {
+            Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
+            if (typeArguments.isPresent()) {
+                typeArguments.get().forEach(ty -> {
+                    if (ty instanceof PrimitiveType) {
+                        reporter.report(node, "Type arguments may not be primitive.");
+                    }
+                });
+            }
+        }
+    });
+
     public Java5Validator() {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
+        add(noPrimitiveGenericArguments);
         
         // TODO validate annotations on classes, fields and methods but nowhere else
         // The following is probably too simple.
