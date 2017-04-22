@@ -151,6 +151,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Called in every constructor for node specific code.
+     * It can't be written in the constructor itself because it will
+     * be overwritten during code generation.
+     */
+    protected void customInitialization() {
+    }
+
+    /**
      * This is a comment associated with this node.
      *
      * @return comment property

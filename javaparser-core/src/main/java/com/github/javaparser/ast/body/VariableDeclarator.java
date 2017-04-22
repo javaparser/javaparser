@@ -91,9 +91,10 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         setType(type);
         setName(name);
         setInitializer(initializer);
+        customInitialization();
     }
 
-    private void registerObserversForDerivedProperties() {
+    private void customInitialization() {
         // We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
         // because it is derived from the type of the variables it contains, for this reason we notify about the change
         this.register(new AstObserverAdapter() {

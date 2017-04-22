@@ -40,13 +40,15 @@ public class MainConstructorGenerator extends NodeGenerator {
         for (PropertyMetaModel parameter : nodeMetaModel.getConstructorParameters()) {
             constructor.addParameter(parameter.getTypeNameForSetter(), parameter.getName());
             if (nodeMetaModel.getDeclaredPropertyMetaModels().contains(parameter)) {
-                body.addStatement(parseStatement(f("%s(%s);", parameter.getSetterMethodName(), parameter.getName())));
+                body.addStatement(f("%s(%s);", parameter.getSetterMethodName(), parameter.getName()));
             } else {
                 superCall.append(parameter.getName());
             }
         }
 
         body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
+        
+        body.addStatement("customInitialization();");
 
         replaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(Range.class);
