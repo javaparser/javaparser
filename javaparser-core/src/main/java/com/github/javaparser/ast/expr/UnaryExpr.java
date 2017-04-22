@@ -162,6 +162,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
     }

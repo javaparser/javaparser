@@ -187,6 +187,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PrimitiveTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.primitiveTypeMetaModel;
     }

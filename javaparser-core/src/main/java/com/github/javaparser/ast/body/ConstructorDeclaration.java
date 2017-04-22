@@ -188,6 +188,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ConstructorDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.constructorDeclarationMetaModel;
     }

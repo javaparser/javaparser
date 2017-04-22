@@ -83,6 +83,7 @@ public final class JavadocComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JavadocCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.javadocCommentMetaModel;
     }

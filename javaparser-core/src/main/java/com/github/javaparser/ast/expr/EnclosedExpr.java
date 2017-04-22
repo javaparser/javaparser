@@ -115,6 +115,7 @@ public final class EnclosedExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public EnclosedExprMetaModel getMetaModel() {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }

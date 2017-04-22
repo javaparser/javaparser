@@ -264,6 +264,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassOrInterfaceDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
     }

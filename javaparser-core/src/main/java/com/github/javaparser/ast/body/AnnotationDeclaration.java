@@ -94,6 +94,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AnnotationDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationDeclarationMetaModel;
     }

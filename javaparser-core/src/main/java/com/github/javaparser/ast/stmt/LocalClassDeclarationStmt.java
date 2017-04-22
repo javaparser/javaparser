@@ -103,6 +103,7 @@ public final class LocalClassDeclarationStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LocalClassDeclarationStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.localClassDeclarationStmtMetaModel;
     }

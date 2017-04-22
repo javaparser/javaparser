@@ -114,6 +114,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BlockStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.blockStmtMetaModel;
     }

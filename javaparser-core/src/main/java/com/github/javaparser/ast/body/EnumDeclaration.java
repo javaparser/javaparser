@@ -173,6 +173,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public EnumDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.enumDeclarationMetaModel;
     }

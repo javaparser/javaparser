@@ -120,6 +120,7 @@ public final class BreakStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BreakStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.breakStmtMetaModel;
     }

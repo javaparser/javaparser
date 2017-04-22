@@ -233,6 +233,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public VariableDeclaratorMetaModel getMetaModel() {
         return JavaParserMetaModel.variableDeclaratorMetaModel;
     }

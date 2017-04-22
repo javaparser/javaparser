@@ -209,6 +209,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NameMetaModel getMetaModel() {
         return JavaParserMetaModel.nameMetaModel;
     }

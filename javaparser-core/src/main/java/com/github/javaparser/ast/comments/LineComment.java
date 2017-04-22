@@ -85,6 +85,7 @@ public final class LineComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LineCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.lineCommentMetaModel;
     }

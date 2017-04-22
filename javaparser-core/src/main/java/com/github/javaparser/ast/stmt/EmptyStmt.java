@@ -73,6 +73,7 @@ public final class EmptyStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public EmptyStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.emptyStmtMetaModel;
     }

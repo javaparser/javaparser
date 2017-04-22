@@ -264,6 +264,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.parameterMetaModel;
     }

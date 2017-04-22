@@ -506,6 +506,7 @@ public final class CompilationUnit extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CompilationUnitMetaModel getMetaModel() {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }

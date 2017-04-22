@@ -174,6 +174,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MethodReferenceExprMetaModel getMetaModel() {
         return JavaParserMetaModel.methodReferenceExprMetaModel;
     }

@@ -40,6 +40,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final AnnotationDeclaration n, final A arg) {
         n.getMembers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
@@ -48,6 +49,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final AnnotationMemberDeclaration n, final A arg) {
@@ -61,6 +63,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ArrayAccessExpr n, final A arg) {
         n.getIndex().accept(this, arg);
         n.getName().accept(this, arg);
@@ -68,6 +71,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ArrayCreationExpr n, final A arg) {
@@ -80,12 +84,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ArrayInitializerExpr n, final A arg) {
         n.getValues().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final AssertStmt n, final A arg) {
@@ -97,6 +103,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final AssignExpr n, final A arg) {
         n.getTarget().accept(this, arg);
         n.getValue().accept(this, arg);
@@ -104,6 +111,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final BinaryExpr n, final A arg) {
@@ -115,11 +123,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final BlockComment n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final BlockStmt n, final A arg) {
@@ -130,11 +140,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final BooleanLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final BreakStmt n, final A arg) {
@@ -143,6 +155,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final CastExpr n, final A arg) {
@@ -154,6 +167,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final CatchClause n, final A arg) {
         n.getBody().accept(this, arg);
         n.getParameter().accept(this, arg);
@@ -163,11 +177,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final CharLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ClassExpr n, final A arg) {
@@ -176,6 +192,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ClassOrInterfaceDeclaration n, final A arg) {
@@ -191,6 +208,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ClassOrInterfaceType n, final A arg) {
         n.getName().accept(this, arg);
         n.getScope().ifPresent(l -> l.accept(this, arg));
@@ -200,6 +218,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final CompilationUnit n, final A arg) {
@@ -213,6 +232,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ConditionalExpr n, final A arg) {
         n.getCondition().accept(this, arg);
         n.getElseExpr().accept(this, arg);
@@ -221,6 +241,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ConstructorDeclaration n, final A arg) {
@@ -236,12 +257,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ContinueStmt n, final A arg) {
         n.getLabel().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final DoStmt n, final A arg) {
@@ -253,11 +276,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final DoubleLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EmptyMemberDeclaration n, final A arg) {
@@ -268,11 +293,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EmptyStmt n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EnclosedExpr n, final A arg) {
@@ -281,6 +308,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EnumConstantDeclaration n, final A arg) {
@@ -292,6 +320,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EnumDeclaration n, final A arg) {
@@ -306,6 +335,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ExplicitConstructorInvocationStmt n, final A arg) {
         n.getArguments().forEach(p -> p.accept(this, arg));
         n.getExpression().ifPresent(l -> l.accept(this, arg));
@@ -316,12 +346,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ExpressionStmt n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final FieldAccessExpr n, final A arg) {
@@ -334,6 +366,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final FieldDeclaration n, final A arg) {
         n.getVariables().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
@@ -341,6 +374,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ForeachStmt n, final A arg) {
@@ -351,6 +385,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ForStmt n, final A arg) {
@@ -364,6 +399,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final IfStmt n, final A arg) {
         n.getCondition().accept(this, arg);
         n.getElseStmt().ifPresent(l -> l.accept(this, arg));
@@ -372,6 +408,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final InitializerDeclaration n, final A arg) {
@@ -383,6 +420,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final InstanceOfExpr n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getType().accept(this, arg);
@@ -392,6 +430,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final IntegerLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
@@ -399,11 +438,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final JavadocComment n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final LabeledStmt n, final A arg) {
@@ -415,11 +456,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final LineComment n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final LongLiteralExpr n, final A arg) {
@@ -429,12 +472,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final MarkerAnnotationExpr n, final A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final MemberValuePair n, final A arg) {
@@ -446,6 +491,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final MethodCallExpr n, final A arg) {
         n.getArguments().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
@@ -455,6 +501,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final MethodDeclaration n, final A arg) {
@@ -471,12 +518,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final NameExpr n, final A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final NormalAnnotationExpr n, final A arg) {
@@ -488,11 +537,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final NullLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ObjectCreationExpr n, final A arg) {
@@ -507,6 +558,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final PackageDeclaration n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
@@ -514,6 +566,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final Parameter n, final A arg) {
@@ -527,12 +580,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final PrimitiveType n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final Name n, final A arg) {
@@ -544,11 +599,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(SimpleName n, A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ArrayType n, A arg) {
@@ -560,6 +617,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ArrayCreationLevel n, A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getDimension().ifPresent(l -> l.accept(this, arg));
@@ -567,6 +625,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final IntersectionType n, final A arg) {
@@ -578,6 +637,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final UnionType n, final A arg) {
         n.getElements().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
@@ -587,12 +647,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ReturnStmt n, final A arg) {
         n.getExpression().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final SingleMemberAnnotationExpr n, final A arg) {
@@ -604,11 +666,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final StringLiteralExpr n, final A arg) {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final SuperExpr n, final A arg) {
@@ -617,6 +681,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final SwitchEntryStmt n, final A arg) {
@@ -628,6 +693,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final SwitchStmt n, final A arg) {
         n.getEntries().forEach(p -> p.accept(this, arg));
         n.getSelector().accept(this, arg);
@@ -635,6 +701,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final SynchronizedStmt n, final A arg) {
@@ -646,6 +713,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ThisExpr n, final A arg) {
         n.getClassExpr().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -654,12 +722,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ThrowStmt n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final TryStmt n, final A arg) {
@@ -673,12 +743,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final LocalClassDeclarationStmt n, final A arg) {
         n.getClassDeclaration().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final TypeParameter n, final A arg) {
@@ -691,12 +763,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final UnaryExpr n, final A arg) {
         n.getExpression().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final UnknownType n, final A arg) {
@@ -707,6 +781,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final VariableDeclarationExpr n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getVariables().forEach(p -> p.accept(this, arg));
@@ -714,6 +789,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final VariableDeclarator n, final A arg) {
@@ -726,12 +802,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final VoidType n, final A arg) {
         n.getAnnotations().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final WhileStmt n, final A arg) {
@@ -741,6 +819,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final WildcardType n, final A arg) {
@@ -753,6 +832,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(LambdaExpr n, final A arg) {
         n.getBody().accept(this, arg);
         n.getParameters().forEach(p -> p.accept(this, arg));
@@ -762,6 +842,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(MethodReferenceExpr n, final A arg) {
         n.getScope().accept(this, arg);
         n.getTypeArguments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
@@ -769,6 +850,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(TypeExpr n, final A arg) {
@@ -786,11 +868,13 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ImportDeclaration n, final A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ModuleDeclaration n, A arg) {
@@ -802,12 +886,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ModuleRequiresStmt n, A arg) {
         n.getName().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ModuleExportsStmt n, A arg) {
@@ -819,6 +905,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ModuleProvidesStmt n, A arg) {
         n.getType().accept(this, arg);
         n.getWithTypes().forEach(p -> p.accept(this, arg));
@@ -828,12 +915,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ModuleUsesStmt n, A arg) {
         n.getType().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(ModuleOpensStmt n, A arg) {

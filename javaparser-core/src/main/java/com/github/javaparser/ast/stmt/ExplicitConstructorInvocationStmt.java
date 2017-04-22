@@ -225,6 +225,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ExplicitConstructorInvocationStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.explicitConstructorInvocationStmtMetaModel;
     }

@@ -126,6 +126,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SynchronizedStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.synchronizedStmtMetaModel;
     }

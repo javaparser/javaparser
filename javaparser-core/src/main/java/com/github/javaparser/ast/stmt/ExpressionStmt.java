@@ -104,6 +104,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ExpressionStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionStmtMetaModel;
     }

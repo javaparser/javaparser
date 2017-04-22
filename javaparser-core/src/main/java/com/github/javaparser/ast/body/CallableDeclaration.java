@@ -313,6 +313,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CallableDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.callableDeclarationMetaModel;
     }

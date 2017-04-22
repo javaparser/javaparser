@@ -165,6 +165,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleDeclarationMetaModel;
     }

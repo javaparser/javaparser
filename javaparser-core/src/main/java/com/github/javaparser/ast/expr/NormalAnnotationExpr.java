@@ -132,6 +132,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NormalAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }

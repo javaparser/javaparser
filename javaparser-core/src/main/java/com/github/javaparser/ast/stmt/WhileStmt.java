@@ -125,6 +125,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public WhileStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.whileStmtMetaModel;
     }

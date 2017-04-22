@@ -171,6 +171,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public EnumConstantDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.enumConstantDeclarationMetaModel;
     }

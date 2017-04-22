@@ -96,6 +96,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BooleanLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.booleanLiteralExprMetaModel;
     }

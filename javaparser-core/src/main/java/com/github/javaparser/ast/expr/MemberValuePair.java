@@ -127,6 +127,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MemberValuePairMetaModel getMetaModel() {
         return JavaParserMetaModel.memberValuePairMetaModel;
     }

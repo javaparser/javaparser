@@ -108,6 +108,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public IntegerLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.integerLiteralExprMetaModel;
     }

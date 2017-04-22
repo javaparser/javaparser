@@ -112,6 +112,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LongLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.longLiteralExprMetaModel;
     }

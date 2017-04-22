@@ -110,6 +110,7 @@ public class ModuleOpensStmt extends ModuleStmt implements NodeWithName<ModuleOp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleOpensStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleOpensStmtMetaModel;
     }

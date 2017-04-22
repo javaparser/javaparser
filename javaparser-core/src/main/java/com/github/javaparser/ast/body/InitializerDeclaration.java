@@ -126,6 +126,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public InitializerDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.initializerDeclarationMetaModel;
     }

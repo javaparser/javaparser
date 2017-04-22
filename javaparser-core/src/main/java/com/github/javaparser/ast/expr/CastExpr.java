@@ -127,6 +127,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CastExprMetaModel getMetaModel() {
         return JavaParserMetaModel.castExprMetaModel;
     }

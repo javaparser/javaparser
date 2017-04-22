@@ -203,6 +203,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.forStmtMetaModel;
     }

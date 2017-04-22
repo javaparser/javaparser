@@ -96,6 +96,7 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public DoubleLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.doubleLiteralExprMetaModel;
     }

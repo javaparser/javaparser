@@ -170,6 +170,7 @@ public final class IfStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }

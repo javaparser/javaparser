@@ -150,6 +150,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForeachStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.foreachStmtMetaModel;
     }

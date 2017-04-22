@@ -152,6 +152,7 @@ public final class SwitchStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SwitchStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.switchStmtMetaModel;
     }

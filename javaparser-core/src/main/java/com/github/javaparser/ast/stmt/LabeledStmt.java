@@ -124,6 +124,7 @@ public final class LabeledStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LabeledStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.labeledStmtMetaModel;
     }

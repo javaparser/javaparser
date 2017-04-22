@@ -216,6 +216,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MethodCallExprMetaModel getMetaModel() {
         return JavaParserMetaModel.methodCallExprMetaModel;
     }

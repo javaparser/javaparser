@@ -173,6 +173,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LambdaExprMetaModel getMetaModel() {
         return JavaParserMetaModel.lambdaExprMetaModel;
     }

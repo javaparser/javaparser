@@ -185,6 +185,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.typeParameterMetaModel;
     }

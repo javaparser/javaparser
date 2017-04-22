@@ -112,6 +112,7 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleRequiresStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleRequiresStmtMetaModel;
     }

@@ -140,6 +140,7 @@ public final class ConditionalExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ConditionalExprMetaModel getMetaModel() {
         return JavaParserMetaModel.conditionalExprMetaModel;
     }

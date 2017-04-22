@@ -161,6 +161,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayCreationLevelMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayCreationLevelMetaModel;
     }

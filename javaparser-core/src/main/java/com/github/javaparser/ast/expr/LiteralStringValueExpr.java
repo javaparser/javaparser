@@ -78,6 +78,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LiteralStringValueExprMetaModel getMetaModel() {
         return JavaParserMetaModel.literalStringValueExprMetaModel;
     }

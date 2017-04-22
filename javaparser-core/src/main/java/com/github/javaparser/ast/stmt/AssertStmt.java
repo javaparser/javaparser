@@ -141,6 +141,7 @@ public final class AssertStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AssertStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.assertStmtMetaModel;
     }

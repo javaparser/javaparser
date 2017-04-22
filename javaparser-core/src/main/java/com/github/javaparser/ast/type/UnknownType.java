@@ -99,6 +99,7 @@ public final class UnknownType extends Type {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public UnknownTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unknownTypeMetaModel;
     }

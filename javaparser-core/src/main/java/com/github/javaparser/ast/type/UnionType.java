@@ -128,6 +128,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public UnionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unionTypeMetaModel;
     }

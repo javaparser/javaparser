@@ -105,6 +105,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ThrowStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.throwStmtMetaModel;
     }

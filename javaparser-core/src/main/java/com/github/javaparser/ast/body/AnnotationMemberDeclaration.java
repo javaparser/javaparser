@@ -208,6 +208,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AnnotationMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }

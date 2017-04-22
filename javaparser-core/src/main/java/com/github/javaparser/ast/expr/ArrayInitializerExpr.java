@@ -116,6 +116,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayInitializerExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayInitializerExprMetaModel;
     }

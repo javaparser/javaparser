@@ -153,6 +153,7 @@ public abstract class Comment extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CommentMetaModel getMetaModel() {
         return JavaParserMetaModel.commentMetaModel;
     }

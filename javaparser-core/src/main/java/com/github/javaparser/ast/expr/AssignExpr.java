@@ -154,6 +154,7 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AssignExprMetaModel getMetaModel() {
         return JavaParserMetaModel.assignExprMetaModel;
     }

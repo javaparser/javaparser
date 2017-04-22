@@ -199,6 +199,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.typeDeclarationMetaModel;
     }

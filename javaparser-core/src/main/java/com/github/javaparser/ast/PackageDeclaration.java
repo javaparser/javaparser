@@ -164,6 +164,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PackageDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.packageDeclarationMetaModel;
     }

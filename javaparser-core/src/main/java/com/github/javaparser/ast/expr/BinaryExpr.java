@@ -155,6 +155,7 @@ public final class BinaryExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BinaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.binaryExprMetaModel;
     }

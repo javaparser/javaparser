@@ -76,6 +76,7 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleUsesStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleUsesStmtMetaModel;
     }

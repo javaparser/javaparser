@@ -233,6 +233,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassOrInterfaceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }

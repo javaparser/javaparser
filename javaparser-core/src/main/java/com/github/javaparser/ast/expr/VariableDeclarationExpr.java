@@ -206,6 +206,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public VariableDeclarationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.variableDeclarationExprMetaModel;
     }

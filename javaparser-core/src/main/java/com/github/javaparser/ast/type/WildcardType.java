@@ -223,6 +223,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public WildcardTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.wildcardTypeMetaModel;
     }

@@ -84,6 +84,7 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MarkerAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }

@@ -271,6 +271,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ObjectCreationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.objectCreationExprMetaModel;
     }

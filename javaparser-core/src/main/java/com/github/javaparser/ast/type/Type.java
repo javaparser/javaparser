@@ -125,6 +125,7 @@ public abstract class Type extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeMetaModel getMetaModel() {
         return JavaParserMetaModel.typeMetaModel;
     }

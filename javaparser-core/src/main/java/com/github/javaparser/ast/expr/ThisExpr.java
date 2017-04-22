@@ -112,6 +112,7 @@ public final class ThisExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ThisExprMetaModel getMetaModel() {
         return JavaParserMetaModel.thisExprMetaModel;
     }

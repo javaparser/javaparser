@@ -166,6 +166,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SwitchEntryStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.switchEntryStmtMetaModel;
     }

@@ -107,6 +107,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NameExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nameExprMetaModel;
     }

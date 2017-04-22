@@ -90,6 +90,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationExprMetaModel;
     }

@@ -95,6 +95,7 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public VoidTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.voidTypeMetaModel;
     }

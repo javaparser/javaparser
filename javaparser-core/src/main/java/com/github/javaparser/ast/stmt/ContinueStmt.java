@@ -124,6 +124,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ContinueStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.continueStmtMetaModel;
     }

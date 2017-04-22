@@ -128,6 +128,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public InstanceOfExprMetaModel getMetaModel() {
         return JavaParserMetaModel.instanceOfExprMetaModel;
     }

@@ -74,6 +74,7 @@ public final class NullLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NullLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nullLiteralExprMetaModel;
     }

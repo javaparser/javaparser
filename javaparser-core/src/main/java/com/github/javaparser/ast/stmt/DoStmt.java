@@ -125,6 +125,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public DoStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.doStmtMetaModel;
     }

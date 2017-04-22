@@ -61,6 +61,7 @@ public abstract class Statement extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public StatementMetaModel getMetaModel() {
         return JavaParserMetaModel.statementMetaModel;
     }

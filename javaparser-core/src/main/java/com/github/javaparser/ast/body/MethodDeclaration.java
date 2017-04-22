@@ -286,6 +286,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MethodDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.methodDeclarationMetaModel;
     }

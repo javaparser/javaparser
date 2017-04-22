@@ -99,6 +99,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SingleMemberAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.singleMemberAnnotationExprMetaModel;
     }

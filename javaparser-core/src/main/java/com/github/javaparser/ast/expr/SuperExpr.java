@@ -118,6 +118,7 @@ public final class SuperExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SuperExprMetaModel getMetaModel() {
         return JavaParserMetaModel.superExprMetaModel;
     }

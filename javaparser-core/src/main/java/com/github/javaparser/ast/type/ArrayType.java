@@ -193,6 +193,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayTypeMetaModel;
     }

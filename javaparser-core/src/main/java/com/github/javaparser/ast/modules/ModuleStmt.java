@@ -36,6 +36,7 @@ public abstract class ModuleStmt extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleStmtMetaModel;
     }

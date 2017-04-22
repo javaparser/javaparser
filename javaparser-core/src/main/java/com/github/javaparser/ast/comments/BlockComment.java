@@ -81,6 +81,7 @@ public final class BlockComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BlockCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.blockCommentMetaModel;
     }

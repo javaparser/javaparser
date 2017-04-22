@@ -61,6 +61,7 @@ public abstract class Expression extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionMetaModel;
     }

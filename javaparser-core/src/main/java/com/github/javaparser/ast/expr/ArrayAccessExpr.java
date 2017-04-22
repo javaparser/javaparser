@@ -120,6 +120,7 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayAccessExprMetaModel;
     }

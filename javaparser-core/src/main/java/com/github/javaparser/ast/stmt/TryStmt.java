@@ -216,6 +216,7 @@ public final class TryStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TryStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.tryStmtMetaModel;
     }

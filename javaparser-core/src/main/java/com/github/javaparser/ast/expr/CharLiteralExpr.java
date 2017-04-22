@@ -118,6 +118,7 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CharLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.charLiteralExprMetaModel;
     }

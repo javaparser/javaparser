@@ -251,6 +251,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public FieldDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldDeclarationMetaModel;
     }

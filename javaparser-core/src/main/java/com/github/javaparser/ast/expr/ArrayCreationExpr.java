@@ -210,6 +210,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayCreationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayCreationExprMetaModel;
     }

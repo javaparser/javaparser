@@ -113,6 +113,7 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BodyDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.bodyDeclarationMetaModel;
     }

@@ -123,6 +123,7 @@ public final class ReturnStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ReturnStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.returnStmtMetaModel;
     }

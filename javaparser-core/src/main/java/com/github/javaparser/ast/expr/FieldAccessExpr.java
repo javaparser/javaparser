@@ -216,6 +216,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public FieldAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldAccessExprMetaModel;
     }

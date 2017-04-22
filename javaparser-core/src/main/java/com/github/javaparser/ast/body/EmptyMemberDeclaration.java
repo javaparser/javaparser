@@ -84,6 +84,7 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public EmptyMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.emptyMemberDeclarationMetaModel;
     }

@@ -105,6 +105,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassExprMetaModel getMetaModel() {
         return JavaParserMetaModel.classExprMetaModel;
     }
