@@ -31,7 +31,6 @@ public class MainConstructorGenerator extends NodeGenerator {
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
                 .addParameter(Range.class, "range");
-        markGenerated(constructor);
         
         BlockStmt body = constructor.getBody();
 
@@ -52,5 +51,6 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         replaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(Range.class);
+        markGenerated(constructor);
     }
 }
