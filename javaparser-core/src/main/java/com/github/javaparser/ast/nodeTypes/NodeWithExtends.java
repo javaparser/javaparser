@@ -86,8 +86,7 @@ public interface NodeWithExtends<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addExtendedType(String name) {
-        ClassOrInterfaceType classOrInterfaceType = parseClassOrInterfaceType(name);
-        getExtendedTypes().add(classOrInterfaceType);
+        getExtendedTypes().add(parseClassOrInterfaceType(name));
         return (N) this;
     }
 }

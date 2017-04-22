@@ -21,27 +21,24 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
-import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.ArrayCreationLevel;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.NonEmptyProperty;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -169,12 +166,11 @@ public final class ArrayCreationExpr extends Expression {
      */
     public ArrayCreationExpr setElementType(Class<?> typeClass) {
         tryAddImportToParentCompilationUnit(typeClass);
-        return setElementType(parseClassOrInterfaceType(typeClass.getSimpleName()));
+        return setElementType(parseType(typeClass.getSimpleName()));
     }
 
     public ArrayCreationExpr setElementType(final String type) {
-        ClassOrInterfaceType classOrInterfaceType = parseClassOrInterfaceType(type);
-        return setElementType(classOrInterfaceType);
+        return setElementType(parseType(type));
     }
 
     @Override

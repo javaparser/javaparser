@@ -153,10 +153,9 @@ public class ManipulationSteps {
     @When("$typeName varargs called \"$parameterName\" are added to method $methodPosition in class $classPosition")
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = new Parameter(parseClassOrInterfaceType(typeName), parameterName);
-        param.setVarArgs(true);
-        method.addParameter(param);
+        getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition)
+                .addAndGetParameter(typeName, parameterName)
+                .setVarArgs(true);
     }
 
     @When("a BlockStmt is added to method $methodPosition in class $classPosition")

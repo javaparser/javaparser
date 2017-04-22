@@ -26,7 +26,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 
@@ -35,9 +34,10 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.JavaParser.parseType;
 import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A node having members.
@@ -88,7 +88,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addField(String type, String name, Modifier... modifiers) {
-        return addField(parseClassOrInterfaceType(type), name, modifiers);
+        return addField(parseType(type), name, modifiers);
     }
 
     /**
