@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -97,8 +98,8 @@ public class NodeWithMembersBuildersTest {
     public void testGetMethodsWithParameterTypes() {
         classDeclaration.addMethod("foo", Modifier.PUBLIC);
         MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
-        ClassOrInterfaceType type = new ClassOrInterfaceType("List");
-        type.setTypeArguments(new ClassOrInterfaceType("String"));
+        ClassOrInterfaceType type = parseClassOrInterfaceType("List");
+        type.setTypeArguments(parseClassOrInterfaceType("String"));
         MethodDeclaration methodWithListParam = classDeclaration.addMethod("fooList", Modifier.PUBLIC).addParameter(type, "overload");
         MethodDeclaration addMethod3 = classDeclaration.addMethod("foo2", Modifier.PUBLIC).addParameter(int.class, "overload");
 

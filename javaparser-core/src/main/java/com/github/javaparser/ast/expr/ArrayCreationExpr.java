@@ -34,6 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -167,11 +169,11 @@ public final class ArrayCreationExpr extends Expression {
      */
     public ArrayCreationExpr setElementType(Class<?> typeClass) {
         tryAddImportToParentCompilationUnit(typeClass);
-        return setElementType(new ClassOrInterfaceType(typeClass.getSimpleName()));
+        return setElementType(parseClassOrInterfaceType(typeClass.getSimpleName()));
     }
 
     public ArrayCreationExpr setElementType(final String type) {
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
+        ClassOrInterfaceType classOrInterfaceType = parseClassOrInterfaceType(type);
         return setElementType(classOrInterfaceType);
     }
 

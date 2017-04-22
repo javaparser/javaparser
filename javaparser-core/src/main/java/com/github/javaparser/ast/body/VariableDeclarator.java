@@ -32,20 +32,23 @@ import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.NonEmptyProperty;
-import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
- * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are VariableDeclarators.
+ * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are
+ * VariableDeclarators.
  *
  * @author Julio Vilmar Gesser
  */
@@ -94,10 +97,11 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         customInitialization();
     }
 
-    private void customInitialization() {
+    @Override
+    protected void customInitialization() {
         // We register an observer on the type property. When it is changed the MaximumCommonType is changes as well,
         // because it is derived from the type of the variables it contains, for this reason we notify about the change
-        this.register(new AstObserverAdapter() {
+        register(new AstObserverAdapter() {
 
             @Override
             public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {

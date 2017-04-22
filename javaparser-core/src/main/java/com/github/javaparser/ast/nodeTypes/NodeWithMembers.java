@@ -34,6 +34,8 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.*;
 
@@ -86,7 +88,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addField(String type, String name, Modifier... modifiers) {
-        return addField(new ClassOrInterfaceType(type), name, modifiers);
+        return addField(parseClassOrInterfaceType(type), name, modifiers);
     }
 
     /**

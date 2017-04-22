@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -88,7 +90,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         private String codeRepresentation;
 
         public ClassOrInterfaceType toBoxedType() {
-            return new ClassOrInterfaceType(nameOfBoxedType);
+            return parseClassOrInterfaceType(nameOfBoxedType);
         }
 
         public String asString() {

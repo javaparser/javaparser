@@ -35,9 +35,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -65,6 +67,9 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         this(null, null, new SimpleName(), null);
     }
 
+    /**
+     * @deprecated use JavaParser.parseClassOrInterfaceType instead. This constructor does not understand generics.
+     */
     public ClassOrInterfaceType(final String name) {
         this(null, null, new SimpleName(name), null);
     }

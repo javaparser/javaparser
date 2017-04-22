@@ -34,6 +34,7 @@ import com.github.javaparser.ast.type.VoidType;
 
 import java.util.EnumSet;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 
 public class ClassCreator {
@@ -71,7 +72,7 @@ public class ClassCreator {
         MethodDeclaration main2 = type.addMethod("main2", Modifier.PUBLIC, Modifier.STATIC);
 
         // add a parameter to the method
-        Parameter param = new Parameter(new ClassOrInterfaceType("String"), "args");
+        Parameter param = new Parameter(parseClassOrInterfaceType("String"), "args");
         param.setVarArgs(true);
         method.addParameter(param);
         

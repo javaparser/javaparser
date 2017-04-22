@@ -25,6 +25,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+
 /**
  * A node that implements other types.
  */
@@ -67,7 +69,7 @@ public interface NodeWithImplements<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addImplementedType(String name) {
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
+        ClassOrInterfaceType classOrInterfaceType = parseClassOrInterfaceType(name);
         getImplementedTypes().add(classOrInterfaceType);
         return (N) this;
     }

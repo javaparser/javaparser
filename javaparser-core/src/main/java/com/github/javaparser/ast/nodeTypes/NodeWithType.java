@@ -26,6 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
@@ -63,13 +64,13 @@ public interface NodeWithType<N extends Node, T extends Type> {
     @SuppressWarnings("unchecked")
     default N setType(Class<?> typeClass) {
         tryAddImportToParentCompilationUnit(typeClass);
-        return setType((T) new ClassOrInterfaceType(typeClass.getSimpleName()));
+        return setType((T) parseClassOrInterfaceType(typeClass.getSimpleName()));
     }
 
     @SuppressWarnings("unchecked")
     default N setType(final String type) {
         assertNonEmpty(type);
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(type);
+        ClassOrInterfaceType classOrInterfaceType = parseClassOrInterfaceType(type);
         return setType((T) classOrInterfaceType);
     }
 
