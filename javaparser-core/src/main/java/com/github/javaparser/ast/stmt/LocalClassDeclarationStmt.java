@@ -97,6 +97,7 @@ public final class LocalClassDeclarationStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LocalClassDeclarationStmt clone() {
         return (LocalClassDeclarationStmt) accept(new CloneVisitor(), null);
     }

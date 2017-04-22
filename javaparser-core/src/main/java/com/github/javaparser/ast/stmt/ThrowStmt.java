@@ -99,6 +99,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ThrowStmt clone() {
         return (ThrowStmt) accept(new CloneVisitor(), null);
     }

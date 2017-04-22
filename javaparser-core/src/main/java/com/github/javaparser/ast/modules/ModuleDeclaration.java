@@ -159,6 +159,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleDeclaration clone() {
         return (ModuleDeclaration) accept(new CloneVisitor(), null);
     }

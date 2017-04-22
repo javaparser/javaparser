@@ -120,6 +120,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public InitializerDeclaration clone() {
         return (InitializerDeclaration) accept(new CloneVisitor(), null);
     }

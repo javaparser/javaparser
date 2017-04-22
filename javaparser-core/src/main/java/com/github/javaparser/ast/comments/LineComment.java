@@ -79,6 +79,7 @@ public final class LineComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LineComment clone() {
         return (LineComment) accept(new CloneVisitor(), null);
     }

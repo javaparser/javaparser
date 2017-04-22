@@ -245,6 +245,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public FieldDeclaration clone() {
         return (FieldDeclaration) accept(new CloneVisitor(), null);
     }

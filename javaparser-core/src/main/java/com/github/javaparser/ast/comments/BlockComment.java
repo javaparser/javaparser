@@ -75,6 +75,7 @@ public final class BlockComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BlockComment clone() {
         return (BlockComment) accept(new CloneVisitor(), null);
     }

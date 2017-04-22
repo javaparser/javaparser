@@ -148,6 +148,7 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssignExpr clone() {
         return (AssignExpr) accept(new CloneVisitor(), null);
     }

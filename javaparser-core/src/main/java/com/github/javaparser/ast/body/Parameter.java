@@ -258,6 +258,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Parameter clone() {
         return (Parameter) accept(new CloneVisitor(), null);
     }

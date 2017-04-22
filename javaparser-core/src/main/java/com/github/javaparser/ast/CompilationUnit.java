@@ -500,6 +500,7 @@ public final class CompilationUnit extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CompilationUnit clone() {
         return (CompilationUnit) accept(new CloneVisitor(), null);
     }

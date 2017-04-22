@@ -121,6 +121,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CastExpr clone() {
         return (CastExpr) accept(new CloneVisitor(), null);
     }

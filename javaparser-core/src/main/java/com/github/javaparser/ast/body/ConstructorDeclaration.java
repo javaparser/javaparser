@@ -182,6 +182,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConstructorDeclaration clone() {
         return (ConstructorDeclaration) accept(new CloneVisitor(), null);
     }

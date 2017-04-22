@@ -165,6 +165,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnumConstantDeclaration clone() {
         return (EnumConstantDeclaration) accept(new CloneVisitor(), null);
     }

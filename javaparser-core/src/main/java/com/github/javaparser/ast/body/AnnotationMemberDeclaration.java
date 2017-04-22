@@ -202,6 +202,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationMemberDeclaration clone() {
         return (AnnotationMemberDeclaration) accept(new CloneVisitor(), null);
     }

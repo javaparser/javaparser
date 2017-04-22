@@ -100,6 +100,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SimpleName clone() {
         return (SimpleName) accept(new CloneVisitor(), null);
     }

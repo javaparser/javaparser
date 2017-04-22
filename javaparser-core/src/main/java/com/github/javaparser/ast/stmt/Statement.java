@@ -55,6 +55,7 @@ public abstract class Statement extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Statement clone() {
         return (Statement) accept(new CloneVisitor(), null);
     }

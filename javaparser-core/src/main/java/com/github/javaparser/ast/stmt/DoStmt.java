@@ -119,6 +119,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoStmt clone() {
         return (DoStmt) accept(new CloneVisitor(), null);
     }

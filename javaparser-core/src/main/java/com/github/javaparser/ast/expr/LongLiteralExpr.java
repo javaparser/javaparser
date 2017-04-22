@@ -106,6 +106,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LongLiteralExpr clone() {
         return (LongLiteralExpr) accept(new CloneVisitor(), null);
     }

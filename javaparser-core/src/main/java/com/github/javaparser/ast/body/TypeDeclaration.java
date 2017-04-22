@@ -193,6 +193,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeDeclaration<?> clone() {
         return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
     }

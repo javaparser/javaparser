@@ -118,6 +118,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ContinueStmt clone() {
         return (ContinueStmt) accept(new CloneVisitor(), null);
     }

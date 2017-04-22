@@ -89,6 +89,7 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VoidType clone() {
         return (VoidType) accept(new CloneVisitor(), null);
     }

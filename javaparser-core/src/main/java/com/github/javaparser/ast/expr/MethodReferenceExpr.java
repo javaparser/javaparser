@@ -168,6 +168,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodReferenceExpr clone() {
         return (MethodReferenceExpr) accept(new CloneVisitor(), null);
     }

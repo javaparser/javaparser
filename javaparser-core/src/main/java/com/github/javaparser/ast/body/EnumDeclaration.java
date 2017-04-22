@@ -167,6 +167,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnumDeclaration clone() {
         return (EnumDeclaration) accept(new CloneVisitor(), null);
     }

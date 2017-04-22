@@ -187,6 +187,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayType clone() {
         return (ArrayType) accept(new CloneVisitor(), null);
     }

@@ -55,6 +55,7 @@ public abstract class LiteralExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LiteralExpr clone() {
         return (LiteralExpr) accept(new CloneVisitor(), null);
     }

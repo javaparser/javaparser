@@ -98,6 +98,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ExpressionStmt clone() {
         return (ExpressionStmt) accept(new CloneVisitor(), null);
     }

@@ -117,6 +117,7 @@ public final class ReturnStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReturnStmt clone() {
         return (ReturnStmt) accept(new CloneVisitor(), null);
     }

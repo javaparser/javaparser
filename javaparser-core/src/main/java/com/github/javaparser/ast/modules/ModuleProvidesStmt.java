@@ -105,6 +105,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleProvidesStmt clone() {
         return (ModuleProvidesStmt) accept(new CloneVisitor(), null);
     }

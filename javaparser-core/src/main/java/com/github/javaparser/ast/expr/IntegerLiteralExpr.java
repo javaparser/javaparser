@@ -102,6 +102,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IntegerLiteralExpr clone() {
         return (IntegerLiteralExpr) accept(new CloneVisitor(), null);
     }

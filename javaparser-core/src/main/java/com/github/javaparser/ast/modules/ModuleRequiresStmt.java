@@ -106,6 +106,7 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleRequiresStmt clone() {
         return (ModuleRequiresStmt) accept(new CloneVisitor(), null);
     }

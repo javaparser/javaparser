@@ -121,6 +121,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MemberValuePair clone() {
         return (MemberValuePair) accept(new CloneVisitor(), null);
     }

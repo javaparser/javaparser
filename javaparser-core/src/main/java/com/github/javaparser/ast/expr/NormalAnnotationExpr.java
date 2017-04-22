@@ -126,6 +126,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NormalAnnotationExpr clone() {
         return (NormalAnnotationExpr) accept(new CloneVisitor(), null);
     }

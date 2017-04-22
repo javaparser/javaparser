@@ -55,6 +55,7 @@ public abstract class Expression extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Expression clone() {
         return (Expression) accept(new CloneVisitor(), null);
     }

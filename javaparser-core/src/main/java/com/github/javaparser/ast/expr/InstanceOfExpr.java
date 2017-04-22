@@ -122,6 +122,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public InstanceOfExpr clone() {
         return (InstanceOfExpr) accept(new CloneVisitor(), null);
     }

@@ -200,6 +200,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VariableDeclarationExpr clone() {
         return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
     }

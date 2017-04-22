@@ -68,6 +68,7 @@ public final class NullLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NullLiteralExpr clone() {
         return (NullLiteralExpr) accept(new CloneVisitor(), null);
     }

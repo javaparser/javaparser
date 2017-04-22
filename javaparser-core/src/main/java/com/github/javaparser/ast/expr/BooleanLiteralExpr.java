@@ -90,6 +90,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BooleanLiteralExpr clone() {
         return (BooleanLiteralExpr) accept(new CloneVisitor(), null);
     }

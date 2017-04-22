@@ -164,6 +164,7 @@ public final class IfStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IfStmt clone() {
         return (IfStmt) accept(new CloneVisitor(), null);
     }

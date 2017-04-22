@@ -61,6 +61,7 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReferenceType<?> clone() {
         return (ReferenceType<?>) accept(new CloneVisitor(), null);
     }

@@ -149,6 +149,7 @@ public final class BinaryExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BinaryExpr clone() {
         return (BinaryExpr) accept(new CloneVisitor(), null);
     }

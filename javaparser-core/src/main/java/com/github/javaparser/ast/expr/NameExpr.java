@@ -101,6 +101,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NameExpr clone() {
         return (NameExpr) accept(new CloneVisitor(), null);
     }

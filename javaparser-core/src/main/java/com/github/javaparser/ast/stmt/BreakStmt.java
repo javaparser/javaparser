@@ -114,6 +114,7 @@ public final class BreakStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BreakStmt clone() {
         return (BreakStmt) accept(new CloneVisitor(), null);
     }

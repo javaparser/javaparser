@@ -114,6 +114,7 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayAccessExpr clone() {
         return (ArrayAccessExpr) accept(new CloneVisitor(), null);
     }

@@ -67,6 +67,7 @@ public final class EmptyStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EmptyStmt clone() {
         return (EmptyStmt) accept(new CloneVisitor(), null);
     }

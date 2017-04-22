@@ -197,6 +197,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ForStmt clone() {
         return (ForStmt) accept(new CloneVisitor(), null);
     }

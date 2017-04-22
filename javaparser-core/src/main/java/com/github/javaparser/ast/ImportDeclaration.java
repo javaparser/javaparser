@@ -138,6 +138,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ImportDeclaration clone() {
         return (ImportDeclaration) accept(new CloneVisitor(), null);
     }

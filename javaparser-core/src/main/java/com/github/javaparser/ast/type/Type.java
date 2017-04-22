@@ -119,6 +119,7 @@ public abstract class Type extends Node {
     public abstract String asString();
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Type clone() {
         return (Type) accept(new CloneVisitor(), null);
     }

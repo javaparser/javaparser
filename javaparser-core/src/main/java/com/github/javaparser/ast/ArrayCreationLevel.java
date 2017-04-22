@@ -155,6 +155,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayCreationLevel clone() {
         return (ArrayCreationLevel) accept(new CloneVisitor(), null);
     }

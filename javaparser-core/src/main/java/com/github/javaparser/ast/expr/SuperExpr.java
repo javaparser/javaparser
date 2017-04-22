@@ -112,6 +112,7 @@ public final class SuperExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SuperExpr clone() {
         return (SuperExpr) accept(new CloneVisitor(), null);
     }

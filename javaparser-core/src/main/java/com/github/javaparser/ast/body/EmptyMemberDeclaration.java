@@ -78,6 +78,7 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EmptyMemberDeclaration clone() {
         return (EmptyMemberDeclaration) accept(new CloneVisitor(), null);
     }

@@ -104,6 +104,7 @@ public class ModuleOpensStmt extends ModuleStmt implements NodeWithName<ModuleOp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleOpensStmt clone() {
         return (ModuleOpensStmt) accept(new CloneVisitor(), null);
     }

@@ -134,6 +134,7 @@ public final class ConditionalExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConditionalExpr clone() {
         return (ConditionalExpr) accept(new CloneVisitor(), null);
     }

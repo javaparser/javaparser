@@ -203,6 +203,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Name clone() {
         return (Name) accept(new CloneVisitor(), null);
     }

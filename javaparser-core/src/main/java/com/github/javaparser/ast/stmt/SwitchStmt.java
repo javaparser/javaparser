@@ -146,6 +146,7 @@ public final class SwitchStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SwitchStmt clone() {
         return (SwitchStmt) accept(new CloneVisitor(), null);
     }

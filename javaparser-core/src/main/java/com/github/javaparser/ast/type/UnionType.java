@@ -122,6 +122,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnionType clone() {
         return (UnionType) accept(new CloneVisitor(), null);
     }

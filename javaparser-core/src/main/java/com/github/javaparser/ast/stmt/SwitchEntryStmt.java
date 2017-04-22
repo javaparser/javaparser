@@ -160,6 +160,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SwitchEntryStmt clone() {
         return (SwitchEntryStmt) accept(new CloneVisitor(), null);
     }

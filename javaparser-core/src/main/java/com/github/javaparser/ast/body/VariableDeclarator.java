@@ -227,6 +227,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VariableDeclarator clone() {
         return (VariableDeclarator) accept(new CloneVisitor(), null);
     }

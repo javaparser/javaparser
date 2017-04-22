@@ -77,6 +77,7 @@ public final class JavadocComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JavadocComment clone() {
         return (JavadocComment) accept(new CloneVisitor(), null);
     }

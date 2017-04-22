@@ -167,6 +167,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LambdaExpr clone() {
         return (LambdaExpr) accept(new CloneVisitor(), null);
     }

@@ -110,6 +110,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayInitializerExpr clone() {
         return (ArrayInitializerExpr) accept(new CloneVisitor(), null);
     }

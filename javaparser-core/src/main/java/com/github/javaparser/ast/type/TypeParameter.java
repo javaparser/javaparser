@@ -179,6 +179,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeParameter clone() {
         return (TypeParameter) accept(new CloneVisitor(), null);
     }

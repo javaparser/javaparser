@@ -280,6 +280,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodDeclaration clone() {
         return (MethodDeclaration) accept(new CloneVisitor(), null);
     }

@@ -93,6 +93,7 @@ public final class UnknownType extends Type {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnknownType clone() {
         return (UnknownType) accept(new CloneVisitor(), null);
     }

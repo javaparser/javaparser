@@ -70,6 +70,7 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleUsesStmt clone() {
         return (ModuleUsesStmt) accept(new CloneVisitor(), null);
     }

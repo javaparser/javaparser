@@ -93,6 +93,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SingleMemberAnnotationExpr clone() {
         return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
     }

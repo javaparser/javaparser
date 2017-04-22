@@ -210,6 +210,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodCallExpr clone() {
         return (MethodCallExpr) accept(new CloneVisitor(), null);
     }

@@ -265,6 +265,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ObjectCreationExpr clone() {
         return (ObjectCreationExpr) accept(new CloneVisitor(), null);
     }

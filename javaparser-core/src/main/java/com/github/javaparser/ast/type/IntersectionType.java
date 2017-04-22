@@ -125,6 +125,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IntersectionType clone() {
         return (IntersectionType) accept(new CloneVisitor(), null);
     }

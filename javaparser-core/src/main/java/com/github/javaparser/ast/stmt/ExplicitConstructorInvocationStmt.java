@@ -219,6 +219,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ExplicitConstructorInvocationStmt clone() {
         return (ExplicitConstructorInvocationStmt) accept(new CloneVisitor(), null);
     }

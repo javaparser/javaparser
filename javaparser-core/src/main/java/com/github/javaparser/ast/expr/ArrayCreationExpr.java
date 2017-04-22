@@ -204,6 +204,7 @@ public final class ArrayCreationExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayCreationExpr clone() {
         return (ArrayCreationExpr) accept(new CloneVisitor(), null);
     }

@@ -118,6 +118,7 @@ public final class LabeledStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LabeledStmt clone() {
         return (LabeledStmt) accept(new CloneVisitor(), null);
     }

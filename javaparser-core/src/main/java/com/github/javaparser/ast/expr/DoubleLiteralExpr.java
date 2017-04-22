@@ -90,6 +90,7 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoubleLiteralExpr clone() {
         return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
     }

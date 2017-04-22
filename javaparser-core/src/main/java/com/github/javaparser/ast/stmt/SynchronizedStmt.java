@@ -120,6 +120,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SynchronizedStmt clone() {
         return (SynchronizedStmt) accept(new CloneVisitor(), null);
     }

@@ -147,6 +147,7 @@ public abstract class Comment extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Comment clone() {
         return (Comment) accept(new CloneVisitor(), null);
     }

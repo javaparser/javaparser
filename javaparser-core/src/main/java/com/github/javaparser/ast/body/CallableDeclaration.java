@@ -307,6 +307,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CallableDeclaration<?> clone() {
         return (CallableDeclaration<?>) accept(new CloneVisitor(), null);
     }

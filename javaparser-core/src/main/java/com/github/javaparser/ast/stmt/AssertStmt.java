@@ -135,6 +135,7 @@ public final class AssertStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssertStmt clone() {
         return (AssertStmt) accept(new CloneVisitor(), null);
     }

@@ -99,6 +99,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassExpr clone() {
         return (ClassExpr) accept(new CloneVisitor(), null);
     }

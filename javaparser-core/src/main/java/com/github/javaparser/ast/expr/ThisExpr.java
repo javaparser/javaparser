@@ -106,6 +106,7 @@ public final class ThisExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ThisExpr clone() {
         return (ThisExpr) accept(new CloneVisitor(), null);
     }

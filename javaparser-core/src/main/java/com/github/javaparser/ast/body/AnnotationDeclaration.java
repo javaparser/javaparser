@@ -88,6 +88,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationDeclaration clone() {
         return (AnnotationDeclaration) accept(new CloneVisitor(), null);
     }

@@ -112,6 +112,7 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CharLiteralExpr clone() {
         return (CharLiteralExpr) accept(new CloneVisitor(), null);
     }

@@ -217,6 +217,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public WildcardType clone() {
         return (WildcardType) accept(new CloneVisitor(), null);
     }

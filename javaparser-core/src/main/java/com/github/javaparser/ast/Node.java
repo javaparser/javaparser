@@ -40,6 +40,7 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import java.util.*;
 import static java.util.Collections.unmodifiableList;
+import javax.annotation.Generated;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -517,6 +518,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Node clone() {
         return (Node) accept(new CloneVisitor(), null);
     }

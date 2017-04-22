@@ -121,6 +121,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public StringLiteralExpr clone() {
         return (StringLiteralExpr) accept(new CloneVisitor(), null);
     }

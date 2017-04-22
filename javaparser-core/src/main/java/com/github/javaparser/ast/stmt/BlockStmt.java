@@ -108,6 +108,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BlockStmt clone() {
         return (BlockStmt) accept(new CloneVisitor(), null);
     }

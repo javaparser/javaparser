@@ -133,6 +133,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CatchClause clone() {
         return (CatchClause) accept(new CloneVisitor(), null);
     }

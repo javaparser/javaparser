@@ -227,6 +227,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceType clone() {
         return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
     }

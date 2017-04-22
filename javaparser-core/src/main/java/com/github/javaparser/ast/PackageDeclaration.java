@@ -158,6 +158,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PackageDeclaration clone() {
         return (PackageDeclaration) accept(new CloneVisitor(), null);
     }

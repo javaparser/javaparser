@@ -30,6 +30,7 @@ public abstract class ModuleStmt extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleStmt clone() {
         return (ModuleStmt) accept(new CloneVisitor(), null);
     }
