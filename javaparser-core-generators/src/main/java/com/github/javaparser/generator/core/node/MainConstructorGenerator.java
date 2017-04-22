@@ -48,7 +48,7 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
 
-        addOrReplaceWhenSameSignature(nodeCoid, constructor);
+        replaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(Range.class);
     }
 }
