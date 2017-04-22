@@ -1,7 +1,7 @@
 package com.github.javaparser.generator;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -9,6 +9,7 @@ import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -36,4 +37,35 @@ public abstract class NodeGenerator extends Generator {
     }
 
     protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid);
+
+    /**
+     * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
+     * with callable. If not found, adds callable.
+     */
+    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration nodeCoid, CallableDeclaration callable) {
+        List<CallableDeclaration> existingCallables = nodeCoid.getCallablesWithSignature(callable.getSignature());
+        if (existingCallables.isEmpty()) {
+            nodeCoid.addMember(callable);
+            return;
+        }
+        if (existingCallables.size() > 1) {
+            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), nodeCoid.getNameAsString()));
+        }
+        nodeCoid.getMembers().replace(existingCallables.get(0), callable);
+    }
+
+    /**
+     * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
+     * with callable. If not found, fails.
+     */
+    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration nodeCoid, CallableDeclaration callable) {
+        List<CallableDeclaration> existingCallables = nodeCoid.getCallablesWithSignature(callable.getSignature());
+        if (existingCallables.isEmpty()) {
+            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), nodeCoid.getNameAsString()));
+        }
+        if (existingCallables.size() > 1) {
+            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), nodeCoid.getNameAsString()));
+        }
+        nodeCoid.getMembers().replace(existingCallables.get(0), callable);
+    }
 }

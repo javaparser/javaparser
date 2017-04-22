@@ -6,16 +6,12 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
-
-import javax.annotation.Generated;
-import java.util.Optional;
 
 import static com.github.javaparser.JavaParser.parseExplicitConstructorInvocationStmt;
 import static com.github.javaparser.JavaParser.parseStatement;
@@ -34,10 +30,9 @@ public class MainConstructorGenerator extends NodeGenerator {
         ConstructorDeclaration constructor = new ConstructorDeclaration()
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
-                .addParameter(Range.class, "range")
-                .addSingleMemberAnnotation(Generated.class, getClass().getName());
-
-
+                .addParameter(Range.class, "range");
+        markGenerated(constructor);
+        
         BlockStmt body = constructor.getBody();
 
         SeparatedItemStringBuilder superCall = new SeparatedItemStringBuilder("super(", ", ", ");");
@@ -53,12 +48,7 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
 
-        nodeCoid.getMembers().stream()
-                .filter(m -> m instanceof CallableDeclaration)
-                .map(m -> ((CallableDeclaration) m))
-                .filter(m -> m.getSignature().equals(constructor.getSignature()))
-                .findFirst()
-                .ifPresent(m -> nodeCoid.getMembers().replace(m, constructor));
+        addOrReplaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(Range.class);
     }
 }

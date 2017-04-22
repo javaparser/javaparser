@@ -26,7 +26,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStaticModifier;
@@ -35,10 +34,13 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
+
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A base class for all types of type declarations.
@@ -172,6 +174,17 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
      */
     public boolean isTopLevelType() {
         return getParentNode().map(p -> p instanceof CompilationUnit).orElse(false);
+    }
+
+    /**
+     * @return methods or constructors whose signature match the passed signature.
+     */
+    public List<CallableDeclaration> getCallablesWithSignature(CallableDeclaration.Signature signature) {
+        return getMembers().stream()
+                .filter(m -> m instanceof CallableDeclaration)
+                .map(m -> ((CallableDeclaration) m))
+                .filter(m -> m.getSignature().equals(signature))
+                .collect(toList());
     }
 
     /**
