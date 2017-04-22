@@ -71,18 +71,18 @@ public class RemoveMethodGenerator extends NodeGenerator {
 
     private MethodDeclaration getOrCreateMethod(ClassOrInterfaceDeclaration nodeCoid,
                                                 Supplier<MethodDeclaration> newMethodSupplier,
-                                                String methodName, String... methodParameterTypes) {
-        final List<MethodDeclaration> removeMethods = nodeCoid.getMethodsBySignature(methodName, methodParameterTypes);
-        final MethodDeclaration removeMethod;
-        if (removeMethods.isEmpty()) {
-            removeMethod = newMethodSupplier.get();
-            nodeCoid.addMember(removeMethod);
-        } else if (removeMethods.size() == 1) {
-            removeMethod = removeMethods.get(0);
+                                                String methodName, String... parameterTypes) {
+        final List<MethodDeclaration> methods = nodeCoid.getMethodsBySignature(methodName, parameterTypes);
+        final MethodDeclaration method;
+        if (methods.isEmpty()) {
+            method = newMethodSupplier.get();
+            nodeCoid.addMember(method);
+        } else if (methods.size() == 1) {
+            method = methods.get(0);
         } else {
             throw new AssertionError(f("Found more than one method while expecting only one."));
         }
-        return removeMethod;
+        return method;
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {

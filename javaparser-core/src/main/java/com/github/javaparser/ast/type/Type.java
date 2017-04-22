@@ -21,14 +21,16 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.TypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.TypeMetaModel;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Base class for types.
@@ -39,6 +41,11 @@ public abstract class Type extends Node {
 
     private NodeList<AnnotationExpr> annotations;
 
+    @AllFieldsConstructor
+    public Type(NodeList<AnnotationExpr> annotations) {
+        this(null, annotations);
+    }
+    
     public Type(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);

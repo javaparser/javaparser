@@ -193,21 +193,6 @@ public interface NodeWithMembers<N extends Node> {
         return methodDeclaration;
     }
 
-    /**
-     * Adds a constructor to this
-     *
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
-     * @return the {@link MethodDeclaration} created
-     */
-    default ConstructorDeclaration addConstructor(Modifier... modifiers) {
-        ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
-        constructorDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        constructorDeclaration.setName(((TypeDeclaration<?>) this).getName());
-        getMembers().add(constructorDeclaration);
-        return constructorDeclaration;
-    }
-
     default BlockStmt addInitializer() {
         BlockStmt block = new BlockStmt();
         InitializerDeclaration initializerDeclaration = new InitializerDeclaration(false, block);

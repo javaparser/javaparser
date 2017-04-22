@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -34,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public abstract class ReferenceType<T extends ReferenceType> extends Type {
 
+    @AllFieldsConstructor
     public ReferenceType() {
         this(null);
     }

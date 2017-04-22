@@ -21,10 +21,11 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.StatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.StatementMetaModel;
 
 /**
  * A base class for all statements.
@@ -32,6 +33,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Julio Vilmar Gesser
  */
 public abstract class Statement extends Node {
+
+    @AllFieldsConstructor
+    public Statement() {
+        this(null);
+    }
 
     public Statement(final Range range) {
         super(range);

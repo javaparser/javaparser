@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -46,6 +47,7 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         this(null, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public BodyDeclaration(NodeList<AnnotationExpr> annotations) {
         this(null, annotations);
     }

@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
@@ -32,6 +33,11 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {
+
+    @AllFieldsConstructor
+    public Expression() {
+        this(null);
+    }
 
     public Expression(Range range) {
         super(range);

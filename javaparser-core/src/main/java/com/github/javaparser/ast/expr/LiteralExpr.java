@@ -21,10 +21,11 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.LiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.LiteralExprMetaModel;
 
 /**
  * A base class for all literal expressions.
@@ -32,8 +33,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Julio Vilmar Gesser
  */
 public abstract class LiteralExpr extends Expression {
+    @AllFieldsConstructor
+    public LiteralExpr() {
+        this(null);
+    }
 
-    protected LiteralExpr(Range range) {
+    public LiteralExpr(Range range) {
         super(range);
     }
 

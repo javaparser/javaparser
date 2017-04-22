@@ -10,11 +10,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import static com.github.javaparser.JavaParser.parseStatement;
-import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelFieldName;
+import static com.github.javaparser.generator.metamodel.MetaModelGenerator.propertyMetaModelFieldName;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class InitializeConstructorParametersStatementsGenerator {
     public void generate(Class<? extends Node> nodeClass, NodeList<Statement> initializeConstructorParametersStatements) {
+        if (nodeClass == Node.class) {
+            return;
+        }
         Constructor<?> constructor = findAllFieldsConstructor(nodeClass);
         for (java.lang.reflect.Parameter parameter : constructor.getParameters()) {
             Field field = findFieldInClass(nodeClass, parameter.getName());

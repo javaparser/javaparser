@@ -25,7 +25,7 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
-  TOKEN_FACTORY = "GeneratedJavaParser.GTToken";
+  TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
   JAVA_TEMPLATE_TYPE = "modern";
 }
 
@@ -57,6 +57,7 @@ import com.github.javaparser.utils.*;
 import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.GeneratedJavaParser.*;
+import static com.github.javaparser.GeneratedJavaParserSupport.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
@@ -65,8 +66,6 @@ import static com.github.javaparser.ast.type.ArrayType.*;
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
 final class GeneratedJavaParser {
-
-    private final Position INVALID = pos(-1, 0);
     List<Problem> problems = new ArrayList<Problem>();
 
     void reset(Provider provider) {
@@ -75,78 +74,6 @@ final class GeneratedJavaParser {
         token_source.reset();
     }
 
-    private static <X extends Node> NodeList<X> emptyList() {
-        return new NodeList<X>();
-    }
-    
-    private <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
-    	if (list == null) {
-    		list = new NodeList<T>();
-    	}
-    	list.add(obj);
-    	return list;
-    }
-
-    private <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
-        if(obj == null) {
-            return list;
-        }
-        return add(list, obj);
-    }
-
-    private <T extends Node> NodeList<T> add(int pos, NodeList<T> list, T obj) {
-    	if (list == null) {
-    		list = new NodeList<T>();
-    	}
-    	list.add(pos, obj);
-    	return list;
-    }
-    
-    private <T> List<T> add(List<T> list, T obj) {
-    	if (list == null) {
-    		list = new LinkedList<T>();
-    	}
-    	list.add(obj);
-    	return list;
-    }
-
-    private <T> List<T> add(int pos, List<T> list, T obj) {
-    	if (list == null) {
-    		list = new LinkedList<T>();
-    	}
-    	list.add(pos, obj);
-    	return list;
-    }
-
-	private class ModifierHolder {
-		final EnumSet<Modifier> modifiers;
-		final NodeList<AnnotationExpr> annotations;
-		final Position begin;
-
-		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
-			this.begin = begin;
-			this.modifiers = assertNotNull(modifiers);
-			this.annotations = annotations;
-		}
-	}
-
-    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
-        if (modifiers.contains(mod)) {
-            addProblem("Duplicated modifier");
-        }
-        modifiers.add(mod);
-    }
-    
-    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods) {
-        if(mods == null)
-            return;
-        for(Modifier m : mods)
-            if (modifiers.contains(m)) 
-                addProblem("Duplicated modifier");
-        for(Modifier m : mods)
-            modifiers.add(m);
-    }
-   
     /**
      * Return the list of tokens that have been encountered while parsing code using
      * this parser.
@@ -161,110 +88,39 @@ final class GeneratedJavaParser {
         return token_source.getCommentsCollection();
     }
 
-    private void addProblem(String message) {
+    void addProblem(String message) {
         // TODO tokenRange only takes the final token. Need all the tokens.
         problems.add(new Problem(message, tokenRange(), null));
     }
 
-    private Expression generateLambda(Expression ret, Statement lambdaBody) {
-        if (ret instanceof EnclosedExpr) {
-            Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
-            if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                SimpleName id = ((NameExpr)inner.get()).getName();
-                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id));
-                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
-            } else {
-                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
-            }
-        } else if (ret instanceof NameExpr) {
-            SimpleName id = ((NameExpr)ret).getName();
-            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id));
-            ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
-        } else if (ret instanceof LambdaExpr) {
-            ((LambdaExpr) ret).setBody(lambdaBody);
-            ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
-        } else if (ret instanceof CastExpr) {
-            CastExpr castExpr = (CastExpr) ret;
-            Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
-            castExpr.setExpression(inner);
-        } else {
-            addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
-        }
-        return ret;
-    }
-    
-    private ArrayCreationExpr juggleArrayCreation(Range range, List<Range> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr)  {
-        NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
-        
-        for(int i = 0; i < arrayAnnotations.size(); i++){
-            levels.add(new ArrayCreationLevel(levelRanges.get(i), dimensions.get(i), arrayAnnotations.get(i)));
-        }
-        return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
-    }
-
-    private Type juggleArrayType(Type partialType, List<ArrayBracketPair> additionalBrackets) {
-        Pair<Type, List<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
-        Type elementType = partialParts.a;
-        List<ArrayBracketPair> leftMostBrackets = partialParts.b;
-        return ArrayType.wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
-    }
-
-    static final class GTToken extends Token {
+    static final class CustomToken extends Token {
         int realKind = GeneratedJavaParserConstants.GT;
+        JavaToken javaToken;
 
-        GTToken(int kind, String image) {
+        CustomToken(int kind, String image) {
             this.kind = kind;
             this.image = image;
         }
 
         public static Token newToken(int kind, String image) {
-            return new GTToken(kind, image);
+            return new CustomToken(kind, image);
         }
     }
-
-    private static class RangedList<T extends Node> {
-        /* A ranged list MUST be set to a begin and end,
-           or these temporary values will leak out */
-        Range range = range(0, 0, 0, 0);
-        NodeList<T> list;
-        RangedList(NodeList<T> list) {
-            this.list = list;
-        }
-        void beginAt(Position begin) {
-            range=range.withBegin(begin);
-        }
-        void endAt(Position end) {
-            range=range.withEnd(end);
-        }
-        void add(T t) {
-            if (list == null) {
-                list = new NodeList<T>();
-            }
-            list.add(t);
-        }
+    
+    private JavaToken token() {
+        return ((CustomToken)token).javaToken;
     }
 
     private Position tokenBegin() {
-        return pos(token.beginLine,token.beginColumn);
+        return token().getRange().begin;
     }
 
     private Position tokenEnd() {
-        return pos(token.endLine,token.endColumn);
-    }
-    
-    private Range tokenRange() {
-        return tokenRange(token);
+        return token().getRange().end;
     }
 
-    public static Range tokenRange(Token token) {
-        return range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
-    }
-        
-    private Position nodeListBegin(NodeList<?> l) {
-        if(l.isEmpty()){
-            return INVALID;
-        }
-        return l.get(0).getBegin().get();
+    private Range tokenRange() {
+        return token().getRange();
     }
 
     public void setTabSize(int size) {
@@ -329,11 +185,13 @@ TOKEN_MGR_DECLS :
         return commentsCollection;
     }
 
-    private void CommonTokenAction(Token token) {
+    private void CommonTokenAction(Token rawToken) {
+        CustomToken token = (CustomToken) rawToken;
         if(token.specialToken!=null) {
             CommonTokenAction(token.specialToken);
         }
-        tokens.add(new JavaToken(token));
+        token.javaToken = new JavaToken(token);
+        tokens.add(token.javaToken);
 
         String commentText = token.image;
         if (token.kind == JAVA_DOC_COMMENT) {
@@ -767,13 +625,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
+     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -865,31 +723,31 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { addModifier(modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(tokenBegin()); }
+   "public" { addModifier(this, modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "static" { addModifier(modifiers, Modifier.STATIC); begin = begin.orIfInvalid(tokenBegin()); }
+   "static" { addModifier(this, modifiers, Modifier.STATIC); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "protected" {  addModifier(modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(tokenBegin()); }
+   "protected" {  addModifier(this, modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "private" { addModifier(modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(tokenBegin()); }
+   "private" { addModifier(this, modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "final" { addModifier(modifiers, Modifier.FINAL); begin = begin.orIfInvalid(tokenBegin()); }
+   "final" { addModifier(this, modifiers, Modifier.FINAL); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "abstract" { addModifier(modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(tokenBegin()); }
+   "abstract" { addModifier(this, modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(tokenBegin()); }
+   "synchronized" { addModifier(this, modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "native" { addModifier(modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(tokenBegin()); }
+   "native" { addModifier(this, modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "transient" { addModifier(modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(tokenBegin()); }
+   "transient" { addModifier(this, modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(tokenBegin()); }
+   "volatile" { addModifier(this, modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
+   "strictfp" { addModifier(this, modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(tokenBegin()); }
+   "transitive" { addModifier(this, modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(tokenBegin()); }
   |
-   "default" { addModifier(modifiers, Modifier.DEFAULT);  begin = begin.orIfInvalid(tokenBegin()); }
+   "default" { addModifier(this, modifiers, Modifier.DEFAULT);  begin = begin.orIfInvalid(tokenBegin()); }
   |
    ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); }
   )
@@ -1175,7 +1033,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
+        return new MethodDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
     }
 }
 
@@ -1301,7 +1159,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
+  	return new ConstructorDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
   }
 }
 
@@ -1558,7 +1416,7 @@ Name Name():
 {
   annotations=Annotations() Identifier() { ret = new Name(tokenRange(), null, token.image, annotations); }
   ( LOOKAHEAD("." Annotations() Identifier()) 
-  "." annotations=Annotations() Identifier() { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image, annotations); } )*
+  "." annotations=Annotations() Identifier() { ret = new Name(range(ret.getBegin().get(), tokenEnd()), ret, token.image, annotations); } )*
   { return ret; }
 }
 
@@ -1609,28 +1467,28 @@ Expression Expression():
   [
     (
        LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, value, op); }
+    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin().get(), tokenEnd()), ret, value, op); }
   |
    "->" lambdaBody = LambdaBody()
    {
      if (ret instanceof CastExpr)
      {
-       ret = generateLambda(ret, lambdaBody);
+       ret = generateLambda(this, ret, lambdaBody);
      }
      else if (ret instanceof ConditionalExpr){
      	 ConditionalExpr ce = (ConditionalExpr) ret;
          if(ce.getElseExpr() != null){
-            ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
+            ce.setElseExpr(generateLambda(this, ce.getElseExpr(), lambdaBody));
          }
      }
      else
      {
-       ret = generateLambda(ret, lambdaBody);
+       ret = generateLambda(this, ret, lambdaBody);
      }
    }
  |  "::"  [typeArgs = TypeArguments() ] (Identifier() | "new")
  {
-   ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
+   ret = new MethodReferenceExpr(range(ret.getBegin().get(), tokenEnd()), ret, typeArgs.list, token.image);
  }
    )
   ]
@@ -1668,7 +1526,7 @@ Expression ConditionalExpression():
 }
 {
   ret = ConditionalOrExpression()
-  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, left, right); } ]
+  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin().get(), tokenEnd()), ret, left, right); } ]
   { return ret; }
 }
 
@@ -1678,7 +1536,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.OR); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, BinaryExpr.Operator.OR); } )*
   { return ret; }
 }
 
@@ -1688,7 +1546,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.AND); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, BinaryExpr.Operator.AND); } )*
   { return ret; }
 }
 
@@ -1698,7 +1556,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
   { return ret; }
 }
 
@@ -1708,7 +1566,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.XOR); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, BinaryExpr.Operator.XOR); } )*
   { return ret; }
 }
 
@@ -1718,7 +1576,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
   { return ret; }
 }
 
@@ -1733,7 +1591,7 @@ Expression EqualityExpression():
   (
     ( "==" { op = BinaryExpr.Operator.EQUALS; } |
       "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
-    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1747,7 +1605,7 @@ Expression InstanceOfExpression():
 {
     ret = RelationalExpression() [ "instanceof" annotations = Annotations() type = ReferenceType() {
         type.getAnnotations().addAll(annotations);
-        ret = new InstanceOfExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, type); 
+        ret = new InstanceOfExpr(range(ret.getBegin().get(), tokenEnd()), ret, type); 
     } ]
     { return ret; }
 }
@@ -1765,7 +1623,7 @@ Expression RelationalExpression():
   	  ">"  { op = BinaryExpr.Operator.GREATER; } |
   	  "<=" { op = BinaryExpr.Operator.LESS_EQUALS; } |
   	  ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
-  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1782,7 +1640,7 @@ Expression ShiftExpression():
   	( "<<"             { op = BinaryExpr.Operator.LEFT_SHIFT; } |
   	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT; } |
   	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
-  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1798,7 +1656,7 @@ Expression AdditiveExpression():
   (
   	( "+" { op = BinaryExpr.Operator.PLUS; } |
   	  "-" { op = BinaryExpr.Operator.MINUS; }
-  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1895,7 +1753,7 @@ Expression PostfixExpression():
   	LOOKAHEAD(2)
     ( "++" { op = UnaryExpr.Operator.POSTFIX_INCREMENT; } |
       "--" { op = UnaryExpr.Operator.POSTFIX_DECREMENT; }
-    ) { ret = new UnaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, op); }
+    ) { ret = new UnaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, op); }
   ]
   { return ret; }
 }
@@ -1980,15 +1838,15 @@ Expression PrimaryPrefix():
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(ret.getBegin().get(), tokenEnd()), ret, typeArgs.list, name, args);
 			} else {
-	  			ret = new FieldAccessExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, emptyList(), name);
+	  			ret = new FieldAccessExpr(range(ret.getBegin().get(), tokenEnd()), ret, emptyList(), name);
 			}
 	  	}
 	 |
 		"::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
-		  ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
+		  ret = new MethodReferenceExpr(range(ret.getBegin().get(), tokenEnd()), ret, typeArgs.list, token.image);
 		}
 	  )
 	|
@@ -2310,11 +2168,11 @@ Statement BlockStatement():
   (
 	  LOOKAHEAD( Modifiers() ("class" | "interface") )
 	  modifier = Modifiers()
-	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
+	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getBegin().get(), tokenEnd()), typeDecl); }
 	|
   	  LOOKAHEAD(VariableDeclarationExpression() )
 	  expr = VariableDeclarationExpression() ";"
-	  { ret = new ExpressionStmt(range(expr.getBegin().get().line, expr.getBegin().get().column, token.endLine, token.endColumn), expr); } 
+	  { ret = new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr); } 
     |
 	  ret = Statement()
   )
@@ -2393,7 +2251,7 @@ ExpressionStmt StatementExpression():
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
-            expr = generateLambda(expr, lambdaBody);
+            expr = generateLambda(this, expr, lambdaBody);
 	   }
 	  ]
   )
@@ -2673,7 +2531,7 @@ void RUNSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((GTToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
+                ((CustomToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -2682,7 +2540,7 @@ void RSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((GTToken)getToken(1)).realKind == RSIGNEDSHIFT} )
+                ((CustomToken)getToken(1)).realKind == RSIGNEDSHIFT} )
   ">" ">"
   )
 }

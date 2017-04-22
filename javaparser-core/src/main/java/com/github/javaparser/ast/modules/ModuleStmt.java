@@ -1,12 +1,17 @@
 package com.github.javaparser.ast.modules;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleStmtMetaModel;
 
 public abstract class ModuleStmt extends Node {
+    @AllFieldsConstructor
+    public ModuleStmt() {
+        this(null);
+    }
 
     public ModuleStmt(Range range) {
         super(range);

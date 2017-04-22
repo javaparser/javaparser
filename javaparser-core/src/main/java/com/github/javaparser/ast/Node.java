@@ -339,7 +339,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public static final int ABSOLUTE_END_LINE = -2;
 
-    /** @deprecated use getComment().isPresent() */
+    /**
+     * @deprecated use getComment().isPresent()
+     */
     @Deprecated
     public boolean hasComment() {
         return comment != null;
