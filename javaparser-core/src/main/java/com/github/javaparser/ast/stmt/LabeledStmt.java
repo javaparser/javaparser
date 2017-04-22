@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LabeledStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A statement that is labeled, like <code>label123: println("continuing");</code>
@@ -56,10 +57,13 @@ public final class LabeledStmt extends Statement {
         this(null, label, statement);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LabeledStmt(Range range, SimpleName label, Statement statement) {
         super(range);
         setLabel(label);
         setStatement(statement);
+        customInitialization();
     }
 
     @Override

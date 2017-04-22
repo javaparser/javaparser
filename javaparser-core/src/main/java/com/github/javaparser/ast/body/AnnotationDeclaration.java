@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import javax.annotation.Generated;
 
 /**
  * An annotation type declaration.<br/><code>@interface X { ... }</code>
@@ -57,8 +58,11 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         this(null, modifiers, annotations, name, members);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
-        super(range, annotations, modifiers, name, members);
+        super(range, modifiers, annotations, name, members);
+        customInitialization();
     }
 
     @Override

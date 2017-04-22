@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.SimpleNameMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A name that consists of a single identifier.
@@ -53,9 +54,12 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         this(null, identifier);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SimpleName(Range range, String identifier) {
         super(range);
         setIdentifier(identifier);
+        customInitialization();
     }
 
     @Override

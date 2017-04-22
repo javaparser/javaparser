@@ -30,7 +30,8 @@ public class MainConstructorGenerator extends NodeGenerator {
         ConstructorDeclaration constructor = new ConstructorDeclaration()
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
-                .addParameter(Range.class, "range");
+                .addParameter(Range.class, "range")
+                .setJavadocComment("This constructor is used by the parser and is considered private.");
         
         BlockStmt body = constructor.getBody();
 

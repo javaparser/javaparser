@@ -16,6 +16,7 @@ import com.github.javaparser.metamodel.ModuleProvidesStmtMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<ModuleProvidesStmt, Type> {
 
@@ -32,10 +33,13 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         this(null, type, withTypes);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleProvidesStmt(Range range, Type type, NodeList<Type> withTypes) {
         super(range);
         setType(type);
         setWithTypes(withTypes);
+        customInitialization();
     }
 
     @Override

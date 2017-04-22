@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * A declaration of variables.
@@ -94,11 +95,14 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         this(null, modifiers, annotations, variables);
     }
 
-    public VariableDeclarationExpr(final Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<VariableDeclarator> variables) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public VariableDeclarationExpr(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setVariables(variables);
+        customInitialization();
     }
 
     @Override

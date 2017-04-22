@@ -40,6 +40,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A lambda expression. The parameters are on the left side of the ->.
@@ -69,11 +70,14 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         this(null, parameters, body, isEnclosingParameters);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LambdaExpr(Range range, NodeList<Parameter> parameters, Statement body, boolean isEnclosingParameters) {
         super(range);
         setParameters(parameters);
         setBody(body);
         setEnclosingParameters(isEnclosingParameters);
+        customInitialization();
     }
 
     @Override

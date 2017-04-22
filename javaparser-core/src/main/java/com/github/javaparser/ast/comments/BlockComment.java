@@ -28,6 +28,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BlockCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * <p>
@@ -49,8 +50,11 @@ public final class BlockComment extends Comment {
         this(null, content);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BlockComment(Range range, String content) {
         super(range, content);
+        customInitialization();
     }
 
     @Override

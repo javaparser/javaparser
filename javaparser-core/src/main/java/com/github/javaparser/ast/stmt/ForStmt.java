@@ -38,6 +38,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A classic for statement.
@@ -65,12 +66,15 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         this(null, initialization, compare, update, body);
     }
 
-    public ForStmt(Range range, final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ForStmt(Range range, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
         super(range);
-        setCompare(compare);
         setInitialization(initialization);
+        setCompare(compare);
         setUpdate(update);
         setBody(body);
+        customInitialization();
     }
 
     @Override

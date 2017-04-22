@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Generated;
 
 /**
  * A wildcard type argument.
@@ -63,10 +64,13 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         this(null, extendedType, superType);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WildcardType(Range range, ReferenceType extendedType, ReferenceType superType) {
         super(range);
         setExtendedType(extendedType);
         setSuperType(superType);
+        customInitialization();
     }
 
     @Override

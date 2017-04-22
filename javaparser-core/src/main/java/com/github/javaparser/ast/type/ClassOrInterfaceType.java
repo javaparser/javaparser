@@ -35,13 +35,12 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
+import javax.annotation.Generated;
 
 /**
  * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
@@ -64,30 +63,37 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     private NodeList<Type> typeArguments;
 
     public ClassOrInterfaceType() {
-        this(null, null, new SimpleName(), null);
+        this(null, null, new SimpleName(), null, new NodeList<>());
     }
 
     /**
      * @deprecated use JavaParser.parseClassOrInterfaceType instead. This constructor does not understand generics.
      */
     public ClassOrInterfaceType(final String name) {
-        this(null, null, new SimpleName(name), null);
+        this(null, null, new SimpleName(name), null, new NodeList<>());
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
-        this(null, scope, new SimpleName(name), null);
+        this(null, scope, new SimpleName(name), null, new NodeList<>());
+    }
+
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
+        this(null, scope, name, typeArguments, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
-        this(null, scope, name, typeArguments);
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments, final NodeList<AnnotationExpr> annotations) {
+        this(null, scope, name, typeArguments, annotations);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassOrInterfaceType(Range range, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
+        super(range, annotations);
         setScope(scope);
         setName(name);
         setTypeArguments(typeArguments);
+        customInitialization();
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
+import javax.annotation.Generated;
 
 /**
  * All ways to specify a long literal.
@@ -50,8 +51,11 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LongLiteralExpr(Range range, String value) {
         super(range, value);
+        customInitialization();
     }
 
     public LongLiteralExpr(final long value) {

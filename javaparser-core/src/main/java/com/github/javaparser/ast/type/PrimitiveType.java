@@ -31,13 +31,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A primitive type.
@@ -122,9 +122,12 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         this(null, type);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PrimitiveType(Range range, Primitive type) {
         super(range);
         setType(type);
+        customInitialization();
     }
 
     @Override

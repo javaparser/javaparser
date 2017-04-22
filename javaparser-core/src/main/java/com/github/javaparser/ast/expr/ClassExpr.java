@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ClassExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Defines an expression that accesses the class of a type.
@@ -53,9 +54,12 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         this(null, type);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassExpr(Range range, Type type) {
         super(range);
         setType(type);
+        customInitialization();
     }
 
     @Override

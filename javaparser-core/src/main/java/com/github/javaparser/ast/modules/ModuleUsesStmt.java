@@ -12,6 +12,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleUsesStmtMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
 
@@ -26,9 +27,12 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
         this(null, type);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleUsesStmt(Range range, Type type) {
         super(range);
         setType(type);
+        customInitialization();
     }
 
     @Override

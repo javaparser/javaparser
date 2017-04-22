@@ -15,6 +15,7 @@ import com.github.javaparser.metamodel.ModuleExportsStmtMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<ModuleExportsStmt> {
 
@@ -31,10 +32,13 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         this(null, name, moduleNames);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleExportsStmt(Range range, Name name, NodeList<Name> moduleNames) {
         super(range);
         setName(name);
         setModuleNames(moduleNames);
+        customInitialization();
     }
 
     @Override

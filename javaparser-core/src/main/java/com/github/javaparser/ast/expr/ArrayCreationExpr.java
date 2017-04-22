@@ -32,13 +32,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -74,11 +73,14 @@ public final class ArrayCreationExpr extends Expression {
         this(range, elementType, new NodeList<>(), new ArrayInitializerExpr());
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayCreationExpr(Range range, Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
         super(range);
-        setLevels(levels);
         setElementType(elementType);
+        setLevels(levels);
         setInitializer(initializer);
+        customInitialization();
     }
 
     @Override

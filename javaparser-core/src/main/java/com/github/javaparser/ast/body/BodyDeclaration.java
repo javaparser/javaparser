@@ -33,6 +33,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Any declaration that can appear between the { and } of a class, interface, or enum.
@@ -52,9 +53,12 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         this(null, annotations);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);
+        customInitialization();
     }
 
     /**

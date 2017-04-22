@@ -38,6 +38,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * The catch part of a try-catch-finally. <br/>In <code>try { ... } catch (Exception e) { ... }</code> the CatchClause
@@ -64,10 +65,13 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         this(null, parameter, body);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CatchClause(Range range, Parameter parameter, BlockStmt body) {
         super(range);
         setParameter(parameter);
         setBody(body);
+        customInitialization();
     }
 
     @Override

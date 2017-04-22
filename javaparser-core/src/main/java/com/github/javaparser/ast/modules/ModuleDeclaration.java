@@ -17,6 +17,7 @@ import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * A Java 9 Jigsaw module declaration. <code>@Foo module com.github.abc { requires a.B; }</code>
@@ -44,12 +45,15 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         this(null, annotations, name, isOpen, moduleStmts);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleDeclaration(Range range, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleStmt> moduleStmts) {
         super(range);
-        setName(name);
         setAnnotations(annotations);
+        setName(name);
         setOpen(isOpen);
         setModuleStmts(moduleStmts);
+        customInitialization();
     }
 
     @Override

@@ -45,6 +45,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -75,12 +76,15 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         this(null, modifiers, annotations, isInterface, name, typeParameters, extendedTypes, implementedTypes, members);
     }
 
-    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final boolean isInterface, final SimpleName name, final NodeList<TypeParameter> typeParameters, final NodeList<ClassOrInterfaceType> extendedTypes, final NodeList<ClassOrInterfaceType> implementedTypes, final NodeList<BodyDeclaration<?>> members) {
-        super(range, annotations, modifiers, name, members);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassOrInterfaceDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<BodyDeclaration<?>> members) {
+        super(range, modifiers, annotations, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
         setExtendedTypes(extendedTypes);
         setImplementedTypes(implementedTypes);
+        customInitialization();
     }
 
     @Override

@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -57,10 +58,12 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         this(type, nodeList(annotations));
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayType(Range range, Type componentType, NodeList<AnnotationExpr> annotations) {
-        super(range);
+        super(range, annotations);
         setComponentType(componentType);
-        setAnnotations(annotations);
+        customInitialization();
     }
 
     @Override

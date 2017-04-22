@@ -34,6 +34,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ForeachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A for-each statement.
@@ -58,11 +59,14 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         this(null, variable, iterable, body);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForeachStmt(Range range, VariableDeclarationExpr variable, Expression iterable, Statement body) {
         super(range);
         setVariable(variable);
         setIterable(iterable);
         setBody(body);
+        customInitialization();
     }
 
     public ForeachStmt(VariableDeclarationExpr variable, String iterable, BlockStmt body) {

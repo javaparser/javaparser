@@ -38,13 +38,12 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are
@@ -89,6 +88,8 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         this(null, type, name, initializer);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VariableDeclarator(Range range, Type type, SimpleName name, Expression initializer) {
         super(range);
         setType(type);

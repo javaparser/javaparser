@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.EnclosedExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An expression between ( ).
@@ -50,9 +51,12 @@ public final class EnclosedExpr extends Expression {
         this(null, inner);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnclosedExpr(Range range, Expression inner) {
         super(range);
         setInner(inner);
+        customInitialization();
     }
 
     @Override

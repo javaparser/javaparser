@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -55,9 +56,12 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         this(name.getRange().orElse(null), name);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NameExpr(Range range, SimpleName name) {
         super(range);
         setName(name);
+        customInitialization();
     }
 
     @Override

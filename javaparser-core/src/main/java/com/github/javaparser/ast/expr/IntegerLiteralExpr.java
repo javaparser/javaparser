@@ -28,6 +28,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * All ways to specify an int literal.
@@ -50,8 +51,11 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntegerLiteralExpr(Range range, String value) {
         super(range, value);
+        customInitialization();
     }
 
     public IntegerLiteralExpr(final int value) {

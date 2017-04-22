@@ -39,6 +39,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A method call on an object. <br/><code>circle.circumference()</code> <br/>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -73,12 +74,15 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         this(null, scope, typeArguments, name, arguments);
     }
 
-    public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public MethodCallExpr(Range range, Expression scope, NodeList<Type> typeArguments, SimpleName name, NodeList<Expression> arguments) {
         super(range);
         setScope(scope);
         setTypeArguments(typeArguments);
         setName(name);
         setArguments(arguments);
+        customInitialization();
     }
 
     @Override

@@ -35,6 +35,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.TryStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * The try statement.
@@ -77,12 +78,15 @@ public final class TryStmt extends Statement {
         this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
-    public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public TryStmt(Range range, NodeList<VariableDeclarationExpr> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
         super(range);
         setResources(resources);
         setTryBlock(tryBlock);
         setCatchClauses(catchClauses);
         setFinallyBlock(finallyBlock);
+        customInitialization();
     }
 
     @Override

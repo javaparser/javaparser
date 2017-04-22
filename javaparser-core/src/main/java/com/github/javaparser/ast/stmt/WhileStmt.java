@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.WhileStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A while statement.
@@ -55,10 +56,13 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         this(null, condition, body);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WhileStmt(Range range, Expression condition, Statement body) {
         super(range);
         setCondition(condition);
         setBody(body);
+        customInitialization();
     }
 
     @Override

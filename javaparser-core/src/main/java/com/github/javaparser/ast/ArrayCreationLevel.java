@@ -36,6 +36,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ArrayCreationLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -65,10 +66,13 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         this(null, dimension, annotations);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayCreationLevel(Range range, Expression dimension, NodeList<AnnotationExpr> annotations) {
         super(range);
         setDimension(dimension);
         setAnnotations(annotations);
+        customInitialization();
     }
 
     @Override

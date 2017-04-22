@@ -29,6 +29,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BooleanLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * The boolean literals.
@@ -50,9 +51,12 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         this(null, value);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BooleanLiteralExpr(Range range, boolean value) {
         super(range);
         setValue(value);
+        customInitialization();
     }
 
     @Override

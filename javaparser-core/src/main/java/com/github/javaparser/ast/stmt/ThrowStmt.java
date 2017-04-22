@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ThrowStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Usage of the throw statement.
@@ -53,9 +54,12 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         this(null, expression);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ThrowStmt(Range range, Expression expression) {
         super(range);
         setExpression(expression);
+        customInitialization();
     }
 
     @Override

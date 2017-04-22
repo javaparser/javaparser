@@ -34,6 +34,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Statements in between { and }.
@@ -53,9 +54,12 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         this(null, statements);
     }
 
-    public BlockStmt(final Range range, final NodeList<Statement> statements) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public BlockStmt(Range range, NodeList<Statement> statements) {
         super(range);
         setStatements(statements);
+        customInitialization();
     }
 
     @Override

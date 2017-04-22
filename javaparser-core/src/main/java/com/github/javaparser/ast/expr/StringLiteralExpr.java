@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
 import com.github.javaparser.utils.StringEscapeUtils;
 import com.github.javaparser.utils.Utils;
+import javax.annotation.Generated;
 
 /**
  * A literal string.
@@ -66,8 +67,11 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return new StringLiteralExpr(Utils.escapeEndOfLines(string));
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public StringLiteralExpr(Range range, String value) {
         super(range, value);
+        customInitialization();
     }
 
     @Override

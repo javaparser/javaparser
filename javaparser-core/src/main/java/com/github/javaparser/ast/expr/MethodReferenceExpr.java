@@ -39,6 +39,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodReferenceExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import javax.annotation.Generated;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -69,11 +70,14 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         this(null, scope, typeArguments, identifier);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodReferenceExpr(Range range, Expression scope, NodeList<Type> typeArguments, String identifier) {
         super(range);
-        setIdentifier(identifier);
         setScope(scope);
         setTypeArguments(typeArguments);
+        setIdentifier(identifier);
+        customInitialization();
     }
 
     @Override

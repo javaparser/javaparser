@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An import declaration.
@@ -60,11 +61,14 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         this(null, name, isStatic, isAsterisk);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ImportDeclaration(Range range, Name name, boolean isStatic, boolean isAsterisk) {
         super(range);
-        setAsterisk(isAsterisk);
         setName(name);
         setStatic(isStatic);
+        setAsterisk(isAsterisk);
+        customInitialization();
     }
 
     @Override

@@ -32,6 +32,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.EmptyMemberDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A loose ";" inside a body.<br/><code>class X { ; }</code>
@@ -47,8 +48,11 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
         this(null);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EmptyMemberDeclaration(Range range) {
         super(range);
+        customInitialization();
     }
 
     @Override

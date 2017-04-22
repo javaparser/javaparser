@@ -1298,14 +1298,13 @@ ClassOrInterfaceType ClassOrInterfaceType():
   name = SimpleName() {begin=tokenBegin();}
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
-      ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, typeArgs.list);
+      ret = new ClassOrInterfaceType(range(begin, tokenEnd()), null, name, typeArgs.list, annotations);
   }
   (
 	  LOOKAHEAD(2) "." annotations = Annotations()  name = SimpleName()
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
-	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, typeArgs.list);
-	    ret.setAnnotations(annotations);
+	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()), ret, name, typeArgs.list, annotations);
 	    annotations = null;
       }
   )*

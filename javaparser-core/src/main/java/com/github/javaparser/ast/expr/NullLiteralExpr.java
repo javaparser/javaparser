@@ -28,6 +28,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NullLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A literal "null".
@@ -42,8 +43,11 @@ public final class NullLiteralExpr extends LiteralExpr {
         this(null);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NullLiteralExpr(Range range) {
         super(range);
+        customInitialization();
     }
 
     @Override

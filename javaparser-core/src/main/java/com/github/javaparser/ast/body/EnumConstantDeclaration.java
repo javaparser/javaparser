@@ -39,6 +39,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.EnumConstantDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
@@ -66,11 +67,14 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         this(null, annotations, name, arguments, classBody);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnumConstantDeclaration(Range range, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> classBody) {
         super(range, annotations);
         setName(name);
         setArguments(arguments);
         setClassBody(classBody);
+        customInitialization();
     }
 
     @Override

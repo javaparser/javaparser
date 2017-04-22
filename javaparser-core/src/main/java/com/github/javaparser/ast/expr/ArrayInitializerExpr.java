@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ArrayInitializerExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * The initialization of an array. In the following sample, the outer { } is an ArrayInitializerExpr.
@@ -55,9 +56,12 @@ public final class ArrayInitializerExpr extends Expression {
         this(null, values);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayInitializerExpr(Range range, NodeList<Expression> values) {
         super(range);
         setValues(values);
+        customInitialization();
     }
 
     @Override

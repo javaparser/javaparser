@@ -25,10 +25,11 @@ public final class JavaParserMetaModel {
         callableDeclarationMetaModel.getConstructorParameters().add(callableDeclarationMetaModel.thrownExceptionsPropertyMetaModel);
         typeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         annotationExprMetaModel.getConstructorParameters().add(annotationExprMetaModel.namePropertyMetaModel);
-        typeDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
         typeDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.modifiersPropertyMetaModel);
+        typeDeclarationMetaModel.getConstructorParameters().add(bodyDeclarationMetaModel.annotationsPropertyMetaModel);
         typeDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.namePropertyMetaModel);
         typeDeclarationMetaModel.getConstructorParameters().add(typeDeclarationMetaModel.membersPropertyMetaModel);
+        referenceTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         literalStringValueExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         stringLiteralExprMetaModel.getConstructorParameters().add(literalStringValueExprMetaModel.valuePropertyMetaModel);
         moduleDeclarationMetaModel.getConstructorParameters().add(moduleDeclarationMetaModel.annotationsPropertyMetaModel);
@@ -216,6 +217,7 @@ public final class JavaParserMetaModel {
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(classOrInterfaceTypeMetaModel.scopePropertyMetaModel);
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(classOrInterfaceTypeMetaModel.namePropertyMetaModel);
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(classOrInterfaceTypeMetaModel.typeArgumentsPropertyMetaModel);
+        classOrInterfaceTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         intersectionTypeMetaModel.getConstructorParameters().add(intersectionTypeMetaModel.elementsPropertyMetaModel);
         primitiveTypeMetaModel.getConstructorParameters().add(primitiveTypeMetaModel.typePropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeParameterMetaModel.namePropertyMetaModel);

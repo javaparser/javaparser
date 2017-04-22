@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * Base class for types.
@@ -47,15 +48,18 @@ public abstract class Type extends Node {
     protected Type(Range range) {
         this(range, new NodeList<>());
     }
-    
+
     @AllFieldsConstructor
     public Type(NodeList<AnnotationExpr> annotations) {
         this(null, annotations);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Type(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);
+        customInitialization();
     }
 
     public NodeList<AnnotationExpr> getAnnotations() {

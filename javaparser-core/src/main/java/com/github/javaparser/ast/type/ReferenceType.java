@@ -37,11 +37,16 @@ import javax.annotation.Generated;
  */
 public abstract class ReferenceType<T extends ReferenceType> extends Type {
 
+    public ReferenceType() {
+        this(null, new NodeList<>());
+    }
+
     @AllFieldsConstructor
     public ReferenceType(NodeList<AnnotationExpr> annotations) {
         this(null, annotations);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReferenceType(Range range, NodeList<AnnotationExpr> annotations) {
         super(range, annotations);

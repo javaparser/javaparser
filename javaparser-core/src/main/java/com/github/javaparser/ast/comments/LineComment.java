@@ -28,6 +28,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LineCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * <p>
@@ -48,8 +49,11 @@ public final class LineComment extends Comment {
         this(null, content);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LineComment(Range range, String content) {
         super(range, content);
+        customInitialization();
     }
 
     @Override

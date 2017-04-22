@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An occurrence of the "this" keyword. <br/><code>World.this.greet()</code> is a MethodCallExpr of method name greet,
@@ -53,9 +54,12 @@ public final class ThisExpr extends Expression {
         this(null, classExpr);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ThisExpr(Range range, Expression classExpr) {
         super(range);
         setClassExpr(classExpr);
+        customInitialization();
     }
 
     @Override

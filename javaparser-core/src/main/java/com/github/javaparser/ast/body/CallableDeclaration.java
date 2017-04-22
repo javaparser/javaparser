@@ -43,6 +43,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import javax.annotation.Generated;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
@@ -64,6 +65,8 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -71,6 +74,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         setName(name);
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
+        customInitialization();
     }
 
     /**

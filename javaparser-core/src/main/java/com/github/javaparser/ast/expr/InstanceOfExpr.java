@@ -34,6 +34,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.InstanceOfExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Usage of the instanceof operator.
@@ -56,10 +57,13 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         this(null, expression, type);
     }
 
-    public InstanceOfExpr(final Range range, final Expression expression, final ReferenceType<?> type) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public InstanceOfExpr(Range range, Expression expression, ReferenceType<?> type) {
         super(range);
         setExpression(expression);
         setType(type);
+        customInitialization();
     }
 
     @Override

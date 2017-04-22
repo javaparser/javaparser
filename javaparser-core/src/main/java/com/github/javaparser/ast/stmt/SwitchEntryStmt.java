@@ -36,6 +36,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SwitchEntryStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * One case in a switch statement.
@@ -72,10 +73,13 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         this(null, label, statements);
     }
 
-    public SwitchEntryStmt(Range range, final Expression label, final NodeList<Statement> statements) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public SwitchEntryStmt(Range range, Expression label, NodeList<Statement> statements) {
         super(range);
         setLabel(label);
         setStatements(statements);
+        customInitialization();
     }
 
     @Override

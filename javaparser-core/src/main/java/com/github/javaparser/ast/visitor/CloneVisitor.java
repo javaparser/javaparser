@@ -241,7 +241,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ClassOrInterfaceType r = new ClassOrInterfaceType(n.getRange().orElse(null), scope, name, typeArguments);
+        ClassOrInterfaceType r = new ClassOrInterfaceType(n.getRange().orElse(null), scope, name, typeArguments, annotations);
         r.setComment(comment);
         return r;
     }

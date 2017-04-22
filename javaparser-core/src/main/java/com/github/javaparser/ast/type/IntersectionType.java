@@ -37,6 +37,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import javax.annotation.Generated;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -60,9 +61,12 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         this(null, elements);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
-        super(range, new NodeList<>());
+        super(range);
         setElements(elements);
+        customInitialization();
     }
 
     @Override

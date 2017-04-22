@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.TypeExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
@@ -54,9 +55,12 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         this(null, type);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypeExpr(Range range, Type type) {
         super(range);
         setType(type);
+        customInitialization();
     }
 
     @Override

@@ -50,6 +50,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;}
@@ -87,10 +88,13 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         setDefault(isDefault);
     }
 
-    public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public MethodDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions, BlockStmt body) {
         super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
         setBody(body);
+        customInitialization();
     }
 
     @Override

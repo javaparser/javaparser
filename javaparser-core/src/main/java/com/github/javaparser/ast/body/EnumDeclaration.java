@@ -40,6 +40,7 @@ import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
@@ -65,10 +66,13 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         this(null, modifiers, annotations, name, implementedTypes, entries, members);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnumDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
-        super(range, annotations, modifiers, name, members);
+        super(range, modifiers, annotations, name, members);
         setImplementedTypes(implementedTypes);
         setEntries(entries);
+        customInitialization();
     }
 
     @Override

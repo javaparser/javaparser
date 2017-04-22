@@ -40,6 +40,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A type parameter.
@@ -80,11 +81,13 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         this(null, name, typeBound, annotations);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
-        super(range);
+        super(range, annotations);
         setName(name);
         setTypeBound(typeBound);
-        setAnnotations(annotations);
+        customInitialization();
     }
 
     @Override

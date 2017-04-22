@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ArrayAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Array brackets [] being used to get a value from an array.
@@ -52,10 +53,13 @@ public final class ArrayAccessExpr extends Expression {
         this(null, name, index);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayAccessExpr(Range range, Expression name, Expression index) {
         super(range);
         setName(name);
         setIndex(index);
+        customInitialization();
     }
 
     @Override

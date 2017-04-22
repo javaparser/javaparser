@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -59,11 +60,14 @@ public final class IfStmt extends Statement {
         this(null, condition, thenStmt, elseStmt);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IfStmt(Range range, Expression condition, Statement thenStmt, Statement elseStmt) {
         super(range);
         setCondition(condition);
         setThenStmt(thenStmt);
         setElseStmt(elseStmt);
+        customInitialization();
     }
 
     @Override

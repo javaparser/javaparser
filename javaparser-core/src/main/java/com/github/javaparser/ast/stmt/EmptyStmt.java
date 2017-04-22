@@ -28,6 +28,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.EmptyStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * @author Julio Vilmar Gesser
@@ -41,8 +42,11 @@ public final class EmptyStmt extends Statement {
         this(null);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EmptyStmt(Range range) {
         super(range);
+        customInitialization();
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BreakStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A usage of the break keyword.
@@ -55,9 +56,12 @@ public final class BreakStmt extends Statement {
         this(null, label);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BreakStmt(Range range, SimpleName label) {
         super(range);
         setLabel(label);
+        customInitialization();
     }
 
     @Override

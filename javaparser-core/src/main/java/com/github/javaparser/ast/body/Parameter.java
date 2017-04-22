@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -93,14 +94,17 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         this(null, modifiers, annotations, type, isVarArgs, varArgsAnnotations, name);
     }
 
-    public Parameter(final Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public Parameter(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
-        setName(name);
         setType(type);
         setVarArgs(isVarArgs);
         setVarArgsAnnotations(varArgsAnnotations);
+        setName(name);
+        customInitialization();
     }
 
     @Override

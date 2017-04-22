@@ -45,6 +45,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * <p>
@@ -83,12 +84,15 @@ public final class CompilationUnit extends Node {
         this(null, packageDeclaration, imports, types, module);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(range);
-        setModule(module);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
+        setModule(module);
+        customInitialization();
     }
 
     @Override
