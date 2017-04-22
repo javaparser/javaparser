@@ -105,6 +105,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations(), getModuleStmts());
     }

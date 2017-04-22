@@ -102,6 +102,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getElements(), getAnnotations());
     }

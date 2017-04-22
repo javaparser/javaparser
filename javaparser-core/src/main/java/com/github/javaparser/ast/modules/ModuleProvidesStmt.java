@@ -100,6 +100,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getWithTypes());
     }

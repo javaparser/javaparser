@@ -167,6 +167,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }

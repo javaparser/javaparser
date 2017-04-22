@@ -198,6 +198,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }

@@ -43,8 +43,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(AnnotationDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -53,8 +55,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ArrayAccessExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -63,8 +67,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ArrayCreationLevel n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -73,8 +79,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ArrayType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -83,8 +91,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(AssignExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -93,8 +103,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(BlockComment n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -103,8 +115,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(BooleanLiteralExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -113,8 +127,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(CastExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -123,8 +139,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(CharLiteralExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -133,8 +151,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ClassOrInterfaceDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -143,8 +163,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(CompilationUnit n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -153,8 +175,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ConstructorDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -163,8 +187,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(DoStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -173,8 +199,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(EmptyMemberDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -183,8 +211,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(EnclosedExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -193,8 +223,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(EnumDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -203,8 +235,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ExpressionStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -213,8 +247,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(FieldDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -223,8 +259,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ForeachStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -233,8 +271,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ImportDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -243,8 +283,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(InstanceOfExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -253,8 +295,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(IntersectionType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -263,8 +307,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(LabeledStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -273,8 +319,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(LineComment n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -283,8 +331,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(LongLiteralExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -293,8 +343,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(MemberValuePair n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -303,8 +355,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(MethodDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -313,8 +367,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(NameExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -323,8 +379,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(NormalAnnotationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -333,8 +391,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ObjectCreationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -343,8 +403,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(Parameter n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -353,8 +415,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ReturnStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -363,8 +427,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(SingleMemberAnnotationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -373,8 +439,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(SuperExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -383,8 +451,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(SwitchStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -393,8 +463,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ThisExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -403,8 +475,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(TryStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -413,8 +487,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(TypeParameter n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -423,8 +499,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(UnionType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -433,8 +511,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(VariableDeclarationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -443,8 +523,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(VoidType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -453,8 +535,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(WildcardType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -463,8 +547,10 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ModuleRequiresStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
@@ -473,13 +559,16 @@ public interface VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ModuleProvidesStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ModuleUsesStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")

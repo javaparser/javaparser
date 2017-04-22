@@ -90,6 +90,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getStatements());
     }

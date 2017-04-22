@@ -148,6 +148,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeArguments().orElse(null));
     }

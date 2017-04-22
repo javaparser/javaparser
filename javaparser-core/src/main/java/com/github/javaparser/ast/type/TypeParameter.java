@@ -154,6 +154,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeBound(), getAnnotations());
     }

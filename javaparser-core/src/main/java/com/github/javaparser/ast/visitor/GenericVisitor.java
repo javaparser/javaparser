@@ -42,8 +42,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(CompilationUnit n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -52,13 +54,16 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(TypeParameter n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(LineComment n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -68,8 +73,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ClassOrInterfaceDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -78,8 +85,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(EnumConstantDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -88,8 +97,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(AnnotationMemberDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -98,8 +109,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(VariableDeclarator n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -108,8 +121,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(MethodDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -118,13 +133,16 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(EmptyMemberDeclaration n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(InitializerDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -134,8 +152,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ClassOrInterfaceType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -144,8 +164,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ArrayType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -154,8 +176,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(IntersectionType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -164,13 +188,16 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(VoidType n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(WildcardType n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -180,8 +207,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ArrayAccessExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -190,8 +219,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ArrayInitializerExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -200,8 +231,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(BinaryExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -210,8 +243,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ClassExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -220,8 +255,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(EnclosedExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -230,8 +267,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(InstanceOfExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -240,8 +279,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(IntegerLiteralExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -250,8 +291,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(CharLiteralExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -260,8 +303,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(BooleanLiteralExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -270,8 +315,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(MethodCallExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -280,8 +327,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ObjectCreationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -290,8 +339,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(SuperExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -300,8 +351,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(VariableDeclarationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -310,13 +363,16 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(SingleMemberAnnotationExpr n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(NormalAnnotationExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -326,8 +382,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ExplicitConstructorInvocationStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -336,8 +394,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(AssertStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -346,8 +406,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(LabeledStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -356,8 +418,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ExpressionStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -366,8 +430,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(SwitchEntryStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -376,8 +442,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ReturnStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -386,8 +454,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(WhileStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -396,8 +466,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(DoStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -406,8 +478,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ForStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -416,8 +490,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(SynchronizedStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -426,8 +502,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(CatchClause n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -436,8 +514,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(MethodReferenceExpr n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -448,8 +528,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(Name n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -458,8 +540,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ImportDeclaration n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -468,8 +552,10 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ModuleRequiresStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
@@ -478,13 +564,16 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ModuleProvidesStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ModuleUsesStmt n, A arg);
 
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
