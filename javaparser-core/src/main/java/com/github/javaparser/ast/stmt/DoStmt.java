@@ -55,7 +55,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         this(null, body, condition);
     }
 
-    public DoStmt(Range range, final Statement body, final Expression condition) {
+    public DoStmt(Range range, Statement body, Expression condition) {
         super(range);
         setBody(body);
         setCondition(condition);

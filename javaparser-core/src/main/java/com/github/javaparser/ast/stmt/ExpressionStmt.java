@@ -52,7 +52,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         this(null, expression);
     }
 
-    public ExpressionStmt(Range range, final Expression expression) {
+    public ExpressionStmt(Range range, Expression expression) {
         super(range);
         setExpression(expression);
     }

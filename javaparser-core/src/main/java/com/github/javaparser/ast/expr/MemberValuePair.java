@@ -57,7 +57,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         this(null, name, value);
     }
 
-    public MemberValuePair(final Range range, final SimpleName name, final Expression value) {
+    public MemberValuePair(Range range, SimpleName name, Expression value) {
         super(range);
         setName(name);
         setValue(value);

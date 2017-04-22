@@ -57,9 +57,9 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         this(null, label);
     }
 
-    public ContinueStmt(Range range, final SimpleName label) {
+    public ContinueStmt(Range range, SimpleName label) {
         super(range);
-        this.label = label;
+        setLabel(label);
     }
 
     @Override

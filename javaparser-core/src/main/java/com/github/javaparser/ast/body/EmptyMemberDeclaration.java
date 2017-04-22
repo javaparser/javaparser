@@ -48,7 +48,7 @@ public final class EmptyMemberDeclaration extends BodyDeclaration<EmptyMemberDec
     }
 
     public EmptyMemberDeclaration(Range range) {
-        super(range, new NodeList<>());
+        super(range);
     }
 
     @Override

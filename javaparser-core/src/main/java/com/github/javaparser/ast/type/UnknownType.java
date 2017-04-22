@@ -50,7 +50,7 @@ public final class UnknownType extends Type {
     }
 
     public UnknownType(Range range) {
-        super(range, new NodeList<>());
+        super(range);
     }
 
     @Override

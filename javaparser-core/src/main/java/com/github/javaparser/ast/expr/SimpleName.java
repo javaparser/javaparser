@@ -53,7 +53,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         this(null, identifier);
     }
 
-    public SimpleName(Range range, final String identifier) {
+    public SimpleName(Range range, String identifier) {
         super(range);
         setIdentifier(identifier);
     }

@@ -53,7 +53,7 @@ public final class LocalClassDeclarationStmt extends Statement {
         this(null, classDeclaration);
     }
 
-    public LocalClassDeclarationStmt(Range range, final ClassOrInterfaceDeclaration classDeclaration) {
+    public LocalClassDeclarationStmt(Range range, ClassOrInterfaceDeclaration classDeclaration) {
         super(range);
         setClassDeclaration(classDeclaration);
     }

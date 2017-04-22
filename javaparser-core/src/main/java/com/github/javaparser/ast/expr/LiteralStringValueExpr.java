@@ -27,7 +27,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -42,7 +41,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         this(null, value);
     }
 
-    public LiteralStringValueExpr(final Range range, final String value) {
+    public LiteralStringValueExpr(Range range, String value) {
         super(range);
         setValue(value);
     }

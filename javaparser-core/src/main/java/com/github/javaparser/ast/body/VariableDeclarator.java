@@ -88,10 +88,9 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
 
     public VariableDeclarator(Range range, Type type, SimpleName name, Expression initializer) {
         super(range);
+        setType(type);
         setName(name);
         setInitializer(initializer);
-        setType(type);
-        registerObserversForDerivedProperties();
     }
 
     private void registerObserversForDerivedProperties() {

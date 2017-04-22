@@ -39,7 +39,7 @@ public abstract class Statement extends Node {
         this(null);
     }
 
-    public Statement(final Range range) {
+    public Statement(Range range) {
         super(range);
     }
 

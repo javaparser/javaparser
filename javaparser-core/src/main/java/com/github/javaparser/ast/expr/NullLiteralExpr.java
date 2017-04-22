@@ -42,7 +42,7 @@ public final class NullLiteralExpr extends LiteralExpr {
         this(null);
     }
 
-    public NullLiteralExpr(final Range range) {
+    public NullLiteralExpr(Range range) {
         super(range);
     }
 

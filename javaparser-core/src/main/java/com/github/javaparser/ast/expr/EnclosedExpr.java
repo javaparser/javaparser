@@ -50,7 +50,7 @@ public final class EnclosedExpr extends Expression {
         this(null, inner);
     }
 
-    public EnclosedExpr(final Range range, final Expression inner) {
+    public EnclosedExpr(Range range, Expression inner) {
         super(range);
         setInner(inner);
     }

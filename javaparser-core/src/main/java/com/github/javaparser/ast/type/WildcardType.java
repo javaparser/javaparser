@@ -63,8 +63,8 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         this(null, extendedType, superType);
     }
 
-    public WildcardType(final Range range, final ReferenceType extendedType, final ReferenceType superType) {
-        super(range, new NodeList<>());
+    public WildcardType(Range range, ReferenceType extendedType, ReferenceType superType) {
+        super(range);
         setExtendedType(extendedType);
         setSuperType(superType);
     }

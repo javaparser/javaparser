@@ -53,7 +53,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         this(null, expression);
     }
 
-    public ThrowStmt(Range range, final Expression expression) {
+    public ThrowStmt(Range range, Expression expression) {
         super(range);
         setExpression(expression);
     }

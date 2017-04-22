@@ -49,7 +49,7 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     }
 
     public VoidType(Range range) {
-        super(range, new NodeList<>());
+        super(range);
     }
 
     @Override

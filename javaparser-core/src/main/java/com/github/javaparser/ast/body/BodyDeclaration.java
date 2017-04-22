@@ -57,15 +57,18 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         setAnnotations(annotations);
     }
 
+    /**
+     * This supports {@link EmptyMemberDeclaration}.
+     */
+    protected BodyDeclaration(Range range) {
+        this(range, new NodeList<>());
+    }
+
     @Override
     public final NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    /**
-     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
-     * so please avoid passing null
-     */
     @SuppressWarnings("unchecked")
     @Override
     public final T setAnnotations(final NodeList<AnnotationExpr> annotations) {

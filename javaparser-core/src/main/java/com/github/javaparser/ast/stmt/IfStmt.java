@@ -59,7 +59,7 @@ public final class IfStmt extends Statement {
         this(null, condition, thenStmt, elseStmt);
     }
 
-    public IfStmt(Range range, final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+    public IfStmt(Range range, Expression condition, Statement thenStmt, Statement elseStmt) {
         super(range);
         setCondition(condition);
         setThenStmt(thenStmt);

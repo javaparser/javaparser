@@ -29,7 +29,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -41,11 +40,19 @@ public abstract class Type extends Node {
 
     private NodeList<AnnotationExpr> annotations;
 
+    /**
+     * Several sub classes do not support annotations.
+     * This is a support constructor for them.
+      */
+    protected Type(Range range) {
+        this(range, new NodeList<>());
+    }
+    
     @AllFieldsConstructor
     public Type(NodeList<AnnotationExpr> annotations) {
         this(null, annotations);
     }
-    
+
     public Type(Range range, NodeList<AnnotationExpr> annotations) {
         super(range);
         setAnnotations(annotations);

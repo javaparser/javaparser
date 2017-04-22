@@ -55,7 +55,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         this(null, condition, body);
     }
 
-    public WhileStmt(Range range, final Expression condition, final Statement body) {
+    public WhileStmt(Range range, Expression condition, Statement body) {
         super(range);
         setCondition(condition);
         setBody(body);

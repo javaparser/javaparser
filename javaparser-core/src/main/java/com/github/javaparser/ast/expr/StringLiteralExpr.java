@@ -66,7 +66,7 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
         return new StringLiteralExpr(Utils.escapeEndOfLines(string));
     }
 
-    public StringLiteralExpr(final Range range, final String value) {
+    public StringLiteralExpr(Range range, String value) {
         super(range, value);
     }
 

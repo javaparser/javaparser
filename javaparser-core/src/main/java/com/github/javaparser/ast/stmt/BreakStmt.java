@@ -55,9 +55,9 @@ public final class BreakStmt extends Statement {
         this(null, label);
     }
 
-    public BreakStmt(final Range range, final SimpleName label) {
+    public BreakStmt(Range range, SimpleName label) {
         super(range);
-        this.label = label;
+        setLabel(label);
     }
 
     @Override

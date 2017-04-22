@@ -41,7 +41,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
@@ -180,23 +179,19 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      */
     public ConstructorDeclaration addConstructor(Modifier... modifiers) {
         ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
-        constructorDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        constructorDeclaration.setModifiers(Arrays.stream(modifiers).collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         constructorDeclaration.setName(getName());
         getMembers().add(constructorDeclaration);
         return constructorDeclaration;
     }
-    
+
     /**
      * Find all constructors for this class.
      *
      * @return the constructors found. This list is immutable.
      */
     public List<ConstructorDeclaration> getConstructors() {
-        return unmodifiableList(getMembers().stream()
-                .filter(m -> m instanceof ConstructorDeclaration)
-                .map(m -> (ConstructorDeclaration) m)
-                .collect(toList()));
+        return unmodifiableList(getMembers().stream().filter(m -> m instanceof ConstructorDeclaration).map(m -> (ConstructorDeclaration) m).collect(toList()));
     }
 
     /**
@@ -207,9 +202,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @return the methods found (multiple in case of overloading)
      */
     public Optional<ConstructorDeclaration> getConstructorByParameterTypes(String... paramTypes) {
-        return getConstructors().stream()
-                .filter(m -> m.hasParametersOfType(paramTypes))
-                .findFirst();
+        return getConstructors().stream().filter(m -> m.hasParametersOfType(paramTypes)).findFirst();
     }
 
     /**
@@ -220,9 +213,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      * @return the methods found (multiple in case of overloading)
      */
     public Optional<ConstructorDeclaration> getConstructorByParameterTypes(Class<?>... paramTypes) {
-        return getConstructors().stream()
-                .filter(m -> m.hasParametersOfType(paramTypes))
-                .findFirst();
+        return getConstructors().stream().filter(m -> m.hasParametersOfType(paramTypes)).findFirst();
     }
 
     @Override

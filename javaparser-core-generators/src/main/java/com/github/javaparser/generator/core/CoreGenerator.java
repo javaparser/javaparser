@@ -24,22 +24,22 @@ public class CoreGenerator {
     }
 
     private void run(SourceRoot sourceRoot) throws Exception {
-//        new GenericListVisitorAdapterGenerator(sourceRoot).generate();
-//        new GenericVisitorAdapterGenerator(sourceRoot).generate();
-//        new EqualsVisitorGenerator(sourceRoot).generate();
-//        new VoidVisitorAdapterGenerator(sourceRoot).generate();
-//        new VoidVisitorGenerator(sourceRoot).generate();
-//        new GenericVisitorGenerator(sourceRoot).generate();
-//        new HashCodeVisitorGenerator(sourceRoot).generate();
-//        new CloneVisitorGenerator(sourceRoot).generate();
-//        new TreeStructureVisitorGenerator(sourceRoot).generate();
-//        new ModifierVisitorGenerator(sourceRoot).generate();
-//
-//        new GetNodeListsGenerator(sourceRoot).generate();
-//        new PropertyGenerator(sourceRoot).generate();
-//        new RemoveMethodGenerator(sourceRoot).generate();
-//        new CloneGenerator(sourceRoot).generate();
-//        new GetMetaModelGenerator(sourceRoot).generate();
+        new GenericListVisitorAdapterGenerator(sourceRoot).generate();
+        new GenericVisitorAdapterGenerator(sourceRoot).generate();
+        new EqualsVisitorGenerator(sourceRoot).generate();
+        new VoidVisitorAdapterGenerator(sourceRoot).generate();
+        new VoidVisitorGenerator(sourceRoot).generate();
+        new GenericVisitorGenerator(sourceRoot).generate();
+        new HashCodeVisitorGenerator(sourceRoot).generate();
+        new CloneVisitorGenerator(sourceRoot).generate();
+        new TreeStructureVisitorGenerator(sourceRoot).generate();
+        new ModifierVisitorGenerator(sourceRoot).generate();
+
+        new GetNodeListsGenerator(sourceRoot).generate();
+        new PropertyGenerator(sourceRoot).generate();
+        new RemoveMethodGenerator(sourceRoot).generate();
+        new CloneGenerator(sourceRoot).generate();
+        new GetMetaModelGenerator(sourceRoot).generate();
         new MainConstructorGenerator(sourceRoot).generate();
     }
 }

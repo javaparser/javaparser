@@ -58,7 +58,7 @@ public final class AssertStmt extends Statement {
         this(null, check, message);
     }
 
-    public AssertStmt(final Range range, final Expression check, final Expression message) {
+    public AssertStmt(Range range, Expression check, Expression message) {
         super(range);
         setCheck(check);
         setMessage(message);

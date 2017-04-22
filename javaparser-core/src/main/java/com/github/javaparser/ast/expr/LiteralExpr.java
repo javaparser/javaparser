@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.LiteralExprMetaModel;
  * @author Julio Vilmar Gesser
  */
 public abstract class LiteralExpr extends Expression {
+
     @AllFieldsConstructor
     public LiteralExpr() {
         this(null);

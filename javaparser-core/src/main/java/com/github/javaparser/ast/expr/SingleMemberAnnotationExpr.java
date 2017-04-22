@@ -49,7 +49,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         this(null, name, memberValue);
     }
 
-    public SingleMemberAnnotationExpr(final Range range, final Name name, final Expression memberValue) {
+    public SingleMemberAnnotationExpr(Range range, Name name, Expression memberValue) {
         super(range, name);
         setMemberValue(memberValue);
     }

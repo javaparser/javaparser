@@ -56,7 +56,7 @@ public final class LabeledStmt extends Statement {
         this(null, label, statement);
     }
 
-    public LabeledStmt(Range range, final SimpleName label, final Statement statement) {
+    public LabeledStmt(Range range, SimpleName label, Statement statement) {
         super(range);
         setLabel(label);
         setStatement(statement);

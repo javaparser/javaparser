@@ -52,7 +52,7 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
         this(null, name);
     }
 
-    public MarkerAnnotationExpr(final Range range, final Name name) {
+    public MarkerAnnotationExpr(Range range, Name name) {
         super(range, name);
     }
 

@@ -58,7 +58,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         this(null, variable, iterable, body);
     }
 
-    public ForeachStmt(Range range, final VariableDeclarationExpr variable, final Expression iterable, final Statement body) {
+    public ForeachStmt(Range range, VariableDeclarationExpr variable, Expression iterable, Statement body) {
         super(range);
         setVariable(variable);
         setIterable(iterable);

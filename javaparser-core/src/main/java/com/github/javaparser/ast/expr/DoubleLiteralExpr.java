@@ -48,7 +48,7 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    public DoubleLiteralExpr(final Range range, final String value) {
+    public DoubleLiteralExpr(Range range, String value) {
         super(range, value);
     }
 

@@ -85,7 +85,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         this(null, expression, operator);
     }
 
-    public UnaryExpr(final Range range, final Expression expression, final Operator operator) {
+    public UnaryExpr(Range range, Expression expression, Operator operator) {
         super(range);
         setExpression(expression);
         setOperator(operator);

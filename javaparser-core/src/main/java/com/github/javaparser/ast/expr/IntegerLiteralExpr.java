@@ -50,7 +50,7 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    public IntegerLiteralExpr(final Range range, final String value) {
+    public IntegerLiteralExpr(Range range, String value) {
         super(range, value);
     }
 

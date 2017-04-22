@@ -51,7 +51,7 @@ public final class ReturnStmt extends Statement {
         this(null, expression);
     }
 
-    public ReturnStmt(Range range, final Expression expression) {
+    public ReturnStmt(Range range, Expression expression) {
         super(range);
         setExpression(expression);
     }

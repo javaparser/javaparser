@@ -40,8 +40,8 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
         this(null);
     }
 
-    public ReferenceType(final Range range) {
-        super(range, new NodeList<>());
+    public ReferenceType(Range range) {
+        super(range);
     }
 
     @Override

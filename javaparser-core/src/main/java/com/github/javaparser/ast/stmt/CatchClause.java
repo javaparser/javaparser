@@ -64,7 +64,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         this(null, parameter, body);
     }
 
-    public CatchClause(final Range range, final Parameter parameter, final BlockStmt body) {
+    public CatchClause(Range range, Parameter parameter, BlockStmt body) {
         super(range);
         setParameter(parameter);
         setBody(body);

@@ -120,8 +120,8 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         this(null, type);
     }
 
-    public PrimitiveType(Range range, final Primitive type) {
-        super(range, new NodeList<>());
+    public PrimitiveType(Range range, Primitive type) {
+        super(range);
         setType(type);
     }
 

@@ -53,7 +53,7 @@ public final class ThisExpr extends Expression {
         this(null, classExpr);
     }
 
-    public ThisExpr(final Range range, final Expression classExpr) {
+    public ThisExpr(Range range, Expression classExpr) {
         super(range);
         setClassExpr(classExpr);
     }

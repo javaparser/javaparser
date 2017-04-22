@@ -50,7 +50,7 @@ public abstract class Comment extends Node {
     public Comment(String content) {
         this(null, content);
     }
-    
+
     public Comment(Range range, String content) {
         super(range);
         setContent(content);
