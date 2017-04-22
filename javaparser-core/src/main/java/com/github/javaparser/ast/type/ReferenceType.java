@@ -24,9 +24,11 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Base class for reference types.
@@ -36,12 +38,14 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 public abstract class ReferenceType<T extends ReferenceType> extends Type {
 
     @AllFieldsConstructor
-    public ReferenceType() {
-        this(null);
+    public ReferenceType(NodeList<AnnotationExpr> annotations) {
+        this(null, annotations);
     }
 
-    public ReferenceType(Range range) {
-        super(range);
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ReferenceType(Range range, NodeList<AnnotationExpr> annotations) {
+        super(range, annotations);
+        customInitialization();
     }
 
     @Override
