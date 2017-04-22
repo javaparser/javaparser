@@ -140,5 +140,6 @@ public class PropertyGenerator extends NodeGenerator {
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
+        markGenerated(observablePropertyEnum);
     }
 }

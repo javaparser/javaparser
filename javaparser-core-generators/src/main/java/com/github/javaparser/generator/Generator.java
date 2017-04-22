@@ -1,13 +1,12 @@
 package com.github.javaparser.generator;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.CallableDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.utils.SourceRoot;
 
 import javax.annotation.Generated;
 
+import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -22,7 +21,11 @@ public abstract class Generator {
 
     public abstract void generate() throws Exception;
 
-    protected <T extends Node & NodeWithAnnotations> void markGenerated(T node) {
+    protected <T extends Node & NodeWithAnnotations<T>> void markGenerated(T node) {
+        node.setAnnotations(
+                node.getAnnotations().stream()
+                        .filter(a -> !a.getNameAsString().equals("Generated"))
+                        .collect(toNodeList()));
         node.addSingleMemberAnnotation(Generated.class, f("\"%s\"", getClass().getName()));
         node.tryAddImportToParentCompilationUnit(Generated.class);
     }
