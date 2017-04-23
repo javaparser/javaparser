@@ -24,12 +24,12 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.github.javaparser.JavaParser.parseType;
 import static java.util.stream.Collectors.toSet;
 
 public interface NodeWithParameters<N extends Node> {
@@ -38,6 +38,8 @@ public interface NodeWithParameters<N extends Node> {
     default Parameter getParameter(int i) {
         return getParameters().get(i);
     }
+
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
 
     @SuppressWarnings("unchecked")
     default N setParameter(int i, Parameter parameter) {
@@ -52,8 +54,8 @@ public interface NodeWithParameters<N extends Node> {
     }
 
     default N addParameter(Class<?> paramClass, String name) {
-        ((Node) this).tryAddImportToParentCompilationUnit(paramClass);
-        return addParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name);
+        tryAddImportToParentCompilationUnit(paramClass);
+        return addParameter(parseType(paramClass.getSimpleName()), name);
     }
 
     /**
@@ -63,7 +65,7 @@ public interface NodeWithParameters<N extends Node> {
      * @param name the name of the parameter
      */
     default N addParameter(String className, String name) {
-        return addParameter(new ClassOrInterfaceType(className), name);
+        return addParameter(parseType(className), name);
     }
 
     @SuppressWarnings("unchecked")
@@ -77,8 +79,8 @@ public interface NodeWithParameters<N extends Node> {
     }
 
     default Parameter addAndGetParameter(Class<?> paramClass, String name) {
-        ((Node) this).tryAddImportToParentCompilationUnit(paramClass);
-        return addAndGetParameter(new ClassOrInterfaceType(paramClass.getSimpleName()), name);
+        tryAddImportToParentCompilationUnit(paramClass);
+        return addAndGetParameter(parseType(paramClass.getSimpleName()), name);
     }
 
     /**
@@ -89,7 +91,7 @@ public interface NodeWithParameters<N extends Node> {
      * @return the {@link Parameter} created
      */
     default Parameter addAndGetParameter(String className, String name) {
-        return addAndGetParameter(new ClassOrInterfaceType(className), name);
+        return addAndGetParameter(parseType(className), name);
     }
 
     default Parameter addAndGetParameter(Parameter parameter) {

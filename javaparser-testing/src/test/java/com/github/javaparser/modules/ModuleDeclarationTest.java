@@ -14,6 +14,7 @@ import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -78,8 +79,8 @@ public class ModuleDeclarationTest {
         ModuleProvidesStmt moduleProvidesStmt = (ModuleProvidesStmt) module.getModuleStmts().get(9);
         assertThat(moduleProvidesStmt.getType().toString()).isEqualTo("X.Y");
         assertThat(moduleProvidesStmt.getWithTypes()).containsExactly(
-                new ClassOrInterfaceType(new ClassOrInterfaceType("Z1"), "Z2"),
-                new ClassOrInterfaceType(new ClassOrInterfaceType("Z3"), "Z4"));
+                new ClassOrInterfaceType(parseClassOrInterfaceType("Z1"), "Z2"),
+                new ClassOrInterfaceType(parseClassOrInterfaceType("Z3"), "Z4"));
 
     }
 

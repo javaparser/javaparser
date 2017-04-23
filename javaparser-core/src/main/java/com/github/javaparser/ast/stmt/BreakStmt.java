@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BreakStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A usage of the break keyword.
@@ -55,9 +56,12 @@ public final class BreakStmt extends Statement {
         this(null, label);
     }
 
-    public BreakStmt(final Range range, final SimpleName label) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public BreakStmt(Range range, SimpleName label) {
         super(range);
-        this.label = label;
+        setLabel(label);
+        customInitialization();
     }
 
     @Override
@@ -70,6 +74,7 @@ public final class BreakStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getLabel() {
         return Optional.ofNullable(label);
     }
@@ -80,6 +85,7 @@ public final class BreakStmt extends Statement {
      * @param label the label, can be null
      * @return this, the BreakStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BreakStmt setLabel(final SimpleName label) {
         if (label == this.label) {
             return (BreakStmt) this;
@@ -93,6 +99,7 @@ public final class BreakStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -105,16 +112,19 @@ public final class BreakStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public BreakStmt removeLabel() {
         return setLabel((SimpleName) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BreakStmt clone() {
         return (BreakStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BreakStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.breakStmtMetaModel;
     }

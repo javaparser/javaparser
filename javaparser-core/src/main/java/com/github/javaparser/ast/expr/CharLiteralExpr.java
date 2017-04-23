@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.CharLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.StringEscapeUtils;
 import com.github.javaparser.utils.Utils;
+import javax.annotation.Generated;
 
 /**
  * A literal character.
@@ -61,8 +62,11 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         this(null, StringEscapeUtils.escapeJava(String.valueOf(value)));
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CharLiteralExpr(Range range, String value) {
         super(range, value);
+        customInitialization();
     }
 
     /**
@@ -83,6 +87,7 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -108,11 +113,13 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CharLiteralExpr clone() {
         return (CharLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CharLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.charLiteralExprMetaModel;
     }

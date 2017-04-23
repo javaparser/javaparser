@@ -30,9 +30,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InternalProperty;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -110,11 +110,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     public boolean contains(N node) {
         return innerList.contains(node);
-    }
-
-    @Override
-    public Stream<N> stream() {
-        return innerList.stream();
     }
 
     @Override
@@ -458,5 +453,12 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public void ifNonEmpty(Consumer<? super NodeList<N>> consumer) {
         if (isNonEmpty())
             consumer.accept(this);
+    }
+
+    public static <T extends Node> Collector<T, NodeList<T>, NodeList<T>> toNodeList() {
+        return Collector.of(NodeList::new, NodeList::add, (left, right) -> {
+            left.addAll(right);
+            return left;
+        });
     }
 }

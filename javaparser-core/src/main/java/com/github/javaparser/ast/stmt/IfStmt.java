@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -59,11 +60,14 @@ public final class IfStmt extends Statement {
         this(null, condition, thenStmt, elseStmt);
     }
 
-    public IfStmt(Range range, final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public IfStmt(Range range, Expression condition, Statement thenStmt, Statement elseStmt) {
         super(range);
         setCondition(condition);
         setThenStmt(thenStmt);
         setElseStmt(elseStmt);
+        customInitialization();
     }
 
     @Override
@@ -76,18 +80,22 @@ public final class IfStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
         return condition;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Statement> getElseStmt() {
         return Optional.ofNullable(elseStmt);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getThenStmt() {
         return thenStmt;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
@@ -107,6 +115,7 @@ public final class IfStmt extends Statement {
      * @param elseStmt the elseStmt, can be null
      * @return this, the IfStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setElseStmt(final Statement elseStmt) {
         if (elseStmt == this.elseStmt) {
             return (IfStmt) this;
@@ -119,6 +128,7 @@ public final class IfStmt extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setThenStmt(final Statement thenStmt) {
         assertNotNull(thenStmt);
         if (thenStmt == this.thenStmt) {
@@ -133,6 +143,7 @@ public final class IfStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -145,6 +156,7 @@ public final class IfStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public IfStmt removeElseStmt() {
         return setElseStmt((Statement) null);
     }
@@ -160,11 +172,13 @@ public final class IfStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IfStmt clone() {
         return (IfStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }

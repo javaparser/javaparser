@@ -29,6 +29,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static org.junit.Assert.assertEquals;
 
 public class NodeWithThrownExceptionsBuildersTest {
@@ -50,7 +51,7 @@ public class NodeWithThrownExceptionsBuildersTest {
         addMethod.addThrownException(IllegalStateException.class);
         assertEquals(1, addMethod.getThrownExceptions().size());
         assertEquals(true, addMethod.isThrown(IllegalStateException.class));
-        addMethod.addThrownException(new ClassOrInterfaceType("Test"));
+        addMethod.addThrownException(parseClassOrInterfaceType("Test"));
         assertEquals(2, addMethod.getThrownExceptions().size());
         assertEquals("Test", addMethod.getThrownException(1).toString());
     }

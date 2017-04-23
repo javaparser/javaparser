@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.EnclosedExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An expression between ( ).
@@ -50,9 +51,12 @@ public final class EnclosedExpr extends Expression {
         this(null, inner);
     }
 
-    public EnclosedExpr(final Range range, final Expression inner) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public EnclosedExpr(Range range, Expression inner) {
         super(range);
         setInner(inner);
+        customInitialization();
     }
 
     @Override
@@ -65,6 +69,7 @@ public final class EnclosedExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getInner() {
         return Optional.ofNullable(inner);
     }
@@ -75,6 +80,7 @@ public final class EnclosedExpr extends Expression {
      * @param inner the inner expression, can be null
      * @return this, the EnclosedExpr
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnclosedExpr setInner(final Expression inner) {
         if (inner == this.inner) {
             return (EnclosedExpr) this;
@@ -88,6 +94,7 @@ public final class EnclosedExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -100,16 +107,19 @@ public final class EnclosedExpr extends Expression {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public EnclosedExpr removeInner() {
         return setInner((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public EnclosedExpr clone() {
         return (EnclosedExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public EnclosedExprMetaModel getMetaModel() {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }

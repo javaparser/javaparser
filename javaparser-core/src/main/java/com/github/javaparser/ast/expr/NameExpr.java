@@ -31,6 +31,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -55,9 +56,12 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         this(name.getRange().orElse(null), name);
     }
 
-    public NameExpr(Range range, final SimpleName name) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public NameExpr(Range range, SimpleName name) {
         super(range);
         setName(name);
+        customInitialization();
     }
 
     @Override
@@ -70,12 +74,12 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         v.visit(this, arg);
     }
 
-    @Override
-    public final SimpleName getName() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getName() {
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NameExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -90,6 +94,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -97,11 +102,13 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NameExpr clone() {
         return (NameExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NameExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nameExprMetaModel;
     }

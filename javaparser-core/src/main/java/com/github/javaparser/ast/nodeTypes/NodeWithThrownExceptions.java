@@ -26,6 +26,8 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+
 /**
  * A node that declares the types of exception it throws.
  */
@@ -60,7 +62,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
      */
     default N addThrownException(Class<? extends Throwable> clazz) {
         tryAddImportToParentCompilationUnit(clazz);
-        return addThrownException(new ClassOrInterfaceType(clazz.getSimpleName()));
+        return addThrownException(parseClassOrInterfaceType(clazz.getSimpleName()));
     }
 
     /**

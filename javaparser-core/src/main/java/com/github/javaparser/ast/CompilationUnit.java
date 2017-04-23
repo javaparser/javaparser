@@ -45,6 +45,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -83,12 +85,15 @@ public final class CompilationUnit extends Node {
         this(null, packageDeclaration, imports, types, module);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(range);
-        setModule(module);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
+        setModule(module);
+        customInitialization();
     }
 
     @Override
@@ -122,6 +127,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the list of imports or <code>none</code> if there is no import
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> getImports() {
         return imports;
     }
@@ -137,6 +143,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the package declaration or <code>none</code>
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<PackageDeclaration> getPackageDeclaration() {
         return Optional.ofNullable(packageDeclaration);
     }
@@ -150,6 +157,7 @@ public final class CompilationUnit extends Node {
      * @see ClassOrInterfaceDeclaration
      * @see EnumDeclaration
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
     }
@@ -170,6 +178,7 @@ public final class CompilationUnit extends Node {
      *
      * @param imports the list of imports
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
@@ -198,6 +207,7 @@ public final class CompilationUnit extends Node {
      *
      * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
             return (CompilationUnit) this;
@@ -213,6 +223,7 @@ public final class CompilationUnit extends Node {
     /**
      * Sets the list of types declared in this compilation unit.
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
@@ -436,11 +447,13 @@ public final class CompilationUnit extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getImports(), getTypes());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -471,14 +484,17 @@ public final class CompilationUnit extends Node {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removePackageDeclaration() {
         return setPackageDeclaration((PackageDeclaration) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ModuleDeclaration> getModule() {
         return Optional.ofNullable(module);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
         if (module == this.module) {
             return (CompilationUnit) this;
@@ -491,16 +507,19 @@ public final class CompilationUnit extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removeModule() {
         return setModule((ModuleDeclaration) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CompilationUnit clone() {
         return (CompilationUnit) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CompilationUnitMetaModel getMetaModel() {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }

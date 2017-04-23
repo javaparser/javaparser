@@ -35,6 +35,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
 
@@ -464,7 +465,7 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a Java type name and returns a {@link ClassOrInterfaceType} that represents it.
+     * Parses a Java class or interface type name and returns a {@link ClassOrInterfaceType} that represents it.
      *
      * @param type the type name like a.b.c.X or Y
      * @return ClassOrInterfaceType representing the type
@@ -472,6 +473,17 @@ public final class JavaParser {
      */
     public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
         return simplifiedParse(CLASS_OR_INTERFACE_TYPE, provider(type));
+    }
+
+    /**
+     * Parses a Java type name and returns a {@link Type} that represents it.
+     *
+     * @param type the type name like a.b.c.X, Y, or int
+     * @return ClassOrInterfaceType representing the type
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Type parseType(String type) {
+        return simplifiedParse(TYPE, provider(type));
     }
 
     /**

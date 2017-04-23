@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SingleMemberAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An annotation that has a single value. <br/><code>@Count(15)</code>
@@ -49,9 +50,12 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         this(null, name, memberValue);
     }
 
-    public SingleMemberAnnotationExpr(final Range range, final Name name, final Expression memberValue) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public SingleMemberAnnotationExpr(Range range, Name name, Expression memberValue) {
         super(range, name);
         setMemberValue(memberValue);
+        customInitialization();
     }
 
     @Override
@@ -64,10 +68,12 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getMemberValue() {
         return memberValue;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
         assertNotNull(memberValue);
         if (memberValue == this.memberValue) {
@@ -82,6 +88,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -89,11 +96,13 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SingleMemberAnnotationExpr clone() {
         return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SingleMemberAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.singleMemberAnnotationExprMetaModel;
     }

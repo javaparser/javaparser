@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.WhileStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A while statement.
@@ -55,10 +56,13 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         this(null, condition, body);
     }
 
-    public WhileStmt(Range range, final Expression condition, final Statement body) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public WhileStmt(Range range, Expression condition, Statement body) {
         super(range);
         setCondition(condition);
         setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -71,16 +75,17 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
         return condition;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -94,6 +99,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
@@ -108,6 +114,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -115,11 +122,13 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public WhileStmt clone() {
         return (WhileStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public WhileStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.whileStmtMetaModel;
     }

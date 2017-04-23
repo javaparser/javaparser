@@ -39,6 +39,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A method call on an object. <br/><code>circle.circumference()</code> <br/>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -73,12 +74,15 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         this(null, scope, typeArguments, name, arguments);
     }
 
-    public MethodCallExpr(final Range range, final Expression scope, final NodeList<Type> typeArguments, final SimpleName name, final NodeList<Expression> arguments) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public MethodCallExpr(Range range, Expression scope, NodeList<Type> typeArguments, SimpleName name, NodeList<Expression> arguments) {
         super(range);
         setScope(scope);
         setTypeArguments(typeArguments);
         setName(name);
         setArguments(arguments);
+        customInitialization();
     }
 
     @Override
@@ -91,20 +95,22 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
         return arguments;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
@@ -118,7 +124,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -132,7 +138,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setScope(final Expression scope) {
         if (scope == this.scope) {
             return (MethodCallExpr) this;
@@ -145,7 +151,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
@@ -156,7 +162,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
      * @param typeArguments the typeArguments, can be null
      * @return this, the MethodCallExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (MethodCallExpr) this;
@@ -170,11 +176,13 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getArguments(), getTypeArguments().orElse(null));
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -201,16 +209,19 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodCallExpr removeScope() {
         return setScope((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodCallExpr clone() {
         return (MethodCallExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MethodCallExprMetaModel getMetaModel() {
         return JavaParserMetaModel.methodCallExprMetaModel;
     }

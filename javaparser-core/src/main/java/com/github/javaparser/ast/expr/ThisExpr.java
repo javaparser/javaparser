@@ -30,6 +30,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * An occurrence of the "this" keyword. <br/><code>World.this.greet()</code> is a MethodCallExpr of method name greet,
@@ -53,9 +54,12 @@ public final class ThisExpr extends Expression {
         this(null, classExpr);
     }
 
-    public ThisExpr(final Range range, final Expression classExpr) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ThisExpr(Range range, Expression classExpr) {
         super(range);
         setClassExpr(classExpr);
+        customInitialization();
     }
 
     @Override
@@ -68,10 +72,12 @@ public final class ThisExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getClassExpr() {
         return Optional.ofNullable(classExpr);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ThisExpr setClassExpr(final Expression classExpr) {
         if (classExpr == this.classExpr) {
             return (ThisExpr) this;
@@ -85,6 +91,7 @@ public final class ThisExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -97,16 +104,19 @@ public final class ThisExpr extends Expression {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeClassExpr() {
         return setClassExpr((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ThisExpr clone() {
         return (ThisExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ThisExprMetaModel getMetaModel() {
         return JavaParserMetaModel.thisExprMetaModel;
     }

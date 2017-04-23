@@ -34,6 +34,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CastExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A typecast. The (long) in <code>(long)15</code>
@@ -55,10 +56,13 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         this(null, type, expression);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CastExpr(Range range, Type type, Expression expression) {
         super(range);
         setType(type);
         setExpression(expression);
+        customInitialization();
     }
 
     @Override
@@ -71,17 +75,17 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CastExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
@@ -95,7 +99,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CastExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -110,6 +114,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -117,11 +122,13 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CastExpr clone() {
         return (CastExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CastExprMetaModel getMetaModel() {
         return JavaParserMetaModel.castExprMetaModel;
     }

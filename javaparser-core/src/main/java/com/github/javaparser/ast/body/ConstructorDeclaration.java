@@ -43,6 +43,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
@@ -66,9 +67,12 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions, BlockStmt body) {
         super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -81,7 +85,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
@@ -92,7 +96,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
      * @param body the body, can not be null
      * @return this, the ConstructorDeclaration
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -166,11 +170,13 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -178,11 +184,13 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConstructorDeclaration clone() {
         return (ConstructorDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ConstructorDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.constructorDeclarationMetaModel;
     }

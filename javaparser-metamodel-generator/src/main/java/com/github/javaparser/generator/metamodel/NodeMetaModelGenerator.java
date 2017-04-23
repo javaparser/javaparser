@@ -95,9 +95,7 @@ public class NodeMetaModelGenerator {
             }
         }
 
-        if (!typeAnalysis.isAbstract) {
-            initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
-        }
+        initializeConstructorParametersStatementsGenerator.generate(nodeClass, initializeConstructorParametersStatements);
 
         moveStaticInitializeToTheEndOfTheClassBecauseWeNeedTheFieldsToInitializeFirst(metaModelCoid);
     }
