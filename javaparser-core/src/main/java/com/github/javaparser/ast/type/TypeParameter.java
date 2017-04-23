@@ -105,7 +105,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
      *
      * @return the name of the paramenter
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
@@ -116,6 +116,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
      *
      * @return list of types that this paramente extends or <code>null</code>
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getTypeBound() {
         return typeBound;
     }

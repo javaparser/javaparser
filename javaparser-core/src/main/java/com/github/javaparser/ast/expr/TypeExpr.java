@@ -73,7 +73,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }

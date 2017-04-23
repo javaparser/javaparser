@@ -89,6 +89,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
      * catch(@X A a |...) are found directly in the Parameter. Annotations that are on the second or later type -
      * catch(A a | @X B b ...) are found on those types.
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter getParameter() {
         return parameter;
     }
@@ -107,7 +108,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }

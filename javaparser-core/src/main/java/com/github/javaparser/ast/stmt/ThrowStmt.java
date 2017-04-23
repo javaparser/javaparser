@@ -72,7 +72,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }

@@ -74,6 +74,7 @@ public final class BreakStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getLabel() {
         return Optional.ofNullable(label);
     }

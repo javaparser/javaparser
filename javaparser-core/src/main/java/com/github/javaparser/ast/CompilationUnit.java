@@ -126,6 +126,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the list of imports or <code>none</code> if there is no import
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> getImports() {
         return imports;
     }
@@ -141,6 +142,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the package declaration or <code>none</code>
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<PackageDeclaration> getPackageDeclaration() {
         return Optional.ofNullable(packageDeclaration);
     }
@@ -154,6 +156,7 @@ public final class CompilationUnit extends Node {
      * @see ClassOrInterfaceDeclaration
      * @see EnumDeclaration
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
     }
@@ -483,6 +486,7 @@ public final class CompilationUnit extends Node {
         return setPackageDeclaration((PackageDeclaration) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ModuleDeclaration> getModule() {
         return Optional.ofNullable(module);
     }

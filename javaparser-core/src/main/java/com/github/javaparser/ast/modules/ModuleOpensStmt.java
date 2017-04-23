@@ -64,6 +64,7 @@ public class ModuleOpensStmt extends ModuleStmt implements NodeWithName<ModuleOp
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
@@ -82,6 +83,7 @@ public class ModuleOpensStmt extends ModuleStmt implements NodeWithName<ModuleOp
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> getModuleNames() {
         return moduleNames;
     }

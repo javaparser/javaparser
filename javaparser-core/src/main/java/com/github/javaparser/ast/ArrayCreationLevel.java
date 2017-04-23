@@ -104,11 +104,12 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getDimension() {
         return Optional.ofNullable(dimension);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }

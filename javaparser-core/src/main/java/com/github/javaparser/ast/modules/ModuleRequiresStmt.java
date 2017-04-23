@@ -55,7 +55,7 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
@@ -71,7 +71,7 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }

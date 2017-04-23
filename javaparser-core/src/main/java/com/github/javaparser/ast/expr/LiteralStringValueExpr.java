@@ -50,7 +50,8 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         customInitialization();
     }
 
-    public final String getValue() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getValue() {
         return value;
     }
 

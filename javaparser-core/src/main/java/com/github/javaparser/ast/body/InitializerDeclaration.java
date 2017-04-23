@@ -77,10 +77,12 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return isStatic;
     }

@@ -99,18 +99,22 @@ public final class TryStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<CatchClause> getCatchClauses() {
         return catchClauses;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getFinallyBlock() {
         return Optional.ofNullable(finallyBlock);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getTryBlock() {
         return Optional.ofNullable(tryBlock);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarationExpr> getResources() {
         return resources;
     }

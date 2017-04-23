@@ -76,6 +76,7 @@ public final class LabeledStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getStatement() {
         return statement;
     }
@@ -94,7 +95,8 @@ public final class LabeledStmt extends Statement {
         return this;
     }
 
-    public final SimpleName getLabel() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getLabel() {
         return label;
     }
 

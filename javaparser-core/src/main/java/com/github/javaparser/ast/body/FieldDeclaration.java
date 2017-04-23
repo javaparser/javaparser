@@ -120,12 +120,12 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
      * @return modifiers
      * @see Modifier
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }

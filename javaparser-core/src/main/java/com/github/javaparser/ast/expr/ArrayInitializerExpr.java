@@ -74,6 +74,7 @@ public final class ArrayInitializerExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getValues() {
         return values;
     }

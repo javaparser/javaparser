@@ -90,6 +90,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getScope() {
         return scope;
     }
@@ -108,7 +109,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
@@ -132,7 +133,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
         return identifier;
     }

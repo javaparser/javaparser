@@ -65,6 +65,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
@@ -83,6 +84,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> getWithTypes() {
         return withTypes;
     }

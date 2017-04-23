@@ -76,12 +76,12 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReferenceType<?> getType() {
         return type;
     }

@@ -139,11 +139,12 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getInitializer() {
         return Optional.ofNullable(initializer);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
@@ -191,7 +192,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         return setInitializer(new NameExpr(assertNonEmpty(init)));
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }

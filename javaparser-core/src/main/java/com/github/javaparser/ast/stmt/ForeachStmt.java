@@ -83,15 +83,17 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getIterable() {
         return iterable;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr getVariable() {
         return variable;
     }

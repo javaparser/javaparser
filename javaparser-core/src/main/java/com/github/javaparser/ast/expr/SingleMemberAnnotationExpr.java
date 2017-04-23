@@ -68,6 +68,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getMemberValue() {
         return memberValue;
     }

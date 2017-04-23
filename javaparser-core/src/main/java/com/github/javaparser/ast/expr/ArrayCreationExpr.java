@@ -93,10 +93,12 @@ public final class ArrayCreationExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ArrayInitializerExpr> getInitializer() {
         return Optional.ofNullable(initializer);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getElementType() {
         return elementType;
     }
@@ -134,6 +136,7 @@ public final class ArrayCreationExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ArrayCreationLevel> getLevels() {
         return levels;
     }

@@ -66,6 +66,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         this(null, elements);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType<?>> getElements() {
         return elements;
     }

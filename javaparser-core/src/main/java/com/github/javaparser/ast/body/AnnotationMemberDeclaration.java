@@ -97,6 +97,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getDefaultValue() {
         return Optional.ofNullable(defaultValue);
     }
@@ -107,17 +108,17 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @return modifiers
      * @see Modifier
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }

@@ -115,7 +115,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
@@ -126,12 +126,12 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
      * @return modifiers
      * @see Modifier
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }

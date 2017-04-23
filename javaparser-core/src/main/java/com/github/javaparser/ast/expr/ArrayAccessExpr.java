@@ -72,10 +72,12 @@ public final class ArrayAccessExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getIndex() {
         return index;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getName() {
         return name;
     }

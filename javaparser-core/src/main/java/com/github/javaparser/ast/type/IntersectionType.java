@@ -79,6 +79,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType<?>> getElements() {
         return elements;
     }

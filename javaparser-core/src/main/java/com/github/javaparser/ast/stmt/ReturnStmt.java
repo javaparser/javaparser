@@ -77,6 +77,7 @@ public final class ReturnStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getExpression() {
         return Optional.ofNullable(expression);
     }

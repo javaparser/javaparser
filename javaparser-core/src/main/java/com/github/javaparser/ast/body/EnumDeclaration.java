@@ -85,6 +85,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<EnumConstantDeclaration> getEntries() {
         return entries;
     }
@@ -103,7 +104,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
     }

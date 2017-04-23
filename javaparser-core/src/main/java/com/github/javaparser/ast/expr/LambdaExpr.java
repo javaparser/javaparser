@@ -80,7 +80,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         customInitialization();
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
@@ -99,6 +99,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
     }
@@ -127,6 +128,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isEnclosingParameters() {
         return isEnclosingParameters;
     }

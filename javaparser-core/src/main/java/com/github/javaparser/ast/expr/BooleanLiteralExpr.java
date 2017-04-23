@@ -69,6 +69,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean getValue() {
         return value;
     }

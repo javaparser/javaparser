@@ -65,7 +65,8 @@ public abstract class Comment extends Node {
      *
      * @return text of the comment
      */
-    public final String getContent() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getContent() {
         return content;
     }
 

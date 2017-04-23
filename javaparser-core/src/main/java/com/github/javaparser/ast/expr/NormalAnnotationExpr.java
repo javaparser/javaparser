@@ -70,6 +70,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<MemberValuePair> getPairs() {
         return pairs;
     }

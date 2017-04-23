@@ -88,7 +88,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return (T) this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<BodyDeclaration<?>> getMembers() {
         return members;
     }
@@ -99,8 +99,8 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
      * @return modifiers
      * @see Modifier
      */
-    @Override
-    public final EnumSet<Modifier> getModifiers() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
@@ -146,8 +146,8 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
         return (T) this;
     }
 
-    @Override
-    public final SimpleName getName() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getName() {
         return name;
     }
 

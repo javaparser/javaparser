@@ -80,14 +80,17 @@ public final class IfStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
         return condition;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Statement> getElseStmt() {
         return Optional.ofNullable(elseStmt);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getThenStmt() {
         return thenStmt;
     }

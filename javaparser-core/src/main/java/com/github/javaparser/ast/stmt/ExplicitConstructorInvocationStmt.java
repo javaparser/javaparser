@@ -92,6 +92,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
         return arguments;
     }
@@ -110,10 +111,12 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getExpression() {
         return Optional.ofNullable(expression);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
         return isThis;
     }
@@ -161,7 +164,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }

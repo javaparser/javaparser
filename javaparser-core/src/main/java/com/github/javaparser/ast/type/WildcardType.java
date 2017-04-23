@@ -83,10 +83,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReferenceType> getExtendedType() {
         return Optional.ofNullable(extendedType);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReferenceType> getSuperType() {
         return Optional.ofNullable(superType);
     }

@@ -117,11 +117,12 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isVarArgs() {
         return isVarArgs;
     }
@@ -153,12 +154,12 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
@@ -169,7 +170,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
      * @return modifiers
      * @see Modifier
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
@@ -242,6 +243,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getVarArgsAnnotations() {
         return varArgsAnnotations;
     }

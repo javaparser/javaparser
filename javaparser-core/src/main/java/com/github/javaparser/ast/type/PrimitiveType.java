@@ -140,6 +140,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Primitive getType() {
         return type;
     }

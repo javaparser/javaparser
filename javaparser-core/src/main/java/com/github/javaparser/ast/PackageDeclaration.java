@@ -88,7 +88,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      *
      * @return list of annotations or <code>null</code>
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
@@ -98,7 +98,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      *
      * @return the name of the package
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }

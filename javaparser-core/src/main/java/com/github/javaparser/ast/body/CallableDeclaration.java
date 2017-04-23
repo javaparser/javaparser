@@ -83,6 +83,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
      * @return modifiers
      * @see Modifier
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
@@ -99,6 +100,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
@@ -118,6 +120,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
@@ -137,6 +140,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType<?>> getThrownExceptions() {
         return thrownExceptions;
     }
@@ -156,6 +160,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }

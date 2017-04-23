@@ -52,6 +52,7 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }

@@ -72,6 +72,7 @@ public final class LocalClassDeclarationStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration getClassDeclaration() {
         return classDeclaration;
     }

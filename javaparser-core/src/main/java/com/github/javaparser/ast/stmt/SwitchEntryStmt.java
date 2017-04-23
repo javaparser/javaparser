@@ -92,10 +92,12 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getLabel() {
         return Optional.ofNullable(label);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
     }

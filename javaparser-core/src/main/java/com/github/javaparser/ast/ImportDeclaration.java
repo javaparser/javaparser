@@ -84,6 +84,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     /**
      * Retrieves the name of the import (.* is not included.)
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
@@ -91,10 +92,12 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     /**
      * Return if the import ends with "*".
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
         return isAsterisk;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return isStatic;
     }

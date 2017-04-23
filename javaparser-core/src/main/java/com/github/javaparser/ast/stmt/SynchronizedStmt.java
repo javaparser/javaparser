@@ -76,6 +76,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
@@ -94,7 +95,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }

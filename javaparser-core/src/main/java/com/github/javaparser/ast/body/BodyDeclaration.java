@@ -68,8 +68,8 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         this(range, new NodeList<>());
     }
 
-    @Override
-    public final NodeList<AnnotationExpr> getAnnotations() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 

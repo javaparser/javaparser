@@ -164,7 +164,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *
      * @return comment property
      */
-    public final Optional<Comment> getComment() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<Comment> getComment() {
         return Optional.ofNullable(comment);
     }
 

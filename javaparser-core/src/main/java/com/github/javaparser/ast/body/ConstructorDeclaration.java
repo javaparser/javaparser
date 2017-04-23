@@ -85,7 +85,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }

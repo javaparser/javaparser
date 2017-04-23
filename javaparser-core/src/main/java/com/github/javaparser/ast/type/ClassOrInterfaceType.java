@@ -106,11 +106,12 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ClassOrInterfaceType> getScope() {
         return Optional.ofNullable(scope);
     }
@@ -159,7 +160,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }

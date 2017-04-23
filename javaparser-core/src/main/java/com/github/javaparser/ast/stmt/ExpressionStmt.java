@@ -71,7 +71,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }

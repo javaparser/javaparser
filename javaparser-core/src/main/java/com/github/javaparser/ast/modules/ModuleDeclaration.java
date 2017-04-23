@@ -66,7 +66,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
@@ -85,7 +85,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
@@ -129,6 +129,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isOpen() {
         return isOpen;
     }
@@ -143,6 +144,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ModuleStmt> getModuleStmts() {
         return moduleStmts;
     }

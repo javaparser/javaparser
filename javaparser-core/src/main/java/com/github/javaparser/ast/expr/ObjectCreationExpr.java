@@ -104,6 +104,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<BodyDeclaration<?>>> getAnonymousClassBody() {
         return Optional.ofNullable(anonymousClassBody);
     }
@@ -114,17 +115,17 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         anonymousClassBody.add(body);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getArguments() {
         return arguments;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getScope() {
         return Optional.ofNullable(scope);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType getType() {
         return type;
     }
@@ -197,7 +198,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }

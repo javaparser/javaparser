@@ -107,7 +107,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
         return Optional.ofNullable(body);
     }
@@ -131,7 +131,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }

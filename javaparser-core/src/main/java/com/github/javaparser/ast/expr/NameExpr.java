@@ -74,8 +74,8 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         v.visit(this, arg);
     }
 
-    @Override
-    public final SimpleName getName() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName getName() {
         return name;
     }
 

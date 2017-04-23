@@ -78,10 +78,12 @@ public final class AssertStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCheck() {
         return check;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getMessage() {
         return Optional.ofNullable(message);
     }

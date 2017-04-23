@@ -99,8 +99,8 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         v.visit(this, arg);
     }
 
-    @Override
-    public final String getIdentifier() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getIdentifier() {
         return identifier;
     }
 
@@ -139,6 +139,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         return identifier;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getQualifier() {
         return Optional.ofNullable(qualifier);
     }
@@ -179,7 +180,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         return setQualifier((Name) null);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }

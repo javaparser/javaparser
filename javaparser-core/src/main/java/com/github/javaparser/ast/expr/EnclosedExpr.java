@@ -69,6 +69,7 @@ public final class EnclosedExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getInner() {
         return Optional.ofNullable(inner);
     }

@@ -76,7 +76,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getLabel() {
         return Optional.ofNullable(label);
     }

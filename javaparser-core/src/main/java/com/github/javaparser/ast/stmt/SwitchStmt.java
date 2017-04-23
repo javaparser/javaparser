@@ -79,6 +79,7 @@ public final class SwitchStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<SwitchEntryStmt> getEntries() {
         return entries;
     }
@@ -87,6 +88,7 @@ public final class SwitchStmt extends Statement {
         return getEntries().get(i);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getSelector() {
         return selector;
     }

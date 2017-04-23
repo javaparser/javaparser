@@ -72,8 +72,8 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         v.visit(this, arg);
     }
 
-    @Override
-    public final String getIdentifier() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getIdentifier() {
         return identifier;
     }
 

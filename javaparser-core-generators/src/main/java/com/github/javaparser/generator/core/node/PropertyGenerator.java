@@ -54,7 +54,6 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             setter.setType(parseType("T"));
         }
-        setter.getParameters().clear();
         setter.addAndGetParameter(property.getTypeNameForSetter(), property.getName())
                 .addModifier(FINAL);
 
@@ -92,17 +91,16 @@ public class PropertyGenerator extends NodeGenerator {
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
-        final List<MethodDeclaration> getters = nodeCoid.getMethodsByName(property.getGetterMethodName());
-        if (getters.size() != 1) {
-            throw new AssertionError(f("Not exactly one getter exists: %s.%s = %s", nodeMetaModel.getTypeName(), property.getName(), getters.size()));
-        }
-        final BlockStmt body = getters.get(0).getBody().get();
+        final MethodDeclaration getter = new MethodDeclaration(EnumSet.of(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
+        final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();
         if (property.isOptional()) {
             body.addStatement(f("return Optional.ofNullable(%s);", property.getName()));
         } else {
             body.addStatement(f("return %s;", property.getName()));
         }
+        replaceWhenSameSignature(nodeCoid, getter);
+        annotateGenerated(getter);
     }
 
     private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {

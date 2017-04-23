@@ -76,6 +76,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getComponentType() {
         return componentType;
     }
