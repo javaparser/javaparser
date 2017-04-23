@@ -115,7 +115,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return isInterface;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         if (extendedTypes == this.extendedTypes) {
@@ -129,7 +129,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
@@ -143,6 +143,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
         if (isInterface == this.isInterface) {
             return (ClassOrInterfaceDeclaration) this;
@@ -152,7 +153,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {

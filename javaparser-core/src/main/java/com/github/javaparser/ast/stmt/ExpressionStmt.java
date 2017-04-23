@@ -76,7 +76,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         return expression;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {

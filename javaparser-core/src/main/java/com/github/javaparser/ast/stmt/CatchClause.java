@@ -93,6 +93,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return parameter;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CatchClause setParameter(final Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
@@ -111,7 +112,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         return body;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CatchClause setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {

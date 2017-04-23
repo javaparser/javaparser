@@ -115,6 +115,7 @@ public final class TryStmt extends Statement {
         return resources;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setCatchClauses(final NodeList<CatchClause> catchClauses) {
         assertNotNull(catchClauses);
         if (catchClauses == this.catchClauses) {
@@ -128,6 +129,7 @@ public final class TryStmt extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setFinallyBlock(final BlockStmt finallyBlock) {
         if (finallyBlock == this.finallyBlock) {
             return (TryStmt) this;
@@ -140,6 +142,7 @@ public final class TryStmt extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setTryBlock(final BlockStmt tryBlock) {
         if (tryBlock == this.tryBlock) {
             return (TryStmt) this;
@@ -152,6 +155,7 @@ public final class TryStmt extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setResources(final NodeList<VariableDeclarationExpr> resources) {
         assertNotNull(resources);
         if (resources == this.resources) {

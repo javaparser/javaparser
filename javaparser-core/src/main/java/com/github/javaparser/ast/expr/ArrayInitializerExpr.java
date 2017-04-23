@@ -78,6 +78,7 @@ public final class ArrayInitializerExpr extends Expression {
         return values;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayInitializerExpr setValues(final NodeList<Expression> values) {
         assertNotNull(values);
         if (values == this.values) {

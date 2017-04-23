@@ -76,6 +76,7 @@ public final class ThisExpr extends Expression {
         return Optional.ofNullable(classExpr);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ThisExpr setClassExpr(final Expression classExpr) {
         if (classExpr == this.classExpr) {
             return (ThisExpr) this;

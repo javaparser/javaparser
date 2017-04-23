@@ -120,7 +120,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         return typeBound;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypeParameter setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -134,6 +134,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
         assertNotNull(typeBound);
         if (typeBound == this.typeBound) {

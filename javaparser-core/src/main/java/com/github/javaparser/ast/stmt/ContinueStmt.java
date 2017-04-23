@@ -87,7 +87,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
      * @param label the label, can be null
      * @return this, the ContinueStmt
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ContinueStmt setLabel(final SimpleName label) {
         if (label == this.label) {
             return (ContinueStmt) this;

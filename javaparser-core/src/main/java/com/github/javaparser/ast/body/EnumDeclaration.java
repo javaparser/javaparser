@@ -108,6 +108,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return implementedTypes;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
@@ -121,7 +122,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {

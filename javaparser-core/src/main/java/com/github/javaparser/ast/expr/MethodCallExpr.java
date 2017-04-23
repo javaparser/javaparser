@@ -109,6 +109,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return Optional.ofNullable(scope);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
@@ -122,7 +123,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -136,7 +137,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setScope(final Expression scope) {
         if (scope == this.scope) {
             return (MethodCallExpr) this;
@@ -160,7 +161,7 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
      * @param typeArguments the typeArguments, can be null
      * @return this, the MethodCallExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodCallExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (MethodCallExpr) this;

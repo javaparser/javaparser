@@ -78,7 +78,7 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypeExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {

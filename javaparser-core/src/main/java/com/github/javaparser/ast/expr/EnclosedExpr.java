@@ -79,6 +79,7 @@ public final class EnclosedExpr extends Expression {
      * @param inner the inner expression, can be null
      * @return this, the EnclosedExpr
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnclosedExpr setInner(final Expression inner) {
         if (inner == this.inner) {
             return (EnclosedExpr) this;

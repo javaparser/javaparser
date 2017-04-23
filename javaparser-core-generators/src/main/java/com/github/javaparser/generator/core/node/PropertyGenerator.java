@@ -1,6 +1,5 @@
 package com.github.javaparser.generator.core.node;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -9,14 +8,16 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
-import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SourceRoot;
 
 import java.util.*;
 
+import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.ast.Modifier.FINAL;
+import static com.github.javaparser.ast.Modifier.PUBLIC;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
@@ -39,24 +40,23 @@ public class PropertyGenerator extends NodeGenerator {
     }
 
     private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
-        final List<MethodDeclaration> setters = nodeCoid.getMethodsBySignature(property.getSetterMethodName(), property.getTypeNameForSetter());
         final String name = property.getName();
-        if (setters.size() != 1) {
-            throw new AssertionError(f("Not exactly one setter exists: %s.%s = %s", nodeMetaModel.getTypeName(), name, setters.size()));
-        }
-        // Fix parameter name
-        final MethodDeclaration setter = setters.get(0);
-        setter.getParameters().clear();
-        setter.addAndGetParameter(property.getTypeNameForSetter(), property.getName())
-                .addModifier(FINAL);
-
         // Fill body
         final String observableName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
         declaredProperties.put(observableName, property);
+
         if (property == JavaParserMetaModel.nodeMetaModel.commentPropertyMetaModel) {
             // Node.comment has a very specific setter that we shouldn't overwrite.
             return;
         }
+
+        final MethodDeclaration setter = new MethodDeclaration(EnumSet.of(PUBLIC), parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()), property.getSetterMethodName());
+        if (property.getContainingNodeMetaModel().hasWildcard()) {
+            setter.setType(parseType("T"));
+        }
+        setter.getParameters().clear();
+        setter.addAndGetParameter(property.getTypeNameForSetter(), property.getName())
+                .addModifier(FINAL);
 
         final BlockStmt body = setter.getBody().get();
         body.getStatements().clear();
@@ -84,6 +84,11 @@ public class PropertyGenerator extends NodeGenerator {
         } else {
             body.addStatement(f("return this;"));
         }
+        replaceWhenSameSignature(nodeCoid, setter);
+        if (property.getContainingNodeMetaModel().hasWildcard()) {
+            annotateSuppressWarnings(setter);
+        }
+        annotateGenerated(setter);
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
@@ -100,7 +105,7 @@ public class PropertyGenerator extends NodeGenerator {
         }
     }
 
-    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived){
+    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
         boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
         String name = property.getName();
         String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
@@ -140,6 +145,6 @@ public class PropertyGenerator extends NodeGenerator {
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
-        markGenerated(observablePropertyEnum);
+        annotateGenerated(observablePropertyEnum);
     }
 }

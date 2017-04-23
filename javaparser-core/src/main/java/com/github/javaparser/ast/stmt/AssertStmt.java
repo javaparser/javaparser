@@ -86,6 +86,7 @@ public final class AssertStmt extends Statement {
         return Optional.ofNullable(message);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssertStmt setCheck(final Expression check) {
         assertNotNull(check);
         if (check == this.check) {
@@ -105,6 +106,7 @@ public final class AssertStmt extends Statement {
      * @param msg the message, can be null
      * @return this, the AssertStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssertStmt setMessage(final Expression message) {
         if (message == this.message) {
             return (AssertStmt) this;

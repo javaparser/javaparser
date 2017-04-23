@@ -148,7 +148,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -168,6 +168,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
      * @param initializer the initializer expression, can be null
      * @return this, the VariableDeclarator
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setInitializer(final Expression initializer) {
         if (initializer == this.initializer) {
             return (VariableDeclarator) this;
@@ -195,7 +196,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {

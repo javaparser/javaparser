@@ -68,6 +68,7 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleExportsStmt setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -85,6 +86,7 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         return moduleNames;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleExportsStmt setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
         if (moduleNames == this.moduleNames) {

@@ -104,7 +104,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return update;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -124,6 +124,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      * @param compare the compare, can be null
      * @return this, the ForStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setCompare(final Expression compare) {
         if (compare == this.compare) {
             return (ForStmt) this;
@@ -136,6 +137,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
         assertNotNull(initialization);
         if (initialization == this.initialization) {
@@ -149,6 +151,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setUpdate(final NodeList<Expression> update) {
         assertNotNull(update);
         if (update == this.update) {

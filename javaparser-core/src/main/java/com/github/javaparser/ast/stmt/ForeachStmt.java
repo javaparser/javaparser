@@ -96,7 +96,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return variable;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForeachStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -110,6 +110,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForeachStmt setIterable(final Expression iterable) {
         assertNotNull(iterable);
         if (iterable == this.iterable) {
@@ -123,6 +124,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForeachStmt setVariable(final VariableDeclarationExpr variable) {
         assertNotNull(variable);
         if (variable == this.variable) {

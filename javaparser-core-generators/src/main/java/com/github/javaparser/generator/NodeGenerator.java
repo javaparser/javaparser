@@ -40,32 +40,37 @@ public abstract class NodeGenerator extends Generator {
 
     /**
      * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
-     * with callable. If not found, adds callable.
+     * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
      */
-    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration nodeCoid, CallableDeclaration callable) {
-        List<CallableDeclaration> existingCallables = nodeCoid.getCallablesWithSignature(callable.getSignature());
-        if (existingCallables.isEmpty()) {
-            nodeCoid.addMember(callable);
-            return;
-        }
-        if (existingCallables.size() > 1) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), nodeCoid.getNameAsString()));
-        }
-        nodeCoid.getMembers().replace(existingCallables.get(0), callable);
+    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addMethod(containingClassOrInterface, callable, () -> containingClassOrInterface.addMember(callable));
     }
 
     /**
      * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
-     * with callable. If not found, fails.
+     * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept.
      */
-    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration nodeCoid, CallableDeclaration callable) {
-        List<CallableDeclaration> existingCallables = nodeCoid.getCallablesWithSignature(callable.getSignature());
+    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addMethod(containingClassOrInterface, callable,
+                () -> {
+                    throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
+                });
+    }
+
+    private void addMethod(
+            ClassOrInterfaceDeclaration containingClassOrInterface,
+            CallableDeclaration<?> callable,
+            Runnable onNoExistingMethod) {
+        List<CallableDeclaration<?>> existingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
         if (existingCallables.isEmpty()) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), nodeCoid.getNameAsString()));
+            onNoExistingMethod.run();
+            return;
         }
         if (existingCallables.size() > 1) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), nodeCoid.getNameAsString()));
+            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
         }
-        nodeCoid.getMembers().replace(existingCallables.get(0), callable);
+        final CallableDeclaration<?> existingCallable = existingCallables.get(0);
+        callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+        containingClassOrInterface.getMembers().replace(existingCallable, callable);
     }
 }

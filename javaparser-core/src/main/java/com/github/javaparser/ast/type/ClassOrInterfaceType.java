@@ -126,7 +126,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return new PrimitiveType(PrimitiveType.unboxMap.get(name.getIdentifier()));
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -146,6 +146,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
      * @param scope the scope, can be null
      * @return this, the ClassOrInterfaceType
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         if (scope == this.scope) {
             return (ClassOrInterfaceType) this;
@@ -169,7 +170,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
      * @param typeArguments the typeArguments, can be null
      * @return this, the ClassOrInterfaceType
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (ClassOrInterfaceType) this;

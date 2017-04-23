@@ -91,6 +91,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
      * @param dimension the dimension, can be null
      * @return this, the ArrayCreationLevel
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationLevel setDimension(final Expression dimension) {
         if (dimension == this.dimension) {
             return (ArrayCreationLevel) this;
@@ -112,7 +113,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return annotations;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationLevel setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {

@@ -105,6 +105,7 @@ public final class BinaryExpr extends Expression {
         return right;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BinaryExpr setLeft(final Expression left) {
         assertNotNull(left);
         if (left == this.left) {
@@ -118,6 +119,7 @@ public final class BinaryExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BinaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
@@ -128,6 +130,7 @@ public final class BinaryExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BinaryExpr setRight(final Expression right) {
         assertNotNull(right);
         if (right == this.right) {

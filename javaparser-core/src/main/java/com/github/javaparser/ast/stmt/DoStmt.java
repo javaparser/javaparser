@@ -84,7 +84,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return condition;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -98,6 +98,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {

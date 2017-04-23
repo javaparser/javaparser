@@ -148,6 +148,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         return type.toBoxedType();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public PrimitiveType setType(final Primitive type) {
         assertNotNull(type);
         if (type == this.type) {

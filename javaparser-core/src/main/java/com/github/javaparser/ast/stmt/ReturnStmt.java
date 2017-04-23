@@ -87,6 +87,7 @@ public final class ReturnStmt extends Statement {
      * @param expression the expression, can be null
      * @return this, the ReturnStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReturnStmt setExpression(final Expression expression) {
         if (expression == this.expression) {
             return (ReturnStmt) this;

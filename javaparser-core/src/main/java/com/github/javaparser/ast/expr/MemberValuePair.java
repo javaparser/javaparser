@@ -86,7 +86,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         return value;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MemberValuePair setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -100,6 +100,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MemberValuePair setValue(final Expression value) {
         assertNotNull(value);
         if (value == this.value) {

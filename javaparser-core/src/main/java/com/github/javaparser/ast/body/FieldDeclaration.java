@@ -130,7 +130,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return variables;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -141,7 +141,7 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {

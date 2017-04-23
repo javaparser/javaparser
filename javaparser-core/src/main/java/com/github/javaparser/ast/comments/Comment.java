@@ -74,6 +74,7 @@ public abstract class Comment extends Node {
      *
      * @param content the text of the comment to set
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Comment setContent(final String content) {
         assertNotNull(content);
         if (content == this.content) {

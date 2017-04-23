@@ -54,7 +54,8 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         return value;
     }
 
-    public final LiteralStringValueExpr setValue(final String value) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
         if (value == this.value) {
             return (LiteralStringValueExpr) this;

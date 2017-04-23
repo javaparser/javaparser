@@ -77,7 +77,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         return expression;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ThrowStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {

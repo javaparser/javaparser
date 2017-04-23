@@ -114,7 +114,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return operator;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public UnaryExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
@@ -128,6 +128,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public UnaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {

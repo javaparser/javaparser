@@ -40,6 +40,6 @@ public class GetNodeListsGenerator extends NodeGenerator {
 
         final MethodDeclaration getNodeListsMethod = (MethodDeclaration) parseClassBodyDeclaration(f("@Override public List<NodeList<?>> getNodeLists() {%s}", statement));
         addOrReplaceWhenSameSignature(nodeCoid, getNodeListsMethod);
-        markGenerated(getNodeListsMethod);
+        annotateGenerated(getNodeListsMethod);
     }
 }

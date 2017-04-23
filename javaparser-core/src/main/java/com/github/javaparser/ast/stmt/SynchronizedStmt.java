@@ -80,6 +80,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return expression;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SynchronizedStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
@@ -98,7 +99,7 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
         return body;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SynchronizedStmt setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {

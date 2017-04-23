@@ -71,7 +71,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -90,7 +90,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return annotations;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
@@ -133,6 +133,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return isOpen;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setOpen(final boolean isOpen) {
         if (isOpen == this.isOpen) {
             return (ModuleDeclaration) this;
@@ -146,6 +147,7 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return moduleStmts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setModuleStmts(final NodeList<ModuleStmt> moduleStmts) {
         assertNotNull(moduleStmts);
         if (moduleStmts == this.moduleStmts) {

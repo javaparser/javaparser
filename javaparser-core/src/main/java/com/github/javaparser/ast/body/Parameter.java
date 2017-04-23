@@ -126,7 +126,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return isVarArgs;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -140,6 +140,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setVarArgs(final boolean isVarArgs) {
         if (isVarArgs == this.isVarArgs) {
             return (Parameter) this;
@@ -177,7 +178,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
      * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
      * so please avoid passing null
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
@@ -191,7 +192,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -205,7 +206,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -245,6 +246,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return varArgsAnnotations;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setVarArgsAnnotations(final NodeList<AnnotationExpr> varArgsAnnotations) {
         assertNotNull(varArgsAnnotations);
         if (varArgsAnnotations == this.varArgsAnnotations) {

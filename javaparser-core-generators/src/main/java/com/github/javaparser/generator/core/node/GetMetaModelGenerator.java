@@ -1,9 +1,6 @@
 package com.github.javaparser.generator.core.node;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.NodeGenerator;
@@ -29,6 +26,6 @@ public class GetMetaModelGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(nodeCoid, getMetaModelMethod);
         nodeCu.addImport(nodeMetaModel.getClass().getName());
         nodeCu.addImport(JavaParserMetaModel.class);
-        markGenerated(getMetaModelMethod);
+        annotateGenerated(getMetaModelMethod);
     }
 }

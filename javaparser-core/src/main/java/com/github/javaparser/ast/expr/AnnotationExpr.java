@@ -62,7 +62,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationExpr setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {

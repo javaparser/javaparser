@@ -82,6 +82,7 @@ public final class SuperExpr extends Expression {
      * @param classExpr the classExpr, can be null
      * @return this, the SuperExpr
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SuperExpr setClassExpr(final Expression classExpr) {
         if (classExpr == this.classExpr) {
             return (SuperExpr) this;

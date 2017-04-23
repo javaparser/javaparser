@@ -104,6 +104,7 @@ public final class AssignExpr extends Expression {
         return value;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
@@ -114,6 +115,7 @@ public final class AssignExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setTarget(final Expression target) {
         assertNotNull(target);
         if (target == this.target) {
@@ -127,6 +129,7 @@ public final class AssignExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setValue(final Expression value) {
         assertNotNull(value);
         if (value == this.value) {

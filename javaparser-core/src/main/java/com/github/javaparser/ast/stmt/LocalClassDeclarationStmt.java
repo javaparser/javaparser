@@ -76,6 +76,7 @@ public final class LocalClassDeclarationStmt extends Statement {
         return classDeclaration;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
         assertNotNull(classDeclaration);
         if (classDeclaration == this.classDeclaration) {

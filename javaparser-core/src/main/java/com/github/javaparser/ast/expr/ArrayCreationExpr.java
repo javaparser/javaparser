@@ -107,6 +107,7 @@ public final class ArrayCreationExpr extends Expression {
      * @param initializer the initializer, can be null
      * @return this, the ArrayCreationExpr
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationExpr setInitializer(final ArrayInitializerExpr initializer) {
         if (initializer == this.initializer) {
             return (ArrayCreationExpr) this;
@@ -119,6 +120,7 @@ public final class ArrayCreationExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationExpr setElementType(final Type elementType) {
         assertNotNull(elementType);
         if (elementType == this.elementType) {
@@ -136,6 +138,7 @@ public final class ArrayCreationExpr extends Expression {
         return levels;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayCreationExpr setLevels(final NodeList<ArrayCreationLevel> levels) {
         assertNotNull(levels);
         if (levels == this.levels) {

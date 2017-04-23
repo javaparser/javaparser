@@ -80,6 +80,7 @@ public final class LabeledStmt extends Statement {
         return statement;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LabeledStmt setStatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
@@ -97,6 +98,7 @@ public final class LabeledStmt extends Statement {
         return label;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LabeledStmt setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {

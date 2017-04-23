@@ -85,7 +85,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return parameters;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
@@ -103,6 +103,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LambdaExpr setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -130,6 +131,7 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return isEnclosingParameters;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LambdaExpr setEnclosingParameters(final boolean isEnclosingParameters) {
         if (isEnclosingParameters == this.isEnclosingParameters) {
             return (LambdaExpr) this;

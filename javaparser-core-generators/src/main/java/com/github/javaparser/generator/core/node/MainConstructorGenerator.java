@@ -3,7 +3,6 @@ package com.github.javaparser.generator.core.node;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -14,7 +13,6 @@ import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
 import static com.github.javaparser.JavaParser.parseExplicitConstructorInvocationStmt;
-import static com.github.javaparser.JavaParser.parseStatement;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class MainConstructorGenerator extends NodeGenerator {
@@ -52,6 +50,6 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         replaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(Range.class);
-        markGenerated(constructor);
+        annotateGenerated(constructor);
     }
 }

@@ -107,6 +107,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @param extendedType the extends, can be null
      * @return this, the WildcardType
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WildcardType setExtendedType(final ReferenceType extendedType) {
         if (extendedType == this.extendedType) {
             return (WildcardType) this;
@@ -137,6 +138,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
      * @param superType the super, can be null
      * @return this, the WildcardType
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WildcardType setSuperType(final ReferenceType superType) {
         if (superType == this.superType) {
             return (WildcardType) this;

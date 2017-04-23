@@ -92,7 +92,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldAccessExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -142,7 +142,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
      * @param scope the scope, can be null
      * @return this, the FieldAccessExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldAccessExpr setScope(final Expression scope) {
         if (scope == this.scope) {
             return (FieldAccessExpr) this;
@@ -166,7 +166,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
      * @param types the type arguments, can be null
      * @return this, the FieldAccessExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldAccessExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (FieldAccessExpr) this;

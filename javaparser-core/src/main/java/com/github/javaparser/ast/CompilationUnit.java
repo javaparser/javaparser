@@ -174,6 +174,7 @@ public final class CompilationUnit extends Node {
      *
      * @param imports the list of imports
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
@@ -202,6 +203,7 @@ public final class CompilationUnit extends Node {
      *
      * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
             return (CompilationUnit) this;
@@ -217,6 +219,7 @@ public final class CompilationUnit extends Node {
     /**
      * Sets the list of types declared in this compilation unit.
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
@@ -484,6 +487,7 @@ public final class CompilationUnit extends Node {
         return Optional.ofNullable(module);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
         if (module == this.module) {
             return (CompilationUnit) this;

@@ -136,7 +136,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return variables;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
@@ -150,7 +150,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -161,7 +161,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {

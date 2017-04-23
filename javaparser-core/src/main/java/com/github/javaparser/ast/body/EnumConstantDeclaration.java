@@ -100,6 +100,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumConstantDeclaration setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
@@ -113,6 +114,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumConstantDeclaration setClassBody(final NodeList<BodyDeclaration<?>> classBody) {
         assertNotNull(classBody);
         if (classBody == this.classBody) {
@@ -126,7 +128,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumConstantDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {

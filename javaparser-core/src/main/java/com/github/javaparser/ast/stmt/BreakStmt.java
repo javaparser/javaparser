@@ -84,6 +84,7 @@ public final class BreakStmt extends Statement {
      * @param label the label, can be null
      * @return this, the BreakStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BreakStmt setLabel(final SimpleName label) {
         if (label == this.label) {
             return (BreakStmt) this;

@@ -76,6 +76,7 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         return statements;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {

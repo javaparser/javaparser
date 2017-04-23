@@ -96,7 +96,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
      * @param body the body, can not be null
      * @return this, the ConstructorDeclaration
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {

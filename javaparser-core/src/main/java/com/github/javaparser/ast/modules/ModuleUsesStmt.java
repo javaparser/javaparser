@@ -56,6 +56,7 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleUsesStmt setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {

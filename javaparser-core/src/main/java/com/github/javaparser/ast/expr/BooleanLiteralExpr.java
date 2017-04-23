@@ -73,6 +73,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         return value;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BooleanLiteralExpr setValue(final boolean value) {
         if (value == this.value) {
             return (BooleanLiteralExpr) this;

@@ -104,7 +104,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         return identifier;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
@@ -143,6 +143,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         return Optional.ofNullable(qualifier);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setQualifier(final Name qualifier) {
         if (qualifier == this.qualifier) {
             return (Name) this;
@@ -183,7 +184,7 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
         return annotations;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {

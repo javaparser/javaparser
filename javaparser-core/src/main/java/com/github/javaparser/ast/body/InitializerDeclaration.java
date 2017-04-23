@@ -85,6 +85,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         return isStatic;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InitializerDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -98,6 +99,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InitializerDeclaration setStatic(final boolean isStatic) {
         if (isStatic == this.isStatic) {
             return (InitializerDeclaration) this;

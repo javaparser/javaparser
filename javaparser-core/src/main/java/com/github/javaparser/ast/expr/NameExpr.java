@@ -79,7 +79,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NameExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {

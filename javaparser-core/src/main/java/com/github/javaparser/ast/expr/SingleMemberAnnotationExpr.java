@@ -72,6 +72,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         return memberValue;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
         assertNotNull(memberValue);
         if (memberValue == this.memberValue) {

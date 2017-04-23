@@ -118,6 +118,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return isThis;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
@@ -137,6 +138,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @param expression the expression, can be null
      * @return this, the ExplicitConstructorInvocationStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setExpression(final Expression expression) {
         if (expression == this.expression) {
             return (ExplicitConstructorInvocationStmt) this;
@@ -149,6 +151,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setThis(final boolean isThis) {
         if (isThis == this.isThis) {
             return (ExplicitConstructorInvocationStmt) this;
@@ -169,7 +172,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
      * @param typeArguments the typeArguments, can be null
      * @return this, the ExplicitConstructorInvocationStmt
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExplicitConstructorInvocationStmt setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (ExplicitConstructorInvocationStmt) this;

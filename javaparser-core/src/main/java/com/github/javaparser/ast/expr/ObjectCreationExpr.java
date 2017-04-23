@@ -137,6 +137,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      * @param anonymousClassBody the anonymousClassBody, can be null or empty
      * @return this, the ObjectCreationExpr
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setAnonymousClassBody(final NodeList<BodyDeclaration<?>> anonymousClassBody) {
         if (anonymousClassBody == this.anonymousClassBody) {
             return (ObjectCreationExpr) this;
@@ -149,7 +150,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setArguments(final NodeList<Expression> arguments) {
         assertNotNull(arguments);
         if (arguments == this.arguments) {
@@ -169,7 +170,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      * @param scope the scope, can be null
      * @return this, the ObjectCreationExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setScope(final Expression scope) {
         if (scope == this.scope) {
             return (ObjectCreationExpr) this;
@@ -182,7 +183,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setType(final ClassOrInterfaceType type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -207,7 +208,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
      * @param typeArguments the typeArguments, can be null
      * @return this, the ObjectCreationExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ObjectCreationExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (ObjectCreationExpr) this;

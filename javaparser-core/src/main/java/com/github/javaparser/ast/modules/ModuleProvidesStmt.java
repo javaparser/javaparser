@@ -69,6 +69,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleProvidesStmt setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -86,6 +87,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return withTypes;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleProvidesStmt setWithTypes(final NodeList<Type> withTypes) {
         assertNotNull(withTypes);
         if (withTypes == this.withTypes) {

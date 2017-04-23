@@ -85,7 +85,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CastExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
@@ -99,7 +99,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CastExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {

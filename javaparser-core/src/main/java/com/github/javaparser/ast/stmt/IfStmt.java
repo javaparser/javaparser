@@ -92,6 +92,7 @@ public final class IfStmt extends Statement {
         return thenStmt;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
@@ -111,6 +112,7 @@ public final class IfStmt extends Statement {
      * @param elseStmt the elseStmt, can be null
      * @return this, the IfStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setElseStmt(final Statement elseStmt) {
         if (elseStmt == this.elseStmt) {
             return (IfStmt) this;
@@ -123,6 +125,7 @@ public final class IfStmt extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public IfStmt setThenStmt(final Statement thenStmt) {
         assertNotNull(thenStmt);
         if (thenStmt == this.thenStmt) {

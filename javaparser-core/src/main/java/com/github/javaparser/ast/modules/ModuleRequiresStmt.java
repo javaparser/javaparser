@@ -60,7 +60,7 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
         return modifiers;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleRequiresStmt setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -76,7 +76,7 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleRequiresStmt setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {

@@ -132,6 +132,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @param defaultValue the default value, can be null
      * @return this, the AnnotationMemberDeclaration
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
         if (defaultValue == this.defaultValue) {
             return (AnnotationMemberDeclaration) this;
@@ -144,7 +145,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -155,7 +156,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -169,7 +170,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {

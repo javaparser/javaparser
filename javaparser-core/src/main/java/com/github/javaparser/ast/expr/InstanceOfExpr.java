@@ -86,7 +86,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InstanceOfExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
@@ -100,7 +100,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InstanceOfExpr setType(final ReferenceType<?> type) {
         assertNotNull(type);
         if (type == this.type) {

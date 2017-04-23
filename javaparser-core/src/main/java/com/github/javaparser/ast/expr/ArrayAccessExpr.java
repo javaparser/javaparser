@@ -80,6 +80,7 @@ public final class ArrayAccessExpr extends Expression {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayAccessExpr setIndex(final Expression index) {
         assertNotNull(index);
         if (index == this.index) {
@@ -93,6 +94,7 @@ public final class ArrayAccessExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayAccessExpr setName(final Expression name) {
         assertNotNull(name);
         if (name == this.name) {

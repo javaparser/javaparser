@@ -80,6 +80,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         return componentType;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
         if (componentType == this.componentType) {

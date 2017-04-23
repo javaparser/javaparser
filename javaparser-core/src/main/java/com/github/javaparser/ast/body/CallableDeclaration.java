@@ -87,6 +87,8 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return modifiers;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -101,6 +103,8 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return name;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -118,6 +122,8 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return parameters;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
@@ -135,6 +141,8 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return thrownExceptions;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
@@ -152,6 +160,8 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return typeParameters;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {

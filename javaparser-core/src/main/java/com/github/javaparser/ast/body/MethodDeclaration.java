@@ -118,7 +118,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      * @param body the body, can be null
      * @return this, the MethodDeclaration
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setBody(final BlockStmt body) {
         if (body == this.body) {
             return (MethodDeclaration) this;
@@ -136,7 +136,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {

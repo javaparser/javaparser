@@ -99,6 +99,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return isStatic;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setAsterisk(final boolean isAsterisk) {
         if (isAsterisk == this.isAsterisk) {
             return (ImportDeclaration) this;
@@ -108,6 +109,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -121,6 +123,7 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setStatic(final boolean isStatic) {
         if (isStatic == this.isStatic) {
             return (ImportDeclaration) this;

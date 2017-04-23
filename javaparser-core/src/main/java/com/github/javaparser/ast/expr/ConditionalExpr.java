@@ -87,6 +87,7 @@ public final class ConditionalExpr extends Expression {
         return thenExpr;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
@@ -100,6 +101,7 @@ public final class ConditionalExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setElseExpr(final Expression elseExpr) {
         assertNotNull(elseExpr);
         if (elseExpr == this.elseExpr) {
@@ -113,6 +115,7 @@ public final class ConditionalExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setThenExpr(final Expression thenExpr) {
         assertNotNull(thenExpr);
         if (thenExpr == this.thenExpr) {

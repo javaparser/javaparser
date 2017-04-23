@@ -106,6 +106,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
      * @param label the label, can be null
      * @return this, the SwitchEntryStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchEntryStmt setLabel(final Expression label) {
         if (label == this.label) {
             return (SwitchEntryStmt) this;
@@ -118,6 +119,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchEntryStmt setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {

@@ -48,6 +48,8 @@ import static java.util.stream.Collectors.toList;
 public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
 
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
+
     default BodyDeclaration<?> getMember(int i) {
         return getMembers().get(i);
     }
@@ -75,7 +77,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addField(Class<?> typeClass, String name, Modifier... modifiers) {
-        ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
+        tryAddImportToParentCompilationUnit(typeClass);
         return addField(typeClass.getSimpleName(), name, modifiers);
     }
 
@@ -218,7 +220,7 @@ public interface NodeWithMembers<N extends Node> {
     default List<MethodDeclaration> getMethodsByName(String name) {
         return unmodifiableList(getMethods().stream()
                 .filter(m -> m.getNameAsString().equals(name))
-                .map(m -> m).collect(toList()));
+                .collect(toList()));
     }
 
     /**
@@ -243,7 +245,7 @@ public interface NodeWithMembers<N extends Node> {
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return unmodifiableList(getMethods().stream()
                 .filter(m -> m.hasParametersOfType(paramTypes))
-                .map(m -> m).collect(toList()));
+                .collect(toList()));
     }
 
     /**
@@ -256,7 +258,7 @@ public interface NodeWithMembers<N extends Node> {
     default List<MethodDeclaration> getMethodsBySignature(String name, String... paramTypes) {
         return unmodifiableList(getMethodsByName(name).stream()
                 .filter(m -> m.hasParametersOfType(paramTypes))
-                .map(m -> m).collect(toList()));
+                .collect(toList()));
     }
 
     /**
@@ -284,8 +286,7 @@ public interface NodeWithMembers<N extends Node> {
                 .map(f -> (FieldDeclaration) f)
                 .filter(f -> f.getVariables().stream()
                         .anyMatch(var -> var.getNameAsString().equals(name)))
-                .findFirst()
-                .map(f -> f);
+                .findFirst();
     }
 
     /**

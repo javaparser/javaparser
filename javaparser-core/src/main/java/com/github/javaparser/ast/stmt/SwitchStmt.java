@@ -91,6 +91,7 @@ public final class SwitchStmt extends Statement {
         return selector;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchStmt setEntries(final NodeList<SwitchEntryStmt> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
@@ -114,6 +115,7 @@ public final class SwitchStmt extends Statement {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchStmt setSelector(final Expression selector) {
         assertNotNull(selector);
         if (selector == this.selector) {

@@ -25,6 +25,6 @@ public class CloneGenerator extends NodeGenerator {
                 nodeMetaModel.getTypeNameGenerified()
         ));
         addOrReplaceWhenSameSignature(nodeCoid, cloneMethod);
-        markGenerated(cloneMethod);
+        annotateGenerated(cloneMethod);
     }
 }

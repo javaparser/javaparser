@@ -84,7 +84,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         return condition;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -98,6 +98,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {

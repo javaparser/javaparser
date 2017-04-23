@@ -94,6 +94,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return scope;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setScope(final Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
@@ -118,7 +119,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
      * @param typeArguments the typeArguments, can be null
      * @return this, the MethodReferenceExpr
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return (MethodReferenceExpr) this;
@@ -136,7 +137,7 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
         return identifier;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {

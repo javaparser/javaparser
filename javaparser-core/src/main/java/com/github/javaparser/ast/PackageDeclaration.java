@@ -106,7 +106,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     /**
      * @param annotations the annotations to set
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public PackageDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
@@ -125,7 +125,7 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
      *
      * @param name the name to set
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public PackageDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {

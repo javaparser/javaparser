@@ -74,6 +74,7 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         return pairs;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
         assertNotNull(pairs);
         if (pairs == this.pairs) {

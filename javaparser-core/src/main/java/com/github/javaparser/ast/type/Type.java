@@ -70,6 +70,7 @@ public abstract class Type extends Node {
         return getAnnotations().get(i);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
