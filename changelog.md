@@ -1,3 +1,9 @@
+Version 3.2.2
+------------------
+Beta: `TreeStructureVisitor`.
+
+* 770 902 904 901 smaller improvements and fixes
+
 Version 3.2.1
 ------------------
 Beta: `TreeStructureVisitor`.
