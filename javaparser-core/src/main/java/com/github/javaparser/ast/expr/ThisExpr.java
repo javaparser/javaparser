@@ -91,6 +91,7 @@ public final class ThisExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -103,6 +104,7 @@ public final class ThisExpr extends Expression {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ThisExpr removeClassExpr() {
         return setClassExpr((Expression) null);
     }

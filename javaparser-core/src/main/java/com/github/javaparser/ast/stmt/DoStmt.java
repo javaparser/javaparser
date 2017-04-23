@@ -114,6 +114,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

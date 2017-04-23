@@ -177,6 +177,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -213,10 +214,12 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return removeSuperType();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeExtendedType() {
         return setExtendedType((ReferenceType) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public WildcardType removeSuperType() {
         return setSuperType((ReferenceType) null);
     }

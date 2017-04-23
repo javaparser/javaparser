@@ -46,6 +46,7 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

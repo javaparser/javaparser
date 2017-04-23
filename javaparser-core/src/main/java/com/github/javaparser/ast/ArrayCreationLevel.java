@@ -134,11 +134,13 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return Arrays.asList(getAnnotations());
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ArrayCreationLevel removeDimension() {
         return setDimension((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

@@ -123,6 +123,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AnnotationMemberDeclaration removeDefaultValue() {
         return setDefaultValue((Expression) null);
     }
@@ -192,6 +193,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

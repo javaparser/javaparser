@@ -196,6 +196,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -225,6 +226,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return str.toString();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ClassOrInterfaceType removeScope() {
         return setScope((ClassOrInterfaceType) null);
     }

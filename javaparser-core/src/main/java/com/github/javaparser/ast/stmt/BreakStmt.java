@@ -99,6 +99,7 @@ public final class BreakStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -111,6 +112,7 @@ public final class BreakStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public BreakStmt removeLabel() {
         return setLabel((SimpleName) null);
     }

@@ -40,6 +40,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 import javax.annotation.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * A base class for all types of type declarations.
@@ -159,6 +160,7 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

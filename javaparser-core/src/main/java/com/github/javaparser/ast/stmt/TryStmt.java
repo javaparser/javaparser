@@ -180,6 +180,7 @@ public final class TryStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -210,10 +211,12 @@ public final class TryStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public TryStmt removeFinallyBlock() {
         return setFinallyBlock((BlockStmt) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public TryStmt removeTryBlock() {
         return setTryBlock((BlockStmt) null);
     }

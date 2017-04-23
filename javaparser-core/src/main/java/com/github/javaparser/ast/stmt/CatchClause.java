@@ -128,6 +128,7 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

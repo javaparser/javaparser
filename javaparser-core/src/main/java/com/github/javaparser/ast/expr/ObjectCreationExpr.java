@@ -229,6 +229,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -263,6 +264,7 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ObjectCreationExpr removeScope() {
         return setScope((Expression) null);
     }

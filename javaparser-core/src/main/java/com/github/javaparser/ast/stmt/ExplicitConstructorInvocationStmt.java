@@ -195,6 +195,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -221,6 +222,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ExplicitConstructorInvocationStmt removeExpression() {
         return setExpression((Expression) null);
     }

@@ -142,6 +142,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -160,6 +161,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SwitchEntryStmt removeLabel() {
         return setLabel((Expression) null);
     }

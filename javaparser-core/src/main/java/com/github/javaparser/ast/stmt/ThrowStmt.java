@@ -92,6 +92,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

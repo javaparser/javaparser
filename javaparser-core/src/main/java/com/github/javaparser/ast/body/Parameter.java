@@ -225,6 +225,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

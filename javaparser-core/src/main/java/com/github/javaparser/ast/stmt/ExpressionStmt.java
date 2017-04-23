@@ -91,6 +91,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;

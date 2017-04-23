@@ -41,6 +41,7 @@ import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import java.util.*;
 import static java.util.Collections.unmodifiableList;
 import javax.annotation.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -502,6 +503,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return Collections.emptyList();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -514,6 +516,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Node removeComment() {
         return setComment((Comment) null);
     }

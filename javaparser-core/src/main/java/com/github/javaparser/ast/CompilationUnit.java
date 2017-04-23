@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -452,6 +453,7 @@ public final class CompilationUnit extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -482,6 +484,7 @@ public final class CompilationUnit extends Node {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removePackageDeclaration() {
         return setPackageDeclaration((PackageDeclaration) null);
     }
@@ -504,6 +507,7 @@ public final class CompilationUnit extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removeModule() {
         return setModule((ModuleDeclaration) null);
     }

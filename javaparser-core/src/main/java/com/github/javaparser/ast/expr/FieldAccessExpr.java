@@ -186,6 +186,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -206,6 +207,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public FieldAccessExpr removeScope() {
         return setScope((Expression) null);
     }

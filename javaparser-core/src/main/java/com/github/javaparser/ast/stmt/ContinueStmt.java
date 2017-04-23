@@ -101,6 +101,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -113,6 +114,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ContinueStmt removeLabel() {
         return setLabel((SimpleName) null);
     }

@@ -94,6 +94,7 @@ public final class EnclosedExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -106,6 +107,7 @@ public final class EnclosedExpr extends Expression {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public EnclosedExpr removeInner() {
         return setInner((Expression) null);
     }

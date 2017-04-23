@@ -1,6 +1,7 @@
 package com.github.javaparser.generator;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -9,7 +10,6 @@ import com.github.javaparser.utils.SourceRoot;
 import javax.annotation.Generated;
 
 import static com.github.javaparser.ast.NodeList.toNodeList;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A general pattern that the generators in this module will follow.
@@ -37,9 +37,16 @@ public abstract class Generator {
                         .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
                         .collect(toNodeList()));
 
-        node.addSingleMemberAnnotation(annotation.getSimpleName(), content);
+        if (content != null) {
+            node.addSingleMemberAnnotation(annotation.getSimpleName(), content);
+        } else {
+            node.addMarkerAnnotation(annotation.getSimpleName());
+        }
         node.tryAddImportToParentCompilationUnit(annotation);
     }
-    
-    
+
+    protected void annotateOverridden(MethodDeclaration method) {
+        annotate(method, Override.class, null);
+    }
+
 }

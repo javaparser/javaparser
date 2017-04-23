@@ -122,6 +122,7 @@ public final class AssertStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -134,6 +135,7 @@ public final class AssertStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AssertStmt removeMessage() {
         return setMessage((Expression) null);
     }
