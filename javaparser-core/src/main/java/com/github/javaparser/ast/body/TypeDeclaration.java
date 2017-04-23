@@ -181,8 +181,8 @@ public abstract class TypeDeclaration<T extends Node> extends BodyDeclaration<T>
     /**
      * @return methods or constructors whose signature match the passed signature.
      */
-    public List<CallableDeclaration> getCallablesWithSignature(CallableDeclaration.Signature signature) {
-        return getMembers().stream().filter(m -> m instanceof CallableDeclaration).map(m -> ((CallableDeclaration) m)).filter(m -> m.getSignature().equals(signature)).collect(toList());
+    public List<CallableDeclaration<?>> getCallablesWithSignature(CallableDeclaration.Signature signature) {
+        return getMembers().stream().filter(m -> m instanceof CallableDeclaration).map(m -> ((CallableDeclaration<?>) m)).filter(m -> m.getSignature().equals(signature)).collect(toList());
     }
 
     /**
