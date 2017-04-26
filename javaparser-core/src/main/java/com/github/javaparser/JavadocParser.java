@@ -60,10 +60,16 @@ class JavadocParser {
             blockLines = Collections.emptyList();
         } else {
             descriptionText = trimRight(String.join("\n", cleanLines.subList(0, indexOfFirstBlockTag)));
+
+            //Combine cleaned lines, but only starting with the first block tag till the end
+            //In this combined string it is easier to handle multiple lines which actually belong together
             String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size())
                 .stream()
                 .collect(Collectors.joining("\n"));
 
+            //Split up the entire tag black again, considering now that some lines belong to the same block tag.
+            //The pattern used splits the block at each new line starting with the '@' symbol, thus the symbol
+            //then needs to be added again so that the block parsers handles everything correctly.
             blockLines = BLOCK_PATTERN
                 .splitAsStream(tagBlock)
                 .filter(Utils.STRING_NOT_EMPTY)
