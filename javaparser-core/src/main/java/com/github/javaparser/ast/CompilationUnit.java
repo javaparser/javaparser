@@ -20,17 +20,6 @@
  */
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.JavaParser.parseName;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.annotation.Generated;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -46,8 +35,18 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CompilationUnitMetaModel;
+import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.ClassUtils;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -183,7 +182,7 @@ public final class CompilationUnit extends Node {
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
         if (imports == this.imports) {
-            return this;
+            return (CompilationUnit) this;
         }
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         if (this.imports != null)
@@ -211,7 +210,7 @@ public final class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
         if (packageDeclaration == this.packageDeclaration) {
-            return this;
+            return (CompilationUnit) this;
         }
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
         if (this.packageDeclaration != null)
@@ -228,7 +227,7 @@ public final class CompilationUnit extends Node {
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
         if (types == this.types) {
-            return this;
+            return (CompilationUnit) this;
         }
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         if (this.types != null)
@@ -502,7 +501,7 @@ public final class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
         if (module == this.module) {
-            return this;
+            return (CompilationUnit) this;
         }
         notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
         if (this.module != null)
