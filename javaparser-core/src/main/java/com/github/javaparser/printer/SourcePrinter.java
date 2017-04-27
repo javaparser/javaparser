@@ -21,16 +21,16 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.utils.Utils.EOL;
-
 public class SourcePrinter {
     private final String indentation;
+    private final String endOfLineCharacter;
     private int level = 0;
     private boolean indented = false;
     private final StringBuilder buf = new StringBuilder();
 
-    SourcePrinter(final String indentation) {
+    SourcePrinter(final String indentation, final String endOfLineCharacter) {
         this.indentation = indentation;
+        this.endOfLineCharacter = endOfLineCharacter;
     }
 
     public SourcePrinter indent() {
@@ -65,7 +65,7 @@ public class SourcePrinter {
     }
 
     public SourcePrinter println() {
-        buf.append(EOL);
+        buf.append(endOfLineCharacter);
         indented = false;
         return this;
     }
