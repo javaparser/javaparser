@@ -40,104 +40,105 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 
 public class CompilationUnitBuildersTest {
-	CompilationUnit cu;
+    CompilationUnit cu;
 
-	@Before
-	public void setup() {
-		cu = new CompilationUnit();
-	}
+    @Before
+    public void setup() {
+        cu = new CompilationUnit();
+    }
 
-	@After
-	public void teardown() {
-		cu = null;
-	}
+    @After
+    public void teardown() {
+        cu = null;
+    }
 
-	@Test
-	public void testAddImport() {
-		cu.addImport(Map.class);
-		cu.addImport(Map.class);
-		cu.addImport(List.class);
-		assertEquals(2, cu.getImports().size());
-		cu.addImport("myImport");
-		assertEquals(3, cu.getImports().size());
-		assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
-		assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
-		assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
-	}
+    @Test
+    public void testAddImport() {
+        cu.addImport(Map.class);
+        cu.addImport(Map.class);
+        cu.addImport(List.class);
+        assertEquals(2, cu.getImports().size());
+        cu.addImport("myImport");
+        assertEquals(3, cu.getImports().size());
+        assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
+        assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
+        assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
+    }
 
-	class testInnerClass {
+    class testInnerClass {
 
-	}
+    }
 
-	@Test
-	public void testAddImportAnonymousClass() {
-		cu.addImport(testInnerClass.class);
-		assertEquals("import " + testInnerClass.class.getName().replace("$", ".") + ";" + EOL, cu.getImport(0).toString());
-	}
+    @Test
+    public void testAddImportAnonymousClass() {
+        cu.addImport(testInnerClass.class);
+        assertEquals("import " + testInnerClass.class.getName().replace("$", ".") + ";" + EOL,
+                cu.getImport(0).toString());
+    }
 
-	@Test(expected = RuntimeException.class)
-	public void testAddImportInnerClass() {
-		Object anonymous = new Object() {
+    @Test(expected = RuntimeException.class)
+    public void testAddImportInnerClass() {
+        Object anonymous = new Object() {
 
-		};
-		cu.addImport(anonymous.getClass());
-	}
+        };
+        cu.addImport(anonymous.getClass());
+    }
 
-	@Test
-	public void testAddClass() {
-		ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE);
-		assertEquals(1, cu.getTypes().size());
-		assertEquals("testClass", cu.getType(0).getNameAsString());
-		assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());
-		assertTrue(myClassDeclaration.isPrivate());
-		assertFalse(myClassDeclaration.isInterface());
-	}
+    @Test
+    public void testAddClass() {
+        ClassOrInterfaceDeclaration myClassDeclaration = cu.addClass("testClass", Modifier.PRIVATE);
+        assertEquals(1, cu.getTypes().size());
+        assertEquals("testClass", cu.getType(0).getNameAsString());
+        assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());
+        assertTrue(myClassDeclaration.isPrivate());
+        assertFalse(myClassDeclaration.isInterface());
+    }
 
-	@Test
-	public void testAddInterface() {
-		ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
-		assertEquals(1, cu.getTypes().size());
-		assertEquals("testInterface", cu.getType(0).getNameAsString());
-		assertTrue(myInterfaceDeclaration.isPublic());
-		assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());
-		assertTrue(myInterfaceDeclaration.isInterface());
-	}
+    @Test
+    public void testAddInterface() {
+        ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
+        assertEquals(1, cu.getTypes().size());
+        assertEquals("testInterface", cu.getType(0).getNameAsString());
+        assertTrue(myInterfaceDeclaration.isPublic());
+        assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());
+        assertTrue(myInterfaceDeclaration.isInterface());
+    }
 
-	@Test
-	public void testAddEnum() {
-		EnumDeclaration myEnumDeclaration = cu.addEnum("test");
-		assertEquals(1, cu.getTypes().size());
-		assertEquals("test", cu.getType(0).getNameAsString());
-		assertTrue(myEnumDeclaration.isPublic());
-		assertEquals(EnumDeclaration.class, cu.getType(0).getClass());
-	}
+    @Test
+    public void testAddEnum() {
+        EnumDeclaration myEnumDeclaration = cu.addEnum("test");
+        assertEquals(1, cu.getTypes().size());
+        assertEquals("test", cu.getType(0).getNameAsString());
+        assertTrue(myEnumDeclaration.isPublic());
+        assertEquals(EnumDeclaration.class, cu.getType(0).getClass());
+    }
 
-	@Test
-	public void testAddAnnotationDeclaration() {
-		AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
-		assertEquals(1, cu.getTypes().size());
-		assertEquals("test", cu.getType(0).getNameAsString());
-		assertTrue(myAnnotationDeclaration.isPublic());
-		assertEquals(AnnotationDeclaration.class, cu.getType(0).getClass());
-	}
+    @Test
+    public void testAddAnnotationDeclaration() {
+        AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
+        assertEquals(1, cu.getTypes().size());
+        assertEquals("test", cu.getType(0).getNameAsString());
+        assertTrue(myAnnotationDeclaration.isPublic());
+        assertEquals(AnnotationDeclaration.class, cu.getType(0).getClass());
+    }
 
-	@Test
-	public void testGetClassByName() {
-		assertEquals(cu.addClass("test"), cu.getClassByName("test").get());
-	}
+    @Test
+    public void testGetClassByName() {
+        assertEquals(cu.addClass("test"), cu.getClassByName("test").get());
+    }
 
-	@Test
-	public void testGetInterfaceByName() {
-		assertEquals(cu.addInterface("test"), cu.getInterfaceByName("test").get());
-	}
+    @Test
+    public void testGetInterfaceByName() {
+        assertEquals(cu.addInterface("test"), cu.getInterfaceByName("test").get());
+    }
 
-	@Test
-	public void testGetEnumByName() {
-		assertEquals(cu.addEnum("test"), cu.getEnumByName("test").get());
-	}
+    @Test
+    public void testGetEnumByName() {
+        assertEquals(cu.addEnum("test"), cu.getEnumByName("test").get());
+    }
 
-	@Test
-	public void testGetAnnotationDeclarationByName() {
-		assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
-	}
+    @Test
+    public void testGetAnnotationDeclarationByName() {
+        assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
+    }
 }
