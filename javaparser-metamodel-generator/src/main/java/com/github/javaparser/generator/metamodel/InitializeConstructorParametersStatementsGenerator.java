@@ -33,14 +33,15 @@ public class InitializeConstructorParametersStatementsGenerator {
     }
 
     private Field findFieldInClass(Class<?> nodeClass, String name) {
+        Class<?> searchClass = nodeClass;
         do {
-            for (Field field : nodeClass.getDeclaredFields()) {
+            for (Field field : searchClass.getDeclaredFields()) {
                 if (field.getName().equals(name)) {
                     return field;
                 }
             }
-            nodeClass = nodeClass.getSuperclass();
-        } while (nodeClass != null);
+            searchClass = searchClass.getSuperclass();
+        } while (searchClass != null);
         throw new AssertionError(f("Couldn't find constructor parameter %s as a field, class %s", name, nodeClass.getSimpleName()));
     }
 

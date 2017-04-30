@@ -53,7 +53,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
-        printer = new SourcePrinter(configuration.getIndent());
+        printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
     }
 
     public String getSource() {

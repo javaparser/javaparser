@@ -5,6 +5,7 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -129,7 +130,7 @@ public class SourceRoot {
 
     private void save(CompilationUnit cu, Path path) throws IOException {
         Files.createDirectories(path.getParent());
-        final String code = new PrettyPrinter().print(cu);
+        final String code = new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n")).print(cu);
         Files.write(path, code.getBytes(UTF8));
     }
 
