@@ -21,20 +21,23 @@
 
 package com.github.javaparser.builders;
 
+import static com.github.javaparser.utils.Utils.EOL;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Map;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.Map;
-
-import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.*;
 
 public class CompilationUnitBuildersTest {
     CompilationUnit cu;
@@ -60,6 +63,25 @@ public class CompilationUnitBuildersTest {
         assertEquals("import " + Map.class.getName() + ";" + EOL, cu.getImport(0).toString());
         assertEquals("import " + List.class.getName() + ";" + EOL, cu.getImport(1).toString());
         assertEquals("import myImport;" + EOL, cu.getImport(2).toString());
+    }
+
+    class testInnerClass {
+
+    }
+
+    @Test
+    public void testAddImportAnonymousClass() {
+        cu.addImport(testInnerClass.class);
+        assertEquals("import " + testInnerClass.class.getName().replace("$", ".") + ";" + EOL,
+                cu.getImport(0).toString());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testAddImportInnerClass() {
+        Object anonymous = new Object() {
+
+        };
+        cu.addImport(anonymous.getClass());
     }
 
     @Test
