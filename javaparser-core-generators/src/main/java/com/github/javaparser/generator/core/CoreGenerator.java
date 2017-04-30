@@ -32,7 +32,6 @@ public class CoreGenerator {
         new GenericVisitorGenerator(sourceRoot).generate();
         new HashCodeVisitorGenerator(sourceRoot).generate();
         new CloneVisitorGenerator(sourceRoot).generate();
-        new TreeStructureVisitorGenerator(sourceRoot).generate();
         new ModifierVisitorGenerator(sourceRoot).generate();
 
         new GetNodeListsGenerator(sourceRoot).generate();

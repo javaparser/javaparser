@@ -1,3 +1,7 @@
+Version 3.2.3
+------------------
+* 907 906 905 903 911 910 909 908 smaller improvements and fixes
+
 Version 3.2.2
 ------------------
 Beta: `TreeStructureVisitor`.
