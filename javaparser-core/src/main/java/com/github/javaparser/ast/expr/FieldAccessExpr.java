@@ -23,7 +23,6 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -46,7 +45,7 @@ import javax.annotation.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithOptionalScope<FieldAccessExpr> {
+public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr> {
 
     private Expression scope;
 
@@ -115,8 +114,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Expression> getScope() {
-        return Optional.ofNullable(scope);
+    public Expression getScope() {
+        return scope;
     }
 
     /**
@@ -144,6 +143,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldAccessExpr setScope(final Expression scope) {
+        assertNotNull(scope);
         if (scope == this.scope) {
             return (FieldAccessExpr) this;
         }
@@ -186,33 +186,6 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        if (scope != null) {
-            if (node == scope) {
-                removeScope();
-                return true;
-            }
-        }
-        if (typeArguments != null) {
-            for (int i = 0; i < typeArguments.size(); i++) {
-                if (typeArguments.get(i) == node) {
-                    typeArguments.remove(i);
-                    return true;
-                }
-            }
-        }
-        return super.remove(node);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public FieldAccessExpr removeScope() {
-        return setScope((Expression) null);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public FieldAccessExpr clone() {
         return (FieldAccessExpr) accept(new CloneVisitor(), null);
@@ -222,5 +195,21 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public FieldAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldAccessExprMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.remove(i);
+                    return true;
+                }
+            }
+        }
+        return super.remove(node);
     }
 }

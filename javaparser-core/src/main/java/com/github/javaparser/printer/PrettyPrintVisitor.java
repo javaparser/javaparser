@@ -577,8 +577,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final FieldAccessExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        if (n.getScope().isPresent())
-            n.getScope().get().accept(this, arg);
+            n.getScope().accept(this, arg);
         printer.print(".");
         n.getName().accept(this, arg);
     }
