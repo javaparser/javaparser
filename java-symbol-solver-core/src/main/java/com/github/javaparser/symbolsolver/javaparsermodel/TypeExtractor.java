@@ -177,8 +177,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public Type visit(FieldAccessExpr node, Boolean solveLambdas) {
         // We should understand if this is a static access
-        if (node.getScope().isPresent() && node.getScope().get() instanceof NameExpr) {
-            NameExpr staticValue = (NameExpr) node.getScope().get();
+        if (node.getScope().isPresent() &&
+            (node.getScope().get() instanceof NameExpr ||
+                node.getScope().get() instanceof FieldAccessExpr)) {
+            Expression staticValue = node.getScope().get();
             SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(node, typeSolver).solveType(staticValue.toString(), typeSolver);
             if (typeAccessedStatically.isSolved()) {
                 // TODO here maybe we have to substitute type typeParametersValues

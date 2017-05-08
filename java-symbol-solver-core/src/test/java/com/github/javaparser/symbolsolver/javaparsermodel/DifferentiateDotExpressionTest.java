@@ -61,6 +61,17 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void staticFieldCallsFromInnerClasses() {
+        ClassOrInterfaceDeclaration clazz = ((JavaParserClassDeclaration) typeSolver.solveType("InnerStaticClassFieldDotExpressions")).getWrappedNode();
+        MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        MethodCallExpr methodCallWithNestedStaticFieldParam = Navigator.findMethodCall(mainMethod, "parseInt");
+
+        assertEquals(true, javaParserFacade.solve(methodCallWithNestedStaticFieldParam).isSolved());
+    }
+
+    @Test
     public void packageStaticMethodCalls() throws ParseException {
         ClassOrInterfaceDeclaration clazz = ((JavaParserClassDeclaration) typeSolver.solveType("PackageDotExpressions")).getWrappedNode();
         MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
