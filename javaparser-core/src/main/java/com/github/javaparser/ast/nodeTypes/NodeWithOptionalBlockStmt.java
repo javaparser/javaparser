@@ -34,6 +34,8 @@ public interface NodeWithOptionalBlockStmt<N extends Node> {
 
     N setBody(BlockStmt block);
 
+    N removeBody();
+
     default BlockStmt createBody() {
         BlockStmt block = new BlockStmt();
         setBody(block);
