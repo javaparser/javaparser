@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
@@ -32,11 +33,9 @@ import javassist.bytecode.AccessFlag;
 import javassist.bytecode.SyntheticAttribute;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -61,7 +60,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 
     @Override
@@ -90,22 +89,24 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     @Override
     public FieldDeclaration getField(String name) {
-        throw new UnsupportedOperationException();
+        Optional<FieldDeclaration> field = javassistTypeDeclarationAdapter.getDeclaredFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+
+        return field.orElseThrow(() -> new RuntimeException("Field " + name + " does not exist in " + ctClass.getName() + "."));
     }
 
     @Override
     public boolean hasField(String name) {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getDeclaredFields().stream().anyMatch(f -> f.getName().equals(name));
     }
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 
     @Override
@@ -168,4 +169,37 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
 
+    @Override
+    public Set<ReferenceTypeDeclaration> internalTypes() {
+        try {
+            /*
+            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
+            Finally, return them in a Set.
+             */
+            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ReferenceTypeDeclaration getInternalType(String name) {
+        /*
+        The name of the ReferenceTypeDeclaration could be composed on the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
+        In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
+         */
+        Optional<ReferenceTypeDeclaration> type =
+                this.internalTypes().stream().filter(f -> f.getName().endsWith(name)).findFirst();
+        return type.orElseThrow(() ->
+                new UnsolvedSymbolException("Internal type not found: " + name));
+    }
+
+    @Override
+    public boolean hasInternalType(String name) {
+        /*
+        The name of the ReferenceTypeDeclaration could be composed on the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
+        In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
+         */
+        return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
+    }
 }
