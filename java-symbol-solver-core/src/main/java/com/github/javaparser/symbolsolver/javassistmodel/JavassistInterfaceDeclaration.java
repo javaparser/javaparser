@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
@@ -31,10 +32,8 @@ import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.bytecode.AccessFlag;
-import javassist.bytecode.AttributeInfo;
 import javassist.bytecode.SyntheticAttribute;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Predicate;
@@ -198,7 +197,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return ctClass.getSimpleName();
     }
 
     @Override
@@ -208,7 +207,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 
     @Override
@@ -242,5 +241,39 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     @Override
     public Optional<ReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
+    }
+
+    @Override
+    public Set<ReferenceTypeDeclaration> internalTypes() {
+        try {
+            /*
+            Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
+            Finally, return them in a Set.
+             */
+            return Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet());
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ReferenceTypeDeclaration getInternalType(String name) {
+        /*
+        The name of the ReferenceTypeDeclaration could be composed on the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
+        In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
+         */
+        Optional<ReferenceTypeDeclaration> type =
+                this.internalTypes().stream().filter(f -> f.getName().endsWith(name)).findFirst();
+        return type.orElseThrow(() ->
+                new UnsolvedSymbolException("Internal type not found: " + name));
+    }
+
+    @Override
+    public boolean hasInternalType(String name) {
+        /*
+        The name of the ReferenceTypeDeclaration could be composed on the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
+        In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
+         */
+        return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
 }
