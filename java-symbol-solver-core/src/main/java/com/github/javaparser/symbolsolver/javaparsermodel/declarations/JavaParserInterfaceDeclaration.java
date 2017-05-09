@@ -197,7 +197,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
         }
 
-        getAncestors().forEach(a -> fields.addAll(a.getTypeDeclaration().getAllFields()));
+        getAncestors().forEach(a -> {
+            if (a.getTypeDeclaration() != this) {
+                fields.addAll(a.getTypeDeclaration().getAllFields());
+            }
+        });
 
         return fields;
     }

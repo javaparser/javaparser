@@ -92,14 +92,17 @@ public class JavaParserTypeDeclarationAdapter {
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!Object.class.getCanonicalName().equals(typeDeclaration.getQualifiedName())) {
             for (ReferenceType ancestor : typeDeclaration.getAncestors()) {
-                SymbolReference<MethodDeclaration> res = MethodResolutionLogic
-                        .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
-                // consider methods from superclasses and only default methods from interfaces :
-                // not true, we should keep abstract as a valid candidate
-                // abstract are removed in MethodResolutionLogic.isApplicable is necessary
-                if (res.isSolved()) {
-                    candidateMethods.add(res.getCorrespondingDeclaration());
-                }
+		// Avoid recursion on self
+                if (typeDeclaration != ancestor.getTypeDeclaration()) {
+                    SymbolReference<MethodDeclaration> res = MethodResolutionLogic
+                            .solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, staticOnly, typeSolver);
+                    // consider methods from superclasses and only default methods from interfaces :
+                    // not true, we should keep abstract as a valid candidate
+                    // abstract are removed in MethodResolutionLogic.isApplicable is necessary
+                    if (res.isSolved()) {
+                        candidateMethods.add(res.getCorrespondingDeclaration());
+                    }
+		}
             }
         }
         // We want to avoid infinite recursion when a class is using its own method
