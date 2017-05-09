@@ -294,7 +294,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final FieldAccessExpr n, final A arg) {
         n.getName().accept(this, arg);
-        n.getScope().ifPresent(l -> l.accept(this, arg));
+        n.getScope().accept(this, arg);
         n.getTypeArguments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }

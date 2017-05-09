@@ -334,7 +334,8 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(FieldAccessExpr.class, CsmElement.sequence(
                 CsmElement.comment(),
-                CsmElement.conditional(SCOPE, IS_PRESENT, CsmElement.sequence(CsmElement.child(SCOPE), CsmElement.token(GeneratedJavaParserConstants.DOT))),
+                CsmElement.child(SCOPE), 
+                CsmElement.token(GeneratedJavaParserConstants.DOT),
                 child(ObservableProperty.NAME)
         ));
 

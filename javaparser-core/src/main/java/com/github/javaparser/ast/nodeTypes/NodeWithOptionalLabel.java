@@ -8,12 +8,14 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**
- * A node that can have a label.
+ * A node that has an optional label.
  */
 public interface NodeWithOptionalLabel<T extends Node> {
     Optional<SimpleName> getLabel();
 
     T setLabel(SimpleName label);
+    
+    T removeLabel();
 
     default T setLabel(String label) {
         assertNonEmpty(label);
