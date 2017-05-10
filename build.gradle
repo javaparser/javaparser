@@ -25,6 +25,7 @@ allprojects  {
   apply plugin: 'jacoco'
 
   group = 'com.github.javaparser'
+  version = jssVersion
 
   repositories {
     mavenCentral()
