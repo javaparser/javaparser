@@ -13,7 +13,6 @@ public class Java9Validator extends Java8Validator {
     public Java9Validator() {
         super();
         add(underscoreKeywordValidator);
-        remove(noLambdas);
         remove(noModules);
         replace(modifiersWithoutPrivateInterfaceMethods, modifiers);
     }
