@@ -190,7 +190,7 @@ TOKEN_MGR_DECLS :
         if(token.specialToken!=null) {
             CommonTokenAction(token.specialToken);
         }
-        token.javaToken = new JavaToken(token);
+        token.javaToken = new JavaToken(token, tokens);
         tokens.add(token.javaToken);
 
         String commentText = token.image;
