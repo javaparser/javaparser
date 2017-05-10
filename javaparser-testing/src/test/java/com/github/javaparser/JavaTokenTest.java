@@ -31,6 +31,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavaTokenTest {
 
@@ -40,11 +41,11 @@ public class JavaTokenTest {
         List<JavaToken> tokens = result.getTokens().get();
         Iterator<JavaToken> iterator = tokens.iterator();
         assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, iterator.next());
-        assertToken(" ", range(1, 2, 1, 2), 1, iterator.next());
+        assertToken(" ", range(1, 2, 1, 2), SPACE, iterator.next());
         assertToken("+", range(1, 3, 1, 3), PLUS, iterator.next());
         assertToken("/*2*/", range(1, 4, 1, 8), MULTI_LINE_COMMENT, iterator.next());
         assertToken("1", range(1, 9, 1, 9), INTEGER_LITERAL, iterator.next());
-        assertToken(" ", range(1, 10, 1, 10), 1, iterator.next());
+        assertToken(" ", range(1, 10, 1, 10), SPACE, iterator.next());
         assertToken("", range(1, 10, 1, 10), EOF, iterator.next());
         assertEquals(false, iterator.hasNext());
     }
@@ -53,5 +54,8 @@ public class JavaTokenTest {
         assertEquals(image, token.getText());
         assertEquals(range, token.getRange());
         assertEquals(kind, token.getKind());
+        token.getNextToken().ifPresent(nt -> assertEquals(token, nt.getPreviousToken().get()));
+        token.getPreviousToken().ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
+        assertTrue(token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
     }
 }
