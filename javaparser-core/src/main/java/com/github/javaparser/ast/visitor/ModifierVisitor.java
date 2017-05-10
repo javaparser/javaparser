@@ -462,10 +462,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final FieldAccessExpr n, final A arg) {
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
-        Expression scope = n.getScope().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Expression scope = (Expression) n.getScope().accept(this, arg);
         NodeList<Type> typeArguments = modifyList(n.getTypeArguments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (name == null)
+        if (name == null || scope == null)
             return null;
         n.setName(name);
         n.setScope(scope);

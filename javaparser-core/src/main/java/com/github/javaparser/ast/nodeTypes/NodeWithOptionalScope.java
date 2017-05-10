@@ -27,22 +27,13 @@ import com.github.javaparser.ast.expr.Expression;
 import java.util.Optional;
 
 /**
- * Represents a node which can have a scope expression eg. method calls or
- * field accesses (object.method(), object.field).
+ * Represents a node which has an optional scope expression eg. method calls (object.method()).
  */
 public interface NodeWithOptionalScope<N extends Node> {
 
     Optional<Expression> getScope();
 
     N setScope(Expression scope);
-
-    /**
-     * Removes the scope by calling {@link #setScope} with null.
-     *
-     * @return this node
-     */
-    default N removeScope() {
-        return setScope(null);
-    }
-
+    
+    N removeScope();
 }
