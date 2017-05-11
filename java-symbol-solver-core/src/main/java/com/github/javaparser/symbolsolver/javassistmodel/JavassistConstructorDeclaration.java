@@ -118,6 +118,6 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public AccessLevel accessLevel() {
-        throw new UnsupportedOperationException();
+        return JavassistFactory.modifiersToAccessLevel(ctConstructor.getModifiers());
     }
 }

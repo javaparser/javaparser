@@ -84,7 +84,32 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
 
     @Override
     public List<ReferenceType> getAncestors() {
-        throw new UnsupportedOperationException();
+        // Direct ancestors of an enum are java.lang.Enum and interfaces
+        List<ReferenceType> ancestors = new LinkedList<>();
+
+        try {
+            CtClass superClass = ctClass.getSuperclass();
+
+            if (superClass != null) {
+                Type superClassTypeUsage = JavassistFactory.typeUsageFor(superClass, typeSolver);
+
+                if (superClassTypeUsage.isReferenceType()) {
+                    ancestors.add(superClassTypeUsage.asReferenceType());
+                }
+            }
+
+            for (CtClass interfaze : ctClass.getInterfaces()) {
+                Type interfazeTypeUsage = JavassistFactory.typeUsageFor(interfaze, typeSolver);
+
+                if (interfazeTypeUsage.isReferenceType()) {
+                    ancestors.add(interfazeTypeUsage.asReferenceType());
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException("Ancestor not found for " + ctClass.getName() + ".", e);
+        }
+
+        return ancestors;
     }
 
     @Override
