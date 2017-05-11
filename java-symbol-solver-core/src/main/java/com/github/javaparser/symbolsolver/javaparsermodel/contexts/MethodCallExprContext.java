@@ -338,10 +338,18 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<Type> actualParamTypes) {
+        Map<TypeParameterDeclaration, Type> matchedTypeParameters = new HashMap<>();
+
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
             if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
-                Type expectedType = methodUsage.getDeclaration().getLastParam().getType();
-                Type actualType = actualParamTypes.get(actualParamTypes.size() - 1);
+                // the varargs parameter is an Array, so extract the inner type
+                Type expectedType =
+                    methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
+                // the varargs corresponding type can be either T or Array<T>
+                Type actualType =
+                    actualParamTypes.get(actualParamTypes.size() - 1).isArray() ?
+                        actualParamTypes.get(actualParamTypes.size() - 1).asArrayType().getComponentType() :
+                        actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
                     for (TypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
@@ -349,15 +357,25 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
                 if (!expectedType.isAssignableBy(actualType)) {
                     // ok, then it needs to be wrapped
-                    throw new UnsupportedOperationException(String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
-                            expectedType, actualType, methodUsage.getDeclaration(), methodUsage));
+                    throw new UnsupportedOperationException(
+                        String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                                      expectedType,
+                                      actualType,
+                                      methodUsage.getDeclaration(),
+                                      methodUsage));
                 }
+                // match only the varargs type
+                matchTypeParameters(expectedType, actualType, matchedTypeParameters);
             } else {
                 return methodUsage;
             }
         }
-        Map<TypeParameterDeclaration, Type> matchedTypeParameters = new HashMap<>();
-        for (int i = 0; i < actualParamTypes.size(); i++) {
+
+        int until = methodUsage.getDeclaration().hasVariadicParameter() ?
+            actualParamTypes.size() - 1 :
+            actualParamTypes.size();
+
+        for (int i = 0; i < until; i++) {
             Type expectedType = methodUsage.getParamType(i);
             Type actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);

@@ -54,11 +54,17 @@ class MethodCalls {
     static <T> T staticGenericMethod0() { return null; }
     static <T> T staticGenericMethod1(T x) { return x; }
 
+    static class GenericClass<T> {}
+
+    static void variadicWithGenericArg(int i, GenericClass<?>... c) {}
+
     void genericMethodTest() {
         this.<Integer>genericMethod0();
         this.genericMethod1("Hello");
 
         MethodCalls.<Integer>staticGenericMethod0();
         MethodCalls.staticGenericMethod1("Hello");
+
+        MethodCalls.variadicWithGenericArg(1, new GenericClass<Long>());
     }
 }
