@@ -122,21 +122,28 @@ class JavassistUtils {
         if (signatureType instanceof SignatureAttribute.ClassType) {
             SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
             List<Type> typeParameters = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
-            ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(classType.getName());
+            final String typeName =
+                classType.getDeclaringClass() != null ?
+                classType.getDeclaringClass().getName() + "." + classType.getName() :
+                classType.getName();
+            ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
+                internalNameToCanonicalName(typeName));
             return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
     }
 
+    private static String internalNameToCanonicalName(String typeName) {
+        return typeName.replaceAll("\\$", ".");
+    }
+
     private static Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
         String typeName = typeArgument.jvmTypeName();
         Optional<Type> type = getGenericParameterByName(typeName, typeParametrizable);
-        if (type.isPresent()) {
-            return type.get();
-        } else {
-            return new ReferenceTypeImpl(typeSolver.solveType(typeName), typeSolver);
-        }
+        return type.orElseGet(() -> new ReferenceTypeImpl(
+            typeSolver.solveType(internalNameToCanonicalName(typeName)),
+            typeSolver));
     }
 
     private static Optional<Type> getGenericParameterByName(String typeName, TypeParametrizable typeParametrizable) {
