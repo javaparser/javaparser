@@ -71,6 +71,20 @@ public class VariadicResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
+    public void resolveVariadicMethodWithGenericArgument() throws ParseException {
+        CompilationUnit cu = parseSample("MethodCalls");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
+
+        MethodDeclaration method = Navigator.demandMethod(clazz, "genericMethodTest");
+        MethodCallExpr callExpr = Navigator.findMethodCall(method, "variadicWithGenericArg");
+
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        MethodUsage callee = javaParserFacade.solveMethodAsUsage(callExpr);
+        assertEquals("variadicWithGenericArg", callee.getName());
+    }
+
+    @Test
     public void selectMostSpecificVariadic() throws ParseException {
         CompilationUnit cu = parseSample("MethodCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
