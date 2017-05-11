@@ -84,11 +84,9 @@ public class JavassistTypeDeclarationAdapter {
 
   public Optional<ReferenceTypeDeclaration> containerType() {
     try {
-      if (ctClass.getDeclaringClass() == null) {
-        return Optional.empty();
-      } else {
-        throw new UnsupportedOperationException();
-      }
+      return ctClass.getDeclaringClass() == null ?
+          Optional.empty() :
+          Optional.of(new JavassistClassDeclaration(ctClass.getDeclaringClass(), typeSolver));
     } catch (NotFoundException e) {
       throw new RuntimeException(e);
     }
