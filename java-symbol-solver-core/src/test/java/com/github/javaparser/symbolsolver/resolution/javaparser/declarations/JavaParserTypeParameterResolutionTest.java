@@ -36,6 +36,27 @@ import static org.junit.Assert.assertTrue;
 
 public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
 
+    private void testGenericArguments(String containingMethodName) throws ParseException {
+        CompilationUnit cu = parseSample("GenericMethodArguments");
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+        ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "GenericMethodArguments");
+        MethodDeclaration containingMethod = Navigator.demandMethod(classDecl, containingMethodName);
+        MethodCallExpr bar = Navigator.findMethodCall(containingMethod, "apply");
+
+        assertTrue(javaParserFacade.solve(bar).isSolved());
+    }
+
+    @Test
+    public void genericMethodWithGenericClassBasedArgument() throws ParseException {
+        testGenericArguments("useCase1");
+    }
+
+    @Test
+    public void genericMethodWithGenericClassArgument() throws ParseException {
+        testGenericArguments("useCase2");
+    }
+
     @Test
     public void declaredOnMethodPositiveCase() throws ParseException {
         CompilationUnit cu = parseSample("MethodTypeParameter");

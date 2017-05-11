@@ -370,7 +370,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private void matchTypeParameters(Type expectedType, Type actualType, Map<TypeParameterDeclaration, Type> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
-            if (!expectedType.isTypeVariable()) {
+            if (!actualType.isTypeVariable() && !actualType.isReferenceType()) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), actualType);
@@ -383,11 +383,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     actualType.asArrayType().getComponentType(),
                     matchedTypeParameters);
         } else if (expectedType.isReferenceType()) {
-            int i = 0;
-            for (Type tp : expectedType.asReferenceType().typeParametersValues()) {
-                matchTypeParameters(tp, actualType.asReferenceType().typeParametersValues().get(i), matchedTypeParameters);
-                i++;
+            // avoid cases such as: "classX extends classY<Integer>"
+            if (actualType.asReferenceType().typeParametersValues().size() > 0) {
+                int i = 0;
+                for (Type tp : expectedType.asReferenceType().typeParametersValues()) {
+                    matchTypeParameters(tp, actualType.asReferenceType().typeParametersValues().get(i), matchedTypeParameters);
+                    i++;
+                }
             }
+
         } else if (expectedType.isPrimitive()) {
             // nothing to do
         } else if (expectedType.isWildcard()) {
