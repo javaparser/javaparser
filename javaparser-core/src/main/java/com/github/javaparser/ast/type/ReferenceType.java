@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class ReferenceType<T extends ReferenceType> extends Type {
+public abstract class ReferenceType extends Type {
 
     public ReferenceType() {
         this(null, new NodeList<>());
@@ -63,8 +63,8 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ReferenceType<?> clone() {
-        return (ReferenceType<?>) accept(new CloneVisitor(), null);
+    public ReferenceType clone() {
+        return (ReferenceType) accept(new CloneVisitor(), null);
     }
 
     @Override

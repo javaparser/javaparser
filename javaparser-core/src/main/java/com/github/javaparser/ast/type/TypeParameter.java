@@ -54,7 +54,7 @@ import javax.annotation.Generated;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
+public final class TypeParameter extends ReferenceType implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
 

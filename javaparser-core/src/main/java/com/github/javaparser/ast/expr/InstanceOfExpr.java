@@ -42,24 +42,24 @@ import javax.annotation.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public final class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr, ReferenceType<?>>, NodeWithExpression<InstanceOfExpr> {
+public final class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr, ReferenceType>, NodeWithExpression<InstanceOfExpr> {
 
     private Expression expression;
 
-    private ReferenceType<?> type;
+    private ReferenceType type;
 
     public InstanceOfExpr() {
         this(null, new NameExpr(), new ClassOrInterfaceType());
     }
 
     @AllFieldsConstructor
-    public InstanceOfExpr(final Expression expression, final ReferenceType<?> type) {
+    public InstanceOfExpr(final Expression expression, final ReferenceType type) {
         this(null, expression, type);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public InstanceOfExpr(Range range, Expression expression, ReferenceType<?> type) {
+    public InstanceOfExpr(Range range, Expression expression, ReferenceType type) {
         super(range);
         setExpression(expression);
         setType(type);
@@ -82,7 +82,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType<?> getType() {
+    public ReferenceType getType() {
         return type;
     }
 
@@ -101,7 +101,7 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setType(final ReferenceType<?> type) {
+    public InstanceOfExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
             return (InstanceOfExpr) this;
