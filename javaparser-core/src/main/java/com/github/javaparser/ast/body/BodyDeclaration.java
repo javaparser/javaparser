@@ -40,7 +40,7 @@ import javax.annotation.Generated;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class BodyDeclaration<T extends Node> extends Node implements NodeWithAnnotations<T> {
+public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node implements NodeWithAnnotations<T> {
 
     private NodeList<AnnotationExpr> annotations;
 
