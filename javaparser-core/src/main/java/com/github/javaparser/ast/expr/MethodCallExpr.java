@@ -65,6 +65,14 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         this(null, scope, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
+    public MethodCallExpr(final Expression scope, final SimpleName name) {
+        this(null, scope, new NodeList<>(), name, new NodeList<>());
+    }
+
+    public MethodCallExpr(final Expression scope, final String name, final NodeList<Expression> arguments) {
+        this(null, scope, new NodeList<>(), new SimpleName(name), arguments);
+    }
+
     public MethodCallExpr(final Expression scope, final SimpleName name, final NodeList<Expression> arguments) {
         this(null, scope, new NodeList<>(), name, arguments);
     }
