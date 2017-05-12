@@ -47,7 +47,7 @@ import javax.annotation.Generated;
 public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @NonEmptyProperty
-    private NodeList<ReferenceType<?>> elements;
+    private NodeList<ReferenceType> elements;
 
     public UnionType() {
         this(null, new NodeList<>());
@@ -55,24 +55,24 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnionType(Range range, NodeList<ReferenceType<?>> elements) {
+    public UnionType(Range range, NodeList<ReferenceType> elements) {
         super(range);
         setElements(elements);
         customInitialization();
     }
 
     @AllFieldsConstructor
-    public UnionType(NodeList<ReferenceType<?>> elements) {
+    public UnionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType<?>> getElements() {
+    public NodeList<ReferenceType> getElements() {
         return elements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public UnionType setElements(final NodeList<ReferenceType<?>> elements) {
+    public UnionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return (UnionType) this;

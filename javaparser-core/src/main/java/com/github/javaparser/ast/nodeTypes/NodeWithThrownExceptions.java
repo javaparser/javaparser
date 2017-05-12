@@ -32,13 +32,13 @@ import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
  * A node that declares the types of exception it throws.
  */
 public interface NodeWithThrownExceptions<N extends Node> {
-    N setThrownExceptions(NodeList<ReferenceType<?>> thrownExceptions);
+    N setThrownExceptions(NodeList<ReferenceType> thrownExceptions);
 
-    NodeList<ReferenceType<?>> getThrownExceptions();
+    NodeList<ReferenceType> getThrownExceptions();
 
     void tryAddImportToParentCompilationUnit(Class<?> clazz);
 
-    default ReferenceType<?> getThrownException(int i) {
+    default ReferenceType getThrownException(int i) {
         return getThrownExceptions().get(i);
     }
 
@@ -49,7 +49,7 @@ public interface NodeWithThrownExceptions<N extends Node> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    default N addThrownException(ReferenceType<?> throwType) {
+    default N addThrownException(ReferenceType throwType) {
         getThrownExceptions().add(throwType);
         return (N) this;
     }

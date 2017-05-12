@@ -54,16 +54,16 @@ import javax.annotation.Generated;
 public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
     @NonEmptyProperty
-    private NodeList<ReferenceType<?>> elements;
+    private NodeList<ReferenceType> elements;
 
     @AllFieldsConstructor
-    public IntersectionType(NodeList<ReferenceType<?>> elements) {
+    public IntersectionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
+    public IntersectionType(Range range, NodeList<ReferenceType> elements) {
         super(range);
         setElements(elements);
         customInitialization();
@@ -80,12 +80,12 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType<?>> getElements() {
+    public NodeList<ReferenceType> getElements() {
         return elements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public IntersectionType setElements(final NodeList<ReferenceType<?>> elements) {
+    public IntersectionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return (IntersectionType) this;
