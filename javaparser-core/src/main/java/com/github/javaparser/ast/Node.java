@@ -421,7 +421,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * Try to remove this node from the parent
      *
-     * @return true if removed, false otherwise
+     * @return true if removed, false if it is a required property of the parent, or if the parent isn't set.
      * @throws RuntimeException if it fails in an unexpected way
      */
     public boolean remove() {
@@ -429,6 +429,22 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             return false;
         }
         return parentNode.remove(this);
+    }
+
+    /**
+     * Forcibly removes this node from the AST.
+     * If it cannot be removed from the parent with remove(),
+     * it will try to remove its parent instead,
+     * until it finds a node that can be removed,
+     * or no parent can be found.
+     * 
+     * Since everything at CompilationUnit level is removable,
+     * this method will only (silently) fail when the node is in a detached AST fragment.
+     */
+    public void removeForced() {
+        if (!remove()) {
+            getParentNode().ifPresent(Node::remove);
+        }
     }
 
     @Override
