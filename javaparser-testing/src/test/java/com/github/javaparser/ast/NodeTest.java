@@ -24,6 +24,7 @@ package com.github.javaparser.ast;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -40,6 +41,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.github.javaparser.JavaParser.parse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -49,7 +51,7 @@ public class NodeTest {
     @Test
     public void registerSubTree() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -79,7 +81,7 @@ public class NodeTest {
     @Test
     public void registerWithJustNodeMode() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -107,7 +109,7 @@ public class NodeTest {
     @Test
     public void registerWithNodeAndExistingDescendantsMode() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -143,7 +145,7 @@ public class NodeTest {
     @Test
     public void registerWithSelfPropagatingMode() {
         String code = "class A { int f; void foo(int p) { return 'z'; }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
@@ -182,7 +184,7 @@ public class NodeTest {
     @Test
     public void deleteAParameterTriggerNotifications() {
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
 
@@ -200,7 +202,7 @@ public class NodeTest {
     @Test
     public void deleteClassNameDoesNotTriggerNotifications() {
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
 
@@ -219,7 +221,7 @@ public class NodeTest {
     @Test
     public void deleteMethodBodyDoesTriggerNotifications() {
         String code = "class A { void foo(int p) { }}";
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
 
@@ -301,5 +303,14 @@ public class NodeTest {
                 false, "Foo");
         decl.setComment(new BlockComment("foo"));
         assertEquals(false, decl.hasJavaDocComment());
+    }
+    
+    @Test
+    public void removeAllOnRequiredProperty() {
+        CompilationUnit cu = parse("class X{ void x(){}}");
+        MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
+        methodDeclaration.getName().removeForced();
+        // Name is required, so to remove it the whole method is removed.
+        assertEquals("class X {\n}\n", cu.toString());
     }
 }
