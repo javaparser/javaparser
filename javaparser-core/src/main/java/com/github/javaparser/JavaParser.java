@@ -113,6 +113,7 @@ public final class JavaParser {
      *
      * @param start refer to the constants in ParseStart to see what can be parsed.
      * @param provider refer to Providers to see how you can read source.
+     * The provider will be closed after parsing.
      * @param <N> the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
@@ -212,7 +213,8 @@ public final class JavaParser {
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param in {@link InputStream} containing Java source code
+     * @param in {@link InputStream} containing Java source code.
+     * It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -226,7 +228,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param in {@link InputStream} containing Java source code
+     * @param in {@link InputStream} containing Java source code.
+     * It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
@@ -238,7 +241,8 @@ public final class JavaParser {
      * Parses the Java code contained in a {@link File} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param file {@link File} containing Java source code
+     * @param file {@link File} containing Java source code.
+     * It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -253,7 +257,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param file {@link File} containing Java source code
+     * @param file {@link File} containing Java source code.
+     * It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
@@ -339,7 +344,8 @@ public final class JavaParser {
      * Parses Java code from a Reader and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param reader the reader containing Java source code
+     * @param reader the reader containing Java source code.
+     * It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
