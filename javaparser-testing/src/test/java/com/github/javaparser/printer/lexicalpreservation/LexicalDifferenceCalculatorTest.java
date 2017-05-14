@@ -227,7 +227,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
     }
 
     @Test
-    public void addingStatementToEmptyBlock() throws IOException {
+    public void csmModelAfterAddingStatementToEmptyBlock() throws IOException {
         LexicalDifferenceCalculator ldc = new LexicalDifferenceCalculator();
         considerExample("ASimpleClassWithMoreFormatting_step3");
 
@@ -246,22 +246,48 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
                         setter.getBody().get().getStatements(),
                         0,
                         assignStatement);
-        calculatedSyntaxModel.removeIndentationElements();
         int index = 0;
         assertEquals(CsmElement.token(GeneratedJavaParserConstants.LBRACE), calculatedSyntaxModel.elements.get(index++));
         assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
-        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.indent(), calculatedSyntaxModel.elements.get(index++));
         assertTrue(isChild(calculatedSyntaxModel.elements.get(index++), ExpressionStmt.class));
         assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.unindent(), calculatedSyntaxModel.elements.get(index++));
         assertEquals(CsmElement.token(GeneratedJavaParserConstants.RBRACE), calculatedSyntaxModel.elements.get(index++));
         assertEquals(index, calculatedSyntaxModel.elements.size());
+    }
+
+    @Test
+    public void differenceAfterddingStatementToEmptyBlock() throws IOException {
+        LexicalDifferenceCalculator ldc = new LexicalDifferenceCalculator();
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        Statement assignStatement = new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                ));
+        Difference diff = ldc.calculateListAdditionDifference(
+                ObservableProperty.STATEMENTS,
+                setter.getBody().get().getStatements(),
+                0,
+                assignStatement);
+        int index = 0;
+        assertEquals(Difference.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.LBRACE)), diff.getElements().get(index++));
+        assertEquals(Difference.DifferenceElement.kept(CsmElement.newline()), diff.getElements().get(index++));
+        assertEquals(Difference.DifferenceElement.added(CsmElement.indent()), diff.getElements().get(index++));
+        assertTrue(isAddedChild(diff.getElements().get(index++), ExpressionStmt.class));
+        assertEquals(Difference.DifferenceElement.added(CsmElement.newline()), diff.getElements().get(index++));
+        assertEquals(Difference.DifferenceElement.added(CsmElement.unindent()), diff.getElements().get(index++));
+        assertEquals(Difference.DifferenceElement.kept(CsmElement.token(GeneratedJavaParserConstants.RBRACE)), diff.getElements().get(index++));
+        assertEquals(index, diff.getElements().size());
+    }
+
+    private boolean isAddedChild(Difference.DifferenceElement element, Class<? extends Node> childClass) {
+        return element.isAdded() && isChild(element.getElement(), childClass);
     }
 
     private boolean isChild(CsmElement element, Class<? extends Node> childClass) {
