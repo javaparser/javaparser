@@ -44,6 +44,10 @@ class LexicalDifferenceCalculator {
         public CalculatedSyntaxModel sub(int start, int end) {
             return new CalculatedSyntaxModel(elements.subList(start, end));
         }
+
+        public void removeIndentationElements() {
+            elements.removeIf(el -> el instanceof CsmIndent || el instanceof CsmUnindent);
+        }
     }
 
     static class CsmChild implements CsmElement {
@@ -215,9 +219,9 @@ class LexicalDifferenceCalculator {
                 calculatedSyntaxModelForNode(csmConditional.getElseElement(), node, elements, change);
             }
         } else if (csm instanceof CsmIndent) {
-            //elements.add(csm);
+            elements.add(csm);
         } else if (csm instanceof CsmUnindent) {
-            //elements.add(csm);
+            elements.add(csm);
         } else if (csm instanceof CsmAttribute) {
             CsmAttribute csmAttribute = (CsmAttribute)csm;
             Object value = change.getValue(csmAttribute.getProperty(), node);
