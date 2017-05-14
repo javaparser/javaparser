@@ -161,7 +161,7 @@ public class LexicalPreservingPrinter {
 
             @Override
             public void concreteListChange(NodeList changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
-                NodeText nodeText = lpp.getTextForNode(changedList.getParentNodeForChildren());
+                NodeText nodeText = lpp.getOrCreateNodeText(changedList.getParentNodeForChildren());
                 if (type == ListChangeType.REMOVAL) {
                     new LexicalDifferenceCalculator().calculateListRemovalDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
                 } else if (type == ListChangeType.ADDITION) {
@@ -327,6 +327,9 @@ public class LexicalPreservingPrinter {
 
     private NodeText interpret(Node node, CsmElement csm) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
+
+        // TODO inject indentation after newlines
+
         NodeText nodeText = new NodeText(this);
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
