@@ -17,7 +17,6 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.sun.tools.javac.jvm.Gen;
 import org.junit.Test;
 
 import java.io.IOException;
