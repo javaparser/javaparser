@@ -269,12 +269,11 @@ public class LexicalPreservingPrinter {
      * Print a Node into a Writer, preserving the lexical information.
      */
     public void print(Node node, Writer writer) throws IOException {
-        if (textForNodes.containsKey(node)) {
-            final NodeText text = textForNodes.get(node);
-            writer.append(text.expand());
-        } else {
-            writer.append(node.toString());
+        if (!textForNodes.containsKey(node)) {
+            getOrCreateNodeText(node);
         }
+        final NodeText text = textForNodes.get(node);
+        writer.append(text.expand());
     }
 
     //
