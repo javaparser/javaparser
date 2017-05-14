@@ -539,7 +539,10 @@ public class Difference {
                         nodeTextIndex++;
                     }
                     if (textElement.isNewline()) {
-                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex);
+                        boolean followedByUnindent = (diffIndex + 1) < elements.size()
+                                && elements.get(diffIndex + 1).isAdded()
+                                && elements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
+                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex, followedByUnindent && !addedIndentation);
                     }
                     diffIndex++;
                 } else if (diffEl instanceof Kept) {
@@ -606,7 +609,7 @@ public class Difference {
                         nodeText.removeElement(nodeTextIndex);
                         diffIndex++;
                     } else if (nodeTextEl instanceof TokenTextElement
-                            && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
+                            && nodeTextEl.isWhiteSpaceOrComment()) {
                         nodeTextIndex++;
                     } else if (removed.element instanceof LexicalDifferenceCalculator.CsmChild
                             && ((LexicalDifferenceCalculator.CsmChild)removed.element).getChild() instanceof PrimitiveType) {
@@ -630,13 +633,20 @@ public class Difference {
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
     }
 
-    private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex) {
+    private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
         if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(RBRACE)) {
             indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTATION_SIZE, indentationAdj.size()));
         }
+        if (followedByUnindent) {
+            indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - STANDARD_INDENTATION_SIZE));
+        }
         for (TextElement e : indentationAdj) {
-            nodeText.getElements().add(nodeTextIndex++, e);
+            if ((nodeTextIndex<nodeText.getElements().size()) && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
+                nodeTextIndex++;
+            } else {
+                nodeText.getElements().add(nodeTextIndex++, e);
+            }
         }
         return nodeTextIndex;
     }
