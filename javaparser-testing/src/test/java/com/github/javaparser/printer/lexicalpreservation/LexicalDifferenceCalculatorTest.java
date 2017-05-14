@@ -2,17 +2,22 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.sun.tools.javac.jvm.Gen;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -21,6 +26,7 @@ import java.util.EnumSet;
 import static com.github.javaparser.TokenTypes.eolToken;
 import static com.github.javaparser.TokenTypes.spaceToken;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTest {
 
@@ -52,6 +58,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
+        csm.removeIndentationElements();
         int i = 0;
         assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
         assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
@@ -82,6 +89,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.MODIFIERS, EnumSet.noneOf(Modifier.class), EnumSet.of(Modifier.PUBLIC));
+        csm.removeIndentationElements();
         int i = 0;
         assertEquals(new CsmToken(GeneratedJavaParserConstants.PUBLIC), csm.elements.get(i++));
         assertEquals(new CsmToken(spaceToken()), csm.elements.get(i++));
@@ -116,6 +124,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         SimpleName newName = new SimpleName("NewName");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.NAME,
                 annotationDeclaration.getName(), newName);
+        csm.removeIndentationElements();
         int i = 0;
         assertEquals(new CsmToken(GeneratedJavaParserConstants.AT), csm.elements.get(i++));
         assertEquals(new CsmToken(GeneratedJavaParserConstants.INTERFACE), csm.elements.get(i++));
@@ -146,6 +155,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
+        csm.removeIndentationElements();
         int i = 0;
         assertEquals(new CsmToken(GeneratedJavaParserConstants.PUBLIC), csm.elements.get(i++));
         assertEquals(new CsmToken(spaceToken()), csm.elements.get(i++));
@@ -179,6 +189,7 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         JavadocComment comment = new JavadocComment("Cool this annotation!");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csm = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.COMMENT, null, comment);
+        csm.removeIndentationElements();
         int i = 0;
         assertEquals(new CsmToken(GeneratedJavaParserConstants.PUBLIC), csm.elements.get(i++));
         assertEquals(new CsmToken(spaceToken()), csm.elements.get(i++));
@@ -213,6 +224,48 @@ public class LexicalDifferenceCalculatorTest extends AbstractLexicalPreservingTe
         int i = 0;
         assertEquals(new LexicalDifferenceCalculator.CsmChild(ecd.getName()), csm.elements.get(i++));
         assertEquals(i, csm.elements.size());
+    }
+
+    @Test
+    public void addingStatementToEmptyBlock() throws IOException {
+        LexicalDifferenceCalculator ldc = new LexicalDifferenceCalculator();
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        Statement assignStatement = new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                ));
+        LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel =
+                ldc.calculatedSyntaxModelAfterListAddition(
+                        ConcreteSyntaxModel.forClass(BlockStmt.class),
+                        ObservableProperty.STATEMENTS,
+                        setter.getBody().get().getStatements(),
+                        0,
+                        assignStatement);
+        calculatedSyntaxModel.removeIndentationElements();
+        int index = 0;
+        assertEquals(CsmElement.token(GeneratedJavaParserConstants.LBRACE), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.space(), calculatedSyntaxModel.elements.get(index++));
+        assertTrue(isChild(calculatedSyntaxModel.elements.get(index++), ExpressionStmt.class));
+        assertEquals(CsmElement.newline(), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(CsmElement.token(GeneratedJavaParserConstants.RBRACE), calculatedSyntaxModel.elements.get(index++));
+        assertEquals(index, calculatedSyntaxModel.elements.size());
+    }
+
+    private boolean isChild(CsmElement element, Class<? extends Node> childClass) {
+        return element instanceof LexicalDifferenceCalculator.CsmChild && childClass.isInstance(((LexicalDifferenceCalculator.CsmChild)element).getChild());
     }
 
     protected EnumConstantDeclaration considerEcd(String code) {

@@ -6,6 +6,7 @@ import com.github.javaparser.TokenTypes;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
 import java.util.*;
 
@@ -27,6 +28,10 @@ public class Difference {
         this.elements = elements;
     }
 
+    public void removeIndentationElements() {
+        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
+    }
+
     interface DifferenceElement {
         static DifferenceElement added(CsmElement element) {
             return new Added(element);
@@ -39,6 +44,8 @@ public class Difference {
         static DifferenceElement kept(CsmElement element) {
             return new Kept(element);
         }
+
+        CsmElement getElement();
     }
 
     private static class Added implements DifferenceElement {
@@ -66,6 +73,11 @@ public class Difference {
         @Override
         public int hashCode() {
             return element.hashCode();
+        }
+
+        @Override
+        public CsmElement getElement() {
+            return element;
         }
     }
 
@@ -95,6 +107,11 @@ public class Difference {
         public int hashCode() {
             return element.hashCode();
         }
+
+        @Override
+        public CsmElement getElement() {
+            return element;
+        }
     }
 
     private static class Removed implements DifferenceElement {
@@ -122,6 +139,11 @@ public class Difference {
         @Override
         public int hashCode() {
             return element.hashCode();
+        }
+
+        @Override
+        public CsmElement getElement() {
+            return element;
         }
     }
 
@@ -253,6 +275,17 @@ public class Difference {
             } else {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
+
+                // FIXME
+                if (nextOriginal instanceof CsmIndent || nextOriginal instanceof CsmUnindent) {
+                    originalIndex++;
+                    continue;
+                }
+                if (nextAfter instanceof CsmIndent || nextAfter instanceof CsmUnindent) {
+                    afterIndex++;
+                    continue;
+                }
+
                 if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
                     originalIndex++;
@@ -415,7 +448,12 @@ public class Difference {
                 DifferenceElement diffEl = elements.get(diffIndex);
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
                 if (diffEl instanceof Added) {
-                    TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
+                    CsmElement addedElement = ((Added) diffEl).element;
+                    if (addedElement instanceof CsmIndent || addedElement instanceof CsmUnindent) {
+                        diffIndex++;
+                        continue;
+                    }
+                    TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), addedElement);
                     boolean used = false;
                     if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
