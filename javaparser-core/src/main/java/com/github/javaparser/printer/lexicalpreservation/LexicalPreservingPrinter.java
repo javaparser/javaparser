@@ -286,8 +286,29 @@ public class LexicalPreservingPrinter {
             NodeText nodeText = new NodeText(this);
             PrimitiveType primitiveType = (PrimitiveType)node;
             switch (primitiveType.getType()) {
+                case BOOLEAN:
+                    nodeText.addToken(GeneratedJavaParserConstants.BOOLEAN, node.toString());
+                    break;
+                case CHAR:
+                    nodeText.addToken(GeneratedJavaParserConstants.CHAR, node.toString());
+                    break;
+                case BYTE:
+                    nodeText.addToken(GeneratedJavaParserConstants.BYTE, node.toString());
+                    break;
+                case SHORT:
+                    nodeText.addToken(GeneratedJavaParserConstants.SHORT, node.toString());
+                    break;
                 case INT:
                     nodeText.addToken(GeneratedJavaParserConstants.INT, node.toString());
+                    break;
+                case LONG:
+                    nodeText.addToken(GeneratedJavaParserConstants.LONG, node.toString());
+                    break;
+                case FLOAT:
+                    nodeText.addToken(GeneratedJavaParserConstants.FLOAT, node.toString());
+                    break;
+                case DOUBLE:
+                    nodeText.addToken(GeneratedJavaParserConstants.DOUBLE, node.toString());
                     break;
                 default:
                     throw new IllegalArgumentException();
