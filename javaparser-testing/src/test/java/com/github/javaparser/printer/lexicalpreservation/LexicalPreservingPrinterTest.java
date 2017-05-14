@@ -6,9 +6,7 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.Providers;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -528,17 +526,15 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         CompilationUnit cu = result.a.getResult().get();
 
         cu.getTypes().stream()
-                .forEach(type -> {
-                    type.getMembers().stream()
-                            .forEach(member -> {
-                                if (member instanceof MethodDeclaration) {
-                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
-                                    if (!methodDeclaration.getAnnotationByName("Override").isPresent()) {
-                                        methodDeclaration.addAnnotation("Override");
-                                    }
+                .forEach(type -> type.getMembers().stream()
+                        .forEach(member -> {
+                            if (member instanceof MethodDeclaration) {
+                                MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                if (!methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                                    methodDeclaration.addAnnotation("Override");
                                 }
-                            });
-                });
+                            }
+                        }));
         assertEquals("public class TestPage extends Page {" + EOL +
                 EOL +
                 "   @Override()" + EOL +
@@ -547,6 +543,31 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   @Override" + EOL +
                 "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
+    }
+
+    @Test
+    public void addingParameterToMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+        assertEquals(readExample("ASimpleClassWithMoreFormatting"), lpp.print(cu));
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step1"), lpp.print(cu));
+
+        // Adding a method: we add a setter
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step2"), lpp.print(cu));
+//        setter.addParameter("boolean", "aField");
+//        assertEquals(readExample("ASimpleClassWithMoreFormatting_step3"), lpp.print(cu));
+//        setter.getBody().get().getStatements().add(new ExpressionStmt(
+//                new AssignExpr(
+//                        new FieldAccessExpr(new ThisExpr(),"aField"),
+//                        new NameExpr("aField"),
+//                        AssignExpr.Operator.ASSIGN
+//                )));
+//        assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
     }
 
 }
