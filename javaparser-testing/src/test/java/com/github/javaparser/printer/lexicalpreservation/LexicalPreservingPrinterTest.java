@@ -546,28 +546,62 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     }
 
     @Test
-    public void addingParameterToMethod() throws IOException {
+    public void preserveSpaceAsIsForASimpleClassWithMoreFormatting() throws IOException {
         considerExample("ASimpleClassWithMoreFormatting");
         assertEquals(readExample("ASimpleClassWithMoreFormatting"), lpp.print(cu));
+    }
+
+    @Test
+    public void renameASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
 
         cu.getClassByName("ASimpleClass").get()
                 .setName("MyRenamedClass");
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step1"), lpp.print(cu));
+    }
 
-        // Adding a method: we add a setter
+    @Test
+    public void addMethodToASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
                 .addMethod("setAField", Modifier.PUBLIC);
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step2"), lpp.print(cu));
-//        setter.addParameter("boolean", "aField");
-//        assertEquals(readExample("ASimpleClassWithMoreFormatting_step3"), lpp.print(cu));
-//        setter.getBody().get().getStatements().add(new ExpressionStmt(
-//                new AssignExpr(
-//                        new FieldAccessExpr(new ThisExpr(),"aField"),
-//                        new NameExpr("aField"),
-//                        AssignExpr.Operator.ASSIGN
-//                )));
-//        assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
+    }
+
+    @Test
+    public void addingParameterToAnAddedMethodInASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        setter.addParameter("boolean", "aField");
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step3"), lpp.print(cu));
+    }
+
+    @Test
+    public void addingStatementToAnAddedMethodInASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        setter.addParameter("boolean", "aField");
+        setter.getBody().get().getStatements().add(new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                )));
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
     }
 
 }
