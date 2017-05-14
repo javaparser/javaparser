@@ -23,6 +23,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.VoidType;
 
 public abstract class TextElement implements TextElementMatcher {
 
@@ -55,4 +56,5 @@ public abstract class TextElement implements TextElementMatcher {
         return isWhiteSpace() || isComment();
     }
 
+    public abstract boolean isChild(Class<? extends Node> nodeClass);
 }
