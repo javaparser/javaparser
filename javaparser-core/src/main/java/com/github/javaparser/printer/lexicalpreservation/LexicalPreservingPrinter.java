@@ -329,13 +329,23 @@ public class LexicalPreservingPrinter {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
 
         // TODO inject indentation after newlines
+        List<TokenTextElement> indentation = findIndentation(node);
 
         NodeText nodeText = new NodeText(this);
+        boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
+            if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken)element).isNewLine())) {
+                indentation.forEach(el -> nodeText.addElement(el));
+            }
+            pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
                 nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
             } else if (element instanceof CsmToken){
-                nodeText.addToken(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(node));
+                CsmToken csmToken = (CsmToken)element;
+                nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
+                if (csmToken.isNewLine()) {
+                    pendingIndentation = true;
+                }
             } else {
                 throw new UnsupportedOperationException(element.getClass().getSimpleName());
             }

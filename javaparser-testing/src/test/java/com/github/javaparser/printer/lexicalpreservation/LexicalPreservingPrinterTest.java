@@ -7,12 +7,10 @@ import com.github.javaparser.Providers;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
@@ -25,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
@@ -644,7 +643,6 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
                 .getMethodsByName("setAField").get(0);
-        setter.addParameter("boolean", "aField");
         setter.getBody().get().getStatements().add(new ExpressionStmt(
                 new AssignExpr(
                         new FieldAccessExpr(new ThisExpr(),"aField"),
@@ -652,6 +650,112 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                         AssignExpr.Operator.ASSIGN
                 )));
         assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
+    }
+
+    @Test
+    public void nodeTextForMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step4");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        NodeText nodeText;
+
+        nodeText = lpp.getTextForNode(setter);
+        int index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(VoidType.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(SimpleName.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
+        assertTrue(nodeText.getElements().get(index++).isChild(Parameter.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(BlockStmt.class));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get());
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(ExpressionStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get().getStatement(0));
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isChild(AssignExpr.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
+        assertEquals(index, nodeText.getElements().size());
+    }
+
+    @Test
+    public void nodeTextForModifiedMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        setter.getBody().get().getStatements().add(new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                )));
+        NodeText nodeText;
+
+        nodeText = lpp.getTextForNode(setter);
+        int index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(VoidType.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(SimpleName.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
+        assertTrue(nodeText.getElements().get(index++).isChild(Parameter.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(BlockStmt.class));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get());
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChild(ExpressionStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get().getStatement(0));
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isChild(AssignExpr.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
+        assertEquals(index, nodeText.getElements().size());
     }
 
 }
