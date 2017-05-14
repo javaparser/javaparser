@@ -102,4 +102,8 @@ class ChildTextElement extends TextElement {
         return child instanceof Comment;
     }
 
+    @Override
+    public boolean isChild(Class<? extends Node> nodeClass) {
+        return nodeClass.isInstance(child);
+    }
 }
