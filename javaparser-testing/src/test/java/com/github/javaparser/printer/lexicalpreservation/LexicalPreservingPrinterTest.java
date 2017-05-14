@@ -599,6 +599,27 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     }
 
     @Test
+    public void findIndentationOfEmptyMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        assertEquals(4, lpp.findIndentation(setter).size());
+        assertEquals(4, lpp.findIndentation(setter.getBody().get()).size());
+    }
+
+    @Test
+    public void findIndentationOfMethodWithStatements() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step4");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        assertEquals(4, lpp.findIndentation(setter).size());
+        assertEquals(4, lpp.findIndentation(setter.getBody().get()).size());
+        assertEquals(8, lpp.findIndentation(setter.getBody().get().getStatement(0)).size());
+    }
+
+    @Test
     public void addingStatementToAnAddedMethodInASimpleClassWithMoreFormatting() throws IOException {
         considerExample("ASimpleClassWithMoreFormatting");
 
@@ -607,6 +628,22 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         MethodDeclaration setter = cu
                 .getClassByName("MyRenamedClass").get()
                 .addMethod("setAField", Modifier.PUBLIC);
+        setter.addParameter("boolean", "aField");
+        setter.getBody().get().getStatements().add(new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                )));
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
+    }
+
+    @Test
+    public void addingStatementToAnAddedMethodInASimpleClassWithMoreFormattingFromStep3() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
         setter.addParameter("boolean", "aField");
         setter.getBody().get().getStatements().add(new ExpressionStmt(
                 new AssignExpr(
