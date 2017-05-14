@@ -154,8 +154,19 @@ class LexicalDifferenceCalculator {
         } else if (csm instanceof CsmList) {
             CsmList csmList = (CsmList) csm;
             if (csmList.getProperty().isAboutNodes()) {
-                NodeList nodeList = (NodeList)change.getValue(csmList.getProperty(), node);
-                if (!nodeList.isEmpty()) {
+                Object rawValue = change.getValue(csmList.getProperty(), node);
+                NodeList nodeList = null;
+                if (rawValue instanceof NodeList) {
+                    nodeList = (NodeList)rawValue;
+                } else if (rawValue instanceof Optional) {
+                    Optional optional = (Optional)rawValue;
+                    if (optional.isPresent()) {
+                        nodeList = (NodeList)optional.get();
+                    }
+                } else {
+                    throw new IllegalStateException("Expected Optional or NodeList, found " + rawValue);
+                }
+                if (nodeList != null && !nodeList.isEmpty()) {
                     calculatedSyntaxModelForNode(csmList.getPreceeding(), node, elements, change);
                     for (int i = 0; i < nodeList.size(); i++) {
                         if (i != 0) {
