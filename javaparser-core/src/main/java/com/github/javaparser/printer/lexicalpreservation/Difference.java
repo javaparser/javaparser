@@ -1,5 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.TokenTypes;
@@ -447,6 +448,7 @@ public class Difference {
         if (nodeText == null) {
             throw new NullPointerException();
         }
+        boolean addedIndentation = false;
         List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         int diffIndex = 0;
         int nodeTextIndex = 0;
@@ -487,7 +489,19 @@ public class Difference {
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
                 if (diffEl instanceof Added) {
                     CsmElement addedElement = ((Added) diffEl).element;
-                    if (addedElement instanceof CsmIndent || addedElement instanceof CsmUnindent) {
+                    if (addedElement instanceof CsmIndent) {
+                        for (int i=0;i<STANDARD_INDENTATION_SIZE;i++){
+                            indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
+                        }
+                        addedIndentation = true;
+                        diffIndex++;
+                        continue;
+                    }
+                    if (addedElement instanceof CsmUnindent) {
+                        for (int i=0;i<STANDARD_INDENTATION_SIZE && !indentation.isEmpty();i++){
+                            indentation.remove(indentation.size() - 1);
+                        }
+                        addedIndentation = false;
                         diffIndex++;
                         continue;
                     }
@@ -502,14 +516,22 @@ public class Difference {
                             used = true;
                         }
                         nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenTypes.eolToken()));
+                        // This remove the space in "{ }" when adding a new line
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
                         }
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
-                        for (TextElement e : indentationBlock()) {
-                            nodeText.addElement(nodeTextIndex++, e);
+                        // Indentation is painful...
+                        // Sometimes we want to force indentation: this is the case when indentation was expected but
+                        // was actually not there. For example if we have "{ }" we would expect indentation but it is
+                        // not there, so when adding new elements we force it. However if the indentation has been
+                        // inserted by us in this transformation we do not want to insert it again
+                        if (!addedIndentation) {
+                            for (TextElement e : indentationBlock()) {
+                                nodeText.addElement(nodeTextIndex++, e);
+                            }
                         }
                     }
                     if (!used) {
