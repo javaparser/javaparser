@@ -14,7 +14,9 @@ import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import org.junit.Test;
 
@@ -361,8 +363,10 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         int i = 0;
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.LBRACE)), diff.getElements().get(i++));
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(eolToken())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.added(new CsmIndent()), diff.getElements().get(i++));
         assertEquals(Difference.DifferenceElement.added(new CsmChild(s)), diff.getElements().get(i++));
         assertEquals(Difference.DifferenceElement.added(new CsmToken(eolToken())), diff.getElements().get(i++));
+        assertEquals(Difference.DifferenceElement.added(new CsmUnindent()), diff.getElements().get(i++));
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.RBRACE)), diff.getElements().get(i++));
         assertEquals(i, diff.getElements().size());
     }
