@@ -749,7 +749,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
         assertEquals(index, nodeText.getElements().size());
 
-        nodeText = lpp.getTextForNode(setter.getBody().get().getStatement(0));
+        nodeText = lpp.getOrCreateNodeText(setter.getBody().get().getStatement(0));
         index = 0;
         assertTrue(nodeText.getElements().get(index++).isChild(AssignExpr.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));

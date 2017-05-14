@@ -542,7 +542,7 @@ public class Difference {
                         boolean followedByUnindent = (diffIndex + 1) < elements.size()
                                 && elements.get(diffIndex + 1).isAdded()
                                 && elements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
-                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex, followedByUnindent && !addedIndentation);
+                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex, followedByUnindent/* && !addedIndentation*/);
                     }
                     diffIndex++;
                 } else if (diffEl instanceof Kept) {
