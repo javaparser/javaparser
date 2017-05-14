@@ -1,3 +1,14 @@
+Version 3.2.4
+------------------
+New style changelog, no more issue numbers, but a link: 
+[issues resolved](https://github.com/javaparser/javaparser/milestone/44?closed=1)
+and any notable changes:
+* the new method `Node.removeForced()` by removing it, or removing the first parent that is optional.
+This is different from `Node.remove()`, `remove()` only tries to remove the node from the parent and fails if it can't.
+* `FieldAccessExpr.scope` is now a required property.
+You might find some `get()`s in your code that are no longer necessary.
+* `ReferenceType` no longer has a type parameter, so every `ReferenceType<?>` can be replaced by `ReferenceType` now.
+
 Version 3.2.3
 ------------------
 * 907 906 905 903 911 910 909 908 smaller improvements and fixes
