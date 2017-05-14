@@ -177,20 +177,19 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public Type visit(FieldAccessExpr node, Boolean solveLambdas) {
         // We should understand if this is a static access
-        if (node.getScope().isPresent() &&
-            (node.getScope().get() instanceof NameExpr ||
-                node.getScope().get() instanceof FieldAccessExpr)) {
-            Expression staticValue = node.getScope().get();
+        if (node.getScope() instanceof NameExpr ||
+                node.getScope() instanceof FieldAccessExpr) {
+            Expression staticValue = node.getScope();
             SymbolReference<TypeDeclaration> typeAccessedStatically = JavaParserFactory.getContext(node, typeSolver).solveType(staticValue.toString(), typeSolver);
             if (typeAccessedStatically.isSolved()) {
                 // TODO here maybe we have to substitute type typeParametersValues
                 return solveDotExpressionType(
                         typeAccessedStatically.getCorrespondingDeclaration().asReferenceType(), node);
             }
-        } else if (node.getScope().isPresent() && node.getScope().get() instanceof ThisExpr){
+        } else if (node.getScope()instanceof ThisExpr){
             // If we are accessing through a 'this' expression, first resolve the type
             // corresponding to 'this'
-            SymbolReference<TypeDeclaration> solve = facade.solve((ThisExpr) node.getScope().get());
+            SymbolReference<TypeDeclaration> solve = facade.solve((ThisExpr) node.getScope());
             // If found get it's declaration and get the field in there
             if (solve.isSolved()){
                 TypeDeclaration correspondingDeclaration = solve.getCorrespondingDeclaration();
@@ -199,9 +198,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 }
             }
 
-        } else if (node.getScope().isPresent() && node.getScope().get().toString().indexOf('.') > 0) {
+        } else if (node.getScope().toString().indexOf('.') > 0) {
             // try to find fully qualified name
-            SymbolReference<ReferenceTypeDeclaration> sr = typeSolver.tryToSolveType(node.getScope().get().toString());
+            SymbolReference<ReferenceTypeDeclaration> sr = typeSolver.tryToSolveType(node.getScope().toString());
             if (sr.isSolved()) {
                 return solveDotExpressionType(sr.getCorrespondingDeclaration(), node);
             }

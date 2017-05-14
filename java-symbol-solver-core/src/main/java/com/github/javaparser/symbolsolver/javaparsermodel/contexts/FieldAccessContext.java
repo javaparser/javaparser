@@ -50,7 +50,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         if (wrappedNode.getField().toString().equals(name)) {
-            if (wrappedNode.getScope().isPresent() && wrappedNode.getScope().get() instanceof ThisExpr) {
+            if (wrappedNode.getScope() instanceof ThisExpr) {
                 Type typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
                 return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
             }
@@ -70,7 +70,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        Expression scope = wrappedNode.getScope().get();
+        Expression scope = wrappedNode.getScope();
         if (wrappedNode.getField().toString().equals(name)) {
             Type typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             if (typeOfScope.isArray() && name.equals(ARRAY_LENGTH_FIELD_NAME)) {
