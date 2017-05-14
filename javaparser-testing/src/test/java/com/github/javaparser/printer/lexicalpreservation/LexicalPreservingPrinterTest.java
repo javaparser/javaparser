@@ -561,6 +561,19 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     }
 
     @Test
+    public void theLexicalPreservationStringForAnAddedMethodShouldBeIndented() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        assertEquals("public void setAField() {" + EOL +
+                "    }", lpp.print(setter));
+    }
+
+    @Test
     public void addMethodToASimpleClassWithMoreFormatting() throws IOException {
         considerExample("ASimpleClassWithMoreFormatting");
 
