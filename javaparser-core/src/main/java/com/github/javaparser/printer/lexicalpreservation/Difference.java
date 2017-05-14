@@ -46,6 +46,8 @@ public class Difference {
         }
 
         CsmElement getElement();
+
+        boolean isAdded();
     }
 
     private static class Added implements DifferenceElement {
@@ -78,6 +80,11 @@ public class Difference {
         @Override
         public CsmElement getElement() {
             return element;
+        }
+
+        @Override
+        public boolean isAdded() {
+            return true;
         }
     }
 
@@ -112,6 +119,11 @@ public class Difference {
         public CsmElement getElement() {
             return element;
         }
+
+        @Override
+        public boolean isAdded() {
+            return false;
+        }
     }
 
     private static class Removed implements DifferenceElement {
@@ -145,6 +157,11 @@ public class Difference {
         public CsmElement getElement() {
             return element;
         }
+
+        @Override
+        public boolean isAdded() {
+            return false;
+        }
     }
 
     private static boolean matching(CsmElement a, CsmElement b) {
@@ -154,6 +171,10 @@ public class Difference {
                 LexicalDifferenceCalculator.CsmChild childB = (LexicalDifferenceCalculator.CsmChild) b;
                 return childA.getChild().equals(childB.getChild());
             } else if (b instanceof CsmToken) {
+                return false;
+            } else if (b instanceof CsmIndent) {
+                return false;
+            } else if (b instanceof CsmUnindent) {
                 return false;
             } else {
                 throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
@@ -165,14 +186,25 @@ public class Difference {
                 return childA.getTokenType() == childB.getTokenType();
             } else if (b instanceof LexicalDifferenceCalculator.CsmChild) {
                 return false;
+            } else if (b instanceof CsmIndent) {
+                return false;
+            } else if (b instanceof CsmUnindent) {
+                return false;
+            } else {
+                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
             }
         } else if (a instanceof CsmIndent) {
             return b instanceof CsmIndent;
+        } else if (a instanceof CsmUnindent) {
+            return b instanceof CsmUnindent;
         }
         throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
     }
 
     private static boolean replacement(CsmElement a, CsmElement b) {
+        if (a instanceof CsmIndent || b instanceof CsmIndent || a instanceof CsmUnindent || b instanceof CsmUnindent) {
+            return false;
+        }
         if (a instanceof LexicalDifferenceCalculator.CsmChild) {
             if (b instanceof LexicalDifferenceCalculator.CsmChild) {
                 LexicalDifferenceCalculator.CsmChild childA = (LexicalDifferenceCalculator.CsmChild) a;
@@ -277,14 +309,20 @@ public class Difference {
                 CsmElement nextAfter = after.elements.get(afterIndex);
 
                 // FIXME
-                if (nextOriginal instanceof CsmIndent || nextOriginal instanceof CsmUnindent) {
-                    originalIndex++;
-                    continue;
-                }
-                if (nextAfter instanceof CsmIndent || nextAfter instanceof CsmUnindent) {
-                    afterIndex++;
-                    continue;
-                }
+//                if (nextOriginal instanceof CsmIndent || nextOriginal instanceof CsmUnindent) {
+//                    originalIndex++;
+//                    continue;
+//                }
+//                if (nextAfter instanceof CsmIndent) {
+//                    for (int i=0;i<STANDARD_INDENTATION_SIZE;i++) {
+//                        elements.add(new Added(CsmElement.space()));
+//                    }
+//                    continue;
+//                }
+//                if (nextAfter instanceof CsmUnindent) {
+//                    afterIndex++;
+//                    continue;
+//                }
 
                 if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
@@ -519,6 +557,12 @@ public class Difference {
                             throw new UnsupportedOperationException("Csm token " + csmToken + " NodeText TOKEN " + nodeTextToken);
                         }
                     } else if ((kept.element instanceof CsmToken) && ((CsmToken) kept.element).isWhiteSpace()) {
+                        diffIndex++;
+                    } else if (kept.element instanceof CsmIndent) {
+                        // FIXME
+                        diffIndex++;
+                    } else if (kept.element instanceof CsmUnindent) {
+                        // FIXME
                         diffIndex++;
                     } else {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
