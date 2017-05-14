@@ -19,7 +19,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  */
 public class Difference {
 
-    private int STANDARD_INDENTATION_SIZE = 4;
+    public static int STANDARD_INDENTATION_SIZE = 4;
 
     private List<DifferenceElement> elements;
 
@@ -373,10 +373,10 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply(NodeText nodeText, Node node) {
-        List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
             throw new NullPointerException();
         }
+        List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         int diffIndex = 0;
         int nodeTextIndex = 0;
         do {
