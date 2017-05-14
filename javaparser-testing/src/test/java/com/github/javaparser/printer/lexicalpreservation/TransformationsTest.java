@@ -1,6 +1,5 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -15,8 +14,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.EnumSet;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * These tests are more "high level" than the ones in LexicalPreservingPrinterTest.

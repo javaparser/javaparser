@@ -24,6 +24,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -333,6 +335,17 @@ public class LexicalPreservingPrinter {
                 nodeText.addToken(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(node));
             } else {
                 throw new UnsupportedOperationException(element.getClass().getSimpleName());
+            }
+        }
+        // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
+        // so they have to be handled in a special way
+        if (node instanceof VariableDeclarator) {
+            VariableDeclarator variableDeclarator = (VariableDeclarator)node;
+            FieldDeclaration fieldDeclaration = (FieldDeclaration)variableDeclarator.getParentNode().get();
+            int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - fieldDeclaration.getMaximumCommonType().getArrayLevel();
+            for (int i=0; i<extraArrayLevels; i++) {
+                nodeText.addElement(new TokenTextElement(GeneratedJavaParserConstants.LBRACKET));
+                nodeText.addElement(new TokenTextElement(GeneratedJavaParserConstants.RBRACKET));
             }
         }
         return nodeText;
