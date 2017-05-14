@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -65,6 +66,9 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
             }
         } else if (getParentNode(wrappedNode) instanceof EnumDeclaration) {
             return new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver);
+        } else if (getParentNode(wrappedNode) instanceof ObjectCreationExpr) {
+            ObjectCreationExpr parentNode = (ObjectCreationExpr) getParentNode(wrappedNode);
+            return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);
         } else {
             throw new UnsupportedOperationException(getParentNode(wrappedNode).getClass().getCanonicalName());
         }
