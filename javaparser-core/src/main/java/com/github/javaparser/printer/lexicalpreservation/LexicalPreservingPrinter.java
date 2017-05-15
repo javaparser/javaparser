@@ -328,7 +328,6 @@ public class LexicalPreservingPrinter {
     private NodeText interpret(Node node, CsmElement csm) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
 
-        // TODO inject indentation after newlines
         List<TokenTextElement> indentation = findIndentation(node);
 
         NodeText nodeText = new NodeText(this);
