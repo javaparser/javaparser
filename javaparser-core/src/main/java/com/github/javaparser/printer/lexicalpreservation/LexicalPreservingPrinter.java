@@ -244,8 +244,21 @@ public class LexicalPreservingPrinter {
         if (!node.getParentNode().isPresent()) {
             return new TextElementIteratorsFactory.EmptyIterator();
         }
+        // There is the awfully painful case of the fake types involved in variable declarators and
+        // fields or variable declaration that are, of course, an exception...
+
         NodeText parentNodeText = getOrCreateNodeText(node.getParentNode().get());
-        int index = parentNodeText.findChild(node);
+        int index = parentNodeText.tryToFindChild(node);
+        if (index == NodeText.NOT_FOUND) {
+            if (node.getParentNode().get() instanceof VariableDeclarator) {
+                return tokensPreceeding(node.getParentNode().get());
+            } else {
+                throw new IllegalArgumentException(
+                        String.format("I could not find child '%s' in parent '%s'. parentNodeText: %s",
+                                node, node.getParentNode().get(), parentNodeText));
+            }
+        }
+
         return new TextElementIteratorsFactory.CascadingIterator<>(
                 TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1),
                 () -> tokensPreceeding(node.getParentNode().get()));
