@@ -21,16 +21,12 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  */
 public class Difference {
 
-    public static int STANDARD_INDENTATION_SIZE = 4;
+    private static int STANDARD_INDENTATION_SIZE = 4;
 
     private List<DifferenceElement> elements;
 
     private Difference(List<DifferenceElement> elements) {
         this.elements = elements;
-    }
-
-    public void removeIndentationElements() {
-        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
     }
 
     interface DifferenceElement {
@@ -46,6 +42,9 @@ public class Difference {
             return new Kept(element);
         }
 
+        /**
+         * Return the CsmElement considered in this DifferenceElement.
+         */
         CsmElement getElement();
 
         boolean isAdded();
@@ -309,22 +308,6 @@ public class Difference {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
 
-                // FIXME
-//                if (nextOriginal instanceof CsmIndent || nextOriginal instanceof CsmUnindent) {
-//                    originalIndex++;
-//                    continue;
-//                }
-//                if (nextAfter instanceof CsmIndent) {
-//                    for (int i=0;i<STANDARD_INDENTATION_SIZE;i++) {
-//                        elements.add(new Added(CsmElement.space()));
-//                    }
-//                    continue;
-//                }
-//                if (nextAfter instanceof CsmUnindent) {
-//                    afterIndex++;
-//                    continue;
-//                }
-
                 if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
                     originalIndex++;
@@ -584,10 +567,10 @@ public class Difference {
                     } else if ((kept.element instanceof CsmToken) && ((CsmToken) kept.element).isWhiteSpace()) {
                         diffIndex++;
                     } else if (kept.element instanceof CsmIndent) {
-                        // FIXME
+                        // Nothing to do
                         diffIndex++;
                     } else if (kept.element instanceof CsmUnindent) {
-                        // FIXME
+                        // Nothing to do
                         diffIndex++;
                     } else {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
@@ -681,5 +664,13 @@ public class Difference {
 
     public List<DifferenceElement> getElements() {
         return elements;
+    }
+
+    /**
+     * Remove from the difference all the elements related to indentation.
+     * This is mainly intended for test purposes.
+     */
+    void removeIndentationElements() {
+        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
     }
 }
