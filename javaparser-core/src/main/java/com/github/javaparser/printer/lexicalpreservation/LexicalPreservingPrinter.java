@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
@@ -350,8 +351,8 @@ public class LexicalPreservingPrinter {
         // so they have to be handled in a special way
         if (node instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator)node;
-            FieldDeclaration fieldDeclaration = (FieldDeclaration)variableDeclarator.getParentNode().get();
-            int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - fieldDeclaration.getMaximumCommonType().getArrayLevel();
+            NodeWithVariables<?> nodeWithVariables = (NodeWithVariables)variableDeclarator.getParentNode().get();
+            int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - nodeWithVariables.getMaximumCommonType().getArrayLevel();
             for (int i=0; i<extraArrayLevels; i++) {
                 nodeText.addElement(new TokenTextElement(GeneratedJavaParserConstants.LBRACKET));
                 nodeText.addElement(new TokenTextElement(GeneratedJavaParserConstants.RBRACKET));
