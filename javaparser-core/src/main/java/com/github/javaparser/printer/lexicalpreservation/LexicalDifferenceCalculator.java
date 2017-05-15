@@ -6,6 +6,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.Printable;
@@ -223,15 +224,18 @@ class LexicalDifferenceCalculator {
         } else if (csm instanceof CsmUnindent) {
             elements.add(csm);
         } else if (csm instanceof CsmAttribute) {
-            CsmAttribute csmAttribute = (CsmAttribute)csm;
+            CsmAttribute csmAttribute = (CsmAttribute) csm;
             Object value = change.getValue(csmAttribute.getProperty(), node);
             String text = value.toString();
             if (value instanceof Printable) {
-                text = ((Printable)value).asString();
+                text = ((Printable) value).asString();
             }
             elements.add(new CsmToken(csmAttribute.getTokenType(node, value.toString()), text));
+        } else if ((csm instanceof CsmString) && (node instanceof StringLiteralExpr)) {
+            elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
+                    "\"" + ((StringLiteralExpr) node).getValue() + "\""));
         } else {
-            throw new UnsupportedOperationException(csm.getClass().getSimpleName());
+            throw new UnsupportedOperationException(csm.getClass().getSimpleName()+ " " + csm);
         }
     }
 
