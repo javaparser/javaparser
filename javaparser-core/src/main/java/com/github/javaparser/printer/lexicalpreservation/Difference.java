@@ -572,6 +572,9 @@ public class Difference {
                     } else if (kept.element instanceof CsmUnindent) {
                         // Nothing to do
                         diffIndex++;
+                        for (int i=0;i<STANDARD_INDENTATION_SIZE && nodeTextIndex>=1 && nodeText.getTextElement(nodeTextIndex-1).isSpaceOrTab();i++) {
+                            nodeText.removeElement(--nodeTextIndex);
+                        }
                     } else {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                     }
