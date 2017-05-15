@@ -662,14 +662,14 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         int index = 0;
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(VoidType.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(SimpleName.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
-        assertTrue(nodeText.getElements().get(index++).isChild(Parameter.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(BlockStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
         assertEquals(index, nodeText.getElements().size());
 
         nodeText = lpp.getTextForNode(setter.getBody().get());
@@ -684,7 +684,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(ExpressionStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
         assertTrue(nodeText.getElements().get(index++).isNewline());
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
@@ -695,7 +695,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = lpp.getTextForNode(setter.getBody().get().getStatement(0));
         index = 0;
-        assertTrue(nodeText.getElements().get(index++).isChild(AssignExpr.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
         assertEquals(index, nodeText.getElements().size());
     }
@@ -718,14 +718,14 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         int index = 0;
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(VoidType.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(SimpleName.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
-        assertTrue(nodeText.getElements().get(index++).isChild(Parameter.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(BlockStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
         assertEquals(index, nodeText.getElements().size());
 
         nodeText = lpp.getTextForNode(setter.getBody().get());
@@ -740,7 +740,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChild(ExpressionStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
         assertTrue(nodeText.getElements().get(index++).isNewline());
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
@@ -751,7 +751,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = lpp.getOrCreateNodeText(setter.getBody().get().getStatement(0));
         index = 0;
-        assertTrue(nodeText.getElements().get(index++).isChild(AssignExpr.class));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
         assertEquals(index, nodeText.getElements().size());
     }
