@@ -34,6 +34,8 @@ class NodeText {
     private LexicalPreservingPrinter lexicalPreservingPrinter;
     private List<TextElement> elements;
 
+    public static int NOT_FOUND = -1;
+
     LexicalPreservingPrinter getLexicalPreservingPrinter() {
         return lexicalPreservingPrinter;
     }
@@ -103,13 +105,24 @@ class NodeText {
     }
 
     int findElement(TextElementMatcher matcher, int from) {
+        int res = tryToFindElement(matcher, from);
+        if (res == NOT_FOUND) {
+            throw new IllegalArgumentException(
+                    String.format("I could not find child '%s' from position %d. Elements: %s",
+                            matcher, from, elements));
+        } else {
+            return res;
+        }
+    }
+
+    int tryToFindElement(TextElementMatcher matcher, int from) {
         for (int i=from; i<elements.size(); i++) {
             TextElement element = elements.get(i);
             if (matcher.match(element)) {
                 return i;
             }
         }
-        throw new IllegalArgumentException(String.format("I could not find child '%s' from position %d", matcher, from));
+        return NOT_FOUND;
     }
 
     int findChild(Node child) {
@@ -118,6 +131,14 @@ class NodeText {
 
     int findChild(Node child, int from) {
         return findElement(TextElementMatchers.byNode(child), from);
+    }
+
+    int tryToFindChild(Node child) {
+        return tryToFindChild(child, 0);
+    }
+
+    int tryToFindChild(Node child, int from) {
+        return tryToFindElement(TextElementMatchers.byNode(child), from);
     }
 
     //
