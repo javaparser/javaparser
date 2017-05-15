@@ -282,9 +282,8 @@ public class LexicalPreservingPrinter {
     // Methods to handle transformations
     //
 
-    private NodeText prettyPrintingTextNode(Node node) {
+    private NodeText prettyPrintingTextNode(Node node, NodeText nodeText) {
         if (node instanceof PrimitiveType) {
-            NodeText nodeText = new NodeText(this);
             PrimitiveType primitiveType = (PrimitiveType)node;
             switch (primitiveType.getType()) {
                 case BOOLEAN:
@@ -317,20 +316,18 @@ public class LexicalPreservingPrinter {
             return nodeText;
         }
         if (node instanceof JavadocComment) {
-            NodeText nodeText = new NodeText(this);
             nodeText.addToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
             return nodeText;
         }
 
-        return interpret(node, ConcreteSyntaxModel.forClass(node.getClass()));
+        return interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
     }
 
-    private NodeText interpret(Node node, CsmElement csm) {
+    private NodeText interpret(Node node, CsmElement csm, NodeText nodeText) {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
 
         List<TokenTextElement> indentation = findIndentation(node);
 
-        NodeText nodeText = new NodeText(this);
         boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken)element).isNewLine())) {
@@ -366,7 +363,9 @@ public class LexicalPreservingPrinter {
     // Visible for testing
     NodeText getOrCreateNodeText(Node node) {
         if (!textForNodes.containsKey(node)) {
-            textForNodes.put(node, prettyPrintingTextNode(node));
+            NodeText nodeText = new NodeText(this);
+            textForNodes.put(node, nodeText);
+            prettyPrintingTextNode(node, nodeText);
         }
         return textForNodes.get(node);
     }
