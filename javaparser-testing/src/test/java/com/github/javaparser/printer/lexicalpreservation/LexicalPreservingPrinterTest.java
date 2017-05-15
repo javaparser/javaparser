@@ -1,9 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.Providers;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
@@ -754,6 +751,25 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
         assertEquals(index, nodeText.getElements().size());
+    }
+
+    // See issue #926
+    @Test
+    public void addASecondStatementToExistingMethod() throws IOException {
+        considerExample("MethodWithOneStatement");
+
+        MethodDeclaration methodDeclaration = cu.getType(0).getMethodsByName("someMethod").get(0);
+        methodDeclaration.getBody().get().getStatements().add(new ExpressionStmt(
+                new VariableDeclarationExpr(
+                        new VariableDeclarator(
+                                JavaParser.parseClassOrInterfaceType("String"),
+                                "test2",
+                                new StringLiteralExpr("")))
+        ));
+        assertEquals("public void someMethod() {" + EOL
+                + "        String test = \"\";" + EOL
+                + "        String test2 = \"\";" + EOL
+                + "    }", lpp.print(methodDeclaration));
     }
 
 }
