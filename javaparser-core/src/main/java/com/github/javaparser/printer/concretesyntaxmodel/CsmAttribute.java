@@ -27,6 +27,8 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
+import java.util.Arrays;
+
 public class CsmAttribute implements CsmElement {
     public ObservableProperty getProperty() {
         return property;
@@ -44,31 +46,37 @@ public class CsmAttribute implements CsmElement {
         printer.print(PrintingHelper.printToString(value));
     }
 
+    /**
+     * Obtain the token type corresponding to the specific value of the attribute.
+     * For example, to the attribute "Operator" different token could correspond like PLUS or MINUS.
+     */
     public int getTokenType(Node node, String text) {
-        if (property == ObservableProperty.IDENTIFIER) {
-            return GeneratedJavaParserConstants.IDENTIFIER;
-        }
-        if (property == ObservableProperty.TYPE) {
-            for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
-                if (GeneratedJavaParserConstants.tokenImage[i].equals("\"" + text.toLowerCase() + "\"")) {
-                    return i;
+        switch (property) {
+            case IDENTIFIER:
+                return GeneratedJavaParserConstants.IDENTIFIER;
+            case TYPE:
+                String expectedImage = "\"" + text.toLowerCase() + "\"";
+                for (int i=0;i<GeneratedJavaParserConstants.tokenImage.length;i++) {
+                    if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
+                        return i;
+                    }
                 }
-            }
+                throw new RuntimeException("Attribute 'type' does not corresponding to any expected value. Text: " + text);
+            case OPERATOR:
+                try {
+                    return (Integer)(GeneratedJavaParserConstants.class.getDeclaredField(text).get(null));
+                } catch (IllegalAccessException|NoSuchFieldException e) {
+                    throw new RuntimeException("Attribute 'operator' does not corresponding to any expected value. Text: " + text, e);
+                }
+            case VALUE:
+                if (node instanceof IntegerLiteralExpr) {
+                    return GeneratedJavaParserConstants.INTEGER_LITERAL;
+                }
+                throw new UnsupportedOperationException("getTokenType does not know how to handle value for "
+                        + node.getClass().getCanonicalName());
+            default:
+                throw new UnsupportedOperationException("getTokenType does not know how to handle property "
+                        + property + " with text: " + text);
         }
-        if (property == ObservableProperty.OPERATOR) {
-            try {
-                return (Integer)(GeneratedJavaParserConstants.class.getDeclaredField(text).get(null));
-            } catch (IllegalAccessException|NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if (property == ObservableProperty.VALUE) {
-            if (node instanceof IntegerLiteralExpr) {
-                return GeneratedJavaParserConstants.INTEGER_LITERAL;
-            }
-            throw new UnsupportedOperationException("getTokenType does not know how to handle value for "
-                    + node.getClass().getCanonicalName());
-        }
-        throw new UnsupportedOperationException(property.name()+ " " + text);
     }
 }
