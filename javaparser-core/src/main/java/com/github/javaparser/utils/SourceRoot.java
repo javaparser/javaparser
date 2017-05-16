@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
@@ -24,6 +25,7 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.fileInPackageRelativePath;
 import static com.github.javaparser.utils.CodeGenerationUtils.packageAbsolutePath;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.SAVE;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * A collection of Java source files located in one directory and its subdirectories on the file system.
@@ -44,8 +46,10 @@ public class SourceRoot {
     private final Path root;
     private final Map<Path, ParseResult<CompilationUnit>> cache = new HashMap<>();
     private JavaParser javaParser = new JavaParser();
+    private Function<CompilationUnit, String> printer = new PrettyPrinter()::print; 
 
     public SourceRoot(Path root) {
+        assertNotNull(root);
         if (!Files.isDirectory(root)) {
             throw new IllegalArgumentException("Only directories are allowed as root path!");
         }
@@ -58,6 +62,7 @@ public class SourceRoot {
      * root.
      */
     public List<ParseResult<CompilationUnit>> tryToParse(String startPackage) throws IOException {
+        assertNotNull(startPackage);
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -79,6 +84,9 @@ public class SourceRoot {
      * The disadvantage: you have to do your processing directly.
      */
     public SourceRoot parse(String startPackage, JavaParser javaParser, Callback callback) throws IOException {
+        assertNotNull(startPackage);
+        assertNotNull(javaParser);
+        assertNotNull(callback);
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -119,6 +127,7 @@ public class SourceRoot {
      * Save all files back to another path.
      */
     public SourceRoot saveAll(Path root) throws IOException {
+        assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache.size(), root);
         for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
             final Path path = root.resolve(cu.getKey());
@@ -131,13 +140,12 @@ public class SourceRoot {
     }
 
     private SourceRoot save(CompilationUnit cu, Path path) throws IOException {
+        assertNotNull(cu);
+        assertNotNull(path);
+        
         cu.setStorage(path);
-        cu.getStorage().get().save();
+        cu.getStorage().get().save(printer);
         return this;
-    private void save(CompilationUnit cu, Path path) throws IOException {
-        Files.createDirectories(path.getParent());
-        final String code = new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n")).print(cu);
-        Files.write(path, code.getBytes(UTF8));
     }
 
     /**
@@ -163,6 +171,8 @@ public class SourceRoot {
      * Try to parse a single Java file and return the result of parsing.
      */
     public ParseResult<CompilationUnit> tryToParse(String packag, String filename) throws IOException {
+        assertNotNull(packag);
+        assertNotNull(filename);
         final Path relativePath = fileInPackageRelativePath(packag, filename);
         if (cache.containsKey(relativePath)) {
             Log.trace("Retrieving cached %s", relativePath);
@@ -182,6 +192,8 @@ public class SourceRoot {
      * @throws ParseProblemException when something went wrong.
      */
     public CompilationUnit parse(String packag, String filename) {
+        assertNotNull(packag);
+        assertNotNull(filename);
         try {
             final ParseResult<CompilationUnit> result = tryToParse(packag, filename);
             if (result.isSuccessful()) {
@@ -197,6 +209,9 @@ public class SourceRoot {
      * Add a newly created Java file to this source root. It will be saved when saveAll is called.
      */
     public SourceRoot add(String pkg, String filename, CompilationUnit compilationUnit) {
+        assertNotNull(pkg);
+        assertNotNull(filename);
+        assertNotNull(compilationUnit);
         Log.trace("Adding new file %s.%s", pkg, filename);
         final Path path = fileInPackageRelativePath(pkg, filename);
         final ParseResult<CompilationUnit> parseResult = new ParseResult<>(compilationUnit, new ArrayList<>(), null, null);
@@ -208,6 +223,7 @@ public class SourceRoot {
      * Add a newly created Java file to this source root. It needs to have its path set.
      */
     public SourceRoot add(CompilationUnit compilationUnit) {
+        assertNotNull(compilationUnit);
         if (compilationUnit.getStorage().isPresent()) {
             final Path path = compilationUnit.getStorage().get().getPath();
             Log.trace("Adding new file %s", path);
@@ -230,8 +246,25 @@ public class SourceRoot {
         return javaParser;
     }
 
+    /**
+     * Set the parser that is used for parsing by default.
+     */
     public SourceRoot setJavaParser(JavaParser javaParser) {
+        assertNotNull(javaParser);
         this.javaParser = javaParser;
         return this;
+    }
+
+    /**
+     * Set the printing function that transforms compilation units into a string to save.
+     */
+    public SourceRoot setPrinter(Function<CompilationUnit, String> printer) {
+        assertNotNull(printer);
+        this.printer = printer;
+        return this;
+    }
+
+    public Function<CompilationUnit, String> getPrinter() {
+        return printer;
     }
 }
