@@ -32,6 +32,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -41,22 +42,25 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
-
+import com.github.javaparser.utils.CodeGenerationUtils;
 import javax.annotation.Generated;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -559,7 +563,7 @@ public final class CompilationUnit extends Node {
         }
 
         /**
-         * @return the path of the source for this CompilationUnit
+         * @return the path to the source for this CompilationUnit
          */
         public Path getPath() {
             return path;
@@ -570,6 +574,24 @@ public final class CompilationUnit extends Node {
          */
         public CompilationUnit getCompilationUnit() {
             return compilationUnit;
+        }
+
+        /**
+         * @return the source root directory, calculated from the path of this compiation unit, and the package
+         * declaration of this compilation unit. If the package declaration is invalid (when it does not match the end
+         * of the path) a RuntimeException is thrown.
+         */
+        public Path getSourceRoot() {
+            final Optional<String> pkgAsString = compilationUnit.getPackageDeclaration().map(NodeWithName::getNameAsString);
+            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElse(getDirectory());
+        }
+
+        public String getFileName() {
+            return path.getFileName().toString();
+        }
+
+        public Path getDirectory() {
+            return path.getParent();
         }
 
         /**
