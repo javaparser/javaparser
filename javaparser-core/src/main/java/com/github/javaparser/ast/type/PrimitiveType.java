@@ -31,11 +31,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A primitive type.
@@ -88,7 +90,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         private String codeRepresentation;
 
         public ClassOrInterfaceType toBoxedType() {
-            return new ClassOrInterfaceType(nameOfBoxedType);
+            return parseClassOrInterfaceType(nameOfBoxedType);
         }
 
         public String asString() {
@@ -120,9 +122,12 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         this(null, type);
     }
 
-    public PrimitiveType(Range range, final Primitive type) {
-        super(range, new NodeList<>());
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public PrimitiveType(Range range, Primitive type) {
+        super(range);
         setType(type);
+        customInitialization();
     }
 
     @Override
@@ -135,6 +140,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Primitive getType() {
         return type;
     }
@@ -143,6 +149,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         return type.toBoxedType();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public PrimitiveType setType(final Primitive type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -164,11 +171,13 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -176,11 +185,13 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PrimitiveType clone() {
         return (PrimitiveType) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PrimitiveTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.primitiveTypeMetaModel;
     }

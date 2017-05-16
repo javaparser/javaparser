@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
 
 /**
  * A declaration of variables.
@@ -94,11 +95,14 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         this(null, modifiers, annotations, variables);
     }
 
-    public VariableDeclarationExpr(final Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<VariableDeclarator> variables) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public VariableDeclarationExpr(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(range);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setVariables(variables);
+        customInitialization();
     }
 
     @Override
@@ -111,7 +115,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
@@ -122,17 +126,17 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
      * @return modifiers
      * @see Modifier
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
@@ -146,7 +150,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -157,7 +161,7 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public VariableDeclarationExpr setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
@@ -172,11 +176,13 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations(), getVariables());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -196,11 +202,13 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public VariableDeclarationExpr clone() {
         return (VariableDeclarationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public VariableDeclarationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.variableDeclarationExprMetaModel;
     }

@@ -27,13 +27,11 @@ public class RemoveMethodGenerator extends NodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        final MethodDeclaration removeMethod = getOrCreateMethod(nodeCoid, () -> {
-                    nodeCu.addImport(Node.class);
-                    return (MethodDeclaration) parseClassBodyDeclaration("@Override public boolean remove(Node node) {}");
-                },
-                "remove", "Node");
+        MethodDeclaration removeNodeMethod = (MethodDeclaration) parseClassBodyDeclaration("public boolean remove(Node node) {}");
+        nodeCu.addImport(Node.class);
+        nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(removeNodeMethod));
 
-        final BlockStmt body = emptyBodyFor(removeMethod);
+        final BlockStmt body = removeNodeMethod.getBody().get();
 
         body.addStatement("if (node == null) return false;");
 
@@ -61,28 +59,9 @@ public class RemoveMethodGenerator extends NodeGenerator {
         } else {
             body.addStatement("return false;");
         }
-    }
-
-    private BlockStmt emptyBodyFor(NodeWithOptionalBlockStmt<?> removeMethod) {
-        final BlockStmt body = removeMethod.getBody().get();
-        body.getStatements().clear();
-        return body;
-    }
-
-    private MethodDeclaration getOrCreateMethod(ClassOrInterfaceDeclaration nodeCoid,
-                                                Supplier<MethodDeclaration> newMethodSupplier,
-                                                String methodName, String... methodParameterTypes) {
-        final List<MethodDeclaration> removeMethods = nodeCoid.getMethodsBySignature(methodName, methodParameterTypes);
-        final MethodDeclaration removeMethod;
-        if (removeMethods.isEmpty()) {
-            removeMethod = newMethodSupplier.get();
-            nodeCoid.addMember(removeMethod);
-        } else if (removeMethods.size() == 1) {
-            removeMethod = removeMethods.get(0);
-        } else {
-            throw new AssertionError(f("Found more than one method while expecting only one."));
-        }
-        return removeMethod;
+        
+        addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
+        annotateGenerated(removeNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
@@ -102,12 +81,14 @@ public class RemoveMethodGenerator extends NodeGenerator {
     }
 
     private String generateRemoveMethodForAttribute(ClassOrInterfaceDeclaration nodeCoid, BaseNodeMetaModel nodeMetaModel, PropertyMetaModel property) {
-        String methodName = "remove" + capitalize(property.getName());
-        MethodDeclaration removeMethod = getOrCreateMethod(nodeCoid,
-                () -> (MethodDeclaration) parseClassBodyDeclaration(f("public %s %s() {}", nodeMetaModel.getTypeName(), methodName)),
-                methodName);
-        BlockStmt block = emptyBodyFor(removeMethod);
+        final String methodName = "remove" + capitalize(property.getName());
+        final MethodDeclaration removeMethod = (MethodDeclaration) parseClassBodyDeclaration(f("public %s %s() {}", nodeMetaModel.getTypeName(), methodName));
+
+        final BlockStmt block = removeMethod.getBody().get();
         block.addStatement(f("return %s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
+
+        addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
+        annotateGenerated(removeMethod);
         return methodName;
     }
 }

@@ -33,6 +33,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A do-while.
@@ -55,10 +56,13 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         this(null, body, condition);
     }
 
-    public DoStmt(Range range, final Statement body, final Expression condition) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public DoStmt(Range range, Statement body, Expression condition) {
         super(range);
         setBody(body);
         setCondition(condition);
+        customInitialization();
     }
 
     @Override
@@ -71,16 +75,17 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
         return condition;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -94,6 +99,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
@@ -108,6 +114,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -115,11 +122,13 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoStmt clone() {
         return (DoStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public DoStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.doStmtMetaModel;
     }

@@ -21,28 +21,40 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * Base class for reference types.
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class ReferenceType<T extends ReferenceType> extends Type {
+public abstract class ReferenceType extends Type {
 
     public ReferenceType() {
-        this(null);
+        this(null, new NodeList<>());
     }
 
-    public ReferenceType(final Range range) {
-        super(range, new NodeList<>());
+    @AllFieldsConstructor
+    public ReferenceType(NodeList<AnnotationExpr> annotations) {
+        this(null, annotations);
+    }
+
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ReferenceType(Range range, NodeList<AnnotationExpr> annotations) {
+        super(range, annotations);
+        customInitialization();
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -50,11 +62,13 @@ public abstract class ReferenceType<T extends ReferenceType> extends Type {
     }
 
     @Override
-    public ReferenceType<?> clone() {
-        return (ReferenceType<?>) accept(new CloneVisitor(), null);
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public ReferenceType clone() {
+        return (ReferenceType) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ReferenceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.referenceTypeMetaModel;
     }

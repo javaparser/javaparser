@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.utils.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +47,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
+import static com.github.javaparser.utils.Utils.*;
 
 /**
  * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
@@ -332,7 +334,8 @@ public class ConcreteSyntaxModel {
 
         concreteSyntaxModelByClass.put(FieldAccessExpr.class, CsmElement.sequence(
                 CsmElement.comment(),
-                CsmElement.conditional(SCOPE, IS_PRESENT, CsmElement.sequence(CsmElement.child(SCOPE), CsmElement.token(GeneratedJavaParserConstants.DOT))),
+                CsmElement.child(SCOPE), 
+                CsmElement.token(GeneratedJavaParserConstants.DOT),
                 child(ObservableProperty.NAME)
         ));
 
@@ -934,7 +937,7 @@ public class ConcreteSyntaxModel {
     }
 
     public static String genericPrettyPrint(Node node) {
-        SourcePrinter sourcePrinter = new SourcePrinter("    ");
+        SourcePrinter sourcePrinter = new SourcePrinter("    ", EOL);
         forClass(node.getClass()).prettyPrint(node, sourcePrinter);
         return sourcePrinter.getSource();
     }

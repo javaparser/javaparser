@@ -31,6 +31,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MemberValuePairMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A value for a member of an annotation.
@@ -57,10 +58,13 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         this(null, name, value);
     }
 
-    public MemberValuePair(final Range range, final SimpleName name, final Expression value) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public MemberValuePair(Range range, SimpleName name, Expression value) {
         super(range);
         setName(name);
         setValue(value);
+        customInitialization();
     }
 
     @Override
@@ -73,16 +77,17 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getValue() {
         return value;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MemberValuePair setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -96,6 +101,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MemberValuePair setValue(final Expression value) {
         assertNotNull(value);
         if (value == this.value) {
@@ -110,6 +116,7 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -117,11 +124,13 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MemberValuePair clone() {
         return (MemberValuePair) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MemberValuePairMetaModel getMetaModel() {
         return JavaParserMetaModel.memberValuePairMetaModel;
     }

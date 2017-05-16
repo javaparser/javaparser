@@ -38,10 +38,14 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -72,12 +76,15 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         this(null, modifiers, annotations, isInterface, name, typeParameters, extendedTypes, implementedTypes, members);
     }
 
-    public ClassOrInterfaceDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final boolean isInterface, final SimpleName name, final NodeList<TypeParameter> typeParameters, final NodeList<ClassOrInterfaceType> extendedTypes, final NodeList<ClassOrInterfaceType> implementedTypes, final NodeList<BodyDeclaration<?>> members) {
-        super(range, annotations, modifiers, name, members);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassOrInterfaceDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<BodyDeclaration<?>> members) {
+        super(range, modifiers, annotations, name, members);
         setInterface(isInterface);
         setTypeParameters(typeParameters);
         setExtendedTypes(extendedTypes);
         setImplementedTypes(implementedTypes);
+        customInitialization();
     }
 
     @Override
@@ -90,25 +97,27 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getExtendedTypes() {
         return extendedTypes;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isInterface() {
         return isInterface;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setExtendedTypes(final NodeList<ClassOrInterfaceType> extendedTypes) {
         assertNotNull(extendedTypes);
         if (extendedTypes == this.extendedTypes) {
@@ -122,7 +131,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
@@ -136,6 +145,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setInterface(final boolean isInterface) {
         if (isInterface == this.isInterface) {
             return (ClassOrInterfaceDeclaration) this;
@@ -145,7 +155,7 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
@@ -168,12 +178,59 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         return getMembers().stream().filter(bd -> bd instanceof ConstructorDeclaration).map(bd -> (ConstructorDeclaration) bd).filter(cd -> cd.getParameters().isEmpty()).findFirst();
     }
 
+    /**
+     * Adds a constructor to this
+     *
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @return the {@link MethodDeclaration} created
+     */
+    public ConstructorDeclaration addConstructor(Modifier... modifiers) {
+        ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
+        constructorDeclaration.setModifiers(Arrays.stream(modifiers).collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        constructorDeclaration.setName(getName());
+        getMembers().add(constructorDeclaration);
+        return constructorDeclaration;
+    }
+
+    /**
+     * Find all constructors for this class.
+     *
+     * @return the constructors found. This list is immutable.
+     */
+    public List<ConstructorDeclaration> getConstructors() {
+        return unmodifiableList(getMembers().stream().filter(m -> m instanceof ConstructorDeclaration).map(m -> (ConstructorDeclaration) m).collect(toList()));
+    }
+
+    /**
+     * Try to find a {@link MethodDeclaration} by its parameters types
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return the methods found (multiple in case of overloading)
+     */
+    public Optional<ConstructorDeclaration> getConstructorByParameterTypes(String... paramTypes) {
+        return getConstructors().stream().filter(m -> m.hasParametersOfType(paramTypes)).findFirst();
+    }
+
+    /**
+     * Try to find a {@link MethodDeclaration} by its parameters types
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return the methods found (multiple in case of overloading)
+     */
+    public Optional<ConstructorDeclaration> getConstructorByParameterTypes(Class<?>... paramTypes) {
+        return getConstructors().stream().filter(m -> m.hasParametersOfType(paramTypes)).findFirst();
+    }
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getExtendedTypes(), getImplementedTypes(), getTypeParameters(), getMembers(), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -206,11 +263,13 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceDeclaration clone() {
         return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassOrInterfaceDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceDeclarationMetaModel;
     }

@@ -21,10 +21,12 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A base class for all expressions.
@@ -33,11 +35,20 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public abstract class Expression extends Node {
 
+    @AllFieldsConstructor
+    public Expression() {
+        this(null);
+    }
+
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Expression(Range range) {
         super(range);
+        customInitialization();
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -45,11 +56,13 @@ public abstract class Expression extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Expression clone() {
         return (Expression) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionMetaModel;
     }

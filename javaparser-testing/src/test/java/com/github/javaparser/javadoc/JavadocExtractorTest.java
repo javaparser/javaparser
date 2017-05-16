@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 
 public class JavadocExtractorTest {
 
@@ -41,7 +42,7 @@ public class JavadocExtractorTest {
 
     private void processFile(File file) throws FileNotFoundException {
         try {
-            CompilationUnit cu = JavaParser.parse(file, Charsets.UTF_8);
+            CompilationUnit cu = JavaParser.parse(file, StandardCharsets.UTF_8);
             new VoidVisitorAdapter<Object>() {
                 @Override
                 public void visit(JavadocComment n, Object arg) {

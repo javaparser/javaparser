@@ -3,15 +3,22 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
+import static org.junit.Assert.assertEquals;
 
 public class Java1_0ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java1_0Validator()));
@@ -76,5 +83,13 @@ public class Java1_0ValidatorTest {
     public void noReflection() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("Abc.class"));
         assertProblems(result, "(line 1,col 1) Reflection is not supported.");
+    }
+
+    @Test
+    public void nonEmptyList() {
+        ArrayCreationExpr expr = new ArrayCreationExpr(PrimitiveType.booleanType());
+        List<Problem> problems= new ArrayList<>();
+        new Java1_0Validator().accept(expr, new ProblemReporter(problems));
+        assertEquals("ArrayCreationExpr.levels can not be empty.", problems.get(0).getMessage());
     }
 }

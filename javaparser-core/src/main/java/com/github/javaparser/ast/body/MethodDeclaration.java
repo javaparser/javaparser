@@ -50,6 +50,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;}
@@ -76,21 +77,24 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
     }
 
     /** @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set. */
     @Deprecated
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
         setDefault(isDefault);
     }
 
-    public MethodDeclaration(Range range, final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType<?>> thrownExceptions, final BlockStmt body) {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public MethodDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
         super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
         setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -103,7 +107,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
         return Optional.ofNullable(body);
     }
@@ -114,7 +118,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      * @param body the body, can be null
      * @return this, the MethodDeclaration
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setBody(final BlockStmt body) {
         if (body == this.body) {
             return (MethodDeclaration) this;
@@ -127,12 +131,12 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -162,7 +166,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
-    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
+    public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         return super.setThrownExceptions(thrownExceptions);
     }
 
@@ -254,11 +258,13 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -271,16 +277,19 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
         return setBody((BlockStmt) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MethodDeclaration clone() {
         return (MethodDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MethodDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.methodDeclarationMetaModel;
     }

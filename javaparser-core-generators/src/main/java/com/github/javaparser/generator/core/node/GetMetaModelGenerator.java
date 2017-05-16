@@ -1,9 +1,8 @@
 package com.github.javaparser.generator.core.node;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.NodeGenerator;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
@@ -19,15 +18,14 @@ public class GetMetaModelGenerator extends NodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        nodeCoid.getMethodsByName("getMetaModel").forEach(Node::remove);
-
-        nodeCu.addImport(nodeMetaModel.getClass().getName());
-        nodeCu.addImport(JavaParserMetaModel.class);
-        final String method = f("%s public %s getMetaModel() { return JavaParserMetaModel.%s; }",
+        final MethodDeclaration getMetaModelMethod = (MethodDeclaration)parseClassBodyDeclaration(f("%s public %s getMetaModel() { return JavaParserMetaModel.%s; }",
                 nodeMetaModel.isRootNode() ? "" : "@Override",
                 nodeMetaModel.getClass().getSimpleName(),
-                nodeMetaModel.getMetaModelFieldName());
+                nodeMetaModel.getMetaModelFieldName()));
 
-        nodeCoid.addMember(parseClassBodyDeclaration(method));
+        addOrReplaceWhenSameSignature(nodeCoid, getMetaModelMethod);
+        nodeCu.addImport(nodeMetaModel.getClass().getName());
+        nodeCu.addImport(JavaParserMetaModel.class);
+        annotateGenerated(getMetaModelMethod);
     }
 }

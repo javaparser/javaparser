@@ -53,7 +53,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
-        printer = new SourcePrinter(configuration.getIndent());
+        printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
     }
 
     public String getSource() {
@@ -577,8 +577,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final FieldAccessExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        if (n.getScope().isPresent())
-            n.getScope().get().accept(this, arg);
+        n.getScope().accept(this, arg);
         printer.print(".");
         n.getName().accept(this, arg);
     }
@@ -737,7 +736,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
                 final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {
@@ -779,7 +778,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         if (!isNullOrEmpty(n.getThrownExceptions())) {
             printer.print(" throws ");
-            for (final Iterator<ReferenceType<?>> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
+            for (final Iterator<ReferenceType> i = n.getThrownExceptions().iterator(); i.hasNext(); ) {
                 final ReferenceType name = i.next();
                 name.accept(this, arg);
                 if (i.hasNext()) {

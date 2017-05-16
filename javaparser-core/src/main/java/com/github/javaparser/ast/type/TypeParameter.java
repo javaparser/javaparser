@@ -40,6 +40,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A type parameter.
@@ -53,7 +54,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
+public final class TypeParameter extends ReferenceType implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
 
@@ -80,11 +81,13 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         this(null, name, typeBound, annotations);
     }
 
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
-        super(range);
+        super(range, annotations);
         setName(name);
         setTypeBound(typeBound);
-        setAnnotations(annotations);
+        customInitialization();
     }
 
     @Override
@@ -102,7 +105,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
      *
      * @return the name of the paramenter
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
@@ -113,11 +116,12 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
      *
      * @return list of types that this paramente extends or <code>null</code>
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ClassOrInterfaceType> getTypeBound() {
         return typeBound;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypeParameter setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -131,6 +135,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypeParameter setTypeBound(final NodeList<ClassOrInterfaceType> typeBound) {
         assertNotNull(typeBound);
         if (typeBound == this.typeBound) {
@@ -151,11 +156,13 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeBound(), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -176,11 +183,13 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public TypeParameter clone() {
         return (TypeParameter) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.typeParameterMetaModel;
     }

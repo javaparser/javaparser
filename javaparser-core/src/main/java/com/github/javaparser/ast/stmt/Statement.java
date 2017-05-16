@@ -21,10 +21,12 @@
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.StatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.StatementMetaModel;
+import javax.annotation.Generated;
 
 /**
  * A base class for all statements.
@@ -33,11 +35,20 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public abstract class Statement extends Node {
 
-    public Statement(final Range range) {
+    @AllFieldsConstructor
+    public Statement() {
+        this(null);
+    }
+
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public Statement(Range range) {
         super(range);
+        customInitialization();
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -45,11 +56,13 @@ public abstract class Statement extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Statement clone() {
         return (Statement) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public StatementMetaModel getMetaModel() {
         return JavaParserMetaModel.statementMetaModel;
     }

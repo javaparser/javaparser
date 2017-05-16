@@ -128,7 +128,7 @@ public class ArrayTypeTest {
     @Test
     public void setFieldDeclarationWithArrays() {
         FieldDeclaration fieldDeclaration = (FieldDeclaration) parseClassBodyDeclaration("int[][] a[][];");
-        fieldDeclaration.getVariable(0).setType(new ArrayType(new ArrayType(new ClassOrInterfaceType("Blob"))));
+        fieldDeclaration.getVariable(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob[][] a;", fieldDeclaration.toString());
     }
@@ -136,7 +136,7 @@ public class ArrayTypeTest {
     @Test
     public void setMethodDeclarationWithArrays() {
         MethodDeclaration method = (MethodDeclaration) parseClassBodyDeclaration("int[][] a()[][] {}");
-        method.setType(new ArrayType(new ArrayType(new ClassOrInterfaceType("Blob"))));
+        method.setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob[][] a() {" + EOL + "}", method.toString());
     }
@@ -144,7 +144,7 @@ public class ArrayTypeTest {
     @Test
     public void setParameterWithArrays() {
         MethodDeclaration method = (MethodDeclaration) parseClassBodyDeclaration("void a(int[][] a[][]) {};");
-        method.getParameter(0).setType(new ArrayType(new ArrayType(new ClassOrInterfaceType("Blob"))));
+        method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
     }

@@ -4,6 +4,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -132,6 +134,10 @@ public class SourceRoot {
         cu.setStorage(path);
         cu.getStorage().get().save();
         return this;
+    private void save(CompilationUnit cu, Path path) throws IOException {
+        Files.createDirectories(path.getParent());
+        final String code = new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n")).print(cu);
+        Files.write(path, code.getBytes(UTF8));
     }
 
     /**

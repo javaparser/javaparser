@@ -21,13 +21,14 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
+import com.github.javaparser.ast.nodeTypes.*;
+import com.github.javaparser.ast.nodeTypes.modifiers.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ReferenceType;
@@ -42,11 +43,12 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import javax.annotation.Generated;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
-public abstract class CallableDeclaration<T extends Node> extends BodyDeclaration<T> {
+public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T> implements NodeWithAccessModifiers<T>, NodeWithDeclaration, NodeWithSimpleName<T>, NodeWithParameters<T>, NodeWithThrownExceptions<T>, NodeWithTypeParameters<T>, NodeWithJavadoc<T>, NodeWithAbstractModifier<T>, NodeWithStaticModifier<T>, NodeWithFinalModifier<T>, NodeWithStrictfpModifier<T> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -56,15 +58,23 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
 
     private NodeList<Parameter> parameters;
 
-    private NodeList<ReferenceType<?>> thrownExceptions;
+    private NodeList<ReferenceType> thrownExceptions;
 
-    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType<?>> thrownExceptions) {
+    @AllFieldsConstructor
+    public CallableDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
+        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+    }
+
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
         super(range, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
+        customInitialization();
     }
 
     /**
@@ -73,10 +83,13 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
      * @return modifiers
      * @see Modifier
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -87,10 +100,13 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -104,10 +120,13 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
         if (parameters == this.parameters) {
@@ -121,11 +140,14 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
-    public NodeList<ReferenceType<?>> getThrownExceptions() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
-    public T setThrownExceptions(final NodeList<ReferenceType<?>> thrownExceptions) {
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public T setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
             return (T) this;
@@ -138,10 +160,13 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         return (T) this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
@@ -169,7 +194,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
         StringBuilder sb = new StringBuilder();
         if (includingThrows) {
             boolean firstThrow = true;
-            for (ReferenceType<?> thr : getThrownExceptions()) {
+            for (ReferenceType thr : getThrownExceptions()) {
                 if (firstThrow) {
                     firstThrow = false;
                     sb.append(" throws ");
@@ -188,6 +213,7 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -297,11 +323,13 @@ public abstract class CallableDeclaration<T extends Node> extends BodyDeclaratio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CallableDeclaration<?> clone() {
         return (CallableDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CallableDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.callableDeclarationMetaModel;
     }

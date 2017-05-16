@@ -1,6 +1,5 @@
 package com.github.javaparser.generator.core;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.visitor.*;
 import com.github.javaparser.utils.SourceRoot;
@@ -33,7 +32,6 @@ public class CoreGenerator {
         new GenericVisitorGenerator(sourceRoot).generate();
         new HashCodeVisitorGenerator(sourceRoot).generate();
         new CloneVisitorGenerator(sourceRoot).generate();
-        new TreeStructureVisitorGenerator(sourceRoot).generate();
         new ModifierVisitorGenerator(sourceRoot).generate();
 
         new GetNodeListsGenerator(sourceRoot).generate();
@@ -41,5 +39,6 @@ public class CoreGenerator {
         new RemoveMethodGenerator(sourceRoot).generate();
         new CloneGenerator(sourceRoot).generate();
         new GetMetaModelGenerator(sourceRoot).generate();
+        new MainConstructorGenerator(sourceRoot).generate();
     }
 }

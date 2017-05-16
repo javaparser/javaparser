@@ -26,10 +26,10 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.Utils;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.Utils.nextWord;
@@ -38,6 +38,9 @@ import static com.github.javaparser.utils.Utils.nextWord;
  * The class responsible for parsing the content of JavadocComments and produce JavadocDocuments.
  */
 class JavadocParser {
+
+    private static String BLOCK_TAG_PREFIX = "@";
+    private static Pattern BLOCK_PATTERN = Pattern.compile("^" + BLOCK_TAG_PREFIX, Pattern.MULTILINE);
 
     public static Javadoc parse(JavadocComment comment) {
         return parse(comment.getContent());
@@ -57,9 +60,21 @@ class JavadocParser {
             blockLines = Collections.emptyList();
         } else {
             descriptionText = trimRight(String.join("\n", cleanLines.subList(0, indexOfFirstBlockTag)));
-            blockLines = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream()
-                    .filter(Utils.STRING_NOT_EMPTY)
-                    .collect(Collectors.toList());
+
+            //Combine cleaned lines, but only starting with the first block tag till the end
+            //In this combined string it is easier to handle multiple lines which actually belong together
+            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size())
+                .stream()
+                .collect(Collectors.joining("\n"));
+
+            //Split up the entire tag black again, considering now that some lines belong to the same block tag.
+            //The pattern used splits the block at each new line starting with the '@' symbol, thus the symbol
+            //then needs to be added again so that the block parsers handles everything correctly.
+            blockLines = BLOCK_PATTERN
+                .splitAsStream(tagBlock)
+                .filter(Utils.STRING_NOT_EMPTY)
+                .map(s -> BLOCK_TAG_PREFIX + s.replace("\n", " ").trim())
+                .collect(Collectors.toList());
         }
         Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
         blockLines.forEach(l -> document.addBlockTag(parseBlockTag(l)));
@@ -74,7 +89,7 @@ class JavadocParser {
     }
 
     private static boolean isABlockLine(String line) {
-        return line.trim().startsWith("@");
+        return line.trim().startsWith(BLOCK_TAG_PREFIX);
     }
 
     private static String trimRight(String string) {

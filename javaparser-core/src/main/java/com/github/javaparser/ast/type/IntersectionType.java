@@ -39,6 +39,7 @@ import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
+import javax.annotation.Generated;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -55,16 +56,19 @@ import static java.util.stream.Collectors.joining;
 public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
     @NonEmptyProperty
-    private NodeList<ReferenceType<?>> elements;
+    private NodeList<ReferenceType> elements;
 
     @AllFieldsConstructor
-    public IntersectionType(NodeList<ReferenceType<?>> elements) {
+    public IntersectionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }
 
-    public IntersectionType(Range range, NodeList<ReferenceType<?>> elements) {
-        super(range, new NodeList<>());
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public IntersectionType(Range range, NodeList<ReferenceType> elements) {
+        super(range);
         setElements(elements);
+        customInitialization();
     }
 
     @Override
@@ -77,11 +81,13 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
         v.visit(this, arg);
     }
 
-    public NodeList<ReferenceType<?>> getElements() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ReferenceType> getElements() {
         return elements;
     }
 
-    public IntersectionType setElements(final NodeList<ReferenceType<?>> elements) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public IntersectionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return (IntersectionType) this;
@@ -100,11 +106,13 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getElements(), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -123,11 +131,13 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IntersectionType clone() {
         return (IntersectionType) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public IntersectionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.intersectionTypeMetaModel;
     }

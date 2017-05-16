@@ -40,6 +40,8 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import java.util.*;
 import static java.util.Collections.unmodifiableList;
+import javax.annotation.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -151,11 +153,20 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Called in every constructor for node specific code.
+     * It can't be written in the constructor itself because it will
+     * be overwritten during code generation.
+     */
+    protected void customInitialization() {
+    }
+
+    /**
      * This is a comment associated with this node.
      *
      * @return comment property
      */
-    public final Optional<Comment> getComment() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<Comment> getComment() {
         return Optional.ofNullable(comment);
     }
 
@@ -339,7 +350,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public static final int ABSOLUTE_END_LINE = -2;
 
-    /** @deprecated use getComment().isPresent() */
+    /**
+     * @deprecated use getComment().isPresent()
+     */
     @Deprecated
     public boolean hasComment() {
         return comment != null;
@@ -408,7 +421,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * Try to remove this node from the parent
      *
-     * @return true if removed, false otherwise
+     * @return true if removed, false if it is a required property of the parent, or if the parent isn't set.
      * @throws RuntimeException if it fails in an unexpected way
      */
     public boolean remove() {
@@ -416,6 +429,22 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             return false;
         }
         return parentNode.remove(this);
+    }
+
+    /**
+     * Forcibly removes this node from the AST.
+     * If it cannot be removed from the parent with remove(),
+     * it will try to remove its parent instead,
+     * until it finds a node that can be removed,
+     * or no parent can be found.
+     * 
+     * Since everything at CompilationUnit level is removable,
+     * this method will only (silently) fail when the node is in a detached AST fragment.
+     */
+    public void removeForced() {
+        if (!remove()) {
+            getParentNode().ifPresent(Node::remove);
+        }
     }
 
     @Override
@@ -490,6 +519,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return Collections.emptyList();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -502,15 +532,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public Node removeComment() {
         return setComment((Comment) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Node clone() {
         return (Node) accept(new CloneVisitor(), null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NodeMetaModel getMetaModel() {
         return JavaParserMetaModel.nodeMetaModel;
     }

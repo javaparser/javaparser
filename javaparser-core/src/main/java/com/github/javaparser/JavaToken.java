@@ -21,22 +21,21 @@
 
 package com.github.javaparser;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * A token from a parsed source file.
  * (Awkwardly named "Java"Token since JavaCC already generates an internal class Token.)
  */
 public class JavaToken {
-    public final Range range;
-    public final int kind;
-    public final String text;
+    private final Range range;
+    private final int kind;
+    private final String text;
+    private final Optional<JavaToken> previousToken;
+    private Optional<JavaToken> nextToken = Optional.empty();
 
-    public JavaToken(Range range, int kind, String text) {
-        this.range = range;
-        this.kind = kind;
-        this.text = text;
-    }
-
-    public JavaToken(Token token) {
+    public JavaToken(Token token, List<JavaToken> tokens) {
         Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
         String text = token.image;
 
@@ -82,6 +81,13 @@ public class JavaToken {
         this.range = range;
         this.kind = token.kind;
         this.text = text;
+        if (!tokens.isEmpty()) {
+            final JavaToken previousToken = tokens.get(tokens.size() - 1);
+            this.previousToken = Optional.of(previousToken);
+            previousToken.nextToken = Optional.of(this);
+        } else {
+            previousToken = Optional.empty();
+        }
     }
 
     public Range getRange() {
@@ -94,6 +100,14 @@ public class JavaToken {
 
     public String getText() {
         return text;
+    }
+
+    public Optional<JavaToken> getNextToken() {
+        return nextToken;
+    }
+
+    public Optional<JavaToken> getPreviousToken() {
+        return previousToken;
     }
 
     @Override

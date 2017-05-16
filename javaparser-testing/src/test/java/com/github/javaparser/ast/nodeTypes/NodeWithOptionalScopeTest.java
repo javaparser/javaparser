@@ -11,11 +11,9 @@ public class NodeWithOptionalScopeTest {
     @Test
     public void commonExpressionWhichHaveInterfaceNodeWithOptionalScope() {
         NodeWithOptionalScope methodCallExpr = new MethodCallExpr(new NameExpr("A"), "call");
-        NodeWithOptionalScope fieldAccessExpr = new FieldAccessExpr(new NameExpr("A"), "field");
         NodeWithOptionalScope objectCreationExpr = new ObjectCreationExpr();
 
         assertTrue(methodCallExpr.getScope().isPresent());
-        assertTrue(fieldAccessExpr.getScope().isPresent());
         assertFalse(objectCreationExpr.getScope().isPresent());
     }
 

@@ -25,6 +25,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
+
 /**
  * A node that implements other types.
  */
@@ -36,7 +38,9 @@ public interface NodeWithImplements<N extends Node> {
     }
 
     N setImplementedTypes(NodeList<ClassOrInterfaceType> implementsList);
-
+    
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
+    
     @SuppressWarnings("unchecked")
     default N setImplementedType(int i, ClassOrInterfaceType implement) {
         getImplementedTypes().set(i, implement);
@@ -67,8 +71,7 @@ public interface NodeWithImplements<N extends Node> {
      */
     @SuppressWarnings("unchecked")
     default N addImplementedType(String name) {
-        ClassOrInterfaceType classOrInterfaceType = new ClassOrInterfaceType(name);
-        getImplementedTypes().add(classOrInterfaceType);
+        getImplementedTypes().add(parseClassOrInterfaceType(name));
         return (N) this;
     }
 
@@ -79,7 +82,7 @@ public interface NodeWithImplements<N extends Node> {
      * @return this
      */
     default N addImplementedType(Class<?> clazz) {
-        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        tryAddImportToParentCompilationUnit(clazz);
         return addImplementedType(clazz.getSimpleName());
     }
 }

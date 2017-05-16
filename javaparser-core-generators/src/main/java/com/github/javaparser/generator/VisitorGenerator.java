@@ -1,6 +1,5 @@
 package com.github.javaparser.generator;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -58,24 +57,26 @@ public abstract class VisitorGenerator extends Generator {
     }
 
     private void generateVisitMethodForNode(BaseNodeMetaModel node, ClassOrInterfaceDeclaration visitorClass, CompilationUnit compilationUnit) {
-        Optional<MethodDeclaration> visitMethod = visitorClass.getMethods().stream()
+        final Optional<MethodDeclaration> existingVisitMethod = visitorClass.getMethods().stream()
                 .filter(m -> m.getNameAsString().equals("visit"))
                 .filter(m -> m.getParameter(0).getType().toString().equals(node.getTypeName()))
                 .findFirst();
 
-        if (visitMethod.isPresent()) {
-            generateVisitMethodBody(node, visitMethod.get(), compilationUnit);
+        if (existingVisitMethod.isPresent()) {
+            generateVisitMethodBody(node, existingVisitMethod.get(), compilationUnit);
+            annotateGenerated(existingVisitMethod.get());
         } else if (createMissingVisitMethods) {
-            MethodDeclaration methodDeclaration = visitorClass.addMethod("visit")
+            MethodDeclaration newVisitMethod = visitorClass.addMethod("visit")
                     .addParameter(node.getTypeNameGenerified(), "n")
                     .addParameter(argumentType, "arg")
                     .setType(returnType);
             if (!visitorClass.isInterface()) {
-                methodDeclaration
+                newVisitMethod
                         .addAnnotation(new MarkerAnnotationExpr(new Name("Override")))
                         .addModifier(PUBLIC);
             }
-            generateVisitMethodBody(node, methodDeclaration, compilationUnit);
+            generateVisitMethodBody(node, newVisitMethod, compilationUnit);
+            annotateGenerated(newVisitMethod);
         }
     }
 

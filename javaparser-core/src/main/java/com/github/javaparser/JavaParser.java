@@ -35,6 +35,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
 
@@ -112,6 +113,7 @@ public final class JavaParser {
      *
      * @param start refer to the constants in ParseStart to see what can be parsed.
      * @param provider refer to Providers to see how you can read source.
+     * The provider will be closed after parsing.
      * @param <N> the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
@@ -211,7 +213,8 @@ public final class JavaParser {
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param in {@link InputStream} containing Java source code
+     * @param in {@link InputStream} containing Java source code.
+     * It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -225,7 +228,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param in {@link InputStream} containing Java source code
+     * @param in {@link InputStream} containing Java source code.
+     * It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
@@ -237,7 +241,8 @@ public final class JavaParser {
      * Parses the Java code contained in a {@link File} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param file {@link File} containing Java source code
+     * @param file {@link File} containing Java source code.
+     * It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -252,7 +257,8 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param file {@link File} containing Java source code
+     * @param file {@link File} containing Java source code.
+     * It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
@@ -338,7 +344,8 @@ public final class JavaParser {
      * Parses Java code from a Reader and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param reader the reader containing Java source code
+     * @param reader the reader containing Java source code.
+     * It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
@@ -464,7 +471,7 @@ public final class JavaParser {
     }
 
     /**
-     * Parses a Java type name and returns a {@link ClassOrInterfaceType} that represents it.
+     * Parses a Java class or interface type name and returns a {@link ClassOrInterfaceType} that represents it.
      *
      * @param type the type name like a.b.c.X or Y
      * @return ClassOrInterfaceType representing the type
@@ -472,6 +479,17 @@ public final class JavaParser {
      */
     public static ClassOrInterfaceType parseClassOrInterfaceType(String type) {
         return simplifiedParse(CLASS_OR_INTERFACE_TYPE, provider(type));
+    }
+
+    /**
+     * Parses a Java type name and returns a {@link Type} that represents it.
+     *
+     * @param type the type name like a.b.c.X, Y, or int
+     * @return ClassOrInterfaceType representing the type
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static Type parseType(String type) {
+        return simplifiedParse(TYPE, provider(type));
     }
 
     /**

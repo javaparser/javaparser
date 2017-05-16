@@ -28,6 +28,7 @@ import com.github.javaparser.ast.expr.*;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 
+import static com.github.javaparser.JavaParser.parseExpression;
 import static com.github.javaparser.JavaParser.parseName;
 
 /**
@@ -37,8 +38,11 @@ import static com.github.javaparser.JavaParser.parseName;
  * @since July 2014
  */
 public interface NodeWithAnnotations<N extends Node> {
-
     NodeList<AnnotationExpr> getAnnotations();
+
+    N setAnnotations(NodeList<AnnotationExpr> annotations);
+
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
 
     default AnnotationExpr getAnnotation(int i) {
         return getAnnotations().get(i);
@@ -55,8 +59,6 @@ public interface NodeWithAnnotations<N extends Node> {
         getAnnotations().add(element);
         return (N) this;
     }
-
-    N setAnnotations(NodeList<AnnotationExpr> annotations);
 
     /**
      * Annotates this
@@ -93,7 +95,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return this
      */
     default N addAnnotation(Class<? extends Annotation> clazz) {
-        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        tryAddImportToParentCompilationUnit(clazz);
         return addAnnotation(clazz.getSimpleName());
     }
 
@@ -104,7 +106,7 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return the {@link NormalAnnotationExpr} added
      */
     default NormalAnnotationExpr addAndGetAnnotation(Class<? extends Annotation> clazz) {
-        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        tryAddImportToParentCompilationUnit(clazz);
         return addAndGetAnnotation(clazz.getSimpleName());
     }
 
@@ -129,8 +131,23 @@ public interface NodeWithAnnotations<N extends Node> {
      * @return this
      */
     default N addMarkerAnnotation(Class<? extends Annotation> clazz) {
-        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        tryAddImportToParentCompilationUnit(clazz);
         return addMarkerAnnotation(clazz.getSimpleName());
+    }
+
+    /**
+     * Annotates this with a single member annotation
+     *
+     * @param name the name of the annotation
+     * @param expression the part between ()
+     * @return this
+     */
+    @SuppressWarnings("unchecked")
+    default N addSingleMemberAnnotation(String name, Expression expression) {
+        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
+                parseName(name), expression);
+        getAnnotations().add(singleMemberAnnotationExpr);
+        return (N) this;
     }
 
     /**
@@ -140,12 +157,8 @@ public interface NodeWithAnnotations<N extends Node> {
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
-    @SuppressWarnings("unchecked")
     default N addSingleMemberAnnotation(String name, String value) {
-        SingleMemberAnnotationExpr singleMemberAnnotationExpr = new SingleMemberAnnotationExpr(
-                parseName(name), new NameExpr(value));
-        getAnnotations().add(singleMemberAnnotationExpr);
-        return (N) this;
+        return addSingleMemberAnnotation(name, parseExpression(value));
     }
 
     /**
@@ -157,7 +170,7 @@ public interface NodeWithAnnotations<N extends Node> {
      */
     default N addSingleMemberAnnotation(Class<? extends Annotation> clazz,
                                         String value) {
-        ((Node) this).tryAddImportToParentCompilationUnit(clazz);
+        tryAddImportToParentCompilationUnit(clazz);
         return addSingleMemberAnnotation(clazz.getSimpleName(), value);
     }
 
