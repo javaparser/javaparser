@@ -538,7 +538,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
     }
-    
+
     @Test
     public void preserveSpaceAsIsForASimpleClassWithMoreFormatting() throws IOException {
         considerExample("ASimpleClassWithMoreFormatting");

@@ -234,6 +234,11 @@ class LexicalDifferenceCalculator {
         } else if ((csm instanceof CsmString) && (node instanceof StringLiteralExpr)) {
             elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL,
                     "\"" + ((StringLiteralExpr) node).getValue() + "\""));
+        } else if (csm instanceof CsmMix) {
+            CsmMix csmMix = (CsmMix)csm;
+            List<CsmElement> mixElements = new LinkedList<>();
+            csmMix.getElements().forEach(e -> calculatedSyntaxModelForNode(e, node, mixElements, change));
+            elements.add(new CsmMix(mixElements));
         } else {
             throw new UnsupportedOperationException(csm.getClass().getSimpleName()+ " " + csm);
         }

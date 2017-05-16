@@ -36,6 +36,7 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.Utils;
@@ -350,12 +351,15 @@ public class LexicalPreservingPrinter {
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {
                 nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
-            } else if (element instanceof CsmToken){
-                CsmToken csmToken = (CsmToken)element;
+            } else if (element instanceof CsmToken) {
+                CsmToken csmToken = (CsmToken) element;
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
                 if (csmToken.isNewLine()) {
                     pendingIndentation = true;
                 }
+            } else if (element instanceof CsmMix) {
+                CsmMix csmMix = (CsmMix)element;
+                csmMix.getElements().forEach(e -> interpret(node, e, nodeText));
             } else {
                 throw new UnsupportedOperationException(element.getClass().getSimpleName());
             }

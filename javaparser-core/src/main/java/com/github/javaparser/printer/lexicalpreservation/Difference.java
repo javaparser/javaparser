@@ -4,10 +4,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.TokenTypes;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+import com.github.javaparser.printer.concretesyntaxmodel.*;
 
 import java.util.*;
 
@@ -308,7 +305,67 @@ public class Difference {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
 
-                if (matching(nextOriginal, nextAfter)) {
+                if ((nextOriginal instanceof CsmMix) && (nextAfter instanceof CsmMix)) {
+                    List<CsmElement> elementsInOriginalMix = new LinkedList<>(((CsmMix) nextOriginal).getElements());
+                    List<CsmElement> elementsInAfterMix = new LinkedList<>(((CsmMix) nextAfter).getElements());
+
+                    int[] indexOfCorrespondingAfterElementForOriginalElement = new int[elementsInOriginalMix.size()];
+                    int[] indexOfCorrespondingOriginalElementForAfterElement = new int[elementsInAfterMix.size()];
+
+                    Arrays.fill(indexOfCorrespondingAfterElementForOriginalElement, -1);
+                    Arrays.fill(indexOfCorrespondingOriginalElementForAfterElement, -1);
+
+                    for (int i=0;i<elementsInOriginalMix.size();i++) {
+                        boolean found = false;
+                        for (int j=0;j<elementsInAfterMix.size() && !found;j++) {
+                            if (indexOfCorrespondingOriginalElementForAfterElement[j] == -1
+                                    && matching(elementsInOriginalMix.get(i), elementsInAfterMix.get(j))) {
+                                indexOfCorrespondingOriginalElementForAfterElement[j] = i;
+                                indexOfCorrespondingAfterElementForOriginalElement[i] = j;
+                            }
+                        }
+                    }
+
+                    int startingPointForMix = elements.size();
+
+                    for (CsmElement el : elementsInOriginalMix) {
+                        // if we find a match in the after mix then it is kept
+                        boolean found = false;
+                        for (int i=0;i<elementsInAfterMix.size() && !found;i++) {
+                            found = matching(el, elementsInAfterMix.get(i));
+                        }
+                        if (found) {
+                            elements.add(new Kept(el));
+                        } else {
+                            elements.add(new Removed(el));
+                        }
+                    }
+
+                    for (int j=0;j<elementsInAfterMix.size();j++) {
+                        if (indexOfCorrespondingOriginalElementForAfterElement[j] == -1) {
+                            // if it is followed by any original element we will keep it just in front of it
+                            int elementToPreceed = -1;
+                            for (int k=j+1;k<elementsInAfterMix.size() && elementToPreceed == -1;k++) {
+                                if (indexOfCorrespondingOriginalElementForAfterElement[k] != -1) {
+                                    elementToPreceed = k;
+                                    elements.add(startingPointForMix + indexOfCorrespondingOriginalElementForAfterElement[k], new Added(elementsInAfterMix.get(j)));
+                                    // we need also to update all index refering to after this point
+                                    for (int z=0;z<elementsInAfterMix.size();z++) {
+                                        if (indexOfCorrespondingOriginalElementForAfterElement[z] >= indexOfCorrespondingOriginalElementForAfterElement[k]) {
+                                            indexOfCorrespondingOriginalElementForAfterElement[z] += 1;
+                                        }
+                                    }
+                                }
+                            }
+                            if (elementToPreceed == -1) {
+                                elements.add(new Added(elementsInAfterMix.get(j)));
+                            }
+                        }
+                    }
+
+                    originalIndex++;
+                    afterIndex++;
+                } else if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
                     originalIndex++;
                     afterIndex++;
@@ -572,7 +629,7 @@ public class Difference {
                     } else if (kept.element instanceof CsmUnindent) {
                         // Nothing to do
                         diffIndex++;
-                        for (int i=0;i<STANDARD_INDENTATION_SIZE && nodeTextIndex>=1 && nodeText.getTextElement(nodeTextIndex-1).isSpaceOrTab();i++) {
+                        for (int i = 0; i < STANDARD_INDENTATION_SIZE && nodeTextIndex >= 1 && nodeText.getTextElement(nodeTextIndex - 1).isSpaceOrTab(); i++) {
                             nodeText.removeElement(--nodeTextIndex);
                         }
                     } else {
