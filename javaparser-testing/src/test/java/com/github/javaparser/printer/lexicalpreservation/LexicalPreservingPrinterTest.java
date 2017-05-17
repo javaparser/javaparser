@@ -794,8 +794,11 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
                                     if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
-                                        methodDeclaration.getAnnotations().stream()
-                                                .forEach(anno -> anno.remove());
+
+                                        while (methodDeclaration.getAnnotations().isNonEmpty()) {
+                                            AnnotationExpr annotationExpr = methodDeclaration.getAnnotations().get(0);
+                                            annotationExpr.remove();
+                                        }
 
                                         methodDeclaration.addMarkerAnnotation("Override");
                                     }

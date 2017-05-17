@@ -74,6 +74,8 @@ public class CsmAttribute implements CsmElement {
                 }
                 throw new UnsupportedOperationException("getTokenType does not know how to handle value for "
                         + node.getClass().getCanonicalName());
+            case NAME:
+                return GeneratedJavaParserConstants.IDENTIFIER;
             default:
                 throw new UnsupportedOperationException("getTokenType does not know how to handle property "
                         + property + " with text: " + text);
