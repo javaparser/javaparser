@@ -56,7 +56,7 @@ public abstract class NodeGenerator extends Generator {
                     throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
                 });
     }
-
+    
     private void addMethod(
             ClassOrInterfaceDeclaration containingClassOrInterface,
             CallableDeclaration<?> callable,
