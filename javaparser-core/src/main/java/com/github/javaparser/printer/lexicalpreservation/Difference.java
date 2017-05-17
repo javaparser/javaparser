@@ -779,27 +779,6 @@ public class Difference {
                         }
                     }
 
-
-
-                    //Map<Integer, List<CsmElement>> elementsToAddBeforeGivenNodeTextIndex = new HashMap<>();
-                    //List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
-                    //Set<Integer> nodeTextElementsToKeep = new HashSet<>();
-
-                    // Let's figure out which ones of the existing tokens are going to be removed
-
-                    // Now I should translate all of this to a sequence of additions and deletions
-                    // and then just add these differences to the diff to be treated normally
-
-//                    // Now let's understand how the new elements are positioned w.r.t. to the kept elements
-//                    if (nodeTextIndexOfPreviousElements.isEmpty()) {
-//                        // They are all just following the sequence in the new mix
-//                        for (CsmElement csmElement : reshuffled.getElement().getElements()) {
-//                            nodeText.addElement(nodeTextIndex++, toTextElement());
-//                        }
-//                    } else {
-//                        throw new UnsupportedOperationException();
-//                    }
-
                     // We go over the original node text elements, in the order they appear in the NodeText.
                     // Considering an original node text element (ONE)
                     // * we verify if it corresponds to a CSM element. If it does not we just move on, otherwise
