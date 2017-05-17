@@ -807,6 +807,47 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 });
         assertEquals("public class TestPage extends Page {" + EOL +
                 EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}", result.b.print(cu));
+    }
+
+    // See issue #866
+    @Test
+    public void moveOrAddOverrideAnnotations() {
+        String code = "public class TestPage extends Page {" + EOL +
+                EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   protected @Override void initializePage() {}" + EOL +
+                "}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    if (methodDeclaration.getAnnotationByName("Override").isPresent()) {
+
+                                        while (methodDeclaration.getAnnotations().isNonEmpty()) {
+                                            AnnotationExpr annotationExpr = methodDeclaration.getAnnotations().get(0);
+                                            annotationExpr.remove();
+                                        }
+                                    }
+                                    methodDeclaration.addMarkerAnnotation("Override");
+                                }
+                            });
+                });
+        assertEquals("public class TestPage extends Page {" + EOL +
+                EOL +
                 "   @Override" + EOL +
                 "   protected void test() {}" + EOL +
                 EOL +

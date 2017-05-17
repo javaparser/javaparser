@@ -819,6 +819,7 @@ public class Difference {
                     for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
                         elements.add(diffElIterator++, new Added(elementToAdd));
                     }
+
                 } else {
                     throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
                 }
