@@ -47,6 +47,7 @@ import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.TokenRange;
 
 /**
  * <p>
@@ -87,8 +88,8 @@ public final class CompilationUnit extends Node {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
-        super(range);
+    public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
+        super(tokenRange);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);

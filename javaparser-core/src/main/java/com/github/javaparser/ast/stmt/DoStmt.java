@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A do-while.
@@ -58,8 +59,8 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DoStmt(Range range, Statement body, Expression condition) {
-        super(range);
+    public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
+        super(tokenRange);
         setBody(body);
         setCondition(condition);
         customInitialization();

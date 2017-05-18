@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -74,8 +75,8 @@ public final class AssignExpr extends Expression {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AssignExpr(Range range, Expression target, Expression value, Operator operator) {
-        super(range);
+    public AssignExpr(TokenRange tokenRange, Expression target, Expression value, Operator operator) {
+        super(tokenRange);
         setTarget(target);
         setValue(value);
         setOperator(operator);

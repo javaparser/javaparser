@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A wildcard type argument.
@@ -66,8 +67,8 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WildcardType(Range range, ReferenceType extendedType, ReferenceType superType) {
-        super(range);
+    public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType) {
+        super(tokenRange);
         setExtendedType(extendedType);
         setSuperType(superType);
         customInitialization();

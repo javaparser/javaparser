@@ -36,6 +36,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A switch statement.
@@ -62,8 +63,8 @@ public final class SwitchStmt extends Statement {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchStmt(Range range, Expression selector, NodeList<SwitchEntryStmt> entries) {
-        super(range);
+    public SwitchStmt(TokenRange tokenRange, Expression selector, NodeList<SwitchEntryStmt> entries) {
+        super(tokenRange);
         setSelector(selector);
         setEntries(entries);
         customInitialization();

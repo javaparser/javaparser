@@ -38,6 +38,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -73,8 +74,8 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ExplicitConstructorInvocationStmt(Range range, NodeList<Type> typeArguments, boolean isThis, Expression expression, NodeList<Expression> arguments) {
-        super(range);
+    public ExplicitConstructorInvocationStmt(TokenRange tokenRange, NodeList<Type> typeArguments, boolean isThis, Expression expression, NodeList<Expression> arguments) {
+        super(tokenRange);
         setTypeArguments(typeArguments);
         setThis(isThis);
         setExpression(expression);

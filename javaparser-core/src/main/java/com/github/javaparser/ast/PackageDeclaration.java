@@ -36,6 +36,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A package declaration.
@@ -65,8 +66,8 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PackageDeclaration(Range range, NodeList<AnnotationExpr> annotations, Name name) {
-        super(range);
+    public PackageDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name) {
+        super(tokenRange);
         setAnnotations(annotations);
         setName(name);
         customInitialization();

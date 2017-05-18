@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The "int id();" in <code>@interface X { int id(); }</code>
@@ -78,8 +79,8 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
-        super(range, annotations);
+    public AnnotationMemberDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+        super(tokenRange, annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);

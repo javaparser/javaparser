@@ -39,6 +39,7 @@ import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.TokenRange;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -70,14 +71,19 @@ public final class ArrayCreationExpr extends Expression {
         this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
     }
 
+    /**
+     * @deprecated range shouldn't be in utility constructors.
+     */
+    @Deprecated
     public ArrayCreationExpr(Range range, Type elementType) {
-        this(range, elementType, new NodeList<>(), new ArrayInitializerExpr());
+        this(null, elementType, new NodeList<>(), new ArrayInitializerExpr());
+        setRange(range);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ArrayCreationExpr(Range range, Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
-        super(range);
+    public ArrayCreationExpr(TokenRange tokenRange, Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+        super(tokenRange);
         setElementType(elementType);
         setLevels(levels);
         setInitializer(initializer);

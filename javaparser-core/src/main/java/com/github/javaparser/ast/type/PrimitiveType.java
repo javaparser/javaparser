@@ -38,6 +38,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A primitive type.
@@ -124,8 +125,8 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PrimitiveType(Range range, Primitive type) {
-        super(range);
+    public PrimitiveType(TokenRange tokenRange, Primitive type) {
+        super(tokenRange);
         setType(type);
         customInitialization();
     }

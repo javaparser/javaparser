@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Base class for reference types.
@@ -48,8 +49,8 @@ public abstract class ReferenceType extends Type {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ReferenceType(Range range, NodeList<AnnotationExpr> annotations) {
-        super(range, annotations);
+    public ReferenceType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         customInitialization();
     }
 

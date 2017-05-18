@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<ModuleProvidesStmt, Type> {
 
@@ -35,8 +36,8 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleProvidesStmt(Range range, Type type, NodeList<Type> withTypes) {
-        super(range);
+    public ModuleProvidesStmt(TokenRange tokenRange, Type type, NodeList<Type> withTypes) {
+        super(tokenRange);
         setType(type);
         setWithTypes(withTypes);
         customInitialization();

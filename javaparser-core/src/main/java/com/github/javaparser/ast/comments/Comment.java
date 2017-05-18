@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -54,8 +55,8 @@ public abstract class Comment extends Node {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Comment(Range range, String content) {
-        super(range);
+    public Comment(TokenRange tokenRange, String content) {
+        super(tokenRange);
         setContent(content);
         customInitialization();
     }

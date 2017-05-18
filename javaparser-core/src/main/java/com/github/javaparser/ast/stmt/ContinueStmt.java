@@ -33,6 +33,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ContinueStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A continue statement with an optional label;
@@ -60,8 +61,8 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ContinueStmt(Range range, SimpleName label) {
-        super(range);
+    public ContinueStmt(TokenRange tokenRange, SimpleName label) {
+        super(tokenRange);
         setLabel(label);
         customInitialization();
     }

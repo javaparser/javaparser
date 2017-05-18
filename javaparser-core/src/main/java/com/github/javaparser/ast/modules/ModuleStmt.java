@@ -7,6 +7,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleStmtMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 public abstract class ModuleStmt extends Node {
 
@@ -17,8 +18,8 @@ public abstract class ModuleStmt extends Node {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleStmt(Range range) {
-        super(range);
+    public ModuleStmt(TokenRange tokenRange) {
+        super(tokenRange);
         customInitialization();
     }
 

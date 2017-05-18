@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -55,8 +56,8 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ExpressionStmt(Range range, Expression expression) {
-        super(range);
+    public ExpressionStmt(TokenRange tokenRange, Expression expression) {
+        super(tokenRange);
         setExpression(expression);
         customInitialization();
     }

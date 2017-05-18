@@ -44,6 +44,7 @@ import java.util.EnumSet;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -96,8 +97,8 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Parameter(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
-        super(range);
+    public Parameter(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
+        super(tokenRange);
         setModifiers(modifiers);
         setAnnotations(annotations);
         setType(type);

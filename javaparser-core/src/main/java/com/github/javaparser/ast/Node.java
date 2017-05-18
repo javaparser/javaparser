@@ -22,6 +22,7 @@ package com.github.javaparser.ast;
 
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
@@ -132,6 +133,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Range range;
 
     @InternalProperty
+    private final TokenRange tokenRange;
+
+    @InternalProperty
     private Node parentNode;
 
     @InternalProperty
@@ -148,8 +152,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @InternalProperty
     private List<AstObserver> observers = new ArrayList<>();
 
-    public Node(Range range) {
-        this.range = range;
+    protected Node(TokenRange tokenRange) {
+        this.range = new Range(tokenRange.getBegin().getRange().begin, tokenRange.getEnd().getRange().end);
+        this.tokenRange = tokenRange;
     }
 
     /**
@@ -175,6 +180,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     public Optional<Range> getRange() {
         return Optional.ofNullable(range);
+    }
+
+    /**
+     * @return the range of tokens that this node covers.
+     */
+    public Optional<TokenRange> getTokenRange() {
+        return Optional.ofNullable(tokenRange);
     }
 
     /**

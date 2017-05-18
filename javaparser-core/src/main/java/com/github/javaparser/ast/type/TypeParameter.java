@@ -41,6 +41,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A type parameter.
@@ -72,8 +73,13 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
         this(null, new SimpleName(name), typeBound, new NodeList<>());
     }
 
+    /**
+     * @deprecated range shouldn't be in utility constructors.
+     */
+    @Deprecated
     public TypeParameter(Range range, final SimpleName name, final NodeList<ClassOrInterfaceType> typeBound) {
-        this(range, name, typeBound, new NodeList<>());
+        this(null, name, typeBound, new NodeList<>());
+        setRange(range);
     }
 
     @AllFieldsConstructor
@@ -83,8 +89,8 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypeParameter(Range range, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
-        super(range, annotations);
+    public TypeParameter(TokenRange tokenRange, SimpleName name, NodeList<ClassOrInterfaceType> typeBound, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setName(name);
         setTypeBound(typeBound);
         customInitialization();

@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.MemberValuePairMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A value for a member of an annotation.
@@ -60,8 +61,8 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MemberValuePair(Range range, SimpleName name, Expression value) {
-        super(range);
+    public MemberValuePair(TokenRange tokenRange, SimpleName name, Expression value) {
+        super(tokenRange);
         setName(name);
         setValue(value);
         customInitialization();

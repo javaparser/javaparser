@@ -6,8 +6,8 @@ package com.github.javaparser;
 public class TokenRange {
     private final JavaToken begin;
     private final JavaToken end;
-    
-    public TokenRange(JavaToken begin, JavaToken end){
+
+    public TokenRange(JavaToken begin, JavaToken end) {
         this.begin = begin;
         this.end = end;
     }
@@ -18,5 +18,9 @@ public class TokenRange {
 
     public JavaToken getEnd() {
         return end;
+    }
+
+    public Range getRange() {
+        return new Range(begin.getRange().begin, end.getRange().end);
     }
 }

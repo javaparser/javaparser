@@ -39,6 +39,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The catch part of a try-catch-finally. <br/>In <code>try { ... } catch (Exception e) { ... }</code> the CatchClause
@@ -67,8 +68,8 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CatchClause(Range range, Parameter parameter, BlockStmt body) {
-        super(range);
+    public CatchClause(TokenRange tokenRange, Parameter parameter, BlockStmt body) {
+        super(tokenRange);
         setParameter(parameter);
         setBody(body);
         customInitialization();

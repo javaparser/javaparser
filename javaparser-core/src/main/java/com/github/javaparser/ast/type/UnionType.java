@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
@@ -55,8 +56,8 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnionType(Range range, NodeList<ReferenceType> elements) {
-        super(range);
+    public UnionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
+        super(tokenRange);
         setElements(elements);
         customInitialization();
     }

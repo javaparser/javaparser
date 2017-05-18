@@ -33,6 +33,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ReturnStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The return statement, with an optional expression to return.
@@ -54,8 +55,8 @@ public final class ReturnStmt extends Statement {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ReturnStmt(Range range, Expression expression) {
-        super(range);
+    public ReturnStmt(TokenRange tokenRange, Expression expression) {
+        super(tokenRange);
         setExpression(expression);
         customInitialization();
     }

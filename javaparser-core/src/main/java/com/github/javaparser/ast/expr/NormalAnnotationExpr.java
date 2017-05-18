@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NormalAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
@@ -54,8 +55,8 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public NormalAnnotationExpr(Range range, Name name, NodeList<MemberValuePair> pairs) {
-        super(range, name);
+    public NormalAnnotationExpr(TokenRange tokenRange, Name name, NodeList<MemberValuePair> pairs) {
+        super(tokenRange, name);
         setPairs(pairs);
         customInitialization();
     }
