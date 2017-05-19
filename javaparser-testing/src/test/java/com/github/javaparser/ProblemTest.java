@@ -9,18 +9,18 @@ import static org.junit.Assert.assertEquals;
 public class ProblemTest {
     @Test
     public void testSimpleGetters() {
-        Problem problem = new Problem("Parse error", range(10, 10, 20, 20), new Exception());
+        Problem problem = new Problem("Parse error", TokenRange.INVALID, new Exception());
 
-        assertEquals(range(10, 10, 20, 20), problem.getLocation().get());
+        assertEquals(TokenRange.INVALID, problem.getLocation().get());
         assertEquals("Parse error", problem.getMessage());
         assertInstanceOf(Exception.class, problem.getCause().get());
     }
 
     @Test
     public void testVerboseMessage() {
-        Problem problem = new Problem("Parse error", range(10, 10, 20, 20), null);
+        Problem problem = new Problem("Parse error", TokenRange.INVALID, null);
 
-        assertEquals("(line 10,col 10) Parse error", problem.getVerboseMessage());
+        assertEquals("(line -1,col -1) Parse error", problem.getVerboseMessage());
     }
 
     @Test

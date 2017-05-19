@@ -27,6 +27,7 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
+import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
@@ -39,9 +40,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import javax.annotation.Generated;
 import java.util.*;
 import static java.util.Collections.unmodifiableList;
-import javax.annotation.Generated;
 import com.github.javaparser.ast.Node;
 
 /**
@@ -87,7 +88,7 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node> {
+public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable, NodeWithRange<Node>, NodeWithTokenRange<Node> {
 
     /**
      * Different registration mode for observers on nodes.
@@ -133,7 +134,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Range range;
 
     @InternalProperty
-    private final TokenRange tokenRange;
+    private TokenRange tokenRange;
 
     @InternalProperty
     private Node parentNode;
@@ -153,8 +154,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private List<AstObserver> observers = new ArrayList<>();
 
     protected Node(TokenRange tokenRange) {
-        this.range = new Range(tokenRange.getBegin().getRange().begin, tokenRange.getEnd().getRange().end);
-        this.tokenRange = tokenRange;
+        setTokenRange(tokenRange);
     }
 
     /**
@@ -187,6 +187,16 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     public Optional<TokenRange> getTokenRange() {
         return Optional.ofNullable(tokenRange);
+    }
+
+    public Node setTokenRange(TokenRange tokenRange) {
+        this.tokenRange = tokenRange;
+        if (tokenRange == null) {
+            range = null;
+        } else {
+            range = new Range(tokenRange.getBegin().getRange().begin, tokenRange.getEnd().getRange().end);
+        }
+        return this;
     }
 
     /**
@@ -449,7 +459,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * it will try to remove its parent instead,
      * until it finds a node that can be removed,
      * or no parent can be found.
-     * 
+     * <p>
      * Since everything at CompilationUnit level is removable,
      * this method will only (silently) fail when the node is in a detached AST fragment.
      */

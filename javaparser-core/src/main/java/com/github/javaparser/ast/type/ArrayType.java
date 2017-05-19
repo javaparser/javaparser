@@ -33,13 +33,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
-
 import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -60,9 +58,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         this(type, nodeList(annotations));
     }
 
-    /**
-     * This constructor is used by the parser and is considered private.
-     */
+    /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayType(TokenRange tokenRange, Type componentType, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);

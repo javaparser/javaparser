@@ -14,9 +14,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 class ModifierHolder {
         final EnumSet<Modifier> modifiers;
         final NodeList<AnnotationExpr> annotations;
-        final Position begin;
+        final JavaToken begin;
 
-        public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
+        public ModifierHolder(JavaToken begin, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
             this.begin = begin;
             this.modifiers = assertNotNull(modifiers);
             this.annotations = annotations;

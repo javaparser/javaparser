@@ -47,7 +47,6 @@ import java.util.TreeSet;
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.*;
-import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -112,8 +111,7 @@ public final class JavaParser {
      * The start indicates what can be found in the source code (compilation unit, block, import...)
      *
      * @param start refer to the constants in ParseStart to see what can be parsed.
-     * @param provider refer to Providers to see how you can read source.
-     * The provider will be closed after parsing.
+     * @param provider refer to Providers to see how you can read source. The provider will be closed after parsing.
      * @param <N> the subclass of Node that is the result of parsing in the start.
      * @return the parse result, a collection of encountered problems, and some extra data.
      */
@@ -134,9 +132,14 @@ public final class JavaParser {
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
         } catch (ParseException p) {
-            final Token token = p.currentToken;
-            final Range range = range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
-            parser.problems.add(new Problem(makeMessageForParseException(p), range, p));
+            TokenRange tokenRange = null;
+            if (p.currentToken != null) {
+                if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
+                    final JavaToken token = ((GeneratedJavaParser.CustomToken) p.currentToken).javaToken;
+                    tokenRange = new TokenRange(token, token);
+                }
+            }
+            parser.problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
             return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
@@ -213,8 +216,7 @@ public final class JavaParser {
      * Parses the Java code contained in the {@link InputStream} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param in {@link InputStream} containing Java source code.
-     * It will be closed after parsing.
+     * @param in {@link InputStream} containing Java source code. It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -228,8 +230,7 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param in {@link InputStream} containing Java source code.
-     * It will be closed after parsing.
+     * @param in {@link InputStream} containing Java source code. It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */
@@ -241,8 +242,7 @@ public final class JavaParser {
      * Parses the Java code contained in a {@link File} and returns a
      * {@link CompilationUnit} that represents it.
      *
-     * @param file {@link File} containing Java source code.
-     * It will be closed after parsing.
+     * @param file {@link File} containing Java source code. It will be closed after parsing.
      * @param encoding encoding of the source code
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
@@ -257,8 +257,7 @@ public final class JavaParser {
      * {@link CompilationUnit} that represents it.<br>
      * Note: Uses UTF-8 encoding
      *
-     * @param file {@link File} containing Java source code.
-     * It will be closed after parsing.
+     * @param file {@link File} containing Java source code. It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      * @throws FileNotFoundException the file was not found
@@ -344,8 +343,7 @@ public final class JavaParser {
      * Parses Java code from a Reader and returns a
      * {@link CompilationUnit} that represents it.<br>
      *
-     * @param reader the reader containing Java source code.
-     * It will be closed after parsing.
+     * @param reader the reader containing Java source code. It will be closed after parsing.
      * @return CompilationUnit representing the Java source code
      * @throws ParseProblemException if the source code has parser errors
      */

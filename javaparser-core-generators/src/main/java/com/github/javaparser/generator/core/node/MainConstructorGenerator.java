@@ -52,24 +52,8 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         body.addStatement("customInitialization();");
 
-        ConstructorDeclaration rangeConstructor = constructor.clone();
-        rangeConstructor.getParameter(0).setType(Range.class);
-
-        replaceWhenSameSignature(nodeCoid, rangeConstructor, constructor);
+        replaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(TokenRange.class);
         annotateGenerated(constructor);
-    }
-
-    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callableWithSignature, CallableDeclaration<?> callableToReplaceWith) {
-        final List<CallableDeclaration<?>> existingCallables = containingClassOrInterface.getCallablesWithSignature(callableWithSignature.getSignature());
-        if (existingCallables.isEmpty()) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callableWithSignature.getSignature(), containingClassOrInterface.getNameAsString()));
-        }
-        if (existingCallables.size() > 1) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callableWithSignature.getSignature(), containingClassOrInterface.getNameAsString()));
-        }
-        final CallableDeclaration<?> existingCallable = existingCallables.get(0);
-        callableToReplaceWith.setJavadocComment(callableToReplaceWith.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
-        containingClassOrInterface.getMembers().replace(existingCallable, callableToReplaceWith);
     }
 }
