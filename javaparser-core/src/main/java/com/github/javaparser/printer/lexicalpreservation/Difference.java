@@ -643,8 +643,8 @@ public class Difference {
                             if (nodeText.getElements().size() > nodeTextIndex && nodeTextIndex > 0) {
                                 if (nodeText.getElements().get(nodeTextIndex).isWhiteSpace()
                                         && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace()) {
-                                    // However we do not want to do that when we are doing a replacement
-                                    if ((diffIndex + 1 )== this.elements.size() || !(elements.get(diffIndex +1 ) instanceof Added)) {
+                                    // However we do not want to do that when we are about to adding or removing elements
+                                    if ((diffIndex + 1 )== this.elements.size() || (elements.get(diffIndex +1 ) instanceof Kept)) {
                                         nodeText.getElements().remove(nodeTextIndex--);
                                     }
                                 }
