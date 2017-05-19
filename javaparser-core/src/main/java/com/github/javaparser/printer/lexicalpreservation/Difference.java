@@ -693,6 +693,16 @@ public class Difference {
                             if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
                                 nodeTextIndex = considerEnforcingIndentation(nodeText, nodeTextIndex);
                             }
+                            // If in front we have one space and before also we had space let's drop one space
+                            if (nodeText.getElements().size() > nodeTextIndex && nodeTextIndex > 0) {
+                                if (nodeText.getElements().get(nodeTextIndex).isWhiteSpace()
+                                        && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace()) {
+                                    // However we do not want to do that when we are doing a replacement
+                                    if ((diffIndex + 1 )== this.elements.size() || !(elements.get(diffIndex +1 ) instanceof Added)) {
+                                        nodeText.getElements().remove(nodeTextIndex--);
+                                    }
+                                }
+                            }
                         }
                         diffIndex++;
                     } else if ((removed.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement
