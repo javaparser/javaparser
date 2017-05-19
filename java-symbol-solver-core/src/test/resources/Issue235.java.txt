@@ -1,0 +1,14 @@
+class Foo {
+    static class Bar {
+        static class Baz {}
+    }
+    static void failing() {
+        new Bar.Baz() {};
+    }
+    static void correct1() {
+        new Bar() {};
+    }
+    static void correct2() {
+        new Foo.Bar() {};
+    }
+}
