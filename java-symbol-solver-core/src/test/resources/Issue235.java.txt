@@ -2,13 +2,13 @@ class Foo {
     static class Bar {
         static class Baz {}
     }
-    static void failing() {
+    static void new_bar_Baz() {
         new Bar.Baz() {};
     }
-    static void correct1() {
+    static void new_Bar() {
         new Bar() {};
     }
-    static void correct2() {
+    static void new_Foo_Bar() {
         new Foo.Bar() {};
     }
 }

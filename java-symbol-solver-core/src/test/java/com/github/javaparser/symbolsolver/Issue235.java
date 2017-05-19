@@ -13,8 +13,30 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
+@RunWith(Parameterized.class)
 public class Issue235 extends AbstractResolutionTest{
+    private final String method;
+
+    public Issue235(String method) {
+        this.method = method;
+    }
+
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<String> data() throws Exception {
+        return Arrays.asList(
+                "new_bar_Baz",
+                "new_Bar",
+                "new_Foo_Bar"
+        );
+    }
+
     @Test
     public void issue235() throws ParseException {
         CompilationUnit cu = parseSample("Issue235");
@@ -25,17 +47,7 @@ public class Issue235 extends AbstractResolutionTest{
         ObjectCreationExpr expression;
         MethodDeclaration m;
 
-        m = Navigator.demandMethod(cls, "correct1");
-        stmt = (ExpressionStmt) m.getBody().get().getStatements().get(0);
-        expression = (ObjectCreationExpr) stmt.getExpression();
-        Assert.assertNotNull(javaParserFacade.convertToUsage(expression.getType()));
-
-        m = Navigator.demandMethod(cls, "correct2");
-        stmt = (ExpressionStmt) m.getBody().get().getStatements().get(0);
-        expression = (ObjectCreationExpr) stmt.getExpression();
-        Assert.assertNotNull(javaParserFacade.convertToUsage(expression.getType()));
-
-        m = Navigator.demandMethod(cls, "failing");
+        m = Navigator.demandMethod(cls, this.method);
         stmt = (ExpressionStmt) m.getBody().get().getStatements().get(0);
         expression = (ObjectCreationExpr) stmt.getExpression();
         Assert.assertNotNull(javaParserFacade.convertToUsage(expression.getType()));
