@@ -68,9 +68,6 @@ public class JavaParserFactory {
             return new StatementContext<Statement>((Statement) node, typeSolver);
         } else if (node instanceof CatchClause) {
             return new CatchClauseContext((CatchClause) node, typeSolver);
-        } else if (node instanceof ObjectCreationExpr &&
-            ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
-            return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
         } else {
             if (node instanceof NameExpr) {
                 // to resolve a name when in a fieldAccess context, we can get to the grand parent to prevent a infinite loop if the name is the same as the field (ie x.x)
@@ -78,7 +75,14 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            return getContext(getParentNode(node), typeSolver);
+            final Node parentNode = getParentNode(node);
+            if(parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
+                return getContext(getParentNode(parentNode), typeSolver);
+            } else if (node instanceof ObjectCreationExpr &&
+                ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+                return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
+            }
+            return getContext(parentNode, typeSolver);
         }
     }
 
