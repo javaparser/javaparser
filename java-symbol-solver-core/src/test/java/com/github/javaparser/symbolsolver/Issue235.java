@@ -18,7 +18,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 @RunWith(Parameterized.class)
 public class Issue235 extends AbstractResolutionTest{
@@ -31,7 +30,8 @@ public class Issue235 extends AbstractResolutionTest{
     @Parameterized.Parameters(name = "{0}")
     public static Collection<String> data() throws Exception {
         return Arrays.asList(
-                "new_bar_Baz",
+                "new_Bar_Baz_direct",
+                "new_Bar_Baz",
                 "new_Bar",
                 "new_Foo_Bar"
         );
@@ -43,13 +43,9 @@ public class Issue235 extends AbstractResolutionTest{
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Foo");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        ExpressionStmt stmt;
-        ObjectCreationExpr expression;
-        MethodDeclaration m;
-
-        m = Navigator.demandMethod(cls, this.method);
-        stmt = (ExpressionStmt) m.getBody().get().getStatements().get(0);
-        expression = (ObjectCreationExpr) stmt.getExpression();
+        MethodDeclaration m = Navigator.demandMethod(cls, this.method);
+        ExpressionStmt stmt = (ExpressionStmt) m.getBody().get().getStatements().get(0);
+        ObjectCreationExpr expression = (ObjectCreationExpr) stmt.getExpression();
         Assert.assertNotNull(javaParserFacade.convertToUsage(expression.getType()));
     }
 }
