@@ -26,9 +26,7 @@ public class CsmMix implements CsmElement {private List<CsmElement> elements;
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        printer.print("mix[");
         elements.forEach(e -> e.prettyPrint(node, printer));
-        printer.print("]");
     }
 
     @Override

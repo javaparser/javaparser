@@ -830,6 +830,15 @@ public class Difference {
                         elements.add(diffElIterator++, new Added(elementToAdd));
                     }
 
+                    // Check if the last thing we added is a space
+                    //if (diffElIterator > startIndex
+                    //        && elements.get(diffElIterator - 1).isAdded()
+                    //        && elements.get(diffElIterator - 1).getElement() instanceof TokenTextElement
+                    //        && ((TokenTextElement)elements.get(diffElIterator - 1).getElement()).isWhiteSpace()) {
+                    //
+                    //}
+                    int v= 0;
+
                 } else {
                     throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
                 }
