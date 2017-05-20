@@ -78,7 +78,11 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            return getContext(getParentNode(node), typeSolver);
+            final Node parentNode = getParentNode(node);
+            if(parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
+                return getContext(getParentNode(parentNode), typeSolver);
+            }
+            return getContext(parentNode, typeSolver);
         }
     }
 
