@@ -87,6 +87,10 @@ public class Difference {
         }
     }
 
+    /**
+     * Elements in a CsmMix have been reshuffled. It could also mean that
+     * some new elements have been added or removed to the mix.
+     */
     private static class Reshuffled implements DifferenceElement {
         CsmMix previousOrder;
         CsmMix element;
@@ -621,7 +625,7 @@ public class Difference {
                         // Nothing to do
                         diffIndex++;
                     } else if (kept.element instanceof CsmUnindent) {
-                        // Nothing to do
+                        // Nothing to do, beside considering indentation
                         diffIndex++;
                         for (int i = 0; i < STANDARD_INDENTATION_SIZE && nodeTextIndex >= 1 && nodeText.getTextElement(nodeTextIndex - 1).isSpaceOrTab(); i++) {
                             nodeText.removeElement(--nodeTextIndex);
@@ -775,16 +779,6 @@ public class Difference {
                     for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
                         elements.add(diffElIterator++, new Added(elementToAdd));
                     }
-
-                    // Check if the last thing we added is a space
-                    //if (diffElIterator > startIndex
-                    //        && elements.get(diffElIterator - 1).isAdded()
-                    //        && elements.get(diffElIterator - 1).getElement() instanceof TokenTextElement
-                    //        && ((TokenTextElement)elements.get(diffElIterator - 1).getElement()).isWhiteSpace()) {
-                    //
-                    //}
-                    int v= 0;
-
                 } else {
                     throw new UnsupportedOperationException("" + diffEl + " vs " + nodeTextEl);
                 }

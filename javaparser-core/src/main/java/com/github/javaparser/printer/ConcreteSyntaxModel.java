@@ -60,6 +60,9 @@ public class ConcreteSyntaxModel {
         return list(ObservableProperty.MODIFIERS, space(), none(), space());
     }
 
+    /**
+     * Build a mix collecting all the elements specified.
+     */
     private static CsmElement mix(CsmElement... elements) {
         return new CsmMix(Arrays.asList(elements));
     }

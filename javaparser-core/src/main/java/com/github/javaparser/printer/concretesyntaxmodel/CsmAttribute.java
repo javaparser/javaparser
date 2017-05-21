@@ -72,13 +72,10 @@ public class CsmAttribute implements CsmElement {
                 if (node instanceof IntegerLiteralExpr) {
                     return GeneratedJavaParserConstants.INTEGER_LITERAL;
                 }
-                throw new UnsupportedOperationException("getTokenType does not know how to handle value for "
-                        + node.getClass().getCanonicalName());
             case NAME:
                 return GeneratedJavaParserConstants.IDENTIFIER;
-            default:
-                throw new UnsupportedOperationException("getTokenType does not know how to handle property "
-                        + property + " with text: " + text);
         }
+        throw new UnsupportedOperationException("getTokenType does not know how to handle property "
+                + property + " with text: " + text);
     }
 }
