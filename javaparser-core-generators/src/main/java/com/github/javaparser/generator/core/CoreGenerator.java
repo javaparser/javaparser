@@ -2,6 +2,8 @@ package com.github.javaparser.generator.core;
 
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.visitor.*;
+import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.nio.file.Path;
@@ -17,6 +19,7 @@ public class CoreGenerator {
         }
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root);
+        sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
 
         new CoreGenerator().run(sourceRoot);
 
