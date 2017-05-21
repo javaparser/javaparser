@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavadocCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
@@ -50,8 +51,8 @@ public final class JavadocComment extends Comment {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JavadocComment(Range range, String content) {
-        super(range, content);
+    public JavadocComment(TokenRange tokenRange, String content) {
+        super(tokenRange, content);
         customInitialization();
     }
 

@@ -1,8 +1,8 @@
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.Problem;
-import com.github.javaparser.Range;
-import com.github.javaparser.ast.nodeTypes.NodeWithRange;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 
 import java.util.List;
 
@@ -24,11 +24,11 @@ public class ProblemReporter {
      * @param message description of the problem
      * @param node the node in which the problem occurred, used to find the Range of the problem.
      */
-    public void report(NodeWithRange<?> node, String message, Object... args) {
-        report(node.getRange().orElse(null), message, args);
+    public void report(NodeWithTokenRange<?> node, String message, Object... args) {
+        report(node.getTokenRange().orElse(null), message, args);
     }
 
-    public void report(Range range, String message, Object... args) {
+    public void report(TokenRange range, String message, Object... args) {
         problems.add(new Problem(f(message, args), range, null));
     }
 }

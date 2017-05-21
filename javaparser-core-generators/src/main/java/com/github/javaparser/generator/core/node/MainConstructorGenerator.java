@@ -1,8 +1,10 @@
 package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -11,6 +13,8 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
+
+import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseExplicitConstructorInvocationStmt;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -28,13 +32,13 @@ public class MainConstructorGenerator extends NodeGenerator {
         ConstructorDeclaration constructor = new ConstructorDeclaration()
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
-                .addParameter(Range.class, "range")
+                .addParameter(TokenRange.class, "tokenRange")
                 .setJavadocComment("This constructor is used by the parser and is considered private.");
-        
+
         BlockStmt body = constructor.getBody();
 
         SeparatedItemStringBuilder superCall = new SeparatedItemStringBuilder("super(", ", ", ");");
-        superCall.append("range");
+        superCall.append("tokenRange");
         for (PropertyMetaModel parameter : nodeMetaModel.getConstructorParameters()) {
             constructor.addParameter(parameter.getTypeNameForSetter(), parameter.getName());
             if (nodeMetaModel.getDeclaredPropertyMetaModels().contains(parameter)) {
@@ -45,11 +49,11 @@ public class MainConstructorGenerator extends NodeGenerator {
         }
 
         body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
-        
+
         body.addStatement("customInitialization();");
 
         replaceWhenSameSignature(nodeCoid, constructor);
-        nodeCu.addImport(Range.class);
+        nodeCu.addImport(TokenRange.class);
         annotateGenerated(constructor);
     }
 }

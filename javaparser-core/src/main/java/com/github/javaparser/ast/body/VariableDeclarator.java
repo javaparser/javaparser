@@ -44,6 +44,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are
@@ -90,8 +91,8 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public VariableDeclarator(Range range, Type type, SimpleName name, Expression initializer) {
-        super(range);
+    public VariableDeclarator(TokenRange tokenRange, Type type, SimpleName name, Expression initializer) {
+        super(tokenRange);
         setType(type);
         setName(name);
         setInitializer(initializer);

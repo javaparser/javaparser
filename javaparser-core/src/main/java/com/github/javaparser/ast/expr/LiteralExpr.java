@@ -27,6 +27,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralExprMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A base class for all literal expressions.
@@ -42,8 +43,8 @@ public abstract class LiteralExpr extends Expression {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LiteralExpr(Range range) {
-        super(range);
+    public LiteralExpr(TokenRange tokenRange) {
+        super(tokenRange);
         customInitialization();
     }
 

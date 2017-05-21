@@ -17,6 +17,7 @@ import java.util.EnumSet;
 import static com.github.javaparser.ast.Modifier.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A require statement in module-info.java. <code>require a.b.C;</code>
@@ -38,8 +39,8 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleRequiresStmt(Range range, EnumSet<Modifier> modifiers, Name name) {
-        super(range);
+    public ModuleRequiresStmt(TokenRange tokenRange, EnumSet<Modifier> modifiers, Name name) {
+        super(tokenRange);
         setModifiers(modifiers);
         setName(name);
         customInitialization();

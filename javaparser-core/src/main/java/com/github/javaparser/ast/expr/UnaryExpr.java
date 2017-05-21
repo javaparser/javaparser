@@ -34,6 +34,7 @@ import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -88,8 +89,8 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnaryExpr(Range range, Expression expression, Operator operator) {
-        super(range);
+    public UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
+        super(tokenRange);
         setExpression(expression);
         setOperator(operator);
         customInitialization();

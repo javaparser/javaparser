@@ -39,7 +39,7 @@ public class CloneVisitorGenerator extends VisitorGenerator {
         }
 
         SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder(f("%s r = new %s(", node.getTypeNameGenerified(), node.getTypeNameGenerified()), ",", ");");
-        builder.append("n.getRange().orElse(null)");
+        builder.append("n.getTokenRange().orElse(null)");
         for (PropertyMetaModel field : node.getConstructorParameters()) {
             if (field.getName().equals("comment")) {
                 continue;

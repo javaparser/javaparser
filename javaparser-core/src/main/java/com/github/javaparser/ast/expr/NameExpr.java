@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -53,13 +54,14 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     @AllFieldsConstructor
     public NameExpr(final SimpleName name) {
-        this(name.getRange().orElse(null), name);
+        this(name.getTokenRange().orElse(null), name);
+        setRange(name.getRange().orElse(null));
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public NameExpr(Range range, SimpleName name) {
-        super(range);
+    public NameExpr(TokenRange tokenRange, SimpleName name) {
+        super(tokenRange);
         setName(name);
         customInitialization();
     }

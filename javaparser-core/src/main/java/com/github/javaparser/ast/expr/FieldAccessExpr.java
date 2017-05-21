@@ -38,6 +38,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Access of a field of an object.
@@ -68,8 +69,8 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public FieldAccessExpr(Range range, Expression scope, NodeList<Type> typeArguments, SimpleName name) {
-        super(range);
+    public FieldAccessExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name) {
+        super(tokenRange);
         setScope(scope);
         setTypeArguments(typeArguments);
         setName(name);

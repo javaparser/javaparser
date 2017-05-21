@@ -29,6 +29,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -44,8 +45,8 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LiteralStringValueExpr(Range range, String value) {
-        super(range);
+    public LiteralStringValueExpr(TokenRange tokenRange, String value) {
+        super(tokenRange);
         setValue(value);
         customInitialization();
     }

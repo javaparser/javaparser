@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -33,13 +33,13 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -60,8 +60,8 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ArrayType(Range range, Type componentType, NodeList<AnnotationExpr> annotations) {
-        super(range, annotations);
+    public ArrayType(TokenRange tokenRange, Type componentType, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setComponentType(componentType);
         customInitialization();
     }
@@ -107,11 +107,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    Range range = null;
-                    if (type.getRange().isPresent() && pair.getRange().isPresent()) {
-                        range = new Range(type.getBegin().get(), pair.getRange().get().end);
+                    TokenRange tokenRange = null;
+                    if (type.getTokenRange().isPresent() && pair.getTokenRange().isPresent()) {
+                        tokenRange = new TokenRange(type.getTokenRange().get().getBegin(), pair.getTokenRange().get().getEnd());
                     }
-                    type = new ArrayType(range, type, pair.getAnnotations());
+                    type = new ArrayType(tokenRange, type, pair.getAnnotations());
+                    if (tokenRange != null) {
+                        type.setRange(tokenRange.getRange());
+                    }
                 }
             }
         }
@@ -127,7 +130,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>(0);
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(type.getRange().orElse(null), arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(type.getTokenRange().orElse(null), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);
@@ -138,12 +141,12 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      */
     public static class ArrayBracketPair {
 
-        private Range range;
+        private TokenRange tokenRange;
 
         private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-        public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
-            setRange(range);
+        public ArrayBracketPair(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+            setTokenRange(tokenRange);
             setAnnotations(annotations);
         }
 
@@ -156,13 +159,13 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             return this;
         }
 
-        public ArrayBracketPair setRange(Range range) {
-            this.range = range;
+        public ArrayBracketPair setTokenRange(TokenRange range) {
+            this.tokenRange = range;
             return this;
         }
 
-        public Optional<Range> getRange() {
-            return Optional.ofNullable(range);
+        public Optional<TokenRange> getTokenRange() {
+            return Optional.ofNullable(tokenRange);
         }
     }
 

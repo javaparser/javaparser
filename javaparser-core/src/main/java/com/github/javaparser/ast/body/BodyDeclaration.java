@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Any declaration that can appear between the { and } of a class, interface, or enum.
@@ -55,8 +56,8 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {
-        super(range);
+    public BodyDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange);
         setAnnotations(annotations);
         customInitialization();
     }
@@ -64,7 +65,7 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     /**
      * This supports {@link EmptyMemberDeclaration}.
      */
-    protected BodyDeclaration(Range range) {
+    protected BodyDeclaration(TokenRange range) {
         this(range, new NodeList<>());
     }
 

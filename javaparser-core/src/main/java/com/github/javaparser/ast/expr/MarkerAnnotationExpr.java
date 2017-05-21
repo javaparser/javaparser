@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.JavaParser.parseName;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -55,8 +56,8 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MarkerAnnotationExpr(Range range, Name name) {
-        super(range, name);
+    public MarkerAnnotationExpr(TokenRange tokenRange, Name name) {
+        super(tokenRange, name);
         customInitialization();
     }
 

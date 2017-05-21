@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssertStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A usage of the keyword "assert"
@@ -61,8 +62,8 @@ public final class AssertStmt extends Statement {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AssertStmt(Range range, Expression check, Expression message) {
-        super(range);
+    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {
+        super(tokenRange);
         setCheck(check);
         setMessage(message);
         customInitialization();

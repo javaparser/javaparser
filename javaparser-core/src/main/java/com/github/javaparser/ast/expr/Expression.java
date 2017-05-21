@@ -27,6 +27,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A base class for all expressions.
@@ -42,8 +43,8 @@ public abstract class Expression extends Node {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Expression(Range range) {
-        super(range);
+    public Expression(TokenRange tokenRange) {
+        super(tokenRange);
         customInitialization();
     }
 
