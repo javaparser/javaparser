@@ -34,13 +34,11 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.utils.Utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
@@ -60,6 +58,13 @@ public class ConcreteSyntaxModel {
 
     private static CsmElement modifiers() {
         return list(ObservableProperty.MODIFIERS, space(), none(), space());
+    }
+
+    /**
+     * Build a mix collecting all the elements specified.
+     */
+    private static CsmElement mix(CsmElement... elements) {
+        return new CsmMix(Arrays.asList(elements));
     }
 
     private static CsmElement memberAnnotations() {
@@ -208,8 +213,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(MethodDeclaration.class, sequence(
                 orphanCommentsBeforeThis(),
                 comment(),
-                memberAnnotations(),
-                modifiers(),
+                mix(memberAnnotations(), modifiers()),
                 typeParameters(),
                 child(ObservableProperty.TYPE),
                 space(),
