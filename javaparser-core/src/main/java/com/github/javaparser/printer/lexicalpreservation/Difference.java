@@ -1,11 +1,13 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
 import java.util.*;
 
@@ -19,7 +21,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  */
 public class Difference {
 
-    private int STANDARD_INDENTATION_SIZE = 4;
+    private static int STANDARD_INDENTATION_SIZE = 4;
 
     private List<DifferenceElement> elements;
 
@@ -39,6 +41,13 @@ public class Difference {
         static DifferenceElement kept(CsmElement element) {
             return new Kept(element);
         }
+
+        /**
+         * Return the CsmElement considered in this DifferenceElement.
+         */
+        CsmElement getElement();
+
+        boolean isAdded();
     }
 
     private static class Added implements DifferenceElement {
@@ -66,6 +75,16 @@ public class Difference {
         @Override
         public int hashCode() {
             return element.hashCode();
+        }
+
+        @Override
+        public CsmElement getElement() {
+            return element;
+        }
+
+        @Override
+        public boolean isAdded() {
+            return true;
         }
     }
 
@@ -95,6 +114,16 @@ public class Difference {
         public int hashCode() {
             return element.hashCode();
         }
+
+        @Override
+        public CsmElement getElement() {
+            return element;
+        }
+
+        @Override
+        public boolean isAdded() {
+            return false;
+        }
     }
 
     private static class Removed implements DifferenceElement {
@@ -123,6 +152,16 @@ public class Difference {
         public int hashCode() {
             return element.hashCode();
         }
+
+        @Override
+        public CsmElement getElement() {
+            return element;
+        }
+
+        @Override
+        public boolean isAdded() {
+            return false;
+        }
     }
 
     private static boolean matching(CsmElement a, CsmElement b) {
@@ -132,6 +171,10 @@ public class Difference {
                 LexicalDifferenceCalculator.CsmChild childB = (LexicalDifferenceCalculator.CsmChild) b;
                 return childA.getChild().equals(childB.getChild());
             } else if (b instanceof CsmToken) {
+                return false;
+            } else if (b instanceof CsmIndent) {
+                return false;
+            } else if (b instanceof CsmUnindent) {
                 return false;
             } else {
                 throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
@@ -143,14 +186,25 @@ public class Difference {
                 return childA.getTokenType() == childB.getTokenType();
             } else if (b instanceof LexicalDifferenceCalculator.CsmChild) {
                 return false;
+            } else if (b instanceof CsmIndent) {
+                return false;
+            } else if (b instanceof CsmUnindent) {
+                return false;
+            } else {
+                throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
             }
         } else if (a instanceof CsmIndent) {
             return b instanceof CsmIndent;
+        } else if (a instanceof CsmUnindent) {
+            return b instanceof CsmUnindent;
         }
         throw new UnsupportedOperationException(a.getClass().getSimpleName()+ " "+b.getClass().getSimpleName());
     }
 
     private static boolean replacement(CsmElement a, CsmElement b) {
+        if (a instanceof CsmIndent || b instanceof CsmIndent || a instanceof CsmUnindent || b instanceof CsmUnindent) {
+            return false;
+        }
         if (a instanceof LexicalDifferenceCalculator.CsmChild) {
             if (b instanceof LexicalDifferenceCalculator.CsmChild) {
                 LexicalDifferenceCalculator.CsmChild childA = (LexicalDifferenceCalculator.CsmChild) a;
@@ -253,6 +307,7 @@ public class Difference {
             } else {
                 CsmElement nextOriginal = original.elements.get(originalIndex);
                 CsmElement nextAfter = after.elements.get(afterIndex);
+
                 if (matching(nextOriginal, nextAfter)) {
                     elements.add(new Kept(nextOriginal));
                     originalIndex++;
@@ -373,10 +428,11 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply(NodeText nodeText, Node node) {
-        List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         if (nodeText == null) {
             throw new NullPointerException();
         }
+        boolean addedIndentation = false;
+        List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
         int diffIndex = 0;
         int nodeTextIndex = 0;
         do {
@@ -415,7 +471,24 @@ public class Difference {
                 DifferenceElement diffEl = elements.get(diffIndex);
                 TextElement nodeTextEl = nodeText.getElements().get(nodeTextIndex);
                 if (diffEl instanceof Added) {
-                    TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element);
+                    CsmElement addedElement = ((Added) diffEl).element;
+                    if (addedElement instanceof CsmIndent) {
+                        for (int i=0;i<STANDARD_INDENTATION_SIZE;i++){
+                            indentation.add(new TokenTextElement(GeneratedJavaParserConstants.SPACE));
+                        }
+                        addedIndentation = true;
+                        diffIndex++;
+                        continue;
+                    }
+                    if (addedElement instanceof CsmUnindent) {
+                        for (int i=0;i<STANDARD_INDENTATION_SIZE && !indentation.isEmpty();i++){
+                            indentation.remove(indentation.size() - 1);
+                        }
+                        addedIndentation = false;
+                        diffIndex++;
+                        continue;
+                    }
+                    TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), addedElement);
                     boolean used = false;
                     if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
@@ -426,14 +499,22 @@ public class Difference {
                             used = true;
                         }
                         nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenTypes.eolToken()));
+                        // This remove the space in "{ }" when adding a new line
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
                         }
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {
                             nodeText.addElement(nodeTextIndex++, e);
                         }
-                        for (TextElement e : indentationBlock()) {
-                            nodeText.addElement(nodeTextIndex++, e);
+                        // Indentation is painful...
+                        // Sometimes we want to force indentation: this is the case when indentation was expected but
+                        // was actually not there. For example if we have "{ }" we would expect indentation but it is
+                        // not there, so when adding new elements we force it. However if the indentation has been
+                        // inserted by us in this transformation we do not want to insert it again
+                        if (!addedIndentation) {
+                            for (TextElement e : indentationBlock()) {
+                                nodeText.addElement(nodeTextIndex++, e);
+                            }
                         }
                     }
                     if (!used) {
@@ -441,7 +522,10 @@ public class Difference {
                         nodeTextIndex++;
                     }
                     if (textElement.isNewline()) {
-                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex);
+                        boolean followedByUnindent = (diffIndex + 1) < elements.size()
+                                && elements.get(diffIndex + 1).isAdded()
+                                && elements.get(diffIndex + 1).getElement() instanceof CsmUnindent;
+                        nodeTextIndex = adjustIndentation(indentation, nodeText, nodeTextIndex, followedByUnindent/* && !addedIndentation*/);
                     }
                     diffIndex++;
                 } else if (diffEl instanceof Kept) {
@@ -482,6 +566,15 @@ public class Difference {
                         }
                     } else if ((kept.element instanceof CsmToken) && ((CsmToken) kept.element).isWhiteSpace()) {
                         diffIndex++;
+                    } else if (kept.element instanceof CsmIndent) {
+                        // Nothing to do
+                        diffIndex++;
+                    } else if (kept.element instanceof CsmUnindent) {
+                        // Nothing to do
+                        diffIndex++;
+                        for (int i=0;i<STANDARD_INDENTATION_SIZE && nodeTextIndex>=1 && nodeText.getTextElement(nodeTextIndex-1).isSpaceOrTab();i++) {
+                            nodeText.removeElement(--nodeTextIndex);
+                        }
                     } else {
                         throw new UnsupportedOperationException("kept " + kept.element + " vs " + nodeTextEl);
                     }
@@ -502,7 +595,7 @@ public class Difference {
                         nodeText.removeElement(nodeTextIndex);
                         diffIndex++;
                     } else if (nodeTextEl instanceof TokenTextElement
-                            && ((TokenTextElement)nodeTextEl).isWhiteSpaceOrComment()) {
+                            && nodeTextEl.isWhiteSpaceOrComment()) {
                         nodeTextIndex++;
                     } else if (removed.element instanceof LexicalDifferenceCalculator.CsmChild
                             && ((LexicalDifferenceCalculator.CsmChild)removed.element).getChild() instanceof PrimitiveType) {
@@ -526,13 +619,19 @@ public class Difference {
         } while (diffIndex < this.elements.size() || nodeTextIndex < nodeText.getElements().size());
     }
 
-    private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex) {
+    private int adjustIndentation(List<TokenTextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
         List<TextElement> indentationAdj = processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1));
         if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isToken(RBRACE)) {
             indentationAdj = indentationAdj.subList(0, indentationAdj.size() - Math.min(STANDARD_INDENTATION_SIZE, indentationAdj.size()));
+        } else if (followedByUnindent) {
+            indentationAdj = indentationAdj.subList(0, Math.max(0, indentationAdj.size() - STANDARD_INDENTATION_SIZE));
         }
         for (TextElement e : indentationAdj) {
-            nodeText.getElements().add(nodeTextIndex++, e);
+            if ((nodeTextIndex<nodeText.getElements().size()) && nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
+                nodeTextIndex++;
+            } else {
+                nodeText.getElements().add(nodeTextIndex++, e);
+            }
         }
         return nodeTextIndex;
     }
@@ -568,5 +667,13 @@ public class Difference {
 
     public List<DifferenceElement> getElements() {
         return elements;
+    }
+
+    /**
+     * Remove from the difference all the elements related to indentation.
+     * This is mainly intended for test purposes.
+     */
+    void removeIndentationElements() {
+        elements.removeIf(el -> el.getElement() instanceof CsmIndent || el.getElement() instanceof CsmUnindent);
     }
 }
