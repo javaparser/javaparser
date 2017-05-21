@@ -21,20 +21,53 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static org.junit.Assert.assertEquals;
 
 public class CompilationUnitTest {
     @Test
     public void issue578TheFirstCommentIsWithinTheCompilationUnit() {
-        CompilationUnit compilationUnit = JavaParser.parse("// This is my class, with my comment\n" +
+        CompilationUnit compilationUnit = parse("// This is my class, with my comment\n" +
                 "class A {\n" +
                 "    static int a;\n" +
                 "}");
 
         assertEquals(1, compilationUnit.getAllContainedComments().size());
+    }
+
+    @Test
+    public void testGetSourceRoot() throws IOException {
+        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
+        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "Z.java"));
+
+        CompilationUnit cu = parse(testFile);
+        Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
+        assertEquals(sourceRoot, sourceRoot1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetSourceRootWithBadPackageDeclaration() throws IOException {
+        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
+        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
+
+        CompilationUnit cu = parse(testFile);
+        Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
+    }
+
+    @Test
+    public void testGetSourceRootInDefaultPackage() throws IOException {
+        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources", "com", "github", "javaparser", "storage")).normalize();
+        Path testFile = sourceRoot.resolve(Paths.get("B.java"));
+
+        CompilationUnit cu = parse(testFile);
+        Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
+        assertEquals(sourceRoot, sourceRoot1);
     }
 }
