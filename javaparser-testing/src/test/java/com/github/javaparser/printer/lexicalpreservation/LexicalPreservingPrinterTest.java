@@ -6,27 +6,22 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.Providers;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.expr.ArrayCreationExpr;
-import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.stmt.CatchClause;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.TryStmt;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
+import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
@@ -528,17 +523,15 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         CompilationUnit cu = result.a.getResult().get();
 
         cu.getTypes().stream()
-                .forEach(type -> {
-                    type.getMembers().stream()
-                            .forEach(member -> {
-                                if (member instanceof MethodDeclaration) {
-                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
-                                    if (!methodDeclaration.getAnnotationByName("Override").isPresent()) {
-                                        methodDeclaration.addAnnotation("Override");
-                                    }
+                .forEach(type -> type.getMembers().stream()
+                        .forEach(member -> {
+                            if (member instanceof MethodDeclaration) {
+                                MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                if (!methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                                    methodDeclaration.addAnnotation("Override");
                                 }
-                            });
-                });
+                            }
+                        }));
         assertEquals("public class TestPage extends Page {" + EOL +
                 EOL +
                 "   @Override()" + EOL +
@@ -547,6 +540,220 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   @Override" + EOL +
                 "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
+    }
+
+    @Test
+    public void preserveSpaceAsIsForASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+        assertEquals(readExample("ASimpleClassWithMoreFormatting"), lpp.print(cu));
+    }
+
+    @Test
+    public void renameASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step1"), lpp.print(cu));
+    }
+
+    @Test
+    public void theLexicalPreservationStringForAnAddedMethodShouldBeIndented() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        assertEquals("public void setAField() {" + EOL +
+                "    }", lpp.print(setter));
+    }
+
+    @Test
+    public void addMethodToASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step2"), lpp.print(cu));
+    }
+
+    @Test
+    public void addingParameterToAnAddedMethodInASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        setter.addParameter("boolean", "aField");
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step3"), lpp.print(cu));
+    }
+
+    @Test
+    public void findIndentationOfEmptyMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        assertEquals(4, lpp.findIndentation(setter).size());
+        assertEquals(4, lpp.findIndentation(setter.getBody().get()).size());
+    }
+
+    @Test
+    public void findIndentationOfMethodWithStatements() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step4");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        assertEquals(4, lpp.findIndentation(setter).size());
+        assertEquals(4, lpp.findIndentation(setter.getBody().get()).size());
+        assertEquals(8, lpp.findIndentation(setter.getBody().get().getStatement(0)).size());
+    }
+
+    @Test
+    public void addingStatementToAnAddedMethodInASimpleClassWithMoreFormatting() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting");
+
+        cu.getClassByName("ASimpleClass").get()
+                .setName("MyRenamedClass");
+        MethodDeclaration setter = cu
+                .getClassByName("MyRenamedClass").get()
+                .addMethod("setAField", Modifier.PUBLIC);
+        setter.addParameter("boolean", "aField");
+        setter.getBody().get().getStatements().add(new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                )));
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
+    }
+
+    @Test
+    public void addingStatementToAnAddedMethodInASimpleClassWithMoreFormattingFromStep3() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        setter.getBody().get().getStatements().add(new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                )));
+        assertEquals(readExample("ASimpleClassWithMoreFormatting_step4"), lpp.print(cu));
+    }
+
+    @Test
+    public void nodeTextForMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step4");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        NodeText nodeText;
+
+        nodeText = lpp.getTextForNode(setter);
+        int index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get());
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get().getStatement(0));
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
+        assertEquals(index, nodeText.getElements().size());
+    }
+
+    @Test
+    public void nodeTextForModifiedMethod() throws IOException {
+        considerExample("ASimpleClassWithMoreFormatting_step3");
+
+        MethodDeclaration setter = cu.getClassByName("MyRenamedClass").get()
+                .getMethodsByName("setAField").get(0);
+        setter.getBody().get().getStatements().add(new ExpressionStmt(
+                new AssignExpr(
+                        new FieldAccessExpr(new ThisExpr(),"aField"),
+                        new NameExpr("aField"),
+                        AssignExpr.Operator.ASSIGN
+                )));
+        NodeText nodeText;
+
+        nodeText = lpp.getTextForNode(setter);
+        int index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getTextForNode(setter.getBody().get());
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
+        assertTrue(nodeText.getElements().get(index++).isNewline());
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
+        assertEquals(index, nodeText.getElements().size());
+
+        nodeText = lpp.getOrCreateNodeText(setter.getBody().get().getStatement(0));
+        index = 0;
+        assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
+        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
+        assertEquals(index, nodeText.getElements().size());
     }
 
 }

@@ -128,4 +128,9 @@ class TokenTextElement extends TextElement {
     public boolean isNewline() {
         return TokenTypes.isEndOfLineCharacter(tokenKind);
     }
+
+    @Override
+    public boolean isChildOfClass(Class<? extends Node> nodeClass) {
+        return false;
+    }
 }
