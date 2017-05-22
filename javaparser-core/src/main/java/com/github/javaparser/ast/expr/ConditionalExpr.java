@@ -22,6 +22,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,12 +34,12 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 
 /**
- * An if-then or if-then-else construct.
- * In <code>if(a){b}else{c}</code>, a is the condition, b is thenExpr, and c is elseExpr.
+ * The ternary conditional expression.
+ * In <code>b==0?x:y</code>, b==0 is the condition, x is thenExpr, and y is elseExpr.
  *
  * @author Julio Vilmar Gesser
  */
-public final class ConditionalExpr extends Expression {
+public final class ConditionalExpr extends Expression implements NodeWithCondition<ConditionalExpr> {
 
     private Expression condition;
 
