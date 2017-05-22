@@ -856,4 +856,112 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "}", result.b.print(cu));
     }
 
+    // See issue #865
+    @Test
+    public void handleAddingMarkerAnnotation() {
+        String code = "public class TestPage extends Page {" + EOL +
+                EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    if (!methodDeclaration.getAnnotationByName("Override").isPresent()) {
+                                        methodDeclaration.addMarkerAnnotation("Override");
+                                    }
+                                }
+                            });
+                });
+        assertEquals("public class TestPage extends Page {" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}", result.b.print(cu));
+    }
+
+    // See issue #865
+    @Test
+    public void handleOverrideMarkerAnnotation() {
+        String code = "public class TestPage extends Page {" + EOL +
+                EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    methodDeclaration.addMarkerAnnotation("Override");
+                                }
+                            });
+                });
+        assertEquals("public class TestPage extends Page {" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}", result.b.print(cu));
+    }
+
+    // See issue #865
+    @Test
+    public void handleOverrideAnnotationAlternative() {
+        String code = "public class TestPage extends Page {" + EOL +
+                EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+
+        cu.getTypes().stream()
+                .forEach(type -> {
+                    type.getMembers().stream()
+                            .forEach(member -> {
+                                if (member instanceof MethodDeclaration) {
+                                    MethodDeclaration methodDeclaration = (MethodDeclaration) member;
+                                    methodDeclaration.addAnnotation("Override");
+                                }
+                            });
+                });
+        assertEquals("public class TestPage extends Page {" + EOL +
+                EOL +
+                "   @Override()" + EOL +
+                "   protected void test() {}" + EOL +
+                EOL +
+                "   @Override()" + EOL +
+                "   protected void initializePage() {}" + EOL +
+                "}", result.b.print(cu));
+    }
+
 }
