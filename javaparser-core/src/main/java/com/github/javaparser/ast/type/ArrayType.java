@@ -113,7 +113,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
                     }
                     type = new ArrayType(tokenRange, type, pair.getAnnotations());
                     if (tokenRange != null) {
-                        type.setRange(tokenRange.getRange());
+                        type.setRange(tokenRange.toRange());
                     }
                 }
             }
