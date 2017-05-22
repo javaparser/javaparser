@@ -6,7 +6,7 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.modules.ModuleRequiresStmt;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import com.github.javaparser.ast.nodeTypes.NodeWithRange;
+import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
@@ -161,7 +161,7 @@ public class ModifierValidator extends VisitorValidator {
         super.visit(n, reporter);
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateModifiers(T n, ProblemReporter reporter, Modifier... allowedModifiers) {
         validateAtMostOneOf(n, reporter, PUBLIC, PROTECTED, PRIVATE);
         validateAtMostOneOf(n, reporter, FINAL, ABSTRACT);
         if (hasStrictfp) {
@@ -192,7 +192,7 @@ public class ModifierValidator extends VisitorValidator {
         return false;
     }
 
-    private <T extends NodeWithModifiers<?> & NodeWithRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier... modifiers) {
+    private <T extends NodeWithModifiers<?> & NodeWithTokenRange<?>> void validateAtMostOneOf(T t, ProblemReporter reporter, Modifier... modifiers) {
         List<Modifier> foundModifiers = new ArrayList<>();
         for (Modifier m : modifiers) {
             if (t.getModifiers().contains(m)) {

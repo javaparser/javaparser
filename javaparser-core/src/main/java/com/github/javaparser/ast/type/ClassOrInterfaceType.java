@@ -41,6 +41,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
@@ -88,8 +89,8 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ClassOrInterfaceType(Range range, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
-        super(range, annotations);
+    public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setScope(scope);
         setName(name);
         setTypeArguments(typeArguments);

@@ -119,4 +119,19 @@ public final class CodeGenerationUtils {
     public static Path mavenModuleRoot(Class<?> c) {
         return classLoaderRoot(c).resolve(Paths.get("..", "..")).normalize();
     }
+
+    /**
+     * Shortens path "full" by cutting "difference" off the end of it.
+     */
+    public static Path subtractPaths(Path full, Path difference) {
+        while (difference != null) {
+            if (difference.getFileName().equals(full.getFileName())) {
+                difference = difference.getParent();
+                full = full.getParent();
+            } else {
+                throw new RuntimeException(f("'%s' could not be subtracted from '%s'", difference, full));
+            }
+        }
+        return full;
+    }
 }

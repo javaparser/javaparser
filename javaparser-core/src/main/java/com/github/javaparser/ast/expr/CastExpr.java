@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CastExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A typecast. The (long) in <code>(long)15</code>
@@ -58,8 +59,8 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CastExpr(Range range, Type type, Expression expression) {
-        super(range);
+    public CastExpr(TokenRange tokenRange, Type type, Expression expression) {
+        super(tokenRange);
         setType(type);
         setExpression(expression);
         customInitialization();

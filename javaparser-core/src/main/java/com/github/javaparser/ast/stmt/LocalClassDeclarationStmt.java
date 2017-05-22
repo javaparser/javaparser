@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.LocalClassDeclarationStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A class declaration inside a method. 
@@ -56,8 +57,8 @@ public final class LocalClassDeclarationStmt extends Statement {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocalClassDeclarationStmt(Range range, ClassOrInterfaceDeclaration classDeclaration) {
-        super(range);
+    public LocalClassDeclarationStmt(TokenRange tokenRange, ClassOrInterfaceDeclaration classDeclaration) {
+        super(tokenRange);
         setClassDeclaration(classDeclaration);
         customInitialization();
     }

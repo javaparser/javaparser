@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DoubleLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A float or a double constant. This value is stored exactly as found in the source.
@@ -51,8 +52,8 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public DoubleLiteralExpr(Range range, String value) {
-        super(range, value);
+    public DoubleLiteralExpr(TokenRange tokenRange, String value) {
+        super(tokenRange, value);
         customInitialization();
     }
 

@@ -33,6 +33,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.UnknownTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -52,8 +53,8 @@ public final class UnknownType extends Type {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnknownType(Range range) {
-        super(range);
+    public UnknownType(TokenRange tokenRange) {
+        super(tokenRange);
         customInitialization();
     }
 

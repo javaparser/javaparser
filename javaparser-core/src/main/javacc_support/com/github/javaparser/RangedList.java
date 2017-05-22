@@ -3,26 +3,24 @@ package com.github.javaparser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 
-import static com.github.javaparser.Range.range;
-
 /**
  * Helper class for {@link GeneratedJavaParser}
  */
 class RangedList<T extends Node> {
     /* A ranged list MUST be set to a begin and end,
        or these temporary values will leak out */
-    Range range = range(0, 0, 0, 0);
+    TokenRange range = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
     NodeList<T> list;
 
     RangedList(NodeList<T> list) {
         this.list = list;
     }
 
-    void beginAt(Position begin) {
+    void beginAt(JavaToken begin) {
         range = range.withBegin(begin);
     }
 
-    void endAt(Position end) {
+    void endAt(JavaToken end) {
         range = range.withEnd(end);
     }
 

@@ -44,6 +44,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
@@ -69,8 +70,8 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ConstructorDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
-        super(range, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+    public ConstructorDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setBody(body);
         customInitialization();
     }

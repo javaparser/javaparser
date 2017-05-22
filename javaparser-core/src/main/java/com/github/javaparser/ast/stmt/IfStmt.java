@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -63,8 +64,8 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public IfStmt(Range range, Expression condition, Statement thenStmt, Statement elseStmt) {
-        super(range);
+    public IfStmt(TokenRange tokenRange, Expression condition, Statement thenStmt, Statement elseStmt) {
+        super(tokenRange);
         setCondition(condition);
         setThenStmt(thenStmt);
         setElseStmt(elseStmt);

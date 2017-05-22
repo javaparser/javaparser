@@ -32,12 +32,13 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntersectionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
-import com.github.javaparser.metamodel.NonEmptyProperty;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -63,8 +64,8 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public IntersectionType(Range range, NodeList<ReferenceType> elements) {
-        super(range);
+    public IntersectionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
+        super(tokenRange);
         setElements(elements);
         customInitialization();
     }

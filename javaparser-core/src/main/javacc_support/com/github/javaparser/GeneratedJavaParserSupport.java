@@ -17,8 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.GeneratedJavaParser.CustomToken;
 import static com.github.javaparser.Position.pos;
-import static com.github.javaparser.Range.range;
 import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 
@@ -26,8 +26,6 @@ import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
  * Support class for {@link GeneratedJavaParser}
  */
 class GeneratedJavaParserSupport {
-    static final Position INVALID = pos(-1, 0);
-
     static <X extends Node> NodeList<X> emptyList() {
         return new NodeList<X>();
     }
@@ -88,23 +86,31 @@ class GeneratedJavaParserSupport {
             modifiers.add(m);
     }
 
+    static TokenRange range(JavaToken begin, JavaToken end) {
+        return new TokenRange(begin, end);
+    }
+
+    static TokenRange range(Node begin, Node end) {
+        return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+    }
+
     static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
             if (inner.isPresent() && inner.get() instanceof NameExpr) {
                 SimpleName id = ((NameExpr) inner.get()).getName();
-                NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
+                NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+                ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
             } else {
-                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), new NodeList<>(), lambdaBody, true);
+                ret = new LambdaExpr(range(ret, lambdaBody), new NodeList<>(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-            ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            ret = new LambdaExpr(ret.getTokenRange().get(), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
-            ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
+            ret.setTokenRange(range(ret, lambdaBody));
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(generatedJavaParser, castExpr.getExpression(), lambdaBody);
@@ -115,7 +121,7 @@ class GeneratedJavaParserSupport {
         return ret;
     }
 
-    static ArrayCreationExpr juggleArrayCreation(Range range, List<Range> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
+    static ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
 
         for (int i = 0; i < arrayAnnotations.size(); i++) {
@@ -131,14 +137,15 @@ class GeneratedJavaParserSupport {
         return wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
     }
 
-    public static Range tokenRange(Token token) {
-        return range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
+    static TokenRange tokenRange(Token token) {
+        JavaToken javaToken = ((CustomToken) token).javaToken;
+        return new TokenRange(javaToken, javaToken);
     }
 
-    static Position nodeListBegin(NodeList<?> l) {
-        if(l.isEmpty()){
-            return INVALID;
+    static JavaToken nodeListBegin(NodeList<?> l) {
+        if (l.isEmpty()) {
+            return JavaToken.INVALID;
         }
-        return l.get(0).getBegin().get();
+        return l.get(0).getTokenRange().get().getBegin();
     }
 }

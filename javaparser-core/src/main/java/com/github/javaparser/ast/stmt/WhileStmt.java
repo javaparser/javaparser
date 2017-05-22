@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.WhileStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A while statement.
@@ -59,8 +60,8 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WhileStmt(Range range, Expression condition, Statement body) {
-        super(range);
+    public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
+        super(tokenRange);
         setCondition(condition);
         setBody(body);
         customInitialization();

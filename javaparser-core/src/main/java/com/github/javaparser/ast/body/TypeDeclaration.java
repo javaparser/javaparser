@@ -41,6 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 import javax.annotation.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.TokenRange;
 
 /**
  * A base class for all types of type declarations.
@@ -70,8 +71,8 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypeDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
-        super(range, annotations);
+    public TypeDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+        super(tokenRange, annotations);
         setModifiers(modifiers);
         setName(name);
         setMembers(members);

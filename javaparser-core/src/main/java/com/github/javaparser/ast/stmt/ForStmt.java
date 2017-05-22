@@ -39,6 +39,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A classic for statement.
@@ -68,8 +69,8 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ForStmt(Range range, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
-        super(range);
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
+        super(tokenRange);
         setInitialization(initialization);
         setCompare(compare);
         setUpdate(update);

@@ -31,6 +31,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SingleMemberAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An annotation that has a single value. <br/><code>@Count(15)</code>
@@ -52,8 +53,8 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SingleMemberAnnotationExpr(Range range, Name name, Expression memberValue) {
-        super(range, name);
+    public SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
+        super(tokenRange, name);
         setMemberValue(memberValue);
         customInitialization();
     }

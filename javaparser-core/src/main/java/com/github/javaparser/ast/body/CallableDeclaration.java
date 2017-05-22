@@ -44,6 +44,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
@@ -67,8 +68,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
-        super(range, annotations);
+    public CallableDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
+        super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);

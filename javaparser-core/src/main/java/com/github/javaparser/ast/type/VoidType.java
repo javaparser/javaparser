@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.VoidTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
@@ -51,8 +52,8 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public VoidType(Range range) {
-        super(range);
+    public VoidType(TokenRange tokenRange) {
+        super(tokenRange);
         customInitialization();
     }
 

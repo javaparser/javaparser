@@ -21,6 +21,8 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -30,6 +32,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,16 +40,28 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
+import com.github.javaparser.utils.CodeGenerationUtils;
+import javax.annotation.Generated;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.TokenRange;
 
 /**
  * <p>
@@ -72,6 +87,9 @@ public final class CompilationUnit extends Node {
 
     private ModuleDeclaration module;
 
+    @InternalProperty
+    private Storage storage;
+
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
@@ -87,8 +105,8 @@ public final class CompilationUnit extends Node {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
-        super(range);
+    public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
+        super(tokenRange);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
@@ -515,6 +533,92 @@ public final class CompilationUnit extends Node {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removeModule() {
         return setModule((ModuleDeclaration) null);
+    }
+
+    /**
+     * @return information about where this compilation unit was loaded from, or empty if it wasn't loaded from a file.
+     */
+    public Optional<Storage> getStorage() {
+        return Optional.ofNullable(storage);
+    }
+
+    public CompilationUnit setStorage(Path path) {
+        this.storage = new Storage(this, path);
+        return this;
+    }
+
+    /**
+     * Information about where this compilation unit was loaded from.
+     * This class only stores the absolute location.
+     * For more flexibility use SourceRoot.
+     */
+    public static class Storage {
+
+        private final CompilationUnit compilationUnit;
+
+        private final Path path;
+
+        private Storage(CompilationUnit compilationUnit, Path path) {
+            this.compilationUnit = compilationUnit;
+            this.path = path.toAbsolutePath();
+        }
+
+        /**
+         * @return the path to the source for this CompilationUnit
+         */
+        public Path getPath() {
+            return path;
+        }
+
+        /**
+         * @return the CompilationUnit this Storage is about.
+         */
+        public CompilationUnit getCompilationUnit() {
+            return compilationUnit;
+        }
+
+        /**
+         * @return the source root directory, calculated from the path of this compiation unit, and the package
+         * declaration of this compilation unit. If the package declaration is invalid (when it does not match the end
+         * of the path) a RuntimeException is thrown.
+         */
+        public Path getSourceRoot() {
+            final Optional<String> pkgAsString = compilationUnit.getPackageDeclaration().map(NodeWithName::getNameAsString);
+            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElse(getDirectory());
+        }
+
+        public String getFileName() {
+            return path.getFileName().toString();
+        }
+
+        public Path getDirectory() {
+            return path.getParent();
+        }
+
+        /**
+         * Saves the compilation unit to its original location
+         */
+        public void save() {
+            save(cu -> new PrettyPrinter().print(getCompilationUnit()));
+        }
+
+        public void save(Function<CompilationUnit, String> makeOutput) {
+            try {
+                Files.createDirectories(path.getParent());
+                final String code = makeOutput.apply(getCompilationUnit());
+                Files.write(path, code.getBytes(UTF8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public ParseResult<CompilationUnit> reparse(JavaParser javaParser) {
+            try {
+                return javaParser.parse(ParseStart.COMPILATION_UNIT, provider(getPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ConditionalExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The ternary conditional expression.
@@ -58,8 +59,8 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ConditionalExpr(Range range, Expression condition, Expression thenExpr, Expression elseExpr) {
-        super(range);
+    public ConditionalExpr(TokenRange tokenRange, Expression condition, Expression thenExpr, Expression elseExpr) {
+        super(tokenRange);
         setCondition(condition);
         setThenExpr(thenExpr);
         setElseExpr(elseExpr);

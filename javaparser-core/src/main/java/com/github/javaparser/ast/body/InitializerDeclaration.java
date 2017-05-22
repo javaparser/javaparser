@@ -37,6 +37,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.InitializerDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
@@ -60,8 +61,8 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public InitializerDeclaration(Range range, boolean isStatic, BlockStmt body) {
-        super(range);
+    public InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
+        super(tokenRange);
         setStatic(isStatic);
         setBody(body);
         customInitialization();

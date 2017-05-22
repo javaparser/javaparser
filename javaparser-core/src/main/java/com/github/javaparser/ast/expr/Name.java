@@ -40,6 +40,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -81,8 +82,8 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Name(Range range, Name qualifier, String identifier, NodeList<AnnotationExpr> annotations) {
-        super(range);
+    public Name(TokenRange tokenRange, Name qualifier, String identifier, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange);
         setQualifier(qualifier);
         setIdentifier(identifier);
         setAnnotations(annotations);

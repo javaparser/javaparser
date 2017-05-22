@@ -35,6 +35,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SynchronizedStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Usage of the synchronized keyword.
@@ -59,8 +60,8 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SynchronizedStmt(Range range, Expression expression, BlockStmt body) {
-        super(range);
+    public SynchronizedStmt(TokenRange tokenRange, Expression expression, BlockStmt body) {
+        super(tokenRange);
         setExpression(expression);
         setBody(body);
         customInitialization();

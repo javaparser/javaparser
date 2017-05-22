@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Base class for types.
@@ -45,7 +46,7 @@ public abstract class Type extends Node {
      * Several sub classes do not support annotations.
      * This is a support constructor for them.
       */
-    protected Type(Range range) {
+    protected Type(TokenRange range) {
         this(range, new NodeList<>());
     }
 
@@ -56,8 +57,8 @@ public abstract class Type extends Node {
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Type(Range range, NodeList<AnnotationExpr> annotations) {
-        super(range);
+    public Type(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange);
         setAnnotations(annotations);
         customInitialization();
     }
