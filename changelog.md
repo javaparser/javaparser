@@ -1,3 +1,13 @@
+Version 3.2.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/45?closed=1)
+* `NodeWithCondition` was added on all nodes containing a condition.
+* Lots of work on improving lexical preservation.
+* If a file was parsed from a file system, you can now get path information etc. from `CompilationUnit`
+* API BREAKING: every node now points to its start and end token.
+Some of the API has started returning `TokenRange` instead of `Range` - you can call `toRange` to get the old object type.
+We may still change the naming of some of this code in the following month.
+
 Version 3.2.4
 ------------------
 New style changelog, no more issue numbers, but a link: 
