@@ -24,6 +24,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -44,7 +45,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Julio Vilmar Gesser
  */
-public final class IfStmt extends Statement {
+public final class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     private Expression condition;
 
