@@ -24,7 +24,7 @@ public class TokenRange {
         return end;
     }
 
-    public Range getRange() {
+    public Range toRange() {
         return new Range(begin.getRange().begin, end.getRange().end);
     }
 
