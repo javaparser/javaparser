@@ -30,4 +30,14 @@ public class CsmIndent implements CsmElement {
     public void prettyPrint(Node node, SourcePrinter printer) {
         printer.indent();
     }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof CsmIndent;
+    }
 }
