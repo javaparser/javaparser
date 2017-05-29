@@ -9,7 +9,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
+import static com.github.javaparser.JavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetNodeListsGenerator extends NodeGenerator {
@@ -38,7 +38,7 @@ public class GetNodeListsGenerator extends NodeGenerator {
             return;
         }
 
-        final MethodDeclaration getNodeListsMethod = (MethodDeclaration) parseClassBodyDeclaration(f("@Override public List<NodeList<?>> getNodeLists() {%s}", statement));
+        final MethodDeclaration getNodeListsMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public List<NodeList<?>> getNodeLists() {%s}", statement));
         addOrReplaceWhenSameSignature(nodeCoid, getNodeListsMethod);
         annotateGenerated(getNodeListsMethod);
     }

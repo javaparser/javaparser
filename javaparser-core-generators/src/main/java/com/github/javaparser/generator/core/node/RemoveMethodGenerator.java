@@ -1,19 +1,14 @@
 package com.github.javaparser.generator.core.node;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.nodeTypes.NodeWithOptionalBlockStmt;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.generator.NodeGenerator;
 import com.github.javaparser.utils.SourceRoot;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-
-import java.util.List;
-import java.util.function.Supplier;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -27,7 +22,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        MethodDeclaration removeNodeMethod = (MethodDeclaration) parseClassBodyDeclaration("public boolean remove(Node node) {}");
+        MethodDeclaration removeNodeMethod = (MethodDeclaration) parseBodyDeclaration("public boolean remove(Node node) {}");
         nodeCu.addImport(Node.class);
         nodeMetaModel.getSuperNodeMetaModel().ifPresent(s -> annotateOverridden(removeNodeMethod));
 
@@ -82,7 +77,7 @@ public class RemoveMethodGenerator extends NodeGenerator {
 
     private String generateRemoveMethodForAttribute(ClassOrInterfaceDeclaration nodeCoid, BaseNodeMetaModel nodeMetaModel, PropertyMetaModel property) {
         final String methodName = "remove" + capitalize(property.getName());
-        final MethodDeclaration removeMethod = (MethodDeclaration) parseClassBodyDeclaration(f("public %s %s() {}", nodeMetaModel.getTypeName(), methodName));
+        final MethodDeclaration removeMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s %s() {}", nodeMetaModel.getTypeName(), methodName));
 
         final BlockStmt block = removeMethod.getBody().get();
         block.addStatement(f("return %s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));

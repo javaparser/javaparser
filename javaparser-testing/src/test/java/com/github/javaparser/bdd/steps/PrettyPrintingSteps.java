@@ -92,12 +92,12 @@ public class PrettyPrintingSteps {
 
     @When("the class body declaration is parsed by the Java parser")
     public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseClassBodyDeclaration(sourceUnderTest);
+        resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
     }
 
     @When("the interface body declaration is parsed by the Java parser")
     public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseInterfaceBodyDeclaration(sourceUnderTest);
+        resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class is visited by an empty ModifierVisitorAdapter")

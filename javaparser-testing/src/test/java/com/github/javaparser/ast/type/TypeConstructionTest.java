@@ -26,7 +26,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import org.assertj.core.api.Assertions;
@@ -40,7 +39,7 @@ import static org.junit.Assert.assertEquals;
 public class TypeConstructionTest {
     @Test
     public void getFieldDeclarationWithArrays() {
-        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseClassBodyDeclaration("@C int @A[] @B[] a @X[] @Y[];");
+        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseBodyDeclaration("@C int @A[] @B[] a @X[] @Y[];");
 
         ArrayType arrayType1 = (ArrayType) fieldDeclaration.getVariable(0).getType();
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
@@ -83,7 +82,7 @@ public class TypeConstructionTest {
 
     @Test
     public void getMethodDeclarationWithArrays() {
-        MethodDeclaration methodDeclaration = (MethodDeclaration) parseClassBodyDeclaration("@C int @A[] a() @B[] {};");
+        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("@C int @A[] a() @B[] {};");
 
         ArrayType arrayType1 = (ArrayType) methodDeclaration.getType();
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
@@ -98,7 +97,7 @@ public class TypeConstructionTest {
 
     @Test
     public void getParameterWithArrays() {
-        MethodDeclaration methodDeclaration = (MethodDeclaration) parseClassBodyDeclaration("void a(@C int @A[] a @B[]) {};");
+        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("void a(@C int @A[] a @B[]) {};");
 
         Parameter parameter = methodDeclaration.getParameter(0);
 
@@ -126,7 +125,7 @@ public class TypeConstructionTest {
 
     @Test
     public void setFieldDeclarationWithArrays() {
-        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseClassBodyDeclaration("int[][] a[][];");
+        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseBodyDeclaration("int[][] a[][];");
         fieldDeclaration.getVariable(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob[][] a;", fieldDeclaration.toString());
@@ -134,7 +133,7 @@ public class TypeConstructionTest {
 
     @Test
     public void setMethodDeclarationWithArrays() {
-        MethodDeclaration method = (MethodDeclaration) parseClassBodyDeclaration("int[][] a()[][] {}");
+        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("int[][] a()[][] {}");
         method.setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob[][] a() {" + EOL + "}", method.toString());
@@ -142,7 +141,7 @@ public class TypeConstructionTest {
 
     @Test
     public void setParameterWithArrays() {
-        MethodDeclaration method = (MethodDeclaration) parseClassBodyDeclaration("void a(int[][] a[][]) {};");
+        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("void a(int[][] a[][]) {};");
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
