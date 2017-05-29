@@ -819,20 +819,24 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	JavaToken begin = modifier.begin;
 }
 {
-  "enum" { begin = begin.orIfInvalid(token()); }
-  name = SimpleName()
-  [ impList = ImplementsList() ]
-  "{"
-  	[
-    	entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
-  	]
-  	[ "," ]
- 	[
- 	 	( ";" ( member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); } )* )
- 	]
-  "}"
-
-  { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
+    "enum" { begin = begin.orIfInvalid(token()); }
+    name = SimpleName()
+    [ impList = ImplementsList() ]
+    "{"
+    [
+        entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
+    ]
+    [ "," ]
+    [
+        ";" (
+            member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); } 
+        |
+            ";"
+        )*
+    ]
+    "}"
+    
+    { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
 }
 
 
@@ -904,8 +908,12 @@ NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 	BodyDeclaration member;
 }
 {
-  "{" ( member = ClassOrInterfaceBodyDeclaration() { ret.add(member); }  )* "}"
-  { return ret; }
+    "{" (
+        member = ClassOrInterfaceBodyDeclaration() { ret.add(member); }
+    |
+        ";"
+    )* "}"
+    { return ret; }
 }
 
 BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
@@ -937,8 +945,6 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 	    |
 	      ret = MethodDeclaration(modifier)
 	  )
-	|
-	  ";" { ret = new EmptyMemberDeclaration(tokenRange()); }
   )
   { return ret; }
 }
@@ -2654,8 +2660,12 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 	BodyDeclaration member;
 }
 {
-  "{" ( member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); } )* "}"
-  { return ret; }
+    "{" ( 
+        member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); }
+    |
+        ";"
+    )* "}"
+    { return ret; }
 }
 
 BodyDeclaration<?> AnnotationBodyDeclaration():
@@ -2664,10 +2674,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
    BodyDeclaration ret;
 }
 {
-  {  }
   (
-	";" { ret = null; }
-  |
     modifier = Modifiers()
     (
 	   LOOKAHEAD(Type() Identifier() "(")

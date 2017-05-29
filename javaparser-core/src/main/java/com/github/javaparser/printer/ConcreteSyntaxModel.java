@@ -155,8 +155,6 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.BODY)
         ));
 
-        concreteSyntaxModelByClass.put(EmptyMemberDeclaration.class, sequence(comment(), token(GeneratedJavaParserConstants.SEMICOLON)));
-
         concreteSyntaxModelByClass.put(EnumConstantDeclaration.class, sequence(
                 comment(),
                 memberAnnotations(),

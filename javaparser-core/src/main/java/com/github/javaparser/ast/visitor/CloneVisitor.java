@@ -225,16 +225,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(EmptyMemberDeclaration n, Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        EmptyMemberDeclaration r = new EmptyMemberDeclaration(n.getTokenRange().orElse(null));
-        r.setComment(comment);
-        return r;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(InitializerDeclaration n, Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
