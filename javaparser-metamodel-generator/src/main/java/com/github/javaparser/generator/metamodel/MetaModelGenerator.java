@@ -59,7 +59,6 @@ public class MetaModelGenerator {
         add(AnnotationMemberDeclaration.class);
         add(ClassOrInterfaceDeclaration.class);
         add(ConstructorDeclaration.class);
-        add(EmptyMemberDeclaration.class);
         add(EnumConstantDeclaration.class);
         add(EnumDeclaration.class);
         add(FieldDeclaration.class);

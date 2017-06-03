@@ -20,22 +20,20 @@
  */
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.EmptyStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
 
 /**
+ * An empty statement is a ";" where a statement is expected.
  * @author Julio Vilmar Gesser
- * @deprecated these ;'s should be ignored
  */
-@Deprecated
 public final class EmptyStmt extends Statement {
 
     @AllFieldsConstructor

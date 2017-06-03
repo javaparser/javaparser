@@ -44,8 +44,6 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
     List<String>[][] arrLS = (List<String>[][]) new List<?>[10][];
 
-    ;
-
     {
         int z = 0, y = 0;
         int a = (z) + y;
@@ -93,8 +91,6 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
             x = x / 1;
         }
     }
-
-    ;
 
     @Deprecated()
     int[][][][] arr2 = new int[10][2][1][0];

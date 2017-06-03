@@ -451,9 +451,11 @@ public final class JavaParser {
      * @param body the body of a class
      * @return BodyDeclaration representing the Java class body
      * @throws ParseProblemException if the source code has parser errors
+     * @deprecated just use parseBodyDeclaration now.
      */
+    @Deprecated
     public static BodyDeclaration<?> parseClassBodyDeclaration(String body) {
-        return simplifiedParse(CLASS_BODY, provider(body));
+        return parseBodyDeclaration(body);
     }
 
     /**
@@ -463,9 +465,23 @@ public final class JavaParser {
      * @param body the body of an interface
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
+     * @deprecated just use parseBodyDeclaration now.
      */
+    @Deprecated
     public static BodyDeclaration parseInterfaceBodyDeclaration(String body) {
-        return simplifiedParse(INTERFACE_BODY, provider(body));
+        return parseBodyDeclaration(body);
+    }
+
+    /**
+     * Parses a Java class or interface body declaration(e.g fields or methods) and returns a
+     * {@link BodyDeclaration} that represents it.
+     *
+     * @param body the body of a class or interface
+     * @return BodyDeclaration representing the Java interface body
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static BodyDeclaration parseBodyDeclaration(String body) {
+        return simplifiedParse(CLASS_BODY, provider(body));
     }
 
     /**

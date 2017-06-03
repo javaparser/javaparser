@@ -778,14 +778,14 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
   ( "class" | "interface" { isInterface = true; } ) { begin = begin.orIfInvalid(token()); }
   name = SimpleName()
   [ typePar = TypeParameters() ]
-  [ extList = ExtendsList(isInterface) ]
-  [ impList = ImplementsList(isInterface) ]
-  members = ClassOrInterfaceBody(isInterface)
+  [ extList = ExtendsList() ]
+  [ impList = ImplementsList() ]
+  members = ClassOrInterfaceBody()
 
 	{ return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
 }
 
-NodeList<ClassOrInterfaceType> ExtendsList(boolean isInterface):
+NodeList<ClassOrInterfaceType> ExtendsList():
 {
    boolean extendsMoreThanOne = false;
    NodeList<ClassOrInterfaceType> ret = new NodeList<ClassOrInterfaceType>();
@@ -797,7 +797,7 @@ NodeList<ClassOrInterfaceType> ExtendsList(boolean isInterface):
    { return ret; }
 }
 
-NodeList<ClassOrInterfaceType> ImplementsList(boolean isInterface):
+NodeList<ClassOrInterfaceType> ImplementsList():
 {
    NodeList<ClassOrInterfaceType> ret = new NodeList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
@@ -819,20 +819,24 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	JavaToken begin = modifier.begin;
 }
 {
-  "enum" { begin = begin.orIfInvalid(token()); }
-  name = SimpleName()
-  [ impList = ImplementsList(false) ]
-  "{"
-  	[
-    	entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
-  	]
-  	[ "," ]
- 	[
- 	 	( ";" ( member = ClassOrInterfaceBodyDeclaration(false) { members = add(members, member); } )* )
- 	]
-  "}"
-
-  { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
+    "enum" { begin = begin.orIfInvalid(token()); }
+    name = SimpleName()
+    [ impList = ImplementsList() ]
+    "{"
+    [
+        entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
+    ]
+    [ "," ]
+    [
+        ";" (
+            member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); } 
+        |
+            ";"
+        )*
+    ]
+    "}"
+    
+    { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
 }
 
 
@@ -849,7 +853,7 @@ EnumConstantDeclaration EnumConstantDeclaration():
   {  }
   ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getTokenRange().get().getBegin()); } )*
   name = SimpleName() { begin = begin.orIfInvalid(token()); } 
-  [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
+  [ args = Arguments() ] [ classBody = ClassOrInterfaceBody() ]
   { 
       return new EnumConstantDeclaration(range(begin, token()), annotations, name, args, classBody);  
   }
@@ -898,17 +902,21 @@ NodeList<ClassOrInterfaceType> TypeBound():
    { return ret; }
 }
 
-NodeList<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface):
+NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 {
 	NodeList<BodyDeclaration<?>> ret = emptyList();
 	BodyDeclaration member;
 }
 {
-  "{" ( member = ClassOrInterfaceBodyDeclaration(isInterface) { ret.add(member); }  )* "}"
-  { return ret; }
+    "{" (
+        member = ClassOrInterfaceBodyDeclaration() { ret.add(member); }
+    |
+        ";"
+    )* "}"
+    { return ret; }
 }
 
-BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
+BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 {
    ModifierHolder modifier;
    BodyDeclaration<?> ret;
@@ -937,8 +945,6 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
 	    |
 	      ret = MethodDeclaration(modifier)
 	  )
-	|
-	  ";" { ret = new EmptyMemberDeclaration(tokenRange()); }
   )
   { return ret; }
 }
@@ -2045,7 +2051,7 @@ Expression AllocationExpression(Expression scope):
         (
             ret = ArrayCreation(begin, type)
         |
-            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
+            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody() ]
             { ret = new ObjectCreationExpr(range(begin, token()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
         )
     )
@@ -2654,8 +2660,12 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 	BodyDeclaration member;
 }
 {
-  "{" ( member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); } )* "}"
-  { return ret; }
+    "{" ( 
+        member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); }
+    |
+        ";"
+    )* "}"
+    { return ret; }
 }
 
 BodyDeclaration<?> AnnotationBodyDeclaration():
@@ -2664,10 +2674,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
    BodyDeclaration ret;
 }
 {
-  {  }
   (
-	";" { ret = null; }
-  |
     modifier = Modifiers()
     (
 	   LOOKAHEAD(Type() Identifier() "(")

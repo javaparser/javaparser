@@ -22,16 +22,19 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Generated;
 
 /**
  * This visitor can be used to save time when some specific nodes needs
@@ -362,16 +365,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final DoubleLiteralExpr n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
-    public Visitable visit(final EmptyMemberDeclaration n, final A arg) {
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setAnnotations(annotations);
         n.setComment(comment);
         return n;
     }
