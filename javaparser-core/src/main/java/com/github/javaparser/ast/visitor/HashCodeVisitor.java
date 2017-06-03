@@ -178,11 +178,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(EmptyMemberDeclaration n, Void arg) {
-        return (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
     public Integer visit(EmptyStmt n, Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }

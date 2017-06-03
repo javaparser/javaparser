@@ -8,7 +8,7 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.SourceRoot;
 
-import static com.github.javaparser.JavaParser.parseClassBodyDeclaration;
+import static com.github.javaparser.JavaParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class GetMetaModelGenerator extends NodeGenerator {
@@ -18,7 +18,7 @@ public class GetMetaModelGenerator extends NodeGenerator {
 
     @Override
     protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        final MethodDeclaration getMetaModelMethod = (MethodDeclaration)parseClassBodyDeclaration(f("%s public %s getMetaModel() { return JavaParserMetaModel.%s; }",
+        final MethodDeclaration getMetaModelMethod = (MethodDeclaration) parseBodyDeclaration(f("%s public %s getMetaModel() { return JavaParserMetaModel.%s; }",
                 nodeMetaModel.isRootNode() ? "" : "@Override",
                 nodeMetaModel.getClass().getSimpleName(),
                 nodeMetaModel.getMetaModelFieldName()));

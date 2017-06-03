@@ -86,9 +86,6 @@ public interface GenericVisitor<R, A> {
     R visit(Parameter n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(EmptyMemberDeclaration n, A arg);
-
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(InitializerDeclaration n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")

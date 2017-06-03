@@ -119,9 +119,6 @@ public interface VoidVisitor<A> {
     void visit(DoubleLiteralExpr n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
-    void visit(EmptyMemberDeclaration n, A arg);
-
-    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(EmptyStmt n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")

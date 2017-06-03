@@ -51,7 +51,6 @@ public class CloneVisitorTest {
         NodeList<BodyDeclaration<?>> bodyDeclarationList = new NodeList<>();
         bodyDeclarationList.add(new AnnotationMemberDeclaration().setJavadocComment("javadoc"));
         bodyDeclarationList.add(new ConstructorDeclaration().setJavadocComment("javadoc"));
-        bodyDeclarationList.add(new EmptyMemberDeclaration().setJavadocComment("javadoc"));
         bodyDeclarationList.add(new EnumConstantDeclaration().setJavadocComment("javadoc"));
         bodyDeclarationList.add(new FieldDeclaration().setJavadocComment("javadoc"));
         bodyDeclarationList.add(new InitializerDeclaration().setJavadocComment("javadoc"));

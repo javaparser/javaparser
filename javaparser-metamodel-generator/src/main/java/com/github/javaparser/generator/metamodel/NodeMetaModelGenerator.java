@@ -71,7 +71,7 @@ public class NodeMetaModelGenerator {
 
         if (typeAnalysis.isAbstract) {
             classMetaModelJavaFile.addImport(Node.class);
-            nodeMetaModelClass.addMember(parseClassBodyDeclaration(f(
+            nodeMetaModelClass.addMember(parseBodyDeclaration(f(
                     "protected %s(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {" +
                             "super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);" +
                             " }",

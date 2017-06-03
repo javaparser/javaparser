@@ -397,17 +397,6 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
-    public Boolean visit(final EmptyMemberDeclaration n, final Visitable arg) {
-        final EmptyMemberDeclaration n2 = (EmptyMemberDeclaration) arg;
-        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
-            return false;
-        if (!nodeEquals(n.getComment(), n2.getComment()))
-            return false;
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final InitializerDeclaration n, final Visitable arg) {
         final InitializerDeclaration n2 = (InitializerDeclaration) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
