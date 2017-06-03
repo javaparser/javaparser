@@ -40,6 +40,7 @@ public class ParseResultTest {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{}"));
 
         assertThat(result.getResult().isPresent()).isTrue();
+        assertThat(result.getResult().get().isBad()).isFalse();
         assertThat(result.getProblems()).isEmpty();
         assertThat(result.getTokens().isPresent()).isTrue();
 
@@ -47,10 +48,11 @@ public class ParseResultTest {
     }
 
     @Test
-    public void whenParsingFailsThenWeGetProblemsAndNoResults() {
+    public void whenParsingFailsThenWeGetProblemsAndABadResult() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class {"));
 
-        assertThat(result.getResult().isPresent()).isFalse();
+        assertThat(result.getResult().isPresent()).isTrue();
+        assertThat(result.getResult().get().isBad()).isTrue();
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);

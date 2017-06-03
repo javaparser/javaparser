@@ -21,10 +21,9 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.Node;
-
 /**
- * A node with parse problems.
+ * A node that may have parse problems.
  */
-public interface BadNode<N extends Node> {
+public interface PossiblyBadNode {
+    boolean isBad();
 }

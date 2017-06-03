@@ -12,13 +12,9 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.utils.Pair;
 
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.GeneratedJavaParser.CustomToken;
-import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 
@@ -148,4 +144,63 @@ class GeneratedJavaParserSupport {
         }
         return l.get(0).getTokenRange().get().getBegin();
     }
+
+    /**
+     * This is the code from ParseException.initialise, modified to be more horizontal.
+     */
+    static String makeMessageForParseException(ParseException exception) {
+        final StringBuilder sb = new StringBuilder("Parse error. Found ");
+        final StringBuilder expected = new StringBuilder();
+
+        int maxExpectedTokenSequenceLength = 0;
+        TreeSet<String> sortedOptions = new TreeSet<>();
+        for (int i = 0; i < exception.expectedTokenSequences.length; i++) {
+            if (maxExpectedTokenSequenceLength < exception.expectedTokenSequences[i].length) {
+                maxExpectedTokenSequenceLength = exception.expectedTokenSequences[i].length;
+            }
+            for (int j = 0; j < exception.expectedTokenSequences[i].length; j++) {
+                sortedOptions.add(exception.tokenImage[exception.expectedTokenSequences[i][j]]);
+            }
+        }
+
+        for (String option : sortedOptions) {
+            expected.append(" ").append(option);
+        }
+
+        sb.append("");
+
+        Token token = exception.currentToken.next;
+        for (int i = 0; i < maxExpectedTokenSequenceLength; i++) {
+            String tokenText = token.image;
+            String escapedTokenText = ParseException.add_escapes(tokenText);
+            if (i != 0) {
+                sb.append(" ");
+            }
+            if (token.kind == 0) {
+                sb.append(exception.tokenImage[0]);
+                break;
+            }
+            escapedTokenText = "\"" + escapedTokenText + "\"";
+            String image = exception.tokenImage[token.kind];
+            if (image.equals(escapedTokenText)) {
+                sb.append(image);
+            } else {
+                sb.append(" ")
+                        .append(escapedTokenText)
+                        .append(" ")
+                        .append(image);
+            }
+            token = token.next;
+        }
+
+        if (exception.expectedTokenSequences.length != 0) {
+            int numExpectedTokens = exception.expectedTokenSequences.length;
+            sb.append(", expected")
+                    .append(numExpectedTokens == 1 ? "" : " one of ")
+                    .append(expected.toString());
+        }
+        return sb.toString();
+
+    }
+
 }

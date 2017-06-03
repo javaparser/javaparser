@@ -131,16 +131,6 @@ public final class JavaParser {
 
             return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
-        } catch (ParseException p) {
-            TokenRange tokenRange = null;
-            if (p.currentToken != null) {
-                if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
-                    final JavaToken token = ((GeneratedJavaParser.CustomToken) p.currentToken).javaToken;
-                    tokenRange = new TokenRange(token, token);
-                }
-            }
-            parser.problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
-            return new ParseResult<>(null, parser.problems, parser.getTokens(), parser.getCommentsCollection());
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
             parser.problems.add(new Problem(message, null, e));
@@ -152,64 +142,6 @@ public final class JavaParser {
                 // Since we're done parsing and have our result, we don't care about any errors.
             }
         }
-    }
-
-    /**
-     * This is the code from ParseException.initialise, modified to be more horizontal.
-     */
-    private String makeMessageForParseException(ParseException exception) {
-        final StringBuilder sb = new StringBuilder("Parse error. Found ");
-        final StringBuilder expected = new StringBuilder();
-
-        int maxExpectedTokenSequenceLength = 0;
-        TreeSet<String> sortedOptions = new TreeSet<>();
-        for (int i = 0; i < exception.expectedTokenSequences.length; i++) {
-            if (maxExpectedTokenSequenceLength < exception.expectedTokenSequences[i].length) {
-                maxExpectedTokenSequenceLength = exception.expectedTokenSequences[i].length;
-            }
-            for (int j = 0; j < exception.expectedTokenSequences[i].length; j++) {
-                sortedOptions.add(exception.tokenImage[exception.expectedTokenSequences[i][j]]);
-            }
-        }
-
-        for (String option : sortedOptions) {
-            expected.append(" ").append(option);
-        }
-
-        sb.append("");
-
-        Token token = exception.currentToken.next;
-        for (int i = 0; i < maxExpectedTokenSequenceLength; i++) {
-            String tokenText = token.image;
-            String escapedTokenText = ParseException.add_escapes(tokenText);
-            if (i != 0) {
-                sb.append(" ");
-            }
-            if (token.kind == 0) {
-                sb.append(exception.tokenImage[0]);
-                break;
-            }
-            escapedTokenText = "\"" + escapedTokenText + "\"";
-            String image = exception.tokenImage[token.kind];
-            if (image.equals(escapedTokenText)) {
-                sb.append(image);
-            } else {
-                sb.append(" ")
-                        .append(escapedTokenText)
-                        .append(" ")
-                        .append(image);
-            }
-            token = token.next;
-        }
-
-        if (exception.expectedTokenSequences.length != 0) {
-            int numExpectedTokens = exception.expectedTokenSequences.length;
-            sb.append(", expected")
-                    .append(numExpectedTokens == 1 ? "" : " one of ")
-                    .append(expected.toString());
-        }
-        return sb.toString();
-
     }
 
     /**

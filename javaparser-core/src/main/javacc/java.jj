@@ -75,6 +75,21 @@ final class GeneratedJavaParser {
         token_source.reset();
     }
 
+    void recover(int recoveryTokenType, ParseException p) {
+        TokenRange tokenRange = null;
+        if (p.currentToken != null) {
+            if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
+                final JavaToken token = ((GeneratedJavaParser.CustomToken) p.currentToken).javaToken;
+                tokenRange = new TokenRange(token, token);
+            }
+        }
+        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+        Token t;
+        do {
+            t = getNextToken();
+        } while (t.kind != recoveryTokenType);
+    }
+
     /**
      * Return the list of tokens that have been encountered while parsing code using
      * this parser.
@@ -659,25 +674,31 @@ CompilationUnit CompilationUnit():
 	ModuleDeclaration module = null;
 }
 {
-    ( ";" )*
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
-    (
-        modifier = Modifiers()
+    try {
+        (  ";" )*
+        [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
         (
-            tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = EnumDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-        |
-            module = ModuleDeclaration(modifier)
-        |
-            ";"
-        )
-    )*
-    (<EOF> | "\u001A" /** ctrl+z char **/)
-    { return new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module); }
+            in = ImportDeclaration() { imports = add(imports, in); }| ";" )*
+        (
+            modifier = Modifiers()
+            (
+                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = EnumDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+            |
+                module = ModuleDeclaration(modifier)
+            |
+                ";"
+            )
+        )*
+        (<EOF> | "\u001A" /** ctrl+z char **/)
+        { return new CompilationUnit(range(token_source.getHomeToken(), token()), false, pakage, imports, types, module); }
+    } catch (ParseException e) {
+        recover(EOF, e);
+        return new CompilationUnit(range(token_source.getHomeToken(), token()), true, null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
+    }
 }
 
 PackageDeclaration PackageDeclaration():

@@ -23,7 +23,7 @@ package com.github.javaparser.ast;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -33,6 +33,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.PossiblyBadNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -43,6 +44,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
+
 import javax.annotation.Generated;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,14 +56,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.TokenRange;
 
 /**
  * <p>
@@ -77,7 +77,7 @@ import com.github.javaparser.TokenRange;
  * @see ImportDeclaration
  * @see TypeDeclaration
  */
-public final class CompilationUnit extends Node {
+public class CompilationUnit extends Node implements PossiblyBadNode {
 
     private PackageDeclaration packageDeclaration;
 
@@ -90,23 +90,27 @@ public final class CompilationUnit extends Node {
     @InternalProperty
     private Storage storage;
 
+    @InternalProperty
+    private boolean isBad;
+
     public CompilationUnit() {
-        this(null, null, new NodeList<>(), new NodeList<>(), null);
+        this(null, false, null, new NodeList<>(), new NodeList<>(), null);
     }
 
     public CompilationUnit(String packageDeclaration) {
-        this(null, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>(), null);
+        this(null, false, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>(), null);
     }
 
     @AllFieldsConstructor
     public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
-        this(null, packageDeclaration, imports, types, module);
+        this(null, false, packageDeclaration, imports, types, module);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
+    public CompilationUnit(TokenRange tokenRange, boolean isBad, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(tokenRange);
+        this.isBad = isBad;
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
@@ -545,6 +549,11 @@ public final class CompilationUnit extends Node {
     public CompilationUnit setStorage(Path path) {
         this.storage = new Storage(this, path);
         return this;
+    }
+
+    @Override
+    public boolean isBad() {
+        return isBad;
     }
 
     /**

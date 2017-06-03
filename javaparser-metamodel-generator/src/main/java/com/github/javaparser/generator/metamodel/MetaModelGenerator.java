@@ -53,6 +53,7 @@ public class MetaModelGenerator {
         //
         add(ArrayCreationLevel.class);
         add(CompilationUnit.class);
+        add(BadCompilationUnit.class);
         add(PackageDeclaration.class);
 
         add(AnnotationDeclaration.class);

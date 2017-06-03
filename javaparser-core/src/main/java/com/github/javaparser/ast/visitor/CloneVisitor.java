@@ -43,7 +43,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         PackageDeclaration packageDeclaration = cloneNode(n.getPackageDeclaration(), arg);
         NodeList<TypeDeclaration<?>> types = cloneList(n.getTypes(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        CompilationUnit r = new CompilationUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
+        CompilationUnit r = new CompilationUnit(n.getTokenRange().orElse(null), false, packageDeclaration, imports, types, module);
         r.setComment(comment);
         return r;
     }
