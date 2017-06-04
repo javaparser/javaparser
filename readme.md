@@ -32,7 +32,7 @@ The project binaries are available in Maven Central.  Just add the following to 
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.2.5</version>
+    <version>3.2.6</version>
 </dependency>
 ```
 
