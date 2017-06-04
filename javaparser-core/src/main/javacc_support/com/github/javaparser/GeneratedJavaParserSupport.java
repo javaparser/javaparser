@@ -61,29 +61,11 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
-    static <T> List<T> add(int pos, List<T> list, T obj) {
-        if (list == null) {
-            list = new LinkedList<T>();
-        }
-        list.add(pos, obj);
-        return list;
-    }
-
     static void addModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
             generatedJavaParser.addProblem("Duplicated modifier");
         }
         modifiers.add(mod);
-    }
-
-    static void addMultipleModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, EnumSet<Modifier> mods) {
-        if (mods == null)
-            return;
-        for (Modifier m : mods)
-            if (modifiers.contains(m))
-                generatedJavaParser.addProblem("Duplicated modifier");
-        for (Modifier m : mods)
-            modifiers.add(m);
     }
 
     static TokenRange range(JavaToken begin, JavaToken end) {
@@ -107,7 +89,7 @@ class GeneratedJavaParserSupport {
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-            ret = new LambdaExpr(ret.getTokenRange().get(), params, lambdaBody, false);
+            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
             ret.setTokenRange(range(ret, lambdaBody));
