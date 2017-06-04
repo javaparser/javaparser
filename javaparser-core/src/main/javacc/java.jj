@@ -659,21 +659,24 @@ CompilationUnit CompilationUnit():
 	ModuleDeclaration module = null;
 }
 {
-    ( ";" )*
+    ( LOOKAHEAD(2) ";" )*
     [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
     (
-        modifier = Modifiers()
+        in = ImportDeclaration() { imports = add(imports, in); }
+    |
         (
-            tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = EnumDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-        |
-            module = ModuleDeclaration(modifier)
-        |
-            ";"
+            modifier = Modifiers()
+            (
+                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = EnumDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+            |
+                module = ModuleDeclaration(modifier)
+            |
+                ";"
+            )
         )
     )*
     (<EOF> | "\u001A" /** ctrl+z char **/)
@@ -934,13 +937,11 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 	      ret = ClassOrInterfaceDeclaration(modifier)
 	    |
 	      ret = EnumDeclaration(modifier)
-	    |
+	    | LOOKAHEAD("@" "interface")
 	      ret = AnnotationTypeDeclaration(modifier)
-	    |
-	      LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
+	    | LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
 	      ret = ConstructorDeclaration(modifier)
-	    |
-	      LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
+	    | LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
 	      ret = FieldDeclaration(modifier)
 	    |
 	      ret = MethodDeclaration(modifier)
