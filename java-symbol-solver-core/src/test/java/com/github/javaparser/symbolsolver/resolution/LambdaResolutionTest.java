@@ -20,6 +20,7 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -158,7 +159,19 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang.String", type.describe());
     }
 
+    @Test
+    public void typeOfVoidLambda() throws ParseException {
+        CompilationUnit cu = parseSample("LambdaVoid");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaEmpty");
+        ReturnStmt returnStmt = Navigator.findReturnStmt(method);
+        Expression expression = returnStmt.getExpression().get();
+        LambdaExpr lambdaExpr = Navigator.findNodeOfGivenClass(expression, LambdaExpr.class);
 
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
+        Type type = javaParserFacade.getType(lambdaExpr);
+        assertEquals("void", type.describe());
+    }
 
 
 }
