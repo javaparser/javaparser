@@ -676,18 +676,21 @@ CompilationUnit CompilationUnit():
 {
     try {( LOOKAHEAD(2)";" )*
     [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    ( in = ImportDeclaration() { imports = add(imports, in); } 
+    (
+        in = ImportDeclaration() { imports = add(imports, in); } 
     |
-        (modifier = Modifiers()
         (
-            tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = EnumDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-        |
-            module = ModuleDeclaration(modifier)|
-        ";"
+            modifier = Modifiers()
+            (
+                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = EnumDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+            |
+                module = ModuleDeclaration(modifier)
+            |
+                ";"
             )
         )
     )*
