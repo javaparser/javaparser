@@ -1,5 +1,7 @@
 package com.github.javaparser;
 
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -7,7 +9,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class TokenRange {
     public static final TokenRange INVALID = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
-    
+
     private final JavaToken begin;
     private final JavaToken end;
 
@@ -34,5 +36,23 @@ public class TokenRange {
 
     public TokenRange withEnd(JavaToken end) {
         return new TokenRange(begin, assertNotNull(end));
+    }
+
+    @Override
+    public String toString() {
+        JavaToken t = begin;
+        StringBuilder result = new StringBuilder();
+        while (true) {
+            result.append(t.getText());
+            if (t == end) {
+                return result.toString();
+            }
+            Optional<JavaToken> next = t.getNextToken();
+            if (next.isPresent()) {
+                t = next.get();
+            } else {
+                return result.toString();
+            }
+        }
     }
 }
