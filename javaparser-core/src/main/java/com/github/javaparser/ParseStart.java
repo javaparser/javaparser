@@ -55,7 +55,7 @@ public interface ParseStart<R> {
     ParseStart<BodyDeclaration<?>> ANNOTATION_BODY = GeneratedJavaParser::AnnotationBodyDeclaration;
     ParseStart<BodyDeclaration<?>> CLASS_BODY = GeneratedJavaParser::ClassOrInterfaceBodyDeclaration;
     ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = GeneratedJavaParser::ClassOrInterfaceType;
-    ParseStart<Type> TYPE = GeneratedJavaParser::Type;
+    ParseStart<Type> TYPE = GeneratedJavaParser::ResultType;
     ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpression;
     ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocation;
     ParseStart<Name> NAME = GeneratedJavaParser::Name;
