@@ -1,3 +1,11 @@
+Version 3.2.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/46?closed=1)
+* `EmptyMemberDeclaration` is gone! 
+It was deprecated for a while because it it was in the AST, but doesn't have any meaning in a Java program. 
+`EmptyStmt` was also deprecated, but that has been reverted. 
+This node *does* have meaning.
+
 Version 3.2.5
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/45?closed=1)

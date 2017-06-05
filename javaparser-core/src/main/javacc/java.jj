@@ -674,28 +674,25 @@ CompilationUnit CompilationUnit():
 	ModuleDeclaration module = null;
 }
 {
-    try {
-        (  ";" )*
-        [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    try {( LOOKAHEAD(2)";" )*
+    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    ( in = ImportDeclaration() { imports = add(imports, in); } 
+    |
+        (modifier = Modifiers()
         (
-            in = ImportDeclaration() { imports = add(imports, in); }| ";" )*
-        (
-            modifier = Modifiers()
-            (
-                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-            |
-                tn = EnumDeclaration(modifier) { types = add(types, tn); }
-            |
-                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-            |
-                module = ModuleDeclaration(modifier)
-            |
-                ";"
+            tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+        |
+            tn = EnumDeclaration(modifier) { types = add(types, tn); }
+        |
+            tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+        |
+            module = ModuleDeclaration(modifier)|
+        ";"
             )
-        )*
-        (<EOF> | "\u001A" /** ctrl+z char **/)
-        { return new CompilationUnit(range(token_source.getHomeToken(), token()), false, pakage, imports, types, module); }
-    } catch (ParseException e) {
+        )
+    )*
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new CompilationUnit(range(token_source.getHomeToken(), token()), false,pakage, imports, types, module); }} catch (ParseException e) {
         recover(EOF, e);
         return new CompilationUnit(range(token_source.getHomeToken(), token()), true, null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
     }
@@ -955,13 +952,11 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 	      ret = ClassOrInterfaceDeclaration(modifier)
 	    |
 	      ret = EnumDeclaration(modifier)
-	    |
+	    | LOOKAHEAD("@" "interface")
 	      ret = AnnotationTypeDeclaration(modifier)
-	    |
-	      LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
+	    | LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
 	      ret = ConstructorDeclaration(modifier)
-	    |
-	      LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
+	    | LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
 	      ret = FieldDeclaration(modifier)
 	    |
 	      ret = MethodDeclaration(modifier)
