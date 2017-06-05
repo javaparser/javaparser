@@ -33,7 +33,6 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.PossiblyBadNode;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -44,7 +43,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
-
 import javax.annotation.Generated;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -56,12 +54,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -77,7 +75,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see ImportDeclaration
  * @see TypeDeclaration
  */
-public class CompilationUnit extends Node implements PossiblyBadNode {
+public class CompilationUnit extends Node {
 
     private PackageDeclaration packageDeclaration;
 
@@ -90,27 +88,23 @@ public class CompilationUnit extends Node implements PossiblyBadNode {
     @InternalProperty
     private Storage storage;
 
-    @InternalProperty
-    private boolean isBad;
-
     public CompilationUnit() {
-        this(null, false, null, new NodeList<>(), new NodeList<>(), null);
+        this(null, null, new NodeList<>(), new NodeList<>(), null);
     }
 
     public CompilationUnit(String packageDeclaration) {
-        this(null, false, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>(), null);
+        this(null, new PackageDeclaration(new Name(packageDeclaration)), new NodeList<>(), new NodeList<>(), null);
     }
 
     @AllFieldsConstructor
     public CompilationUnit(PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
-        this(null, false, packageDeclaration, imports, types, module);
+        this(null, packageDeclaration, imports, types, module);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CompilationUnit(TokenRange tokenRange, boolean isBad, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
+    public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
         super(tokenRange);
-        this.isBad = isBad;
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
@@ -549,11 +543,6 @@ public class CompilationUnit extends Node implements PossiblyBadNode {
     public CompilationUnit setStorage(Path path) {
         this.storage = new Storage(this, path);
         return this;
-    }
-
-    @Override
-    public boolean isBad() {
-        return isBad;
     }
 
     /**

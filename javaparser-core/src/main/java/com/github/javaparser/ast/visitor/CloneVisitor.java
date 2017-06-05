@@ -43,7 +43,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         PackageDeclaration packageDeclaration = cloneNode(n.getPackageDeclaration(), arg);
         NodeList<TypeDeclaration<?>> types = cloneList(n.getTypes(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        CompilationUnit r = new CompilationUnit(n.getTokenRange().orElse(null), false, packageDeclaration, imports, types, module);
+        CompilationUnit r = new CompilationUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
         r.setComment(comment);
         return r;
     }
@@ -1042,6 +1042,15 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleOpensStmt r = new ModuleOpensStmt(n.getTokenRange().orElse(null), name, moduleNames);
+        r.setComment(comment);
+        return r;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
+    public Visitable visit(UnparsableStmt n, Object arg) {
+        Comment comment = cloneNode(n.getComment(), arg);
+        UnparsableStmt r = new UnparsableStmt(n.getTokenRange().orElse(null));
         r.setComment(comment);
         return r;
     }

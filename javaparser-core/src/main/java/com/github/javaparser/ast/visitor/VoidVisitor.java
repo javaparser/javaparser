@@ -303,4 +303,7 @@ public interface VoidVisitor<A> {
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ModuleOpensStmt n, A arg);
+
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    void visit(UnparsableStmt n, A arg);
 }

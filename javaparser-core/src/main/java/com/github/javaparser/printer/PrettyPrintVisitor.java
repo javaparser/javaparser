@@ -39,6 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.Node.Parsedness.*;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
@@ -176,6 +177,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final CompilationUnit n, final Void arg) {
         printJavaComment(n.getComment(), arg);
+        if(n.getParsed()== UNPARSABLE){
+            printer.println("???");
+            return;
+        }
 
         if (n.getPackageDeclaration().isPresent()) {
             n.getPackageDeclaration().get().accept(this, arg);
@@ -1426,6 +1431,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
         printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
         printer.println(";");
+    }
+
+    @Override
+    public void visit(UnparsableStmt n, Void arg) {
+        printer.print("???;");
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {

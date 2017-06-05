@@ -55,6 +55,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
 import static com.github.javaparser.JavaToken.INVALID;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.GeneratedJavaParser.*;
@@ -75,19 +76,27 @@ final class GeneratedJavaParser {
         token_source.reset();
     }
 
-    void recover(int recoveryTokenType, ParseException p) {
-        TokenRange tokenRange = null;
+    TokenRange recover(int recoveryTokenType, ParseException p) {
+        JavaToken begin = null;
         if (p.currentToken != null) {
             if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
-                final JavaToken token = ((GeneratedJavaParser.CustomToken) p.currentToken).javaToken;
-                tokenRange = new TokenRange(token, token);
+                begin = token();
             }
         }
-        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
         Token t;
         do {
             t = getNextToken();
         } while (t.kind != recoveryTokenType);
+
+        JavaToken end = token();
+        
+        TokenRange tokenRange=null;
+        if(begin!=null && end!=null){
+            tokenRange=range(begin, end);
+        }
+        
+        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+        return tokenRange;
     }
 
     /**
@@ -696,10 +705,12 @@ CompilationUnit CompilationUnit():
             )
         )*
         (<EOF> | "\u001A" /** ctrl+z char **/)
-        { return new CompilationUnit(range(token_source.getHomeToken(), token()), false,pakage, imports, types, module); }
+        { return new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module); }
     } catch (ParseException e) {
         recover(EOF, e);
-        return new CompilationUnit(range(token_source.getHomeToken(), token()), true, null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
+        final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
+        compilationUnit.setParsed(UNPARSABLE);
+        return compilationUnit;
     }
 }
 
@@ -2111,41 +2122,45 @@ Statement Statement():
 	Statement ret;
 }
 {
-  (
-	  LOOKAHEAD(2)
-	  ret = LabeledStatement()
-	|
-	  ret = AssertStatement()
-	|
-	  ret = Block()
-	|
-	  ret = EmptyStatement()
-	|
-	  ret = StatementExpression()
-	|
-	  ret = SwitchStatement()
-	|
-	  ret = IfStatement()
-	|
-	  ret = WhileStatement()
-	|
-	  ret = DoStatement()
-	|
-	  ret = ForStatement()
-	|
-	  ret = BreakStatement()
-	|
-	  ret = ContinueStatement()
-	|
-	  ret = ReturnStatement()
-	|
-	  ret = ThrowStatement()
-	|
-	  ret = SynchronizedStatement()
-	|
-	  ret = TryStatement()
-  )
-  { return ret; }
+    try {
+        ( LOOKAHEAD(2)
+            ret = LabeledStatement()
+        |
+            ret = AssertStatement()
+        |
+            ret = Block()
+        |
+            ret = EmptyStatement()
+        |
+            ret = StatementExpression()
+        |
+            ret = SwitchStatement()
+        |
+            ret = IfStatement()
+        |
+            ret = WhileStatement()
+        |
+            ret = DoStatement()
+        |
+            ret = ForStatement()
+        |
+            ret = BreakStatement()
+        |
+            ret = ContinueStatement()
+        |
+            ret = ReturnStatement()
+        |
+            ret = ThrowStatement()
+        |
+            ret = SynchronizedStatement()
+        |
+            ret = TryStatement()
+        )
+        { return ret; }
+    } catch (ParseException e) {
+        TokenRange errorRange = recover(SEMICOLON, e);
+        return new UnparsableStatement(errorRange);
+    }
 }
 
 AssertStmt AssertStatement():

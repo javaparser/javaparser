@@ -36,7 +36,6 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -566,6 +565,11 @@ public class ConcreteSyntaxModel {
         ));
 
         concreteSyntaxModelByClass.put(EmptyStmt.class, CsmElement.sequence(
+                CsmElement.comment(),
+                CsmElement.token(GeneratedJavaParserConstants.SEMICOLON)
+        ));
+
+        concreteSyntaxModelByClass.put(UnparsableStmt.class, CsmElement.sequence(
                 CsmElement.comment(),
                 CsmElement.token(GeneratedJavaParserConstants.SEMICOLON)
         ));

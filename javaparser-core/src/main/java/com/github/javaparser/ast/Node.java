@@ -42,6 +42,7 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import javax.annotation.Generated;
 import java.util.*;
+import static com.github.javaparser.ast.Node.Parsedness.*;
 import static java.util.Collections.unmodifiableList;
 import com.github.javaparser.ast.Node;
 
@@ -110,6 +111,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         SELF_PROPAGATING
     }
 
+    public enum Parsedness {
+
+        PARSED, UNPARSABLE
+    }
+
     /**
      * This can be used to sort nodes on position.
      */
@@ -152,6 +158,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     @InternalProperty
     private List<AstObserver> observers = new ArrayList<>();
+
+    @InternalProperty
+    private Parsedness parsed = PARSED;
 
     protected Node(TokenRange tokenRange) {
         setTokenRange(tokenRange);
@@ -568,5 +577,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NodeMetaModel getMetaModel() {
         return JavaParserMetaModel.nodeMetaModel;
+    }
+
+    /**
+     * @return whether this node was successfully parsed or not.
+     * If it was not, only the range and tokenRange fields will be valid. 
+     */
+    public Parsedness getParsed() {
+        return parsed;
+    }
+
+    /**
+     * Used by the parser to flag unparsable nodes.
+     */
+    public Node setParsed(Parsedness parsed) {
+        this.parsed = parsed;
+        return this;
     }
 }

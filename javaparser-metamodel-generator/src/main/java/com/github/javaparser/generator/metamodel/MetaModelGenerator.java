@@ -1,6 +1,5 @@
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -53,7 +52,6 @@ public class MetaModelGenerator {
         //
         add(ArrayCreationLevel.class);
         add(CompilationUnit.class);
-        add(BadCompilationUnit.class);
         add(PackageDeclaration.class);
 
         add(AnnotationDeclaration.class);
@@ -130,6 +128,7 @@ public class MetaModelGenerator {
         add(TryStmt.class);
         add(LocalClassDeclarationStmt.class);
         add(WhileStmt.class);
+        add(UnparsableStmt.class);
 
         add(ArrayType.class);
         add(ClassOrInterfaceType.class);
