@@ -84,17 +84,18 @@ final class GeneratedJavaParser {
             }
         }
         Token t;
+        boolean done = false;
         do {
             t = getNextToken();
-        } while (t.kind != recoveryTokenType);
+        } while(t.kind != recoveryTokenType && t.kind!=EOF);
 
         JavaToken end = token();
-        
+
         TokenRange tokenRange=null;
         if(begin!=null && end!=null){
             tokenRange=range(begin, end);
         }
-        
+
         problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
         return tokenRange;
     }
@@ -2159,7 +2160,7 @@ Statement Statement():
         { return ret; }
     } catch (ParseException e) {
         TokenRange errorRange = recover(SEMICOLON, e);
-        return new UnparsableStatement(errorRange);
+        return new UnparsableStmt(errorRange);
     }
 }
 
@@ -2208,18 +2209,21 @@ Statement BlockStatement():
 	ModifierHolder modifier;
 }
 {
-  (
-	  LOOKAHEAD( Modifiers() ("class" | "interface") )
-	  modifier = Modifiers()
-	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getTokenRange().get().getBegin(), token()), typeDecl); }
-	|
-  	  LOOKAHEAD(VariableDeclarationExpression() )
-	  expr = VariableDeclarationExpression() ";"
-	  { ret = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); } 
-    |
-	  ret = Statement()
-  )
-  { return ret; }
+    try {
+        ( LOOKAHEAD( Modifiers() ("class" | "interface") )
+            modifier = Modifiers()
+            typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getTokenRange().get().getBegin(), token()), typeDecl); }
+        | LOOKAHEAD(VariableDeclarationExpression() )
+            expr = VariableDeclarationExpression() ";"
+            { ret = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); } 
+        |
+            ret = Statement()
+        )
+        { return ret; }
+    } catch (ParseException e) {
+        TokenRange errorRange = recover(SEMICOLON, e);
+        return new UnparsableStmt(errorRange);
+    }
 }
 
 VariableDeclarationExpr VariableDeclarationExpression():

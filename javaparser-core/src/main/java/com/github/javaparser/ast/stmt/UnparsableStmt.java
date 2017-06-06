@@ -7,8 +7,9 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import javax.annotation.Generated;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.UnparsableStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.UnparsableStmtMetaModel;
+import static com.github.javaparser.ast.Node.Parsedness.*;
 
 /**
  * A statement that had parse errors.
@@ -27,7 +28,7 @@ public class UnparsableStmt extends Statement {
         super(tokenRange);
         customInitialization();
     }
-    
+
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
@@ -54,7 +55,12 @@ public class UnparsableStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public UnparsableStatementMetaModel getMetaModel() {
-        return JavaParserMetaModel.unparsableStatementMetaModel;
+    public UnparsableStmtMetaModel getMetaModel() {
+        return JavaParserMetaModel.unparsableStmtMetaModel;
+    }
+
+    @Override
+    public Parsedness getParsed() {
+        return UNPARSABLE;
     }
 }

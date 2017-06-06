@@ -338,7 +338,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(unaryExprMetaModel);
         nodeMetaModels.add(unionTypeMetaModel);
         nodeMetaModels.add(unknownTypeMetaModel);
-        nodeMetaModels.add(unparsableStatementMetaModel);
+        nodeMetaModels.add(unparsableStmtMetaModel);
         nodeMetaModels.add(variableDeclarationExprMetaModel);
         nodeMetaModels.add(variableDeclaratorMetaModel);
         nodeMetaModels.add(voidTypeMetaModel);
@@ -910,7 +910,7 @@ public final class JavaParserMetaModel {
 
     public static final WhileStmtMetaModel whileStmtMetaModel = new WhileStmtMetaModel(Optional.of(statementMetaModel));
 
-    public static final UnparsableStatementMetaModel unparsableStatementMetaModel = new UnparsableStatementMetaModel(Optional.of(statementMetaModel));
+    public static final UnparsableStmtMetaModel unparsableStmtMetaModel = new UnparsableStmtMetaModel(Optional.of(statementMetaModel));
 
     public static final ArrayTypeMetaModel arrayTypeMetaModel = new ArrayTypeMetaModel(Optional.of(referenceTypeMetaModel));
 
