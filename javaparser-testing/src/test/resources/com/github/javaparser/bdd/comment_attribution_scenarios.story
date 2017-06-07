@@ -33,6 +33,7 @@ public class ClassWithOrphanComments {
     //a first comment floating in the class
 
     //comment associated to the method
+    /**Javadoc associated with the class*/
     void foo(){
         /*comment floating inside the method*/
     }
