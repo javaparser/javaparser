@@ -147,7 +147,6 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (ref.isSolved()) {
                             return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
                         }
-                        
                     }
                 }
             }
