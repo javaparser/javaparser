@@ -130,37 +130,33 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
             // look into type imports
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (!importDecl.isStatic()) {
-                    if (!importDecl.isAsterisk()) {
-                        String qName = importDecl.getNameAsString();
-                        boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
-                        boolean found = !defaultPackage && importDecl.getName().getIdentifier().equals(name);
-                        if (!found) {
-                            if (prefix != null) {
-                                found = qName.endsWith("." + prefix);
-                                if (found) {
-                                    qName = qName + name.substring(dotPos);
-                                }
+                if (!importDecl.isAsterisk()) {
+                    String qName = importDecl.getNameAsString();
+                    boolean defaultPackage = !importDecl.getName().getQualifier().isPresent();
+                    boolean found = !defaultPackage && importDecl.getName().getIdentifier().equals(name);
+                    if (!found) {
+                        if (prefix != null) {
+                            found = qName.endsWith("." + prefix);
+                            if (found) {
+                                qName = qName + name.substring(dotPos);
                             }
                         }
-                        if (found) {
-                            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                            if (ref.isSolved()) {
-                                return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
-                            }
+                    }
+                    if (found) {
+                        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                        if (ref.isSolved()) {
+                            return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
                         }
                     }
                 }
             }
             // look into type imports on demand
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if (!importDecl.isStatic()) {
-                    if (importDecl.isAsterisk()) {
-                        String qName = importDecl.getNameAsString() + "." + name;
-                        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
-                        if (ref.isSolved()) {
-                            return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
-                        }
+                if (importDecl.isAsterisk()) {
+                    String qName = importDecl.getNameAsString() + "." + name;
+                    SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                    if (ref.isSolved()) {
+                        return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
                     }
                 }
             }

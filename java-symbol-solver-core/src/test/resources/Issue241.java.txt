@@ -1,0 +1,7 @@
+import static issue241.TypeWithMemberType.MemberInterface; 
+
+public class Main {
+
+	private MemberInterface foo;
+
+}
