@@ -23,9 +23,12 @@ Consider this:
 
 ```java
 int a = 0;
-while (true) {
-    String a = "hello!";
-    Object foo = a + 1;
+
+void foo() {
+    while (true) {
+        String a = "hello!";
+        Object foo = a + 1;
+    }
 }
 ```
 
