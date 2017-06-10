@@ -64,7 +64,7 @@ public class JavaParserFacade {
         logger.addHandler(consoleHandler);
     }
 
-    private static Map<TypeSolver, JavaParserFacade> instances = new HashMap<>();
+    private static Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
     private TypeSolver typeSolver;
     private SymbolSolver symbolSolver;
     private Map<Node, Type> cacheWithLambdasSolved = new IdentityHashMap<>();
@@ -86,10 +86,7 @@ public class JavaParserFacade {
     }
 
     public static JavaParserFacade get(TypeSolver typeSolver) {
-        if (!instances.containsKey(typeSolver)) {
-            instances.put(typeSolver, new JavaParserFacade(typeSolver));
-        }
-        return instances.get(typeSolver);
+        return instances.computeIfAbsent(typeSolver, JavaParserFacade::new);
     }
 
     /**
