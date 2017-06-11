@@ -52,7 +52,7 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         body.addStatement("customInitialization();");
 
-        replaceWhenSameSignature(nodeCoid, constructor);
+        addOrReplaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(TokenRange.class);
         annotateGenerated(constructor);
     }

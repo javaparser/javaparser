@@ -1986,4 +1986,16 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         return null;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
+    public R visit(UnparsableStmt n, A arg) {
+        R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
 }
