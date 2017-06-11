@@ -23,7 +23,7 @@ package com.github.javaparser.ast;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -57,11 +57,9 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.TokenRange;
 
 /**
  * <p>
@@ -77,7 +75,7 @@ import com.github.javaparser.TokenRange;
  * @see ImportDeclaration
  * @see TypeDeclaration
  */
-public final class CompilationUnit extends Node {
+public class CompilationUnit extends Node {
 
     private PackageDeclaration packageDeclaration;
 
