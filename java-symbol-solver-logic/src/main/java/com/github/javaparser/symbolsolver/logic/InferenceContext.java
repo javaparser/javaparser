@@ -148,7 +148,11 @@ public class InferenceContext {
                 ((InferenceVariableType) constraintType.getBound()).registerEquivalentType(formalType);
             }
         } else if (actualType.isPrimitive()) {
-            registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
+            if (formalType.isPrimitive()) {
+                // nothing to do
+            } else {
+                registerCorrespondance(formalType, objectProvider.byName(actualType.asPrimitive().getBoxTypeQName()));
+            }
         } else {
             throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
         }
