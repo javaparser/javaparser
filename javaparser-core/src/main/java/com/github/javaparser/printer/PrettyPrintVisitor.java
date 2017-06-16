@@ -39,6 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.Node.Parsedness.*;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
@@ -53,7 +54,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
-        printer = new SourcePrinter(configuration.getIndent());
+        printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
     }
 
     public String getSource() {
@@ -176,6 +177,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final CompilationUnit n, final Void arg) {
         printJavaComment(n.getComment(), arg);
+        if(n.getParsed()== UNPARSABLE){
+            printer.println("???");
+            return;
+        }
 
         if (n.getPackageDeclaration().isPresent()) {
             n.getPackageDeclaration().get().accept(this, arg);
@@ -376,12 +381,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printAnnotations(n.getAnnotations(), false, arg);
         boolean isFirst = true;
         for (ReferenceType element : n.getElements()) {
-            element.accept(this, arg);
             if (isFirst) {
                 isFirst = false;
             } else {
                 printer.print(" & ");
             }
+            element.accept(this, arg);
         }
     }
 
@@ -577,8 +582,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final FieldAccessExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        if (n.getScope().isPresent())
-            n.getScope().get().accept(this, arg);
+        n.getScope().accept(this, arg);
         printer.print(".");
         n.getName().accept(this, arg);
     }
@@ -756,9 +760,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
-        if (n.isDefault()) {
-            printer.print("default ");
-        }
         printTypeParameters(n.getTypeParameters(), arg);
         if (!isNullOrEmpty(n.getTypeParameters())) {
             printer.print(" ");
@@ -803,14 +804,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         printModifiers(n.getModifiers());
-        if (n.getType() != null) {
-            n.getType().accept(this, arg);
-        }
+        n.getType().accept(this, arg);
         if (n.isVarArgs()) {
             printAnnotations(n.getVarArgsAnnotations(), false, arg);
             printer.print("...");
         }
-        printer.print(" ");
+        if (!(n.getType() instanceof UnknownType)) {
+            printer.print(" ");
+        }
         n.getName().accept(this, arg);
     }
 
@@ -1026,12 +1027,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.unindent();
             printer.println("}");
         }
-    }
-
-    @Override
-    public void visit(final EmptyMemberDeclaration n, final Void arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print(";");
     }
 
     @Override
@@ -1436,6 +1431,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
         printPrePostFixOptionalList(n.getModuleNames(), arg, " to ", ", ", "");
         printer.println(";");
+    }
+
+    @Override
+    public void visit(UnparsableStmt n, Void arg) {
+        printer.print("???;");
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {

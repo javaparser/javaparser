@@ -1,6 +1,5 @@
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -11,6 +10,8 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import com.github.javaparser.printer.PrettyPrinter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
@@ -57,7 +58,6 @@ public class MetaModelGenerator {
         add(AnnotationMemberDeclaration.class);
         add(ClassOrInterfaceDeclaration.class);
         add(ConstructorDeclaration.class);
-        add(EmptyMemberDeclaration.class);
         add(EnumConstantDeclaration.class);
         add(EnumDeclaration.class);
         add(FieldDeclaration.class);
@@ -128,6 +128,7 @@ public class MetaModelGenerator {
         add(TryStmt.class);
         add(LocalClassDeclarationStmt.class);
         add(WhileStmt.class);
+        add(UnparsableStmt.class);
 
         add(ArrayType.class);
         add(ClassOrInterfaceType.class);
@@ -154,6 +155,7 @@ public class MetaModelGenerator {
         }
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root);
+        sourceRoot.setPrinter(new PrettyPrinter(new PrettyPrinterConfiguration().setEndOfLineCharacter("\n"))::print);
 
         new MetaModelGenerator().run(sourceRoot);
 

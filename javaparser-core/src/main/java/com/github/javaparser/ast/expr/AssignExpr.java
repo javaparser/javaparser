@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -71,11 +73,14 @@ public final class AssignExpr extends Expression {
         this(null, target, value, operator);
     }
 
-    public AssignExpr(Range range, Expression target, Expression value, Operator operator) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public AssignExpr(TokenRange tokenRange, Expression target, Expression value, Operator operator) {
+        super(tokenRange);
         setTarget(target);
         setValue(value);
         setOperator(operator);
+        customInitialization();
     }
 
     @Override
@@ -88,27 +93,38 @@ public final class AssignExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
         return operator;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getTarget() {
         return target;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getValue() {
         return value;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setOperator(final Operator operator) {
         assertNotNull(operator);
+        if (operator == this.operator) {
+            return (AssignExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setTarget(final Expression target) {
         assertNotNull(target);
+        if (target == this.target) {
+            return (AssignExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
         if (this.target != null)
             this.target.setParentNode(null);
@@ -117,8 +133,12 @@ public final class AssignExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssignExpr setValue(final Expression value) {
         assertNotNull(value);
+        if (value == this.value) {
+            return (AssignExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         if (this.value != null)
             this.value.setParentNode(null);
@@ -128,6 +148,7 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -135,13 +156,14 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssignExpr clone() {
         return (AssignExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AssignExprMetaModel getMetaModel() {
         return JavaParserMetaModel.assignExprMetaModel;
     }
 }
-

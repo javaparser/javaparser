@@ -22,6 +22,7 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -30,14 +31,16 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ConditionalExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
- * An if-then or if-then-else construct.
- * In <code>if(a){b}else{c}</code>, a is the condition, b is thenExpr, and c is elseExpr.
+ * The ternary conditional expression.
+ * In <code>b==0?x:y</code>, b==0 is the condition, x is thenExpr, and y is elseExpr.
  *
  * @author Julio Vilmar Gesser
  */
-public final class ConditionalExpr extends Expression {
+public final class ConditionalExpr extends Expression implements NodeWithCondition<ConditionalExpr> {
 
     private Expression condition;
 
@@ -54,11 +57,14 @@ public final class ConditionalExpr extends Expression {
         this(null, condition, thenExpr, elseExpr);
     }
 
-    public ConditionalExpr(Range range, Expression condition, Expression thenExpr, Expression elseExpr) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ConditionalExpr(TokenRange tokenRange, Expression condition, Expression thenExpr, Expression elseExpr) {
+        super(tokenRange);
         setCondition(condition);
         setThenExpr(thenExpr);
         setElseExpr(elseExpr);
+        customInitialization();
     }
 
     @Override
@@ -71,20 +77,27 @@ public final class ConditionalExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
         return condition;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getElseExpr() {
         return elseExpr;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getThenExpr() {
         return thenExpr;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setCondition(final Expression condition) {
         assertNotNull(condition);
+        if (condition == this.condition) {
+            return (ConditionalExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         if (this.condition != null)
             this.condition.setParentNode(null);
@@ -93,8 +106,12 @@ public final class ConditionalExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setElseExpr(final Expression elseExpr) {
         assertNotNull(elseExpr);
+        if (elseExpr == this.elseExpr) {
+            return (ConditionalExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.ELSE_EXPR, this.elseExpr, elseExpr);
         if (this.elseExpr != null)
             this.elseExpr.setParentNode(null);
@@ -103,8 +120,12 @@ public final class ConditionalExpr extends Expression {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConditionalExpr setThenExpr(final Expression thenExpr) {
         assertNotNull(thenExpr);
+        if (thenExpr == this.thenExpr) {
+            return (ConditionalExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.THEN_EXPR, this.thenExpr, thenExpr);
         if (this.thenExpr != null)
             this.thenExpr.setParentNode(null);
@@ -114,6 +135,7 @@ public final class ConditionalExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -121,13 +143,14 @@ public final class ConditionalExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ConditionalExpr clone() {
         return (ConditionalExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ConditionalExprMetaModel getMetaModel() {
         return JavaParserMetaModel.conditionalExprMetaModel;
     }
 }
-

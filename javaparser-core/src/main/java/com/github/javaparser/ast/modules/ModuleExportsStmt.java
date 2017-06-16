@@ -15,6 +15,8 @@ import com.github.javaparser.metamodel.ModuleExportsStmtMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<ModuleExportsStmt> {
 
@@ -31,10 +33,13 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         this(null, name, moduleNames);
     }
 
-    public ModuleExportsStmt(Range range, Name name, NodeList<Name> moduleNames) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ModuleExportsStmt(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
+        super(tokenRange);
         setName(name);
         setModuleNames(moduleNames);
+        customInitialization();
     }
 
     @Override
@@ -48,6 +53,7 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -60,12 +66,17 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleExportsStmt setName(final Name name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ModuleExportsStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -74,12 +85,17 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Name> getModuleNames() {
         return moduleNames;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleExportsStmt setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
+        if (moduleNames == this.moduleNames) {
+            return (ModuleExportsStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.MODULE_NAMES, this.moduleNames, moduleNames);
         if (this.moduleNames != null)
             this.moduleNames.setParentNode(null);
@@ -89,18 +105,20 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getModuleNames());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleExportsStmt clone() {
         return (ModuleExportsStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleExportsStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleExportsStmtMetaModel;
     }
 }
-

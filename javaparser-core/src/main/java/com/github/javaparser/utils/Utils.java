@@ -47,8 +47,7 @@ public class Utils {
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
     }
-
-
+    
     public static <T> T assertNotNull(T o) {
         if (o == null) {
             throw new AssertionError("A reference was unexpectedly null.");

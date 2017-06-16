@@ -12,4 +12,3 @@ public class ArrayAccessExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

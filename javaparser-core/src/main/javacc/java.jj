@@ -25,22 +25,22 @@ options {
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
-  TOKEN_FACTORY = "GeneratedJavaParser.GTToken";
+  TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
   JAVA_TEMPLATE_TYPE = "modern";
 }
 
 PARSER_BEGIN(GeneratedJavaParser)
 /*
  *
- * This file is part of Java 1.8 parser and Abstract Syntax Tree.
+ * This file is part of JavaParser 9.
  *
- * Java 1.8 parser and Abstract Syntax Tree is free software: you can redistribute it and/or modify
+ * JavaParser 9 is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Java 1.8 parser and Abstract Syntax Tree.  If not, see <http://www.gnu.org/licenses/>.
+ * along with JavaParser 9.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.github.javaparser;
 
@@ -54,9 +54,12 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
+import static com.github.javaparser.JavaToken.INVALID;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.GeneratedJavaParser.*;
+import static com.github.javaparser.GeneratedJavaParserSupport.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
@@ -65,8 +68,6 @@ import static com.github.javaparser.ast.type.ArrayType.*;
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
 final class GeneratedJavaParser {
-
-    private final Position INVALID = pos(-1, 0);
     List<Problem> problems = new ArrayList<Problem>();
 
     void reset(Provider provider) {
@@ -75,78 +76,30 @@ final class GeneratedJavaParser {
         token_source.reset();
     }
 
-    private static <X extends Node> NodeList<X> emptyList() {
-        return new NodeList<X>();
-    }
-    
-    private <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
-    	if (list == null) {
-    		list = new NodeList<T>();
-    	}
-    	list.add(obj);
-    	return list;
-    }
-
-    private <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
-        if(obj == null) {
-            return list;
+    TokenRange recover(int recoveryTokenType, ParseException p) {
+        JavaToken begin = null;
+        if (p.currentToken != null) {
+            if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
+                begin = token();
+            }
         }
-        return add(list, obj);
-    }
+        Token t;
+        boolean done = false;
+        do {
+            t = getNextToken();
+        } while(t.kind != recoveryTokenType && t.kind!=EOF);
 
-    private <T extends Node> NodeList<T> add(int pos, NodeList<T> list, T obj) {
-    	if (list == null) {
-    		list = new NodeList<T>();
-    	}
-    	list.add(pos, obj);
-    	return list;
-    }
-    
-    private <T> List<T> add(List<T> list, T obj) {
-    	if (list == null) {
-    		list = new LinkedList<T>();
-    	}
-    	list.add(obj);
-    	return list;
-    }
+        JavaToken end = token();
 
-    private <T> List<T> add(int pos, List<T> list, T obj) {
-    	if (list == null) {
-    		list = new LinkedList<T>();
-    	}
-    	list.add(pos, obj);
-    	return list;
-    }
-
-	private class ModifierHolder {
-		final EnumSet<Modifier> modifiers;
-		final NodeList<AnnotationExpr> annotations;
-		final Position begin;
-
-		public ModifierHolder(Position begin, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations) {
-			this.begin = begin;
-			this.modifiers = assertNotNull(modifiers);
-			this.annotations = annotations;
-		}
-	}
-
-    public void addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
-        if (modifiers.contains(mod)) {
-            addProblem("Duplicated modifier");
+        TokenRange tokenRange=null;
+        if(begin!=null && end!=null){
+            tokenRange=range(begin, end);
         }
-        modifiers.add(mod);
+
+        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+        return tokenRange;
     }
-    
-    public void addMultipleModifier(EnumSet<Modifier> modifiers, EnumSet<Modifier> mods) {
-        if(mods == null)
-            return;
-        for(Modifier m : mods)
-            if (modifiers.contains(m)) 
-                addProblem("Duplicated modifier");
-        for(Modifier m : mods)
-            modifiers.add(m);
-    }
-   
+
     /**
      * Return the list of tokens that have been encountered while parsing code using
      * this parser.
@@ -161,110 +114,31 @@ final class GeneratedJavaParser {
         return token_source.getCommentsCollection();
     }
 
-    private void addProblem(String message) {
+    void addProblem(String message) {
         // TODO tokenRange only takes the final token. Need all the tokens.
         problems.add(new Problem(message, tokenRange(), null));
     }
 
-    private Expression generateLambda(Expression ret, Statement lambdaBody) {
-        if (ret instanceof EnclosedExpr) {
-            Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
-            if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                SimpleName id = ((NameExpr)inner.get()).getName();
-                NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id));
-                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), params, lambdaBody, true);
-            } else {
-                ret = new LambdaExpr(range(ret.getBegin().get(), lambdaBody.getEnd().get()), emptyList(), lambdaBody, true);
-            }
-        } else if (ret instanceof NameExpr) {
-            SimpleName id = ((NameExpr)ret).getName();
-            NodeList<Parameter> params = add(emptyList(), new Parameter(ret.getRange().get(), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id));
-            ret = new LambdaExpr(ret.getRange().get(), params, lambdaBody, false);
-        } else if (ret instanceof LambdaExpr) {
-            ((LambdaExpr) ret).setBody(lambdaBody);
-            ret.setRange(range(ret.getBegin().get(), lambdaBody.getEnd().get()));
-        } else if (ret instanceof CastExpr) {
-            CastExpr castExpr = (CastExpr) ret;
-            Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
-            castExpr.setExpression(inner);
-        } else {
-            addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
-        }
-        return ret;
-    }
-    
-    private ArrayCreationExpr juggleArrayCreation(Range range, List<Range> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr)  {
-        NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
-        
-        for(int i = 0; i < arrayAnnotations.size(); i++){
-            levels.add(new ArrayCreationLevel(levelRanges.get(i), dimensions.get(i), arrayAnnotations.get(i)));
-        }
-        return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
-    }
-
-    private Type juggleArrayType(Type partialType, List<ArrayBracketPair> additionalBrackets) {
-        Pair<Type, List<ArrayBracketPair>> partialParts = ArrayType.unwrapArrayTypes(partialType);
-        Type elementType = partialParts.a;
-        List<ArrayBracketPair> leftMostBrackets = partialParts.b;
-        return ArrayType.wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
-    }
-
-    static final class GTToken extends Token {
+    static final class CustomToken extends Token {
         int realKind = GeneratedJavaParserConstants.GT;
+        JavaToken javaToken;
 
-        GTToken(int kind, String image) {
+        CustomToken(int kind, String image) {
             this.kind = kind;
             this.image = image;
         }
 
         public static Token newToken(int kind, String image) {
-            return new GTToken(kind, image);
+            return new CustomToken(kind, image);
         }
-    }
-
-    private static class RangedList<T extends Node> {
-        /* A ranged list MUST be set to a begin and end,
-           or these temporary values will leak out */
-        Range range = range(0, 0, 0, 0);
-        NodeList<T> list;
-        RangedList(NodeList<T> list) {
-            this.list = list;
-        }
-        void beginAt(Position begin) {
-            range=range.withBegin(begin);
-        }
-        void endAt(Position end) {
-            range=range.withEnd(end);
-        }
-        void add(T t) {
-            if (list == null) {
-                list = new NodeList<T>();
-            }
-            list.add(t);
-        }
-    }
-
-    private Position tokenBegin() {
-        return pos(token.beginLine,token.beginColumn);
-    }
-
-    private Position tokenEnd() {
-        return pos(token.endLine,token.endColumn);
     }
     
-    private Range tokenRange() {
-        return tokenRange(token);
+    private JavaToken token() {
+        return ((CustomToken)token).javaToken;
     }
 
-    public static Range tokenRange(Token token) {
-        return range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
-    }
-        
-    private Position nodeListBegin(NodeList<?> l) {
-        if(l.isEmpty()){
-            return INVALID;
-        }
-        return l.get(0).getBegin().get();
+    private TokenRange tokenRange() {
+        return new TokenRange(token(), token());
     }
 
     public void setTabSize(int size) {
@@ -278,42 +152,44 @@ PARSER_END(GeneratedJavaParser)
 
 SPECIAL_TOKEN :
 {
-  " "
-| "\t"
-| "\n"
-| "\r"
-| "\f"
-| "\u0085"
-| "\u00A0"
-| "\u1680"
-| "\u180e"
-| "\u2000"
-| "\u2001"
-| "\u2002"
-| "\u2003"
-| "\u2004"
-| "\u2005"
-| "\u2006"
-| "\u2007"
-| "\u2008"
-| "\u2009"
-| "\u200a"
-| "\u200b"
-| "\u200c"
-| "\u200d"
-| "\u2028"
-| "\u2029"
-| "\u202f"
-| "\u205f"
-| "\u2060"
-| "\u3000"
-| "\ufeff"
+  <SPACE: " ">
+| <WINDOWS_EOL : "\r\n">
+| <TAB: "\t">
+| <UNIX_EOL: "\n">
+| <OLD_MAC_EOL: "\r">
+| <FORM_FEED: "\f">
+| <NEXT_LINE: "\u0085">
+| <NON_BREAKING_SPACE: "\u00A0">
+| <OGHAM_SPACE: "\u1680">
+| <MONGOLIAN_VOWEL_SEPARATOR: "\u180e">
+| <EN_QUAD: "\u2000">
+| <EM_QUAD: "\u2001">
+| <EN_SPACE: "\u2002">
+| <EM_SPACE: "\u2003">
+| <THREE_PER_EM_SPACE: "\u2004">
+| <FOUR_PER_EM_SPACE: "\u2005">
+| <SIX_PER_EM_SPACE: "\u2006">
+| <FIGURE_SPACE: "\u2007">
+| <PUNCTUATION_SPACE: "\u2008">
+| <THIN_SPACE: "\u2009">
+| <HAIR_SPACE: "\u200a">
+| <ZERO_WIDTH_SPACE: "\u200b">
+| <ZERO_WIDTH_NON_JOINER: "\u200c">
+| <ZERO_WIDTH_JOINER: "\u200d">
+| <LINE_SEPARATOR: "\u2028">
+| <PARAGRAPH_SEPARATOR: "\u2029">
+| <NARROW_NO_BREAK_SPACE: "\u202f">
+| <MEDIUM_MATHEMATICAL_SPACE: "\u205f">
+| <WORD_JOINER: "\u2060">
+| <IDEOGRAPHIC_SPACE: "\u3000">
+| <ZERO_WIDTH_NO_BREAK_SPACE: "\ufeff">
 }
 
 TOKEN_MGR_DECLS :
 {
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
+    private JavaToken homeToken;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -328,11 +204,20 @@ TOKEN_MGR_DECLS :
         return commentsCollection;
     }
 
-    private void CommonTokenAction(Token token) {
+    JavaToken getHomeToken() {
+        return homeToken;
+    }
+
+    private void CommonTokenAction(Token rawToken) {
+        CustomToken token = (CustomToken) rawToken;
         if(token.specialToken!=null) {
             CommonTokenAction(token.specialToken);
         }
-        tokens.add(new JavaToken(token));
+        token.javaToken = new JavaToken(token, tokens);
+        tokens.add(token.javaToken);
+        if (homeToken == null) {
+            homeToken = token.javaToken;
+        }
 
         String commentText = token.image;
         if (token.kind == JAVA_DOC_COMMENT) {
@@ -343,12 +228,13 @@ TOKEN_MGR_DECLS :
             commentsCollection.addComment(comment);
         } else if (token.kind == SINGLE_LINE_COMMENT) {
             // line comments have their end of line character(s) included, and we don't want that.
-            Range range = tokenRange(token);
+            Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
             while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
                 commentText = commentText.substring(0, commentText.length() - 1);
             }
             range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-            LineComment comment = new LineComment(range, commentText.substring(2));
+            LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
+            comment.setRange(range);
             commentsCollection.addComment(comment);
         }
     }
@@ -547,700 +433,157 @@ TOKEN :
 {
   < IDENTIFIER: <LETTER> (<PART_LETTER>)* >
 |
-  < #LETTER:
-      [  // all chars for which Character.isIdentifierStart is true
-         "\u0024",          // "$"
-         "\u0041"-"\u005a", // "A"-"Z"
-         "\u005f",          // "_"
-         "\u0061"-"\u007a", // "a"-"z"
-         "\u00a2"-"\u00a5",
-         "\u00aa",
-         "\u00b5",
-         "\u00ba",
-         "\u00c0"-"\u00d6",
-         "\u00d8"-"\u00f6",
-         "\u00f8"-"\u0236",
-         "\u0250"-"\u02c1",
-         "\u02c6"-"\u02d1",
-         "\u02e0"-"\u02e4",
-         "\u02ee",
-         "\u037a",
-         "\u0386",
-         "\u0388"-"\u038a",
-         "\u038c",
-         "\u038e"-"\u03a1",
-         "\u03a3"-"\u03ce",
-         "\u03d0"-"\u03f5",
-         "\u03f7"-"\u03fb",
-         "\u0400"-"\u0481",
-         "\u048a"-"\u04ce",
-         "\u04d0"-"\u04f5",
-         "\u04f8"-"\u04f9",
-         "\u0500"-"\u050f",
-         "\u0531"-"\u0556",
-         "\u0559",
-         "\u0561"-"\u0587",
-         "\u05d0"-"\u05ea",
-         "\u05f0"-"\u05f2",
-         "\u0621"-"\u063a",
-         "\u0640"-"\u064a",
-         "\u066e"-"\u066f",
-         "\u0671"-"\u06d3",
-         "\u06d5",
-         "\u06e5"-"\u06e6",
-         "\u06ee"-"\u06ef",
-         "\u06fa"-"\u06fc",
-         "\u06ff",
-         "\u0710",
-         "\u0712"-"\u072f",
-         "\u074d"-"\u074f",
-         "\u0780"-"\u07a5",
-         "\u07b1",
-         "\u0904"-"\u0939",
-         "\u093d",
-         "\u0950",
-         "\u0958"-"\u0961",
-         "\u0985"-"\u098c",
-         "\u098f"-"\u0990",
-         "\u0993"-"\u09a8",
-         "\u09aa"-"\u09b0",
-         "\u09b2",
-         "\u09b6"-"\u09b9",
-         "\u09bd",
-         "\u09dc"-"\u09dd",
-         "\u09df"-"\u09e1",
-         "\u09f0"-"\u09f3",
-         "\u0a05"-"\u0a0a",
-         "\u0a0f"-"\u0a10",
-         "\u0a13"-"\u0a28",
-         "\u0a2a"-"\u0a30",
-         "\u0a32"-"\u0a33",
-         "\u0a35"-"\u0a36",
-         "\u0a38"-"\u0a39",
-         "\u0a59"-"\u0a5c",
-         "\u0a5e",
-         "\u0a72"-"\u0a74",
-         "\u0a85"-"\u0a8d",
-         "\u0a8f"-"\u0a91",
-         "\u0a93"-"\u0aa8",
-         "\u0aaa"-"\u0ab0",
-         "\u0ab2"-"\u0ab3",
-         "\u0ab5"-"\u0ab9",
-         "\u0abd",
-         "\u0ad0",
-         "\u0ae0"-"\u0ae1",
-         "\u0af1",
-         "\u0b05"-"\u0b0c",
-         "\u0b0f"-"\u0b10",
-         "\u0b13"-"\u0b28",
-         "\u0b2a"-"\u0b30",
-         "\u0b32"-"\u0b33",
-         "\u0b35"-"\u0b39",
-         "\u0b3d",
-         "\u0b5c"-"\u0b5d",
-         "\u0b5f"-"\u0b61",
-         "\u0b71",
-         "\u0b83",
-         "\u0b85"-"\u0b8a",
-         "\u0b8e"-"\u0b90",
-         "\u0b92"-"\u0b95",
-         "\u0b99"-"\u0b9a",
-         "\u0b9c",
-         "\u0b9e"-"\u0b9f",
-         "\u0ba3"-"\u0ba4",
-         "\u0ba8"-"\u0baa",
-         "\u0bae"-"\u0bb5",
-         "\u0bb7"-"\u0bb9",
-         "\u0bf9",
-         "\u0c05"-"\u0c0c",
-         "\u0c0e"-"\u0c10",
-         "\u0c12"-"\u0c28",
-         "\u0c2a"-"\u0c33",
-         "\u0c35"-"\u0c39",
-         "\u0c60"-"\u0c61",
-         "\u0c85"-"\u0c8c",
-         "\u0c8e"-"\u0c90",
-         "\u0c92"-"\u0ca8",
-         "\u0caa"-"\u0cb3",
-         "\u0cb5"-"\u0cb9",
-         "\u0cbd",
-         "\u0cde",
-         "\u0ce0"-"\u0ce1",
-         "\u0d05"-"\u0d0c",
-         "\u0d0e"-"\u0d10",
-         "\u0d12"-"\u0d28",
-         "\u0d2a"-"\u0d39",
-         "\u0d60"-"\u0d61",
-         "\u0d85"-"\u0d96",
-         "\u0d9a"-"\u0db1",
-         "\u0db3"-"\u0dbb",
-         "\u0dbd",
-         "\u0dc0"-"\u0dc6",
-         "\u0e01"-"\u0e30",
-         "\u0e32"-"\u0e33",
-         "\u0e3f"-"\u0e46",
-         "\u0e81"-"\u0e82",
-         "\u0e84",
-         "\u0e87"-"\u0e88",
-         "\u0e8a",
-         "\u0e8d",
-         "\u0e94"-"\u0e97",
-         "\u0e99"-"\u0e9f",
-         "\u0ea1"-"\u0ea3",
-         "\u0ea5",
-         "\u0ea7",
-         "\u0eaa"-"\u0eab",
-         "\u0ead"-"\u0eb0",
-         "\u0eb2"-"\u0eb3",
-         "\u0ebd",
-         "\u0ec0"-"\u0ec4",
-         "\u0ec6",
-         "\u0edc"-"\u0edd",
-         "\u0f00",
-         "\u0f40"-"\u0f47",
-         "\u0f49"-"\u0f6a",
-         "\u0f88"-"\u0f8b",
-         "\u1000"-"\u1021",
-         "\u1023"-"\u1027",
-         "\u1029"-"\u102a",
-         "\u1050"-"\u1055",
-         "\u10a0"-"\u10c5",
-         "\u10d0"-"\u10f8",
-         "\u1100"-"\u1159",
-         "\u115f"-"\u11a2",
-         "\u11a8"-"\u11f9",
-         "\u1200"-"\u1206",
-         "\u1208"-"\u1246",
-         "\u1248",
-         "\u124a"-"\u124d",
-         "\u1250"-"\u1256",
-         "\u1258",
-         "\u125a"-"\u125d",
-         "\u1260"-"\u1286",
-         "\u1288",
-         "\u128a"-"\u128d",
-         "\u1290"-"\u12ae",
-         "\u12b0",
-         "\u12b2"-"\u12b5",
-         "\u12b8"-"\u12be",
-         "\u12c0",
-         "\u12c2"-"\u12c5",
-         "\u12c8"-"\u12ce",
-         "\u12d0"-"\u12d6",
-         "\u12d8"-"\u12ee",
-         "\u12f0"-"\u130e",
-         "\u1310",
-         "\u1312"-"\u1315",
-         "\u1318"-"\u131e",
-         "\u1320"-"\u1346",
-         "\u1348"-"\u135a",
-         "\u13a0"-"\u13f4",
-         "\u1401"-"\u166c",
-         "\u166f"-"\u1676",
-         "\u1681"-"\u169a",
-         "\u16a0"-"\u16ea",
-         "\u16ee"-"\u16f0",
-         "\u1700"-"\u170c",
-         "\u170e"-"\u1711",
-         "\u1720"-"\u1731",
-         "\u1740"-"\u1751",
-         "\u1760"-"\u176c",
-         "\u176e"-"\u1770",
-         "\u1780"-"\u17b3",
-         "\u17d7",
-         "\u17db"-"\u17dc",
-         "\u1820"-"\u1877",
-         "\u1880"-"\u18a8",
-         "\u1900"-"\u191c",
-         "\u1950"-"\u196d",
-         "\u1970"-"\u1974",
-         "\u1d00"-"\u1d6b",
-         "\u1e00"-"\u1e9b",
-         "\u1ea0"-"\u1ef9",
-         "\u1f00"-"\u1f15",
-         "\u1f18"-"\u1f1d",
-         "\u1f20"-"\u1f45",
-         "\u1f48"-"\u1f4d",
-         "\u1f50"-"\u1f57",
-         "\u1f59",
-         "\u1f5b",
-         "\u1f5d",
-         "\u1f5f"-"\u1f7d",
-         "\u1f80"-"\u1fb4",
-         "\u1fb6"-"\u1fbc",
-         "\u1fbe",
-         "\u1fc2"-"\u1fc4",
-         "\u1fc6"-"\u1fcc",
-         "\u1fd0"-"\u1fd3",
-         "\u1fd6"-"\u1fdb",
-         "\u1fe0"-"\u1fec",
-         "\u1ff2"-"\u1ff4",
-         "\u1ff6"-"\u1ffc",
-         "\u203f"-"\u2040",
-         "\u2054",
-         "\u2071",
-         "\u207f",
-         "\u20a0"-"\u20b1",
-         "\u2102",
-         "\u2107",
-         "\u210a"-"\u2113",
-         "\u2115",
-         "\u2119"-"\u211d",
-         "\u2124",
-         "\u2126",
-         "\u2128",
-         "\u212a"-"\u212d",
-         "\u212f"-"\u2131",
-         "\u2133"-"\u2139",
-         "\u213d"-"\u213f",
-         "\u2145"-"\u2149",
-         "\u2160"-"\u2183",
-         "\u3005"-"\u3007",
-         "\u3021"-"\u3029",
-         "\u3031"-"\u3035",
-         "\u3038"-"\u303c",
-         "\u3041"-"\u3096",
-         "\u309d"-"\u309f",
-         "\u30a1"-"\u30ff",
-         "\u3105"-"\u312c",
-         "\u3131"-"\u318e",
-         "\u31a0"-"\u31b7",
-         "\u31f0"-"\u31ff",
-         "\u3400"-"\u4db5",
-         "\u4e00"-"\u9fa5",
-         "\ua000"-"\ua48c",
-         "\uac00"-"\ud7a3",
-         "\ud801", //for supplementary characters suport
-         "\ud802", //for supplementary characters suport
-         "\uf900"-"\ufa2d",
-         "\ufa30"-"\ufa6a",
-         "\ufb00"-"\ufb06",
-         "\ufb13"-"\ufb17",
-         "\ufb1d",
-         "\ufb1f"-"\ufb28",
-         "\ufb2a"-"\ufb36",
-         "\ufb38"-"\ufb3c",
-         "\ufb3e",
-         "\ufb40"-"\ufb41",
-         "\ufb43"-"\ufb44",
-         "\ufb46"-"\ufbb1",
-         "\ufbd3"-"\ufd3d",
-         "\ufd50"-"\ufd8f",
-         "\ufd92"-"\ufdc7",
-         "\ufdf0"-"\ufdfc",
-         "\ufe33"-"\ufe34",
-         "\ufe4d"-"\ufe4f",
-         "\ufe69",
-         "\ufe70"-"\ufe74",
-         "\ufe76"-"\ufefc",
-         "\uff04",
-         "\uff21"-"\uff3a",
-         "\uff3f",
-         "\uff41"-"\uff5a",
-         "\uff65"-"\uffbe",
-         "\uffc2"-"\uffc7",
-         "\uffca"-"\uffcf",
-         "\uffd2"-"\uffd7",
-         "\uffda"-"\uffdc",
-         "\uffe0"-"\uffe1",
-         "\uffe5"-"\uffe6"
-      ]
+  < #LETTER: [
+         "\u0024",  "\u0041"-"\u005a",  "\u005f",  "\u0061"-"\u007a",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00b5",  
+         "\u00ba",  "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",  
+         "\u02ec",  "\u02ee",  "\u0370"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u0386",  "\u0388"-"\u038a",  
+         "\u038c",  "\u038e"-"\u03a1",  "\u03a3"-"\u03f5",  "\u03f7"-"\u0481",  "\u048a"-"\u0527",  "\u0531"-"\u0556",  
+         "\u0559",  "\u0561"-"\u0587",  "\u058f",  "\u05d0"-"\u05ea",  "\u05f0"-"\u05f2",  "\u060b",  "\u0620"-"\u064a",  
+         "\u066e"-"\u066f",  "\u0671"-"\u06d3",  "\u06d5",  "\u06e5"-"\u06e6",  "\u06ee"-"\u06ef",  "\u06fa"-"\u06fc",  
+         "\u06ff",  "\u0710",  "\u0712"-"\u072f",  "\u074d"-"\u07a5",  "\u07b1",  "\u07ca"-"\u07ea",  "\u07f4"-"\u07f5",  
+         "\u07fa",  "\u0800"-"\u0815",  "\u081a",  "\u0824",  "\u0828",  "\u0840"-"\u0858",  "\u08a0",  "\u08a2"-"\u08ac",  
+         "\u0904"-"\u0939",  "\u093d",  "\u0950",  "\u0958"-"\u0961",  "\u0971"-"\u0977",  "\u0979"-"\u097f",  
+         "\u0985"-"\u098c",  "\u098f"-"\u0990",  "\u0993"-"\u09a8",  "\u09aa"-"\u09b0",  "\u09b2",  "\u09b6"-"\u09b9",  
+         "\u09bd",  "\u09ce",  "\u09dc"-"\u09dd",  "\u09df"-"\u09e1",  "\u09f0"-"\u09f3",  "\u09fb",  "\u0a05"-"\u0a0a",  
+         "\u0a0f"-"\u0a10",  "\u0a13"-"\u0a28",  "\u0a2a"-"\u0a30",  "\u0a32"-"\u0a33",  "\u0a35"-"\u0a36",  
+         "\u0a38"-"\u0a39",  "\u0a59"-"\u0a5c",  "\u0a5e",  "\u0a72"-"\u0a74",  "\u0a85"-"\u0a8d",  "\u0a8f"-"\u0a91",  
+         "\u0a93"-"\u0aa8",  "\u0aaa"-"\u0ab0",  "\u0ab2"-"\u0ab3",  "\u0ab5"-"\u0ab9",  "\u0abd",  "\u0ad0",  
+         "\u0ae0"-"\u0ae1",  "\u0af1",  "\u0b05"-"\u0b0c",  "\u0b0f"-"\u0b10",  "\u0b13"-"\u0b28",  "\u0b2a"-"\u0b30",  
+         "\u0b32"-"\u0b33",  "\u0b35"-"\u0b39",  "\u0b3d",  "\u0b5c"-"\u0b5d",  "\u0b5f"-"\u0b61",  "\u0b71",  
+         "\u0b83",  "\u0b85"-"\u0b8a",  "\u0b8e"-"\u0b90",  "\u0b92"-"\u0b95",  "\u0b99"-"\u0b9a",  "\u0b9c",  
+         "\u0b9e"-"\u0b9f",  "\u0ba3"-"\u0ba4",  "\u0ba8"-"\u0baa",  "\u0bae"-"\u0bb9",  "\u0bd0",  "\u0bf9",  
+         "\u0c05"-"\u0c0c",  "\u0c0e"-"\u0c10",  "\u0c12"-"\u0c28",  "\u0c2a"-"\u0c33",  "\u0c35"-"\u0c39",  
+         "\u0c3d",  "\u0c58"-"\u0c59",  "\u0c60"-"\u0c61",  "\u0c85"-"\u0c8c",  "\u0c8e"-"\u0c90",  "\u0c92"-"\u0ca8",  
+         "\u0caa"-"\u0cb3",  "\u0cb5"-"\u0cb9",  "\u0cbd",  "\u0cde",  "\u0ce0"-"\u0ce1",  "\u0cf1"-"\u0cf2",  
+         "\u0d05"-"\u0d0c",  "\u0d0e"-"\u0d10",  "\u0d12"-"\u0d3a",  "\u0d3d",  "\u0d4e",  "\u0d60"-"\u0d61",  
+         "\u0d7a"-"\u0d7f",  "\u0d85"-"\u0d96",  "\u0d9a"-"\u0db1",  "\u0db3"-"\u0dbb",  "\u0dbd",  "\u0dc0"-"\u0dc6",  
+         "\u0e01"-"\u0e30",  "\u0e32"-"\u0e33",  "\u0e3f"-"\u0e46",  "\u0e81"-"\u0e82",  "\u0e84",  "\u0e87"-"\u0e88",  
+         "\u0e8a",  "\u0e8d",  "\u0e94"-"\u0e97",  "\u0e99"-"\u0e9f",  "\u0ea1"-"\u0ea3",  "\u0ea5",  "\u0ea7",  
+         "\u0eaa"-"\u0eab",  "\u0ead"-"\u0eb0",  "\u0eb2"-"\u0eb3",  "\u0ebd",  "\u0ec0"-"\u0ec4",  "\u0ec6",  
+         "\u0edc"-"\u0edf",  "\u0f00",  "\u0f40"-"\u0f47",  "\u0f49"-"\u0f6c",  "\u0f88"-"\u0f8c",  "\u1000"-"\u102a",  
+         "\u103f",  "\u1050"-"\u1055",  "\u105a"-"\u105d",  "\u1061",  "\u1065"-"\u1066",  "\u106e"-"\u1070",  
+         "\u1075"-"\u1081",  "\u108e",  "\u10a0"-"\u10c5",  "\u10c7",  "\u10cd",  "\u10d0"-"\u10fa",  "\u10fc"-"\u1248",  
+         "\u124a"-"\u124d",  "\u1250"-"\u1256",  "\u1258",  "\u125a"-"\u125d",  "\u1260"-"\u1288",  "\u128a"-"\u128d",  
+         "\u1290"-"\u12b0",  "\u12b2"-"\u12b5",  "\u12b8"-"\u12be",  "\u12c0",  "\u12c2"-"\u12c5",  "\u12c8"-"\u12d6",  
+         "\u12d8"-"\u1310",  "\u1312"-"\u1315",  "\u1318"-"\u135a",  "\u1380"-"\u138f",  "\u13a0"-"\u13f4",  
+         "\u1401"-"\u166c",  "\u166f"-"\u167f",  "\u1681"-"\u169a",  "\u16a0"-"\u16ea",  "\u16ee"-"\u16f0",  
+         "\u1700"-"\u170c",  "\u170e"-"\u1711",  "\u1720"-"\u1731",  "\u1740"-"\u1751",  "\u1760"-"\u176c",  
+         "\u176e"-"\u1770",  "\u1780"-"\u17b3",  "\u17d7",  "\u17db"-"\u17dc",  "\u1820"-"\u1877",  "\u1880"-"\u18a8",  
+         "\u18aa",  "\u18b0"-"\u18f5",  "\u1900"-"\u191c",  "\u1950"-"\u196d",  "\u1970"-"\u1974",  "\u1980"-"\u19ab",  
+         "\u19c1"-"\u19c7",  "\u1a00"-"\u1a16",  "\u1a20"-"\u1a54",  "\u1aa7",  "\u1b05"-"\u1b33",  "\u1b45"-"\u1b4b",  
+         "\u1b83"-"\u1ba0",  "\u1bae"-"\u1baf",  "\u1bba"-"\u1be5",  "\u1c00"-"\u1c23",  "\u1c4d"-"\u1c4f",  
+         "\u1c5a"-"\u1c7d",  "\u1ce9"-"\u1cec",  "\u1cee"-"\u1cf1",  "\u1cf5"-"\u1cf6",  "\u1d00"-"\u1dbf",  
+         "\u1e00"-"\u1f15",  "\u1f18"-"\u1f1d",  "\u1f20"-"\u1f45",  "\u1f48"-"\u1f4d",  "\u1f50"-"\u1f57",  
+         "\u1f59",  "\u1f5b",  "\u1f5d",  "\u1f5f"-"\u1f7d",  "\u1f80"-"\u1fb4",  "\u1fb6"-"\u1fbc",  "\u1fbe",  
+         "\u1fc2"-"\u1fc4",  "\u1fc6"-"\u1fcc",  "\u1fd0"-"\u1fd3",  "\u1fd6"-"\u1fdb",  "\u1fe0"-"\u1fec",  
+         "\u1ff2"-"\u1ff4",  "\u1ff6"-"\u1ffc",  "\u203f"-"\u2040",  "\u2054",  "\u2071",  "\u207f",  "\u2090"-"\u209c",  
+         "\u20a0"-"\u20ba",  "\u2102",  "\u2107",  "\u210a"-"\u2113",  "\u2115",  "\u2119"-"\u211d",  "\u2124",  
+         "\u2126",  "\u2128",  "\u212a"-"\u212d",  "\u212f"-"\u2139",  "\u213c"-"\u213f",  "\u2145"-"\u2149",  
+         "\u214e",  "\u2160"-"\u2188",  "\u2c00"-"\u2c2e",  "\u2c30"-"\u2c5e",  "\u2c60"-"\u2ce4",  "\u2ceb"-"\u2cee",  
+         "\u2cf2"-"\u2cf3",  "\u2d00"-"\u2d25",  "\u2d27",  "\u2d2d",  "\u2d30"-"\u2d67",  "\u2d6f",  "\u2d80"-"\u2d96",  
+         "\u2da0"-"\u2da6",  "\u2da8"-"\u2dae",  "\u2db0"-"\u2db6",  "\u2db8"-"\u2dbe",  "\u2dc0"-"\u2dc6",  
+         "\u2dc8"-"\u2dce",  "\u2dd0"-"\u2dd6",  "\u2dd8"-"\u2dde",  "\u2e2f",  "\u3005"-"\u3007",  "\u3021"-"\u3029",  
+         "\u3031"-"\u3035",  "\u3038"-"\u303c",  "\u3041"-"\u3096",  "\u309d"-"\u309f",  "\u30a1"-"\u30fa",  
+         "\u30fc"-"\u30ff",  "\u3105"-"\u312d",  "\u3131"-"\u318e",  "\u31a0"-"\u31ba",  "\u31f0"-"\u31ff",  
+         "\u3400"-"\u4db5",  "\u4e00"-"\u9fcc",  "\ua000"-"\ua48c",  "\ua4d0"-"\ua4fd",  "\ua500"-"\ua60c",  
+         "\ua610"-"\ua61f",  "\ua62a"-"\ua62b",  "\ua640"-"\ua66e",  "\ua67f"-"\ua697",  "\ua6a0"-"\ua6ef",  
+         "\ua717"-"\ua71f",  "\ua722"-"\ua788",  "\ua78b"-"\ua78e",  "\ua790"-"\ua793",  "\ua7a0"-"\ua7aa",  
+         "\ua7f8"-"\ua801",  "\ua803"-"\ua805",  "\ua807"-"\ua80a",  "\ua80c"-"\ua822",  "\ua838",  "\ua840"-"\ua873",  
+         "\ua882"-"\ua8b3",  "\ua8f2"-"\ua8f7",  "\ua8fb",  "\ua90a"-"\ua925",  "\ua930"-"\ua946",  "\ua960"-"\ua97c",  
+         "\ua984"-"\ua9b2",  "\ua9cf",  "\uaa00"-"\uaa28",  "\uaa40"-"\uaa42",  "\uaa44"-"\uaa4b",  "\uaa60"-"\uaa76",  
+         "\uaa7a",  "\uaa80"-"\uaaaf",  "\uaab1",  "\uaab5"-"\uaab6",  "\uaab9"-"\uaabd",  "\uaac0",  "\uaac2",  
+         "\uaadb"-"\uaadd",  "\uaae0"-"\uaaea",  "\uaaf2"-"\uaaf4",  "\uab01"-"\uab06",  "\uab09"-"\uab0e",  
+         "\uab11"-"\uab16",  "\uab20"-"\uab26",  "\uab28"-"\uab2e",  "\uabc0"-"\uabe2",  "\uac00"-"\ud7a3",  
+         "\ud7b0"-"\ud7c6",  "\ud7cb"-"\ud7fb",  "\ud800"-"\udfff",  "\uf900"-"\ufa6d",  "\ufa70"-"\ufad9",  
+         "\ufb00"-"\ufb06",  "\ufb13"-"\ufb17",  "\ufb1d",  "\ufb1f"-"\ufb28",  "\ufb2a"-"\ufb36",  "\ufb38"-"\ufb3c",  
+         "\ufb3e",  "\ufb40"-"\ufb41",  "\ufb43"-"\ufb44",  "\ufb46"-"\ufbb1",  "\ufbd3"-"\ufd3d",  "\ufd50"-"\ufd8f",  
+         "\ufd92"-"\ufdc7",  "\ufdf0"-"\ufdfc",  "\ufe33"-"\ufe34",  "\ufe4d"-"\ufe4f",  "\ufe69",  "\ufe70"-"\ufe74",  
+         "\ufe76"-"\ufefc",  "\uff04",  "\uff21"-"\uff3a",  "\uff3f",  "\uff41"-"\uff5a",  "\uff66"-"\uffbe",  
+         "\uffc2"-"\uffc7",  "\uffca"-"\uffcf",  "\uffd2"-"\uffd7",  "\uffda"-"\uffdc",  "\uffe0"-"\uffe1",  
+         "\uffe5"-"\uffe6"  ]
   >
 |
-  < #PART_LETTER:
-      [  // all chars for which Character.isIdentifierPart is true
-         "\u0000"-"\u0008",
-         "\u000e"-"\u001b",
-         "\u0024",          // "$"
-         "\u0030"-"\u0039", // "0"-"9"
-         "\u0041"-"\u005a", // "A"-"Z"
-         "\u005f",          // "_"
-         "\u0061"-"\u007a", // "a"-"z"
-         "\u007f"-"\u009f",
-         "\u00a2"-"\u00a5",
-         "\u00aa",
-         "\u00ad",
-         "\u00b5",
-         "\u00ba",
-         "\u00c0"-"\u00d6",
-         "\u00d8"-"\u00f6",
-         "\u00f8"-"\u0236",
-         "\u0250"-"\u02c1",
-         "\u02c6"-"\u02d1",
-         "\u02e0"-"\u02e4",
-         "\u02ee",
-         "\u0300"-"\u0357",
-         "\u035d"-"\u036f",
-         "\u037a",
-         "\u0386",
-         "\u0388"-"\u038a",
-         "\u038c",
-         "\u038e"-"\u03a1",
-         "\u03a3"-"\u03ce",
-         "\u03d0"-"\u03f5",
-         "\u03f7"-"\u03fb",
-         "\u0400"-"\u0481",
-         "\u0483"-"\u0486",
-         "\u048a"-"\u04ce",
-         "\u04d0"-"\u04f5",
-         "\u04f8"-"\u04f9",
-         "\u0500"-"\u050f",
-         "\u0531"-"\u0556",
-         "\u0559",
-         "\u0561"-"\u0587",
-         "\u0591"-"\u05a1",
-         "\u05a3"-"\u05b9",
-         "\u05bb"-"\u05bd",
-         "\u05bf",
-         "\u05c1"-"\u05c2",
-         "\u05c4",
-         "\u05d0"-"\u05ea",
-         "\u05f0"-"\u05f2",
-         "\u0600"-"\u0603",
-         "\u0610"-"\u0615",
-         "\u0621"-"\u063a",
-         "\u0640"-"\u0658",
-         "\u0660"-"\u0669",
-         "\u066e"-"\u06d3",
-         "\u06d5"-"\u06dd",
-         "\u06df"-"\u06e8",
-         "\u06ea"-"\u06fc",
-         "\u06ff",
-         "\u070f"-"\u074a",
-         "\u074d"-"\u074f",
-         "\u0780"-"\u07b1",
-         "\u0901"-"\u0939",
-         "\u093c"-"\u094d",
-         "\u0950"-"\u0954",
-         "\u0958"-"\u0963",
-         "\u0966"-"\u096f",
-         "\u0981"-"\u0983",
-         "\u0985"-"\u098c",
-         "\u098f"-"\u0990",
-         "\u0993"-"\u09a8",
-         "\u09aa"-"\u09b0",
-         "\u09b2",
-         "\u09b6"-"\u09b9",
-         "\u09bc"-"\u09c4",
-         "\u09c7"-"\u09c8",
-         "\u09cb"-"\u09cd",
-         "\u09d7",
-         "\u09dc"-"\u09dd",
-         "\u09df"-"\u09e3",
-         "\u09e6"-"\u09f3",
-         "\u0a01"-"\u0a03",
-         "\u0a05"-"\u0a0a",
-         "\u0a0f"-"\u0a10",
-         "\u0a13"-"\u0a28",
-         "\u0a2a"-"\u0a30",
-         "\u0a32"-"\u0a33",
-         "\u0a35"-"\u0a36",
-         "\u0a38"-"\u0a39",
-         "\u0a3c",
-         "\u0a3e"-"\u0a42",
-         "\u0a47"-"\u0a48",
-         "\u0a4b"-"\u0a4d",
-         "\u0a59"-"\u0a5c",
-         "\u0a5e",
-         "\u0a66"-"\u0a74",
-         "\u0a81"-"\u0a83",
-         "\u0a85"-"\u0a8d",
-         "\u0a8f"-"\u0a91",
-         "\u0a93"-"\u0aa8",
-         "\u0aaa"-"\u0ab0",
-         "\u0ab2"-"\u0ab3",
-         "\u0ab5"-"\u0ab9",
-         "\u0abc"-"\u0ac5",
-         "\u0ac7"-"\u0ac9",
-         "\u0acb"-"\u0acd",
-         "\u0ad0",
-         "\u0ae0"-"\u0ae3",
-         "\u0ae6"-"\u0aef",
-         "\u0af1",
-         "\u0b01"-"\u0b03",
-         "\u0b05"-"\u0b0c",
-         "\u0b0f"-"\u0b10",
-         "\u0b13"-"\u0b28",
-         "\u0b2a"-"\u0b30",
-         "\u0b32"-"\u0b33",
-         "\u0b35"-"\u0b39",
-         "\u0b3c"-"\u0b43",
-         "\u0b47"-"\u0b48",
-         "\u0b4b"-"\u0b4d",
-         "\u0b56"-"\u0b57",
-         "\u0b5c"-"\u0b5d",
-         "\u0b5f"-"\u0b61",
-         "\u0b66"-"\u0b6f",
-         "\u0b71",
-         "\u0b82"-"\u0b83",
-         "\u0b85"-"\u0b8a",
-         "\u0b8e"-"\u0b90",
-         "\u0b92"-"\u0b95",
-         "\u0b99"-"\u0b9a",
-         "\u0b9c",
-         "\u0b9e"-"\u0b9f",
-         "\u0ba3"-"\u0ba4",
-         "\u0ba8"-"\u0baa",
-         "\u0bae"-"\u0bb5",
-         "\u0bb7"-"\u0bb9",
-         "\u0bbe"-"\u0bc2",
-         "\u0bc6"-"\u0bc8",
-         "\u0bca"-"\u0bcd",
-         "\u0bd7",
-         "\u0be7"-"\u0bef",
-         "\u0bf9",
-         "\u0c01"-"\u0c03",
-         "\u0c05"-"\u0c0c",
-         "\u0c0e"-"\u0c10",
-         "\u0c12"-"\u0c28",
-         "\u0c2a"-"\u0c33",
-         "\u0c35"-"\u0c39",
-         "\u0c3e"-"\u0c44",
-         "\u0c46"-"\u0c48",
-         "\u0c4a"-"\u0c4d",
-         "\u0c55"-"\u0c56",
-         "\u0c60"-"\u0c61",
-         "\u0c66"-"\u0c6f",
-         "\u0c82"-"\u0c83",
-         "\u0c85"-"\u0c8c",
-         "\u0c8e"-"\u0c90",
-         "\u0c92"-"\u0ca8",
-         "\u0caa"-"\u0cb3",
-         "\u0cb5"-"\u0cb9",
-         "\u0cbc"-"\u0cc4",
-         "\u0cc6"-"\u0cc8",
-         "\u0cca"-"\u0ccd",
-         "\u0cd5"-"\u0cd6",
-         "\u0cde",
-         "\u0ce0"-"\u0ce1",
-         "\u0ce6"-"\u0cef",
-         "\u0d02"-"\u0d03",
-         "\u0d05"-"\u0d0c",
-         "\u0d0e"-"\u0d10",
-         "\u0d12"-"\u0d28",
-         "\u0d2a"-"\u0d39",
-         "\u0d3e"-"\u0d43",
-         "\u0d46"-"\u0d48",
-         "\u0d4a"-"\u0d4d",
-         "\u0d57",
-         "\u0d60"-"\u0d61",
-         "\u0d66"-"\u0d6f",
-         "\u0d82"-"\u0d83",
-         "\u0d85"-"\u0d96",
-         "\u0d9a"-"\u0db1",
-         "\u0db3"-"\u0dbb",
-         "\u0dbd",
-         "\u0dc0"-"\u0dc6",
-         "\u0dca",
-         "\u0dcf"-"\u0dd4",
-         "\u0dd6",
-         "\u0dd8"-"\u0ddf",
-         "\u0df2"-"\u0df3",
-         "\u0e01"-"\u0e3a",
-         "\u0e3f"-"\u0e4e",
-         "\u0e50"-"\u0e59",
-         "\u0e81"-"\u0e82",
-         "\u0e84",
-         "\u0e87"-"\u0e88",
-         "\u0e8a",
-         "\u0e8d",
-         "\u0e94"-"\u0e97",
-         "\u0e99"-"\u0e9f",
-         "\u0ea1"-"\u0ea3",
-         "\u0ea5",
-         "\u0ea7",
-         "\u0eaa"-"\u0eab",
-         "\u0ead"-"\u0eb9",
-         "\u0ebb"-"\u0ebd",
-         "\u0ec0"-"\u0ec4",
-         "\u0ec6",
-         "\u0ec8"-"\u0ecd",
-         "\u0ed0"-"\u0ed9",
-         "\u0edc"-"\u0edd",
-         "\u0f00",
-         "\u0f18"-"\u0f19",
-         "\u0f20"-"\u0f29",
-         "\u0f35",
-         "\u0f37",
-         "\u0f39",
-         "\u0f3e"-"\u0f47",
-         "\u0f49"-"\u0f6a",
-         "\u0f71"-"\u0f84",
-         "\u0f86"-"\u0f8b",
-         "\u0f90"-"\u0f97",
-         "\u0f99"-"\u0fbc",
-         "\u0fc6",
-         "\u1000"-"\u1021",
-         "\u1023"-"\u1027",
-         "\u1029"-"\u102a",
-         "\u102c"-"\u1032",
-         "\u1036"-"\u1039",
-         "\u1040"-"\u1049",
-         "\u1050"-"\u1059",
-         "\u10a0"-"\u10c5",
-         "\u10d0"-"\u10f8",
-         "\u1100"-"\u1159",
-         "\u115f"-"\u11a2",
-         "\u11a8"-"\u11f9",
-         "\u1200"-"\u1206",
-         "\u1208"-"\u1246",
-         "\u1248",
-         "\u124a"-"\u124d",
-         "\u1250"-"\u1256",
-         "\u1258",
-         "\u125a"-"\u125d",
-         "\u1260"-"\u1286",
-         "\u1288",
-         "\u128a"-"\u128d",
-         "\u1290"-"\u12ae",
-         "\u12b0",
-         "\u12b2"-"\u12b5",
-         "\u12b8"-"\u12be",
-         "\u12c0",
-         "\u12c2"-"\u12c5",
-         "\u12c8"-"\u12ce",
-         "\u12d0"-"\u12d6",
-         "\u12d8"-"\u12ee",
-         "\u12f0"-"\u130e",
-         "\u1310",
-         "\u1312"-"\u1315",
-         "\u1318"-"\u131e",
-         "\u1320"-"\u1346",
-         "\u1348"-"\u135a",
-         "\u1369"-"\u1371",
-         "\u13a0"-"\u13f4",
-         "\u1401"-"\u166c",
-         "\u166f"-"\u1676",
-         "\u1681"-"\u169a",
-         "\u16a0"-"\u16ea",
-         "\u16ee"-"\u16f0",
-         "\u1700"-"\u170c",
-         "\u170e"-"\u1714",
-         "\u1720"-"\u1734",
-         "\u1740"-"\u1753",
-         "\u1760"-"\u176c",
-         "\u176e"-"\u1770",
-         "\u1772"-"\u1773",
-         "\u1780"-"\u17d3",
-         "\u17d7",
-         "\u17db"-"\u17dd",
-         "\u17e0"-"\u17e9",
-         "\u180b"-"\u180d",
-         "\u1810"-"\u1819",
-         "\u1820"-"\u1877",
-         "\u1880"-"\u18a9",
-         "\u1900"-"\u191c",
-         "\u1920"-"\u192b",
-         "\u1930"-"\u193b",
-         "\u1946"-"\u196d",
-         "\u1970"-"\u1974",
-         "\u1d00"-"\u1d6b",
-         "\u1e00"-"\u1e9b",
-         "\u1ea0"-"\u1ef9",
-         "\u1f00"-"\u1f15",
-         "\u1f18"-"\u1f1d",
-         "\u1f20"-"\u1f45",
-         "\u1f48"-"\u1f4d",
-         "\u1f50"-"\u1f57",
-         "\u1f59",
-         "\u1f5b",
-         "\u1f5d",
-         "\u1f5f"-"\u1f7d",
-         "\u1f80"-"\u1fb4",
-         "\u1fb6"-"\u1fbc",
-         "\u1fbe",
-         "\u1fc2"-"\u1fc4",
-         "\u1fc6"-"\u1fcc",
-         "\u1fd0"-"\u1fd3",
-         "\u1fd6"-"\u1fdb",
-         "\u1fe0"-"\u1fec",
-         "\u1ff2"-"\u1ff4",
-         "\u1ff6"-"\u1ffc",
-         "\u200c"-"\u200f",
-         "\u202a"-"\u202e",
-         "\u203f"-"\u2040",
-         "\u2054",
-         "\u2060"-"\u2063",
-         "\u206a"-"\u206f",
-         "\u2071",
-         "\u207f",
-         "\u20a0"-"\u20b1",
-         "\u20d0"-"\u20dc",
-         "\u20e1",
-         "\u20e5"-"\u20ea",
-         "\u2102",
-         "\u2107",
-         "\u210a"-"\u2113",
-         "\u2115",
-         "\u2119"-"\u211d",
-         "\u2124",
-         "\u2126",
-         "\u2128",
-         "\u212a"-"\u212d",
-         "\u212f"-"\u2131",
-         "\u2133"-"\u2139",
-         "\u213d"-"\u213f",
-         "\u2145"-"\u2149",
-         "\u2160"-"\u2183",
-         "\u3005"-"\u3007",
-         "\u3021"-"\u302f",
-         "\u3031"-"\u3035",
-         "\u3038"-"\u303c",
-         "\u3041"-"\u3096",
-         "\u3099"-"\u309a",
-         "\u309d"-"\u309f",
-         "\u30a1"-"\u30ff",
-         "\u3105"-"\u312c",
-         "\u3131"-"\u318e",
-         "\u31a0"-"\u31b7",
-         "\u31f0"-"\u31ff",
-         "\u3400"-"\u4db5",
-         "\u4e00"-"\u9fa5",
-         "\ua000"-"\ua48c",
-         "\uac00"-"\ud7a3",
-         "\ud801", //for supplementary characters suport
-         "\ud802", //for supplementary characters suport
-         "\ud834", //for supplementary characters suport
-         "\udc00", //for supplementary characters suport
-         "\udc01", //for supplementary characters suport
-         "\udd7b", //for supplementary characters suport
-         "\uf900"-"\ufa2d",
-         "\ufa30"-"\ufa6a",
-         "\ufb00"-"\ufb06",
-         "\ufb13"-"\ufb17",
-         "\ufb1d"-"\ufb28",
-         "\ufb2a"-"\ufb36",
-         "\ufb38"-"\ufb3c",
-         "\ufb3e",
-         "\ufb40"-"\ufb41",
-         "\ufb43"-"\ufb44",
-         "\ufb46"-"\ufbb1",
-         "\ufbd3"-"\ufd3d",
-         "\ufd50"-"\ufd8f",
-         "\ufd92"-"\ufdc7",
-         "\ufdf0"-"\ufdfc",
-         "\ufe00"-"\ufe0f",
-         "\ufe20"-"\ufe23",
-         "\ufe33"-"\ufe34",
-         "\ufe4d"-"\ufe4f",
-         "\ufe69",
-         "\ufe70"-"\ufe74",
-         "\ufe76"-"\ufefc",
-         "\ufeff",
-         "\uff04",
-         "\uff10"-"\uff19",
-         "\uff21"-"\uff3a",
-         "\uff3f",
-         "\uff41"-"\uff5a",
-         "\uff65"-"\uffbe",
-         "\uffc2"-"\uffc7",
-         "\uffca"-"\uffcf",
-         "\uffd2"-"\uffd7",
-         "\uffda"-"\uffdc",
-         "\uffe0"-"\uffe1",
-         "\uffe5"-"\uffe6",
-         "\ufff9"-"\ufffb"
-      ]
+  < #PART_LETTER: [
+         "\u0000"-"\u0008",  "\u000e"-"\u001b",  "\u0024",  "\u0030"-"\u0039",  "\u0041"-"\u005a",  "\u005f",  
+         "\u0061"-"\u007a",  "\u007f"-"\u009f",  "\u00a2"-"\u00a5",  "\u00aa",  "\u00ad",  "\u00b5",  "\u00ba",  
+         "\u00c0"-"\u00d6",  "\u00d8"-"\u00f6",  "\u00f8"-"\u02c1",  "\u02c6"-"\u02d1",  "\u02e0"-"\u02e4",  
+         "\u02ec",  "\u02ee",  "\u0300"-"\u0374",  "\u0376"-"\u0377",  "\u037a"-"\u037d",  "\u0386",  "\u0388"-"\u038a",  
+         "\u038c",  "\u038e"-"\u03a1",  "\u03a3"-"\u03f5",  "\u03f7"-"\u0481",  "\u0483"-"\u0487",  "\u048a"-"\u0527",  
+         "\u0531"-"\u0556",  "\u0559",  "\u0561"-"\u0587",  "\u058f",  "\u0591"-"\u05bd",  "\u05bf",  "\u05c1"-"\u05c2",  
+         "\u05c4"-"\u05c5",  "\u05c7",  "\u05d0"-"\u05ea",  "\u05f0"-"\u05f2",  "\u0600"-"\u0604",  "\u060b",  
+         "\u0610"-"\u061a",  "\u0620"-"\u0669",  "\u066e"-"\u06d3",  "\u06d5"-"\u06dd",  "\u06df"-"\u06e8",  
+         "\u06ea"-"\u06fc",  "\u06ff",  "\u070f"-"\u074a",  "\u074d"-"\u07b1",  "\u07c0"-"\u07f5",  "\u07fa",  
+         "\u0800"-"\u082d",  "\u0840"-"\u085b",  "\u08a0",  "\u08a2"-"\u08ac",  "\u08e4"-"\u08fe",  "\u0900"-"\u0963",  
+         "\u0966"-"\u096f",  "\u0971"-"\u0977",  "\u0979"-"\u097f",  "\u0981"-"\u0983",  "\u0985"-"\u098c",  
+         "\u098f"-"\u0990",  "\u0993"-"\u09a8",  "\u09aa"-"\u09b0",  "\u09b2",  "\u09b6"-"\u09b9",  "\u09bc"-"\u09c4",  
+         "\u09c7"-"\u09c8",  "\u09cb"-"\u09ce",  "\u09d7",  "\u09dc"-"\u09dd",  "\u09df"-"\u09e3",  "\u09e6"-"\u09f3",  
+         "\u09fb",  "\u0a01"-"\u0a03",  "\u0a05"-"\u0a0a",  "\u0a0f"-"\u0a10",  "\u0a13"-"\u0a28",  "\u0a2a"-"\u0a30",  
+         "\u0a32"-"\u0a33",  "\u0a35"-"\u0a36",  "\u0a38"-"\u0a39",  "\u0a3c",  "\u0a3e"-"\u0a42",  "\u0a47"-"\u0a48",  
+         "\u0a4b"-"\u0a4d",  "\u0a51",  "\u0a59"-"\u0a5c",  "\u0a5e",  "\u0a66"-"\u0a75",  "\u0a81"-"\u0a83",  
+         "\u0a85"-"\u0a8d",  "\u0a8f"-"\u0a91",  "\u0a93"-"\u0aa8",  "\u0aaa"-"\u0ab0",  "\u0ab2"-"\u0ab3",  
+         "\u0ab5"-"\u0ab9",  "\u0abc"-"\u0ac5",  "\u0ac7"-"\u0ac9",  "\u0acb"-"\u0acd",  "\u0ad0",  "\u0ae0"-"\u0ae3",  
+         "\u0ae6"-"\u0aef",  "\u0af1",  "\u0b01"-"\u0b03",  "\u0b05"-"\u0b0c",  "\u0b0f"-"\u0b10",  "\u0b13"-"\u0b28",  
+         "\u0b2a"-"\u0b30",  "\u0b32"-"\u0b33",  "\u0b35"-"\u0b39",  "\u0b3c"-"\u0b44",  "\u0b47"-"\u0b48",  
+         "\u0b4b"-"\u0b4d",  "\u0b56"-"\u0b57",  "\u0b5c"-"\u0b5d",  "\u0b5f"-"\u0b63",  "\u0b66"-"\u0b6f",  
+         "\u0b71",  "\u0b82"-"\u0b83",  "\u0b85"-"\u0b8a",  "\u0b8e"-"\u0b90",  "\u0b92"-"\u0b95",  "\u0b99"-"\u0b9a",  
+         "\u0b9c",  "\u0b9e"-"\u0b9f",  "\u0ba3"-"\u0ba4",  "\u0ba8"-"\u0baa",  "\u0bae"-"\u0bb9",  "\u0bbe"-"\u0bc2",  
+         "\u0bc6"-"\u0bc8",  "\u0bca"-"\u0bcd",  "\u0bd0",  "\u0bd7",  "\u0be6"-"\u0bef",  "\u0bf9",  "\u0c01"-"\u0c03",  
+         "\u0c05"-"\u0c0c",  "\u0c0e"-"\u0c10",  "\u0c12"-"\u0c28",  "\u0c2a"-"\u0c33",  "\u0c35"-"\u0c39",  
+         "\u0c3d"-"\u0c44",  "\u0c46"-"\u0c48",  "\u0c4a"-"\u0c4d",  "\u0c55"-"\u0c56",  "\u0c58"-"\u0c59",  
+         "\u0c60"-"\u0c63",  "\u0c66"-"\u0c6f",  "\u0c82"-"\u0c83",  "\u0c85"-"\u0c8c",  "\u0c8e"-"\u0c90",  
+         "\u0c92"-"\u0ca8",  "\u0caa"-"\u0cb3",  "\u0cb5"-"\u0cb9",  "\u0cbc"-"\u0cc4",  "\u0cc6"-"\u0cc8",  
+         "\u0cca"-"\u0ccd",  "\u0cd5"-"\u0cd6",  "\u0cde",  "\u0ce0"-"\u0ce3",  "\u0ce6"-"\u0cef",  "\u0cf1"-"\u0cf2",  
+         "\u0d02"-"\u0d03",  "\u0d05"-"\u0d0c",  "\u0d0e"-"\u0d10",  "\u0d12"-"\u0d3a",  "\u0d3d"-"\u0d44",  
+         "\u0d46"-"\u0d48",  "\u0d4a"-"\u0d4e",  "\u0d57",  "\u0d60"-"\u0d63",  "\u0d66"-"\u0d6f",  "\u0d7a"-"\u0d7f",  
+         "\u0d82"-"\u0d83",  "\u0d85"-"\u0d96",  "\u0d9a"-"\u0db1",  "\u0db3"-"\u0dbb",  "\u0dbd",  "\u0dc0"-"\u0dc6",  
+         "\u0dca",  "\u0dcf"-"\u0dd4",  "\u0dd6",  "\u0dd8"-"\u0ddf",  "\u0df2"-"\u0df3",  "\u0e01"-"\u0e3a",  
+         "\u0e3f"-"\u0e4e",  "\u0e50"-"\u0e59",  "\u0e81"-"\u0e82",  "\u0e84",  "\u0e87"-"\u0e88",  "\u0e8a",  
+         "\u0e8d",  "\u0e94"-"\u0e97",  "\u0e99"-"\u0e9f",  "\u0ea1"-"\u0ea3",  "\u0ea5",  "\u0ea7",  "\u0eaa"-"\u0eab",  
+         "\u0ead"-"\u0eb9",  "\u0ebb"-"\u0ebd",  "\u0ec0"-"\u0ec4",  "\u0ec6",  "\u0ec8"-"\u0ecd",  "\u0ed0"-"\u0ed9",  
+         "\u0edc"-"\u0edf",  "\u0f00",  "\u0f18"-"\u0f19",  "\u0f20"-"\u0f29",  "\u0f35",  "\u0f37",  "\u0f39",  
+         "\u0f3e"-"\u0f47",  "\u0f49"-"\u0f6c",  "\u0f71"-"\u0f84",  "\u0f86"-"\u0f97",  "\u0f99"-"\u0fbc",  
+         "\u0fc6",  "\u1000"-"\u1049",  "\u1050"-"\u109d",  "\u10a0"-"\u10c5",  "\u10c7",  "\u10cd",  "\u10d0"-"\u10fa",  
+         "\u10fc"-"\u1248",  "\u124a"-"\u124d",  "\u1250"-"\u1256",  "\u1258",  "\u125a"-"\u125d",  "\u1260"-"\u1288",  
+         "\u128a"-"\u128d",  "\u1290"-"\u12b0",  "\u12b2"-"\u12b5",  "\u12b8"-"\u12be",  "\u12c0",  "\u12c2"-"\u12c5",  
+         "\u12c8"-"\u12d6",  "\u12d8"-"\u1310",  "\u1312"-"\u1315",  "\u1318"-"\u135a",  "\u135d"-"\u135f",  
+         "\u1380"-"\u138f",  "\u13a0"-"\u13f4",  "\u1401"-"\u166c",  "\u166f"-"\u167f",  "\u1681"-"\u169a",  
+         "\u16a0"-"\u16ea",  "\u16ee"-"\u16f0",  "\u1700"-"\u170c",  "\u170e"-"\u1714",  "\u1720"-"\u1734",  
+         "\u1740"-"\u1753",  "\u1760"-"\u176c",  "\u176e"-"\u1770",  "\u1772"-"\u1773",  "\u1780"-"\u17d3",  
+         "\u17d7",  "\u17db"-"\u17dd",  "\u17e0"-"\u17e9",  "\u180b"-"\u180d",  "\u1810"-"\u1819",  "\u1820"-"\u1877",  
+         "\u1880"-"\u18aa",  "\u18b0"-"\u18f5",  "\u1900"-"\u191c",  "\u1920"-"\u192b",  "\u1930"-"\u193b",  
+         "\u1946"-"\u196d",  "\u1970"-"\u1974",  "\u1980"-"\u19ab",  "\u19b0"-"\u19c9",  "\u19d0"-"\u19d9",  
+         "\u1a00"-"\u1a1b",  "\u1a20"-"\u1a5e",  "\u1a60"-"\u1a7c",  "\u1a7f"-"\u1a89",  "\u1a90"-"\u1a99",  
+         "\u1aa7",  "\u1b00"-"\u1b4b",  "\u1b50"-"\u1b59",  "\u1b6b"-"\u1b73",  "\u1b80"-"\u1bf3",  "\u1c00"-"\u1c37",  
+         "\u1c40"-"\u1c49",  "\u1c4d"-"\u1c7d",  "\u1cd0"-"\u1cd2",  "\u1cd4"-"\u1cf6",  "\u1d00"-"\u1de6",  
+         "\u1dfc"-"\u1f15",  "\u1f18"-"\u1f1d",  "\u1f20"-"\u1f45",  "\u1f48"-"\u1f4d",  "\u1f50"-"\u1f57",  
+         "\u1f59",  "\u1f5b",  "\u1f5d",  "\u1f5f"-"\u1f7d",  "\u1f80"-"\u1fb4",  "\u1fb6"-"\u1fbc",  "\u1fbe",  
+         "\u1fc2"-"\u1fc4",  "\u1fc6"-"\u1fcc",  "\u1fd0"-"\u1fd3",  "\u1fd6"-"\u1fdb",  "\u1fe0"-"\u1fec",  
+         "\u1ff2"-"\u1ff4",  "\u1ff6"-"\u1ffc",  "\u200b"-"\u200f",  "\u202a"-"\u202e",  "\u203f"-"\u2040",  
+         "\u2054",  "\u2060"-"\u2064",  "\u206a"-"\u206f",  "\u2071",  "\u207f",  "\u2090"-"\u209c",  "\u20a0"-"\u20ba",  
+         "\u20d0"-"\u20dc",  "\u20e1",  "\u20e5"-"\u20f0",  "\u2102",  "\u2107",  "\u210a"-"\u2113",  "\u2115",  
+         "\u2119"-"\u211d",  "\u2124",  "\u2126",  "\u2128",  "\u212a"-"\u212d",  "\u212f"-"\u2139",  "\u213c"-"\u213f",  
+         "\u2145"-"\u2149",  "\u214e",  "\u2160"-"\u2188",  "\u2c00"-"\u2c2e",  "\u2c30"-"\u2c5e",  "\u2c60"-"\u2ce4",  
+         "\u2ceb"-"\u2cf3",  "\u2d00"-"\u2d25",  "\u2d27",  "\u2d2d",  "\u2d30"-"\u2d67",  "\u2d6f",  "\u2d7f"-"\u2d96",  
+         "\u2da0"-"\u2da6",  "\u2da8"-"\u2dae",  "\u2db0"-"\u2db6",  "\u2db8"-"\u2dbe",  "\u2dc0"-"\u2dc6",  
+         "\u2dc8"-"\u2dce",  "\u2dd0"-"\u2dd6",  "\u2dd8"-"\u2dde",  "\u2de0"-"\u2dff",  "\u2e2f",  "\u3005"-"\u3007",  
+         "\u3021"-"\u302f",  "\u3031"-"\u3035",  "\u3038"-"\u303c",  "\u3041"-"\u3096",  "\u3099"-"\u309a",  
+         "\u309d"-"\u309f",  "\u30a1"-"\u30fa",  "\u30fc"-"\u30ff",  "\u3105"-"\u312d",  "\u3131"-"\u318e",  
+         "\u31a0"-"\u31ba",  "\u31f0"-"\u31ff",  "\u3400"-"\u4db5",  "\u4e00"-"\u9fcc",  "\ua000"-"\ua48c",  
+         "\ua4d0"-"\ua4fd",  "\ua500"-"\ua60c",  "\ua610"-"\ua62b",  "\ua640"-"\ua66f",  "\ua674"-"\ua67d",  
+         "\ua67f"-"\ua697",  "\ua69f"-"\ua6f1",  "\ua717"-"\ua71f",  "\ua722"-"\ua788",  "\ua78b"-"\ua78e",  
+         "\ua790"-"\ua793",  "\ua7a0"-"\ua7aa",  "\ua7f8"-"\ua827",  "\ua838",  "\ua840"-"\ua873",  "\ua880"-"\ua8c4",  
+         "\ua8d0"-"\ua8d9",  "\ua8e0"-"\ua8f7",  "\ua8fb",  "\ua900"-"\ua92d",  "\ua930"-"\ua953",  "\ua960"-"\ua97c",  
+         "\ua980"-"\ua9c0",  "\ua9cf"-"\ua9d9",  "\uaa00"-"\uaa36",  "\uaa40"-"\uaa4d",  "\uaa50"-"\uaa59",  
+         "\uaa60"-"\uaa76",  "\uaa7a"-"\uaa7b",  "\uaa80"-"\uaac2",  "\uaadb"-"\uaadd",  "\uaae0"-"\uaaef",  
+         "\uaaf2"-"\uaaf6",  "\uab01"-"\uab06",  "\uab09"-"\uab0e",  "\uab11"-"\uab16",  "\uab20"-"\uab26",  
+         "\uab28"-"\uab2e",  "\uabc0"-"\uabea",  "\uabec"-"\uabed",  "\uabf0"-"\uabf9",  "\uac00"-"\ud7a3",  
+         "\ud7b0"-"\ud7c6",  "\ud7cb"-"\ud7fb",  "\ud800"-"\udfff",  "\uf900"-"\ufa6d",  "\ufa70"-"\ufad9",  
+         "\ufb00"-"\ufb06",  "\ufb13"-"\ufb17",  "\ufb1d"-"\ufb28",  "\ufb2a"-"\ufb36",  "\ufb38"-"\ufb3c",  
+         "\ufb3e",  "\ufb40"-"\ufb41",  "\ufb43"-"\ufb44",  "\ufb46"-"\ufbb1",  "\ufbd3"-"\ufd3d",  "\ufd50"-"\ufd8f",  
+         "\ufd92"-"\ufdc7",  "\ufdf0"-"\ufdfc",  "\ufe00"-"\ufe0f",  "\ufe20"-"\ufe26",  "\ufe33"-"\ufe34",  
+         "\ufe4d"-"\ufe4f",  "\ufe69",  "\ufe70"-"\ufe74",  "\ufe76"-"\ufefc",  "\ufeff",  "\uff04",  "\uff10"-"\uff19",  
+         "\uff21"-"\uff3a",  "\uff3f",  "\uff41"-"\uff5a",  "\uff66"-"\uffbe",  "\uffc2"-"\uffc7",  "\uffca"-"\uffcf",  
+         "\uffd2"-"\uffd7",  "\uffda"-"\uffdc",  "\uffe0"-"\uffe1",  "\uffe5"-"\uffe6",  "\ufff9"-"\ufffb" ]
   >
 }
 
@@ -1309,13 +652,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.GTToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.GTToken)matchedToken).realKind = RSIGNEDSHIFT;
+     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -1341,37 +684,47 @@ CompilationUnit CompilationUnit():
 	ModuleDeclaration module = null;
 }
 {
-    ( ";" )*
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    ( in = ImportDeclaration() { imports = add(imports, in); } | ";" )*
-    (
-        modifier = Modifiers()
+    try {
+        ( LOOKAHEAD(2)";" )*
+        [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
         (
-            tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+            in = ImportDeclaration() { imports = add(imports, in); } 
         |
-            tn = EnumDeclaration(modifier) { types = add(types, tn); }
-        |
-            tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-        |
-            module = ModuleDeclaration(modifier)
-        |
-            ";"
-        )
-    )*
-    (<EOF> | "\u001A" /** ctrl+z char **/)
-    { return new CompilationUnit(range(Position.HOME, tokenEnd()), pakage, imports, types, module); }
+            (
+                modifier = Modifiers()
+                (
+                    tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+                |
+                    tn = EnumDeclaration(modifier) { types = add(types, tn); }
+                |
+                    tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+                |
+                    module = ModuleDeclaration(modifier)
+                |
+                    ";"
+                )
+            )
+        )*
+        (<EOF> | "\u001A" /** ctrl+z char **/)
+        { return new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module); }
+    } catch (ParseException e) {
+        recover(EOF, e);
+        final CompilationUnit compilationUnit = new CompilationUnit(range(token_source.getHomeToken(), token()), null, new NodeList<ImportDeclaration>(), new NodeList<TypeDeclaration<?>>(), null);
+        compilationUnit.setParsed(UNPARSABLE);
+        return compilationUnit;
+    }
 }
 
 PackageDeclaration PackageDeclaration():
 {
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	Name name;
-	Position begin;
+	JavaToken begin;
 }
 {
   annotations = Annotations() 
-  "package" {begin = tokenBegin();}  name = Name() ";"
-  { return new PackageDeclaration(range(begin, tokenEnd()), annotations, name); }
+  "package" {begin = token();}  name = Name() ";"
+  { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
 
@@ -1380,14 +733,14 @@ ImportDeclaration ImportDeclaration():
     Name name;
     boolean isStatic = false;
     boolean isAsterisk = false;
-    Position begin;
+    JavaToken begin;
 }
 {
-    "import" {begin = tokenBegin();} 
+    "import" {begin = token();} 
     [ "static" { isStatic = true; } ] 
     name = Name() 
     [ "." "*" { isAsterisk = true; } ] ";"
-    { return new ImportDeclaration(range(begin, tokenEnd()), name, isStatic, isAsterisk); }
+    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk); }
 }
 
 /*
@@ -1398,7 +751,7 @@ ImportDeclaration ImportDeclaration():
 
 ModifierHolder Modifiers():
 {
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
     EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     AnnotationExpr ann;
@@ -1407,31 +760,33 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { addModifier(modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(tokenBegin()); }
+   "public" { addModifier(this, modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(token()); }
   |
-   "static" { addModifier(modifiers, Modifier.STATIC); begin = begin.orIfInvalid(tokenBegin()); }
+   "static" { addModifier(this, modifiers, Modifier.STATIC); begin = begin.orIfInvalid(token()); }
   |
-   "protected" {  addModifier(modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(tokenBegin()); }
+   "protected" {  addModifier(this, modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(token()); }
   |
-   "private" { addModifier(modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(tokenBegin()); }
+   "private" { addModifier(this, modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(token()); }
   |
-   "final" { addModifier(modifiers, Modifier.FINAL); begin = begin.orIfInvalid(tokenBegin()); }
+   "final" { addModifier(this, modifiers, Modifier.FINAL); begin = begin.orIfInvalid(token()); }
   |
-   "abstract" { addModifier(modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(tokenBegin()); }
+   "abstract" { addModifier(this, modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(token()); }
   |
-   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(tokenBegin()); }
+   "synchronized" { addModifier(this, modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(token()); }
   |
-   "native" { addModifier(modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(tokenBegin()); }
+   "native" { addModifier(this, modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(token()); }
   |
-   "transient" { addModifier(modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(tokenBegin()); }
+   "transient" { addModifier(this, modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(token()); }
   |
-   "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(tokenBegin()); }
+   "volatile" { addModifier(this, modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(token()); }
   |
-   "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(tokenBegin()); }
+   "strictfp" { addModifier(this, modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(token()); }
   |
-   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(tokenBegin()); }
+   "transitive" { addModifier(this, modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(token()); }
   |
-   ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); }
+   "default" { addModifier(this, modifiers, Modifier.DEFAULT);  begin = begin.orIfInvalid(token()); }
+  |
+   ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getTokenRange().get().getBegin()); }
   )
  )*
 
@@ -1452,20 +807,20 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     NodeList<ClassOrInterfaceType> extList = emptyList();
     NodeList<ClassOrInterfaceType> impList = emptyList();
     NodeList<BodyDeclaration<?>> members = emptyList();
-    Position begin = modifier.begin;
+    JavaToken begin = modifier.begin;
 }
 {
-  ( "class" | "interface" { isInterface = true; } ) { begin = begin.orIfInvalid(tokenBegin()); }
+  ( "class" | "interface" { isInterface = true; } ) { begin = begin.orIfInvalid(token()); }
   name = SimpleName()
   [ typePar = TypeParameters() ]
-  [ extList = ExtendsList(isInterface) ]
-  [ impList = ImplementsList(isInterface) ]
-  members = ClassOrInterfaceBody(isInterface)
+  [ extList = ExtendsList() ]
+  [ impList = ImplementsList() ]
+  members = ClassOrInterfaceBody()
 
-	{ return new ClassOrInterfaceDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
+	{ return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
 }
 
-NodeList<ClassOrInterfaceType> ExtendsList(boolean isInterface):
+NodeList<ClassOrInterfaceType> ExtendsList():
 {
    boolean extendsMoreThanOne = false;
    NodeList<ClassOrInterfaceType> ret = new NodeList<ClassOrInterfaceType>();
@@ -1474,14 +829,10 @@ NodeList<ClassOrInterfaceType> ExtendsList(boolean isInterface):
 {
    "extends" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); extendsMoreThanOne = true; } )*
-   {
-      if (extendsMoreThanOne && !isInterface)
-         addProblem("A class cannot extend more than one other class");
-   }
    { return ret; }
 }
 
-NodeList<ClassOrInterfaceType> ImplementsList(boolean isInterface):
+NodeList<ClassOrInterfaceType> ImplementsList():
 {
    NodeList<ClassOrInterfaceType> ret = new NodeList<ClassOrInterfaceType>();
    ClassOrInterfaceType cit;
@@ -1489,10 +840,6 @@ NodeList<ClassOrInterfaceType> ImplementsList(boolean isInterface):
 {
    "implements" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
-   {
-      if (isInterface)
-         addProblem("An interface cannot implement other interfaces");
-   }
    { return ret; }
 }
 
@@ -1504,23 +851,27 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	NodeList<EnumConstantDeclaration> entries = emptyList();
 	BodyDeclaration<?> member;
     NodeList<BodyDeclaration<?>> members = emptyList();
-	Position begin = modifier.begin;
+	JavaToken begin = modifier.begin;
 }
 {
-  "enum" { begin = begin.orIfInvalid(tokenBegin()); }
-  name = SimpleName()
-  [ impList = ImplementsList(false) ]
-  "{"
-  	[
-    	entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
-  	]
-  	[ "," ]
- 	[
- 	 	( ";" ( member = ClassOrInterfaceBodyDeclaration(false) { members = add(members, member); } )* )
- 	]
-  "}"
-
-  { return new EnumDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
+    "enum" { begin = begin.orIfInvalid(token()); }
+    name = SimpleName()
+    [ impList = ImplementsList() ]
+    "{"
+    [
+        entry = EnumConstantDeclaration() { entries.add(entry); } ( LOOKAHEAD(2) "," entry = EnumConstantDeclaration() { entries.add(entry); } )*
+    ]
+    [ "," ]
+    [
+        ";" (
+            member = ClassOrInterfaceBodyDeclaration() { members = add(members, member); } 
+        |
+            ";"
+        )*
+    ]
+    "}"
+    
+    { return new EnumDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, impList, entries, members); }
 }
 
 
@@ -1531,15 +882,15 @@ EnumConstantDeclaration EnumConstantDeclaration():
 	SimpleName name;
 	NodeList<Expression> args = emptyList();
 	NodeList<BodyDeclaration<?>> classBody = emptyList();
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 }
 {
   {  }
-  ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getBegin().get()); } )*
-  name = SimpleName() { begin = begin.orIfInvalid(tokenBegin()); } 
-  [ args = Arguments() ] [ classBody = ClassOrInterfaceBody(false) ]
+  ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getTokenRange().get().getBegin()); } )*
+  name = SimpleName() { begin = begin.orIfInvalid(token()); } 
+  [ args = Arguments() ] [ classBody = ClassOrInterfaceBody() ]
   { 
-      return new EnumConstantDeclaration(range(begin, tokenEnd()), annotations, name, args, classBody);  
+      return new EnumConstantDeclaration(range(begin, token()), annotations, name, args, classBody);  
   }
 }
 
@@ -1555,12 +906,12 @@ RangedList<TypeParameter> TypeParameters():
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-   "<" { ret.beginAt(tokenBegin()); }
+   "<" { ret.beginAt(token()); }
    annotations = Annotations() 
    tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; }
    ( "," 
    annotations = Annotations() tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; } )*
-   ">" { ret.endAt(tokenEnd()); }
+   ">" { ret.endAt(token()); }
    { return ret; }
 }
 
@@ -1568,11 +919,11 @@ TypeParameter TypeParameter():
 {
 	SimpleName name;
 	NodeList<ClassOrInterfaceType> typeBound  = emptyList();
-	Position begin;
+	JavaToken begin;
 }
 {
-   name = SimpleName() { begin=tokenBegin(); } [ typeBound = TypeBound() ]
-   { return new TypeParameter(range(begin, tokenEnd()),name, typeBound); }
+   name = SimpleName() { begin=token(); } [ typeBound = TypeBound() ]
+   { return new TypeParameter(range(begin, token()), name, typeBound, new NodeList()); }
 }
 
 NodeList<ClassOrInterfaceType> TypeBound():
@@ -1586,81 +937,47 @@ NodeList<ClassOrInterfaceType> TypeBound():
    { return ret; }
 }
 
-NodeList<BodyDeclaration<?>> ClassOrInterfaceBody(boolean isInterface):
+NodeList<BodyDeclaration<?>> ClassOrInterfaceBody():
 {
 	NodeList<BodyDeclaration<?>> ret = emptyList();
 	BodyDeclaration member;
 }
 {
-  "{" ( member = ClassOrInterfaceBodyDeclaration(isInterface) { ret.add(member); }  )* "}"
-  { return ret; }
+    "{" (
+        member = ClassOrInterfaceBodyDeclaration() { ret.add(member); }
+    |
+        ";"
+    )* "}"
+    { return ret; }
 }
 
-BodyDeclaration<?> ClassOrInterfaceBodyDeclaration(boolean isInterface):
+BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 {
    ModifierHolder modifier;
-   ModifierHolder modifier2 = null;
-   EnumSet<Modifier> aux = null;
    BodyDeclaration<?> ret;
-   boolean isDefault = false;
 }
 {
   {  }
   (
 	  LOOKAHEAD(2)
 	  ret = InitializerDeclaration()
-	  {
-	     if (isInterface)
-	        addProblem("An interface cannot have initializers");
-	  }
 	|
-	  modifier = Modifiers() [ "default" modifier2= Modifiers()
-	  {
-	    if(!isInterface)
-	    {
-	      addProblem("A class cannot have default members");
-	    }
-	    isDefault = true;
-	  }]
-
-				// Just get all the modifiers out of the way. If you want to do
-	              // more checks, pass the modifiers down to the member
+      // Just get all the modifiers out of the way. If you want to do
+      // more checks, pass the modifiers down to the member
+	  modifier = Modifiers()
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
 	    |
 	      ret = EnumDeclaration(modifier)
-	    |
+	    | LOOKAHEAD("@" "interface")
 	      ret = AnnotationTypeDeclaration(modifier)
-	    |
-	      LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
+	    | LOOKAHEAD( [ TypeParameters() ] Identifier() "(" )
 	      ret = ConstructorDeclaration(modifier)
-	    |
-	      LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
+	    | LOOKAHEAD( Type() Identifier() ( ArrayBracketPair() )* ( "," | "=" | ";" ) )
 	      ret = FieldDeclaration(modifier)
 	    |
 	      ret = MethodDeclaration(modifier)
-	      {
-	        if(isDefault && ret!= null && ((MethodDeclaration)ret).getBody() == null)
-	        {
-	          addProblem("\"default\" methods must have a body");
-	        }
-	        ((MethodDeclaration)ret).setDefault(isDefault);
-	        if(modifier2!= null)
-	        {
-	          aux = modifier2.modifiers;
-	        }
-	        addMultipleModifier(modifier.modifiers, aux);
-	        ((MethodDeclaration)ret).setModifiers(modifier.modifiers);
-	      }
 	  )
-	  {
-	    if(isDefault && ! (ret instanceof MethodDeclaration))
-	    {
-	      addProblem("Only methods can have the keyword \"default\".");
-	    }
-	  }
-	|
-	  ";" { ret = new EmptyMemberDeclaration(tokenRange()); }
   )
   { return ret; }
 }
@@ -1678,8 +995,8 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
   ( "," val = VariableDeclarator(partialType) { variables.add(val); } )* ";"
 
     { 
-        Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
-        return new FieldDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, variables);
+        JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
+        return new FieldDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
     }
 }
 
@@ -1690,20 +1007,20 @@ VariableDeclarator VariableDeclarator(Type partialType):
 }
 {
     id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
-    { return new VariableDeclarator(range(id.a.getBegin().get(), tokenEnd()), juggleArrayType(partialType, id.b), id.a, init); }
+    { return new VariableDeclarator(range(id.a.getTokenRange().get().getBegin(), token()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
 Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 {
 	SimpleName name;
-	Position begin;
+	JavaToken begin;
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
-    name = SimpleName() { begin=tokenBegin();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     {
-        name.setRange(name.getRange().get().withEnd(tokenEnd()));    
+        name.setTokenRange(name.getTokenRange().get().withEnd(token()));    
         return new Pair(name, arrayBracketPairs);
     }
 }
@@ -1725,11 +1042,11 @@ ArrayInitializerExpr ArrayInitializer():
 {
 	NodeList<Expression> values = emptyList();
 	Expression val;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "{" {begin=tokenBegin();} [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ] [ "," ] "}"
-  { return new ArrayInitializerExpr(range(begin, tokenEnd()), values); }
+  "{" {begin=token();} [ val = VariableInitializer() { values = add(values, val); } ( LOOKAHEAD(2) "," val = VariableInitializer() { values = add(values, val); } )* ] [ "," ] "}"
+  { return new ArrayInitializerExpr(range(begin, token()), values); }
 }
 
 MethodDeclaration MethodDeclaration(ModifierHolder modifier):
@@ -1743,21 +1060,21 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	NodeList<ReferenceType> throws_ = emptyList();
 	BlockStmt body = null;
 	NodeList<AnnotationExpr> annotations;
-	Position begin = modifier.begin;
+	JavaToken begin = modifier.begin;
 	ReferenceType throwType;
 }
 {
     // Modifiers already matched in the caller!
-    [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
+    [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = begin.orIfInvalid(nodeListBegin(annotations)); }
-    type = ResultType() { begin = begin.orIfInvalid(type.getBegin().get()); }
-    name = SimpleName() parameters = FormalParameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    type = ResultType() { begin = begin.orIfInvalid(type.getTokenRange().get().getBegin()); }
+    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
       ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
     ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, false, parameters, throws_, body);
+        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
     }
 }
 
@@ -1780,25 +1097,24 @@ ReferenceType ReferenceTypeWithAnnotations():
     }
 }
 
-NodeList<Parameter> FormalParameters():
+NodeList<Parameter> Parameters():
 {
 	NodeList<Parameter> ret = emptyList();
 	Parameter par;
 }
 {
-  "(" [ par = FormalParameter() { ret = add(ret, par); } ( "," par = FormalParameter() { ret = add(ret, par); } )* ] ")"
-
+  "(" [ par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )* ] ")"
   { return ret; }
 }
 
-NodeList<Parameter> FormalLambdaParameters():
+NodeList<Parameter> LambdaParameters():
 {
   NodeList<Parameter> ret = null;
   Parameter par;
 }
 {
    ","
-  	par = FormalParameter() {  ret = add(ret, par);  } ( "," par = FormalParameter() { ret = add(ret, par); } )*
+  	par = Parameter() {  ret = add(ret, par);  } ( "," par = Parameter() { ret = add(ret, par); } )*
   { return ret;  }
 }
 
@@ -1809,28 +1125,54 @@ NodeList<Parameter> InferredLambdaParameters():
 }
 {
     ","
-    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
+    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
     (
-        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getBegin().get(), id.a.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
+        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
     )*
     { return ret;  }
 }
 
-Parameter FormalParameter():
+Parameter Parameter():
 {
 	ModifierHolder modifier;
 	Type partialType;
 	boolean isVarArg = false;
 	Pair<SimpleName, List<ArrayBracketPair>> id;
+	SimpleName receiverId;
 	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
+	Parameter ret;
 }
 {
-  modifier = Modifiers() partialType = Type() [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] id = VariableDeclaratorId()
-  {
-        Position begin = modifier.begin.orIfInvalid(partialType.getBegin().get());
-        return new Parameter(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
-  }
+  modifier = Modifiers() partialType = Type() [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
+  ( LOOKAHEAD(ReceiverParameterId())
+    receiverId = ReceiverParameterId()
+    {
+        JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
+        ret = new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, partialType, isVarArg, varArgAnnotations, receiverId);
+    }
+  |
+    id = VariableDeclaratorId()
+    {
+        JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
+        ret = new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
+    }
+  )
+  { return ret; }
 }
+
+SimpleName ReceiverParameterId():
+{
+    String id;
+	String ret ="";
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    JavaToken begin = INVALID;
+}
+{
+  ( id = Identifier() "." { ret = ret + id + "."; begin = begin.orIfInvalid(token()); } )*
+  "this" { begin = begin.orIfInvalid(token()); }
+  { return new SimpleName(range(begin, token()), ret + "this"); }
+}
+
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
@@ -1840,16 +1182,16 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	NodeList<ReferenceType> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
-    Position begin = modifier.begin;
-	Position blockBegin = INVALID;
+    JavaToken begin = modifier.begin;
+	JavaToken blockBegin = INVALID;
 	ReferenceType throwType;
 }
 {
-  [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.begin); } ]
+  [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.begin); begin = begin.orIfInvalid(tokenBegin()); } parameters = FormalParameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); begin = begin.orIfInvalid(token()); } parameters = Parameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
   ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
-  "{" { blockBegin=tokenBegin(); }
+  "{" { blockBegin=token(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
   "}"
@@ -1858,7 +1200,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = add(0, stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, pos(token.endLine, token.endColumn)), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, tokenEnd()), stmts));
+  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, token()), stmts));
   }
 }
 
@@ -1868,25 +1210,25 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
 	NodeList<Expression> args;
 	Expression expr = null;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 }
 {
   (
 	  LOOKAHEAD([ TypeArguments() ] <THIS> "(")
-	  [ typeArgs = TypeArguments() { begin=typeArgs.range.begin; } ]
-	  <THIS> { begin = begin.orIfInvalid(tokenBegin()); isThis = true; }
+	  [ typeArgs = TypeArguments() { begin=typeArgs.range.getBegin(); } ]
+	  <THIS> { begin = begin.orIfInvalid(token()); isThis = true; }
 	  args = Arguments() ";"
 	|
 	  [
 	    LOOKAHEAD( PrimaryExpressionWithoutSuperSuffix() "." )
 	  	expr = PrimaryExpressionWithoutSuperSuffix() "."
-	  	{ begin=expr.getBegin().get(); }
+	  	{ begin=expr.getTokenRange().get().getBegin(); }
 	  ]
-	  [ typeArgs = TypeArguments() { begin = begin.orIfInvalid(typeArgs.range.begin); } ]
-	  <SUPER> {begin = begin.orIfInvalid(tokenBegin());}
+	  [ typeArgs = TypeArguments() { begin = begin.orIfInvalid(typeArgs.range.getBegin()); } ]
+	  <SUPER> {begin = begin.orIfInvalid(token());}
 	  args = Arguments() ";"
   )
-  { return new ExplicitConstructorInvocationStmt(range(begin, tokenEnd()),typeArgs.list, isThis, expr, args); }
+  { return new ExplicitConstructorInvocationStmt(range(begin, token()),typeArgs.list, isThis, expr, args); }
 }
 
 NodeList<Statement> Statements():
@@ -1895,20 +1237,20 @@ NodeList<Statement> Statements():
 	Statement stmt;
 }
 {
-	( stmt = BlockStatement() { ret = add(ret, stmt); } )*
+	( LOOKAHEAD(2) stmt = BlockStatement() { ret = add(ret, stmt); } )*
 	{ return ret; }
 }
 
 InitializerDeclaration InitializerDeclaration():
 {
 	BlockStmt body;
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 	boolean isStatic = false;
 }
 {
-  [ "static" { isStatic = true; begin=tokenBegin();} ] 
-  body = Block() {begin = begin.orIfInvalid(body.getBegin().get());}
-  { return new InitializerDeclaration(range(begin, tokenEnd()), isStatic, body); }
+  [ "static" { isStatic = true; begin=token();} ] 
+  body = Block() {begin = begin.orIfInvalid(body.getTokenRange().get().getBegin());}
+  { return new InitializerDeclaration(range(begin, token()), isStatic, body); }
 }
 
 
@@ -1947,24 +1289,24 @@ ReferenceType ReferenceType():
 ArrayBracketPair ArrayBracketPair():
 {
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-    Position begin = INVALID;
+    JavaToken begin = INVALID;
 }
 {
     annotations = Annotations()
-    "[" { begin = begin.orIfInvalid(tokenBegin()); } "]"
-    { return new ArrayBracketPair(range(begin, tokenEnd()), annotations); }
+    "[" { begin = begin.orIfInvalid(token()); } "]"
+    { return new ArrayBracketPair(range(begin, token()), annotations); }
 }
 
 IntersectionType IntersectionType():
 {
-	Position begin;
+	JavaToken begin;
 	ReferenceType elementType;
 	NodeList<ReferenceType> elements = emptyList();
 }
 {
-    elementType=ReferenceType() { begin=elementType.getBegin().get(); elements = add(elements, elementType); }
+    elementType=ReferenceType() { begin=elementType.getTokenRange().get().getBegin(); elements = add(elements, elementType); }
     "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
-    { return new IntersectionType(range(begin, tokenEnd()), elements); }
+    { return new IntersectionType(range(begin, token()), elements); }
 }
 
 ClassOrInterfaceType AnnotatedClassOrInterfaceType():
@@ -1990,21 +1332,20 @@ ClassOrInterfaceType ClassOrInterfaceType():
 	ClassOrInterfaceType ret;
 	SimpleName name;
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
-	Position begin;
+	JavaToken begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-  name = SimpleName() {begin=tokenBegin();}
+  name = SimpleName() {begin=token();}
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
-      ret = new ClassOrInterfaceType(range(begin, tokenEnd()),null, name, typeArgs.list);
+      ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, annotations);
   }
   (
 	  LOOKAHEAD(2) "." annotations = Annotations()  name = SimpleName()
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
-	    ret = new ClassOrInterfaceType(range(begin, tokenEnd()),ret, name, typeArgs.list);
-	    ret.setAnnotations(annotations);
+	    ret = new ClassOrInterfaceType(range(begin, token()), ret, name, typeArgs.list, annotations);
 	    annotations = null;
       }
   )*
@@ -2018,9 +1359,9 @@ RangedList<Type> TypeArguments():
 }
 {
    (
-     "<" { ret.beginAt(tokenBegin()); }
+     "<" { ret.beginAt(token()); }
      (type = TypeArgument() { ret.add(type); } ( "," type = TypeArgument() { ret.add(type); } )*)?
-     ">" { ret.endAt(tokenEnd()); }
+     ">" { ret.endAt(token()); }
    )
    { return ret; }
 }
@@ -2033,7 +1374,7 @@ Type TypeArgument():
 {
  annotations = Annotations() 
  (
-   ret = ReferenceType()
+   ret = Type()
  |
    ret = Wildcard()
  )
@@ -2044,11 +1385,11 @@ WildcardType Wildcard():
 {
 	ReferenceType ext = null;
 	ReferenceType sup = null;
-	Position begin;
+	JavaToken begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-   "?" {begin=tokenBegin();}
+   "?" {begin=token();}
    [
 		"extends" annotations = Annotations() ext = ReferenceType()
 		{
@@ -2061,7 +1402,7 @@ WildcardType Wildcard():
 		}
    ]
    { 
-     return new WildcardType(range(begin, tokenEnd()),ext, sup);
+     return new WildcardType(range(begin, token()),ext, sup);
    }
 }
 
@@ -2115,7 +1456,7 @@ Name Name():
 {
   annotations=Annotations() Identifier() { ret = new Name(tokenRange(), null, token.image, annotations); }
   ( LOOKAHEAD("." Annotations() Identifier()) 
-  "." annotations=Annotations() Identifier() { ret = new Name(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, token.image, annotations); } )*
+  "." annotations=Annotations() Identifier() { ret = new Name(range(ret.getTokenRange().get().getBegin(), token()), ret, token.image, annotations); } )*
   { return ret; }
 }
 
@@ -2166,28 +1507,28 @@ Expression Expression():
   [
     (
        LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, value, op); }
+    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, value, op); }
   |
    "->" lambdaBody = LambdaBody()
    {
      if (ret instanceof CastExpr)
      {
-       ret = generateLambda(ret, lambdaBody);
+       ret = generateLambda(this, ret, lambdaBody);
      }
      else if (ret instanceof ConditionalExpr){
      	 ConditionalExpr ce = (ConditionalExpr) ret;
          if(ce.getElseExpr() != null){
-            ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
+            ce.setElseExpr(generateLambda(this, ce.getElseExpr(), lambdaBody));
          }
      }
      else
      {
-       ret = generateLambda(ret, lambdaBody);
+       ret = generateLambda(this, ret, lambdaBody);
      }
    }
  |  "::"  [typeArgs = TypeArguments() ] (Identifier() | "new")
  {
-   ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
+   ret = new MethodReferenceExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, token.image);
  }
    )
   ]
@@ -2225,7 +1566,7 @@ Expression ConditionalExpression():
 }
 {
   ret = ConditionalOrExpression()
-  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, left, right); } ]
+  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, left, right); } ]
   { return ret; }
 }
 
@@ -2235,7 +1576,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.OR); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.OR); } )*
   { return ret; }
 }
 
@@ -2245,7 +1586,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.AND); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.AND); } )*
   { return ret; }
 }
 
@@ -2255,7 +1596,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
   { return ret; }
 }
 
@@ -2265,7 +1606,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.XOR); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.XOR); } )*
   { return ret; }
 }
 
@@ -2275,7 +1616,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
   { return ret; }
 }
 
@@ -2290,7 +1631,7 @@ Expression EqualityExpression():
   (
     ( "==" { op = BinaryExpr.Operator.EQUALS; } |
       "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
-    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2304,7 +1645,7 @@ Expression InstanceOfExpression():
 {
     ret = RelationalExpression() [ "instanceof" annotations = Annotations() type = ReferenceType() {
         type.getAnnotations().addAll(annotations);
-        ret = new InstanceOfExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, type); 
+        ret = new InstanceOfExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, type); 
     } ]
     { return ret; }
 }
@@ -2322,7 +1663,7 @@ Expression RelationalExpression():
   	  ">"  { op = BinaryExpr.Operator.GREATER; } |
   	  "<=" { op = BinaryExpr.Operator.LESS_EQUALS; } |
   	  ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
-  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2339,7 +1680,7 @@ Expression ShiftExpression():
   	( "<<"             { op = BinaryExpr.Operator.LEFT_SHIFT; } |
   	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT; } |
   	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
-  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2355,7 +1696,7 @@ Expression AdditiveExpression():
   (
   	( "+" { op = BinaryExpr.Operator.PLUS; } |
   	  "-" { op = BinaryExpr.Operator.MINUS; }
-  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, right, op); }
+  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2372,7 +1713,7 @@ Expression MultiplicativeExpression():
   	( "*" { op = BinaryExpr.Operator.MULTIPLY; } |
   	  "/" { op = BinaryExpr.Operator.DIVIDE; } |
   	  "%" { op = BinaryExpr.Operator.REMAINDER; }
-  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getBegin().get(), tokenEnd()), ret, right, op); }
+  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -2381,7 +1722,7 @@ Expression UnaryExpression():
 {
 	Expression ret;
 	UnaryExpr.Operator op;
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 }
 {
   (
@@ -2389,11 +1730,11 @@ Expression UnaryExpression():
 	|
 	  ret = PreDecrementExpression()
 	|
-	  ( "+" { op = UnaryExpr.Operator.PLUS; begin=tokenBegin();} |
-	    "-" { op = UnaryExpr.Operator.MINUS; begin=tokenBegin();}
+	  ( "+" { op = UnaryExpr.Operator.PLUS; begin=token();} |
+	    "-" { op = UnaryExpr.Operator.MINUS; begin=token();}
 	  ) ret = UnaryExpression()
 	  {
-        ret = new UnaryExpr(range(begin, tokenEnd()), ret, op);
+        ret = new UnaryExpr(range(begin, token()), ret, op);
 	  }
 	|
 	  ret = UnaryExpressionNotPlusMinus()
@@ -2404,20 +1745,20 @@ Expression UnaryExpression():
 Expression PreIncrementExpression():
 {
 	Expression ret;
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 }
 {
-  "++" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
+  "++" {begin=token();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_INCREMENT); }
   { return ret; }
 }
 
 Expression PreDecrementExpression():
 {
 	Expression ret;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "--" {begin=tokenBegin();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
+  "--" {begin=token();} ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, UnaryExpr.Operator.PREFIX_DECREMENT); }
   { return ret; }
 }
 
@@ -2425,13 +1766,13 @@ Expression UnaryExpressionNotPlusMinus():
 {
 	Expression ret;
 	UnaryExpr.Operator op;
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 }
 {
   (
-	  ( "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=tokenBegin(); } |
-	    "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=tokenBegin(); }
-	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, tokenEnd()), ret, op); }
+	  ( "~" { op = UnaryExpr.Operator.BITWISE_COMPLEMENT; begin=token(); } |
+	    "!" { op = UnaryExpr.Operator.LOGICAL_COMPLEMENT;     begin=token(); }
+	  ) ret = UnaryExpression() { ret = new UnaryExpr(range(begin, token()), ret, op); }
 	|
 	  LOOKAHEAD( CastExpression() )
 	  ret = CastExpression()
@@ -2452,7 +1793,7 @@ Expression PostfixExpression():
   	LOOKAHEAD(2)
     ( "++" { op = UnaryExpr.Operator.POSTFIX_INCREMENT; } |
       "--" { op = UnaryExpr.Operator.POSTFIX_DECREMENT; }
-    ) { ret = new UnaryExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, op); }
+    ) { ret = new UnaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, op); }
   ]
   { return ret; }
 }
@@ -2462,16 +1803,16 @@ Expression CastExpression():
 	Expression ret;
 	ReferenceType referenceType;
 	PrimitiveType primitiveType;
-	Position begin = INVALID;
+	JavaToken begin = INVALID;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 	NodeList<ReferenceType> typesOfMultiCast = emptyList();
 }
 {
-  "(" {begin=tokenBegin();}
+  "(" {begin=token();}
   annotations = Annotations() 
   (
   	  LOOKAHEAD(2)
-  	  primitiveType = PrimitiveType() ")" ret = UnaryExpression() { primitiveType.setAnnotations(annotations); ret = new CastExpr(range(begin, tokenEnd()), primitiveType, ret); }
+  	  primitiveType = PrimitiveType() ")" ret = UnaryExpression() { primitiveType.setAnnotations(annotations); ret = new CastExpr(range(begin, token()), primitiveType, ret); }
   	|
   	  referenceType = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, referenceType); referenceType.setAnnotations(annotations); }
   	  ( "&" referenceType = ReferenceType() {
@@ -2480,9 +1821,10 @@ Expression CastExpression():
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
-  	        ret = new CastExpr(range(begin, tokenEnd()), new IntersectionType(range(begin, tokenEnd()), typesOfMultiCast), ret);
+  	        ret = new CastExpr(range(begin, token()), new IntersectionType(range(begin, token()), typesOfMultiCast), ret);
+  	    } else {
+  	        ret = new CastExpr(range(begin, token()), referenceType, ret);
   	    }
-  	    ret = new CastExpr(range(begin, tokenEnd()), referenceType, ret);
   	  }
  )
   { return ret; }
@@ -2518,7 +1860,7 @@ Expression PrimaryPrefix():
 	boolean hasArgs = false;
 	boolean isLambda = false;
 	Type type;
-	Position begin;
+	JavaToken begin;
 	Parameter p = null;
 	SimpleName id = null;
 }
@@ -2536,39 +1878,39 @@ Expression PrimaryPrefix():
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, name, args);
 			} else {
-	  			ret = new FieldAccessExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, emptyList(), name);
+	  			ret = new FieldAccessExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, emptyList(), name);
 			}
 	  	}
 	 |
 		"::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
-		  ret = new MethodReferenceExpr(range(ret.getBegin().get(), pos(token.endLine, token.endColumn)), ret, typeArgs.list, token.image);
+		  ret = new MethodReferenceExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, token.image);
 		}
 	  )
 	|
-	  "(" {begin=tokenBegin();}
+	  "(" {begin=token();}
 	  	[
-	  	( LOOKAHEAD(FormalParameter()) p = FormalParameter() { isLambda = true;} [params = FormalLambdaParameters()]
+	  	( LOOKAHEAD(Parameter()) p = Parameter() { isLambda = true;} [params = LambdaParameters()]
 	  	| ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ]
 	  	)
 	  	]
 	  	")"
 	  	{
-	  		   if(!isLambda) { ret = new EnclosedExpr(range(begin, tokenEnd()), ret);}
+	  		   if(!isLambda) { ret = new EnclosedExpr(range(begin, token()), ret);}
 	  		   else{
 	  		 	  if(ret != null){
 	  		  		  if(ret instanceof NameExpr)
 	  		  		  {
 	  		  		    id = ((NameExpr)ret).getName();
-	  		  		    p = new Parameter(range(ret.getBegin().get(), ret.getEnd().get()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id);
+	  		  		    p = new Parameter(range(ret.getTokenRange().get().getBegin(), ret.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id);
 	  		  		  }
 
 	  		  		}
 	  		  		params = add(0, params, p);
 	  		  		// TODO p may be null here
-	  		  		ret = new LambdaExpr(range(p.getBegin().get(), tokenEnd()), params, new BlockStmt(), true);
+	  		  		ret = new LambdaExpr(range(p.getTokenRange().get().getBegin(), token()), params, new BlockStmt(), true);
 	  		 	}
 
 	  		 }
@@ -2576,21 +1918,21 @@ Expression PrimaryPrefix():
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getBegin().get(), tokenEnd()), type); }
+	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getTokenRange().get().getBegin(), token()), type); }
 
 	| LOOKAHEAD (ResultType() "::" )
 	  type = ResultType() "::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
-		  ret = new TypeExpr(type.getRange().get(), type);
-		  ret = new MethodReferenceExpr(ret.getRange().get(), ret, typeArgs.list, token.image);
+		  ret = new TypeExpr(type.getTokenRange().get(), type);
+		  ret = new MethodReferenceExpr(ret.getTokenRange().get(), ret, typeArgs.list, token.image);
 		}
 
 	|
-	  	name = SimpleName() { begin=tokenBegin(); }
+	  	name = SimpleName() { begin=token(); }
 	  	[ args = Arguments() { hasArgs=true; } ]
 	  	{
 	  		if (hasArgs) {
-	  			ret = new MethodCallExpr(range(begin, tokenEnd()), null, emptyList(), name, args);
+	  			ret = new MethodCallExpr(range(begin, token()), null, emptyList(), name, args);
 			} else {
 	  			ret = new NameExpr(name);
 			}
@@ -2608,7 +1950,7 @@ Expression PrimarySuffix(Expression scope):
   	LOOKAHEAD(2)
 	ret = PrimarySuffixWithoutSuper(scope)
 	|
-  	"." "super" { ret = new SuperExpr(range(scope.getBegin().get(), tokenEnd()), scope); }
+  	"." "super" { ret = new SuperExpr(range(scope.getTokenRange().get().getBegin(), token()), scope); }
   )
   { return ret; }
 }
@@ -2625,7 +1967,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-		"this" { ret = new ThisExpr(range(scope.getBegin().get(), tokenEnd()), scope); }
+		"this" { ret = new ThisExpr(range(scope.getTokenRange().get().getBegin(), token()), scope); }
 	  |
 	  	ret = AllocationExpression(scope)
 	  |
@@ -2635,14 +1977,14 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(scope.getTokenRange().get().getBegin(), token()), scope, typeArgs.list, name, args);
 			} else {
-	  			ret =  new FieldAccessExpr(range(scope.getBegin().get(), tokenEnd()), scope, typeArgs.list, name);
+	  			ret =  new FieldAccessExpr(range(scope.getTokenRange().get().getBegin(), token()), scope, typeArgs.list, name);
 			}
 	  	}
 	)
 	|
-	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope.getBegin().get(), tokenEnd()), scope, ret); }
+	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope.getTokenRange().get().getBegin(), token()), scope, ret); }
   )
   { return ret; }
 }
@@ -2726,11 +2068,11 @@ Expression AllocationExpression(Expression scope):
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
-	Position begin;
+	JavaToken begin;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-    "new" { if(scope==null) {begin=tokenBegin();} else {begin=scope.getBegin().get();} }
+    "new" { if(scope==null) {begin=token();} else {begin=scope.getTokenRange().get().getBegin();} }
     
     annotations = Annotations() 
     (
@@ -2742,33 +2084,33 @@ Expression AllocationExpression(Expression scope):
         (
             ret = ArrayCreation(begin, type)
         |
-            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody(false) ]
-            { ret = new ObjectCreationExpr(range(begin, tokenEnd()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
+            args = Arguments() [ LOOKAHEAD(2) anonymousBody = ClassOrInterfaceBody() ]
+            { ret = new ObjectCreationExpr(range(begin, token()), scope, (ClassOrInterfaceType) type, typeArgs.list, args, anonymousBody); }
         )
     )
     { return ret; }
 }
 
-ArrayCreationExpr ArrayCreation(Position begin, Type type):
+ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 {
 	Expression expr = null;
 	ArrayInitializerExpr arrayInitializerExpr = null;
 	NodeList<Expression> inits = emptyList();
 	List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	Position arrayCreationLevelStart = null;
-	List<Range> levelRanges = new ArrayList<Range>();
+	JavaToken arrayCreationLevelStart = null;
+	List<TokenRange> levelRanges = new ArrayList<TokenRange>();
 }
 { 
     ( LOOKAHEAD(2)
         annotations = Annotations()
-        "[" { arrayCreationLevelStart = annotations.isEmpty() ? tokenBegin() : annotations.get(0).getRange().get().begin; }
+        "[" { arrayCreationLevelStart = annotations.isEmpty() ? token() : annotations.get(0).getTokenRange().get().getBegin(); }
         (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
-        "]" { levelRanges.add(new Range(arrayCreationLevelStart,tokenEnd())); }
+        "]" { levelRanges.add(new TokenRange(arrayCreationLevelStart, token())); }
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
     {  
-        return juggleArrayCreation(range(begin, tokenEnd()), levelRanges, type, inits, accum, arrayInitializerExpr);
+        return juggleArrayCreation(range(begin, token()), levelRanges, type, inits, accum, arrayInitializerExpr);
     }
 }
 
@@ -2781,75 +2123,79 @@ Statement Statement():
 	Statement ret;
 }
 {
-  (
-	  LOOKAHEAD(2)
-	  ret = LabeledStatement()
-	|
-	  ret = AssertStatement()
-	|
-	  ret = Block()
-	|
-	  ret = EmptyStatement()
-	|
-	  ret = StatementExpression()
-	|
-	  ret = SwitchStatement()
-	|
-	  ret = IfStatement()
-	|
-	  ret = WhileStatement()
-	|
-	  ret = DoStatement()
-	|
-	  ret = ForStatement()
-	|
-	  ret = BreakStatement()
-	|
-	  ret = ContinueStatement()
-	|
-	  ret = ReturnStatement()
-	|
-	  ret = ThrowStatement()
-	|
-	  ret = SynchronizedStatement()
-	|
-	  ret = TryStatement()
-  )
-  { return ret; }
+    try {
+        ( LOOKAHEAD(2)
+            ret = LabeledStatement()
+        |
+            ret = AssertStatement()
+        |
+            ret = Block()
+        |
+            ret = EmptyStatement()
+        |
+            ret = StatementExpression()
+        |
+            ret = SwitchStatement()
+        |
+            ret = IfStatement()
+        |
+            ret = WhileStatement()
+        |
+            ret = DoStatement()
+        |
+            ret = ForStatement()
+        |
+            ret = BreakStatement()
+        |
+            ret = ContinueStatement()
+        |
+            ret = ReturnStatement()
+        |
+            ret = ThrowStatement()
+        |
+            ret = SynchronizedStatement()
+        |
+            ret = TryStatement()
+        )
+        { return ret; }
+    } catch (ParseException e) {
+        TokenRange errorRange = recover(SEMICOLON, e);
+        return new UnparsableStmt(errorRange);
+    }
 }
 
 AssertStmt AssertStatement():
 {
 	Expression check;
 	Expression msg = null;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "assert" {begin=tokenBegin();} check = Expression() [ ":" msg = Expression() ] ";"
-  { return new AssertStmt(range(begin, tokenEnd()), check, msg);  }
+  "assert" {begin=token();} check = Expression() [ ":" msg = Expression() ] ";"
+  { return new AssertStmt(range(begin, token()), check, msg);  }
 }
 
 LabeledStmt LabeledStatement():
 {
 	SimpleName label;
 	Statement stmt;
-	Position begin;
+	JavaToken begin;
 }
 {
-  label = SimpleName() {begin=tokenBegin();} ":" stmt = Statement()
-  { return new LabeledStmt(range(begin, tokenEnd()), label, stmt); }
+  label = SimpleName() {begin=token();} ":" stmt = Statement()
+  { return new LabeledStmt(range(begin, token()), label, stmt); }
 }
 
 BlockStmt Block():
 {
 	NodeList<Statement> stmts = emptyList();
-	Position begin;
+	JavaToken begin;
 }
 {
-  "{" {begin=tokenBegin();}
+  "{" {begin=token();}
   	stmts = Statements()
   "}"
-  { return new BlockStmt(range(begin, tokenEnd()), stmts); }
+  { return new BlockStmt(range(begin, token()), stmts); }
 }
 
 /*
@@ -2863,19 +2209,21 @@ Statement BlockStatement():
 	ModifierHolder modifier;
 }
 {
-  (
-	  LOOKAHEAD( Modifiers() ("class" | "interface") )
-  	  {  }
-	  modifier = Modifiers()
-	  typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getBegin().get().line, typeDecl.getBegin().get().column, token.endLine, token.endColumn), typeDecl); }
-	|
-  	  LOOKAHEAD(VariableDeclarationExpression() )
-	  expr = VariableDeclarationExpression() ";"
-	  { ret = new ExpressionStmt(range(expr.getBegin().get().line, expr.getBegin().get().column, token.endLine, token.endColumn), expr); } 
-    |
-	  ret = Statement()
-  )
-  { return ret; }
+    try {
+        ( LOOKAHEAD( Modifiers() ("class" | "interface") )
+            modifier = Modifiers()
+            typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getTokenRange().get().getBegin(), token()), typeDecl); }
+        | LOOKAHEAD(VariableDeclarationExpression() )
+            expr = VariableDeclarationExpression() ";"
+            { ret = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); } 
+        |
+            ret = Statement()
+        )
+        { return ret; }
+    } catch (ParseException e) {
+        TokenRange errorRange = recover(SEMICOLON, e);
+        return new UnparsableStmt(errorRange);
+    }
 }
 
 VariableDeclarationExpr VariableDeclarationExpression():
@@ -2888,8 +2236,8 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
   modifier = Modifiers() partialType = Type() var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
   {
-        Position begin=modifier.begin.orIfInvalid(partialType.getBegin().get());
-        return new VariableDeclarationExpr(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, variables);
+        JavaToken begin=modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
+        return new VariableDeclarationExpr(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
   }
 }
 
@@ -2909,7 +2257,7 @@ Statement LambdaBody():
   (
   	expr = Expression()
   	{
-  	  n = new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr);
+  	  n = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr);
   	}
  	|  n = Block()
   )
@@ -2940,22 +2288,22 @@ ExpressionStmt StatementExpression():
 	|
 	  expr = PrimaryExpression()
 	  [
-	    "++" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
+	    "++" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
 	  |
-	    "--" { expr = new UnaryExpr(range(expr.getBegin().get(), tokenEnd()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
+	    "--" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
 	  |
-	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getBegin().get(), tokenEnd()), expr, value, op); }
+	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, value, op); }
 	  |
-	    "::"  [typeArgs = TypeArguments() ] (Identifier() | "new"){expr = new MethodReferenceExpr(range(expr.getBegin().get(), tokenEnd()), expr, typeArgs.list, token.image); 	  }
+	    "::"  [typeArgs = TypeArguments() ] (Identifier() | "new"){expr = new MethodReferenceExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, typeArgs.list, token.image); 	  }
 	 |
 	   "->" lambdaBody = LambdaBody()
 	   {
-            expr = generateLambda(expr, lambdaBody);
+            expr = generateLambda(this, expr, lambdaBody);
 	   }
 	  ]
   )
   ";"
-  { return new ExpressionStmt(range(expr.getBegin().get(), tokenEnd()), expr); }
+  { return new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); }
 }
 
 SwitchStmt SwitchStatement():
@@ -2963,31 +2311,31 @@ SwitchStmt SwitchStatement():
 	Expression selector;
 	SwitchEntryStmt entry;
 	NodeList<SwitchEntryStmt> entries = emptyList();
-	Position begin;
+	JavaToken begin;
 }
 {
-  "switch" {begin=tokenBegin();} "(" selector = Expression() ")" "{"
+  "switch" {begin=token();} "(" selector = Expression() ")" "{"
     ( entry = SwitchEntry() { entries = add(entries, entry); } )*
   "}"
 
-  { return new SwitchStmt(range(begin, tokenEnd()), selector, entries); }
+  { return new SwitchStmt(range(begin, token()), selector, entries); }
 }
 
 SwitchEntryStmt SwitchEntry():
 {
 	Expression label = null;
 	NodeList<Statement> stmts;
-	Position begin;
+	JavaToken begin;
 }
 {
   (
-	  "case" {begin=tokenBegin();} label = Expression()
+	  "case" {begin=token();} label = Expression()
 	|
-	  "default" {begin=tokenBegin();}
+	  "default" {begin=token();}
   )
   ":" stmts = Statements()
 
-  { return new SwitchEntryStmt(range(begin, tokenEnd()),label, stmts); }
+  { return new SwitchEntryStmt(range(begin, token()),label, stmts); }
 }
 
 IfStmt IfStatement():
@@ -3000,12 +2348,12 @@ IfStmt IfStatement():
 	Expression condition;
 	Statement thenStmt;
 	Statement elseStmt = null;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "if" {begin=tokenBegin();} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
+  "if" {begin=token();} "(" condition = Expression() ")" {} thenStmt = Statement() [ LOOKAHEAD(1) "else" {} elseStmt = Statement() ]
   { 
-      return new IfStmt(range(begin, tokenEnd()), condition, thenStmt, elseStmt);
+      return new IfStmt(range(begin, token()), condition, thenStmt, elseStmt);
   }
 }
 
@@ -3013,22 +2361,22 @@ WhileStmt WhileStatement():
 {
 	Expression condition;
 	Statement body;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "while" {begin=tokenBegin();} "(" condition = Expression() ")" body = Statement()
-  { return new WhileStmt(range(begin, tokenEnd()),condition, body); }
+  "while" {begin=token();} "(" condition = Expression() ")" body = Statement()
+  { return new WhileStmt(range(begin, token()),condition, body); }
 }
 
 DoStmt DoStatement():
 {
 	Expression condition;
 	Statement body;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "do" {begin=tokenBegin();} body = Statement() "while" "(" condition = Expression() ")" ";"
-  { return new DoStmt(range(begin, tokenEnd()),body, condition); }
+  "do" {begin=token();} body = Statement() "while" "(" condition = Expression() ")" ";"
+  { return new DoStmt(range(begin, token()),body, condition); }
 }
 
 Statement ForStatement():
@@ -3038,10 +2386,10 @@ Statement ForStatement():
 	NodeList<Expression> init = emptyList();
 	NodeList<Expression> update = emptyList();
 	Statement body;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "for" {begin=tokenBegin();} "("
+  "for" {begin=token();} "("
 
   (
       LOOKAHEAD(VariableDeclarationExpression() ":")
@@ -3054,9 +2402,9 @@ Statement ForStatement():
 
   {
   	if (varExpr != null) {
-  		return new ForeachStmt(range(begin, tokenEnd()),varExpr, expr, body);
+  		return new ForeachStmt(range(begin, token()),varExpr, expr, body);
   	}
-	return new ForStmt(range(begin, tokenEnd()),init, expr, update, body);
+	return new ForStmt(range(begin, token()),init, expr, update, body);
   }
 }
 
@@ -3099,52 +2447,52 @@ NodeList<Expression> ForUpdate():
 BreakStmt BreakStatement():
 {
 	SimpleName label = null;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "break" {begin=tokenBegin();} [ label = SimpleName() ] ";"
-  { return new BreakStmt(range(begin, tokenEnd()), label); }
+  "break" {begin=token();} [ label = SimpleName() ] ";"
+  { return new BreakStmt(range(begin, token()), label); }
 }
 
 ContinueStmt ContinueStatement():
 {
 	SimpleName label = null;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "continue" {begin=tokenBegin();} [ label = SimpleName() ] ";"
-  { return new ContinueStmt(range(begin, tokenEnd()), label); }
+  "continue" {begin=token();} [ label = SimpleName() ] ";"
+  { return new ContinueStmt(range(begin, token()), label); }
 }
 
 ReturnStmt ReturnStatement():
 {
 	Expression expr = null;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "return" {begin=tokenBegin();} [ expr = Expression() ] ";"
-  { return new ReturnStmt(range(begin, tokenEnd()),expr); }
+  "return" {begin=token();} [ expr = Expression() ] ";"
+  { return new ReturnStmt(range(begin, token()),expr); }
 }
 
 ThrowStmt ThrowStatement():
 {
 	Expression expr;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "throw" {begin=tokenBegin();} expr = Expression() ";"
-  { return new ThrowStmt(range(begin, tokenEnd()),expr); }
+  "throw" {begin=token();} expr = Expression() ";"
+  { return new ThrowStmt(range(begin, token()),expr); }
 }
 
 SynchronizedStmt SynchronizedStatement():
 {
 	Expression expr;
 	BlockStmt body;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "synchronized" {begin=tokenBegin();} "(" expr = Expression() ")" body = Block()
-  { return new SynchronizedStmt(range(begin, tokenEnd()),expr, body); }
+  "synchronized" {begin=token();} "(" expr = Expression() ")" body = Block()
+  { return new SynchronizedStmt(range(begin, token()),expr, body); }
 }
 
 TryStmt TryStatement():
@@ -3158,47 +2506,42 @@ TryStmt TryStatement():
 	ReferenceType exceptionType;
 	NodeList<ReferenceType> exceptionTypes = emptyList();
 	Pair<SimpleName, List<ArrayBracketPair>> exceptId;
-	Position begin;
-	Position catchBegin;
-	Position typesBegin;
-	Position paramEnd;
+	JavaToken begin;
+	JavaToken catchBegin;
+	JavaToken typesBegin;
+	JavaToken paramEnd;
 	Type type;
 }
 {
-  "try" {begin=tokenBegin();}
+  "try" {begin=token();}
   (resources = ResourceSpecification())?
   tryBlock = Block()
   (
         LOOKAHEAD(2)
   		(
-  			"catch" {catchBegin=tokenBegin();}
-  			"(" { typesBegin=tokenBegin(); }
+  			"catch" {catchBegin=token();}
+  			"(" { typesBegin=token(); }
   			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
   			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
-  			exceptId = VariableDeclaratorId() { paramEnd = tokenEnd(); }
+  			exceptId = VariableDeclaratorId() { paramEnd = token(); }
   			")"
   			 
   			catchBlock = Block()
   			{
   			    if (exceptionTypes.size() > 1) {
-  			        type = new UnionType(range(exceptionTypes.get(0).getRange().get().begin, exceptionTypes.get(exceptionTypes.size() - 1).getRange().get().end), exceptionTypes);
+  			        type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(range(type.getRange().get().begin, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
-  			    catchs = add(catchs, new CatchClause(range(catchBegin, tokenEnd()), catchType, catchBlock));
+				Parameter catchType = new Parameter(range(type.getTokenRange().get().getBegin(), paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+  			    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
   		[ "finally" finallyBlock = Block() ]
   	|
   		"finally" finallyBlock = Block()
   )
-  {
-    if (finallyBlock == null && catchs.isEmpty() && resources.isEmpty()) {
-      addProblem("Try has no finally, no catch, and no resources");
-    }
-    return new TryStmt(range(begin, tokenEnd()), resources, tryBlock, catchs, finallyBlock);
-  }
+  { return new TryStmt(range(begin, token()), resources, tryBlock, catchs, finallyBlock); }
 }
 
 
@@ -3235,7 +2578,7 @@ void RUNSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((GTToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
+                ((CustomToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -3244,7 +2587,7 @@ void RSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((GTToken)getToken(1)).realKind == RSIGNEDSHIFT} )
+                ((CustomToken)getToken(1)).realKind == RSIGNEDSHIFT} )
   ">" ">"
   )
 }
@@ -3266,21 +2609,21 @@ AnnotationExpr Annotation():
 	AnnotationExpr ret;
 	Name name;
 	NodeList<MemberValuePair> pairs = emptyList();
-	Position begin;
+	JavaToken begin;
 	Expression memberVal;
 }
 {
-    "@" { begin=tokenBegin(); } name = Name()
+    "@" { begin=token(); } name = Name()
     (
         LOOKAHEAD( "(" ( Identifier() "=" | ")" ))
         "(" [ pairs = MemberValuePairs() ] ")"
-        { ret = new NormalAnnotationExpr(range(begin, tokenEnd()), name, pairs); }
+        { ret = new NormalAnnotationExpr(range(begin, token()), name, pairs); }
     |
         LOOKAHEAD( "(" )
         "(" memberVal = MemberValue() ")"
-        { ret = new SingleMemberAnnotationExpr(range(begin, tokenEnd()), name, memberVal); }
+        { ret = new SingleMemberAnnotationExpr(range(begin, token()), name, memberVal); }
     |
-        { ret = new MarkerAnnotationExpr(range(begin, tokenEnd()), name); }
+        { ret = new MarkerAnnotationExpr(range(begin, token()), name); }
     )
     { return ret; }
 }
@@ -3299,11 +2642,11 @@ MemberValuePair MemberValuePair():
 {
 	SimpleName name;
 	Expression value;
-	Position begin;
+	JavaToken begin;
 }
 {
-    name = SimpleName() { begin=tokenBegin();} "=" value = MemberValue()
-    { return new MemberValuePair(range(begin, tokenEnd()),name, value); }
+    name = SimpleName() { begin=token();} "=" value = MemberValue()
+    { return new MemberValuePair(range(begin, token()),name, value); }
 }
 
 Expression MemberValue():
@@ -3325,13 +2668,13 @@ Expression  MemberValueArrayInitializer():
 {
 	NodeList<Expression> ret = emptyList();
 	Expression member;
-	Position begin;
+	JavaToken begin;
 }
 {
-  "{" {begin=tokenBegin();}
+  "{" {begin=token();}
   (	member = MemberValue() { ret.add(member); } ( LOOKAHEAD(2) "," member = MemberValue() { ret.add(member); } )*  )? [ "," ]
   "}"
-  { return new ArrayInitializerExpr(range(begin, tokenEnd()),ret); }
+  { return new ArrayInitializerExpr(range(begin, token()),ret); }
 }
 
 
@@ -3341,13 +2684,13 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 {
 	SimpleName name;
     NodeList<BodyDeclaration<?>> members = emptyList();
-	Position begin = modifier.begin;
+	JavaToken begin = modifier.begin;
 }
 {
-  "@" { begin=begin.orIfInvalid(tokenBegin()); }
+  "@" { begin=begin.orIfInvalid(token()); }
   "interface" name = SimpleName() members = AnnotationTypeBody()
   { 
-      return new AnnotationDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, name, members);
+      return new AnnotationDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, members);
   }
 }
 
@@ -3357,8 +2700,12 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
 	BodyDeclaration member;
 }
 {
-  "{" ( member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); } )* "}"
-  { return ret; }
+    "{" ( 
+        member = AnnotationBodyDeclaration() { ret = addWhenNotNull(ret, member); }
+    |
+        ";"
+    )* "}"
+    { return ret; }
 }
 
 BodyDeclaration<?> AnnotationBodyDeclaration():
@@ -3367,10 +2714,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
    BodyDeclaration ret;
 }
 {
-  {  }
   (
-	";" { ret = null; }
-  |
     modifier = Modifiers()
     (
 	   LOOKAHEAD(Type() Identifier() "(")
@@ -3398,8 +2742,8 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
   type = Type() name = SimpleName() "(" ")" [ defaultVal = DefaultValue() ] ";"
 
   {
-	Position begin = modifier.begin.orIfInvalid(type.getBegin().get());
-    return new AnnotationMemberDeclaration(range(begin, tokenEnd()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
+	JavaToken begin = modifier.begin.orIfInvalid(type.getTokenRange().get().getBegin());
+    return new AnnotationMemberDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
   }
 }
 
@@ -3424,20 +2768,20 @@ ModuleStmt ModuleStmt():
     Type type;
     Type tmpType;
     NodeList<Type> types=emptyList();
-    Position begin;
+    JavaToken begin;
     ModuleStmt stmt=new ModuleRequiresStmt();
 }
 {
     (
-        <REQUIRES> {begin=tokenBegin();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, tokenEnd()), modifiers.modifiers, name);}
+        <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, token()), modifiers.modifiers, name);}
     |
-        <EXPORTS> {begin=tokenBegin();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, tokenEnd()), name, names);}
+        <EXPORTS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, token()), name, names);}
     |
-        <OPENS> {begin=tokenBegin();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, tokenEnd()), name, names);}
+        <OPENS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, token()), name, names);}
     |
-        <USES> { begin=tokenBegin();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, tokenEnd()), type);}
+        <USES> { begin=token();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, token()), type);}
     |
-        <PROVIDES> { begin=tokenBegin();} type=Type() <WITH> tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, tokenEnd()), type, types);}
+        <PROVIDES> { begin=token();} type=Type() <WITH> tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, token()), type, types);}
     )
     { return stmt; }
 }
@@ -3448,13 +2792,13 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
     boolean open=false;
     ModuleStmt st;
     Name name;
-    Position begin = modifier.begin;
+    JavaToken begin = modifier.begin;
 }
 {
-    [ <OPEN> {open=true; begin = begin.orIfInvalid(tokenBegin());} ]
-    <MODULE> { begin = begin.orIfInvalid(tokenBegin()); }
+    [ <OPEN> {open=true; begin = begin.orIfInvalid(token());} ]
+    <MODULE> { begin = begin.orIfInvalid(token()); }
     name = Name() "{"
     ( st = ModuleStmt() { statements = add(statements, st); } )*
     "}"
-    { return new ModuleDeclaration(range(begin, tokenEnd()), modifier.annotations, name, open, statements); }
+    { return new ModuleDeclaration(range(begin, token()), modifier.annotations, name, open, statements); }
 }

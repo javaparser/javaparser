@@ -29,7 +29,17 @@ class TextElementMatchers {
         return textElement -> textElement.isToken(tokenType);
     }
 
-    static TextElementMatcher byNode(Node node) {
-        return textElement -> textElement.isNode(node);
+    static TextElementMatcher byNode(final Node node) {
+        return new TextElementMatcher() {
+            @Override
+            public boolean match(TextElement textElement) {
+                return textElement.isNode(node);
+            }
+
+            @Override
+            public String toString() {
+                return "match node " + node;
+            }
+        };
     }
 }

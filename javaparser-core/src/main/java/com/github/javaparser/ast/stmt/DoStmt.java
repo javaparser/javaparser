@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
+import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -33,6 +34,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A do-while.
@@ -40,7 +43,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  *
  * @author Julio Vilmar Gesser
  */
-public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
+public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithCondition<DoStmt> {
 
     private Statement body;
 
@@ -55,10 +58,13 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         this(null, body, condition);
     }
 
-    public DoStmt(Range range, final Statement body, final Expression condition) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
+        super(tokenRange);
         setBody(body);
         setCondition(condition);
+        customInitialization();
     }
 
     @Override
@@ -71,18 +77,22 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCondition() {
         return condition;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setBody(final Statement body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (DoStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -91,8 +101,12 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public DoStmt setCondition(final Expression condition) {
         assertNotNull(condition);
+        if (condition == this.condition) {
+            return (DoStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
         if (this.condition != null)
             this.condition.setParentNode(null);
@@ -102,6 +116,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -109,13 +124,14 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoStmt clone() {
         return (DoStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public DoStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.doStmtMetaModel;
     }
 }
-

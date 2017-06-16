@@ -29,8 +29,11 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.SimpleNameMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A name that consists of a single identifier.
@@ -40,6 +43,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
+    @NonEmptyProperty
     private String identifier;
 
     public SimpleName() {
@@ -51,9 +55,12 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         this(null, identifier);
     }
 
-    public SimpleName(Range range, final String identifier) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public SimpleName(TokenRange tokenRange, String identifier) {
+        super(tokenRange);
         setIdentifier(identifier);
+        customInitialization();
     }
 
     @Override
@@ -66,34 +73,43 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         v.visit(this, arg);
     }
 
-    @Override
-    public final String getIdentifier() {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getIdentifier() {
         return identifier;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
+        if (identifier == this.identifier) {
+            return (SimpleName) this;
+        }
         notifyPropertyChange(ObservableProperty.IDENTIFIER, this.identifier, identifier);
         this.identifier = identifier;
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
         return super.remove(node);
     }
 
+    public String asString() {
+        return identifier;
+    }
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SimpleName clone() {
         return (SimpleName) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SimpleNameMetaModel getMetaModel() {
         return JavaParserMetaModel.simpleNameMetaModel;
     }
 }
-

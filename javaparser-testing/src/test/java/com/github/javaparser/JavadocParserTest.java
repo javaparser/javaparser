@@ -111,6 +111,26 @@ public class JavadocParserTest {
     }
 
     @Test
+    public void parseMultilineParamBlockTags() {
+        String text = "\n" +
+                "     * Add a field to this and automatically add the import of the type if needed\n" +
+                "     *\n" +
+                "     * @param typeClass the type of the field\n" +
+                "     * continued in a second line\n" +
+                "     * @param name the name of the field\n" +
+                "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}\n" +
+                "     * @return the {@link FieldDeclaration} created\n" +
+                "     ";
+        Javadoc res = JavadocParser.parse(text);
+        assertEquals(new Javadoc(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
+                             .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field continued in a second line"))
+                             .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
+                             .addBlockTag(JavadocBlockTag.createParamBlockTag("modifiers", "the modifiers like {@link Modifier#PUBLIC}"))
+                             .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "the {@link FieldDeclaration} created")), res);
+    }
+
+
+    @Test
     public void startsWithAsteriskEmpty() {
         assertEquals(-1, JavadocParser.startsWithAsterisk(""));
     }

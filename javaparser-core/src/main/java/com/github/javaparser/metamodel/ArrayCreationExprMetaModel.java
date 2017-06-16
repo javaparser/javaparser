@@ -14,4 +14,3 @@ public class ArrayCreationExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel levelsPropertyMetaModel;
 }
-

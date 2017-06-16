@@ -8,4 +8,3 @@ public class BlockCommentMetaModel extends CommentMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.comments.BlockComment.class, "BlockComment", "com.github.javaparser.ast.comments", false, false);
     }
 }
-

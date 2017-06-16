@@ -25,7 +25,7 @@ public class B {
 
     Runnable runnable = () -> System.out.println("running");
 
-    Consumer<Integer> consumer =  i -> {
+    Consumer<Integer> consumer = i -> {
         i += 1;
         System.out.println(i);
     };
@@ -515,4 +515,15 @@ interface A extends @X B, @Y C, @Z D {
 When the class is parsed by the Java parser
 Then it is printed as:
 interface A extends @X B, @Y C, @Z D {
+}
+
+Scenario: default modifier isn't printed twice
+Given the class:
+interface X {default String author(){}}
+When the annotation body declaration is parsed by the Java parser
+Then it is printed as:
+interface X {
+
+    default String author() {
+    }
 }

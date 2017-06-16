@@ -26,7 +26,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
 
@@ -34,8 +33,11 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+
+import static com.github.javaparser.JavaParser.parseType;
 import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A node having members.
@@ -45,6 +47,8 @@ import static java.util.stream.Collectors.*;
  */
 public interface NodeWithMembers<N extends Node> {
     NodeList<BodyDeclaration<?>> getMembers();
+
+    void tryAddImportToParentCompilationUnit(Class<?> clazz);
 
     default BodyDeclaration<?> getMember(int i) {
         return getMembers().get(i);
@@ -73,7 +77,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addField(Class<?> typeClass, String name, Modifier... modifiers) {
-        ((Node) this).tryAddImportToParentCompilationUnit(typeClass);
+        tryAddImportToParentCompilationUnit(typeClass);
         return addField(typeClass.getSimpleName(), name, modifiers);
     }
 
@@ -86,7 +90,7 @@ public interface NodeWithMembers<N extends Node> {
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addField(String type, String name, Modifier... modifiers) {
-        return addField(new ClassOrInterfaceType(type), name, modifiers);
+        return addField(parseType(type), name, modifiers);
     }
 
     /**
@@ -193,21 +197,6 @@ public interface NodeWithMembers<N extends Node> {
         return methodDeclaration;
     }
 
-    /**
-     * Adds a constructor to this
-     *
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
-     * @return the {@link MethodDeclaration} created
-     */
-    default ConstructorDeclaration addConstructor(Modifier... modifiers) {
-        ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
-        constructorDeclaration.setModifiers(Arrays.stream(modifiers)
-                .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
-        constructorDeclaration.setName(((TypeDeclaration<?>) this).getName());
-        getMembers().add(constructorDeclaration);
-        return constructorDeclaration;
-    }
-
     default BlockStmt addInitializer() {
         BlockStmt block = new BlockStmt();
         InitializerDeclaration initializerDeclaration = new InitializerDeclaration(false, block);
@@ -231,7 +220,7 @@ public interface NodeWithMembers<N extends Node> {
     default List<MethodDeclaration> getMethodsByName(String name) {
         return unmodifiableList(getMethods().stream()
                 .filter(m -> m.getNameAsString().equals(name))
-                .map(m -> m).collect(toList()));
+                .collect(toList()));
     }
 
     /**
@@ -256,7 +245,7 @@ public interface NodeWithMembers<N extends Node> {
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return unmodifiableList(getMethods().stream()
                 .filter(m -> m.hasParametersOfType(paramTypes))
-                .map(m -> m).collect(toList()));
+                .collect(toList()));
     }
 
     /**
@@ -269,7 +258,7 @@ public interface NodeWithMembers<N extends Node> {
     default List<MethodDeclaration> getMethodsBySignature(String name, String... paramTypes) {
         return unmodifiableList(getMethodsByName(name).stream()
                 .filter(m -> m.hasParametersOfType(paramTypes))
-                .map(m -> m).collect(toList()));
+                .collect(toList()));
     }
 
     /**
@@ -297,8 +286,7 @@ public interface NodeWithMembers<N extends Node> {
                 .map(f -> (FieldDeclaration) f)
                 .filter(f -> f.getVariables().stream()
                         .anyMatch(var -> var.getNameAsString().equals(name)))
-                .findFirst()
-                .map(f -> f);
+                .findFirst();
     }
 
     /**

@@ -12,4 +12,3 @@ public class ModuleOpensStmtMetaModel extends ModuleStmtMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

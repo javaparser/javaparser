@@ -22,7 +22,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.TokenConstants;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +33,8 @@ import java.util.List;
 class NodeText {
     private LexicalPreservingPrinter lexicalPreservingPrinter;
     private List<TextElement> elements;
+
+    public static int NOT_FOUND = -1;
 
     LexicalPreservingPrinter getLexicalPreservingPrinter() {
         return lexicalPreservingPrinter;
@@ -104,13 +105,24 @@ class NodeText {
     }
 
     int findElement(TextElementMatcher matcher, int from) {
+        int res = tryToFindElement(matcher, from);
+        if (res == NOT_FOUND) {
+            throw new IllegalArgumentException(
+                    String.format("I could not find child '%s' from position %d. Elements: %s",
+                            matcher, from, elements));
+        } else {
+            return res;
+        }
+    }
+
+    int tryToFindElement(TextElementMatcher matcher, int from) {
         for (int i=from; i<elements.size(); i++) {
             TextElement element = elements.get(i);
             if (matcher.match(element)) {
                 return i;
             }
         }
-        throw new IllegalArgumentException(String.format("I could not find child '%s' from position %d", matcher, from));
+        return NOT_FOUND;
     }
 
     int findChild(Node child) {
@@ -121,12 +133,20 @@ class NodeText {
         return findElement(TextElementMatchers.byNode(child), from);
     }
 
+    int tryToFindChild(Node child) {
+        return tryToFindChild(child, 0);
+    }
+
+    int tryToFindChild(Node child, int from) {
+        return tryToFindElement(TextElementMatchers.byNode(child), from);
+    }
+
     //
     // Removing single elements
     //
 
     void remove(TextElementMatcher matcher) {
-        elements.removeIf(e -> matcher.match(e));
+        elements.removeIf(matcher::match);
     }
 
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
@@ -136,7 +156,7 @@ class NodeText {
                 elements.remove(e);
                 if (potentiallyFollowingWhitespace) {
                     if (i < elements.size()) {
-                        if (elements.get(i).isToken(TokenConstants.SPACE_TOKEN)) {
+                        if (elements.get(i).isWhiteSpace()) {
                             elements.remove(i);
                         }
                     } else {

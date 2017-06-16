@@ -12,4 +12,3 @@ public class ModuleExportsStmtMetaModel extends ModuleStmtMetaModel {
 
     public PropertyMetaModel namePropertyMetaModel;
 }
-

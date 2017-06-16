@@ -16,4 +16,3 @@ public class TryStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel tryBlockPropertyMetaModel;
 }
-

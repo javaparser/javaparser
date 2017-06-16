@@ -13,4 +13,3 @@ public class ModuleStmtMetaModel extends NodeMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 }
-

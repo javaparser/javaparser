@@ -10,4 +10,3 @@ public class LocalClassDeclarationStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel classDeclarationPropertyMetaModel;
 }
-

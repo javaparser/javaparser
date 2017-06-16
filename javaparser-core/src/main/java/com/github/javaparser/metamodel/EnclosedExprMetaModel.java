@@ -10,4 +10,3 @@ public class EnclosedExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel innerPropertyMetaModel;
 }
-

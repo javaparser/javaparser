@@ -29,6 +29,9 @@ import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParseResultTest {
@@ -39,6 +42,7 @@ public class ParseResultTest {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{}"));
 
         assertThat(result.getResult().isPresent()).isTrue();
+        assertThat(result.getResult().get().getParsed()).isEqualTo(PARSED);
         assertThat(result.getProblems()).isEmpty();
         assertThat(result.getTokens().isPresent()).isTrue();
 
@@ -46,16 +50,17 @@ public class ParseResultTest {
     }
 
     @Test
-    public void whenParsingFailsThenWeGetProblemsAndNoResults() {
+    public void whenParsingFailsThenWeGetProblemsAndABadResult() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class {"));
 
-        assertThat(result.getResult().isPresent()).isFalse();
+        assertThat(result.getResult().isPresent()).isTrue();
+        assertThat(result.getResult().get().getParsed()).isEqualTo(UNPARSABLE);
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);
         assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"exports\" \"module\" \"open\" \"opens\" \"provides\" \"requires\" \"to\" \"transitive\" \"uses\" \"with\" <IDENTIFIER>");
         assertThat(result.getTokens().isPresent()).isTrue();
 
-        assertThat(result.toString()).startsWith("Parsing failed:\n(line 1,col 1) Parse error.");
+        assertThat(result.toString()).startsWith("Parsing failed:" + EOL + "(line 1,col 1) Parse error.");
     }
 }

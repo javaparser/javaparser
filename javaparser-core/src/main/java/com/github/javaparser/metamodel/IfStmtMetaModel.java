@@ -14,8 +14,7 @@ public class IfStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel thenStmtPropertyMetaModel;
 
-    public PropertyMetaModel thenBlockPropertyMetaModel;
-
     public PropertyMetaModel elseBlockPropertyMetaModel;
-}
 
+    public PropertyMetaModel thenBlockPropertyMetaModel;
+}

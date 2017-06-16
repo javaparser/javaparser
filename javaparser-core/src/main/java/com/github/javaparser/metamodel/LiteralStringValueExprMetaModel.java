@@ -15,4 +15,3 @@ public class LiteralStringValueExprMetaModel extends LiteralExprMetaModel {
 
     public PropertyMetaModel valuePropertyMetaModel;
 }
-

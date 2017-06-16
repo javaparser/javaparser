@@ -30,6 +30,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.SuperExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An occurrence of the "super" keyword. <br/><code>World.super.greet()</code> is a MethodCallExpr of method name greet,
@@ -53,9 +55,12 @@ public final class SuperExpr extends Expression {
         this(null, classExpr);
     }
 
-    public SuperExpr(final Range range, final Expression classExpr) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public SuperExpr(TokenRange tokenRange, Expression classExpr) {
+        super(tokenRange);
         setClassExpr(classExpr);
+        customInitialization();
     }
 
     @Override
@@ -68,6 +73,7 @@ public final class SuperExpr extends Expression {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getClassExpr() {
         return Optional.ofNullable(classExpr);
     }
@@ -78,7 +84,11 @@ public final class SuperExpr extends Expression {
      * @param classExpr the classExpr, can be null
      * @return this, the SuperExpr
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SuperExpr setClassExpr(final Expression classExpr) {
+        if (classExpr == this.classExpr) {
+            return (SuperExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.CLASS_EXPR, this.classExpr, classExpr);
         if (this.classExpr != null)
             this.classExpr.setParentNode(null);
@@ -88,6 +98,7 @@ public final class SuperExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -100,18 +111,20 @@ public final class SuperExpr extends Expression {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeClassExpr() {
         return setClassExpr((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public SuperExpr clone() {
         return (SuperExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public SuperExprMetaModel getMetaModel() {
         return JavaParserMetaModel.superExprMetaModel;
     }
 }
-

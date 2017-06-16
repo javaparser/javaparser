@@ -23,35 +23,38 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
-import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithPublicModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.AnnotationMemberDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.AnnotationMemberDeclarationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The "int id();" in <code>@interface X { int id(); }</code>
  *
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithModifiers<AnnotationMemberDeclaration> {
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -74,12 +77,15 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         this(null, modifiers, annotations, type, name, defaultValue);
     }
 
-    public AnnotationMemberDeclaration(Range range, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
-        super(range, annotations);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public AnnotationMemberDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+        super(tokenRange, annotations);
         setModifiers(modifiers);
         setType(type);
         setName(name);
         setDefaultValue(defaultValue);
+        customInitialization();
     }
 
     @Override
@@ -92,6 +98,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getDefaultValue() {
         return Optional.ofNullable(defaultValue);
     }
@@ -102,21 +109,22 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @return modifiers
      * @see Modifier
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnumSet<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AnnotationMemberDeclaration removeDefaultValue() {
         return setDefaultValue((Expression) null);
     }
@@ -127,7 +135,11 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
      * @param defaultValue the default value, can be null
      * @return this, the AnnotationMemberDeclaration
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
+        if (defaultValue == this.defaultValue) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.DEFAULT_VALUE, this.defaultValue, defaultValue);
         if (this.defaultValue != null)
             this.defaultValue.setParentNode(null);
@@ -136,17 +148,23 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setModifiers(final EnumSet<Modifier> modifiers) {
         assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
         this.modifiers = modifiers;
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -155,9 +173,12 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AnnotationMemberDeclaration setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (AnnotationMemberDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -167,11 +188,13 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -185,13 +208,14 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AnnotationMemberDeclaration clone() {
         return (AnnotationMemberDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AnnotationMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }
 }
-

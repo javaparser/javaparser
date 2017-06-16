@@ -31,10 +31,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
@@ -43,15 +47,19 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  */
 public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
+    @NonEmptyProperty
     private NodeList<ReferenceType> elements;
 
     public UnionType() {
         this(null, new NodeList<>());
     }
 
-    public UnionType(Range range, NodeList<ReferenceType> elements) {
-        super(range, new NodeList<>());
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public UnionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
+        super(tokenRange);
         setElements(elements);
+        customInitialization();
     }
 
     @AllFieldsConstructor
@@ -59,12 +67,17 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         this(null, elements);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getElements() {
         return elements;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public UnionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
+        if (elements == this.elements) {
+            return (UnionType) this;
+        }
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
         if (this.elements != null)
             this.elements.setParentNode(null);
@@ -89,11 +102,13 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getElements(), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -107,13 +122,19 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     }
 
     @Override
+    public String asString() {
+        return elements.stream().map(Type::asString).collect(joining("|"));
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnionType clone() {
         return (UnionType) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public UnionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unionTypeMetaModel;
     }
 }
-

@@ -28,6 +28,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NullLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A literal "null".
@@ -42,8 +44,11 @@ public final class NullLiteralExpr extends LiteralExpr {
         this(null);
     }
 
-    public NullLiteralExpr(final Range range) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public NullLiteralExpr(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
     }
 
     @Override
@@ -57,6 +62,7 @@ public final class NullLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -64,13 +70,14 @@ public final class NullLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NullLiteralExpr clone() {
         return (NullLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NullLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nullLiteralExprMetaModel;
     }
 }
-

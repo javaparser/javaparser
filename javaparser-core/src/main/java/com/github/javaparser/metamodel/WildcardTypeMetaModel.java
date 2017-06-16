@@ -12,4 +12,3 @@ public class WildcardTypeMetaModel extends TypeMetaModel {
 
     public PropertyMetaModel superTypePropertyMetaModel;
 }
-

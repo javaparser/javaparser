@@ -38,6 +38,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A classic for statement.
@@ -65,12 +67,15 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         this(null, initialization, compare, update, body);
     }
 
-    public ForStmt(Range range, final NodeList<Expression> initialization, final Expression compare, final NodeList<Expression> update, final Statement body) {
-        super(range);
-        setCompare(compare);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
+        super(tokenRange);
         setInitialization(initialization);
+        setCompare(compare);
         setUpdate(update);
         setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -83,26 +88,32 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getCompare() {
         return Optional.ofNullable(compare);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getInitialization() {
         return initialization;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getUpdate() {
         return update;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setBody(final Statement body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -117,7 +128,11 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
      * @param compare the compare, can be null
      * @return this, the ForStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setCompare(final Expression compare) {
+        if (compare == this.compare) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.COMPARE, this.compare, compare);
         if (this.compare != null)
             this.compare.setParentNode(null);
@@ -126,8 +141,12 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setInitialization(final NodeList<Expression> initialization) {
         assertNotNull(initialization);
+        if (initialization == this.initialization) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.INITIALIZATION, this.initialization, initialization);
         if (this.initialization != null)
             this.initialization.setParentNode(null);
@@ -136,8 +155,12 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setUpdate(final NodeList<Expression> update) {
         assertNotNull(update);
+        if (update == this.update) {
+            return (ForStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.UPDATE, this.update, update);
         if (this.update != null)
             this.update.setParentNode(null);
@@ -147,11 +170,13 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getInitialization(), getUpdate());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -176,18 +201,20 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ForStmt removeCompare() {
         return setCompare((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ForStmt clone() {
         return (ForStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.forStmtMetaModel;
     }
 }
-

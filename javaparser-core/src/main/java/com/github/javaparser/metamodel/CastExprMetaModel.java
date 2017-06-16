@@ -12,4 +12,3 @@ public class CastExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel typePropertyMetaModel;
 }
-

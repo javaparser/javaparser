@@ -1,6 +1,7 @@
 package com.github.javaparser.utils;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -104,7 +105,11 @@ public final class CodeGenerationUtils {
      * @return the root directory of the classloader for class c.
      */
     public static Path classLoaderRoot(Class<?> c) {
-        return Paths.get(c.getProtectionDomain().getCodeSource().getLocation().getPath());
+        try {
+            return Paths.get(c.getProtectionDomain().getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException e) {
+            throw new AssertionError("Bug in JavaParser, please report.", e);
+        }
     }
 
     /**
@@ -116,11 +121,17 @@ public final class CodeGenerationUtils {
     }
 
     /**
-     * Useful for locating source code in your Maven project.
-     * Finds the classpath for the JavaParser code (which is probably the classpath for your code too,)
-     * then backs up out of "target/(test-)classes", giving the directory containing the pom.xml.
+     * Shortens path "full" by cutting "difference" off the end of it.
      */
-    public static Path mavenModuleRoot() {
-        return mavenModuleRoot(CodeGenerationUtils.class);
+    public static Path subtractPaths(Path full, Path difference) {
+        while (difference != null) {
+            if (difference.getFileName().equals(full.getFileName())) {
+                difference = difference.getParent();
+                full = full.getParent();
+            } else {
+                throw new RuntimeException(f("'%s' could not be subtracted from '%s'", difference, full));
+            }
+        }
+        return full;
     }
 }

@@ -36,6 +36,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.InitializerDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
@@ -57,10 +59,13 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         this(null, isStatic, body);
     }
 
-    public InitializerDeclaration(Range range, boolean isStatic, BlockStmt body) {
-        super(range, new NodeList<>());
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
+        super(tokenRange);
         setStatic(isStatic);
         setBody(body);
+        customInitialization();
     }
 
     @Override
@@ -73,16 +78,22 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
         return isStatic;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InitializerDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
+        if (body == this.body) {
+            return (InitializerDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
         if (this.body != null)
             this.body.setParentNode(null);
@@ -91,18 +102,24 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public InitializerDeclaration setStatic(final boolean isStatic) {
+        if (isStatic == this.isStatic) {
+            return (InitializerDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
         this.isStatic = isStatic;
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -110,13 +127,14 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public InitializerDeclaration clone() {
         return (InitializerDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public InitializerDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.initializerDeclarationMetaModel;
     }
 }
-

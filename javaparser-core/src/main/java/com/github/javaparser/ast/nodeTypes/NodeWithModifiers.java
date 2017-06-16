@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.ast.Modifier.*;
+
 /**
  * A Node with Modifiers.
  * Note that not all modifiers may be valid for this node.
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 public interface NodeWithModifiers<N extends Node> {
     /**
      * Return the modifiers of this variable declaration.
+     * Warning: modifying the returned set will not trigger observers,
+     * you have to use setModifiers for that.
      *
      * @return modifiers
      * @see Modifier
@@ -45,52 +49,27 @@ public interface NodeWithModifiers<N extends Node> {
 
     @SuppressWarnings("unchecked")
     default N addModifier(Modifier... modifiers) {
-        getModifiers().addAll(Arrays.stream(modifiers)
+        EnumSet<Modifier> newModifiers = getModifiers().clone();
+        newModifiers.addAll(Arrays.stream(modifiers)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        setModifiers(newModifiers);
         return (N) this;
     }
 
-    default boolean isStatic() {
-        return getModifiers().contains(Modifier.STATIC);
+    @SuppressWarnings("unchecked")
+    default N removeModifier(Modifier... m) {
+        EnumSet<Modifier> newModifiers = getModifiers().clone();
+        newModifiers.removeAll(Arrays.stream(m)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        setModifiers(newModifiers);
+        return (N) this;
+    }
+    default N setModifier(Modifier m, boolean set) {
+        if (set) {
+            return addModifier(m);
+        } else {
+            return removeModifier(m);
+        }
     }
 
-    default boolean isAbstract() {
-        return getModifiers().contains(Modifier.ABSTRACT);
-    }
-
-    default boolean isFinal() {
-        return getModifiers().contains(Modifier.FINAL);
-    }
-
-    default boolean isNative() {
-        return getModifiers().contains(Modifier.NATIVE);
-    }
-
-    default boolean isPrivate() {
-        return getModifiers().contains(Modifier.PRIVATE);
-    }
-
-    default boolean isProtected() {
-        return getModifiers().contains(Modifier.PROTECTED);
-    }
-
-    default boolean isPublic() {
-        return getModifiers().contains(Modifier.PUBLIC);
-    }
-
-    default boolean isStrictfp() {
-        return getModifiers().contains(Modifier.STRICTFP);
-    }
-
-    default boolean isSynchronized() {
-        return getModifiers().contains(Modifier.SYNCHRONIZED);
-    }
-
-    default boolean isTransient() {
-        return getModifiers().contains(Modifier.TRANSIENT);
-    }
-
-    default boolean isVolatile() {
-        return getModifiers().contains(Modifier.VOLATILE);
-    }
 }

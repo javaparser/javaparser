@@ -21,6 +21,12 @@
 
 package com.github.javaparser;
 
+import com.github.javaparser.ast.validator.Java1_0Validator;
+import com.github.javaparser.ast.validator.Java8Validator;
+import com.github.javaparser.ast.validator.Validator;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * The configuration that is used by the parser.
  * Note that this can be changed even when reusing the same JavaParser instance.
@@ -31,6 +37,7 @@ public class ParserConfiguration {
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
     private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
     private int tabSize = 1;
+    private Validator validator = new Java8Validator();
 
     public boolean isAttributeComments() {
         return attributeComments;
@@ -73,6 +80,20 @@ public class ParserConfiguration {
      */
     public ParserConfiguration setTabSize(int tabSize) {
         this.tabSize = tabSize;
+        return this;
+    }
+
+    public Validator getValidator() {
+        return validator;
+    }
+
+    /**
+     * The validator to run directly after parsing.
+     * By default it is {@link Java1_0Validator}
+     */
+    public ParserConfiguration setValidator(Validator validator) {
+        assertNotNull(validator);
+        this.validator = validator;
         return this;
     }
 }

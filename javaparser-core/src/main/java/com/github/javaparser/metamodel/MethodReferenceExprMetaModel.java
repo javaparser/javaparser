@@ -16,4 +16,3 @@ public class MethodReferenceExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }
-

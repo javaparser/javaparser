@@ -21,14 +21,17 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.TypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.TypeMetaModel;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Base class for types.
@@ -39,11 +42,28 @@ public abstract class Type extends Node {
 
     private NodeList<AnnotationExpr> annotations;
 
-    public Type(Range range, NodeList<AnnotationExpr> annotations) {
-        super(range);
-        setAnnotations(annotations);
+    /**
+     * Several sub classes do not support annotations.
+     * This is a support constructor for them.
+      */
+    protected Type(TokenRange range) {
+        this(range, new NodeList<>());
     }
 
+    @AllFieldsConstructor
+    public Type(NodeList<AnnotationExpr> annotations) {
+        this(null, annotations);
+    }
+
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public Type(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange);
+        setAnnotations(annotations);
+        customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
@@ -52,8 +72,12 @@ public abstract class Type extends Node {
         return getAnnotations().get(i);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (Type) this;
+        }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);
@@ -83,6 +107,7 @@ public abstract class Type extends Node {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -95,14 +120,17 @@ public abstract class Type extends Node {
         return super.remove(node);
     }
 
+    public abstract String asString();
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Type clone() {
         return (Type) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeMetaModel getMetaModel() {
         return JavaParserMetaModel.typeMetaModel;
     }
 }
-

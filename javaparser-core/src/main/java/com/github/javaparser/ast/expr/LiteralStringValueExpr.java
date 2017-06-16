@@ -21,12 +21,15 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -35,23 +38,37 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
 
     protected String value;
 
-    public LiteralStringValueExpr(final Range range, final String value) {
-        super(range);
-        setValue(value);
+    @AllFieldsConstructor
+    public LiteralStringValueExpr(final String value) {
+        this(null, value);
     }
 
-    public final String getValue() {
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public LiteralStringValueExpr(TokenRange tokenRange, String value) {
+        super(tokenRange);
+        setValue(value);
+        customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String getValue() {
         return value;
     }
 
-    public final LiteralStringValueExpr setValue(final String value) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
+        if (value == this.value) {
+            return (LiteralStringValueExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
         this.value = value;
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -59,13 +76,14 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LiteralStringValueExpr clone() {
         return (LiteralStringValueExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LiteralStringValueExprMetaModel getMetaModel() {
         return JavaParserMetaModel.literalStringValueExprMetaModel;
     }
 }
-

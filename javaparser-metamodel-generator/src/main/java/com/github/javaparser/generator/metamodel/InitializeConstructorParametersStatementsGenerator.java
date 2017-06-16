@@ -10,11 +10,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import static com.github.javaparser.JavaParser.parseStatement;
-import static com.github.javaparser.generator.metamodel.MetaModelGenerator.*;
-import static com.github.javaparser.utils.CodeGenerationUtils.*;
+import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeMetaModelFieldName;
+import static com.github.javaparser.generator.metamodel.MetaModelGenerator.propertyMetaModelFieldName;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class InitializeConstructorParametersStatementsGenerator {
     public void generate(Class<? extends Node> nodeClass, NodeList<Statement> initializeConstructorParametersStatements) {
+        if (nodeClass == Node.class) {
+            return;
+        }
         Constructor<?> constructor = findAllFieldsConstructor(nodeClass);
         for (java.lang.reflect.Parameter parameter : constructor.getParameters()) {
             Field field = findFieldInClass(nodeClass, parameter.getName());
@@ -29,14 +33,15 @@ public class InitializeConstructorParametersStatementsGenerator {
     }
 
     private Field findFieldInClass(Class<?> nodeClass, String name) {
+        Class<?> searchClass = nodeClass;
         do {
-            for (Field field : nodeClass.getDeclaredFields()) {
+            for (Field field : searchClass.getDeclaredFields()) {
                 if (field.getName().equals(name)) {
                     return field;
                 }
             }
-            nodeClass = nodeClass.getSuperclass();
-        } while (nodeClass != null);
+            searchClass = searchClass.getSuperclass();
+        } while (searchClass != null);
         throw new AssertionError(f("Couldn't find constructor parameter %s as a field, class %s", name, nodeClass.getSimpleName()));
     }
 

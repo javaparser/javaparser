@@ -33,6 +33,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.NormalAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
@@ -51,9 +53,12 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         this(null, name, pairs);
     }
 
-    public NormalAnnotationExpr(final Range range, final Name name, final NodeList<MemberValuePair> pairs) {
-        super(range, name);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public NormalAnnotationExpr(TokenRange tokenRange, Name name, NodeList<MemberValuePair> pairs) {
+        super(tokenRange, name);
         setPairs(pairs);
+        customInitialization();
     }
 
     @Override
@@ -66,12 +71,17 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<MemberValuePair> getPairs() {
         return pairs;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
         assertNotNull(pairs);
+        if (pairs == this.pairs) {
+            return (NormalAnnotationExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.PAIRS, this.pairs, pairs);
         if (this.pairs != null)
             this.pairs.setParentNode(null);
@@ -101,11 +111,13 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getPairs());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -119,13 +131,14 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public NormalAnnotationExpr clone() {
         return (NormalAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NormalAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }
 }
-

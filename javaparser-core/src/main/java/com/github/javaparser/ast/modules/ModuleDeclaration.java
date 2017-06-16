@@ -17,6 +17,8 @@ import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A Java 9 Jigsaw module declaration. <code>@Foo module com.github.abc { requires a.B; }</code>
@@ -44,12 +46,15 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         this(null, annotations, name, isOpen, moduleStmts);
     }
 
-    public ModuleDeclaration(Range range, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleStmt> moduleStmts) {
-        super(range);
-        setName(name);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleStmt> moduleStmts) {
+        super(tokenRange);
         setAnnotations(annotations);
+        setName(name);
         setOpen(isOpen);
         setModuleStmts(moduleStmts);
+        customInitialization();
     }
 
     @Override
@@ -62,14 +67,17 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setName(final Name name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -78,14 +86,17 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);
@@ -95,11 +106,13 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations(), getModuleStmts());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -118,22 +131,32 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isOpen() {
         return isOpen;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setOpen(final boolean isOpen) {
+        if (isOpen == this.isOpen) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.OPEN, this.isOpen, isOpen);
         this.isOpen = isOpen;
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ModuleStmt> getModuleStmts() {
         return moduleStmts;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleDeclaration setModuleStmts(final NodeList<ModuleStmt> moduleStmts) {
         assertNotNull(moduleStmts);
+        if (moduleStmts == this.moduleStmts) {
+            return (ModuleDeclaration) this;
+        }
         notifyPropertyChange(ObservableProperty.MODULE_STMTS, this.moduleStmts, moduleStmts);
         if (this.moduleStmts != null)
             this.moduleStmts.setParentNode(null);
@@ -143,13 +166,14 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleDeclaration clone() {
         return (ModuleDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleDeclarationMetaModel;
     }
 }
-

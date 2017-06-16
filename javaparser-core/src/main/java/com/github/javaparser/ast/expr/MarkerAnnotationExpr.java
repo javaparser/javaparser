@@ -30,6 +30,8 @@ import com.github.javaparser.metamodel.MarkerAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.JavaParser.parseName;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -52,8 +54,11 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
         this(null, name);
     }
 
-    public MarkerAnnotationExpr(final Range range, final Name name) {
-        super(range, name);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public MarkerAnnotationExpr(TokenRange tokenRange, Name name) {
+        super(tokenRange, name);
+        customInitialization();
     }
 
     @Override
@@ -67,6 +72,7 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -74,13 +80,14 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public MarkerAnnotationExpr clone() {
         return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MarkerAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }
 }
-

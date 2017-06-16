@@ -33,6 +33,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssertStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A usage of the keyword "assert"
@@ -58,10 +60,13 @@ public final class AssertStmt extends Statement {
         this(null, check, message);
     }
 
-    public AssertStmt(final Range range, final Expression check, final Expression message) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {
+        super(tokenRange);
         setCheck(check);
         setMessage(message);
+        customInitialization();
     }
 
     @Override
@@ -74,16 +79,22 @@ public final class AssertStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getCheck() {
         return check;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getMessage() {
         return Optional.ofNullable(message);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssertStmt setCheck(final Expression check) {
         assertNotNull(check);
+        if (check == this.check) {
+            return (AssertStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.CHECK, this.check, check);
         if (this.check != null)
             this.check.setParentNode(null);
@@ -98,7 +109,11 @@ public final class AssertStmt extends Statement {
      * @param msg the message, can be null
      * @return this, the AssertStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public AssertStmt setMessage(final Expression message) {
+        if (message == this.message) {
+            return (AssertStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.MESSAGE, this.message, message);
         if (this.message != null)
             this.message.setParentNode(null);
@@ -108,6 +123,7 @@ public final class AssertStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -120,18 +136,20 @@ public final class AssertStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public AssertStmt removeMessage() {
         return setMessage((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public AssertStmt clone() {
         return (AssertStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AssertStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.assertStmtMetaModel;
     }
 }
-

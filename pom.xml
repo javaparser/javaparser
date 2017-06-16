@@ -10,12 +10,12 @@
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.2-SNAPSHOT</version>
+    <version>3.2.7-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
     <inceptionYear>2007</inceptionYear>
-    <description>Java 1.8 Parser Parser and Abstract Syntax Tree for Java</description>
+    <description>Java 9 Parser Parser and Abstract Syntax Tree for Java</description>
 
     <licenses>
         <license>
@@ -126,15 +126,15 @@
         <!-- Maven Plugins -->
         <javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
-        <maven-jacoco-plugin.version>0.7.7.201606060606</maven-jacoco-plugin.version>
-        <maven-coveralls-plugin.version>4.2.0</maven-coveralls-plugin.version>
+        <maven-jacoco-plugin.version>0.7.9</maven-jacoco-plugin.version>
+        <maven-coveralls-plugin.version>4.3.0</maven-coveralls-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-        <bnd-maven-plugin.version>3.2.0</bnd-maven-plugin.version>
+        <bnd-maven-plugin.version>3.3.0</bnd-maven-plugin.version>
     </properties>
 
     <scm>
@@ -153,7 +153,7 @@
         <repository>
             <id>bintray-javaparser-JavaParser</id>
             <name>javaparser-JavaParser</name>
-            <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/</url>
+            <url>https://api.bintray.com/maven/javaparser/JavaParser/javaparser/;publish=1</url>
         </repository>
     </distributionManagement>
 

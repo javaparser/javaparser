@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
+import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -32,13 +33,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Any declaration that can appear between the { and } of a class, interface, or enum.
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class BodyDeclaration<T extends Node> extends Node implements NodeWithAnnotations<T> {
+public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node implements NodeWithAnnotations<T> {
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -46,28 +49,38 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
         this(null, new NodeList<>());
     }
 
+    @AllFieldsConstructor
     public BodyDeclaration(NodeList<AnnotationExpr> annotations) {
         this(null, annotations);
     }
 
-    public BodyDeclaration(Range range, NodeList<AnnotationExpr> annotations) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public BodyDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange);
         setAnnotations(annotations);
-    }
-
-    @Override
-    public final NodeList<AnnotationExpr> getAnnotations() {
-        return annotations;
+        customInitialization();
     }
 
     /**
-     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
-     * so please avoid passing null
+     * This supports {@link EmptyMemberDeclaration}.
      */
+    protected BodyDeclaration(TokenRange range) {
+        this(range, new NodeList<>());
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
     @SuppressWarnings("unchecked")
-    @Override
-    public final T setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public T setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (T) this;
+        }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
             this.annotations.setParentNode(null);
@@ -82,6 +95,7 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -95,13 +109,14 @@ public abstract class BodyDeclaration<T extends Node> extends Node implements No
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BodyDeclaration<?> clone() {
         return (BodyDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BodyDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.bodyDeclarationMetaModel;
     }
 }
-

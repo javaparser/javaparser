@@ -12,4 +12,3 @@ public class InitializerDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     public PropertyMetaModel isStaticPropertyMetaModel;
 }
-

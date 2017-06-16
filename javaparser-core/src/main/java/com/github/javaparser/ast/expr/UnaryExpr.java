@@ -33,6 +33,8 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -85,10 +87,13 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         this(null, expression, operator);
     }
 
-    public UnaryExpr(final Range range, final Expression expression, final Operator operator) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
+        super(tokenRange);
         setExpression(expression);
         setOperator(operator);
+        customInitialization();
     }
 
     @Override
@@ -101,18 +106,22 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Operator getOperator() {
         return operator;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public UnaryExpr setExpression(final Expression expression) {
         assertNotNull(expression);
+        if (expression == this.expression) {
+            return (UnaryExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
@@ -121,14 +130,19 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public UnaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
+        if (operator == this.operator) {
+            return (UnaryExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.OPERATOR, this.operator, operator);
         this.operator = operator;
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -146,13 +160,14 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public UnaryExpr clone() {
         return (UnaryExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
     }
 }
-

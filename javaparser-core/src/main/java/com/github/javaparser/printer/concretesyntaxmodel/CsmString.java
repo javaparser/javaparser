@@ -38,4 +38,10 @@ public class CsmString implements CsmElement {
         printer.print(property.getValueAsStringAttribute(node));
         printer.print("\"");
     }
+
+    @Override
+    public String toString() {
+        return String.format("CsmString(property:%s)", property);
+    }
+
 }

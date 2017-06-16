@@ -33,6 +33,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ClassExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Defines an expression that accesses the class of a type.
@@ -53,9 +55,12 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         this(null, type);
     }
 
-    public ClassExpr(Range range, Type type) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassExpr(TokenRange tokenRange, Type type) {
+        super(tokenRange);
         setType(type);
+        customInitialization();
     }
 
     @Override
@@ -68,14 +73,17 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassExpr setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (ClassExpr) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -85,6 +93,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -92,13 +101,14 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassExpr clone() {
         return (ClassExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassExprMetaModel getMetaModel() {
         return JavaParserMetaModel.classExprMetaModel;
     }
 }
-

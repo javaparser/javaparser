@@ -22,12 +22,14 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.IntegerLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * All ways to specify an int literal.
@@ -36,7 +38,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * <br/><code>022</code>
  * <br/><code>0B10101010</code>
  * <br/><code>99999999L</code>
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public class IntegerLiteralExpr extends LiteralStringValueExpr {
@@ -50,8 +52,15 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    public IntegerLiteralExpr(final Range range, final String value) {
-        super(range, value);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public IntegerLiteralExpr(TokenRange tokenRange, String value) {
+        super(tokenRange, value);
+        customInitialization();
+    }
+
+    public IntegerLiteralExpr(final int value) {
+        this(null, String.valueOf(value));
     }
 
     @Override
@@ -65,20 +74,44 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
         return super.remove(node);
     }
 
+    /**
+     * @return the literal value as an integer while respecting different number representations
+     */
+    public int asInt() {
+        String result = value.replaceAll("_", "");
+        if (result.startsWith("0x") || result.startsWith("0X")) {
+            return Integer.parseUnsignedInt(result.substring(2), 16);
+        }
+        if (result.startsWith("0b") || result.startsWith("0B")) {
+            return Integer.parseUnsignedInt(result.substring(2), 2);
+        }
+        if (result.length() > 1 && result.startsWith("0")) {
+            return Integer.parseUnsignedInt(result.substring(1), 8);
+        }
+        return Integer.parseInt(result);
+    }
+
+    public IntegerLiteralExpr setInt(int value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public IntegerLiteralExpr clone() {
         return (IntegerLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public IntegerLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.integerLiteralExprMetaModel;
     }
 }
-

@@ -20,25 +20,26 @@
  */
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.ArrayTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ArrayTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -57,10 +58,12 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         this(type, nodeList(annotations));
     }
 
-    public ArrayType(Range range, Type componentType, NodeList<AnnotationExpr> annotations) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ArrayType(TokenRange tokenRange, Type componentType, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setComponentType(componentType);
-        setAnnotations(annotations);
+        customInitialization();
     }
 
     @Override
@@ -73,12 +76,17 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getComponentType() {
         return componentType;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ArrayType setComponentType(final Type componentType) {
         assertNotNull(componentType);
+        if (componentType == this.componentType) {
+            return (ArrayType) this;
+        }
         notifyPropertyChange(ObservableProperty.COMPONENT_TYPE, this.componentType, componentType);
         if (this.componentType != null)
             this.componentType.setParentNode(null);
@@ -99,11 +107,14 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             if (arrayBracketPairList != null) {
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
-                    Range range = null;
-                    if (type.getRange().isPresent() && pair.getRange().isPresent()) {
-                        range = new Range(type.getBegin().get(), pair.getRange().get().end);
+                    TokenRange tokenRange = null;
+                    if (type.getTokenRange().isPresent() && pair.getTokenRange().isPresent()) {
+                        tokenRange = new TokenRange(type.getTokenRange().get().getBegin(), pair.getTokenRange().get().getEnd());
                     }
-                    type = new ArrayType(range, type, pair.getAnnotations());
+                    type = new ArrayType(tokenRange, type, pair.getAnnotations());
+                    if (tokenRange != null) {
+                        type.setRange(tokenRange.toRange());
+                    }
                 }
             }
         }
@@ -119,7 +130,7 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
         final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>(0);
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(type.getRange().orElse(null), arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(type.getTokenRange().orElse(null), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);
@@ -130,12 +141,12 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      */
     public static class ArrayBracketPair {
 
-        private Range range;
+        private TokenRange tokenRange;
 
         private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-        public ArrayBracketPair(Range range, NodeList<AnnotationExpr> annotations) {
-            setRange(range);
+        public ArrayBracketPair(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+            setTokenRange(tokenRange);
             setAnnotations(annotations);
         }
 
@@ -148,13 +159,13 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
             return this;
         }
 
-        public ArrayBracketPair setRange(Range range) {
-            this.range = range;
+        public ArrayBracketPair setTokenRange(TokenRange range) {
+            this.tokenRange = range;
             return this;
         }
 
-        public Optional<Range> getRange() {
-            return Optional.ofNullable(range);
+        public Optional<TokenRange> getTokenRange() {
+            return Optional.ofNullable(tokenRange);
         }
     }
 
@@ -164,11 +175,13 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -176,13 +189,19 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     }
 
     @Override
+    public String asString() {
+        return componentType.asString() + "[]";
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ArrayType clone() {
         return (ArrayType) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayTypeMetaModel;
     }
 }
-

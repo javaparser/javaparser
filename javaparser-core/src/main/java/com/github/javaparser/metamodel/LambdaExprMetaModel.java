@@ -16,4 +16,3 @@ public class LambdaExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel expressionBodyPropertyMetaModel;
 }
-

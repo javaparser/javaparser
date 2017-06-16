@@ -45,6 +45,7 @@ import org.jbehave.core.annotations.When;
 import java.util.EnumSet;
 import java.util.Map;
 
+import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
@@ -152,10 +153,9 @@ public class ManipulationSteps {
     @When("$typeName varargs called \"$parameterName\" are added to method $methodPosition in class $classPosition")
     public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        Parameter param = new Parameter(new ClassOrInterfaceType(typeName), parameterName);
-        param.setVarArgs(true);
-        method.addParameter(param);
+        getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition)
+                .addAndGetParameter(typeName, parameterName)
+                .setVarArgs(true);
     }
 
     @When("a BlockStmt is added to method $methodPosition in class $classPosition")

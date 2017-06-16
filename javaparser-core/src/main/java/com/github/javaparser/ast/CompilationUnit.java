@@ -21,7 +21,9 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.Range;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -30,20 +32,34 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CompilationUnitMetaModel;
+import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
+import com.github.javaparser.utils.CodeGenerationUtils;
+import javax.annotation.Generated;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import static com.github.javaparser.JavaParser.parseName;
+import static com.github.javaparser.Providers.UTF8;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -59,7 +75,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see ImportDeclaration
  * @see TypeDeclaration
  */
-public final class CompilationUnit extends Node {
+public class CompilationUnit extends Node {
 
     private PackageDeclaration packageDeclaration;
 
@@ -68,6 +84,9 @@ public final class CompilationUnit extends Node {
     private NodeList<TypeDeclaration<?>> types;
 
     private ModuleDeclaration module;
+
+    @InternalProperty
+    private Storage storage;
 
     public CompilationUnit() {
         this(null, null, new NodeList<>(), new NodeList<>(), null);
@@ -82,12 +101,15 @@ public final class CompilationUnit extends Node {
         this(null, packageDeclaration, imports, types, module);
     }
 
-    public CompilationUnit(Range range, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
-        super(range);
-        setModule(module);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public CompilationUnit(TokenRange tokenRange, PackageDeclaration packageDeclaration, NodeList<ImportDeclaration> imports, NodeList<TypeDeclaration<?>> types, ModuleDeclaration module) {
+        super(tokenRange);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
         setTypes(types);
+        setModule(module);
+        customInitialization();
     }
 
     @Override
@@ -121,6 +143,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the list of imports or <code>none</code> if there is no import
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ImportDeclaration> getImports() {
         return imports;
     }
@@ -136,6 +159,7 @@ public final class CompilationUnit extends Node {
      *
      * @return the package declaration or <code>none</code>
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<PackageDeclaration> getPackageDeclaration() {
         return Optional.ofNullable(packageDeclaration);
     }
@@ -149,6 +173,7 @@ public final class CompilationUnit extends Node {
      * @see ClassOrInterfaceDeclaration
      * @see EnumDeclaration
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeDeclaration<?>> getTypes() {
         return types;
     }
@@ -169,8 +194,12 @@ public final class CompilationUnit extends Node {
      *
      * @param imports the list of imports
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setImports(final NodeList<ImportDeclaration> imports) {
         assertNotNull(imports);
+        if (imports == this.imports) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.IMPORTS, this.imports, imports);
         if (this.imports != null)
             this.imports.setParentNode(null);
@@ -194,7 +223,11 @@ public final class CompilationUnit extends Node {
      *
      * @param packageDeclaration the packageDeclaration declaration to set or <code>null</code> to default package
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setPackageDeclaration(final PackageDeclaration packageDeclaration) {
+        if (packageDeclaration == this.packageDeclaration) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.PACKAGE_DECLARATION, this.packageDeclaration, packageDeclaration);
         if (this.packageDeclaration != null)
             this.packageDeclaration.setParentNode(null);
@@ -206,8 +239,12 @@ public final class CompilationUnit extends Node {
     /**
      * Sets the list of types declared in this compilation unit.
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setTypes(final NodeList<TypeDeclaration<?>> types) {
         assertNotNull(types);
+        if (types == this.types) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPES, this.types, types);
         if (this.types != null)
             this.types.setParentNode(null);
@@ -260,12 +297,17 @@ public final class CompilationUnit extends Node {
      *
      * @param clazz the class to import
      * @return this, the {@link CompilationUnit}
+     * @throws RuntimeException if clazz is an anonymous or local class
      */
     public CompilationUnit addImport(Class<?> clazz) {
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.getName().startsWith("java.lang"))
             return this;
+        else if (clazz.isMemberClass())
+            return addImport(clazz.getName().replace("$", "."));
         else if (clazz.isArray() && !ClassUtils.isPrimitiveOrWrapper(clazz.getComponentType()) && !clazz.getComponentType().getName().startsWith("java.lang"))
             return addImport(clazz.getComponentType().getName());
+        else if (clazz.isAnonymousClass() || clazz.isLocalClass())
+            throw new RuntimeException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
         return addImport(clazz.getName());
     }
 
@@ -289,7 +331,7 @@ public final class CompilationUnit extends Node {
         }
         i.append(";");
         ImportDeclaration importDeclaration = JavaParser.parseImport(i.toString());
-        if (getImports().stream().anyMatch( im -> im.toString().equals(importDeclaration.toString())))
+        if (getImports().stream().anyMatch(im -> im.toString().equals(importDeclaration.toString())))
             return this;
         else {
             getImports().add(importDeclaration);
@@ -395,7 +437,7 @@ public final class CompilationUnit extends Node {
      * @param className the class name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getClassByName(String className) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map( t -> (ClassOrInterfaceDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(className) && type instanceof ClassOrInterfaceDeclaration && !((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
@@ -404,7 +446,7 @@ public final class CompilationUnit extends Node {
      * @param interfaceName the interface name (case-sensitive)
      */
     public Optional<ClassOrInterfaceDeclaration> getInterfaceByName(String interfaceName) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(interfaceName) && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map( t -> (ClassOrInterfaceDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(interfaceName) && type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) type).isInterface()).findFirst().map(t -> (ClassOrInterfaceDeclaration) t);
     }
 
     /**
@@ -413,7 +455,7 @@ public final class CompilationUnit extends Node {
      * @param enumName the enum name (case-sensitive)
      */
     public Optional<EnumDeclaration> getEnumByName(String enumName) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(enumName) && type instanceof EnumDeclaration).findFirst().map( t -> (EnumDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(enumName) && type instanceof EnumDeclaration).findFirst().map(t -> (EnumDeclaration) t);
     }
 
     /**
@@ -422,15 +464,17 @@ public final class CompilationUnit extends Node {
      * @param annotationName the annotation name (case-sensitive)
      */
     public Optional<AnnotationDeclaration> getAnnotationDeclarationByName(String annotationName) {
-        return getTypes().stream().filter( type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map( t -> (AnnotationDeclaration) t);
+        return getTypes().stream().filter(type -> type.getNameAsString().equals(annotationName) && type instanceof AnnotationDeclaration).findFirst().map(t -> (AnnotationDeclaration) t);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getImports(), getTypes());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -461,15 +505,21 @@ public final class CompilationUnit extends Node {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removePackageDeclaration() {
         return setPackageDeclaration((PackageDeclaration) null);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ModuleDeclaration> getModule() {
         return Optional.ofNullable(module);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompilationUnit setModule(final ModuleDeclaration module) {
+        if (module == this.module) {
+            return (CompilationUnit) this;
+        }
         notifyPropertyChange(ObservableProperty.MODULE, this.module, module);
         if (this.module != null)
             this.module.setParentNode(null);
@@ -478,18 +528,106 @@ public final class CompilationUnit extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public CompilationUnit removeModule() {
         return setModule((ModuleDeclaration) null);
     }
 
+    /**
+     * @return information about where this compilation unit was loaded from, or empty if it wasn't loaded from a file.
+     */
+    public Optional<Storage> getStorage() {
+        return Optional.ofNullable(storage);
+    }
+
+    public CompilationUnit setStorage(Path path) {
+        this.storage = new Storage(this, path);
+        return this;
+    }
+
+    /**
+     * Information about where this compilation unit was loaded from.
+     * This class only stores the absolute location.
+     * For more flexibility use SourceRoot.
+     */
+    public static class Storage {
+
+        private final CompilationUnit compilationUnit;
+
+        private final Path path;
+
+        private Storage(CompilationUnit compilationUnit, Path path) {
+            this.compilationUnit = compilationUnit;
+            this.path = path.toAbsolutePath();
+        }
+
+        /**
+         * @return the path to the source for this CompilationUnit
+         */
+        public Path getPath() {
+            return path;
+        }
+
+        /**
+         * @return the CompilationUnit this Storage is about.
+         */
+        public CompilationUnit getCompilationUnit() {
+            return compilationUnit;
+        }
+
+        /**
+         * @return the source root directory, calculated from the path of this compiation unit, and the package
+         * declaration of this compilation unit. If the package declaration is invalid (when it does not match the end
+         * of the path) a RuntimeException is thrown.
+         */
+        public Path getSourceRoot() {
+            final Optional<String> pkgAsString = compilationUnit.getPackageDeclaration().map(NodeWithName::getNameAsString);
+            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElse(getDirectory());
+        }
+
+        public String getFileName() {
+            return path.getFileName().toString();
+        }
+
+        public Path getDirectory() {
+            return path.getParent();
+        }
+
+        /**
+         * Saves the compilation unit to its original location
+         */
+        public void save() {
+            save(cu -> new PrettyPrinter().print(getCompilationUnit()));
+        }
+
+        public void save(Function<CompilationUnit, String> makeOutput) {
+            try {
+                Files.createDirectories(path.getParent());
+                final String code = makeOutput.apply(getCompilationUnit());
+                Files.write(path, code.getBytes(UTF8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public ParseResult<CompilationUnit> reparse(JavaParser javaParser) {
+            try {
+                return javaParser.parse(ParseStart.COMPILATION_UNIT, provider(getPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public CompilationUnit clone() {
         return (CompilationUnit) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CompilationUnitMetaModel getMetaModel() {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }
 }
-

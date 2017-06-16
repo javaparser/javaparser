@@ -34,6 +34,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Statements in between { and }.
@@ -53,9 +55,12 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         this(null, statements);
     }
 
-    public BlockStmt(final Range range, final NodeList<Statement> statements) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
+        super(tokenRange);
         setStatements(statements);
+        customInitialization();
     }
 
     @Override
@@ -68,12 +73,17 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
+        if (statements == this.statements) {
+            return (BlockStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
         if (this.statements != null)
             this.statements.setParentNode(null);
@@ -83,11 +93,13 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getStatements());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -101,13 +113,14 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BlockStmt clone() {
         return (BlockStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BlockStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.blockStmtMetaModel;
     }
 }
-

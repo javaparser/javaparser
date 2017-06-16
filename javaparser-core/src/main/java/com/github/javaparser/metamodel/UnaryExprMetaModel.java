@@ -16,4 +16,3 @@ public class UnaryExprMetaModel extends ExpressionMetaModel {
 
     public PropertyMetaModel prefixPropertyMetaModel;
 }
-

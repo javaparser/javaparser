@@ -12,6 +12,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleUsesStmtMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
 
@@ -26,9 +28,12 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
         this(null, type);
     }
 
-    public ModuleUsesStmt(Range range, Type type) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ModuleUsesStmt(TokenRange tokenRange, Type type) {
+        super(tokenRange);
         setType(type);
+        customInitialization();
     }
 
     @Override
@@ -42,18 +47,24 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleUsesStmt setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (ModuleUsesStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -63,13 +74,14 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleUsesStmt clone() {
         return (ModuleUsesStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleUsesStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleUsesStmtMetaModel;
     }
 }
-

@@ -24,8 +24,9 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.printer.TokenConstants;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.TokenTypes;
+
+import static com.github.javaparser.utils.Utils.EOL;
 
 class TokenTextElement extends TextElement {
 
@@ -33,7 +34,7 @@ class TokenTextElement extends TextElement {
     private String text;
 
     public static TokenTextElement newLine() {
-        return new TokenTextElement(TokenConstants.NEWLINE_TOKEN, Utils.EOL);
+        return new TokenTextElement(TokenTypes.eolToken(), EOL);
     }
 
     TokenTextElement(JavaToken token) {
@@ -50,9 +51,9 @@ class TokenTextElement extends TextElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (tokenKind == TokenConstants.NEWLINE_TOKEN) {
-            content = Utils.EOL;
-        } else if (tokenKind == TokenConstants.SPACE_TOKEN) {
+        if (TokenTypes.isEndOfLineCharacter(tokenKind)) {
+            content = EOL;
+        } else if (TokenTypes.isWhitespace(tokenKind)) {
             content = " ";
         }
         this.tokenKind = tokenKind;
@@ -110,20 +111,26 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isWhiteSpace() {
-        return TokenConstants.isWhitespace(tokenKind);
+        return TokenTypes.isWhitespace(tokenKind);
     }
 
     @Override
     public boolean isSpaceOrTab() {
-        return TokenConstants.isSpaceOrTab(tokenKind);
+        return TokenTypes.isSpaceOrTab(tokenKind);
     }
 
-    boolean isWhiteSpaceOrComment() {
-        return TokenConstants.isWhitespaceOrComment(tokenKind);
+    @Override
+    public boolean isComment() {
+        return TokenTypes.isComment(tokenKind);
     }
 
     @Override
     public boolean isNewline() {
-        return tokenKind == TokenConstants.NEWLINE_TOKEN;
+        return TokenTypes.isEndOfLineCharacter(tokenKind);
+    }
+
+    @Override
+    public boolean isChildOfClass(Class<? extends Node> nodeClass) {
+        return false;
     }
 }

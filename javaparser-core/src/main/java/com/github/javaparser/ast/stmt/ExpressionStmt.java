@@ -33,6 +33,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -52,9 +54,12 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         this(null, expression);
     }
 
-    public ExpressionStmt(Range range, final Expression expression) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ExpressionStmt(TokenRange tokenRange, Expression expression) {
+        super(tokenRange);
         setExpression(expression);
+        customInitialization();
     }
 
     @Override
@@ -67,14 +72,17 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpression() {
         return expression;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
+        if (expression == this.expression) {
+            return (ExpressionStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
@@ -84,6 +92,7 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -91,13 +100,14 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ExpressionStmt clone() {
         return (ExpressionStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ExpressionStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionStmtMetaModel;
     }
 }
-

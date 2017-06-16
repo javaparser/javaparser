@@ -193,12 +193,6 @@ class ExistenceOfParentNodeVerifier {
         }
 
         @Override
-        public void visit(EmptyMemberDeclaration n, Void arg) {
-            assertParentIsSet(n);
-            super.visit(n, arg);
-        }
-
-        @Override
         public void visit(EmptyStmt n, Void arg) {
             assertParentIsSet(n);
             super.visit(n, arg);

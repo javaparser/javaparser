@@ -22,12 +22,14 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DoubleLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A float or a double constant. This value is stored exactly as found in the source.
@@ -48,8 +50,15 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    public DoubleLiteralExpr(final Range range, final String value) {
-        super(range, value);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public DoubleLiteralExpr(TokenRange tokenRange, String value) {
+        super(tokenRange, value);
+        customInitialization();
+    }
+
+    public DoubleLiteralExpr(final double value) {
+        this(null, String.valueOf(value));
     }
 
     @Override
@@ -63,20 +72,34 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
         return super.remove(node);
     }
 
+    /**
+     * @return the literal value as a double
+     */
+    public double asDouble() {
+        return Double.parseDouble(value);
+    }
+
+    public DoubleLiteralExpr setDouble(double value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public DoubleLiteralExpr clone() {
         return (DoubleLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public DoubleLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.doubleLiteralExprMetaModel;
     }
 }
-

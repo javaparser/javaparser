@@ -22,6 +22,7 @@ package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -29,16 +30,18 @@ import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
+import static java.util.stream.Collectors.joining;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
@@ -61,27 +64,37 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     private NodeList<Type> typeArguments;
 
     public ClassOrInterfaceType() {
-        this(null, null, new SimpleName(), null);
+        this(null, null, new SimpleName(), null, new NodeList<>());
     }
 
+    /**
+     * @deprecated use JavaParser.parseClassOrInterfaceType instead. This constructor does not understand generics.
+     */
     public ClassOrInterfaceType(final String name) {
-        this(null, null, new SimpleName(name), null);
+        this(null, null, new SimpleName(name), null, new NodeList<>());
     }
 
     public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
-        this(null, scope, new SimpleName(name), null);
+        this(null, scope, new SimpleName(name), null, new NodeList<>());
+    }
+
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
+        this(null, scope, name, typeArguments, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
-        this(null, scope, name, typeArguments);
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments, final NodeList<AnnotationExpr> annotations) {
+        this(null, scope, name, typeArguments, annotations);
     }
 
-    public ClassOrInterfaceType(final Range range, final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setScope(scope);
         setName(name);
         setTypeArguments(typeArguments);
+        customInitialization();
     }
 
     @Override
@@ -94,11 +107,12 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ClassOrInterfaceType> getScope() {
         return Optional.ofNullable(scope);
     }
@@ -114,9 +128,12 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return new PrimitiveType(PrimitiveType.unboxMap.get(name.getIdentifier()));
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setName(final SimpleName name) {
         assertNotNull(name);
+        if (name == this.name) {
+            return (ClassOrInterfaceType) this;
+        }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
@@ -131,7 +148,11 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
      * @param scope the scope, can be null
      * @return this, the ClassOrInterfaceType
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
+        if (scope == this.scope) {
+            return (ClassOrInterfaceType) this;
+        }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
         if (this.scope != null)
             this.scope.setParentNode(null);
@@ -140,7 +161,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return this;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
@@ -151,8 +172,11 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
      * @param typeArguments the typeArguments, can be null
      * @return this, the ClassOrInterfaceType
      */
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
+        if (typeArguments == this.typeArguments) {
+            return (ClassOrInterfaceType) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
         if (this.typeArguments != null)
             this.typeArguments.setParentNode(null);
@@ -167,11 +191,13 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getTypeArguments().orElse(null), getAnnotations());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -192,18 +218,29 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return super.remove(node);
     }
 
+    @Override
+    public String asString() {
+        StringBuilder str = new StringBuilder();
+        getScope().ifPresent(s -> str.append(s.asString()).append("."));
+        str.append(name.asString());
+        getTypeArguments().ifPresent(ta -> str.append(ta.stream().map(Type::asString).collect(joining(",", "<", ">"))));
+        return str.toString();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ClassOrInterfaceType removeScope() {
         return setScope((ClassOrInterfaceType) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceType clone() {
         return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassOrInterfaceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }
 }
-

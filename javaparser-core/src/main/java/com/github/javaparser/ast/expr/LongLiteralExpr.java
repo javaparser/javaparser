@@ -22,12 +22,14 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * All ways to specify a long literal.
@@ -50,8 +52,15 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    public LongLiteralExpr(final Range range, final String value) {
-        super(range, value);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public LongLiteralExpr(TokenRange tokenRange, String value) {
+        super(tokenRange, value);
+        customInitialization();
+    }
+
+    public LongLiteralExpr(final long value) {
+        this(null, String.valueOf(value));
     }
 
     @Override
@@ -65,20 +74,48 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
         return super.remove(node);
     }
 
+    /**
+     * @return the literal value as an long while respecting different number representations
+     */
+    public long asLong() {
+        String result = value.replaceAll("_", "");
+        char lastChar = result.charAt(result.length() - 1);
+        if (lastChar == 'l' || lastChar == 'L') {
+            result = result.substring(0, result.length() - 1);
+        }
+        if (result.startsWith("0x") || result.startsWith("0X")) {
+            return Long.parseUnsignedLong(result.substring(2), 16);
+        }
+        if (result.startsWith("0b") || result.startsWith("0B")) {
+            return Long.parseUnsignedLong(result.substring(2), 2);
+        }
+        if (result.length() > 1 && result.startsWith("0")) {
+            return Long.parseUnsignedLong(result.substring(1), 8);
+        }
+        return Long.parseLong(result);
+    }
+
+    public LongLiteralExpr setLong(long value) {
+        this.value = String.valueOf(value);
+        return this;
+    }
+
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public LongLiteralExpr clone() {
         return (LongLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public LongLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.longLiteralExprMetaModel;
     }
 }
-

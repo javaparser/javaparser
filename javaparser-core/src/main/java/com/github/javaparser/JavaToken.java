@@ -21,22 +21,33 @@
 
 package com.github.javaparser;
 
+import java.util.List;
+import java.util.Optional;
+
+import static com.github.javaparser.Position.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
  * A token from a parsed source file.
  * (Awkwardly named "Java"Token since JavaCC already generates an internal class Token.)
  */
 public class JavaToken {
-    public final Range range;
-    public final int kind;
-    public final String text;
+    public static final JavaToken INVALID = new JavaToken();
 
-    public JavaToken(Range range, int kind, String text) {
-        this.range = range;
-        this.kind = kind;
-        this.text = text;
+    private final Range range;
+    private final int kind;
+    private final String text;
+    private final Optional<JavaToken> previousToken;
+    private Optional<JavaToken> nextToken = Optional.empty();
+
+    private JavaToken() {
+        range = new Range(pos(-1,-1), pos(-1,-1));
+        kind = 0;
+        text = "INVALID";
+        previousToken = Optional.empty();
     }
 
-    public JavaToken(Token token) {
+    public JavaToken(Token token, List<JavaToken> tokens) {
         Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
         String text = token.image;
 
@@ -82,6 +93,13 @@ public class JavaToken {
         this.range = range;
         this.kind = token.kind;
         this.text = text;
+        if (!tokens.isEmpty()) {
+            final JavaToken previousToken = tokens.get(tokens.size() - 1);
+            this.previousToken = Optional.of(previousToken);
+            previousToken.nextToken = Optional.of(this);
+        } else {
+            previousToken = Optional.empty();
+        }
     }
 
     public Range getRange() {
@@ -96,8 +114,38 @@ public class JavaToken {
         return text;
     }
 
+    public Optional<JavaToken> getNextToken() {
+        return nextToken;
+    }
+
+    public Optional<JavaToken> getPreviousToken() {
+        return previousToken;
+    }
+
     @Override
     public String toString() {
         return text;
     }
+
+    /**
+     * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
+     * the end of the source.
+     */
+    public boolean valid() {
+        return !invalid();
+    }
+
+    public boolean invalid() {
+        return this == INVALID;
+    }
+
+    public JavaToken orIfInvalid(JavaToken anotherToken) {
+        assertNotNull(anotherToken);
+        if (valid() || anotherToken.invalid()) {
+            return this;
+        }
+        return anotherToken;
+    }
+
+
 }

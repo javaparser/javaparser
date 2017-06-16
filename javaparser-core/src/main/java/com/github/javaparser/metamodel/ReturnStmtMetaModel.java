@@ -10,4 +10,3 @@ public class ReturnStmtMetaModel extends StatementMetaModel {
 
     public PropertyMetaModel expressionPropertyMetaModel;
 }
-

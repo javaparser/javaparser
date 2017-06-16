@@ -8,4 +8,3 @@ public class StringLiteralExprMetaModel extends LiteralStringValueExprMetaModel 
         super(superBaseNodeMetaModel, com.github.javaparser.ast.expr.StringLiteralExpr.class, "StringLiteralExpr", "com.github.javaparser.ast.expr", false, false);
     }
 }
-

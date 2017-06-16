@@ -101,7 +101,7 @@ public class ModifierVisitorTest {
 
     @Test
     public void fieldDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseClassBodyDeclaration("int x=1;");
+        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("int x=1;");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
             public Visitable visit(VariableDeclarator x, Void arg) {
@@ -114,7 +114,7 @@ public class ModifierVisitorTest {
 
     @Test
     public void variableDeclarationCantSurviveWithoutVariables() {
-        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseClassBodyDeclaration("void x() {int x=1;}");
+        final BodyDeclaration<?> bodyDeclaration = JavaParser.parseBodyDeclaration("void x() {int x=1;}");
 
         final Visitable result = bodyDeclaration.accept(new ModifierVisitor<Void>() {
             public Visitable visit(VariableDeclarator x, Void arg) {

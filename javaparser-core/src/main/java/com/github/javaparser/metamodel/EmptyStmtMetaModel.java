@@ -8,4 +8,3 @@ public class EmptyStmtMetaModel extends StatementMetaModel {
         super(superBaseNodeMetaModel, com.github.javaparser.ast.stmt.EmptyStmt.class, "EmptyStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 }
-

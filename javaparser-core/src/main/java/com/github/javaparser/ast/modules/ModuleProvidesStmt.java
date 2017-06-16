@@ -16,6 +16,8 @@ import com.github.javaparser.metamodel.ModuleProvidesStmtMetaModel;
 import java.util.Arrays;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<ModuleProvidesStmt, Type> {
 
@@ -32,10 +34,13 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         this(null, type, withTypes);
     }
 
-    public ModuleProvidesStmt(Range range, Type type, NodeList<Type> withTypes) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ModuleProvidesStmt(TokenRange tokenRange, Type type, NodeList<Type> withTypes) {
+        super(tokenRange);
         setType(type);
         setWithTypes(withTypes);
+        customInitialization();
     }
 
     @Override
@@ -49,6 +54,7 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -61,12 +67,17 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleProvidesStmt setType(final Type type) {
         assertNotNull(type);
+        if (type == this.type) {
+            return (ModuleProvidesStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
@@ -75,12 +86,17 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Type> getWithTypes() {
         return withTypes;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ModuleProvidesStmt setWithTypes(final NodeList<Type> withTypes) {
         assertNotNull(withTypes);
+        if (withTypes == this.withTypes) {
+            return (ModuleProvidesStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.WITH_TYPES, this.withTypes, withTypes);
         if (this.withTypes != null)
             this.withTypes.setParentNode(null);
@@ -90,18 +106,20 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
     public List<NodeList<?>> getNodeLists() {
         return Arrays.asList(getWithTypes());
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleProvidesStmt clone() {
         return (ModuleProvidesStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleProvidesStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleProvidesStmtMetaModel;
     }
 }
-

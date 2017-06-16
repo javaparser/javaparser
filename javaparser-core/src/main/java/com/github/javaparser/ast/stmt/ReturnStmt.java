@@ -32,6 +32,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ReturnStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * The return statement, with an optional expression to return.
@@ -51,9 +53,12 @@ public final class ReturnStmt extends Statement {
         this(null, expression);
     }
 
-    public ReturnStmt(Range range, final Expression expression) {
-        super(range);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ReturnStmt(TokenRange tokenRange, Expression expression) {
+        super(tokenRange);
         setExpression(expression);
+        customInitialization();
     }
 
     /**
@@ -73,6 +78,7 @@ public final class ReturnStmt extends Statement {
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Expression> getExpression() {
         return Optional.ofNullable(expression);
     }
@@ -83,7 +89,11 @@ public final class ReturnStmt extends Statement {
      * @param expression the expression, can be null
      * @return this, the ReturnStmt
      */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReturnStmt setExpression(final Expression expression) {
+        if (expression == this.expression) {
+            return (ReturnStmt) this;
+        }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
         if (this.expression != null)
             this.expression.setParentNode(null);
@@ -93,6 +103,7 @@ public final class ReturnStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -105,18 +116,20 @@ public final class ReturnStmt extends Statement {
         return super.remove(node);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ReturnStmt removeExpression() {
         return setExpression((Expression) null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReturnStmt clone() {
         return (ReturnStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ReturnStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.returnStmtMetaModel;
     }
 }
-

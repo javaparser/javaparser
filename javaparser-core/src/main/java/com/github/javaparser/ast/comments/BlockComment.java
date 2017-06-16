@@ -28,6 +28,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BlockCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import com.github.javaparser.TokenRange;
 
 /**
  * <p>
@@ -49,8 +51,11 @@ public final class BlockComment extends Comment {
         this(null, content);
     }
 
-    public BlockComment(Range range, String content) {
-        super(range, content);
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public BlockComment(TokenRange tokenRange, String content) {
+        super(tokenRange, content);
+        customInitialization();
     }
 
     @Override
@@ -64,6 +69,7 @@ public final class BlockComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
             return false;
@@ -71,13 +77,14 @@ public final class BlockComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public BlockComment clone() {
         return (BlockComment) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public BlockCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.blockCommentMetaModel;
     }
 }
-
