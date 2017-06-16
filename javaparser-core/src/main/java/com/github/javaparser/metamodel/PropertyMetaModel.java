@@ -77,7 +77,7 @@ public class PropertyMetaModel {
     }
 
     /**
-     * @return whether this field may contain an empty String.
+     * @return if this property is a String or a NodeList: whether it may be empty.
      */
     public boolean isNonEmpty() {
         return isNonEmpty;
