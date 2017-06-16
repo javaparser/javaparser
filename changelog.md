@@ -1,3 +1,8 @@
+Version 3.2.7
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/47?closed=1)
+* We now recover from some parse errors! [Here is an article](https://matozoid.github.io/2017/06/11/parse-error-recovery.html)
+
 Version 3.2.6
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/46?closed=1)
