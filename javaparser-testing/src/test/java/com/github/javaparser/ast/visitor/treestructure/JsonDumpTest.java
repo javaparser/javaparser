@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TreeStructureJsonCallbackTest {
+public class JsonDumpTest {
     @Test
     public void testWithType() {
         JsonDump jsonDump = new JsonDump(true);

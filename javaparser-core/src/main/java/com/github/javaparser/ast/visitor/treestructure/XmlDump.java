@@ -7,11 +7,14 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 
 import java.util.List;
 
-import static com.github.javaparser.metamodel.Multiplicity.ONE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
 // TODO use Java XML API
+/**
+ * @deprecated this is a work in progress.
+ */
+@Deprecated
 public class XmlDump {
     private final boolean outputNodeType;
 
@@ -29,8 +32,8 @@ public class XmlDump {
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
-        List<PropertyMetaModel> attributes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(p -> p.getMultiplicity() == ONE).collect(toList());
-        List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(p -> p.getMultiplicity() == ONE).collect(toList());
+        List<PropertyMetaModel> attributes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(PropertyMetaModel::isSingular).collect(toList());
+        List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(PropertyMetaModel::isSingular).collect(toList());
         List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).collect(toList());
 
         builder.append("<").append(name);
