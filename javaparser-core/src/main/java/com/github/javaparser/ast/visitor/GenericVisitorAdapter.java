@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import javax.annotation.Generated;
 
 /**
@@ -453,6 +454,13 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        return null;
+    }
+
+    // TODO Implement GenericVisitorAdapter # visit on IndexUnit
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
+    public R visit(final IndexUnit n, final A arg) {
         return null;
     }
 

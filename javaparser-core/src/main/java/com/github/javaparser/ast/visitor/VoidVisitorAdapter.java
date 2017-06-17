@@ -29,12 +29,13 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import javax.annotation.Generated;
 
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
  * methods that simply visit their children in an unspecified order.
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
@@ -191,6 +192,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getPackageDeclaration().ifPresent(l -> l.accept(this, arg));
         n.getTypes().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    // TODO Implement VoidVisitorAdapter for IndexUnit
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    public void visit(final IndexUnit n, final A arg) {
     }
 
     @Override

@@ -23,6 +23,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.IndexUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -42,7 +43,6 @@ import com.github.javaparser.javadoc.Javadoc;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.TreeSet;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
@@ -293,6 +293,148 @@ public final class JavaParser {
      */
     public static CompilationUnit parse(String code) {
         return simplifiedParse(COMPILATION_UNIT, provider(code));
+    }
+
+    public static IndexUnit parseIndexUnit(final InputStream in, Charset encoding) {
+        return simplifiedParse(INDEX_UNIT, provider(in, encoding));
+    }
+
+    /**
+     * Parses the Java code contained in the {@link InputStream} and returns a
+     * {@link IndexUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     *
+     * @param in {@link InputStream} containing Java source code. It will be closed after parsing.
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static IndexUnit parseIndexUnit(final InputStream in) {
+        return parseIndexUnit(in, UTF8);
+    }
+
+    /**
+     * Parses the Java code contained in a {@link File} and returns a
+     * {@link IndexUnit} that represents it.
+     *
+     * @param file {@link File} containing Java source code. It will be closed after parsing.
+     * @param encoding encoding of the source code
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws FileNotFoundException the file was not found
+     */
+    public static IndexUnit parseIndexUnit(final File file, final Charset encoding) throws FileNotFoundException {
+        return simplifiedParse(INDEX_UNIT, provider(file, encoding)).setStorage(file.toPath());
+    }
+
+    /**
+     * Parses the Java code contained in a {@link File} and returns a
+     * {@link IndexUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     *
+     * @param file {@link File} containing Java source code. It will be closed after parsing.
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws FileNotFoundException the file was not found
+     */
+    public static IndexUnit parseIndexUnit(final File file) throws FileNotFoundException {
+        return simplifiedParse(INDEX_UNIT, provider(file)).setStorage(file.toPath());
+    }
+
+    /**
+     * Parses the Java code contained in a file and returns a
+     * {@link IndexUnit} that represents it.
+     *
+     * @param path path to a file containing Java source code
+     * @param encoding encoding of the source code
+     * @return IndexUnit representing the Java source code
+     * @throws IOException the path could not be accessed
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static IndexUnit parseIndexUnit(final Path path, final Charset encoding) throws IOException {
+        return simplifiedParse(INDEX_UNIT, provider(path, encoding)).setStorage(path);
+    }
+
+    /**
+     * Parses the Java code contained in a file and returns a
+     * {@link IndexUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     *
+     * @param path path to a file containing Java source code
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static IndexUnit parseIndexUnit(final Path path) throws IOException {
+        return simplifiedParse(INDEX_UNIT, provider(path)).setStorage(path);
+    }
+
+    /**
+     * Parses the Java code contained in a resource and returns a
+     * {@link IndexUnit} that represents it.<br>
+     * Note: Uses UTF-8 encoding
+     *
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static IndexUnit parseResourceIndexUnit(final String path) throws IOException {
+        return simplifiedParse(INDEX_UNIT, resourceProvider(path));
+    }
+
+    /**
+     * Parses the Java code contained in a resource and returns a
+     * {@link IndexUnit} that represents it.<br>
+     *
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
+     * @param encoding encoding of the source code
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static IndexUnit parseResourceIndexUnit(final String path, Charset encoding) throws IOException {
+        return simplifiedParse(INDEX_UNIT, resourceProvider(path, encoding));
+    }
+
+    /**
+     * Parses the Java code contained in a resource and returns a
+     * {@link IndexUnit} that represents it.<br>
+     *
+     * @param classLoader the classLoader that is asked to load the resource
+     * @param path path to a resource containing Java source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     * @throws IOException the path could not be accessed
+     */
+    public static IndexUnit parseResourceIndexUnit(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+        return simplifiedParse(INDEX_UNIT, resourceProvider(classLoader, path, encoding));
+    }
+
+    /**
+     * Parses Java code from a Reader and returns a
+     * {@link IndexUnit} that represents it.<br>
+     *
+     * @param reader the reader containing Java source code. It will be closed after parsing.
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static IndexUnit parseIndexUnit(final Reader reader) {
+        return simplifiedParse(INDEX_UNIT, provider(reader));
+    }
+
+    /**
+     * Parses the Java code contained in code and returns a
+     * {@link IndexUnit} that represents it.
+     *
+     * @param code Java source code
+     * @return IndexUnit representing the Java source code
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static IndexUnit parseIndexUnit(String code) {
+        return simplifiedParse(INDEX_UNIT, provider(code));
     }
 
     /**

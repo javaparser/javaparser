@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
@@ -514,6 +515,12 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
                 result.addAll(tmp);
         }
         return result;
+    }
+
+    // TODO Implement GenericListVisitorAdapter # visit on IndexUnit
+    @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
+    public List<R> visit(IndexUnit n, A arg) {
+        return null;
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")

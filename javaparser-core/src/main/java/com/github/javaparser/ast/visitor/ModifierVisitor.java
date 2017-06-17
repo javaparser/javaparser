@@ -31,6 +31,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
+
 import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +42,9 @@ import java.util.Optional;
  * to be changed. To do that just extend this class and override the methods
  * from the nodes who needs to be changed, returning the changed node.
  * Returning null will remove the node.
- * 
- * If a node is removed that was required in its parent node, 
- * the parent node will be removed too. 
+ *
+ * If a node is removed that was required in its parent node,
+ * the parent node will be removed too.
  *
  * @author Julio Vilmar Gesser
  */
@@ -297,6 +298,24 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setTypes(types);
         n.setComment(comment);
         return n;
+    }
+
+    // TODO Implement ModifierVisitor for IndexUnit
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
+    public Visitable visit(final IndexUnit n, final A arg) {
+        /*NodeList<ImportDeclaration> imports = modifyList(n.getImports(), arg);
+        ModuleDeclaration module = n.getModule().map(s -> (ModuleDeclaration) s.accept(this, arg)).orElse(null);
+        PackageDeclaration packageDeclaration = n.getPackageDeclaration().map(s -> (PackageDeclaration) s.accept(this, arg)).orElse(null);
+        NodeList<TypeDeclaration<?>> types = modifyList(n.getTypes(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setImports(imports);
+        n.setModule(module);
+        n.setPackageDeclaration(packageDeclaration);
+        n.setTypes(types);
+        n.setComment(comment);
+        return n;*/
+        return null;
     }
 
     @Override

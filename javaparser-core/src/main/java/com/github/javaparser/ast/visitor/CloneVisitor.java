@@ -22,13 +22,17 @@ package com.github.javaparser.ast.visitor;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.*;
+import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import java.util.Optional;
+
 import javax.annotation.Generated;
+import java.util.Optional;
 
 /**
  * A visitor that clones (copies) a node and all its children.
@@ -46,6 +50,20 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         CompilationUnit r = new CompilationUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
         r.setComment(comment);
         return r;
+    }
+
+    // TODO Implement clone visitor for the IndexUnit
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
+    public Visitable visit(IndexUnit n, Object arg) {
+        /*NodeList<ImportDeclaration> imports = cloneList(n.getImports(), arg);
+        ModuleDeclaration module = cloneNode(n.getModule(), arg);
+        PackageDeclaration packageDeclaration = cloneNode(n.getPackageDeclaration(), arg);
+        NodeList<TypeDeclaration<?>> types = cloneList(n.getTypes(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        IndexUnit r = new IndexUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
+        r.setComment(comment);*/
+        return null;
     }
 
     @Override

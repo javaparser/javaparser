@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import javax.annotation.Generated;
 
 /**
@@ -41,6 +42,9 @@ public interface GenericVisitor<R, A> {
     //- Compilation Unit ----------------------------------
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(CompilationUnit n, A arg);
+
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
+    R visit(IndexUnit n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(PackageDeclaration n, A arg);

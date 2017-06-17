@@ -29,9 +29,10 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
+import javax.annotation.Generated;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Generated;
 
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
@@ -145,6 +146,13 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
         return true;
+    }
+
+    // TODO Implement EqualsVisitor for IndexUnit
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
+    public Boolean visit(IndexUnit n, Visitable arg) {
+        return null;
     }
 
     @Override

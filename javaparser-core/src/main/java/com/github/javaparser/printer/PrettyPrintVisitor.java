@@ -39,7 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Node.Parsedness.*;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
@@ -202,6 +202,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getModule().ifPresent(m -> m.accept(this, arg));
 
         printOrphanCommentsEnding(n);
+    }
+
+    // TODO Implement PrettyPrintVisitor # visit on IndexUnit
+    @Override
+    public void visit(final IndexUnit n, final Void arg) {
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+
 import javax.annotation.Generated;
 
 /**
@@ -102,6 +103,9 @@ public interface VoidVisitor<A> {
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(CompilationUnit n, A arg);
+
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    void visit(IndexUnit n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ConditionalExpr n, A arg);
