@@ -2,7 +2,7 @@
   Line 90) getParserForProvider(provider) ==> com.github.javaparser.JavaParser.getParserForProvider(com.github.javaparser.Provider)
   Line 91) start.parse(parser) ==> com.github.javaparser.ParseStart.parse(com.github.javaparser.ASTParser)
   Line 92) astParser.getCommentsCollection() ==> com.github.javaparser.ASTParser.getCommentsCollection()
-  Line 93) commentsInserter.insertComments(resultNode, comments.copy().getComments()) ==> com.github.javaparser.CommentsInserter.insertComments(com.github.javaparser.ast.CompilationUnit, java.util.TreeSet<com.github.javaparser.ast.comments.Comment>)
+  Line 93) commentsInserter.insertComments(resultNode, comments.copy().getComments()) ==> com.github.javaparser.CommentsInserter.insertComments(com.github.javaparser.ast.Node, java.util.TreeSet<com.github.javaparser.ast.comments.Comment>)
   Line 93) comments.copy().getComments() ==> com.github.javaparser.ast.comments.CommentsCollection.getComments()
   Line 93) comments.copy() ==> com.github.javaparser.ast.comments.CommentsCollection.copy()
   Line 95) Optional.of(resultNode) ==> java.util.Optional.of(T)
