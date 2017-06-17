@@ -1,34 +1,32 @@
-package com.github.javaparser.ast.visitor.treestructure;
+package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.SeparatedItemStringBuilder;
 
 import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
-// TODO use Java XML API
 /**
  * @deprecated this is a work in progress.
  */
 @Deprecated
-public class XmlDump {
+public class JsonPrinter {
     private final boolean outputNodeType;
 
-    public XmlDump(boolean outputNodeType) {
+    public JsonPrinter(boolean outputNodeType) {
         this.outputNodeType = outputNodeType;
     }
 
     public String output(Node node) {
-        StringBuilder output = new StringBuilder();
-        output(node, "root", 0, output);
-        return output.toString();
+        return output(node, null, 0);
     }
 
-    public void output(Node node, String name, int level, StringBuilder builder) {
+    public String output(Node node, String name, int level) {
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
@@ -36,44 +34,43 @@ public class XmlDump {
         List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(PropertyMetaModel::isSingular).collect(toList());
         List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).collect(toList());
 
-        builder.append("<").append(name);
+        final SeparatedItemStringBuilder content;
+        if (name == null) {
+            content = new SeparatedItemStringBuilder("{", ",", "}");
+        } else {
+            content = new SeparatedItemStringBuilder(q(name) + ":{", ",", "}");
+        }
+
         if (outputNodeType) {
-            builder.append(attribute("type", metaModel.getTypeName()));
+            content.append(q("type") + ":" + q(metaModel.getTypeName()));
         }
 
         for (PropertyMetaModel attributeMetaModel : attributes) {
-            builder.append(attribute(attributeMetaModel.getName(), attributeMetaModel.getValue(node).toString()));
+            content.append(q(attributeMetaModel.getName()) + ":" + q(attributeMetaModel.getValue(node).toString()));
         }
-        builder.append(">");
 
         for (PropertyMetaModel subNodeMetaModel : subNodes) {
             Node value = (Node) subNodeMetaModel.getValue(node);
             if (value != null) {
-                output(value, subNodeMetaModel.getName(), level + 1, builder);
+                content.append(output(value, subNodeMetaModel.getName(), level + 1));
             }
         }
 
         for (PropertyMetaModel subListMetaModel : subLists) {
             NodeList<? extends Node> subList = (NodeList<? extends Node>) subListMetaModel.getValue(node);
             if (subList != null && !subList.isEmpty()) {
-                String listName = subListMetaModel.getName();
-                builder.append("<").append(listName).append(">");
-                String singular = listName.substring(0, listName.length() - 1);
+                SeparatedItemStringBuilder listContent = new SeparatedItemStringBuilder(q(subListMetaModel.getName()) + ":[", ",", "]");
                 for (Node subListNode : subList) {
-                    output(subListNode, singular, level + 1, builder);
+                    listContent.append(output(subListNode, null, level + 1));
                 }
-                builder.append(close(listName));
+                content.append(listContent.toString());
             }
         }
-        builder.append(close(name));
+
+        return content.toString();
     }
 
-    private static String close(String name) {
-        return "</" + name + ">";
-    }
-
-    private static String attribute(String name, String value) {
-        return " " + name + "='" + value + "'";
+    private static String q(String value) {
+        return "\"" + value + "\"";
     }
 }
-

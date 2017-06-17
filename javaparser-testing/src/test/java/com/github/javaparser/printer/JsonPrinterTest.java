@@ -1,28 +1,29 @@
-package com.github.javaparser.ast.visitor.treestructure;
+package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.printer.JsonPrinter;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class JsonDumpTest {
+public class JsonPrinterTest {
     @Test
     public void testWithType() {
-        JsonDump jsonDump = new JsonDump(true);
+        JsonPrinter jsonPrinter = new JsonPrinter(true);
         Expression expression = JavaParser.parseExpression("x(1,1)");
 
-        String output = jsonDump.output(expression);
+        String output = jsonPrinter.output(expression);
 
         assertEquals("{\"type\":\"MethodCallExpr\",\"name\":{\"type\":\"SimpleName\",\"identifier\":\"x\"},\"arguments\":[{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"},{\"type\":\"IntegerLiteralExpr\",\"value\":\"1\"}]}", output);
     }
 
     @Test
     public void testWithoutType() {
-        JsonDump jsonDump = new JsonDump(false);
+        JsonPrinter jsonPrinter = new JsonPrinter(false);
         Expression expression = JavaParser.parseExpression("1+1");
 
-        String output = jsonDump.output(expression);
+        String output = jsonPrinter.output(expression);
 
         assertEquals("{\"operator\":\"PLUS\",\"left\":{\"value\":\"1\"},\"right\":{\"value\":\"1\"}}", output);
     }

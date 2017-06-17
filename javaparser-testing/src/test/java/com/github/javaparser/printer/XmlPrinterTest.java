@@ -1,16 +1,17 @@
-package com.github.javaparser.ast.visitor.treestructure;
+package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.printer.XmlPrinter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class XmpDumpTest {
+public class XmlPrinterTest {
     @Test
     public void testWithType() {
         Expression expression = JavaParser.parseExpression("1+1");
-        XmlDump xmlOutput = new XmlDump(true);
+        XmlPrinter xmlOutput = new XmlPrinter(true);
 
         String output = xmlOutput.output(expression);
 
@@ -21,7 +22,7 @@ public class XmpDumpTest {
     public void testWithoutType() {
         Expression expression = JavaParser.parseExpression("1+1");
 
-        XmlDump xmlOutput = new XmlDump(false);
+        XmlPrinter xmlOutput = new XmlPrinter(false);
 
         String output = xmlOutput.output(expression);
 
@@ -32,7 +33,7 @@ public class XmpDumpTest {
     public void testList() {
         Expression expression = JavaParser.parseExpression("a(1,2)");
 
-        XmlDump xmlOutput = new XmlDump(true);
+        XmlPrinter xmlOutput = new XmlPrinter(true);
 
         String output = xmlOutput.output(expression);
 

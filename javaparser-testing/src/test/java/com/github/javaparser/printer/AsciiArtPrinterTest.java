@@ -1,15 +1,16 @@
-package com.github.javaparser.ast.visitor.treestructure;
+package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.printer.AsciiArtPrinter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class AsciiArtDumpTest {
+public class AsciiArtPrinterTest {
     @Test
     public void test() {
-        AsciiArtDump dump = new AsciiArtDump();
+        AsciiArtPrinter dump = new AsciiArtPrinter();
         Expression expression = JavaParser.parseExpression("1+a(1,1)");
 
         String output = dump.output(expression);

@@ -1,4 +1,4 @@
-package com.github.javaparser.ast.visitor.treestructure;
+package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.Node;
 
@@ -6,7 +6,7 @@ import com.github.javaparser.ast.Node;
  * @deprecated this is a work in progress.
  */
 @Deprecated
-public class AsciiArtDump {
+public class AsciiArtPrinter {
     public String output(Node node) {
         return "root (BinaryExpr)\n" +
                 "\toperator: PLUS\n" +
