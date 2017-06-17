@@ -43,7 +43,6 @@ public class TypeVariableUsageTest {
 
     @Test
     public void testIsAssignableBySimple() {
-   //     assertEquals(true, tpA.isAssignableBy(tpString));
         assertEquals(false, tpString.isAssignableBy(tpA));
     }
 
