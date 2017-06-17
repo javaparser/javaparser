@@ -26,6 +26,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <maven.build.timestamp>${maven.build.timestamp}</maven.build.timestamp>
     </properties>
 
     <build>
