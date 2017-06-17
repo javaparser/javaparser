@@ -21,6 +21,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -109,8 +110,14 @@ public class ReferenceTypeImpl extends ReferenceType {
             }
             return false;
         } else if (other.isTypeVariable()) {
-            // TODO look bounds...
-            return true;
+            for (Bound bound : other.asTypeVariable().asTypeParameter().getBounds(typeSolver)) {
+                if (bound.isExtends()) {
+                    if (this.isAssignableBy(bound.getType())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         } else if (other.isConstraint()){
             return isAssignableBy(other.asConstraintType().getBound());
         } else if (other.isWildcard()) {
