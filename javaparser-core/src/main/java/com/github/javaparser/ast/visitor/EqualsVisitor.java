@@ -29,7 +29,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import javax.annotation.Generated;
 import java.util.List;
 import java.util.Optional;

@@ -31,7 +31,6 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
-
 import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
