@@ -26,6 +26,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <maven.build.timestamp>${maven.build.timestamp}</maven.build.timestamp>
     </properties>
 
     <build>
@@ -155,9 +156,22 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/main/javacc_support</source>
+                                <source>src/main/javacc-support</source>
                             </sources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
