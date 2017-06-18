@@ -20,33 +20,36 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithExtends;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
-import com.github.javaparser.ast.nodeTypes.modifiers.*;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.*;
+import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -261,6 +264,14 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
      */
     public boolean isLocalClassDeclaration() {
         return getParentNode().map(p -> p instanceof LocalClassDeclarationStmt).orElse(false);
+    }
+
+    /**
+     * @return is this an inner class?
+     * NOTE: many people are confused over terminology. Refer to https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html .
+     */
+    public boolean isInnerClass() {
+        return isNestedType() && !isInterface && !isStatic();
     }
 
     @Override
