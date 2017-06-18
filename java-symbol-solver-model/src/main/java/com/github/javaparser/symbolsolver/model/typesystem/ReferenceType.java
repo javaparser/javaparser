@@ -350,8 +350,21 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     public abstract Set<MethodUsage> getDeclaredMethods();
 
     public boolean isRawType() {
-        return (!typeDeclaration.getTypeParameters().isEmpty() &&
-                typeParametersMap().isEmpty());
+        if (!typeDeclaration.getTypeParameters().isEmpty()) {
+            if (typeParametersMap().isEmpty()) {
+                return true;
+            }
+            for (String name : typeParametersMap().getNames()) {
+                Optional<Type> value = typeParametersMap().getValueBySignature(name);
+                if (value.isPresent() && value.get().isTypeVariable() && value.get().asTypeVariable().qualifiedName().equals(name)) {
+                    // nothing to do
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public Optional<Type> typeParamValue(TypeParameterDeclaration typeParameterDeclaration) {

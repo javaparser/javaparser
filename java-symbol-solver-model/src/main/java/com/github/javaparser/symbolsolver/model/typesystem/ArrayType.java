@@ -89,12 +89,10 @@ public class ArrayType implements Type {
               return baseType.equals(other.asArrayType().getComponentType());
             }
             return baseType.isAssignableBy(other.asArrayType().getComponentType());
-        } else {
-            if (other.isNull()) {
-              return true;
-            }
-            return false;
+        } else if (other.isNull()) {
+            return true;
         }
+        return false;
     }
 
     @Override
