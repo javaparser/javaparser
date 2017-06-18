@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -34,14 +34,13 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
+import javax.annotation.Generated;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
-import javax.annotation.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.TokenRange;
 
 /**
  * A base class for all types of type declarations.
@@ -182,7 +181,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     /**
-     * @return methods or constructors whose signature match the passed signature.
+     * @return methods or constructors whose signatures match the passed signature.
      */
     public List<CallableDeclaration<?>> getCallablesWithSignature(CallableDeclaration.Signature signature) {
         return getMembers().stream().filter(m -> m instanceof CallableDeclaration).map(m -> ((CallableDeclaration<?>) m)).filter(m -> m.getSignature().equals(signature)).collect(toList());
@@ -190,6 +189,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     /**
      * @return is this type's parent a TypeDeclaration?
+     * NOTE: many people are confused over terminology. Refer to https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html .
      */
     public boolean isNestedType() {
         return getParentNode().map(p -> p instanceof TypeDeclaration).orElse(false);
