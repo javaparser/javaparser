@@ -400,7 +400,7 @@ public final class JavaParser {
      * @deprecated just use parseBodyDeclaration now.
      */
     @Deprecated
-    public static BodyDeclaration parseInterfaceBodyDeclaration(String body) {
+    public static BodyDeclaration<?> parseInterfaceBodyDeclaration(String body) {
         return parseBodyDeclaration(body);
     }
 
@@ -412,7 +412,7 @@ public final class JavaParser {
      * @return BodyDeclaration representing the Java interface body
      * @throws ParseProblemException if the source code has parser errors
      */
-    public static BodyDeclaration parseBodyDeclaration(String body) {
+    public static BodyDeclaration<?> parseBodyDeclaration(String body) {
         return simplifiedParse(CLASS_BODY, provider(body));
     }
 

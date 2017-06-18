@@ -4,7 +4,10 @@ Here is some information that's good to know when contributing to JavaParser:
 - There is some interesting information on the [wiki](https://github.com/javaparser/javaparser/wiki).
 - We work on JavaParser because we like to, not because it earns us money. Please remember that we try to run a professional project in our spare time, on a budget of zero.
 - Be sure to check [the coding guidelines](https://github.com/javaparser/javaparser/wiki/Coding-Guidelines) which are easily used by installing the formatting rules as described there.
-- If you're new and like to contribute something, check out the [easy issues](https://github.com/javaparser/javaparser/labels/Easy).
+- If you're new and like to casually contribute something, check out the [easy issues](https://github.com/javaparser/javaparser/labels/Easy).
+- If you're new and would like to become a member, start your own project that uses JavaParser.
+We noticed we get the best feedback from those. 
+Here are [some fun project ideas](https://github.com/javaparser/javaparser/labels/fun%20project%20idea).
 - If you start working on an issue, please say so with a comment in the issue.
 - If you know how to fix a problem, please fix it and open a pull request instead of opening an issue.
 
