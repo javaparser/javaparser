@@ -1,3 +1,9 @@
+Version 3.2.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/48?closed=1)
+* Added `isInnerClass()` that checks if a `ClassOrInterfaceDeclaration` is an inner class (note: this is different from a nested class!)
+* @ryan-beckett contributed a huge [Eclipse setup guide](https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide)
+
 Version 3.2.7
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/47?closed=1)
