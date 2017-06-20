@@ -23,11 +23,11 @@ package com.github.javaparser.ast.observer;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.utils.Utils;
-import javax.annotation.Generated;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Arrays;
+import javax.annotation.Generated;
 
 /**
  * Properties considered by the AstObserver
