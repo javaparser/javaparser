@@ -42,6 +42,10 @@ public abstract class Type extends Node {
 
     private NodeList<AnnotationExpr> annotations;
 
+    public Type() {
+        super(null);
+    }
+
     /**
      * Several sub classes do not support annotations.
      * This is a support constructor for them.

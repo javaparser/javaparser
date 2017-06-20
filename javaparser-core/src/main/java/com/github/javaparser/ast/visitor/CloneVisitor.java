@@ -62,7 +62,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         IndexUnit r = new IndexUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
         r.setComment(comment);*/
-        return null;
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Override
