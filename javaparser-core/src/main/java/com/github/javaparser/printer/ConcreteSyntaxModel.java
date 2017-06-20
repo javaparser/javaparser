@@ -810,7 +810,7 @@ public class ConcreteSyntaxModel {
                 child(ObservableProperty.MODULE),
                 orphanCommentsEnding()));
 
-        concreteSyntaxModelByClass.put(IndexUnit.class, sequence(
+        concreteSyntaxModelByClass.put(StubUnit.class, sequence(
                 comment(),
                 list(ObservableProperty.COMPILATION_UNITS, none(), none(), newline()),
                 orphanCommentsEnding()));

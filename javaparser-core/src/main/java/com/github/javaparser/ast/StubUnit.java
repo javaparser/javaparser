@@ -17,31 +17,32 @@ import static com.github.javaparser.Providers.UTF8;
 
 /**
  * <p>
- * This class represents an index unit with a list of compilation units. Each stub file represented with an
- * index unit.
+ * This class represents a stub file. The stub file is a Java file, but with the optionally omitted
+ * information that is not relevant to pluggable type-checking; this makes the stub file smaller
+ * and easier for people to read and write.
  * </p>
- * A index unit contains the list of compilation units.
+ * A stub unit contains the list of compilation units.
  * This class copied the {@link CompilationUnit} and then adjusted to the needs of the Checker Framework.
  *
  * @see CompilationUnit
  */
-public class IndexUnit extends Node {
+public class StubUnit extends Node {
 
     /**
      * The field represents a list of compilations units.
      */
     private NodeList<CompilationUnit> compilationUnits;
 
-    /** Contains the information about where this index unit was loaded from, or empty if it wasn't loaded from a file.*/
+    /** Contains the information about where this stub unit was loaded from, or empty if it wasn't loaded from a file.*/
     @InternalProperty
-    private IndexUnit.Storage storage;
+    private StubUnit.Storage storage;
 
     /**
      * The constructor that takes the tokenRange and just pass it to the super method {@link Node}.
      *
-     * @param tokenRange is the range of tokens covered by this index unit.
+     * @param tokenRange is the range of tokens covered by this stub unit.
      */
-    protected IndexUnit(TokenRange tokenRange) {
+    protected StubUnit(TokenRange tokenRange) {
         super(tokenRange);
     }
 
@@ -50,7 +51,7 @@ public class IndexUnit extends Node {
      *
      * @param compilationUnits - the list of compilation units in the stub file.
      */
-    public IndexUnit(NodeList<CompilationUnit> compilationUnits) {
+    public StubUnit(NodeList<CompilationUnit> compilationUnits) {
         super(null);
         this.compilationUnits = compilationUnits;
     }
@@ -65,12 +66,12 @@ public class IndexUnit extends Node {
         this.compilationUnits = compilationUnits;
     }
 
-    /** @return information about where this index unit was loaded from, or empty if it wasn't loaded from a file.*/
-    public Optional<IndexUnit.Storage> getStorage() {
+    /** @return information about where this stub unit was loaded from, or empty if it wasn't loaded from a file.*/
+    public Optional<StubUnit.Storage> getStorage() {
         return Optional.ofNullable(storage);
     }
 
-    public IndexUnit setStorage(Path path) {
+    public StubUnit setStorage(Path path) {
         this.storage = new Storage(this, path);
         return this;
     }
@@ -90,59 +91,59 @@ public class IndexUnit extends Node {
     }
 
     /**
-     * Information about where this index unit was loaded from.
+     * Information about where this stub unit was loaded from.
      * This class only stores the absolute location.
      * For more flexibility use SourceRoot.
      */
     public static class Storage {
 
-        /** An index unit that it represents. */
-        private final IndexUnit indexUnit;
+        /** An stub unit that it represents. */
+        private final StubUnit stubUnit;
 
-        /** The path to the source for this index unit. */
+        /** The path to the source for this stub unit. */
         private final Path path;
 
         /**
          * The constructor with all fields.
          *
-         * @param indexUnit is the index unit that it describes.
-         * @param path to the source for this index unit.
+         * @param stubUnit is the stub unit that it describes.
+         * @param path to the source for this stub unit.
          */
-        private Storage(IndexUnit indexUnit, Path path) {
-            this.indexUnit = indexUnit;
+        private Storage(StubUnit stubUnit, Path path) {
+            this.stubUnit = stubUnit;
             this.path = path.toAbsolutePath();
         }
 
-        /** @return the path to the source for this IndexUnit. */
+        /** @return the path to the source for this StubUnit. */
         public Path getPath() {
             return path;
         }
 
-        /** @return the IndexUnit this Storage is about. */
-        public IndexUnit getIndexUnit() {
-            return indexUnit;
+        /** @return the StubUnit this Storage is about. */
+        public StubUnit getStubUnit() {
+            return stubUnit;
         }
 
-        /** @return the file name of the stub file that represented by the IndexUnit. */
+        /** @return the file name of the stub file that represented by the StubUnit. */
         public String getFileName() {
             return path.getFileName().toString();
         }
 
-        /** @return the directory with the stub file that represented by the IndexUnit. */
+        /** @return the directory with the stub file that represented by the StubUnit. */
         public Path getDirectory() {
             return path.getParent();
         }
 
-        /** Saves the index unit to its original location.*/
+        /** Saves the stub unit to its original location.*/
         public void save() {
-            save(cu -> new PrettyPrinter().print(getIndexUnit()));
+            save(cu -> new PrettyPrinter().print(getStubUnit()));
         }
 
-        /** Saves the index unit to its original location and give the output.*/
-        public void save(Function<IndexUnit, String> makeOutput) {
+        /** Saves the stub unit to its original location and give the output.*/
+        public void save(Function<StubUnit, String> makeOutput) {
             try {
                 Files.createDirectories(path.getParent());
-                final String code = makeOutput.apply(getIndexUnit());
+                final String code = makeOutput.apply(getStubUnit());
                 Files.write(path, code.getBytes(UTF8));
             } catch (IOException e) {
                 throw new RuntimeException(e);

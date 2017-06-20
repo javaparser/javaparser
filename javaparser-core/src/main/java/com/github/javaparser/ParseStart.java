@@ -23,7 +23,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.IndexUnit;
+import com.github.javaparser.ast.StubUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -47,7 +47,7 @@ import com.github.javaparser.ast.type.Type;
  */
 @FunctionalInterface
 public interface ParseStart<R> {
-    ParseStart<IndexUnit> INDEX_UNIT = GeneratedJavaParser::IndexUnit;
+    ParseStart<StubUnit> STUB_UNIT = GeneratedJavaParser::StubUnit;
     ParseStart<CompilationUnit> COMPILATION_UNIT = GeneratedJavaParser::CompilationUnit;
     ParseStart<BlockStmt> BLOCK = GeneratedJavaParser::Block;
     ParseStart<Statement> STATEMENT = GeneratedJavaParser::BlockStatement;

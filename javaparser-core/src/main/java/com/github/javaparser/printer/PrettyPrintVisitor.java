@@ -204,9 +204,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsEnding(n);
     }
 
-    // TODO Implement PrettyPrintVisitor # visit on IndexUnit
+    // TODO Implement PrettyPrintVisitor # visit on StubUnit
     @Override
-    public void visit(final IndexUnit n, final Void arg) {
+    public void visit(final StubUnit n, final Void arg) {
     }
 
     @Override

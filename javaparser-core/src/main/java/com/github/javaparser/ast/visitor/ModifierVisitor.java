@@ -299,10 +299,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         return n;
     }
 
-    // TODO Implement ModifierVisitor for IndexUnit
+    // TODO Implement ModifierVisitor for StubUnit
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
-    public Visitable visit(final IndexUnit n, final A arg) {
+    public Visitable visit(final StubUnit n, final A arg) {
         /*NodeList<ImportDeclaration> imports = modifyList(n.getImports(), arg);
         ModuleDeclaration module = n.getModule().map(s -> (ModuleDeclaration) s.accept(this, arg)).orElse(null);
         PackageDeclaration packageDeclaration = n.getPackageDeclaration().map(s -> (PackageDeclaration) s.accept(this, arg)).orElse(null);

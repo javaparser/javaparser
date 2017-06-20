@@ -516,9 +516,9 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         return result;
     }
 
-    // TODO Implement GenericListVisitorAdapter # visit on IndexUnit
+    // TODO Implement GenericListVisitorAdapter # visit on StubUnit
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
-    public List<R> visit(IndexUnit n, A arg) {
+    public List<R> visit(StubUnit n, A arg) {
         return null;
     }
 

@@ -672,7 +672,11 @@ TOKEN :
 /*
  * Program structuring syntax follows.
  */
-IndexUnit IndexUnit():
+
+ /**
+ * The stub files are represented by the {@link StubUnit}
+ */
+StubUnit StubUnit():
 {
 	/* Actual Type */
 	NodeList<CompilationUnit> compilationUnits = emptyList();
@@ -738,7 +742,7 @@ IndexUnit IndexUnit():
         )*
 
 	(<EOF> | "\u001A" /** ctrl+z char **/)
-	{ return new IndexUnit(compilationUnits); }
+	{ return new StubUnit(compilationUnits); }
 }
 
 CompilationUnit CompilationUnit():

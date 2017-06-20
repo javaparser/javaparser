@@ -43,7 +43,7 @@ public interface GenericVisitor<R, A> {
     R visit(CompilationUnit n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(IndexUnit n, A arg);
+    R visit(StubUnit n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(PackageDeclaration n, A arg);

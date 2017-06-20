@@ -147,10 +147,10 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         return true;
     }
 
-    // TODO Implement EqualsVisitor for IndexUnit
+    // TODO Implement EqualsVisitor for StubUnit
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
-    public Boolean visit(IndexUnit n, Visitable arg) {
+    public Boolean visit(StubUnit n, Visitable arg) {
         return null;
     }
 

@@ -456,10 +456,10 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         return null;
     }
 
-    // TODO Implement GenericVisitorAdapter # visit on IndexUnit
+    // TODO Implement GenericVisitorAdapter # visit on StubUnit
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
-    public R visit(final IndexUnit n, final A arg) {
+    public R visit(final StubUnit n, final A arg) {
         return null;
     }
 
