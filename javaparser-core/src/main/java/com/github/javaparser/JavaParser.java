@@ -43,7 +43,7 @@ import com.github.javaparser.javadoc.Javadoc;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-
+import java.util.TreeSet;
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.*;
