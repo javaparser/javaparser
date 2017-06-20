@@ -678,11 +678,14 @@ TOKEN :
  */
 StubUnit StubUnit():
 {
-	/* Actual Type */
+	/* Represents the list of compilation units that contained in a stub file */
 	NodeList<CompilationUnit> compilationUnits = emptyList();
 	CompilationUnit cu;
 
-	/* Parsing the compilation unit itself */
+	/*
+	* Represents the particular compilation unit components in each iteration of
+	* reading compilation units from the stub file
+	*/
 	PackageDeclaration pakage = null;
     NodeList<ImportDeclaration> imports = emptyList();
     ImportDeclaration in = null;
@@ -693,31 +696,12 @@ StubUnit StubUnit():
 }
 {
 	( LOOKAHEAD(2) ";" )*
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-    (
-        in = ImportDeclaration() { imports = add(imports, in); }
-        |
-        (
-            modifier = Modifiers()
-            (
-                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-            |
-                tn = EnumDeclaration(modifier) { types = add(types, tn); }
-            |
-                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-            |
-                module = ModuleDeclaration(modifier)
-            |
-                ";"
-            )
-        )
-        {
-             cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
-             compilationUnits.add(cu);
-        }
-    )
-
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+	(
+	    /*
+	    * Reading the particular compilation unit in the stub file
+	    * Number of compilation units could be 1+
+	    */
+        [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
         (
             in = ImportDeclaration() { imports = add(imports, in); }
             |
@@ -739,7 +723,8 @@ StubUnit StubUnit():
                  cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
                  compilationUnits.add(cu);
             }
-        )*
+        )
+    )+
 
 	(<EOF> | "\u001A" /** ctrl+z char **/)
 	{ return new StubUnit(compilationUnits); }
