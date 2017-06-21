@@ -34,7 +34,7 @@ import javax.annotation.Generated;
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
  * methods that simply visit their children in an unspecified order.
- *
+ * 
  * @author Julio Vilmar Gesser
  */
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
@@ -197,6 +197,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final StubUnit n, final A arg) {
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Override

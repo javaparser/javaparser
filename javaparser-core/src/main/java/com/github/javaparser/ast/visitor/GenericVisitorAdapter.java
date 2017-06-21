@@ -460,7 +460,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final StubUnit n, final A arg) {
-        return null;
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Override

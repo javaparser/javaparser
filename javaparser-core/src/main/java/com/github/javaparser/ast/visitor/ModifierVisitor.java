@@ -314,7 +314,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setTypes(types);
         n.setComment(comment);
         return n;*/
-        return null;
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Override

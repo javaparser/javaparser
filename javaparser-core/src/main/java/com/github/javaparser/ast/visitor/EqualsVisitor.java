@@ -29,9 +29,9 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import javax.annotation.Generated;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Generated;
 
 /**
  * A visitor that calculates deep node equality by comparing all properties and child nodes of the node.
@@ -151,7 +151,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(StubUnit n, Visitable arg) {
-        return null;
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Override

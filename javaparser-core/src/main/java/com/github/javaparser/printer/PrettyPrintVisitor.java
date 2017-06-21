@@ -39,7 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.ast.Node.Parsedness.*;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
@@ -207,6 +207,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     // TODO Implement PrettyPrintVisitor # visit on StubUnit
     @Override
     public void visit(final StubUnit n, final Void arg) {
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Override
