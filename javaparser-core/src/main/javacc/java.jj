@@ -696,16 +696,30 @@ StubUnit StubUnit():
 }
 {
 	( LOOKAHEAD(2) ";" )*
+    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+	/**
+	* The stub file format permits having multiple classes and packages.
+	* The packages are separated by a package statement: package my.package;.
+	* Each package declaration may occur only once; in other words, all classes from a package must appear together.
+	*/
 	(
 	    /*
 	    * Reading the particular compilation unit in the stub file
 	    * Number of compilation units could be 1+
 	    */
-        [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-        (
-            in = ImportDeclaration() { imports = add(imports, in); }
-            |
+        (pakage = PackageDeclaration())?
+        (in = ImportDeclaration() { imports = add(imports, in); })*
+        {
+            types = emptyList();
+            modifier = null;
+            tn = null;
+            module = null;
+        }
+
             (
+                /**
+                * Declaration specifiers (e.g., public, final, volatile) may be omitted.
+                */
                 modifier = Modifiers()
                 (
                     tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
@@ -720,11 +734,11 @@ StubUnit StubUnit():
                 )
             )
             {
-                 cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
-                 compilationUnits.add(cu);
+                  cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+                  compilationUnits.add(cu);
             }
-        )
     )+
+
 
 	(<EOF> | "\u001A" /** ctrl+z char **/)
 	{ return new StubUnit(compilationUnits); }
@@ -1128,7 +1142,15 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
       ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
-    ( body = Block() | ";" )
+    (
+        /**
+        * The stub class does not require method bodies for classes;
+        * any method body may be replaced by a semicolon (;), as in an interface or abstract method declaration.
+        */
+        body = Block()
+        |
+        ";"
+    )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
         return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
@@ -1248,10 +1270,20 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   // Modifiers matched in the caller
   name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); begin = begin.orIfInvalid(token()); } parameters = Parameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
   ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
-  "{" { blockBegin=token(); }
-    [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
-    stmts = Statements()
-  "}"
+
+  /**
+  * Constructors bodies as well as method bodies could be ommited in the stub files of the Checker Framework
+  */
+  (
+      (
+          "{" { blockBegin=token(); }
+            [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
+            stmts = Statements()
+          "}"
+      )
+      |
+      ";"
+  )
 
   {
   	if (exConsInv != null) {
