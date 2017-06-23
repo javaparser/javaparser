@@ -17,9 +17,9 @@ import static com.github.javaparser.Providers.UTF8;
 
 /**
  * <p>
- * This class represents a stub file. The stub file is a Java file, but with the optionally omitted
- * information that is not relevant to pluggable type-checking; this makes the stub file smaller
- * and easier for people to read and write.
+ * This class represents a stub file. The stub file is concentration of multiple Java files (1+),
+ * but with the optionally omitted information that is not relevant to pluggable type-checking;
+ * this makes the stub file smaller and easier for people to read and write.
  * </p>
  * A stub unit contains the list of compilation units.
  * This class copied the {@link CompilationUnit} and then adjusted to the needs of the Checker Framework.
@@ -29,7 +29,9 @@ import static com.github.javaparser.Providers.UTF8;
 public class StubUnit extends Node {
 
     /**
-     * The field represents a list of compilations units.
+     * The field is a list of {@link CompilationUnit}.
+     * After parsing a stub file the value of the field is required to be a not empty list of compilation units
+     * because a valid stub file consists of minimum one entity that translated into the compilation unit.
      */
     private NodeList<CompilationUnit> compilationUnits;
 
@@ -38,30 +40,30 @@ public class StubUnit extends Node {
     private StubUnit.Storage storage;
 
     /**
-     * The constructor that takes the tokenRange and just pass it to the super method {@link Node}.
+     * Constructs a StubUnit from a {@link TokenRange} that represents the range of tokens covered by this node.
      *
-     * @param tokenRange is the range of tokens covered by this stub unit.
+     * @param tokenRange the range of tokens covered by the stub unit
      */
     protected StubUnit(TokenRange tokenRange) {
         super(tokenRange);
     }
 
     /**
-     * The constructor that takes the list of compilation units.
+     * Constructs a StubUnit from a list of CompilationUnits.
      *
-     * @param compilationUnits - the list of compilation units in the stub file.
+     * @param compilationUnits the list of compilation units in the stub file
      */
     public StubUnit(NodeList<CompilationUnit> compilationUnits) {
         super(null);
         this.compilationUnits = compilationUnits;
     }
 
-    /** The getter method for the list of the compilation units of the stub file. */
+    /** Gets the list of compilation units of the stub file. */
     public List<CompilationUnit> getCompilationUnits() {
         return compilationUnits;
     }
 
-    /** The setter method for the list of the compilation units of the stub file. */
+    /** Sets the list of compilation units of the stub file. */
     public void setCompilationUnits(NodeList<CompilationUnit> compilationUnits) {
         this.compilationUnits = compilationUnits;
     }
@@ -76,14 +78,14 @@ public class StubUnit extends Node {
         return this;
     }
 
-    //TODO add a visit method
+    //TODO implement this method
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         throw new RuntimeException("The method is not implemented!");
          //v.visit(this, arg);
     }
 
-    //TODO add a visit method
+    //TODO implement this method
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
         throw new RuntimeException("The method is not implemented!");
@@ -106,8 +108,8 @@ public class StubUnit extends Node {
         /**
          * The constructor with all fields.
          *
-         * @param stubUnit is the stub unit that it describes.
-         * @param path to the source for this stub unit.
+         * @param stubUnit is the stub unit that it describes
+         * @param path to the source for this stub unit
          */
         private Storage(StubUnit stubUnit, Path path) {
             this.stubUnit = stubUnit;
@@ -136,10 +138,15 @@ public class StubUnit extends Node {
 
         /** Saves the stub unit to its original location.*/
         public void save() {
-            save(cu -> new PrettyPrinter().print(getStubUnit()));
+            save(stubUnit -> new PrettyPrinter().print(stubUnit));
         }
 
-        /** Saves the stub unit to its original location and give the output.*/
+        /**
+         * Saves the stub unit to its original location with formatting according to the function
+         * passed as a parameter.
+         *
+         * @param makeOutput a function that generates the output that should be writen to the file
+         */
         public void save(Function<StubUnit, String> makeOutput) {
             try {
                 Files.createDirectories(path.getParent());
