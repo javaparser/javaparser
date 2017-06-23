@@ -597,9 +597,15 @@ public class CompilationUnit extends Node {
          * Saves the compilation unit to its original location
          */
         public void save() {
-            save(cu -> new PrettyPrinter().print(getCompilationUnit()));
+            save(cu -> new PrettyPrinter().print(cu));
         }
 
+        /**
+         * Saves a compilation unit to its original location with formatting according to the function
+         * passed as a parameter.
+         *
+         * @param makeOutput a function that formats the compilation unit
+         */
         public void save(Function<CompilationUnit, String> makeOutput) {
             try {
                 Files.createDirectories(path.getParent());
