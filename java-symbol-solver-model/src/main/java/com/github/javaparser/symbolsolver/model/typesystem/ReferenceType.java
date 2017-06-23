@@ -451,7 +451,6 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
                         if (thisParam instanceof TypeVariable && otherParam instanceof TypeVariable) {
                             List<Type> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds(this.typeSolver).stream().map(bound -> bound.getType()).collect(Collectors.toList());
                             List<Type> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds(other.typeSolver).stream().map(bound -> bound.getType()).collect(Collectors.toList());
-                           
                             if (thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds)) {
                                 return true;
                             }
