@@ -704,7 +704,7 @@ StubUnit StubUnit():
     * Each package declaration may occur only once; in other words, all classes from a package must appear together.
     *
     * Going through a stub file and reading one compilation unit at a time
-    * Number of compilation units in a stub file could be 1+
+    * Number of compilation units in a stub file is 1+
     */
     (
         /* Additional package declaration is not require, but still possible */
