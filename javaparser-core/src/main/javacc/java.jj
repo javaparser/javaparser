@@ -1280,7 +1280,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
 
   /**
-  * Constructors bodies as well as method bodies could be ommited in the stub files of the Checker Framework
+  * Constructor bodies as well as method bodies may be ommited in the stub files of the Checker Framework
   */
   (
       (
