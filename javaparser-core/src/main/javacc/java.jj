@@ -673,20 +673,21 @@ TOKEN :
  * Program structuring syntax follows.
  */
 
- /**
- * The stub files are represented by the {@link StubUnit}
- */
+/**
+* Reading the stub file and creating a StubUnit object based on the stub file
+* @see StubUnit
+*/
 StubUnit StubUnit():
 {
-	/* Represents the list of compilation units that contained in a stub file */
-	NodeList<CompilationUnit> compilationUnits = emptyList();
-	CompilationUnit cu;
+    /* Represents the list of compilation units that contained in a stub file */
+    NodeList<CompilationUnit> compilationUnits = emptyList();
+    CompilationUnit cu;
 
-	/*
-	* Represents the particular compilation unit components in each iteration of
-	* reading compilation units from the stub file
-	*/
-	PackageDeclaration pakage = null;
+    /*
+    * Represents a compilation unit components in each iteration of
+    * reading compilation units from the stub file
+    */
+    PackageDeclaration pakage = null;
     NodeList<ImportDeclaration> imports = emptyList();
     ImportDeclaration in = null;
     NodeList<TypeDeclaration<?>> types = emptyList();
@@ -695,20 +696,26 @@ StubUnit StubUnit():
     ModuleDeclaration module = null;
 }
 {
-	( LOOKAHEAD(2) ";" )*
+    ( LOOKAHEAD(2) ";" )*
     [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
-	/**
-	* The stub file format permits having multiple classes and packages.
-	* The packages are separated by a package statement: package my.package;.
-	* Each package declaration may occur only once; in other words, all classes from a package must appear together.
-	*/
-	(
-	    /*
-	    * Reading the particular compilation unit in the stub file
-	    * Number of compilation units could be 1+
-	    */
+    /**
+    * The stub file format permits having multiple classes and packages.
+    * The packages are separated by a package statement: package my.package;.
+    * Each package declaration may occur only once; in other words, all classes from a package must appear together.
+    *
+    * Going through a stub file and reading one compilation unit at a time
+    * Number of compilation units in a stub file could be 1+
+    */
+    (
+        /* Additional package declaration is not require, but still possible */
         (pakage = PackageDeclaration())?
+
+        /*
+        * The only required import statements are the ones to import type annotations.
+        * Import statements for types are optional.
+        */
         (in = ImportDeclaration() { imports = add(imports, in); })*
+
         {
             types = emptyList();
             modifier = null;
@@ -734,14 +741,15 @@ StubUnit StubUnit():
                 )
             )
             {
-                  cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
-                  compilationUnits.add(cu);
+
+                cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+                compilationUnits.add(cu);
             }
     )+
 
 
-	(<EOF> | "\u001A" /** ctrl+z char **/)
-	{ return new StubUnit(compilationUnits); }
+    (<EOF> | "\u001A" /** ctrl+z char **/)
+    { return new StubUnit(compilationUnits); }
 }
 
 CompilationUnit CompilationUnit():
