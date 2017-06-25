@@ -697,6 +697,12 @@ StubUnit StubUnit():
 }
 {
     ( LOOKAHEAD(2) ";" )*
+    /*
+     * Reading leading imports to support the old stub files that contain import declarations
+     * before the package declaration.
+     */
+    (in = ImportDeclaration() { imports = add(imports, in); })*
+
     [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
     /**
      * The stub file format permits having multiple classes and packages.
