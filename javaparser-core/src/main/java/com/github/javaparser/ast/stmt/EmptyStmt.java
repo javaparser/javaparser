@@ -77,4 +77,12 @@ public final class EmptyStmt extends Statement {
     public EmptyStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.emptyStmtMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
 }

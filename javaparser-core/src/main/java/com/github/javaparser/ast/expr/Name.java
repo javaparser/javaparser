@@ -219,4 +219,29 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     public NameMetaModel getMetaModel() {
         return JavaParserMetaModel.nameMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public Name replaceQualifier(Name replacement) {
+        return setQualifier((Name) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        if (qualifier != null) {
+            if (node == qualifier) {
+                replaceQualifier((Name) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }
