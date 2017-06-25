@@ -78,18 +78,14 @@ public class StubUnit extends Node {
         return this;
     }
 
-    //TODO implement this method
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        throw new RuntimeException("The method is not implemented!");
-         //v.visit(this, arg);
+        return v.visit(this, arg);
     }
 
-    //TODO implement this method
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
-        throw new RuntimeException("The method is not implemented!");
-        // v.visit(this, arg);
+        v.visit(this, arg);
     }
 
     /**
