@@ -9,7 +9,7 @@ public class JavaParserBuild {
     public static final String PROJECT_BUILD_FINAL_NAME = "${project.build.finalName}";
     public static final String MAVEN_VERSION = "${maven.version}";
     public static final String MAVEN_BUILD_VERSION = "${maven.build.version}";
-    public static final String MAVEN_BUILD_TIMESTAMP = "${maven.build.timestamp}";
+    public static final String MAVEN_BUILD_TIMESTAMP = "${build.timestamp}";
     public static final String JAVA_VENDOR ="${java.vendor}";
     public static final String JAVA_VENDOR_URL ="${java.vendor.url}";
     public static final String JAVA_VERSION ="${java.version}";
