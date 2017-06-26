@@ -119,4 +119,18 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     public BodyDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.bodyDeclarationMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

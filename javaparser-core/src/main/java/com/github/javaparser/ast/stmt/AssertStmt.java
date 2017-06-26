@@ -152,4 +152,23 @@ public final class AssertStmt extends Statement {
     public AssertStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.assertStmtMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public AssertStmt replaceMessage(Expression replacement) {
+        return setMessage((Expression) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (message != null) {
+            if (node == message) {
+                replaceMessage((Expression) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

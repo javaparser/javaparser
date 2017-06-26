@@ -127,4 +127,23 @@ public final class SuperExpr extends Expression {
     public SuperExprMetaModel getMetaModel() {
         return JavaParserMetaModel.superExprMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public SuperExpr replaceClassExpr(Expression replacement) {
+        return setClassExpr((Expression) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (classExpr != null) {
+            if (node == classExpr) {
+                replaceClassExpr((Expression) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }
