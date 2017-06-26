@@ -275,4 +275,24 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     public ParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.parameterMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < varArgsAnnotations.size(); i++) {
+            if (varArgsAnnotations.get(i) == node) {
+                varArgsAnnotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

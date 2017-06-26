@@ -141,4 +141,18 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     public NormalAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < pairs.size(); i++) {
+            if (pairs.get(i) == node) {
+                pairs.set(i, (MemberValuePair) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

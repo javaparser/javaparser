@@ -131,4 +131,23 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     public ContinueStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.continueStmtMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public ContinueStmt replaceLabel(SimpleName replacement) {
+        return setLabel((SimpleName) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (label != null) {
+            if (node == label) {
+                replaceLabel((SimpleName) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

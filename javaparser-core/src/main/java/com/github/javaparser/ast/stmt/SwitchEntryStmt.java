@@ -178,4 +178,29 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     public SwitchEntryStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.switchEntryStmtMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public SwitchEntryStmt replaceLabel(Expression replacement) {
+        return setLabel((Expression) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (label != null) {
+            if (node == label) {
+                replaceLabel((Expression) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.set(i, (Statement) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

@@ -123,4 +123,18 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     public BlockStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.blockStmtMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < statements.size(); i++) {
+            if (statements.get(i) == node) {
+                statements.set(i, (Statement) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

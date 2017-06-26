@@ -206,4 +206,18 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     public TypeDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.typeDeclarationMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < members.size(); i++) {
+            if (members.get(i) == node) {
+                members.set(i, (BodyDeclaration) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

@@ -171,4 +171,29 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
     public ArrayCreationLevelMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayCreationLevelMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public ArrayCreationLevel replaceDimension(Expression replacement) {
+        return setDimension((Expression) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        if (dimension != null) {
+            if (node == dimension) {
+                replaceDimension((Expression) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }
