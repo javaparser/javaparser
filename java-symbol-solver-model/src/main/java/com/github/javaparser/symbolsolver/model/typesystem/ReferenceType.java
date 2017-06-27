@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.model.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParameterValueProvider;
@@ -447,6 +448,13 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
                             return false;
                         }
                     } else {
+                        if (thisParam instanceof TypeVariable && otherParam instanceof TypeVariable) {
+                            List<Type> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds(this.typeSolver).stream().map(bound -> bound.getType()).collect(Collectors.toList());
+                            List<Type> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds(other.typeSolver).stream().map(bound -> bound.getType()).collect(Collectors.toList());
+                            if (thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds)) {
+                                return true;
+                            }
+                        }
                         return false;
                     }
                 }
