@@ -147,4 +147,12 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     public CatchClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.catchClauseMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
 }

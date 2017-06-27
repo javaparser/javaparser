@@ -140,4 +140,18 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     public IntersectionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.intersectionTypeMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.set(i, (ReferenceType) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

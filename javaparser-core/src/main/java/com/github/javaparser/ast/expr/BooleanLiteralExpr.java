@@ -104,4 +104,12 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     public BooleanLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.booleanLiteralExprMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
 }

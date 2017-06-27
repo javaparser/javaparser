@@ -184,4 +184,23 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public IfStmt replaceElseStmt(Statement replacement) {
+        return setElseStmt((Statement) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (elseStmt != null) {
+            if (node == elseStmt) {
+                replaceElseStmt((Statement) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

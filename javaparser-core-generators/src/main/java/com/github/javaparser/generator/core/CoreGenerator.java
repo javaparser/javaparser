@@ -40,6 +40,7 @@ public class CoreGenerator {
         new GetNodeListsGenerator(sourceRoot).generate();
         new PropertyGenerator(sourceRoot).generate();
         new RemoveMethodGenerator(sourceRoot).generate();
+        new ReplaceMethodGenerator(sourceRoot).generate();
         new CloneGenerator(sourceRoot).generate();
         new GetMetaModelGenerator(sourceRoot).generate();
         new MainConstructorGenerator(sourceRoot).generate();

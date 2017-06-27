@@ -156,4 +156,12 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     public ImportDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.importDeclarationMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
 }

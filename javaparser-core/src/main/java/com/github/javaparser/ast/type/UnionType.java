@@ -137,4 +137,18 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public UnionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unionTypeMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i) == node) {
+                elements.set(i, (ReferenceType) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

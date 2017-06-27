@@ -110,4 +110,12 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     public ExpressionStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionStmtMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
 }

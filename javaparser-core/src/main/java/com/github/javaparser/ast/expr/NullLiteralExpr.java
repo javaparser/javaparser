@@ -80,4 +80,12 @@ public final class NullLiteralExpr extends LiteralExpr {
     public NullLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nullLiteralExprMetaModel;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
+    }
 }
