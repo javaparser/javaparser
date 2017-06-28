@@ -11,7 +11,7 @@ before_script:
 - sudo service rsync stop || true
 - sudo service x11-common stop || true
 language: java
-script: ./gradlew check
+script: travis_wait 30 ./gradlew check
 jdk:
   - oraclejdk8
 before_cache:

@@ -117,6 +117,10 @@ subprojects {
     }
     generatedPom.writeTo("$buildDir/pom.xml")
   }
+
+  test {
+    maxHeapSize = "4096m"
+  }
 }
 
 task sign(type:Exec) {

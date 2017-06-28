@@ -26,7 +26,7 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
     public void setup() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(new File("src/test/resources/differentiate_dot_expressions")));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/differentiate_dot_expressions"))));
         typeSolver = combinedTypeSolver;
     }
 
