@@ -89,11 +89,6 @@ public class DefaultVisitorAdapter implements GenericVisitor<Type, Boolean> {
     }
 
     @Override
-    public Type visit(EmptyMemberDeclaration node, Boolean aBoolean) {
-        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
-    }
-
-    @Override
     public Type visit(InitializerDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
@@ -460,6 +455,11 @@ public class DefaultVisitorAdapter implements GenericVisitor<Type, Boolean> {
 
     @Override
     public Type visit(ModuleOpensStmt node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
+
+    @Override
+    public Type visit(UnparsableStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 }
