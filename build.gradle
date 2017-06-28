@@ -119,7 +119,7 @@ subprojects {
   }
 
   test {
-    maxHeapSize = "1024m"
+    maxHeapSize = "4096m"
   }
 }
 

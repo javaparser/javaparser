@@ -10,8 +10,6 @@ before_script:
 - sudo service riak stop || true
 - sudo service rsync stop || true
 - sudo service x11-common stop || true
-- "echo $JAVA_OPTS"
-- "export JAVA_OPTS=-Xmx1024m"
 language: java
 script: travis_wait 30 ./gradlew check
 jdk:
