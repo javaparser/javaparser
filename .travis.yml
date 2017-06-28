@@ -11,7 +11,7 @@ before_script:
 - sudo service rsync stop || true
 - sudo service x11-common stop || true
 - "echo $JAVA_OPTS"
-- "export JAVA_OPTS=-Xmx512m"
+- "export JAVA_OPTS=-Xmx1024m"
 language: java
 script: ./gradlew check
 jdk:
