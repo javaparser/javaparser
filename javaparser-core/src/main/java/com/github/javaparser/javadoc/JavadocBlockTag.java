@@ -116,6 +116,10 @@ public class JavadocBlockTag {
         return name;
     }
 
+    public String getTagName() {
+        return tagName;
+    }
+
     public String toText() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");

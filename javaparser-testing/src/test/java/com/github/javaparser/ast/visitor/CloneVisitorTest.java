@@ -24,12 +24,14 @@ package com.github.javaparser.ast.visitor;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.type.Type;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Iterator;
 
+import static com.github.javaparser.JavaParser.*;
 import static org.junit.Assert.assertEquals;
 
 public class CloneVisitorTest {
@@ -47,7 +49,6 @@ public class CloneVisitorTest {
 
     @Test
     public void cloneJavaDocTest() {
-
         NodeList<BodyDeclaration<?>> bodyDeclarationList = new NodeList<>();
         bodyDeclarationList.add(new AnnotationMemberDeclaration().setJavadocComment("javadoc"));
         bodyDeclarationList.add(new ConstructorDeclaration().setJavadocComment("javadoc"));
@@ -95,7 +96,12 @@ public class CloneVisitorTest {
                 }
             }
         }
-
+    }
+    
+    @Test
+    public void cloneAnnotationOnWildcardTypeArgument() {
+        Type type = parseType("List<@C ? extends Object>").clone();
+        assertEquals("List<@C ? extends Object>", type.toString());
     }
 
 }

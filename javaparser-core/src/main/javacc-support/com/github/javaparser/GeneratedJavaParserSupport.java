@@ -112,7 +112,7 @@ class GeneratedJavaParserSupport {
         Pair<Type, List<ArrayType.ArrayBracketPair>> partialParts = unwrapArrayTypes(partialType);
         Type elementType = partialParts.a;
         List<ArrayType.ArrayBracketPair> leftMostBrackets = partialParts.b;
-        return wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets);
+        return wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets).clone();
     }
 
     static TokenRange tokenRange(Token token) {

@@ -93,6 +93,20 @@ public class JavadocParserTest {
     }
 
     @Test
+    public void parseBlockTagsAndProvideTagName() {
+        String expectedText = "\n" +
+                "   * @unofficial\n " +
+                "   ";
+
+        Javadoc underTest = new Javadoc(JavadocDescription.parseText(""))
+                .addBlockTag(new JavadocBlockTag("unofficial", ""));
+
+
+        assertEquals(underTest, JavadocParser.parse(expectedText));
+        assertEquals(underTest.getBlockTags().get(0).getTagName(), "unofficial");
+    }
+
+    @Test
     public void parseParamBlockTags() {
         String text = "\n" +
                 "     * Add a field to this and automatically add the import of the type if needed\n" +
