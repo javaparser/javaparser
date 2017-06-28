@@ -13,7 +13,7 @@ before_script:
 - "echo $JAVA_OPTS"
 - "export JAVA_OPTS=-Xmx1024m"
 language: java
-script: ./gradlew check
+script: travis_wait 30 ./gradlew check
 jdk:
   - oraclejdk8
 before_cache:
