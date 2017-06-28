@@ -28,6 +28,11 @@ public interface ParameterDeclaration extends ValueDeclaration {
         return true;
     }
 
+    @Override
+    default ParameterDeclaration asParameter() {
+        return this;
+    }
+
     /**
      * Is this parameter declared as variadic?
      */
