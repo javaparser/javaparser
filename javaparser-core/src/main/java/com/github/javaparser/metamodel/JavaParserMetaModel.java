@@ -226,6 +226,7 @@ public final class JavaParserMetaModel {
         unionTypeMetaModel.getConstructorParameters().add(unionTypeMetaModel.elementsPropertyMetaModel);
         wildcardTypeMetaModel.getConstructorParameters().add(wildcardTypeMetaModel.extendedTypePropertyMetaModel);
         wildcardTypeMetaModel.getConstructorParameters().add(wildcardTypeMetaModel.superTypePropertyMetaModel);
+        wildcardTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         moduleRequiresStmtMetaModel.getConstructorParameters().add(moduleRequiresStmtMetaModel.modifiersPropertyMetaModel);
         moduleRequiresStmtMetaModel.getConstructorParameters().add(moduleRequiresStmtMetaModel.namePropertyMetaModel);
         moduleExportsStmtMetaModel.getConstructorParameters().add(moduleExportsStmtMetaModel.namePropertyMetaModel);

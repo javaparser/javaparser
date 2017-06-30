@@ -1402,7 +1402,7 @@ WildcardType Wildcard():
 		}
    ]
    { 
-     return new WildcardType(range(begin, token()),ext, sup);
+     return new WildcardType(range(begin, token()), ext, sup, new NodeList<AnnotationExpr>());
    }
 }
 
