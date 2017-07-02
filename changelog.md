@@ -1,3 +1,8 @@
+Version 3.2.9
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/49?closed=1)
+* `Node.replace(old, new)` was added, including property-specific `X.replaceY(newY)` methods
+
 Version 3.2.8
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/48?closed=1)
