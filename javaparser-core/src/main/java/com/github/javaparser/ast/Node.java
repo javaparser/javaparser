@@ -357,22 +357,27 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Assign a new parent to this node, removing it
      * from the list of children of the previous parent, if any.
      *
-     * @param parentNode node to be set as parent
+     * @param newParentNode node to be set as parent
      */
     @Override
-    public Node setParentNode(Node parentNode) {
-        if (parentNode == this.parentNode) {
+    public Node setParentNode(Node newParentNode) {
+        if (newParentNode == parentNode) {
             return this;
         }
-        observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
+        observers.forEach(o -> o.parentChange(this, parentNode, newParentNode));
         // remove from old parent, if any
-        if (this.parentNode != null) {
-            this.parentNode.childNodes.remove(this);
+        if (parentNode != null) {
+            final List<Node> parentChildNodes = parentNode.childNodes;
+            for (int i = 0; i < parentChildNodes.size(); i++) {
+                if (parentChildNodes.get(i) == this) {
+                    parentChildNodes.remove(i);
+                }
+            }
         }
-        this.parentNode = parentNode;
+        parentNode = newParentNode;
         // add to new parent, if any
-        if (this.parentNode != null) {
-            this.parentNode.childNodes.add(this);
+        if (parentNode != null) {
+            parentNode.childNodes.add(this);
         }
         return this;
     }

@@ -26,8 +26,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.BlockComment;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.observer.AstObserver;
@@ -42,9 +42,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.parse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class NodeTest {
 
@@ -312,5 +310,21 @@ public class NodeTest {
         methodDeclaration.getName().removeForced();
         // Name is required, so to remove it the whole method is removed.
         assertEquals("class X {\n}\n", cu.toString());
+    }
+
+    @Test
+    public void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
+        CompilationUnit unit = JavaParser.parse("public class Example {\n" +
+                "  public static void example() {\n" +
+                "    boolean swapped;\n" +
+                "    swapped=false;\n" +
+                "    swapped=false;\n" +
+                "  }\n" +
+                "}\n");
+        // remove the second swapped=false
+        Node target = unit.getChildNodes().get(0).getChildNodes().get(1).getChildNodes().get(2).getChildNodes().get(2);
+        target.remove();
+        // This will throw an exception if the parents are bad.
+        System.out.println(unit.toString());
     }
 }
