@@ -694,6 +694,8 @@ StubUnit StubUnit():
     ModifierHolder modifier;
     TypeDeclaration tn = null;
     ModuleDeclaration module = null;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    AnnotationExpr annotation = null;
 }
 {
     ( LOOKAHEAD(2) ";" )*
@@ -713,8 +715,10 @@ StubUnit StubUnit():
      * Number of compilation units in a stub file is 1+
      */
     (
+        /* This annotations could belong to the package declarations as well as to class declaration */
+        (LOOKAHEAD("@") annotation = Annotation()  {annotations = add(annotations, annotation);} )*
         /* Additional package declaration is not require, but still possible */
-        (pakage = PackageDeclaration())?
+        (pakage = PackageDeclarationForStubUnit(annotations))?
 
         /*
          * The only required import statements are the ones to import type annotations.
@@ -733,7 +737,7 @@ StubUnit StubUnit():
                 /**
                  * Declaration specifiers (e.g., public, final, volatile) may be omitted.
                  */
-                modifier = Modifiers()
+                modifier = ModifiersForStubUnit(annotations)
                 (
                     tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
                 |
@@ -750,6 +754,13 @@ StubUnit StubUnit():
 
                 cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
                 compilationUnits.add(cu);
+            }
+            // Need to make annotations null in order to read new annotations properly
+            {
+                annotation = null;
+                if (annotations != null) {
+                    annotations = null;
+                }
             }
     )+
 
@@ -812,6 +823,22 @@ PackageDeclaration PackageDeclaration():
   { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
+PackageDeclaration PackageDeclarationForStubUnit(NodeList<AnnotationExpr> annotationsArg):
+{
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	Name name;
+	JavaToken begin;
+}
+{
+    {
+        if (annotationsArg != null) {
+            annotations.addAll(annotationsArg);
+        }
+    }
+    "package" {begin = token();}  name = Name() ";"
+    { return new PackageDeclaration(range(begin, token()), annotations, name); }
+}
+
 
 ImportDeclaration ImportDeclaration():
 {
@@ -844,6 +871,65 @@ ModifierHolder Modifiers():
 {
  (
   LOOKAHEAD(2)
+  (
+   "public" { addModifier(this, modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(token()); }
+  |
+   "static" { addModifier(this, modifiers, Modifier.STATIC); begin = begin.orIfInvalid(token()); }
+  |
+   "protected" {  addModifier(this, modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(token()); }
+  |
+   "private" { addModifier(this, modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(token()); }
+  |
+   "final" { addModifier(this, modifiers, Modifier.FINAL); begin = begin.orIfInvalid(token()); }
+  |
+   "abstract" { addModifier(this, modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(token()); }
+  |
+   "synchronized" { addModifier(this, modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(token()); }
+  |
+   "native" { addModifier(this, modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(token()); }
+  |
+   "transient" { addModifier(this, modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(token()); }
+  |
+   "volatile" { addModifier(this, modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(token()); }
+  |
+   "strictfp" { addModifier(this, modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(token()); }
+  |
+   "transitive" { addModifier(this, modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(token()); }
+  |
+   "default" { addModifier(this, modifiers, Modifier.DEFAULT);  begin = begin.orIfInvalid(token()); }
+  |
+   ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getTokenRange().get().getBegin()); }
+  )
+ )*
+
+ {
+    return new ModifierHolder(begin, modifiers, annotations);
+ }
+}
+
+/*
+ * This is copied from method Modifiers() that used in the javaparser project
+ * Changes were required to adjust it for parsing stub files in the Checker Framework
+ */
+ModifierHolder ModifiersForStubUnit(NodeList<AnnotationExpr> annotationsArg):
+{
+	JavaToken begin = INVALID;
+    EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    AnnotationExpr ann;
+}
+{
+ (
+  LOOKAHEAD(2)
+    /*
+     * This action is require, because annotations could be read before executing this block
+     * Hence all the annotation should accummulate
+     */
+    {
+        if (annotationsArg != null) {
+            annotations.addAll(annotationsArg);
+        }
+    }
   (
    "public" { addModifier(this, modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(token()); }
   |
