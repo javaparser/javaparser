@@ -758,9 +758,7 @@ StubUnit StubUnit():
             // Need to make annotations null in order to read new annotations properly
             {
                 annotation = null;
-                if (annotations != null) {
-                    annotations = null;
-                }
+                annotations = new NodeList<AnnotationExpr>();
             }
     )+
 
@@ -830,11 +828,6 @@ PackageDeclaration PackageDeclarationForStubUnit(NodeList<AnnotationExpr> annota
 	JavaToken begin;
 }
 {
-    {
-        if (annotationsArg != null) {
-            annotations.addAll(annotationsArg);
-        }
-    }
     "package" {begin = token();}  name = Name() ";"
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
