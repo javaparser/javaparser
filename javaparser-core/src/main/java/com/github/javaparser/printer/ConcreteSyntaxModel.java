@@ -25,7 +25,6 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -35,7 +34,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,7 +42,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmConditional.Condition.*;
 import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
-import static com.github.javaparser.utils.Utils.*;
+import static com.github.javaparser.utils.Utils.EOL;
 
 /**
  * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
@@ -914,23 +912,6 @@ public class ConcreteSyntaxModel {
             initializationError = Optional.empty();
         } else {
             initializationError = Optional.of("The CSM should include support for these classes: " + String.join(", ", unsupportedNodeClassNames));
-        }
-    }
-
-    private static class JavadocContentTokenCalculator implements CsmToken.TokenContentCalculator {
-        @Override
-        public String calculate(Node node) {
-            return "/**" + ((JavadocComment) node).getContent() + "*";
-        }
-
-        @Override
-        public int hashCode() {
-            return 1;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof JavadocContentTokenCalculator;
         }
     }
 

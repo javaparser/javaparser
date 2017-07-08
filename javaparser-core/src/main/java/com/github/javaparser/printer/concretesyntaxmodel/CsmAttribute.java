@@ -27,8 +27,6 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
-import java.util.Arrays;
-
 public class CsmAttribute implements CsmElement {
     public ObservableProperty getProperty() {
         return property;

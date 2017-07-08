@@ -3,7 +3,6 @@ package com.github.javaparser.printer.lexicalpreservation.changes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 
 /**
  * The removal of an element in a list.
