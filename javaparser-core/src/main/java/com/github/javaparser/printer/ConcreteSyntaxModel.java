@@ -917,23 +917,6 @@ public class ConcreteSyntaxModel {
         }
     }
 
-    private static class JavadocContentTokenCalculator implements CsmToken.TokenContentCalculator {
-        @Override
-        public String calculate(Node node) {
-            return "/**" + ((JavadocComment) node).getContent() + "*";
-        }
-
-        @Override
-        public int hashCode() {
-            return 1;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return obj instanceof JavadocContentTokenCalculator;
-        }
-    }
-
     private ConcreteSyntaxModel() {
 
     }
