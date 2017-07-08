@@ -1,11 +1,7 @@
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
-
-import java.util.Optional;
 
 /**
  * The change in value of a property.
