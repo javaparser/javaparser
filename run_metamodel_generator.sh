@@ -12,7 +12,7 @@ fi
 pushd javaparser-metamodel-generator
 
 # Generate code
-mvn clean package
+mvn clean package -P run-metamodel-generator
 
 # Go back to previous directory
 popd
