@@ -1477,7 +1477,7 @@ String Identifier():
 {
     // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
   (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
-   <IDENTIFIER>) { ret = token.image; }
+   <IDENTIFIER>) { ret = token.image; token().setKind(IDENTIFIER);}
   { return ret; }
 }
 
@@ -2770,9 +2770,13 @@ ModuleStmt ModuleStmt():
     NodeList<Type> types=emptyList();
     JavaToken begin;
     ModuleStmt stmt=new ModuleRequiresStmt();
+    JavaToken transitiveExceptionalToken;
 }
 {
     (
+        LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
+        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); transitiveExceptionalToken.setKind(IDENTIFIER);} ";" {stmt=new ModuleRequiresStmt(range(begin, token()), EnumSet.noneOf(Modifier.class), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
+    |
         <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, token()), modifiers.modifiers, name);}
     |
         <EXPORTS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, token()), name, names);}
