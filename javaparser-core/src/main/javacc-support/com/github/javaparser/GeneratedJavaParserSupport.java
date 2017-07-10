@@ -22,10 +22,12 @@ import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
  * Support class for {@link GeneratedJavaParser}
  */
 class GeneratedJavaParserSupport {
+    /** Quickly create a new NodeList */
     static <X extends Node> NodeList<X> emptyList() {
-        return new NodeList<X>();
+        return new NodeList<>();
     }
 
+    /** Add obj to list and return it. Create a new list if list is null */
     static <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<T>();
@@ -34,6 +36,7 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
+    /** Add obj to list only when list is not null */
     static <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
         if (obj == null) {
             return list;
@@ -41,6 +44,7 @@ class GeneratedJavaParserSupport {
         return add(list, obj);
     }
 
+    /** Add obj to list at position pos */
     static <T extends Node> NodeList<T> add(int pos, NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<T>();
@@ -49,6 +53,7 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
+    /** Add obj to list */
     static <T> List<T> add(List<T> list, T obj) {
         if (list == null) {
             list = new LinkedList<T>();
@@ -57,6 +62,7 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
+    /** Add modifier mod to modifiers */
     static void addModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
             generatedJavaParser.addProblem("Duplicated modifier");
@@ -64,14 +70,17 @@ class GeneratedJavaParserSupport {
         modifiers.add(mod);
     }
 
+    /** Return a TokenRange spanning from begin to end */
     static TokenRange range(JavaToken begin, JavaToken end) {
         return new TokenRange(begin, end);
     }
 
+    /** Return a TokenRange spanning from begin to end */
     static TokenRange range(Node begin, Node end) {
         return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
     }
 
+    /** Workaround for rather complex ambiguity that lambda's create */
     static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
             Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
@@ -99,6 +108,7 @@ class GeneratedJavaParserSupport {
         return ret;
     }
 
+    /** Throws together an ArrayCreationExpr from a lot of pieces */
     static ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
 
@@ -108,6 +118,7 @@ class GeneratedJavaParserSupport {
         return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
 
+    /** Throws together a Type, taking care of all the array brackets */
     static Type juggleArrayType(Type partialType, List<ArrayType.ArrayBracketPair> additionalBrackets) {
         Pair<Type, List<ArrayType.ArrayBracketPair>> partialParts = unwrapArrayTypes(partialType);
         Type elementType = partialParts.a;
@@ -115,11 +126,13 @@ class GeneratedJavaParserSupport {
         return wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets).clone();
     }
 
+    /** Create a TokenRange that spans exactly one token */
     static TokenRange tokenRange(Token token) {
         JavaToken javaToken = ((CustomToken) token).javaToken;
         return new TokenRange(javaToken, javaToken);
     }
 
+    /** Get the token that starts the NodeList l */
     static JavaToken nodeListBegin(NodeList<?> l) {
         if (l.isEmpty()) {
             return JavaToken.INVALID;
@@ -182,7 +195,5 @@ class GeneratedJavaParserSupport {
                     .append(expected.toString());
         }
         return sb.toString();
-
     }
-
 }

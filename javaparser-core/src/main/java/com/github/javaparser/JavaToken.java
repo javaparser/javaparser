@@ -35,7 +35,7 @@ public class JavaToken {
     public static final JavaToken INVALID = new JavaToken();
 
     private final Range range;
-    private final int kind;
+    private int kind;
     private final String text;
     private final Optional<JavaToken> previousToken;
     private Optional<JavaToken> nextToken = Optional.empty();
@@ -102,12 +102,24 @@ public class JavaToken {
         }
     }
 
+    public JavaToken(Range range, int kind, String text, Optional<JavaToken> previousToken, Optional<JavaToken> nextToken) {
+        this.range = range;
+        this.kind = kind;
+        this.text = text;
+        this.previousToken = previousToken;
+        this.nextToken = nextToken;
+    }
+
     public Range getRange() {
         return range;
     }
 
     public int getKind() {
         return kind;
+    }
+
+    void setKind(int kind) {
+        this.kind = kind;
     }
 
     public String getText() {
