@@ -1,6 +1,7 @@
 package com.github.javaparser.modules;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaToken;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
@@ -14,6 +15,7 @@ import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import org.junit.Test;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.provider;
@@ -30,7 +32,17 @@ public class ModuleDeclarationTest {
 
     @Test
     public void moduleInfoKeywordsAreSeenAsIdentifiers() {
-        parse("class module { }");
+        CompilationUnit cu = parse("class module { }");
+        JavaToken moduleToken = cu.getClassByName("module").get().getName().getTokenRange().get().getBegin();
+        assertEquals(IDENTIFIER, moduleToken.getKind());
+    }
+
+    @Test
+    public void issue988RequireTransitiveShouldRequireAModuleCalledTransitive() {
+        CompilationUnit cu = parse("module X { requires transitive; }");
+        ModuleRequiresStmt requiresTransitive = (ModuleRequiresStmt) cu.getModule().get().getModuleStmts().get(0);
+        assertEquals("transitive", requiresTransitive.getNameAsString());
+        assertEquals(IDENTIFIER, requiresTransitive.getName().getTokenRange().get().getBegin().getKind());
     }
 
     @Test
