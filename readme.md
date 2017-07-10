@@ -50,6 +50,12 @@ If you checkout the sources and want to view the project in an IDE, it is best t
 mvn javacc:javacc
 ```
 
+If you modify the code of the AST nodes, specifically if you add or remove fields or node classes,
+a lot of stuff needs to be rebuilt.
+The `run_metamodel_generator.sh` script will rebuild the metamodel,
+which is used by the code generators which are run by `run_core_generators.sh`
+Make sure that `javaparser-core` at least compiles before you run these.
+
 ## Manual
 
 Examples of how to use the library can be found on the [Manual](https://github.com/javaparser/javaparser/wiki/Manual) page of the wiki
