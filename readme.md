@@ -28,12 +28,21 @@ you can use [the Java Symbol Solver project.](https://github.com/javaparser/java
 The project binaries are available in Maven Central.  Just add the following to your maven configuration or tailor to your own dependency management system.
 
 [Please refer to the Migration Guide when upgrading from 2.5.1](https://github.com/javaparser/javaparser/wiki/Migration-Guide)
+
+For Maven: 
+
 ```xml
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
     <version>3.2.10</version>
 </dependency>
+```
+
+For Gradle:
+
+```
+compile 'com.github.javaparser:javaparser-core:3.2.10'
 ```
 
 ## How To Compile Sources
