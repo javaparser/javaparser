@@ -1,3 +1,8 @@
+Version 3.2.11
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/50?closed=1)
+* We're up to date with the latest Java 9 module system again.
+
 Version 3.2.10
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/49?closed=1)

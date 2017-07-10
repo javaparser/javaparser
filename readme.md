@@ -35,14 +35,14 @@ For Maven:
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.2.10</version>
+    <version>3.2.11</version>
 </dependency>
 ```
 
 For Gradle:
 
 ```
-compile 'com.github.javaparser:javaparser-core:3.2.10'
+compile 'com.github.javaparser:javaparser-core:3.2.11'
 ```
 
 ## How To Compile Sources
@@ -60,7 +60,7 @@ mvn javacc:javacc
 ```
 
 If you modify the code of the AST nodes, specifically if you add or remove fields or node classes,
-a lot of stuff needs to be rebuilt.
+the code generators will update a lot of code for you.
 The `run_metamodel_generator.sh` script will rebuild the metamodel,
 which is used by the code generators which are run by `run_core_generators.sh`
 Make sure that `javaparser-core` at least compiles before you run these.
