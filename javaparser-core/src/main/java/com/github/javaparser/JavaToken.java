@@ -102,6 +102,14 @@ public class JavaToken {
         }
     }
 
+    public JavaToken(Range range, int kind, String text, Optional<JavaToken> previousToken, Optional<JavaToken> nextToken) {
+        this.range = range;
+        this.kind = kind;
+        this.text = text;
+        this.previousToken = previousToken;
+        this.nextToken = nextToken;
+    }
+
     public Range getRange() {
         return range;
     }
@@ -110,7 +118,7 @@ public class JavaToken {
         return kind;
     }
 
-    public void setKind(int kind) {
+    void setKind(int kind) {
         this.kind = kind;
     }
 
