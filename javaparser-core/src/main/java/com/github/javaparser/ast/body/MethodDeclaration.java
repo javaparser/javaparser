@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
@@ -42,9 +41,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.Modifier.*;
-import static com.github.javaparser.ast.Modifier.DEFAULT;
-import static com.github.javaparser.ast.Modifier.NATIVE;
-import static com.github.javaparser.ast.Modifier.SYNCHRONIZED;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;

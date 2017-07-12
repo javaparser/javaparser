@@ -2,12 +2,7 @@ package com.github.javaparser.generator.metamodel;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.IntersectionType;
-import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 
 import java.lang.reflect.Field;
@@ -46,8 +41,7 @@ public class InitializePropertyMetaModelsStatementsGenerator {
         initializePropertyMetaModelsStatements.add(parseStatement(fieldAddition));
     }
 
-    public void generateDerivedProperty(Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) throws NoSuchMethodException {
-
+    public void generateDerivedProperty(Method method, ClassOrInterfaceDeclaration nodeMetaModelClass, String nodeMetaModelFieldName, NodeList<Statement> initializePropertyMetaModelsStatements) {
         final AstTypeAnalysis fieldAnalysis = new AstTypeAnalysis(method.getGenericReturnType());
 
         final Class<?> fieldType = fieldAnalysis.innerType;

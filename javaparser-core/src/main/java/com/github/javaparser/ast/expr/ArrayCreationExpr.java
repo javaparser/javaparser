@@ -38,7 +38,7 @@ import java.util.Optional;
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.TokenRange;
 
 /**

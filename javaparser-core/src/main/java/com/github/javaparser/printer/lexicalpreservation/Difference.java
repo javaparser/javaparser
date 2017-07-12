@@ -591,7 +591,7 @@ public class Difference {
                         diffIndex++;
                         nodeTextIndex++;
                     } else if ((kept.element instanceof CsmChild) && nodeTextEl instanceof TokenTextElement) {
-                        if (((TokenTextElement) nodeTextEl).isWhiteSpaceOrComment()) {
+                        if (nodeTextEl.isWhiteSpaceOrComment()) {
                             nodeTextIndex++;
                         } else {
                             if (kept.element instanceof CsmChild) {

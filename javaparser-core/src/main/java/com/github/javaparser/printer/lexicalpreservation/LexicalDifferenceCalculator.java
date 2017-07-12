@@ -268,7 +268,7 @@ class LexicalDifferenceCalculator {
 
     // Visible for testing
     CalculatedSyntaxModel calculatedSyntaxModelAfterPropertyChange(CsmElement csm, Node node, ObservableProperty property, Object oldValue, Object newValue) {
-        List<CsmElement> elements = new LinkedList<CsmElement>();
+        List<CsmElement> elements = new LinkedList<>();
         calculatedSyntaxModelForNode(csm, node, elements, new PropertyChange(property, oldValue, newValue));
         return new CalculatedSyntaxModel(elements);
     }

@@ -25,7 +25,6 @@ import com.github.javaparser.ast.Node;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -50,7 +49,7 @@ public abstract class TreeVisitor {
      */
     public void visitPreOrder(Node node) {
         process(node);
-        new ArrayList<>(node.getChildNodes()).forEach(child -> visitPreOrder(child));
+        new ArrayList<>(node.getChildNodes()).forEach(this::visitPreOrder);
     }
 
     /**
@@ -62,7 +61,7 @@ public abstract class TreeVisitor {
      * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
      */
     public void visitPostOrder(Node node) {
-        new ArrayList<>(node.getChildNodes()).forEach(child -> visitPostOrder(child));
+        new ArrayList<>(node.getChildNodes()).forEach(this::visitPostOrder);
         process(node);
     }
 

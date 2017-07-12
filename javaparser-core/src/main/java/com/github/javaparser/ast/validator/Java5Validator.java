@@ -12,7 +12,7 @@ import java.util.Optional;
  * This validator validates according to Java 5 syntax rules.
  */
 public class Java5Validator extends Java1_4Validator {
-    protected Validator genericsWithoutDiamondOperator = new TreeVisitorValidator((node, reporter) -> {
+    Validator genericsWithoutDiamondOperator = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof NodeWithTypeArguments) {
             Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
             if (typeArguments.isPresent() && typeArguments.get().isEmpty()) {
@@ -24,13 +24,11 @@ public class Java5Validator extends Java1_4Validator {
     protected Validator noPrimitiveGenericArguments = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof NodeWithTypeArguments) {
             Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
-            if (typeArguments.isPresent()) {
-                typeArguments.get().forEach(ty -> {
-                    if (ty instanceof PrimitiveType) {
-                        reporter.report(node, "Type arguments may not be primitive.");
-                    }
-                });
-            }
+            typeArguments.ifPresent(types -> types.forEach(ty -> {
+                if (ty instanceof PrimitiveType) {
+                    reporter.report(node, "Type arguments may not be primitive.");
+                }
+            }));
         }
     });
 

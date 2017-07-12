@@ -1,10 +1,8 @@
 package com.github.javaparser.generator.core.node;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -13,8 +11,6 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
 import com.github.javaparser.utils.SourceRoot;
-
-import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseExplicitConstructorInvocationStmt;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
