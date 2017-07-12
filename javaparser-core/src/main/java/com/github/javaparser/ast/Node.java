@@ -44,7 +44,6 @@ import javax.annotation.Generated;
 import java.util.*;
 import static com.github.javaparser.ast.Node.Parsedness.*;
 import static java.util.Collections.unmodifiableList;
-import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -380,6 +379,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             parentNode.childNodes.add(this);
         }
         return this;
+    }
+
+    protected void setAsParentNodeOf(Node childNode) {
+        if (childNode != null) {
+            childNode.setParentNode(getParentNodeForChildren());
+        }
     }
 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
