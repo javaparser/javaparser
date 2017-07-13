@@ -718,24 +718,25 @@ StubUnit StubUnit():
          * Each CompilationUnit declaration starts with a package declaration.
          */
         pakage = PackageDeclaration()
+        (in = ImportDeclaration() { imports = add(imports, in); })*
 
-            (
-                /*
-                 * Looking ahead it tries to find another package declaration.
-                 * In case it find one this compilation unit does not have any classes/interfaces/enums declarations;
-                 */
-                LOOKAHEAD(PackageDeclaration())
-
-                /**
-                 * These variables should be cleared for each type or module declaration in CompilationUnit
-                 */
+        (LOOKAHEAD(5, PackageDeclaration())
+        (
+             {
+                cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+                compilationUnits.add(cu);
+                types = emptyList();
+                tn = null;
+                module = null;
+             }
+             pakage = PackageDeclaration()
+             (in = ImportDeclaration() { imports = add(imports, in); })*
+        )
+        |
+        (
                 {
-                    types = emptyList();
                     modifier = null;
-                    tn = null;
-                    module = null;
                 }
-
                 /**
                  * Declaration specifiers (e.g., public, final, volatile) may be omitted.
                  */
@@ -751,12 +752,13 @@ StubUnit StubUnit():
                 |
                     ";"
                 )
-            )*
-            {
+        )
+        )*
+        {
+            cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+            compilationUnits.add(cu);
+        }
 
-                cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
-                compilationUnits.add(cu);
-            }
     )+
 
     (<EOF> | "\u001A" /** ctrl+z char **/)

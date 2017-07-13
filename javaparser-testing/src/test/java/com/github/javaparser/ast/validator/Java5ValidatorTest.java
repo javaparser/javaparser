@@ -38,7 +38,6 @@ public class Java5ValidatorTest {
                 "(line 1,col 1) 'default' is not allowed here.",
                 "(line 1,col 1) 'native' is not allowed here.",
                 "(line 1,col 1) 'transitive' is not allowed here.",
-                "(line 1,col 1) 'static' is not allowed here.",
                 "(line 1,col 1) 'final' is not allowed here.",
                 "(line 1,col 1) 'private' is not allowed here.",
                 "(line 1,col 1) 'protected' is not allowed here."
