@@ -414,7 +414,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             if (clazz.isInstance(child)) {
                 nodes.add(clazz.cast(child));
             }
-            nodes.addAll(child.getNodesByType(clazz));
+            nodes.addAll(child.getChildNodesByType(clazz));
         }
         return nodes;
     }

@@ -30,7 +30,7 @@ class GeneratedJavaParserSupport {
     /** Add obj to list and return it. Create a new list if list is null */
     static <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
         if (list == null) {
-            list = new NodeList<T>();
+            list = new NodeList<>();
         }
         list.add(obj);
         return list;
@@ -47,7 +47,7 @@ class GeneratedJavaParserSupport {
     /** Add obj to list at position pos */
     static <T extends Node> NodeList<T> prepend(NodeList<T> list, T obj) {
         if (list == null) {
-            list = new NodeList<T>();
+            list = new NodeList<>();
         }
         list.add(0, obj);
         return list;
@@ -56,7 +56,7 @@ class GeneratedJavaParserSupport {
     /** Add obj to list */
     static <T> List<T> add(List<T> list, T obj) {
         if (list == null) {
-            list = new LinkedList<T>();
+            list = new LinkedList<>();
         }
         list.add(obj);
         return list;
@@ -110,7 +110,7 @@ class GeneratedJavaParserSupport {
 
     /** Throws together an ArrayCreationExpr from a lot of pieces */
     static ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
-        NodeList<ArrayCreationLevel> levels = new NodeList<ArrayCreationLevel>();
+        NodeList<ArrayCreationLevel> levels = new NodeList<>();
 
         for (int i = 0; i < arrayAnnotations.size(); i++) {
             levels.add(new ArrayCreationLevel(levelRanges.get(i), dimensions.get(i), arrayAnnotations.get(i)));

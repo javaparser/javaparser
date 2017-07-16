@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;

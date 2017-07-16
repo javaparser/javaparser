@@ -930,9 +930,9 @@ public class ConcreteSyntaxModel {
     }
 
     public static CsmElement forClass(Class<? extends Node> nodeClazz) {
-        if (initializationError.isPresent()) {
-            throw new IllegalStateException(initializationError.get());
-        }
+        initializationError.ifPresent(s -> {
+            throw new IllegalStateException(s);
+        });
         if (!concreteSyntaxModelByClass.containsKey(nodeClazz)) {
             throw new UnsupportedOperationException(nodeClazz.getSimpleName());
         }

@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -15,7 +16,7 @@ public class CsmMix implements CsmElement {private List<CsmElement> elements;
         if (elements == null) {
             throw new NullPointerException();
         }
-        if (elements.stream().filter(e -> e == null).findAny().isPresent()) {
+        if (elements.stream().anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("Null element in the mix");
         }
         this.elements = elements;

@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;

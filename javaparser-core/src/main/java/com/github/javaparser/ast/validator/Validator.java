@@ -2,8 +2,6 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
 
-import java.util.function.BiConsumer;
-
 /**
  * A validator that can be run on a node to check for semantic errors.
  * It is fully up to the implementor how to do this.

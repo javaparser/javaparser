@@ -95,9 +95,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     public static <X extends Node> NodeList<X> nodeList(Collection<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        for (X node : nodes) {
-            nodeList.add(node);
-        }
+        nodeList.addAll(nodes);
         return nodeList;
     }
 
@@ -150,7 +148,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public void sort(Comparator<? super N> comparator) {
-        Collections.sort(innerList, comparator);
+        innerList.sort(comparator);
     }
 
     public void addAll(NodeList<N> otherList) {
