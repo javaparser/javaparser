@@ -9,13 +9,11 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  */
 public class ListAdditionChange implements Change {
     private ObservableProperty observableProperty;
-    private NodeList nodeList;
     private int index;
     private Node nodeAdded;
 
-    public ListAdditionChange(ObservableProperty observableProperty, NodeList nodeList, int index, Node nodeAdded) {
+    public ListAdditionChange(ObservableProperty observableProperty, int index, Node nodeAdded) {
         this.observableProperty = observableProperty;
-        this.nodeList = nodeList;
         this.index = index;
         this.nodeAdded = nodeAdded;
     }
@@ -23,8 +21,8 @@ public class ListAdditionChange implements Change {
     @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
-            NodeList nodeList = new NodeList();
-            NodeList currentNodeList = (NodeList)(new NoChange().getValue(property, node));
+            NodeList<Node> nodeList = new NodeList<>();
+            NodeList<Node> currentNodeList = (NodeList<Node>)(new NoChange().getValue(property, node));
             nodeList.addAll(currentNodeList);
             nodeList.add(index, nodeAdded);
             return nodeList;
