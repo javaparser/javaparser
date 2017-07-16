@@ -47,13 +47,10 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
 
         LexicalDifferenceCalculator.CalculatedSyntaxModel a = new LexicalDifferenceCalculator.CalculatedSyntaxModel(Collections.emptyList());
         LexicalDifferenceCalculator.CalculatedSyntaxModel b = new LexicalDifferenceCalculator.CalculatedSyntaxModel(Arrays.asList(
-                new CsmElement[]{
-                        new CsmToken(GeneratedJavaParserConstants.LPAREN),
-                        new CsmChild(n1),
-                        new CsmToken(GeneratedJavaParserConstants.RPAREN),
-                        new CsmChild(n2)
-                }
-        ));
+                new CsmToken(GeneratedJavaParserConstants.LPAREN),
+                new CsmChild(n1),
+                new CsmToken(GeneratedJavaParserConstants.RPAREN),
+                new CsmChild(n2)));
         Difference diff = Difference.calculate(a, b);
         assertEquals(4, diff.getElements().size());
         assertEquals(added(new CsmToken(GeneratedJavaParserConstants.LPAREN)), diff.getElements().get(0));
@@ -68,13 +65,10 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         Node n2 = new MethodDeclaration();
 
         LexicalDifferenceCalculator.CalculatedSyntaxModel a = new LexicalDifferenceCalculator.CalculatedSyntaxModel(Arrays.asList(
-                new CsmElement[]{
-                        new CsmToken(GeneratedJavaParserConstants.LPAREN),
-                        new CsmChild(n1),
-                        new CsmToken(GeneratedJavaParserConstants.RPAREN),
-                        new CsmChild(n2)
-                }
-        ));
+                new CsmToken(GeneratedJavaParserConstants.LPAREN),
+                new CsmChild(n1),
+                new CsmToken(GeneratedJavaParserConstants.RPAREN),
+                new CsmChild(n2)));
         LexicalDifferenceCalculator.CalculatedSyntaxModel b = new LexicalDifferenceCalculator.CalculatedSyntaxModel(Collections.emptyList());
         Difference diff = Difference.calculate(a, b);
         assertEquals(4, diff.getElements().size());
@@ -375,7 +369,7 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
     public void methodDeclarationRemovingParameter() {
         MethodDeclaration md = considerMd("public void foo(float f){}");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(md);
-        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(md, ObservableProperty.PARAMETERS, 0, md.getParameter(0));
+        LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterListRemoval(md, ObservableProperty.PARAMETERS, 0);
         Difference diff = Difference.calculate(csmOriginal, csmChanged);
         int i = 0;
         assertEquals(Difference.DifferenceElement.kept(new CsmToken(GeneratedJavaParserConstants.PUBLIC)), diff.getElements().get(i++));
@@ -412,22 +406,22 @@ public class DifferenceTest extends AbstractLexicalPreservingTest {
         assertEquals(i, diff.getElements().size());
     }
 
-    protected AnnotationMemberDeclaration considerAmd(String code) {
+    private AnnotationMemberDeclaration considerAmd(String code) {
         considerCode("@interface AD { " + code + " }");
         return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
     }
 
-    protected ConstructorDeclaration considerCd(String code) {
+    private ConstructorDeclaration considerCd(String code) {
         considerCode("class A { " + code + " }");
         return (ConstructorDeclaration) cu.getType(0).getMembers().get(0);
     }
 
-    protected EnumConstantDeclaration considerEcd(String code) {
+    private EnumConstantDeclaration considerEcd(String code) {
         considerCode("enum A { " + code + " }");
         return ((EnumDeclaration)cu.getType(0)).getEntries().get(0);
     }
 
-    protected MethodDeclaration considerMd(String code) {
+    private MethodDeclaration considerMd(String code) {
         considerCode("class A { " + code + " }");
         return (MethodDeclaration) cu.getType(0).getMembers().get(0);
     }

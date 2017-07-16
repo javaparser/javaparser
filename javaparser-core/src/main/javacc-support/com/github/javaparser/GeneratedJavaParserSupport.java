@@ -45,11 +45,11 @@ class GeneratedJavaParserSupport {
     }
 
     /** Add obj to list at position pos */
-    static <T extends Node> NodeList<T> add(int pos, NodeList<T> list, T obj) {
+    static <T extends Node> NodeList<T> prepend(NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<>();
         }
-        list.add(pos, obj);
+        list.add(0, obj);
         return list;
     }
 

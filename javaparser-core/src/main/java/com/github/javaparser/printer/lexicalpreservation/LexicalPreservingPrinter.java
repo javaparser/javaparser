@@ -164,7 +164,7 @@ public class LexicalPreservingPrinter {
             public void concreteListChange(NodeList changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
                 NodeText nodeText = lpp.getOrCreateNodeText(changedList.getParentNodeForChildren());
                 if (type == ListChangeType.REMOVAL) {
-                    new LexicalDifferenceCalculator().calculateListRemovalDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
+                    new LexicalDifferenceCalculator().calculateListRemovalDifference(findNodeListName(changedList), changedList, index).apply(nodeText, changedList.getParentNodeForChildren());
                 } else if (type == ListChangeType.ADDITION) {
                     new LexicalDifferenceCalculator().calculateListAdditionDifference(findNodeListName(changedList),changedList, index, nodeAddedOrRemoved).apply(nodeText, changedList.getParentNodeForChildren());
                 } else {
@@ -175,7 +175,7 @@ public class LexicalPreservingPrinter {
             @Override
             public void concreteListReplacement(NodeList changedList, int index, Node oldValue, Node newValue) {
                 NodeText nodeText = lpp.getTextForNode(changedList.getParentNodeForChildren());
-                new LexicalDifferenceCalculator().calculateListReplacementDifference(findNodeListName(changedList), changedList, index, oldValue, newValue).apply(nodeText, changedList.getParentNodeForChildren());
+                new LexicalDifferenceCalculator().calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue).apply(nodeText, changedList.getParentNodeForChildren());
             }
         };
     }
@@ -242,7 +242,7 @@ public class LexicalPreservingPrinter {
 
     public Iterator<TokenTextElement> tokensPreceeding(final Node node) {
         if (!node.getParentNode().isPresent()) {
-            return new TextElementIteratorsFactory.EmptyIterator();
+            return new TextElementIteratorsFactory.EmptyIterator<>();
         }
         // There is the awfully painful case of the fake types involved in variable declarators and
         // fields or variable declaration that are, of course, an exception...
@@ -345,7 +345,7 @@ public class LexicalPreservingPrinter {
         boolean pendingIndentation = false;
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (pendingIndentation && !(element instanceof CsmToken && ((CsmToken)element).isNewLine())) {
-                indentation.forEach(el -> nodeText.addElement(el));
+                indentation.forEach(nodeText::addElement);
             }
             pendingIndentation = false;
             if (element instanceof LexicalDifferenceCalculator.CsmChild) {

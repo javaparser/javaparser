@@ -458,4 +458,18 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             return left;
         });
     }
+
+    private void setAsParentNodeOf(List<? extends Node> childNodes) {
+        if (childNodes != null) {
+            for (HasParentNode current : childNodes) {
+                current.setParentNode(getParentNodeForChildren());
+            }
+        }
+    }
+
+    private void setAsParentNodeOf(Node childNode) {
+        if (childNode != null) {
+            childNode.setParentNode(getParentNodeForChildren());
+        }
+    }
 }
