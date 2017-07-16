@@ -52,7 +52,7 @@ public class StringEscapeUtils {
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
      */
-    public static final String escapeJava(final String input) {
+    public static String escapeJava(final String input) {
         return ESCAPE_JAVA.translate(input);
     }
 

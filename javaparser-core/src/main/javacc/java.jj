@@ -1215,7 +1215,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 
   {
   	if (exConsInv != null) {
-  		stmts = add(0, stmts, exConsInv);
+  		stmts = prepend(stmts, exConsInv);
   	}
   	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, token()), stmts));
   }
@@ -1925,7 +1925,7 @@ Expression PrimaryPrefix():
 	  		  		  }
 
 	  		  		}
-	  		  		params = add(0, params, p);
+	  		  		params = prepend(params, p);
 	  		  		// TODO p may be null here
 	  		  		ret = new LambdaExpr(range(p.getTokenRange().get().getBegin(), token()), params, new BlockStmt(), true);
 	  		 	}
