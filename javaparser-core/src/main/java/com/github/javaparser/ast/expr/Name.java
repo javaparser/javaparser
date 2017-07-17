@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -218,5 +217,30 @@ public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnno
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NameMetaModel getMetaModel() {
         return JavaParserMetaModel.nameMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public Name replaceQualifier(Name replacement) {
+        return setQualifier((Name) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        if (qualifier != null) {
+            if (node == qualifier) {
+                replaceQualifier((Name) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

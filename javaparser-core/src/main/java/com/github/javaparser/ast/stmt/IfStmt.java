@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -183,5 +182,24 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public IfStmt replaceElseStmt(Statement replacement) {
+        return setElseStmt((Statement) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (elseStmt != null) {
+            if (node == elseStmt) {
+                replaceElseStmt((Statement) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

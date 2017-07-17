@@ -44,7 +44,6 @@ import javax.annotation.Generated;
 import java.util.*;
 import static com.github.javaparser.ast.Node.Parsedness.*;
 import static java.util.Collections.unmodifiableList;
-import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -357,24 +356,35 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Assign a new parent to this node, removing it
      * from the list of children of the previous parent, if any.
      *
-     * @param parentNode node to be set as parent
+     * @param newParentNode node to be set as parent
      */
     @Override
-    public Node setParentNode(Node parentNode) {
-        if (parentNode == this.parentNode) {
+    public Node setParentNode(Node newParentNode) {
+        if (newParentNode == parentNode) {
             return this;
         }
-        observers.forEach(o -> o.parentChange(this, this.parentNode, parentNode));
+        observers.forEach(o -> o.parentChange(this, parentNode, newParentNode));
         // remove from old parent, if any
-        if (this.parentNode != null) {
-            this.parentNode.childNodes.remove(this);
+        if (parentNode != null) {
+            final List<Node> parentChildNodes = parentNode.childNodes;
+            for (int i = 0; i < parentChildNodes.size(); i++) {
+                if (parentChildNodes.get(i) == this) {
+                    parentChildNodes.remove(i);
+                }
+            }
         }
-        this.parentNode = parentNode;
+        parentNode = newParentNode;
         // add to new parent, if any
-        if (this.parentNode != null) {
-            this.parentNode.childNodes.add(this);
+        if (parentNode != null) {
+            parentNode.childNodes.add(this);
         }
         return this;
+    }
+
+    protected void setAsParentNodeOf(Node childNode) {
+        if (childNode != null) {
+            childNode.setParentNode(getParentNodeForChildren());
+        }
     }
 
     public static final int ABSOLUTE_BEGIN_LINE = -1;
@@ -404,7 +414,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             if (clazz.isInstance(child)) {
                 nodes.add(clazz.cast(child));
             }
-            nodes.addAll(child.getNodesByType(clazz));
+            nodes.addAll(child.getChildNodesByType(clazz));
         }
         return nodes;
     }
@@ -593,5 +603,23 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public Node setParsed(Parsedness parsed) {
         this.parsed = parsed;
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public Node replaceComment(Comment replacement) {
+        return setComment((Comment) replacement);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (comment != null) {
+            if (node == comment) {
+                replaceComment((Comment) replacementNode);
+                return true;
+            }
+        }
+        return false;
     }
 }

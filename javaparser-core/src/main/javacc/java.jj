@@ -68,14 +68,18 @@ import static com.github.javaparser.ast.type.ArrayType.*;
  * <p>This class was generated automatically by javacc, do not edit.</p>
  */
 final class GeneratedJavaParser {
+    /* The problems encountered while parsing */
     List<Problem> problems = new ArrayList<Problem>();
 
+    /* Resets the parser for reuse, gaining a little performance */
     void reset(Provider provider) {
         ReInit(provider);
         problems = new ArrayList<Problem>();
         token_source.reset();
     }
 
+    /* Called from within a catch block to skip forward to a known token,
+        and report the occurred exception as a problem. */
     TokenRange recover(int recoveryTokenType, ParseException p) {
         JavaToken begin = null;
         if (p.currentToken != null) {
@@ -101,8 +105,8 @@ final class GeneratedJavaParser {
     }
 
     /**
-     * Return the list of tokens that have been encountered while parsing code using
-     * this parser.
+     * Return the list of JavaParser specific tokens that have been encountered while 
+     * parsing code using this parser.
      *
      * @return a list of tokens
      */
@@ -110,15 +114,19 @@ final class GeneratedJavaParser {
         return token_source.getTokens();
     }
 
+    /* The collection of comments encountered */
     public CommentsCollection getCommentsCollection() {
         return token_source.getCommentsCollection();
     }
 
+    /* Reports a problem to the user */
     void addProblem(String message) {
         // TODO tokenRange only takes the final token. Need all the tokens.
         problems.add(new Problem(message, tokenRange(), null));
     }
 
+    /* Supports a case where >> should be two tokens instead of one,
+        and keeps track of the JavaParser specific token type for this token */
     static final class CustomToken extends Token {
         int realKind = GeneratedJavaParserConstants.GT;
         JavaToken javaToken;
@@ -132,15 +140,24 @@ final class GeneratedJavaParser {
             return new CustomToken(kind, image);
         }
     }
-    
+
+    /* Returns the JavaParser specific token type of the last matched token */
     private JavaToken token() {
         return ((CustomToken)token).javaToken;
     }
 
+    /* Returns a tokenRange that spans the last matched token */
     private TokenRange tokenRange() {
         return new TokenRange(token(), token());
     }
 
+    /* Sets the kind of the last matched token to newKind */
+    private void setTokenKind(int newKind) {
+        token().setKind(newKind);
+    }
+
+    /* Changes the amount by which the horizontal position is increased when a tab character is encountered.
+        One by default.*/
     public void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
@@ -1295,7 +1312,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 
   {
   	if (exConsInv != null) {
-  		stmts = add(0, stmts, exConsInv);
+  		stmts = prepend(stmts, exConsInv);
   	}
   	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, token()), stmts));
   }
@@ -1499,7 +1516,7 @@ WildcardType Wildcard():
 		}
    ]
    { 
-     return new WildcardType(range(begin, token()),ext, sup);
+     return new WildcardType(range(begin, token()), ext, sup, new NodeList<AnnotationExpr>());
    }
 }
 
@@ -1574,7 +1591,7 @@ String Identifier():
 {
     // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
   (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
-   <IDENTIFIER>) { ret = token.image; }
+   <IDENTIFIER>) { ret = token.image; setTokenKind(IDENTIFIER);}
   { return ret; }
 }
 
@@ -2005,7 +2022,7 @@ Expression PrimaryPrefix():
 	  		  		  }
 
 	  		  		}
-	  		  		params = add(0, params, p);
+	  		  		params = prepend(params, p);
 	  		  		// TODO p may be null here
 	  		  		ret = new LambdaExpr(range(p.getTokenRange().get().getBegin(), token()), params, new BlockStmt(), true);
 	  		 	}
@@ -2867,9 +2884,14 @@ ModuleStmt ModuleStmt():
     NodeList<Type> types=emptyList();
     JavaToken begin;
     ModuleStmt stmt=new ModuleRequiresStmt();
+    JavaToken transitiveExceptionalToken;
 }
 {
     (
+        // This is a hack for the edge case "requires transitive;" which is supposed to mean "require the module named 'transitive'" 
+        LOOKAHEAD(<REQUIRES> <TRANSITIVE> ";")
+        <REQUIRES> {begin=token();} <TRANSITIVE> {transitiveExceptionalToken=token(); setTokenKind(IDENTIFIER);} ";" {stmt=new ModuleRequiresStmt(range(begin, token()), EnumSet.noneOf(Modifier.class), new Name(range(transitiveExceptionalToken, transitiveExceptionalToken), null, transitiveExceptionalToken.getText(), new NodeList<AnnotationExpr>()));}
+    |
         <REQUIRES> {begin=token();} modifiers=Modifiers() name=Name() ";" {stmt=new ModuleRequiresStmt(range(begin, token()), modifiers.modifiers, name);}
     |
         <EXPORTS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleExportsStmt(range(begin, token()), name, names);}

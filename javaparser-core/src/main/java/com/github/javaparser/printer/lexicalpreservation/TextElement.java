@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.type.VoidType;
 
 public abstract class TextElement implements TextElementMatcher {
 

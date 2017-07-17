@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -155,5 +154,13 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ImportDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.importDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
     }
 }

@@ -1,6 +1,5 @@
 package com.github.javaparser.ast.modules;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -121,5 +120,19 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleProvidesStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleProvidesStmtMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < withTypes.size(); i++) {
+            if (withTypes.get(i) == node) {
+                withTypes.set(i, (Type) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.nodeTypes.NodeWithExpression;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
@@ -132,5 +131,13 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CastExprMetaModel getMetaModel() {
         return JavaParserMetaModel.castExprMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
     }
 }

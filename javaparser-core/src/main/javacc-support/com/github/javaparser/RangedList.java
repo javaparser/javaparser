@@ -26,7 +26,7 @@ class RangedList<T extends Node> {
 
     void add(T t) {
         if (list == null) {
-            list = new NodeList<T>();
+            list = new NodeList<>();
         }
         list.add(t);
     }

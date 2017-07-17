@@ -9,24 +9,20 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  */
 public class ListReplacementChange implements Change {
     private ObservableProperty observableProperty;
-    private NodeList nodeList;
     private int index;
-    private Node oldValue;
     private Node newValue;
 
-    public ListReplacementChange(ObservableProperty observableProperty, NodeList nodeList, int index, Node oldValue, Node newValue) {
+    public ListReplacementChange(ObservableProperty observableProperty, int index, Node newValue) {
         this.observableProperty = observableProperty;
-        this.nodeList = nodeList;
         this.index = index;
-        this.oldValue = oldValue;
         this.newValue = newValue;
     }
 
     @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
-            NodeList nodeList = new NodeList();
-            NodeList currentNodeList = (NodeList)(new NoChange().getValue(property, node));
+            NodeList<Node> nodeList = new NodeList<>();
+            NodeList<Node> currentNodeList = (NodeList<Node>)(new NoChange().getValue(property, node));
             nodeList.addAll(currentNodeList);
             nodeList.set(index, newValue);
             return nodeList;

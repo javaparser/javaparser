@@ -636,4 +636,46 @@ public class CompilationUnit extends Node {
     public CompilationUnitMetaModel getMetaModel() {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public CompilationUnit replaceModule(ModuleDeclaration replacement) {
+        return setModule((ModuleDeclaration) replacement);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public CompilationUnit replacePackageDeclaration(PackageDeclaration replacement) {
+        return setPackageDeclaration((PackageDeclaration) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < imports.size(); i++) {
+            if (imports.get(i) == node) {
+                imports.set(i, (ImportDeclaration) replacementNode);
+                return true;
+            }
+        }
+        if (module != null) {
+            if (node == module) {
+                replaceModule((ModuleDeclaration) replacementNode);
+                return true;
+            }
+        }
+        if (packageDeclaration != null) {
+            if (node == packageDeclaration) {
+                replacePackageDeclaration((PackageDeclaration) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < types.size(); i++) {
+            if (types.get(i) == node) {
+                types.set(i, (TypeDeclaration) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
 }

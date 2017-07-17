@@ -116,14 +116,15 @@ public class JavadocBlockTag {
         return name;
     }
 
+    public String getTagName() {
+        return tagName;
+    }
+
     public String toText() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
         sb.append(tagName);
-        if (name.isPresent()) {
-            sb.append(" ");
-            sb.append(name.get());
-        }
+        name.ifPresent(s -> sb.append(" ").append(s));
         if (!content.isEmpty()) {
             sb.append(" ");
             sb.append(content.toText());

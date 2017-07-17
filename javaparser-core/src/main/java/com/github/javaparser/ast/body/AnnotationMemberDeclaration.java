@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -217,5 +216,24 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public AnnotationMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public AnnotationMemberDeclaration replaceDefaultValue(Expression replacement) {
+        return setDefaultValue((Expression) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (defaultValue != null) {
+            if (node == defaultValue) {
+                replaceDefaultValue((Expression) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

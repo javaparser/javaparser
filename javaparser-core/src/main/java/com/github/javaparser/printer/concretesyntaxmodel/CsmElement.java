@@ -32,7 +32,6 @@ import static com.github.javaparser.TokenTypes.eolToken;
 import static com.github.javaparser.TokenTypes.spaceToken;
 import static com.github.javaparser.utils.Utils.EOL;
 
-
 public interface CsmElement {
 
     void prettyPrint(Node node, SourcePrinter printer);

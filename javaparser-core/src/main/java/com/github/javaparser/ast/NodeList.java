@@ -32,7 +32,6 @@ import com.github.javaparser.metamodel.InternalProperty;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -96,9 +95,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     public static <X extends Node> NodeList<X> nodeList(Collection<X> nodes) {
         final NodeList<X> nodeList = new NodeList<>();
-        for (X node : nodes) {
-            nodeList.add(node);
-        }
+        nodeList.addAll(nodes);
         return nodeList;
     }
 
@@ -151,7 +148,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public void sort(Comparator<? super N> comparator) {
-        Collections.sort(innerList, comparator);
+        innerList.sort(comparator);
     }
 
     public void addAll(NodeList<N> otherList) {
@@ -460,5 +457,19 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             left.addAll(right);
             return left;
         });
+    }
+
+    private void setAsParentNodeOf(List<? extends Node> childNodes) {
+        if (childNodes != null) {
+            for (HasParentNode current : childNodes) {
+                current.setParentNode(getParentNodeForChildren());
+            }
+        }
+    }
+
+    private void setAsParentNodeOf(Node childNode) {
+        if (childNode != null) {
+            childNode.setParentNode(getParentNodeForChildren());
+        }
     }
 }

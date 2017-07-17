@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
@@ -42,9 +41,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.Modifier.*;
-import static com.github.javaparser.ast.Modifier.DEFAULT;
-import static com.github.javaparser.ast.Modifier.NATIVE;
-import static com.github.javaparser.ast.Modifier.SYNCHRONIZED;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -293,5 +289,24 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public MethodDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.methodDeclarationMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public MethodDeclaration replaceBody(BlockStmt replacement) {
+        return setBody((BlockStmt) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (body != null) {
+            if (node == body) {
+                replaceBody((BlockStmt) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

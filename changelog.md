@@ -1,3 +1,21 @@
+Version 3.2.12
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/51?closed=1)
+
+Version 3.2.11
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/50?closed=1)
+* We're up to date with the latest Java 9 module system again.
+
+Version 3.2.10
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/49?closed=1)
+* `Node.replace(old, new)` was added, including property-specific `X.replaceY(newY)` methods
+
+Version 3.2.9
+------------------
+Scrapped due to release problem.
+
 Version 3.2.8
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/48?closed=1)

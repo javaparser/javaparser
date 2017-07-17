@@ -31,10 +31,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 import static java.util.stream.Collectors.joining;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -198,5 +196,19 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeParameterMetaModel getMetaModel() {
         return JavaParserMetaModel.typeParameterMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < typeBound.size(); i++) {
+            if (typeBound.get(i) == node) {
+                typeBound.set(i, (ClassOrInterfaceType) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

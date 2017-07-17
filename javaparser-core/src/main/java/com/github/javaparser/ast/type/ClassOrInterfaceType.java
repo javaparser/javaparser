@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -242,5 +241,32 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ClassOrInterfaceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public ClassOrInterfaceType replaceScope(ClassOrInterfaceType replacement) {
+        return setScope((ClassOrInterfaceType) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (scope != null) {
+            if (node == scope) {
+                replaceScope((ClassOrInterfaceType) replacementNode);
+                return true;
+            }
+        }
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.set(i, (Type) replacementNode);
+                    return true;
+                }
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

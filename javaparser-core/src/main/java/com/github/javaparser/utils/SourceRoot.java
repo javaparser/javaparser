@@ -5,7 +5,6 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.PrettyPrinter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -40,7 +39,7 @@ public class SourceRoot {
          * @param absolutePath the absolute path to the file that was parsed.
          * @param result the result of of parsing the file.
          */
-        Result process(Path localPath, Path absolutePath, ParseResult<CompilationUnit> result) throws IOException;
+        Result process(Path localPath, Path absolutePath, ParseResult<CompilationUnit> result);
     }
 
     private final Path root;
@@ -119,14 +118,14 @@ public class SourceRoot {
     /**
      * Save all files back to where they were found.
      */
-    public SourceRoot saveAll() throws IOException {
+    public SourceRoot saveAll() {
         return saveAll(root);
     }
 
     /**
      * Save all files back to another path.
      */
-    public SourceRoot saveAll(Path root) throws IOException {
+    public SourceRoot saveAll(Path root) {
         assertNotNull(root);
         Log.info("Saving all files (%s) to %s", cache.size(), root);
         for (Map.Entry<Path, ParseResult<CompilationUnit>> cu : cache.entrySet()) {
@@ -139,7 +138,7 @@ public class SourceRoot {
         return this;
     }
 
-    private SourceRoot save(CompilationUnit cu, Path path) throws IOException {
+    private SourceRoot save(CompilationUnit cu, Path path) {
         assertNotNull(cu);
         assertNotNull(path);
         

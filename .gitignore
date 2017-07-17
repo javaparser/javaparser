@@ -10,3 +10,4 @@ target
 .idea/
 *.iml
 release.properties
+**/.DS_Store

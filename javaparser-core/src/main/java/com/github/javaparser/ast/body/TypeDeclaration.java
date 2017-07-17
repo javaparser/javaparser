@@ -40,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
-import com.github.javaparser.ast.Node;
 
 /**
  * A base class for all types of type declarations.
@@ -205,5 +204,19 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public TypeDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.typeDeclarationMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < members.size(); i++) {
+            if (members.get(i) == node) {
+                members.set(i, (BodyDeclaration) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

@@ -341,7 +341,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         ReferenceType superType = cloneNode(n.getSuperType(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        WildcardType r = new WildcardType(n.getTokenRange().orElse(null), extendedType, superType);
+        WildcardType r = new WildcardType(n.getTokenRange().orElse(null), extendedType, superType, annotations);
         r.setComment(comment);
         return r;
     }

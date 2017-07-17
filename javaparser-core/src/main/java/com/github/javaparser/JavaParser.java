@@ -25,6 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.StubUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.CommentsCollection;
@@ -43,7 +44,6 @@ import com.github.javaparser.javadoc.Javadoc;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.TreeSet;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
@@ -645,6 +645,18 @@ public final class JavaParser {
      */
     public static Parameter parseParameter(String parameter) {
         return simplifiedParse(PARAMETER, provider(parameter));
+    }
+
+
+    /**
+     * Parses a package declaration and returns it as a PackageDeclaration.
+     *
+     * @param packageDeclaration a declaration like "package com.microsoft.java;"
+     * @return the AST for the parameter
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
+        return simplifiedParse(PACKAGE_DECLARATION, provider(packageDeclaration));
     }
 
 }

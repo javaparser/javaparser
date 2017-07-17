@@ -38,7 +38,7 @@ import java.util.Optional;
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
-import com.github.javaparser.ast.Node;
+
 import com.github.javaparser.TokenRange;
 
 /**
@@ -229,5 +229,30 @@ public final class ArrayCreationExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ArrayCreationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayCreationExprMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public ArrayCreationExpr replaceInitializer(ArrayInitializerExpr replacement) {
+        return setInitializer((ArrayInitializerExpr) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (initializer != null) {
+            if (node == initializer) {
+                replaceInitializer((ArrayInitializerExpr) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < levels.size(); i++) {
+            if (levels.get(i) == node) {
+                levels.set(i, (ArrayCreationLevel) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

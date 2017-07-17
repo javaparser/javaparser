@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.comments;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -160,5 +159,13 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public CommentMetaModel getMetaModel() {
         return JavaParserMetaModel.commentMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        return super.replace(node, replacementNode);
     }
 }

@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.Range;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -280,5 +279,46 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ObjectCreationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.objectCreationExprMetaModel;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public ObjectCreationExpr replaceScope(Expression replacement) {
+        return setScope((Expression) replacement);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        if (anonymousClassBody != null) {
+            for (int i = 0; i < anonymousClassBody.size(); i++) {
+                if (anonymousClassBody.get(i) == node) {
+                    anonymousClassBody.set(i, (BodyDeclaration) replacementNode);
+                    return true;
+                }
+            }
+        }
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.get(i) == node) {
+                arguments.set(i, (Expression) replacementNode);
+                return true;
+            }
+        }
+        if (scope != null) {
+            if (node == scope) {
+                replaceScope((Expression) replacementNode);
+                return true;
+            }
+        }
+        if (typeArguments != null) {
+            for (int i = 0; i < typeArguments.size(); i++) {
+                if (typeArguments.get(i) == node) {
+                    typeArguments.set(i, (Type) replacementNode);
+                    return true;
+                }
+            }
+        }
+        return super.replace(node, replacementNode);
     }
 }

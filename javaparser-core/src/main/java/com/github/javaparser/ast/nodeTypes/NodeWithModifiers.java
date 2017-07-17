@@ -28,8 +28,6 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Modifier.*;
-
 /**
  * A Node with Modifiers.
  * Note that not all modifiers may be valid for this node.

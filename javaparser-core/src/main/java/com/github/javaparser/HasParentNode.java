@@ -24,7 +24,6 @@ package com.github.javaparser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -63,21 +62,4 @@ public interface HasParentNode<T> extends Observable {
         }
         return Optional.empty();
     }
-
-    // TODO should become protected once Java lets us
-    default void setAsParentNodeOf(List<? extends Node> childNodes) {
-        if (childNodes != null) {
-            for (HasParentNode current : childNodes) {
-                current.setParentNode(getParentNodeForChildren());
-            }
-        }
-    }
-
-    // TODO should become protected once Java lets us
-    default void setAsParentNodeOf(Node childNode) {
-        if (childNode != null) {
-            childNode.setParentNode(getParentNodeForChildren());
-        }
-    }
-
 }
