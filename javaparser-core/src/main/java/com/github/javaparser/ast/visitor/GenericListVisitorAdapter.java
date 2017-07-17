@@ -519,7 +519,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     // TODO Implement GenericListVisitorAdapter # visit on StubUnit
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")
     public List<R> visit(StubUnit n, A arg) {
-        return null;
+        throw new RuntimeException("The method is not implemented!");
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericListVisitorAdapterGenerator")

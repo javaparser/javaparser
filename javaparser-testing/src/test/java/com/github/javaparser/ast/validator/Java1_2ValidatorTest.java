@@ -29,8 +29,7 @@ public class Java1_2ValidatorTest {
                 "(line 1,col 1) 'protected' is not allowed here.",
                 "(line 1,col 1) 'synchronized' is not allowed here.",
                 "(line 1,col 1) 'native' is not allowed here.",
-                "(line 1,col 1) 'transitive' is not allowed here.",
-                "(line 1,col 1) 'static' is not allowed here."
+                "(line 1,col 1) 'transitive' is not allowed here."
         );
     }
 
@@ -83,7 +82,6 @@ public class Java1_2ValidatorTest {
                 "(line 1,col 1) 'synchronized' is not allowed here.",
                 "(line 1,col 1) 'native' is not allowed here.",
                 "(line 1,col 1) 'transitive' is not allowed here.",
-                "(line 1,col 1) 'static' is not allowed here.",
                 "(line 1,col 1) 'final' is not allowed here.",
                 "(line 1,col 1) 'private' is not allowed here.",
                 "(line 1,col 1) 'protected' is not allowed here."

@@ -711,10 +711,17 @@ StubUnit StubUnit():
     ModifierHolder modifier;
     TypeDeclaration tn = null;
     ModuleDeclaration module = null;
+    NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+    AnnotationExpr annotation = null;
 }
 {
     ( LOOKAHEAD(2) ";" )*
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    /*
+     * Reading leading imports to support the old stub files that contain import declarations
+     * before the package declaration.
+     */
+    (in = ImportDeclaration() { imports = add(imports, in); })*
+
     /**
      * The stub file format permits having multiple classes and packages.
      * The packages are separated by a package statement: package my.package;.
@@ -724,23 +731,29 @@ StubUnit StubUnit():
      * Number of compilation units in a stub file is 1+
      */
     (
-        /* Additional package declaration is not require, but still possible */
-        (pakage = PackageDeclaration())?
-
-        /*
-         * The only required import statements are the ones to import type annotations.
-         * Import statements for types are optional.
+        /**
+         * Each CompilationUnit declaration starts with a package declaration.
          */
+        pakage = PackageDeclaration()
         (in = ImportDeclaration() { imports = add(imports, in); })*
 
-        {
-            types = emptyList();
-            modifier = null;
-            tn = null;
-            module = null;
-        }
-
-            (
+        (LOOKAHEAD(5, PackageDeclaration())
+        (
+             {
+                cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+                compilationUnits.add(cu);
+                types = emptyList();
+                tn = null;
+                module = null;
+             }
+             pakage = PackageDeclaration()
+             (in = ImportDeclaration() { imports = add(imports, in); })*
+        )
+        |
+        (
+                {
+                    modifier = null;
+                }
                 /**
                  * Declaration specifiers (e.g., public, final, volatile) may be omitted.
                  */
@@ -756,14 +769,14 @@ StubUnit StubUnit():
                 |
                     ";"
                 )
-            )
-            {
+        )
+        )*
+        {
+            cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+            compilationUnits.add(cu);
+        }
 
-                cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
-                compilationUnits.add(cu);
-            }
     )+
-
 
     (<EOF> | "\u001A" /** ctrl+z char **/)
     { return new StubUnit(compilationUnits); }
@@ -822,7 +835,6 @@ PackageDeclaration PackageDeclaration():
   "package" {begin = token();}  name = Name() ";"
   { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
-
 
 ImportDeclaration ImportDeclaration():
 {

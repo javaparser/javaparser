@@ -49,7 +49,7 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STATIC, FINAL, STRICTFP);
         } else if (n.isNestedType()) {
             validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP);
         } else if (n.isLocalClassDeclaration()) {
@@ -59,7 +59,7 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateInterfaceModifiers(TypeDeclaration<?> n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, STATIC, ABSTRACT, STRICTFP);
         } else if (n.isNestedType()) {
             validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP);
         }
