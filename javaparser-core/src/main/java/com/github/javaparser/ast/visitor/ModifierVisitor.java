@@ -290,7 +290,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         ModuleDeclaration module = n.getModule().map(s -> (ModuleDeclaration) s.accept(this, arg)).orElse(null);
         PackageDeclaration packageDeclaration = n.getPackageDeclaration().map(s -> (PackageDeclaration) s.accept(this, arg)).orElse(null);
         NodeList<TypeDeclaration<?>> t = n.getTypes();
-        System.out.println(t);
         NodeList<TypeDeclaration<?>> types = modifyList(t, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setImports(imports);
