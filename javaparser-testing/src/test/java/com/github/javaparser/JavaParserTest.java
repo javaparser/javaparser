@@ -136,6 +136,19 @@ public class JavaParserTest {
     }
 
     @Test
+    public void rangeOfCastNonIntersection() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        assertEquals(range(3, 12, 3, 101), castExpr.getRange().get());
+    }
+
+    @Test
     public void rangeOfLambda() {
         String code = "class A {" + EOL
                 + "  Object f() {" + EOL
