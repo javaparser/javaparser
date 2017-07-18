@@ -27,7 +27,7 @@ import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.utils.Utils;
 
-import static com.github.javaparser.TokenTypes.isEndOfLineCharacter;
+import static com.github.javaparser.TokenTypes.isEndOfLineToken;
 import static com.github.javaparser.TokenTypes.isSpaceOrTab;
 
 public class CsmToken implements CsmElement {
@@ -56,7 +56,7 @@ public class CsmToken implements CsmElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (isEndOfLineCharacter(tokenType)) {
+        if (isEndOfLineToken(tokenType)) {
             content = Utils.EOL;
         } else if (isSpaceOrTab(tokenType)) {
             content = " ";
@@ -75,7 +75,7 @@ public class CsmToken implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        if (isEndOfLineCharacter(tokenType)) {
+        if (isEndOfLineToken(tokenType)) {
             printer.println();
         } else {
             printer.print(getContent(node));
@@ -112,6 +112,6 @@ public class CsmToken implements CsmElement {
     }
 
     public boolean isNewLine() {
-        return TokenTypes.isEndOfLineCharacter(tokenType);
+        return TokenTypes.isEndOfLineToken(tokenType);
     }
 }

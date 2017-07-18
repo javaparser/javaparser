@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
 import static com.github.javaparser.TokenTypes.eolToken;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
@@ -121,7 +122,7 @@ public class LexicalPreservingPrinter {
                         // Find the position of the comment node and put in front of it the comment and a newline
                         int index = nodeText.findChild(observedNode);
                         nodeText.addChild(index, (Comment)newValue);
-                        nodeText.addToken(index + 1, eolToken(), Utils.EOL);
+                        nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
                     } else if (oldValue != null && newValue == null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment javadocComment = (JavadocComment)oldValue;
