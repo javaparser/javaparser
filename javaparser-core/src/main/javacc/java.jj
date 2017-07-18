@@ -1838,7 +1838,7 @@ Expression CastExpression():
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
-  	        ret = new CastExpr(range(begin, token()), new IntersectionType(range(begin, token()), typesOfMultiCast), ret);
+  	        ret = new CastExpr(range(begin, token()), new IntersectionType(range(typesOfMultiCast.get(0).getTokenRange().get().getBegin(), typesOfMultiCast.get(typesOfMultiCast.size() -1).getTokenRange().get().getBegin()), typesOfMultiCast), ret);
   	    } else {
   	        ret = new CastExpr(range(begin, token()), referenceType, ret);
   	    }
@@ -1927,7 +1927,7 @@ Expression PrimaryPrefix():
 	  		  		}
 	  		  		params = prepend(params, p);
 	  		  		// TODO p may be null here
-	  		  		ret = new LambdaExpr(range(p.getTokenRange().get().getBegin(), token()), params, new BlockStmt(), true);
+	  		  		ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true);
 	  		 	}
 
 	  		 }

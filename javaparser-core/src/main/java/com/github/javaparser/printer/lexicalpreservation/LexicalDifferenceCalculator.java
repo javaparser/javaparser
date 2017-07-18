@@ -159,18 +159,24 @@ class LexicalDifferenceCalculator {
             CsmList csmList = (CsmList) csm;
             if (csmList.getProperty().isAboutNodes()) {
                 Object rawValue = change.getValue(csmList.getProperty(), node);
-                NodeList nodeList = null;
-                if (rawValue instanceof NodeList) {
-                    nodeList = (NodeList)rawValue;
-                } else if (rawValue instanceof Optional) {
+                NodeList nodeList;
+                if (rawValue instanceof Optional) {
                     Optional optional = (Optional)rawValue;
                     if (optional.isPresent()) {
-                        nodeList = (NodeList)optional.get();
+                        if (!(optional.get() instanceof NodeList)) {
+                            throw new IllegalStateException("Expected NodeList, found " + optional.get().getClass().getCanonicalName());
+                        }
+                        nodeList = (NodeList) optional.get();
+                    } else {
+                        nodeList = new NodeList();
                     }
                 } else {
-                    throw new IllegalStateException("Expected Optional or NodeList, found " + rawValue);
+                    if (!(rawValue instanceof NodeList)) {
+                        throw new IllegalStateException("Expected NodeList, found " + rawValue.getClass().getCanonicalName());
+                    }
+                    nodeList = (NodeList) rawValue;
                 }
-                if (nodeList != null && !nodeList.isEmpty()) {
+                if (!nodeList.isEmpty()) {
                     calculatedSyntaxModelForNode(csmList.getPreceeding(), node, elements, change);
                     for (int i = 0; i < nodeList.size(); i++) {
                         if (i != 0) {
@@ -292,14 +298,22 @@ class LexicalDifferenceCalculator {
     // Visible for testing
     CalculatedSyntaxModel calculatedSyntaxModelAfterListAddition(Node container, ObservableProperty observableProperty, int index, Node nodeAdded) {
         CsmElement csm = ConcreteSyntaxModel.forClass(container.getClass());
-        NodeList nodeList = (NodeList)observableProperty.getRawValue(container);
+        Object rawValue = observableProperty.getRawValue(container);
+        if (!(rawValue instanceof NodeList)) {
+            throw new IllegalStateException("Expected NodeList, found " + rawValue.getClass().getCanonicalName());
+        }
+        NodeList nodeList = (NodeList)rawValue;
         return calculatedSyntaxModelAfterListAddition(csm, observableProperty, nodeList, index, nodeAdded);
     }
 
     // Visible for testing
     CalculatedSyntaxModel calculatedSyntaxModelAfterListRemoval(Node container, ObservableProperty observableProperty, int index) {
         CsmElement csm = ConcreteSyntaxModel.forClass(container.getClass());
-        NodeList nodeList = (NodeList)observableProperty.getRawValue(container);
+        Object rawValue = observableProperty.getRawValue(container);
+        if (!(rawValue instanceof NodeList)) {
+            throw new IllegalStateException("Expected NodeList, found " + rawValue.getClass().getCanonicalName());
+        }
+        NodeList nodeList = (NodeList)rawValue;
         return calculatedSyntaxModelAfterListRemoval(csm, observableProperty, nodeList, index);
     }
 

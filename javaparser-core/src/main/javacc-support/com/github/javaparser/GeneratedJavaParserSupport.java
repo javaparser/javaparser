@@ -80,6 +80,23 @@ class GeneratedJavaParserSupport {
         return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
     }
 
+    /**
+     * Propagate expansion of the range on the right to the parent. This is necessary when the right border of the child
+     * is determining the right border of the parent (i.e., the child is the last element of the parent). In this case
+     * when we "enlarge" the child we should enlarge also the parent.
+     * @param node
+     * @param endNode
+     */
+    static void propagateRangeGrowthOnRight(Node node, Node endNode) {
+        if (node.getParentNode().isPresent()) {
+            boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(node.getParentNode().get().getTokenRange().get().getEnd());
+            if (isChildOnTheRightBorderOfParent) {
+                propagateRangeGrowthOnRight(node.getParentNode().get(), endNode);
+            }
+        }
+        node.setTokenRange(range(node, endNode));
+    }
+
     /** Workaround for rather complex ambiguity that lambda's create */
     static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
@@ -97,7 +114,7 @@ class GeneratedJavaParserSupport {
             ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
-            ret.setTokenRange(range(ret, lambdaBody));
+            propagateRangeGrowthOnRight(ret, lambdaBody);
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(generatedJavaParser, castExpr.getExpression(), lambdaBody);

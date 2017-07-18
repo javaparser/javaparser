@@ -8,6 +8,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
@@ -962,6 +963,18 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   @Override()" + EOL +
                 "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
+    }
+
+    @Test
+    public void invokeModifierVisitor() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+        cu = result.a.getResult().get();
+        cu.accept(new ModifierVisitor<>(), null);
     }
 
 }
