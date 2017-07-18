@@ -1283,7 +1283,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final LineComment n, final Void arg) {
-        if (!configuration.isPrintComments()) {
+        if (configuration.isIgnoreComments()) {
             return;
         }
         printer.print("//");
@@ -1295,7 +1295,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final BlockComment n, final Void arg) {
-        if (!configuration.isPrintComments()) {
+        if (configuration.isIgnoreComments()) {
             return;
         }
         printer.print("/*").print(n.getContent()).println("*/");
