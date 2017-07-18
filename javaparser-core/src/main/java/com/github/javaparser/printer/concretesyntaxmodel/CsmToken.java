@@ -31,7 +31,7 @@ import static com.github.javaparser.TokenTypes.isEndOfLineToken;
 import static com.github.javaparser.TokenTypes.isSpaceOrTab;
 
 public class CsmToken implements CsmElement {
-    private int tokenType;
+    private final int tokenType;
     private String content;
     private TokenContentCalculator tokenContentCalculator;
 

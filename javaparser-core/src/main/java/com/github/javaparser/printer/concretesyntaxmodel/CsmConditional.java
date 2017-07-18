@@ -27,10 +27,10 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmConditional implements CsmElement {
-    private Condition condition;
-    private ObservableProperty property;
-    private CsmElement thenElement;
-    private CsmElement elseElement;
+    private final Condition condition;
+    private final ObservableProperty property;
+    private final CsmElement thenElement;
+    private final CsmElement elseElement;
 
     public Condition getCondition() {
         return condition;
