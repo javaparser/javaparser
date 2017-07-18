@@ -1927,7 +1927,7 @@ Expression PrimaryPrefix():
 	  		  		}
 	  		  		params = prepend(params, p);
 	  		  		// TODO p may be null here
-	  		  		ret = new LambdaExpr(range(p.getTokenRange().get().getBegin(), token()), params, new BlockStmt(), true);
+	  		  		ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true);
 	  		 	}
 
 	  		 }

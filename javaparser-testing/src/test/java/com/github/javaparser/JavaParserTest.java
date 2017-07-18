@@ -159,7 +159,9 @@ public class JavaParserTest {
         ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
         CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
         LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
-        assertEquals(range(3, 57, 3, 101), lambdaExpr.getRange().get());
+        assertEquals(range(3, 56, 3, 101), lambdaExpr.getRange().get());
+        assertEquals(GeneratedJavaParserConstants.LPAREN, lambdaExpr.getTokenRange().get().getBegin().getKind());
+        assertEquals(GeneratedJavaParserConstants.RPAREN, lambdaExpr.getTokenRange().get().getEnd().getKind());
     }
 
     @Test
