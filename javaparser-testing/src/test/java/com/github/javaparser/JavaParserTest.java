@@ -123,6 +123,20 @@ public class JavaParserTest {
     }
 
     @Test
+    public void rangeOfIntersectionType() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        Type type = castExpr.getType();
+        assertEquals(range(3, 13, 3, 54), type.getRange().get());
+    }
+
+    @Test
     public void rangeOfCast() {
         String code = "class A {" + EOL
                 + "  Object f() {" + EOL
