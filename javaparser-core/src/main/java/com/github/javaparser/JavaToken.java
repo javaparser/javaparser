@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.Optional.*;
 
 /**
  * A token from a parsed source file.
@@ -34,17 +35,18 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class JavaToken {
     public static final JavaToken INVALID = new JavaToken();
 
-    private final Range range;
+    private Range range;
     private int kind;
-    private final String text;
-    private final Optional<JavaToken> previousToken;
-    private Optional<JavaToken> nextToken = Optional.empty();
+    private String text;
+    private Optional<JavaToken> previousToken;
+    private Optional<JavaToken> nextToken = empty();
 
     private JavaToken() {
-        range = new Range(pos(-1,-1), pos(-1,-1));
-        kind = 0;
-        text = "INVALID";
-        previousToken = Optional.empty();
+        this(new Range(pos(-1,-1), pos(-1,-1)), 0, "INVALID", empty(), empty());
+    }
+
+    public JavaToken(int kind, String text) {
+        this(new Range(pos(-1,-1), pos(-1,-1)), kind, text, empty(), empty());
     }
 
     public JavaToken(Token token, List<JavaToken> tokens) {
@@ -95,10 +97,10 @@ public class JavaToken {
         this.text = text;
         if (!tokens.isEmpty()) {
             final JavaToken previousToken = tokens.get(tokens.size() - 1);
-            this.previousToken = Optional.of(previousToken);
-            previousToken.nextToken = Optional.of(this);
+            this.previousToken = of(previousToken);
+            previousToken.nextToken = of(this);
         } else {
-            previousToken = Optional.empty();
+            previousToken = empty();
         }
     }
 
@@ -160,4 +162,7 @@ public class JavaToken {
     }
 
 
+    public TokenCursor createCursor() {
+        return new TokenCursor(this);
+    }
 }
