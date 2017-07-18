@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.JavaToken.Category.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static org.junit.Assert.assertEquals;
@@ -40,20 +41,21 @@ public class JavaTokenTest {
         ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/1 "));
         List<JavaToken> tokens = result.getTokens().get();
         Iterator<JavaToken> iterator = tokens.iterator();
-        assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, iterator.next());
-        assertToken(" ", range(1, 2, 1, 2), SPACE, iterator.next());
-        assertToken("+", range(1, 3, 1, 3), PLUS, iterator.next());
-        assertToken("/*2*/", range(1, 4, 1, 8), MULTI_LINE_COMMENT, iterator.next());
-        assertToken("1", range(1, 9, 1, 9), INTEGER_LITERAL, iterator.next());
-        assertToken(" ", range(1, 10, 1, 10), SPACE, iterator.next());
-        assertToken("", range(1, 10, 1, 10), EOF, iterator.next());
+        assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, LITERAL, iterator.next());
+        assertToken(" ", range(1, 2, 1, 2), SPACE, WHITESPACE, iterator.next());
+        assertToken("+", range(1, 3, 1, 3), PLUS, OPERATOR, iterator.next());
+        assertToken("/*2*/", range(1, 4, 1, 8), MULTI_LINE_COMMENT, COMMENT, iterator.next());
+        assertToken("1", range(1, 9, 1, 9), INTEGER_LITERAL, LITERAL, iterator.next());
+        assertToken(" ", range(1, 10, 1, 10), SPACE, WHITESPACE, iterator.next());
+        assertToken("", range(1, 10, 1, 10), EOF, WHITESPACE, iterator.next());
         assertEquals(false, iterator.hasNext());
     }
 
-    private void assertToken(String image, Range range, int kind, JavaToken token) {
+    private void assertToken(String image, Range range, int kind, JavaToken.Category category, JavaToken token) {
         assertEquals(image, token.getText());
         assertEquals(range, token.getRange());
         assertEquals(kind, token.getKind());
+        assertEquals(category, token.getCategory());
         token.getNextToken().ifPresent(nt -> assertEquals(token, nt.getPreviousToken().get()));
         token.getPreviousToken().ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
         assertTrue(token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
