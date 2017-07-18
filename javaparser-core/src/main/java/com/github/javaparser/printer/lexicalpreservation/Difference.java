@@ -468,7 +468,7 @@ public class Difference {
             }
         }
         if (hasOnlyWsBefore) {
-            for (int i=nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.getElements().size(); i--) {
+            for (int i=nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
                 if (nodeText.getElements().get(i).isNewline()) {
                     break;
                 }

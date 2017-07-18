@@ -93,13 +93,16 @@ public class LexicalPreservingPrinter {
     //
 
     private LexicalPreservingPrinter(ParseResult<? extends Node> parseResult) {
-        // Store initial text
-        storeInitialText(parseResult);
+        if (parseResult.getResult().isPresent()) {
+            // Store initial text
+            storeInitialText(parseResult);
 
-        // Setup observer
-        AstObserver observer = createObserver(this);
-        Node root = parseResult.getResult().get();
-        root.registerForSubtree(observer);
+            // Setup observer
+            AstObserver observer = createObserver(this);
+
+            Node root = parseResult.getResult().get();
+            root.registerForSubtree(observer);
+        }
     }
 
     private static AstObserver createObserver(LexicalPreservingPrinter lpp) {
@@ -118,12 +121,12 @@ public class LexicalPreservingPrinter {
                         throw new IllegalStateException();
                     }
                     NodeText nodeText = lpp.getOrCreateNodeText(observedNode.getParentNode().get());
-                    if (oldValue == null && newValue != null) {
+                    if (oldValue == null) {
                         // Find the position of the comment node and put in front of it the comment and a newline
                         int index = nodeText.findChild(observedNode);
                         nodeText.addChild(index, (Comment)newValue);
                         nodeText.addToken(index + 1, eolTokenKind(), Utils.EOL);
-                    } else if (oldValue != null && newValue == null) {
+                    } else if (newValue == null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment javadocComment = (JavadocComment)oldValue;
                             List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT)
