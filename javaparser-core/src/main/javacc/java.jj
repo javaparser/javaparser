@@ -729,15 +729,12 @@ StubUnit StubUnit():
      *
      * Going through a stub file and reading one compilation unit at a time
      * Number of compilation units in a stub file is 1+
-     */
-    (
-        /**
-         * Each CompilationUnit declaration starts with a package declaration.
-         */
-        pakage = PackageDeclaration()
-        (in = ImportDeclaration() { imports = add(imports, in); })*
+     * Each CompilationUnit declaration starts with a package declaration.
+    */
+    pakage = PackageDeclaration()
+    (in = ImportDeclaration() { imports = add(imports, in); })*
 
-        (LOOKAHEAD(5, PackageDeclaration())
+    (LOOKAHEAD(PackageDeclaration())
         (
              {
                 cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
@@ -770,13 +767,11 @@ StubUnit StubUnit():
                     ";"
                 )
         )
-        )*
-        {
-            cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
-            compilationUnits.add(cu);
-        }
-
-    )+
+    )*
+    {
+        cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+        compilationUnits.add(cu);
+    }
 
     (<EOF> | "\u001A" /** ctrl+z char **/)
     { return new StubUnit(compilationUnits); }
