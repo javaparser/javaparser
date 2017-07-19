@@ -255,7 +255,7 @@ public class Difference {
             if (b instanceof CsmChild) {
                 CsmChild childA = (CsmChild) a;
                 CsmChild childB = (CsmChild) b;
-                return childA.getChild().getClass().equals(childB.getClass());
+                return childA.getChild().getClass().equals(childB.getChild().getClass());
             } else if (b instanceof CsmToken) {
                 return false;
             } else {
@@ -691,7 +691,7 @@ public class Difference {
                         CsmElement ne = elementsFromNextOrder.getElements().get(ni);
                         for (int pi=0;pi<elementsFromPreviousOrder.getElements().size() && !found;pi++) {
                             CsmElement pe = elementsFromPreviousOrder.getElements().get(pi);
-                            if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pe)
+                            if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
                                     && matching(ne, pe)) {
                                 found = true;
                                 correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
@@ -767,10 +767,8 @@ public class Difference {
                                 } else {
                                     elements.add(diffElIterator++, new Removed(originalCSMElement));
                                 }
-                            } else {
-                                // simple node text element, without associated csm element, just keep ignore it
                             }
-
+                            // else we have a simple node text element, without associated csm element, just keep ignore it
                         }
                     }
 

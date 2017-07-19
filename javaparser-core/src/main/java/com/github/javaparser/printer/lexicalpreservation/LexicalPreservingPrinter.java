@@ -91,9 +91,9 @@ public class LexicalPreservingPrinter {
     //
 
     private LexicalPreservingPrinter(ParseResult<? extends Node> parseResult) {
-        if (parseResult.getResult().isPresent()) {
+        if (parseResult.getResult().isPresent() && parseResult.getTokens().isPresent()) {
             // Store initial text
-            storeInitialText(parseResult);
+            storeInitialText(parseResult.getResult().get(), parseResult.getTokens().get());
 
             // Setup observer
             AstObserver observer = createObserver(this);
@@ -140,7 +140,7 @@ public class LexicalPreservingPrinter {
                         } else {
                             throw new UnsupportedOperationException();
                         }
-                    } else if (oldValue != null && newValue != null) {
+                    } else {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment oldJavadocComment = (JavadocComment)oldValue;
                             List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT)
@@ -184,9 +184,7 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private void storeInitialText(ParseResult<? extends Node> parseResult) {
-        Node root = parseResult.getResult().get();
-        List<JavaToken> documentTokens = parseResult.getTokens().get();
+    private void storeInitialText(Node root, List<JavaToken> documentTokens) {
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
         // Take all nodes and sort them to get the leaves first
@@ -205,6 +203,9 @@ public class LexicalPreservingPrinter {
         // and we move up to more general nodes
         for (JavaToken token : documentTokens) {
             Optional<Node> maybeOwner = nodesDepthFirst.stream().filter(n -> n.getRange().get().contains(token.getRange())).findFirst();
+            if (!maybeOwner.isPresent()) {
+                throw new RuntimeException("Token without node owning it: " + token);
+            }
             Node owner = maybeOwner.get();
             if (!tokensByNode.containsKey(owner)) {
                 tokensByNode.put(owner, new LinkedList<>());
@@ -230,6 +231,9 @@ public class LexicalPreservingPrinter {
         List<Pair<Range, TextElement>> elements = new LinkedList<>();
         for (Node child : node.getChildNodes()) {
             if (!PhantomNodeLogic.isPhantomNode(child)) {
+                if (!child.getRange().isPresent()) {
+                    throw new RuntimeException("Range not present on node " + child);
+                }
                 elements.add(new Pair<>(child.getRange().get(), new ChildTextElement(this, child)));
             }
         }
@@ -371,6 +375,9 @@ public class LexicalPreservingPrinter {
         // so they have to be handled in a special way
         if (node instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator)node;
+            if (!variableDeclarator.getParentNode().isPresent()) {
+                throw new RuntimeException("VariableDeclarator without parent: I cannot handle the array levels");
+            }
             NodeWithVariables<?> nodeWithVariables = (NodeWithVariables)variableDeclarator.getParentNode().get();
             int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - nodeWithVariables.getMaximumCommonType().getArrayLevel();
             for (int i=0; i<extraArrayLevels; i++) {

@@ -453,7 +453,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Type commonType = n.getAncestorOfType(NodeWithVariables.class).get().getMaximumCommonType();
+        Optional<NodeWithVariables> ancestor = n.getAncestorOfType(NodeWithVariables.class);
+        if (!ancestor.isPresent()) {
+            throw new RuntimeException("Unable to work with VariableDeclarator not owned by a NodeWithVariables");
+        }
+        Type commonType = ancestor.get().getMaximumCommonType();
 
         Type type = n.getType();
 
