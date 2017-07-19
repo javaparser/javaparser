@@ -553,7 +553,7 @@ public class Difference {
                         if (textElement.isNewline()) {
                             used = true;
                         }
-                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenTypes.eolToken()));
+                        nodeText.addElement(nodeTextIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
                         // This remove the space in "{ }" when adding a new line
                         while (nodeText.getElements().get(nodeTextIndex).isSpaceOrTab()) {
                             nodeText.getElements().remove(nodeTextIndex);
