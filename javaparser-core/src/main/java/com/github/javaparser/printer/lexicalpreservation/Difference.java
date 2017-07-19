@@ -20,9 +20,9 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  */
 public class Difference {
 
-    private static int STANDARD_INDENTATION_SIZE = 4;
+    private static final int STANDARD_INDENTATION_SIZE = 4;
 
-    private List<DifferenceElement> elements;
+    private final List<DifferenceElement> elements;
 
     private Difference(List<DifferenceElement> elements) {
         this.elements = elements;
@@ -50,7 +50,7 @@ public class Difference {
     }
 
     private static class Added implements DifferenceElement {
-        CsmElement element;
+        final CsmElement element;
 
         public Added(CsmElement element) {
             this.element = element;
@@ -92,8 +92,8 @@ public class Difference {
      * some new elements have been added or removed to the mix.
      */
     private static class Reshuffled implements DifferenceElement {
-        CsmMix previousOrder;
-        CsmMix element;
+        final CsmMix previousOrder;
+        final CsmMix element;
 
         public Reshuffled(CsmMix previousOrder, CsmMix element) {
             this.previousOrder = previousOrder;
@@ -135,7 +135,7 @@ public class Difference {
     }
 
     private static class Kept implements DifferenceElement {
-        CsmElement element;
+        final CsmElement element;
 
         public Kept(CsmElement element) {
             this.element = element;
@@ -173,7 +173,7 @@ public class Difference {
     }
 
     private static class Removed implements DifferenceElement {
-        CsmElement element;
+        final CsmElement element;
 
         public Removed(CsmElement element) {
             this.element = element;
@@ -853,7 +853,7 @@ public class Difference {
         }
     }
 
-    public long cost() {
+    private long cost() {
         return elements.stream().filter(e -> !(e instanceof Kept)).count();
     }
 

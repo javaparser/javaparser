@@ -31,10 +31,10 @@ import java.util.List;
  * It is basically a list of tokens and children.
  */
 class NodeText {
-    private LexicalPreservingPrinter lexicalPreservingPrinter;
-    private List<TextElement> elements;
+    private final LexicalPreservingPrinter lexicalPreservingPrinter;
+    private final List<TextElement> elements;
 
-    public static int NOT_FOUND = -1;
+    public static final int NOT_FOUND = -1;
 
     LexicalPreservingPrinter getLexicalPreservingPrinter() {
         return lexicalPreservingPrinter;

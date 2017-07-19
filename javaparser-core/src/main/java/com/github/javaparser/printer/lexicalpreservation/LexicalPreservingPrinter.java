@@ -32,7 +32,6 @@ import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
@@ -51,7 +50,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
-import static com.github.javaparser.TokenTypes.eolToken;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
@@ -86,7 +84,7 @@ public class LexicalPreservingPrinter {
     /**
      * For each node we setup and update a NodeText, containing all the lexical information about such node
      */
-    private Map<Node, NodeText> textForNodes = new IdentityHashMap<>();
+    private final Map<Node, NodeText> textForNodes = new IdentityHashMap<>();
 
     //
     // Constructor and setup
@@ -246,7 +244,7 @@ public class LexicalPreservingPrinter {
     // Iterators
     //
 
-    public Iterator<TokenTextElement> tokensPreceeding(final Node node) {
+    private Iterator<TokenTextElement> tokensPreceeding(final Node node) {
         if (!node.getParentNode().isPresent()) {
             return new TextElementIteratorsFactory.EmptyIterator<>();
         }

@@ -30,8 +30,8 @@ import static com.github.javaparser.utils.Utils.EOL;
 
 class TokenTextElement extends TextElement {
 
-    private int tokenKind;
-    private String text;
+    private final int tokenKind;
+    private final String text;
 
     public static TokenTextElement newLine() {
         return new TokenTextElement(TokenTypes.eolTokenKind(), EOL);

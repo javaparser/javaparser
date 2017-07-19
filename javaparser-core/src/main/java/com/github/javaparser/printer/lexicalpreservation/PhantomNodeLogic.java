@@ -35,9 +35,9 @@ class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    private static IdentityHashMap<Node, Boolean> isPhantomNodeCache = new IdentityHashMap<>();
+    private static final IdentityHashMap<Node, Boolean> isPhantomNodeCache = new IdentityHashMap<>();
 
-    private static AstObserver cacheCleaner = new AstObserverAdapter() {
+    private static final AstObserver cacheCleaner = new AstObserverAdapter() {
         @Override
         public void parentChange(Node observedNode, Node previousParent, Node newParent) {
             isPhantomNodeCache.remove(observedNode);
