@@ -227,7 +227,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(4);
         List<TokenTextElement> indentation = lpp.findIndentation(node);
-        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(e -> e.expand()).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
     }
 
     @Test
@@ -235,7 +235,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
         List<TokenTextElement> indentation = lpp.findIndentation(node);
-        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(e -> e.expand()).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
     }
 
     //
@@ -520,8 +520,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
-                .forEach(type -> type.getMembers().stream()
+        cu.getTypes()
+                .forEach(type -> type.getMembers()
                         .forEach(member -> {
                             if (member instanceof MethodDeclaration) {
                                 MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -788,9 +788,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -830,9 +830,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -873,9 +873,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -910,9 +910,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -945,9 +945,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;

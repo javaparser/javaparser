@@ -453,7 +453,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Type commonType = n.getAncestorOfType(NodeWithVariables.class).get().getMaximumCommonType();
+        Optional<NodeWithVariables> ancestor = n.getAncestorOfType(NodeWithVariables.class);
+        if (!ancestor.isPresent()) {
+            throw new RuntimeException("Unable to work with VariableDeclarator not owned by a NodeWithVariables");
+        }
+        Type commonType = ancestor.get().getMaximumCommonType();
 
         Type type = n.getType();
 
@@ -1283,7 +1287,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final LineComment n, final Void arg) {
-        if (!configuration.isPrintComments()) {
+        if (configuration.isIgnoreComments()) {
             return;
         }
         printer.print("//");
@@ -1295,7 +1299,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(final BlockComment n, final Void arg) {
-        if (!configuration.isPrintComments()) {
+        if (configuration.isIgnoreComments()) {
             return;
         }
         printer.print("/*").print(n.getContent()).println("*/");

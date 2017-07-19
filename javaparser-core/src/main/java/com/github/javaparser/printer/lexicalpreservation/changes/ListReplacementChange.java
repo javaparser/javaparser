@@ -11,9 +11,9 @@ import java.util.Optional;
  * The replacement of an element in a list.
  */
 public class ListReplacementChange implements Change {
-    private ObservableProperty observableProperty;
-    private int index;
-    private Node newValue;
+    private final ObservableProperty observableProperty;
+    private final int index;
+    private final Node newValue;
 
     public ListReplacementChange(ObservableProperty observableProperty, int index, Node newValue) {
         this.observableProperty = observableProperty;

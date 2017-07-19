@@ -20,9 +20,9 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
  */
 public class Difference {
 
-    private static int STANDARD_INDENTATION_SIZE = 4;
+    private static final int STANDARD_INDENTATION_SIZE = 4;
 
-    private List<DifferenceElement> elements;
+    private final List<DifferenceElement> elements;
 
     private Difference(List<DifferenceElement> elements) {
         this.elements = elements;
@@ -50,7 +50,7 @@ public class Difference {
     }
 
     private static class Added implements DifferenceElement {
-        CsmElement element;
+        final CsmElement element;
 
         public Added(CsmElement element) {
             this.element = element;
@@ -92,8 +92,8 @@ public class Difference {
      * some new elements have been added or removed to the mix.
      */
     private static class Reshuffled implements DifferenceElement {
-        CsmMix previousOrder;
-        CsmMix element;
+        final CsmMix previousOrder;
+        final CsmMix element;
 
         public Reshuffled(CsmMix previousOrder, CsmMix element) {
             this.previousOrder = previousOrder;
@@ -135,7 +135,7 @@ public class Difference {
     }
 
     private static class Kept implements DifferenceElement {
-        CsmElement element;
+        final CsmElement element;
 
         public Kept(CsmElement element) {
             this.element = element;
@@ -173,7 +173,7 @@ public class Difference {
     }
 
     private static class Removed implements DifferenceElement {
-        CsmElement element;
+        final CsmElement element;
 
         public Removed(CsmElement element) {
             this.element = element;
@@ -255,7 +255,7 @@ public class Difference {
             if (b instanceof CsmChild) {
                 CsmChild childA = (CsmChild) a;
                 CsmChild childB = (CsmChild) b;
-                return childA.getChild().getClass().equals(childB.getClass());
+                return childA.getChild().getClass().equals(childB.getChild().getClass());
             } else if (b instanceof CsmToken) {
                 return false;
             } else {
@@ -468,7 +468,7 @@ public class Difference {
             }
         }
         if (hasOnlyWsBefore) {
-            for (int i=nodeTextIndex; i >= 0 && hasOnlyWsBefore && i < nodeText.getElements().size(); i--) {
+            for (int i=nodeTextIndex; i >= 0 && i < nodeText.getElements().size(); i--) {
                 if (nodeText.getElements().get(i).isNewline()) {
                     break;
                 }
@@ -691,7 +691,7 @@ public class Difference {
                         CsmElement ne = elementsFromNextOrder.getElements().get(ni);
                         for (int pi=0;pi<elementsFromPreviousOrder.getElements().size() && !found;pi++) {
                             CsmElement pe = elementsFromPreviousOrder.getElements().get(pi);
-                            if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pe)
+                            if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(pi)
                                     && matching(ne, pe)) {
                                 found = true;
                                 correspondanceBetweenNextOrderAndPreviousOrder.put(ni, pi);
@@ -767,10 +767,8 @@ public class Difference {
                                 } else {
                                     elements.add(diffElIterator++, new Removed(originalCSMElement));
                                 }
-                            } else {
-                                // simple node text element, without associated csm element, just keep ignore it
                             }
-
+                            // else we have a simple node text element, without associated csm element, just keep ignore it
                         }
                     }
 
@@ -853,7 +851,7 @@ public class Difference {
         }
     }
 
-    public long cost() {
+    private long cost() {
         return elements.stream().filter(e -> !(e instanceof Kept)).count();
     }
 

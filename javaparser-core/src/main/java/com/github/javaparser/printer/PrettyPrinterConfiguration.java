@@ -45,6 +45,10 @@ public class PrettyPrinterConfiguration {
         return printComments;
     }
 
+    public boolean isIgnoreComments() {
+        return !printComments;
+    }
+
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
         return this;

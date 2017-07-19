@@ -50,7 +50,7 @@ import static com.github.javaparser.utils.Utils.EOL;
  */
 public class ConcreteSyntaxModel {
 
-    private static Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
+    private static final Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
     private static Optional<String> initializationError;
 
     private static CsmElement modifiers() {

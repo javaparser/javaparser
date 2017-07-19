@@ -21,7 +21,7 @@ class LexicalDifferenceCalculator {
      * with no condition, no lists, just tokens and node children.
      */
     static class CalculatedSyntaxModel {
-        List<CsmElement> elements;
+        final List<CsmElement> elements;
 
         CalculatedSyntaxModel(List<CsmElement> elements) {
             this.elements = elements;
@@ -50,7 +50,7 @@ class LexicalDifferenceCalculator {
     }
 
     static class CsmChild implements CsmElement {
-        private Node child;
+        private final Node child;
 
         public Node getChild() {
             return child;
