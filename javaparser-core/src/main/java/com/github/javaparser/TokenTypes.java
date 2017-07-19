@@ -8,7 +8,7 @@ import static com.github.javaparser.utils.Utils.EOL;
  */
 public class TokenTypes {
     public static boolean isWhitespace(int kind) {
-        return getCategory(kind) == JavaToken.Category.WHITESPACE;
+        return getCategory(kind).isWhitespace();
     }
 
     /**
@@ -20,71 +20,32 @@ public class TokenTypes {
     }
 
     public static boolean isEndOfLineToken(int kind) {
-        switch (kind) {
-            case WINDOWS_EOL:
-            case OLD_MAC_EOL:
-            case UNIX_EOL:
-                return true;
-            default:
-                return false;
-        }
+        return getCategory(kind).isEndOfLine();
     }
 
     public static boolean isWhitespaceOrComment(int kind) {
-        switch (getCategory(kind)) {
-            case WHITESPACE:
-            case COMMENT:
-                return true;
-            default:
-                return false;
-        }
+        return getCategory(kind).isWhitespaceOrComment();
     }
 
     public static boolean isSpaceOrTab(int kind) {
-        switch (kind) {
-            case SPACE:
-            case TAB:
-            case FORM_FEED:
-            case NEXT_LINE:
-            case NON_BREAKING_SPACE:
-            case OGHAM_SPACE:
-            case MONGOLIAN_VOWEL_SEPARATOR:
-            case EN_QUAD:
-            case EM_QUAD:
-            case EN_SPACE:
-            case EM_SPACE:
-            case THREE_PER_EM_SPACE:
-            case FOUR_PER_EM_SPACE:
-            case SIX_PER_EM_SPACE:
-            case FIGURE_SPACE:
-            case PUNCTUATION_SPACE:
-            case THIN_SPACE:
-            case HAIR_SPACE:
-            case ZERO_WIDTH_SPACE:
-            case ZERO_WIDTH_NON_JOINER:
-            case ZERO_WIDTH_JOINER:
-            case LINE_SEPARATOR:
-            case PARAGRAPH_SEPARATOR:
-            case NARROW_NO_BREAK_SPACE:
-            case MEDIUM_MATHEMATICAL_SPACE:
-            case WORD_JOINER:
-            case IDEOGRAPHIC_SPACE:
-            case ZERO_WIDTH_NO_BREAK_SPACE:
-                return true;
-            default:
-                return false;
-        }
+        return getCategory(kind).isWhitespaceButNotEndOfLine();
     }
 
     public static boolean isComment(int kind) {
-        return getCategory(kind)== JavaToken.Category.COMMENT;
+        return getCategory(kind).isComment();
     }
 
-    /** @deprecated use eolTokenKind */
+    /**
+     * @deprecated use eolTokenKind
+     */
+    @Deprecated
     public static int eolToken() {
         return eolTokenKind();
     }
 
+    /**
+     * @return the kind of EOL token to use on the platform you're running on.
+     */
     public static int eolTokenKind() {
         if (EOL.equals("\n")) {
             return UNIX_EOL;
@@ -98,26 +59,34 @@ public class TokenTypes {
         throw new AssertionError("Unknown EOL character sequence");
     }
 
+    /**
+     * @return the token kind for a single space.
+     */
     public static int spaceTokenKind() {
         return SPACE;
     }
 
-    /** @deprecated use spaceTokenKind */
+    /**
+     * @deprecated use spaceTokenKind
+     */
+    @Deprecated
     public static int spaceToken() {
         return spaceTokenKind();
     }
 
     /**
-     * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.5">Relevant JLS section</a>
+     * Category of a token, a little more detailed than
+     * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.5">The JLS</a>.
      */
     public static JavaToken.Category getCategory(int kind) {
         switch (kind) {
-            case EOF:
-            case SPACE:
             case WINDOWS_EOL:
-            case TAB:
             case UNIX_EOL:
             case OLD_MAC_EOL:
+                return JavaToken.Category.EOL;
+            case EOF:
+            case SPACE:
+            case TAB:
             case FORM_FEED:
             case NEXT_LINE:
             case NON_BREAKING_SPACE:
@@ -144,7 +113,7 @@ public class TokenTypes {
             case WORD_JOINER:
             case IDEOGRAPHIC_SPACE:
             case ZERO_WIDTH_NO_BREAK_SPACE:
-                return JavaToken.Category.WHITESPACE;
+                return JavaToken.Category.WHITESPACE_NO_EOL;
             case SINGLE_LINE_COMMENT:
             case JAVA_DOC_COMMENT:
             case MULTI_LINE_COMMENT:

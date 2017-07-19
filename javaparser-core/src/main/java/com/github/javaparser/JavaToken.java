@@ -139,14 +139,23 @@ public class JavaToken {
         return text;
     }
 
+    /**
+     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
+     */
     public boolean valid() {
         return !invalid();
     }
 
+    /**
+     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
+     */
     public boolean invalid() {
         return this == INVALID;
     }
 
+    /**
+     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
+     */
     public JavaToken orIfInvalid(JavaToken anotherToken) {
         assertNotNull(anotherToken);
         if (valid() || anotherToken.invalid()) {
@@ -156,18 +165,50 @@ public class JavaToken {
     }
 
     public enum Category {
-        WHITESPACE, COMMENT, IDENTIFIER, KEYWORD, LITERAL, SEPARATOR, OPERATOR
+        WHITESPACE_NO_EOL, EOL, COMMENT, IDENTIFIER, KEYWORD, LITERAL, SEPARATOR, OPERATOR;
+
+        public boolean isWhitespaceOrComment() {
+            return isWhitespace() || this == COMMENT;
+        }
+
+        public boolean isWhitespace() {
+            return this == WHITESPACE_NO_EOL || this == EOL;
+        }
+
+        public boolean isEndOfLine() {
+            return this == EOL;
+        }
+
+        public boolean isComment() {
+            return this == COMMENT;
+        }
+
+        public boolean isWhitespaceButNotEndOfLine() {
+            return this == WHITESPACE_NO_EOL;
+        }
+
+        public boolean isIdentifier() {
+            return this == IDENTIFIER;
+        }
+
+        public boolean isKeyword() {
+            return this == KEYWORD;
+        }
+
+        public boolean isLiteral() {
+            return this == LITERAL;
+        }
+
+        public boolean isSeparator() {
+            return this == SEPARATOR;
+        }
+
+        public boolean isOperator() {
+            return this == OPERATOR;
+        }
     }
 
     public JavaToken.Category getCategory() {
         return TokenTypes.getCategory(kind);
-    }
-
-    public boolean isEndOfLineToken() {
-        return TokenTypes.isEndOfLineToken(kind);
-    }
-
-    public boolean isSpaceOrTab() {
-        return TokenTypes.isSpaceOrTab(kind);
     }
 }

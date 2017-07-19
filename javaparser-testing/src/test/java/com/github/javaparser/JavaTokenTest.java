@@ -42,12 +42,12 @@ public class JavaTokenTest {
         List<JavaToken> tokens = result.getTokens().get();
         Iterator<JavaToken> iterator = tokens.iterator();
         assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, LITERAL, iterator.next());
-        assertToken(" ", range(1, 2, 1, 2), SPACE, WHITESPACE, iterator.next());
+        assertToken(" ", range(1, 2, 1, 2), SPACE, WHITESPACE_NO_EOL, iterator.next());
         assertToken("+", range(1, 3, 1, 3), PLUS, OPERATOR, iterator.next());
         assertToken("/*2*/", range(1, 4, 1, 8), MULTI_LINE_COMMENT, COMMENT, iterator.next());
         assertToken("1", range(1, 9, 1, 9), INTEGER_LITERAL, LITERAL, iterator.next());
-        assertToken(" ", range(1, 10, 1, 10), SPACE, WHITESPACE, iterator.next());
-        assertToken("", range(1, 10, 1, 10), EOF, WHITESPACE, iterator.next());
+        assertToken(" ", range(1, 10, 1, 10), SPACE, WHITESPACE_NO_EOL, iterator.next());
+        assertToken("", range(1, 10, 1, 10), EOF, WHITESPACE_NO_EOL, iterator.next());
         assertEquals(false, iterator.hasNext());
     }
 
