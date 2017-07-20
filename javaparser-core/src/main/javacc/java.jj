@@ -734,7 +734,7 @@ StubUnit StubUnit():
     pakage = PackageDeclaration()
     (in = ImportDeclaration() { imports = add(imports, in); })*
 
-    (LOOKAHEAD(PackageDeclaration())
+    (LOOKAHEAD(3, PackageDeclaration())
         (
              {
                 cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
