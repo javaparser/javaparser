@@ -591,7 +591,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getCatchClauses().forEach(p -> p.accept(this, arg));
         n.getFinallyBlock().ifPresent(l -> l.accept(this, arg));
         n.getResources().forEach(p -> p.accept(this, arg));
-        n.getTryBlock().ifPresent(l -> l.accept(this, arg));
+        n.getTryBlock().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

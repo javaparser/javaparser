@@ -412,7 +412,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
     public Integer visit(TryStmt n, Void arg) {
-        return (n.getCatchClauses().accept(this, arg)) * 31 + (n.getFinallyBlock().isPresent() ? n.getFinallyBlock().get().accept(this, arg) : 0) * 31 + (n.getResources().accept(this, arg)) * 31 + (n.getTryBlock().isPresent() ? n.getTryBlock().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+        return (n.getCatchClauses().accept(this, arg)) * 31 + (n.getFinallyBlock().isPresent() ? n.getFinallyBlock().get().accept(this, arg) : 0) * 31 + (n.getResources().accept(this, arg)) * 31 + (n.getTryBlock().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
