@@ -30,11 +30,11 @@ import static com.github.javaparser.utils.Utils.EOL;
 
 class TokenTextElement extends TextElement {
 
-    private int tokenKind;
-    private String text;
+    private final int tokenKind;
+    private final String text;
 
     public static TokenTextElement newLine() {
-        return new TokenTextElement(TokenTypes.eolToken(), EOL);
+        return new TokenTextElement(TokenTypes.eolTokenKind(), EOL);
     }
 
     TokenTextElement(JavaToken token) {
@@ -51,7 +51,7 @@ class TokenTextElement extends TextElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-        if (TokenTypes.isEndOfLineCharacter(tokenKind)) {
+        if (TokenTypes.isEndOfLineToken(tokenKind)) {
             content = EOL;
         } else if (TokenTypes.isWhitespace(tokenKind)) {
             content = " ";
@@ -126,7 +126,7 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isNewline() {
-        return TokenTypes.isEndOfLineCharacter(tokenKind);
+        return TokenTypes.isEndOfLineToken(tokenKind);
     }
 
     @Override

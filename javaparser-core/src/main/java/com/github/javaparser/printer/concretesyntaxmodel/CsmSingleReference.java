@@ -27,7 +27,7 @@ import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 
 public class CsmSingleReference implements CsmElement {
-    private ObservableProperty property;
+    private final ObservableProperty property;
 
     public ObservableProperty getProperty() {
         return property;

@@ -22,14 +22,11 @@
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
-import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
