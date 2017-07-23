@@ -98,12 +98,10 @@ class GeneratedJavaParserSupport {
     /** Workaround for rather complex ambiguity that lambda's create */
     static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
-            Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
-            if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                SimpleName id = ((NameExpr) inner.get()).getName();
-                NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-                ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
-            }
+            Expression inner = ((EnclosedExpr) ret).getInner();
+            SimpleName id = ((NameExpr) inner).getName();
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
