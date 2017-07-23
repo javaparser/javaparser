@@ -103,8 +103,6 @@ class GeneratedJavaParserSupport {
                 SimpleName id = ((NameExpr) inner.get()).getName();
                 NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
                 ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
-            } else {
-                ret = new LambdaExpr(range(ret, lambdaBody), new NodeList<>(), lambdaBody, true);
             }
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();

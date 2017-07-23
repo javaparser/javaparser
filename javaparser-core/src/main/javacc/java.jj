@@ -1130,9 +1130,8 @@ NodeList<Parameter> LambdaParameters():
   Parameter par;
 }
 {
-   ","
-  	par = Parameter() {  ret = add(ret, par);  } ( "," par = Parameter() { ret = add(ret, par); } )*
-  { return ret;  }
+    par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )*
+    { return ret;  }
 }
 
 NodeList<Parameter> InferredLambdaParameters():
@@ -1141,7 +1140,6 @@ NodeList<Parameter> InferredLambdaParameters():
     Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-    ","
     id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
     (
         "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
@@ -1902,26 +1900,14 @@ Expression PrimaryPrefix():
         "(" {begin=token();}
         (
             ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
-            | LOOKAHEAD(Parameter())
-            p = Parameter() { isLambda = true;} [params = LambdaParameters()] ")"
-            |
-            ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ] ")"
+        | LOOKAHEAD(Parameter())
+            params = LambdaParameters() ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
+        | LOOKAHEAD(VariableDeclaratorId() ",")
+            params = InferredLambdaParameters() ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
+        |
+            // This could still be a lambda expression, but this is handled after matching -> elsewhere
+            ret = Expression() ")" { ret = new EnclosedExpr(range(begin, token()), ret); }
         )
-        {
-            if(!isLambda) { 
-                ret = new EnclosedExpr(range(begin, token()), ret);
-            } else {
-                if(ret != null) {
-                    if(ret instanceof NameExpr) {
-                        id = ((NameExpr)ret).getName();
-                        p = new Parameter(range(ret.getTokenRange().get().getBegin(), ret.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id);
-                    }
-                }
-                params = prepend(params, p);
-                // TODO p may be null here
-                ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true);
-            }
-        }
 	|
 	  ret = AllocationExpression(null)
 	|
