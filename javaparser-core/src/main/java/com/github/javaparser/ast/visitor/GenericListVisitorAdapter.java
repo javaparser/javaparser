@@ -1625,8 +1625,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getTryBlock().isPresent()) {
-            tmp = n.getTryBlock().get().accept(this, arg);
+        {
+            tmp = n.getTryBlock().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

@@ -110,8 +110,8 @@ public final class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<BlockStmt> getTryBlock() {
-        return Optional.ofNullable(tryBlock);
+    public BlockStmt getTryBlock() {
+        return tryBlock;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -148,6 +148,7 @@ public final class TryStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setTryBlock(final BlockStmt tryBlock) {
+        assertNotNull(tryBlock);
         if (tryBlock == this.tryBlock) {
             return (TryStmt) this;
         }
@@ -199,12 +200,6 @@ public final class TryStmt extends Statement {
         for (int i = 0; i < resources.size(); i++) {
             if (resources.get(i) == node) {
                 resources.remove(i);
-                return true;
-            }
-        }
-        if (tryBlock != null) {
-            if (node == tryBlock) {
-                removeTryBlock();
                 return true;
             }
         }
@@ -263,12 +258,6 @@ public final class TryStmt extends Statement {
         for (int i = 0; i < resources.size(); i++) {
             if (resources.get(i) == node) {
                 resources.set(i, (VariableDeclarationExpr) replacementNode);
-                return true;
-            }
-        }
-        if (tryBlock != null) {
-            if (node == tryBlock) {
-                replaceTryBlock((BlockStmt) replacementNode);
                 return true;
             }
         }
