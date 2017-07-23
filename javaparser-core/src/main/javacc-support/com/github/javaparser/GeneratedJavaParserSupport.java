@@ -84,10 +84,8 @@ class GeneratedJavaParserSupport {
      * Propagate expansion of the range on the right to the parent. This is necessary when the right border of the child
      * is determining the right border of the parent (i.e., the child is the last element of the parent). In this case
      * when we "enlarge" the child we should enlarge also the parent.
-     * @param node
-     * @param endNode
      */
-    static void propagateRangeGrowthOnRight(Node node, Node endNode) {
+    private static void propagateRangeGrowthOnRight(Node node, Node endNode) {
         if (node.getParentNode().isPresent()) {
             boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(node.getParentNode().get().getTokenRange().get().getEnd());
             if (isChildOnTheRightBorderOfParent) {
