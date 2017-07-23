@@ -82,6 +82,9 @@ public final class EnclosedExpr extends Expression {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnclosedExpr setInner(final Expression inner) {
+        if(inner==null){
+            throw new AssertionError();
+        }
         if (inner == this.inner) {
             return (EnclosedExpr) this;
         }

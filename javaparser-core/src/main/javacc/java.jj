@@ -1899,15 +1899,14 @@ Expression PrimaryPrefix():
 		}
 	  )
 	|
-	  "(" {begin=token();}
-	  	[
-            ( LOOKAHEAD(Parameter())
-                p = Parameter() { isLambda = true;} [params = LambdaParameters()]
+        "(" {begin=token();}
+        (
+            ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
+            | LOOKAHEAD(Parameter())
+            p = Parameter() { isLambda = true;} [params = LambdaParameters()] ")"
             |
-                ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ]
-            )
-	  	]
-	  	")"
+            ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ] ")"
+        )
         {
             if(!isLambda) { 
                 ret = new EnclosedExpr(range(begin, token()), ret);
