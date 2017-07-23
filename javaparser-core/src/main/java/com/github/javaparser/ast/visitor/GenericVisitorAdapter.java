@@ -1541,8 +1541,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getTryBlock().isPresent()) {
-            result = n.getTryBlock().get().accept(this, arg);
+        {
+            result = n.getTryBlock().accept(this, arg);
             if (result != null)
                 return result;
         }
