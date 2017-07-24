@@ -577,9 +577,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final EnclosedExpr n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("(");
-        if (n.getInner().isPresent()) {
-            n.getInner().get().accept(this, arg);
-        }
+        n.getInner().accept(this, arg);
         printer.print(")");
     }
 

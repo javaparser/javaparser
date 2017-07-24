@@ -1130,9 +1130,8 @@ NodeList<Parameter> LambdaParameters():
   Parameter par;
 }
 {
-   ","
-  	par = Parameter() {  ret = add(ret, par);  } ( "," par = Parameter() { ret = add(ret, par); } )*
-  { return ret;  }
+    par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )*
+    { return ret;  }
 }
 
 NodeList<Parameter> InferredLambdaParameters():
@@ -1141,7 +1140,6 @@ NodeList<Parameter> InferredLambdaParameters():
     Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-    ","
     id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
     (
         "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
@@ -1509,8 +1507,7 @@ Expression Expression():
  * for performance reasons.
  * However, it is a weakening of the grammar for it allows the LHS of
  * assignments to be any conditional expression whereas it can only be
- * a primary expression.  Consider adding a semantic predicate to work
- * around this.
+ * a primary expression. This is caught by a validation after parsing.
  */
 {
 	Expression ret;
@@ -1520,37 +1517,30 @@ Expression Expression():
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 }
 {
-  ret = ConditionalExpression()
-  [
-    (
-       LOOKAHEAD(2)
-    op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, value, op); }
-  |
-   "->" lambdaBody = LambdaBody()
-   {
-     if (ret instanceof CastExpr)
-     {
-       ret = generateLambda(this, ret, lambdaBody);
-     }
-     else if (ret instanceof ConditionalExpr){
-     	 ConditionalExpr ce = (ConditionalExpr) ret;
-         if(ce.getElseExpr() != null){
-            ce.setElseExpr(generateLambda(this, ce.getElseExpr(), lambdaBody));
-         }
-     }
-     else
-     {
-       ret = generateLambda(this, ret, lambdaBody);
-     }
-   }
- |  "::"  [typeArgs = TypeArguments() ] (Identifier() | "new")
- {
-   ret = new MethodReferenceExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, token.image);
- }
-   )
-  ]
-
-  { return ret; }
+    ret = ConditionalExpression()
+    [
+        ( LOOKAHEAD(2)
+            op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, value, op); }
+        |
+            "->" lambdaBody = LambdaBody()
+            {
+                if (ret instanceof CastExpr) {
+                    ret = generateLambda(this, ret, lambdaBody);
+                } else if (ret instanceof ConditionalExpr) {
+                    ConditionalExpr ce = (ConditionalExpr) ret;
+                    if(ce.getElseExpr() != null) {
+                        ce.setElseExpr(generateLambda(this, ce.getElseExpr(), lambdaBody));
+                    }
+                } else {
+                    ret = generateLambda(this, ret, lambdaBody);
+                }
+            }
+        |
+            "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, token.image); }
+        )
+    ]
+    
+    { return ret; }
 }
 
 AssignExpr.Operator AssignmentOperator():
@@ -1907,30 +1897,17 @@ Expression PrimaryPrefix():
 		}
 	  )
 	|
-	  "(" {begin=token();}
-	  	[
-	  	( LOOKAHEAD(Parameter()) p = Parameter() { isLambda = true;} [params = LambdaParameters()]
-	  	| ret = Expression() [params = InferredLambdaParameters() { isLambda = true;} ]
-	  	)
-	  	]
-	  	")"
-	  	{
-	  		   if(!isLambda) { ret = new EnclosedExpr(range(begin, token()), ret);}
-	  		   else{
-	  		 	  if(ret != null){
-	  		  		  if(ret instanceof NameExpr)
-	  		  		  {
-	  		  		    id = ((NameExpr)ret).getName();
-	  		  		    p = new Parameter(range(ret.getTokenRange().get().getBegin(), ret.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id);
-	  		  		  }
-
-	  		  		}
-	  		  		params = prepend(params, p);
-	  		  		// TODO p may be null here
-	  		  		ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true);
-	  		 	}
-
-	  		 }
+        "(" {begin=token();}
+        (
+            ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
+        | LOOKAHEAD(Parameter())
+            params = LambdaParameters() ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
+        | LOOKAHEAD(VariableDeclaratorId() ",")
+            params = InferredLambdaParameters() ")" { ret = new LambdaExpr(range(begin, token()), params, new BlockStmt(), true); }
+        |
+            // This could still be a lambda expression, but this is handled after matching -> elsewhere
+            ret = Expression() ")" { ret = new EnclosedExpr(range(begin, token()), ret); }
+        )
 	|
 	  ret = AllocationExpression(null)
 	|
@@ -2251,37 +2228,32 @@ VariableDeclarationExpr VariableDeclarationExpression():
 	VariableDeclarator var;
 }
 {
-  modifier = Modifiers() partialType = Type() var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
-  {
+    modifier = Modifiers() partialType = Type() var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
+    {
         JavaToken begin=modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
         return new VariableDeclarationExpr(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
-  }
+    }
 }
 
 EmptyStmt EmptyStatement():
 {}
 {
-  ";"
-  { return new EmptyStmt(tokenRange()); }
+    ";"
+    { return new EmptyStmt(tokenRange()); }
 }
 
 Statement LambdaBody():
 {
-  Expression expr;
-  Statement n = null;
+    Expression expr;
+    Statement n = null;
 }
 {
-  (
-  	expr = Expression()
-  	{
-  	  n = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr);
-  	}
- 	|  n = Block()
-  )
-  {
-  	return n;
-  }
-
+    (
+        expr = Expression() { n = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); }
+        |  
+        n = Block()
+    )
+    { return n; }
 }
 
 ExpressionStmt StatementExpression():
@@ -2298,29 +2270,26 @@ ExpressionStmt StatementExpression():
 	Statement lambdaBody;
 }
 {
-  ( LOOKAHEAD(2)
-	  expr = PreIncrementExpression()
-	|
-	  expr = PreDecrementExpression()
-	|
-	  expr = PrimaryExpression()
-	  [
-	    "++" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
-	  |
-	    "--" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
-	  |
-	    op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, value, op); }
-	  |
-	    "::"  [typeArgs = TypeArguments() ] (Identifier() | "new"){expr = new MethodReferenceExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, typeArgs.list, token.image); 	  }
-	 |
-	   "->" lambdaBody = LambdaBody()
-	   {
-            expr = generateLambda(this, expr, lambdaBody);
-	   }
-	  ]
-  )
-  ";"
-  { return new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); }
+    ( LOOKAHEAD(2)
+        expr = PreIncrementExpression()
+        |
+        expr = PreDecrementExpression()
+        |
+        expr = PrimaryExpression()
+        [
+            "++" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
+            |
+            "--" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
+            |
+            op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, value, op); }
+            |
+            "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { expr = new MethodReferenceExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, typeArgs.list, token.image); }
+            |
+            "->" lambdaBody = LambdaBody() { expr = generateLambda(this, expr, lambdaBody); }
+        ]
+    )
+    ";"
+    { return new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); }
 }
 
 SwitchStmt SwitchStatement():

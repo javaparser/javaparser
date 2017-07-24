@@ -84,10 +84,8 @@ class GeneratedJavaParserSupport {
      * Propagate expansion of the range on the right to the parent. This is necessary when the right border of the child
      * is determining the right border of the parent (i.e., the child is the last element of the parent). In this case
      * when we "enlarge" the child we should enlarge also the parent.
-     * @param node
-     * @param endNode
      */
-    static void propagateRangeGrowthOnRight(Node node, Node endNode) {
+    private static void propagateRangeGrowthOnRight(Node node, Node endNode) {
         if (node.getParentNode().isPresent()) {
             boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(node.getParentNode().get().getTokenRange().get().getEnd());
             if (isChildOnTheRightBorderOfParent) {
@@ -100,14 +98,10 @@ class GeneratedJavaParserSupport {
     /** Workaround for rather complex ambiguity that lambda's create */
     static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
-            Optional<Expression> inner = ((EnclosedExpr) ret).getInner();
-            if (inner.isPresent() && inner.get() instanceof NameExpr) {
-                SimpleName id = ((NameExpr) inner.get()).getName();
-                NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-                ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
-            } else {
-                ret = new LambdaExpr(range(ret, lambdaBody), new NodeList<>(), lambdaBody, true);
-            }
+            Expression inner = ((EnclosedExpr) ret).getInner();
+            SimpleName id = ((NameExpr) inner).getName();
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
