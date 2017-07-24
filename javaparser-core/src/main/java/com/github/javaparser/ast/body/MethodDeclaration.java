@@ -164,6 +164,8 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     public MethodDeclaration setParameters(NodeList<Parameter> parameters) {
         if (parameters != null && parameters.size() > 0 && parameters.get(0).getNameAsString().equals("this")) {
             setReceiverAnnotations(parameters.get(0).getAnnotations());
+            // Removing receiver parameter as it should only be added to pass the annotations for receiver
+            parameters.remove(0);
         }
         if (parameters == null) {
             parameters = new NodeList<>();
