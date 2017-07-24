@@ -61,6 +61,8 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     private BlockStmt body;
 
+    private NodeList<AnnotationExpr> receiverAnnotations;
+
     public MethodDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
@@ -88,10 +90,11 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
-        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+        super(tokenRange, modifiers, annotations, typeParameters, name, null, thrownExceptions);
         setType(type);
         setBody(body);
         customInitialization();
+        setParameters(parameters);
     }
 
     @Override
@@ -158,7 +161,13 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
-    public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
+    public MethodDeclaration setParameters(NodeList<Parameter> parameters) {
+        if (parameters != null && parameters.size() > 0 && parameters.get(0).getNameAsString().equals("this")) {
+            setReceiverAnnotations(parameters.get(0).getAnnotations());
+        }
+        if (parameters == null) {
+            parameters = new NodeList<>();
+        }
         return super.setParameters(parameters);
     }
 
@@ -170,6 +179,15 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Override
     public MethodDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         return super.setTypeParameters(typeParameters);
+    }
+
+    public MethodDeclaration setReceiverAnnotations(NodeList<AnnotationExpr> receiverAnnotations) {
+        this.receiverAnnotations = receiverAnnotations;
+        return this;
+    }
+
+    public NodeList<AnnotationExpr> getReceiverAnnotations() {
+        return receiverAnnotations;
     }
 
     /**
