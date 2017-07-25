@@ -398,8 +398,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final EnclosedExpr n, final A arg) {
-        Expression inner = n.getInner().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Expression inner = (Expression) n.getInner().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (inner == null)
+            return null;
         n.setInner(inner);
         n.setComment(comment);
         return n;
@@ -963,8 +965,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<CatchClause> catchClauses = modifyList(n.getCatchClauses(), arg);
         BlockStmt finallyBlock = n.getFinallyBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
         NodeList<VariableDeclarationExpr> resources = modifyList(n.getResources(), arg);
-        BlockStmt tryBlock = n.getTryBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        BlockStmt tryBlock = (BlockStmt) n.getTryBlock().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (tryBlock == null)
+            return null;
         n.setCatchClauses(catchClauses);
         n.setFinallyBlock(finallyBlock);
         n.setResources(resources);

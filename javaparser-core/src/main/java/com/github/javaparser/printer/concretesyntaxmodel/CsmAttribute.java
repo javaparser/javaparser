@@ -32,7 +32,7 @@ public class CsmAttribute implements CsmElement {
         return property;
     }
 
-    private ObservableProperty property;
+    private final ObservableProperty property;
 
     public CsmAttribute(ObservableProperty property) {
         this.property = property;

@@ -33,17 +33,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class PrettyPrinterTest {
-    CompilationUnit cu;
-
-    @Before
-    public void setUp() {
-        cu = new CompilationUnit();
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-    }
 
     private String prettyPrintField(String code) {
         CompilationUnit cu = JavaParser.parse(code);

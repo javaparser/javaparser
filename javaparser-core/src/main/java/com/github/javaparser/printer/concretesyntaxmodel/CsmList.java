@@ -31,11 +31,11 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class CsmList implements CsmElement {
-    private ObservableProperty property;
-    private CsmElement separatorPost;
-    private CsmElement separatorPre;
-    private CsmElement preceeding;
-    private CsmElement following;
+    private final ObservableProperty property;
+    private final CsmElement separatorPost;
+    private final CsmElement separatorPre;
+    private final CsmElement preceeding;
+    private final CsmElement following;
 
     public ObservableProperty getProperty() {
         return property;

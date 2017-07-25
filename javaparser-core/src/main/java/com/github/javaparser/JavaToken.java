@@ -24,7 +24,7 @@ package com.github.javaparser;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.Position.*;
+import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -41,7 +41,7 @@ public class JavaToken {
     private Optional<JavaToken> nextToken = Optional.empty();
 
     private JavaToken() {
-        range = new Range(pos(-1,-1), pos(-1,-1));
+        range = new Range(pos(-1, -1), pos(-1, -1));
         kind = 0;
         text = "INVALID";
         previousToken = Optional.empty();
@@ -140,17 +140,22 @@ public class JavaToken {
     }
 
     /**
-     * Check if the position is usable. Does not know what it is pointing at, so it can't check if the position is after
-     * the end of the source.
+     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
      */
     public boolean valid() {
         return !invalid();
     }
 
+    /**
+     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
+     */
     public boolean invalid() {
         return this == INVALID;
     }
 
+    /**
+     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
+     */
     public JavaToken orIfInvalid(JavaToken anotherToken) {
         assertNotNull(anotherToken);
         if (valid() || anotherToken.invalid()) {
@@ -159,5 +164,51 @@ public class JavaToken {
         return anotherToken;
     }
 
+    public enum Category {
+        WHITESPACE_NO_EOL, EOL, COMMENT, IDENTIFIER, KEYWORD, LITERAL, SEPARATOR, OPERATOR;
 
+        public boolean isWhitespaceOrComment() {
+            return isWhitespace() || this == COMMENT;
+        }
+
+        public boolean isWhitespace() {
+            return this == WHITESPACE_NO_EOL || this == EOL;
+        }
+
+        public boolean isEndOfLine() {
+            return this == EOL;
+        }
+
+        public boolean isComment() {
+            return this == COMMENT;
+        }
+
+        public boolean isWhitespaceButNotEndOfLine() {
+            return this == WHITESPACE_NO_EOL;
+        }
+
+        public boolean isIdentifier() {
+            return this == IDENTIFIER;
+        }
+
+        public boolean isKeyword() {
+            return this == KEYWORD;
+        }
+
+        public boolean isLiteral() {
+            return this == LITERAL;
+        }
+
+        public boolean isSeparator() {
+            return this == SEPARATOR;
+        }
+
+        public boolean isOperator() {
+            return this == OPERATOR;
+        }
+    }
+
+    public JavaToken.Category getCategory() {
+        return TokenTypes.getCategory(kind);
+    }
 }

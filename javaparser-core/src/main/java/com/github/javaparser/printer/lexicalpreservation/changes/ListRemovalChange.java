@@ -8,8 +8,8 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  * The removal of an element in a list.
  */
 public class ListRemovalChange implements Change {
-    private ObservableProperty observableProperty;
-    private int index;
+    private final ObservableProperty observableProperty;
+    private final int index;
 
     public ListRemovalChange(ObservableProperty observableProperty, int index) {
         this.observableProperty = observableProperty;
@@ -20,7 +20,11 @@ public class ListRemovalChange implements Change {
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             NodeList<Node> nodeList = new NodeList<>();
-            NodeList<Node> currentNodeList = (NodeList<Node>)(new NoChange().getValue(property, node));
+            Object currentRawValue = new NoChange().getValue(property, node);
+            if (!(currentRawValue instanceof NodeList)){
+                throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
+            }
+            NodeList<?> currentNodeList = (NodeList<?>)currentRawValue;
             nodeList.addAll(currentNodeList);
             nodeList.remove(index);
             return nodeList;

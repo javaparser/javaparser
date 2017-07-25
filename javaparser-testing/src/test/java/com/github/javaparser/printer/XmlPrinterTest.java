@@ -2,7 +2,6 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.printer.XmlPrinter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

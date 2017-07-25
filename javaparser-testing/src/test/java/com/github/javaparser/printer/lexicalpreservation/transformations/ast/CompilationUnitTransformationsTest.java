@@ -24,7 +24,6 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import com.github.javaparser.utils.Utils;
 import org.junit.Test;
 
 import java.io.IOException;

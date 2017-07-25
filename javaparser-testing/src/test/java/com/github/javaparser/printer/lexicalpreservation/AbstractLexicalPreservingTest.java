@@ -82,7 +82,7 @@ public abstract class AbstractLexicalPreservingTest {
         assertEquals(code, lpp.print(cu != null ? cu : expression));
     }
 
-    protected void assertTransformedToString(String expectedPartialCode, Node node) throws IOException {
+    protected void assertTransformedToString(String expectedPartialCode, Node node) {
         String actualCode = lpp.print(node);
         assertEquals(expectedPartialCode, actualCode);
     }

@@ -7,9 +7,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
  * The change in value of a property.
  */
 public class PropertyChange implements Change {
-    private ObservableProperty property;
-    private Object oldValue;
-    private Object newValue;
+    private final ObservableProperty property;
+    private final Object oldValue;
+    private final Object newValue;
 
     public ObservableProperty getProperty() {
         return property;

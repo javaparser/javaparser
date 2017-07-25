@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation.transformations.ast.bo
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 

@@ -250,7 +250,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final EnclosedExpr n, final A arg) {
-        n.getInner().ifPresent(l -> l.accept(this, arg));
+        n.getInner().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -597,7 +597,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getCatchClauses().forEach(p -> p.accept(this, arg));
         n.getFinallyBlock().ifPresent(l -> l.accept(this, arg));
         n.getResources().forEach(p -> p.accept(this, arg));
-        n.getTryBlock().ifPresent(l -> l.accept(this, arg));
+        n.getTryBlock().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

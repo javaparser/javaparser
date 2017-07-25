@@ -498,7 +498,7 @@ public final class JavaParserMetaModel {
         conditionalExprMetaModel.getDeclaredPropertyMetaModels().add(conditionalExprMetaModel.elseExprPropertyMetaModel);
         conditionalExprMetaModel.thenExprPropertyMetaModel = new PropertyMetaModel(conditionalExprMetaModel, "thenExpr", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false, false);
         conditionalExprMetaModel.getDeclaredPropertyMetaModels().add(conditionalExprMetaModel.thenExprPropertyMetaModel);
-        enclosedExprMetaModel.innerPropertyMetaModel = new PropertyMetaModel(enclosedExprMetaModel, "inner", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false, false);
+        enclosedExprMetaModel.innerPropertyMetaModel = new PropertyMetaModel(enclosedExprMetaModel, "inner", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, false, false, false);
         enclosedExprMetaModel.getDeclaredPropertyMetaModels().add(enclosedExprMetaModel.innerPropertyMetaModel);
         fieldAccessExprMetaModel.namePropertyMetaModel = new PropertyMetaModel(fieldAccessExprMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false, false);
         fieldAccessExprMetaModel.getDeclaredPropertyMetaModels().add(fieldAccessExprMetaModel.namePropertyMetaModel);
@@ -676,7 +676,7 @@ public final class JavaParserMetaModel {
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.finallyBlockPropertyMetaModel);
         tryStmtMetaModel.resourcesPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "resources", com.github.javaparser.ast.expr.VariableDeclarationExpr.class, Optional.of(variableDeclarationExprMetaModel), false, false, true, false, false);
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.resourcesPropertyMetaModel);
-        tryStmtMetaModel.tryBlockPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "tryBlock", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false, false);
+        tryStmtMetaModel.tryBlockPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "tryBlock", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false, false);
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.tryBlockPropertyMetaModel);
         localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel = new PropertyMetaModel(localClassDeclarationStmtMetaModel, "classDeclaration", com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class, Optional.of(classOrInterfaceDeclarationMetaModel), false, false, false, false, false);
         localClassDeclarationStmtMetaModel.getDeclaredPropertyMetaModels().add(localClassDeclarationStmtMetaModel.classDeclarationPropertyMetaModel);
