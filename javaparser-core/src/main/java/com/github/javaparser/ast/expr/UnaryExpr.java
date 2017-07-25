@@ -175,6 +175,10 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

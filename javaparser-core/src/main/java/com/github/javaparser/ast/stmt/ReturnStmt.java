@@ -132,11 +132,6 @@ public final class ReturnStmt extends Statement {
         return JavaParserMetaModel.returnStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ReturnStmt replaceExpression(Expression replacement) {
-        return setExpression((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -144,7 +139,7 @@ public final class ReturnStmt extends Statement {
             return false;
         if (expression != null) {
             if (node == expression) {
-                replaceExpression((Expression) replacementNode);
+                setExpression((Expression) replacementNode);
                 return true;
             }
         }

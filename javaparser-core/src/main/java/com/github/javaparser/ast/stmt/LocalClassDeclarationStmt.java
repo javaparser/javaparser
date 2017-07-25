@@ -116,6 +116,10 @@ public final class LocalClassDeclarationStmt extends Statement {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == classDeclaration) {
+            setClassDeclaration((ClassOrInterfaceDeclaration) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

@@ -243,19 +243,18 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ClassOrInterfaceType replaceScope(ClassOrInterfaceType replacement) {
-        return setScope((ClassOrInterfaceType) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         if (scope != null) {
             if (node == scope) {
-                replaceScope((ClassOrInterfaceType) replacementNode);
+                setScope((ClassOrInterfaceType) replacementNode);
                 return true;
             }
         }

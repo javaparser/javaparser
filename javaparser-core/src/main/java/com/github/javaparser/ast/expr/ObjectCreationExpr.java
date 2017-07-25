@@ -284,11 +284,6 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return JavaParserMetaModel.objectCreationExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ObjectCreationExpr replaceScope(Expression replacement) {
-        return setScope((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -310,9 +305,13 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         }
         if (scope != null) {
             if (node == scope) {
-                replaceScope((Expression) replacementNode);
+                setScope((Expression) replacementNode);
                 return true;
             }
+        }
+        if (node == type) {
+            setType((ClassOrInterfaceType) replacementNode);
+            return true;
         }
         if (typeArguments != null) {
             for (int i = 0; i < typeArguments.size(); i++) {

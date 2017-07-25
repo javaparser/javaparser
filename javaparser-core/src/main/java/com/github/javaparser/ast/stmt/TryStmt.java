@@ -228,16 +228,6 @@ public final class TryStmt extends Statement {
         return JavaParserMetaModel.tryStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public TryStmt replaceFinallyBlock(BlockStmt replacement) {
-        return setFinallyBlock((BlockStmt) replacement);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public TryStmt replaceTryBlock(BlockStmt replacement) {
-        return setTryBlock((BlockStmt) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -251,7 +241,7 @@ public final class TryStmt extends Statement {
         }
         if (finallyBlock != null) {
             if (node == finallyBlock) {
-                replaceFinallyBlock((BlockStmt) replacementNode);
+                setFinallyBlock((BlockStmt) replacementNode);
                 return true;
             }
         }
@@ -260,6 +250,10 @@ public final class TryStmt extends Statement {
                 resources.set(i, (VariableDeclarationExpr) replacementNode);
                 return true;
             }
+        }
+        if (node == tryBlock) {
+            setTryBlock((BlockStmt) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }

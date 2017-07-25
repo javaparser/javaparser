@@ -242,11 +242,6 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         return JavaParserMetaModel.variableDeclaratorMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public VariableDeclarator replaceInitializer(Expression replacement) {
-        return setInitializer((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -254,9 +249,17 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
             return false;
         if (initializer != null) {
             if (node == initializer) {
-                replaceInitializer((Expression) replacementNode);
+                setInitializer((Expression) replacementNode);
                 return true;
             }
+        }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }

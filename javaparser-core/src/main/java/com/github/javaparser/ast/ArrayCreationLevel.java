@@ -171,11 +171,6 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         return JavaParserMetaModel.arrayCreationLevelMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ArrayCreationLevel replaceDimension(Expression replacement) {
-        return setDimension((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -189,7 +184,7 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
         }
         if (dimension != null) {
             if (node == dimension) {
-                replaceDimension((Expression) replacementNode);
+                setDimension((Expression) replacementNode);
                 return true;
             }
         }

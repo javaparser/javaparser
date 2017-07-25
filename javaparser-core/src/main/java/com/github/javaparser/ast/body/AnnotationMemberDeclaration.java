@@ -218,11 +218,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public AnnotationMemberDeclaration replaceDefaultValue(Expression replacement) {
-        return setDefaultValue((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -230,9 +225,17 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
             return false;
         if (defaultValue != null) {
             if (node == defaultValue) {
-                replaceDefaultValue((Expression) replacementNode);
+                setDefaultValue((Expression) replacementNode);
                 return true;
             }
+        }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }

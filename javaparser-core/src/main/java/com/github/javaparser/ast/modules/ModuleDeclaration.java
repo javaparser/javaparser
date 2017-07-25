@@ -193,6 +193,10 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
                 return true;
             }
         }
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

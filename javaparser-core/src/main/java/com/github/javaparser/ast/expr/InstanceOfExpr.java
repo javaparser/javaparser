@@ -139,6 +139,14 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((ReferenceType) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }
