@@ -652,8 +652,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(EnclosedExpr n, A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getInner().isPresent()) {
-            tmp = n.getInner().get().accept(this, arg);
+        {
+            tmp = n.getInner().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

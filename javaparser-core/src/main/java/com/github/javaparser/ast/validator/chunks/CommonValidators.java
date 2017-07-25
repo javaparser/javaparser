@@ -41,12 +41,7 @@ public class CommonValidators extends Validators {
                     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.26
                     Expression target = n.getTarget();
                     while (target instanceof EnclosedExpr) {
-                        Optional<Expression> inner = ((EnclosedExpr) target).getInner();
-                        if (!inner.isPresent()) {
-                            reporter.report(n.getTarget(), "Illegal left hand side of an assignment.");
-                            return;
-                        }
-                        target = inner.get();
+                        target = ((EnclosedExpr) target).getInner();
                     }
                     if (target instanceof NameExpr
                             || target instanceof ArrayAccessExpr

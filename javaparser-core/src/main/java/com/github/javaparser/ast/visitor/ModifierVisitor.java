@@ -380,8 +380,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final EnclosedExpr n, final A arg) {
-        Expression inner = n.getInner().map(s -> (Expression) s.accept(this, arg)).orElse(null);
+        Expression inner = (Expression) n.getInner().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (inner == null)
+            return null;
         n.setInner(inner);
         n.setComment(comment);
         return n;
