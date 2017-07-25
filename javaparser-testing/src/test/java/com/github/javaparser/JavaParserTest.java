@@ -23,12 +23,19 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -36,6 +43,7 @@ import java.util.Optional;
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -112,5 +120,76 @@ public class JavaParserTest {
         assertEquals("Runnable", ((ClassOrInterfaceType)intersectionType.getElements().get(0)).getNameAsString());
         assertTrue(intersectionType.getElements().get(1) instanceof ClassOrInterfaceType);
         assertEquals("Serializable", ((ClassOrInterfaceType)intersectionType.getElements().get(1)).getNameAsString());
+    }
+
+    @Test
+    public void rangeOfIntersectionType() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        Type type = castExpr.getType();
+        assertEquals(range(3, 13, 3, 54), type.getRange().get());
+    }
+
+    @Test
+    public void rangeOfCast() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        assertEquals(range(3, 12, 3, 101), castExpr.getRange().get());
+    }
+
+    @Test
+    public void rangeOfCastNonIntersection() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        assertEquals(range(3, 12, 3, 101), castExpr.getRange().get());
+    }
+
+    @Test
+    public void rangeOfLambda() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
+        assertEquals(range(3, 56, 3, 101), lambdaExpr.getRange().get());
+        assertEquals(GeneratedJavaParserConstants.LPAREN, lambdaExpr.getTokenRange().get().getBegin().getKind());
+        assertEquals(GeneratedJavaParserConstants.RPAREN, lambdaExpr.getTokenRange().get().getEnd().getKind());
+    }
+
+    @Test
+    public void rangeOfLambdaBody() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        CompilationUnit cu = JavaParser.parse(code);
+        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
+        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
+        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
+        Statement lambdaBody = lambdaExpr.getBody();
+        assertEquals(range(3, 68, 3, 101), lambdaBody.getRange().get());
     }
 }

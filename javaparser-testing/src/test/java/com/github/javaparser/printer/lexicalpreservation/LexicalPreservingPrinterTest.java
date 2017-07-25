@@ -8,6 +8,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
@@ -226,7 +227,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(4);
         List<TokenTextElement> indentation = lpp.findIndentation(node);
-        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(e -> e.expand()).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
     }
 
     @Test
@@ -234,7 +235,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerExample("AnnotationDeclaration_Example3_original");
         Node node = cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
         List<TokenTextElement> indentation = lpp.findIndentation(node);
-        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(e -> e.expand()).collect(Collectors.toList()));
+        assertEquals(Arrays.asList(" ", " ", " "), indentation.stream().map(TokenTextElement::expand).collect(Collectors.toList()));
     }
 
     //
@@ -519,8 +520,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
-                .forEach(type -> type.getMembers().stream()
+        cu.getTypes()
+                .forEach(type -> type.getMembers()
                         .forEach(member -> {
                             if (member instanceof MethodDeclaration) {
                                 MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -787,9 +788,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -829,9 +830,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -872,9 +873,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -909,9 +910,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -944,9 +945,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         CompilationUnit cu = result.a.getResult().get();
 
-        cu.getTypes().stream()
+        cu.getTypes()
                 .forEach(type -> {
-                    type.getMembers().stream()
+                    type.getMembers()
                             .forEach(member -> {
                                 if (member instanceof MethodDeclaration) {
                                     MethodDeclaration methodDeclaration = (MethodDeclaration) member;
@@ -962,6 +963,18 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "   @Override()" + EOL +
                 "   protected void initializePage() {}" + EOL +
                 "}", result.b.print(cu));
+    }
+
+    @Test
+    public void invokeModifierVisitor() {
+        String code = "class A {" + EOL
+                + "  Object f() {" + EOL
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
+                + "}}";
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+        cu = result.a.getResult().get();
+        cu.accept(new ModifierVisitor<>(), null);
     }
 
 }

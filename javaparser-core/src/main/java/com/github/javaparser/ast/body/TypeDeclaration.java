@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
+import com.github.javaparser.ast.Node;
 
 /**
  * A base class for all types of type declarations.

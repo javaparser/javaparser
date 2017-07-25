@@ -38,8 +38,8 @@ import java.util.Optional;
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
-
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.Node;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.

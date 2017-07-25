@@ -3,14 +3,17 @@ package com.github.javaparser.printer.lexicalpreservation.changes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.utils.Pair;
+
+import java.util.Optional;
 
 /**
  * The replacement of an element in a list.
  */
 public class ListReplacementChange implements Change {
-    private ObservableProperty observableProperty;
-    private int index;
-    private Node newValue;
+    private final ObservableProperty observableProperty;
+    private final int index;
+    private final Node newValue;
 
     public ListReplacementChange(ObservableProperty observableProperty, int index, Node newValue) {
         this.observableProperty = observableProperty;
@@ -21,8 +24,16 @@ public class ListReplacementChange implements Change {
     @Override
     public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
-            NodeList<Node> nodeList = new NodeList<>();
-            NodeList<Node> currentNodeList = (NodeList<Node>)(new NoChange().getValue(property, node));
+            NodeList nodeList = new NodeList();
+            Object currentRawValue = new NoChange().getValue(property, node);
+            if (currentRawValue instanceof Optional) {
+                Optional optional = (Optional)currentRawValue;
+                currentRawValue = optional.orElseGet(null);
+            }
+            if (!(currentRawValue instanceof NodeList)){
+                throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
+            }
+            NodeList currentNodeList = (NodeList)currentRawValue;
             nodeList.addAll(currentNodeList);
             nodeList.set(index, newValue);
             return nodeList;

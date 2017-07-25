@@ -25,14 +25,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TextElementIteratorsFactory {
+class TextElementIteratorsFactory {
 
     static class CascadingIterator<E> implements Iterator<E> {
         interface Provider<E> {
             Iterator<E> provide();
         }
 
-        private Provider<E> nextProvider;
+        private final Provider<E> nextProvider;
         private Iterator<E> current;
         private Iterator<E> next;
         private boolean lastReturnedFromCurrent = false;
@@ -97,7 +97,7 @@ public class TextElementIteratorsFactory {
     }
 
     private static class SingleElementIterator<E> implements Iterator<E> {
-        private E element;
+        private final E element;
         private boolean returned;
 
         SingleElementIterator(E element) {
@@ -122,7 +122,7 @@ public class TextElementIteratorsFactory {
     }
 
     static class ComposedIterator<E> implements Iterator<E> {
-        private List<Iterator<E>> elements;
+        private final List<Iterator<E>> elements;
         private int currIndex;
 
         ComposedIterator(List<Iterator<E>> elements) {
