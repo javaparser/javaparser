@@ -731,7 +731,7 @@ StubUnit StubUnit():
      * Number of compilation units in a stub file is 1+
      * Each CompilationUnit declaration starts with a package declaration.
     */
-    pakage = PackageDeclaration()
+    (pakage = PackageDeclaration())?
     (in = ImportDeclaration() { imports = add(imports, in); })*
 
     (LOOKAHEAD(3, PackageDeclaration())
