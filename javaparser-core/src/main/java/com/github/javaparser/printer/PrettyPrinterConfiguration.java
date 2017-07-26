@@ -28,6 +28,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
+    private boolean printJavaDoc = true;
     private String indent = "    ";
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
@@ -49,8 +50,17 @@ public class PrettyPrinterConfiguration {
         return !printComments;
     }
 
+    public boolean isPrintJavaDoc() {
+        return printJavaDoc;
+    }
+
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
+        return this;
+    }
+
+    public PrettyPrinterConfiguration setPrintJavaDoc(boolean printJavaDoc) {
+        this.printJavaDoc = printJavaDoc;
         return this;
     }
 

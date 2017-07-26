@@ -4,9 +4,12 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
@@ -261,5 +264,11 @@ public class Java1_2ValidatorTest {
                 "(line 1,col 144) 'public' is not allowed here.",
                 "(line 1,col 144) 'protected' is not allowed here."
         );
+    }
+    
+    @Test
+    public void strictfpNotAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int strictfp;"));
+        assertProblems(result, "(line 1,col 5) 'strictfp' cannot be used as an identifier as it is a keyword.");
     }
 }

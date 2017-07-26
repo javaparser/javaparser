@@ -114,7 +114,7 @@ public class PrettyPrintVisitorTest {
     public void printIntersectionType() {
         String code = "(Runnable & Serializable) (() -> {})";
         Expression expression = JavaParser.parseExpression(code);
-        Type type = ((CastExpr)expression).getType();
+        Type type = ((CastExpr) expression).getType();
 
         assertEquals("Runnable & Serializable", print(type));
     }
@@ -129,5 +129,14 @@ public class PrettyPrintVisitorTest {
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
         assertEquals("return (Comparator<Map.Entry<K, V>> & Serializable) (c1, c2) -> c1.getKey().compareTo(c2.getKey());", print(methodDeclaration.getBody().get().getStatements().get(0)));
+    }
+
+    @Test
+    public void printClassWithoutJavaDocButWithComment() {
+        String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
+        CompilationUnit cu = JavaParser.parse(code);
+        PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavaDoc(false);
+        String content = cu.toString(ignoreJavaDoc);
+        assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
     }
 }
