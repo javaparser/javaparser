@@ -1,3 +1,10 @@
+Version 3.3.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/52?closed=1)
+* Breaking: `TryStmt::tryBlock` and `EnclosedExpr::inner` were optional for no good reason. Now they are required.
+* You can now ask a `JavaToken` for its category, which is useful for examining the token list or doing syntax highlighting or so.
+* `enum` and `strictfp` can now be used as identifiers on lower Java versions.
+
 Version 3.2.12
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/51?closed=1)
