@@ -39,7 +39,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.ast.Node.Parsedness.*;
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 
@@ -171,13 +171,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     private void printJavaComment(final Optional<Comment> javacomment, final Void arg) {
-        javacomment.ifPresent(c -> c.accept(this, arg));
+        if (configuration.isPrintJavaDoc()) {
+            javacomment.ifPresent(c -> c.accept(this, arg));
+        }
     }
 
     @Override
     public void visit(final CompilationUnit n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-        if(n.getParsed()== UNPARSABLE){
+        if (n.getParsed() == UNPARSABLE) {
             printer.println("???");
             return;
         }
@@ -302,7 +304,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final ClassOrInterfaceType n, final Void arg) {
         printJavaComment(n.getComment(), arg);
-
         if (n.getScope().isPresent()) {
             n.getScope().get().accept(this, arg);
             printer.print(".");
