@@ -1440,6 +1440,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {
+        if (configuration.isIgnoreComments()) return;
         if (node instanceof Comment) return;
 
         Node parent = node.getParentNode().orElse(null);
@@ -1469,6 +1470,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     private void printOrphanCommentsEnding(final Node node) {
+        if (configuration.isIgnoreComments()) return;
+
         List<Node> everything = new LinkedList<>();
         everything.addAll(node.getChildNodes());
         sortByBeginPosition(everything);
