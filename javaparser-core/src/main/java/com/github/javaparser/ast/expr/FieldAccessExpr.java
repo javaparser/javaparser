@@ -218,6 +218,14 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == scope) {
+            setScope((Expression) replacementNode);
+            return true;
+        }
         if (typeArguments != null) {
             for (int i = 0; i < typeArguments.size(); i++) {
                 if (typeArguments.get(i) == node) {

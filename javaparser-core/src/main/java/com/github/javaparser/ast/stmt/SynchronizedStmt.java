@@ -139,6 +139,14 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
+            return true;
+        }
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

@@ -165,6 +165,18 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((Statement) replacementNode);
+            return true;
+        }
+        if (node == iterable) {
+            setIterable((Expression) replacementNode);
+            return true;
+        }
+        if (node == variable) {
+            setVariable((VariableDeclarationExpr) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

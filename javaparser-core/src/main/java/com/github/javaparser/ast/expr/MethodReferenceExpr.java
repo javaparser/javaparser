@@ -188,6 +188,10 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == scope) {
+            setScope((Expression) replacementNode);
+            return true;
+        }
         if (typeArguments != null) {
             for (int i = 0; i < typeArguments.size(); i++) {
                 if (typeArguments.get(i) == node) {

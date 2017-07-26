@@ -239,11 +239,6 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         return JavaParserMetaModel.explicitConstructorInvocationStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ExplicitConstructorInvocationStmt replaceExpression(Expression replacement) {
-        return setExpression((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -257,7 +252,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         }
         if (expression != null) {
             if (node == expression) {
-                replaceExpression((Expression) replacementNode);
+                setExpression((Expression) replacementNode);
                 return true;
             }
         }

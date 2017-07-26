@@ -117,6 +117,10 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

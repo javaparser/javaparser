@@ -216,19 +216,18 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         return JavaParserMetaModel.forStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ForStmt replaceCompare(Expression replacement) {
-        return setCompare((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((Statement) replacementNode);
+            return true;
+        }
         if (compare != null) {
             if (node == compare) {
-                replaceCompare((Expression) replacementNode);
+                setCompare((Expression) replacementNode);
                 return true;
             }
         }

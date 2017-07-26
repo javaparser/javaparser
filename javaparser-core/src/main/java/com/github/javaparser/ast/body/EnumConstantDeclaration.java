@@ -199,6 +199,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
                 return true;
             }
         }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

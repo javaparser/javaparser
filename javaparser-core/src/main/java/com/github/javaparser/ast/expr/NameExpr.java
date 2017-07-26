@@ -119,6 +119,10 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

@@ -135,6 +135,14 @@ public final class ArrayAccessExpr extends Expression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == index) {
+            setIndex((Expression) replacementNode);
+            return true;
+        }
+        if (node == name) {
+            setName((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

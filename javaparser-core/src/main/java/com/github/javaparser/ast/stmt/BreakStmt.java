@@ -129,11 +129,6 @@ public final class BreakStmt extends Statement {
         return JavaParserMetaModel.breakStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public BreakStmt replaceLabel(SimpleName replacement) {
-        return setLabel((SimpleName) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -141,7 +136,7 @@ public final class BreakStmt extends Statement {
             return false;
         if (label != null) {
             if (node == label) {
-                replaceLabel((SimpleName) replacementNode);
+                setLabel((SimpleName) replacementNode);
                 return true;
             }
         }

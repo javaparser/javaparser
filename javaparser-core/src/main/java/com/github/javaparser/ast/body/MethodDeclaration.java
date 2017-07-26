@@ -291,11 +291,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         return JavaParserMetaModel.methodDeclarationMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public MethodDeclaration replaceBody(BlockStmt replacement) {
-        return setBody((BlockStmt) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -303,9 +298,13 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
             return false;
         if (body != null) {
             if (node == body) {
-                replaceBody((BlockStmt) replacementNode);
+                setBody((BlockStmt) replacementNode);
                 return true;
             }
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }

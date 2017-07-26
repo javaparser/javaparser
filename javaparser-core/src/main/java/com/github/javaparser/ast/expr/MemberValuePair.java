@@ -140,6 +140,14 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == value) {
+            setValue((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }
