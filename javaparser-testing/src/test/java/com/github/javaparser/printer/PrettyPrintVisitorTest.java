@@ -133,10 +133,10 @@ public class PrettyPrintVisitorTest {
 
     @Test
     public void printClassWithoutJavaDocButWithComment() {
-        String code = "/** javadoc */ public class A { \n// stuff\n}";
+        String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
         CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavaDoc(false);
         String content = cu.toString(ignoreJavaDoc);
-        assertEquals("public class A {\n    // stuff\n}\n", content);
+        assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
     }
 }
