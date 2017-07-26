@@ -60,4 +60,10 @@ public class Java1_4ValidatorTest {
                 "(line 1,col 17) Static imports are not supported.",
                 "(line 1,col 1) Static imports are not supported.");
     }
+
+    @Test
+    public void enumAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int enum;"));
+        assertNoProblems(result);
+    }
 }
