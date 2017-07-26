@@ -390,10 +390,10 @@ TOKEN :
   >
 |
   < #DECIMAL_FLOATING_POINT_LITERAL:
-        (<DECIMAL_LITERAL>)+ "." (<DECIMAL_LITERAL>)* (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
-      | "." (<DECIMAL_LITERAL>)+ (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
-      | (<DECIMAL_LITERAL>)+ <DECIMAL_EXPONENT> (["f","F","d","D"])?
-      | (<DECIMAL_LITERAL>)+ (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
+        <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | "." <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | <DECIMAL_LITERAL> <DECIMAL_EXPONENT> (["f","F","d","D"])?
+      | <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
   >
 |
   < #DECIMAL_EXPONENT: ["e","E"] (["+","-"])? (<DECIMAL_LITERAL>)+ >
