@@ -135,6 +135,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             setReceiverAnnotations(parameters.get(0).getAnnotations());
             // Removing receiver parameter as it should only be added to pass the annotations for receiver
             parameters.remove(0);
+        } else {
+            setReceiverAnnotations(new NodeList<>());
         }
         if (parameters == this.parameters) {
             return (T) this;

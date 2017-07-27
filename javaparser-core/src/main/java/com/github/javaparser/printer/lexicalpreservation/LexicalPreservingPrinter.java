@@ -443,7 +443,7 @@ public class LexicalPreservingPrinter {
             if (m.getParameterCount() == 0 && m.getReturnType().getCanonicalName().equals(NodeList.class.getCanonicalName())) {
                 try {
                     Object raw = m.invoke(parent);
-                    if (raw != null && !(raw instanceof NodeList)) {
+                    if (!(raw instanceof NodeList)) {
                         throw new IllegalStateException("Expected NodeList, found " + raw.getClass().getCanonicalName());
                     }
                     NodeList result = (NodeList)raw;
