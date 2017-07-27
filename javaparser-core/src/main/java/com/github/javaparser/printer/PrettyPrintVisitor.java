@@ -206,6 +206,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printOrphanCommentsEnding(n);
     }
 
+    // TODO Implement PrettyPrintVisitor # visit on StubUnit
+    @Override
+    public void visit(final StubUnit n, final Void arg) {
+        throw new RuntimeException("The method is not implemented!");
+    }
+
     @Override
     public void visit(final StubUnit n, final Void arg) {
         n.getCompilationUnits().forEach(cu -> cu.accept(this, arg));
