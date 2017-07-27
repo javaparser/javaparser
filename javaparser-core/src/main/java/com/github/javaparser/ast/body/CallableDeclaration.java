@@ -60,6 +60,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     private NodeList<ReferenceType> thrownExceptions;
 
+    private NodeList<AnnotationExpr> receiverAnnotations;
+
     @AllFieldsConstructor
     public CallableDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
@@ -129,6 +131,11 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
+        if (parameters.size() > 0 && parameters.get(0).getNameAsString().equals("this")) {
+            setReceiverAnnotations(parameters.get(0).getAnnotations());
+            // Removing receiver parameter as it should only be added to pass the annotations for receiver
+            parameters.remove(0);
+        }
         if (parameters == this.parameters) {
             return (T) this;
         }
@@ -138,6 +145,15 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
         return (T) this;
+    }
+
+    public CallableDeclaration<T> setReceiverAnnotations(NodeList<AnnotationExpr> receiverAnnotations) {
+        this.receiverAnnotations = receiverAnnotations;
+        return this;
+    }
+
+    public NodeList<AnnotationExpr> getReceiverAnnotations() {
+        return receiverAnnotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
