@@ -182,6 +182,10 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
                 return true;
             }
         }
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

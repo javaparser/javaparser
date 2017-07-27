@@ -231,19 +231,18 @@ public final class ArrayCreationExpr extends Expression {
         return JavaParserMetaModel.arrayCreationExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ArrayCreationExpr replaceInitializer(ArrayInitializerExpr replacement) {
-        return setInitializer((ArrayInitializerExpr) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == elementType) {
+            setElementType((Type) replacementNode);
+            return true;
+        }
         if (initializer != null) {
             if (node == initializer) {
-                replaceInitializer((ArrayInitializerExpr) replacementNode);
+                setInitializer((ArrayInitializerExpr) replacementNode);
                 return true;
             }
         }

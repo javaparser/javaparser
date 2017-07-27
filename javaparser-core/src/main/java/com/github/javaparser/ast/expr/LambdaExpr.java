@@ -189,6 +189,10 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((Statement) replacementNode);
+            return true;
+        }
         for (int i = 0; i < parameters.size(); i++) {
             if (parameters.get(i) == node) {
                 parameters.set(i, (Parameter) replacementNode);

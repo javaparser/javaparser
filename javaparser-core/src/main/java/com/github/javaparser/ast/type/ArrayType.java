@@ -210,6 +210,10 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == componentType) {
+            setComponentType((Type) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

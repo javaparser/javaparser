@@ -172,6 +172,14 @@ public final class BinaryExpr extends Expression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == left) {
+            setLeft((Expression) replacementNode);
+            return true;
+        }
+        if (node == right) {
+            setRight((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

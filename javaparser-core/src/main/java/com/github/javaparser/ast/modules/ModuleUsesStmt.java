@@ -89,6 +89,10 @@ public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUse
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

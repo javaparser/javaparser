@@ -339,6 +339,10 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         for (int i = 0; i < parameters.size(); i++) {
             if (parameters.get(i) == node) {
                 parameters.set(i, (Parameter) replacementNode);

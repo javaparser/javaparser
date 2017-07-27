@@ -127,6 +127,10 @@ public class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<Modul
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
         for (int i = 0; i < withTypes.size(); i++) {
             if (withTypes.get(i) == node) {
                 withTypes.set(i, (Type) replacementNode);

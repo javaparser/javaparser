@@ -120,16 +120,15 @@ public final class EnclosedExpr extends Expression {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public EnclosedExpr replaceInner(Expression replacement) {
-        return setInner((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == inner) {
+            setInner((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

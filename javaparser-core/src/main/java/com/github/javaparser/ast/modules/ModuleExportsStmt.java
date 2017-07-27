@@ -132,6 +132,10 @@ public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<Module
                 return true;
             }
         }
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

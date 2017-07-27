@@ -139,6 +139,14 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((Statement) replacementNode);
+            return true;
+        }
+        if (node == condition) {
+            setCondition((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

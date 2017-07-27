@@ -234,11 +234,6 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return JavaParserMetaModel.methodCallExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public MethodCallExpr replaceScope(Expression replacement) {
-        return setScope((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -250,9 +245,13 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
                 return true;
             }
         }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         if (scope != null) {
             if (node == scope) {
-                replaceScope((Expression) replacementNode);
+                setScope((Expression) replacementNode);
                 return true;
             }
         }
