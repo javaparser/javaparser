@@ -139,6 +139,14 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((Statement) replacementNode);
+            return true;
+        }
+        if (node == condition) {
+            setCondition((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

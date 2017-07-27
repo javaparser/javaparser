@@ -5,10 +5,12 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.Statement;
 import org.junit.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.EXPRESSION;
+import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
@@ -276,6 +278,12 @@ public class Java1_1ValidatorTest {
     @Test
     public void reflection() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("Abc.class"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    public void strictfpAllowedAsIdentifier() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int strictfp;"));
         assertNoProblems(result);
     }
 }

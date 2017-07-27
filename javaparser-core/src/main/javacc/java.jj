@@ -390,10 +390,10 @@ TOKEN :
   >
 |
   < #DECIMAL_FLOATING_POINT_LITERAL:
-        (<DECIMAL_LITERAL>)+ "." (<DECIMAL_LITERAL>)* (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
-      | "." (<DECIMAL_LITERAL>)+ (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
-      | (<DECIMAL_LITERAL>)+ <DECIMAL_EXPONENT> (["f","F","d","D"])?
-      | (<DECIMAL_LITERAL>)+ (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
+        <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | "." <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      | <DECIMAL_LITERAL> <DECIMAL_EXPONENT> (["f","F","d","D"])?
+      | <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
   >
 |
   < #DECIMAL_EXPONENT: ["e","E"] (["+","-"])? (<DECIMAL_LITERAL>)+ >
@@ -1595,9 +1595,12 @@ String Identifier():
 }
 {
     // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
-  (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
-   <IDENTIFIER>) { ret = token.image; setTokenKind(IDENTIFIER);}
-  { return ret; }
+    (<MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
+    // Make sure older Java versions parse
+    <ENUM> | <STRICTFP> |
+    // An actual plain old identifier
+    <IDENTIFIER>) { ret = token.image; setTokenKind(IDENTIFIER);}
+    { return ret; }
 }
 
 /*

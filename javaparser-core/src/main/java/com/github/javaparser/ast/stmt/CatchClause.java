@@ -152,6 +152,14 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
+            return true;
+        }
+        if (node == parameter) {
+            setParameter((Parameter) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

@@ -607,17 +607,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public Node replaceComment(Comment replacement) {
-        return setComment((Comment) replacement);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
         if (comment != null) {
             if (node == comment) {
-                replaceComment((Comment) replacementNode);
+                setComment((Comment) replacementNode);
                 return true;
             }
         }

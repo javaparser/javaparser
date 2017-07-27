@@ -121,11 +121,6 @@ public final class ThisExpr extends Expression {
         return JavaParserMetaModel.thisExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ThisExpr replaceClassExpr(Expression replacement) {
-        return setClassExpr((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -133,7 +128,7 @@ public final class ThisExpr extends Expression {
             return false;
         if (classExpr != null) {
             if (node == classExpr) {
-                replaceClassExpr((Expression) replacementNode);
+                setClassExpr((Expression) replacementNode);
                 return true;
             }
         }

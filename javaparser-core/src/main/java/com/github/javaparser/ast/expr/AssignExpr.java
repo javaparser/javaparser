@@ -171,6 +171,14 @@ public final class AssignExpr extends Expression {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == target) {
+            setTarget((Expression) replacementNode);
+            return true;
+        }
+        if (node == value) {
+            setValue((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

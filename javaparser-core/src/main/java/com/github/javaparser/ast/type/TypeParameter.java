@@ -203,6 +203,10 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         for (int i = 0; i < typeBound.size(); i++) {
             if (typeBound.get(i) == node) {
                 typeBound.set(i, (ClassOrInterfaceType) replacementNode);

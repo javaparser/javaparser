@@ -286,6 +286,14 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
                 return true;
             }
         }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
         for (int i = 0; i < varArgsAnnotations.size(); i++) {
             if (varArgsAnnotations.get(i) == node) {
                 varArgsAnnotations.set(i, (AnnotationExpr) replacementNode);

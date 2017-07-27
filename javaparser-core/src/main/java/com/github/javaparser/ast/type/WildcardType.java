@@ -236,16 +236,6 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return JavaParserMetaModel.wildcardTypeMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public WildcardType replaceExtendedType(ReferenceType replacement) {
-        return setExtendedType((ReferenceType) replacement);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public WildcardType replaceSuperType(ReferenceType replacement) {
-        return setSuperType((ReferenceType) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -253,13 +243,13 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
             return false;
         if (extendedType != null) {
             if (node == extendedType) {
-                replaceExtendedType((ReferenceType) replacementNode);
+                setExtendedType((ReferenceType) replacementNode);
                 return true;
             }
         }
         if (superType != null) {
             if (node == superType) {
-                replaceSuperType((ReferenceType) replacementNode);
+                setSuperType((ReferenceType) replacementNode);
                 return true;
             }
         }

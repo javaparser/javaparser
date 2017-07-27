@@ -218,6 +218,10 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
                 return true;
             }
         }
+        if (node == name) {
+            setName((SimpleName) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }
