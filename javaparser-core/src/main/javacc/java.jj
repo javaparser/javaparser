@@ -752,24 +752,24 @@ StubUnit StubUnit():
         )
         |
         (
-                {
-                    modifier = null;
-                }
-                /**
-                 * Declaration specifiers (e.g., public, final, volatile) may be omitted.
-                 */
-                modifier = Modifiers()
-                (
-                    tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-                |
-                    tn = EnumDeclaration(modifier) { types = add(types, tn); }
-                |
-                    tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-                |
-                    module = ModuleDeclaration(modifier)
-                |
-                    ";"
-                )
+            {
+                modifier = null;
+            }
+            /**
+             * Declaration specifiers (e.g., public, final, volatile) may be omitted.
+             */
+            modifier = Modifiers()
+            (
+                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = EnumDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+            |
+                module = ModuleDeclaration(modifier)
+            |
+                ";"
+            )
         )
     )*
     {
