@@ -22,9 +22,6 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.CtMethod;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
@@ -37,26 +34,12 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     private SignatureAttribute.TypeParameter wrapped;
     private TypeSolver typeSolver;
-    private CtMethod qualifierMethod = null;
-    private CtConstructor qualifierConstructor = null;
-    private CtClass qualifierType = null;
+    private TypeParametrizable container;
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, CtMethod qualifierMethod, TypeSolver typeSolver) {
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, TypeParametrizable container, TypeSolver typeSolver) {
         this.wrapped = wrapped;
         this.typeSolver = typeSolver;
-        this.qualifierMethod = qualifierMethod;
-    }
-
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, CtConstructor qualifierConstructor, TypeSolver typeSolver) {
-        this.wrapped = wrapped;
-        this.typeSolver = typeSolver;
-        this.qualifierConstructor = qualifierConstructor;
-    }
-
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, CtClass qualifierType, TypeSolver typeSolver) {
-        this.wrapped = wrapped;
-        this.typeSolver = typeSolver;
-        this.qualifierType = qualifierType;
+        this.container = container;
     }
 
     @Override
@@ -93,7 +76,7 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public boolean declaredOnType() {
-        return (this.qualifierType != null);
+        return (this.container instanceof ReferenceTypeDeclaration);
     }
 
     @Override
@@ -103,11 +86,10 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public String getContainerQualifiedName() {
-        TypeParametrizable container = getContainer();
-        if (container instanceof ReferenceTypeDeclaration) {
-            return ((ReferenceTypeDeclaration) container).getQualifiedName();
-        } else if (container instanceof MethodLikeDeclaration) {
-            return ((MethodLikeDeclaration) container).getQualifiedName();
+        if (this.container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) this.container).getQualifiedName();
+        } else if (this.container instanceof MethodLikeDeclaration) {
+            return ((MethodLikeDeclaration) this.container).getQualifiedName();
         }
         throw new UnsupportedOperationException();
     }
@@ -118,15 +100,7 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
     
     public TypeParametrizable getContainer() {
-
-        if (qualifierType != null) {
-            return JavassistFactory.toTypeDeclaration(qualifierType, typeSolver);
-        } else if (qualifierMethod != null) {
-            return new JavassistMethodDeclaration(qualifierMethod, typeSolver);
-        } else if (qualifierConstructor != null) {
-            return new JavassistConstructorDeclaration(qualifierConstructor, typeSolver);
-        }
-        throw new UnsupportedOperationException("No qualifier found in JavassistTypeParameter");
+        return this.container;
     }
 
     @Override

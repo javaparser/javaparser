@@ -73,7 +73,7 @@ public class JavassistTypeDeclarationAdapter {
         SignatureAttribute.ClassSignature classSignature =
             SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
         return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
-            .map((tp) -> new JavassistTypeParameter(tp, ctClass, typeSolver))
+            .map((tp) -> new JavassistTypeParameter(tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver))
             .collect(Collectors.toList());
       } catch (BadBytecode badBytecode) {
         throw new RuntimeException(badBytecode);
