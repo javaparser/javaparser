@@ -75,16 +75,6 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public boolean declaredOnType() {
-        return (this.container instanceof ReferenceTypeDeclaration);
-    }
-
-    @Override
-    public boolean declaredOnMethod() {
-        return !declaredOnType();
-    }
-
-    @Override
     public String getContainerQualifiedName() {
         if (this.container instanceof ReferenceTypeDeclaration) {
             return ((ReferenceTypeDeclaration) this.container).getQualifiedName();
@@ -98,7 +88,8 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     public String getContainerId() {
         return getContainerQualifiedName();
     }
-    
+
+    @Override
     public TypeParametrizable getContainer() {
         return this.container;
     }

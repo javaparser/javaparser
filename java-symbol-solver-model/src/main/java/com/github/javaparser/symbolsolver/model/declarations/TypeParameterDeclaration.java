@@ -55,6 +55,11 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
             }
 
             @Override
+            public boolean declaredOnConstructor() {
+                return false;
+            }
+
+            @Override
             public String getContainerQualifiedName() {
                 return classQName;
             }
@@ -62,6 +67,11 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
             @Override
             public String getContainerId() {
                 return classQName;
+            }
+            
+            @Override
+            public TypeParametrizable getContainer() {
+                return null;
             }
 
             @Override
@@ -84,12 +94,23 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
     /**
      * Is the type parameter been defined on a type?
      */
-    boolean declaredOnType();
+    default boolean declaredOnType() {
+        return (getContainer() instanceof ReferenceTypeDeclaration);
+    }
 
     /**
      * Is the type parameter been defined on a method?
      */
-    boolean declaredOnMethod();
+    default boolean declaredOnMethod() {
+        return (getContainer() instanceof MethodDeclaration);
+    }
+
+    /**
+     * Is the type parameter been defined on a constructor?
+     */
+    default boolean declaredOnConstructor() {
+        return (getContainer() instanceof ConstructorDeclaration);
+    }
 
     /**
      * The package name of the type bound(s).
@@ -125,6 +146,11 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
      * The ID of the container. See TypeContainer.getId
      */
     String getContainerId();
+    
+    /**
+     * The TypeParametrizable of the container. Can be either a ReferenceTypeDeclaration or a MethodLikeDeclaration
+     */
+    TypeParametrizable getContainer();
 
     /**
      * The bounds specified for the type parameter.
