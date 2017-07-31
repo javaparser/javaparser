@@ -24,6 +24,7 @@ import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
@@ -33,6 +34,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -177,5 +179,10 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
      */
     public TypeParameter getWrappedNode() {
         return wrappedNode;
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return asTypeParameter().containerType();
     }
 }

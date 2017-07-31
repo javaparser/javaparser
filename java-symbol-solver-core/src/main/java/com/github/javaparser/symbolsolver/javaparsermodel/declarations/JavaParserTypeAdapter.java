@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -14,9 +15,11 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -107,5 +110,12 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
             }
         }
         return SymbolReference.unsolved(TypeDeclaration.class);
+    }
+
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        Optional<Node> parent = wrappedNode.getParentNode();
+        return parent.isPresent() ? 
+                Optional.of(JavaParserFactory.toTypeDeclaration(parent.get(), typeSolver)) :
+                Optional.empty();
     }
 }

@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Declaration of a type parameter.
@@ -82,6 +83,11 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
             @Override
             public String toString() {
                 return "TypeParameter onType " + name;
+            }
+
+            @Override
+            public Optional<ReferenceTypeDeclaration> containerType() {
+                return Optional.empty();
             }
         };
     }

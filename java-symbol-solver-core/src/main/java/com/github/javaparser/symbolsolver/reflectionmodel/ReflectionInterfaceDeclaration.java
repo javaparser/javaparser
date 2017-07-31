@@ -274,6 +274,11 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         return res;
     }
+    
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return reflectionClassAdapter.containerType();
+    }
 
     @Override
     public Set<ReferenceTypeDeclaration> internalTypes() {

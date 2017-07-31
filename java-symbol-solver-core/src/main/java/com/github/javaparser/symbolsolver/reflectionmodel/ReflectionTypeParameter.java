@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -118,5 +119,13 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         return "ReflectionTypeParameter{" +
                 "typeVariable=" + typeVariable +
                 '}';
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        if (container instanceof ReferenceTypeDeclaration) {
+            return Optional.of((ReferenceTypeDeclaration) container);
+        }
+        return Optional.empty();
     }
 }

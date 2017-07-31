@@ -24,6 +24,7 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
+import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
@@ -38,6 +39,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.google.common.collect.ImmutableList;
+import com.sun.org.apache.xerces.internal.dom.ParentNode;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -333,6 +335,22 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
     }
 
+    @Override
+    public Set<ReferenceTypeDeclaration> internalTypes() {
+        Set<ReferenceTypeDeclaration> res = new HashSet<>();
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return javaParserTypeAdapter.containerType();
+    }
+
     ///
     /// Private methods
     ///
@@ -361,16 +379,5 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
                 .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
-    }
-
-    @Override
-    public Set<ReferenceTypeDeclaration> internalTypes() {
-        Set<ReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
     }
 }

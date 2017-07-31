@@ -78,6 +78,11 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
   public AccessLevel accessLevel() {
     return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
   }
+  
+  @Override
+  public Optional<ReferenceTypeDeclaration> containerType() {
+      return reflectionClassAdapter.containerType();
+  }
 
   @Override
   public String getPackageName() {

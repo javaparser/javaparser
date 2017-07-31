@@ -320,6 +320,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return reflectionClassAdapter.containerType();
+    }
+    
+    @Override
     public Set<ReferenceTypeDeclaration> internalTypes() {
         return Arrays.stream(this.clazz.getDeclaredClasses())
                 .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))

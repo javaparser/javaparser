@@ -26,6 +26,7 @@ import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -104,5 +105,13 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
             throw new UnsupportedOperationException(ot.toString());
         }
         return bounds;
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        if (container instanceof ReferenceTypeDeclaration) {
+            return Optional.of((ReferenceTypeDeclaration) container);
+        }
+        return Optional.empty();
     }
 }
