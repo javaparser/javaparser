@@ -109,8 +109,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
                 return Collections.emptyList();
             }
             SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(ctConstructor.getGenericSignature());
-            String qualifier = this.getQualifiedName();
-            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, false, qualifier, typeSolver)).collect(Collectors.toList());
+            return Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, ctConstructor, typeSolver)).collect(Collectors.toList());
         } catch (BadBytecode badBytecode) {
             throw new RuntimeException(badBytecode);
         }

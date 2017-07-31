@@ -16,8 +16,15 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtMethod;
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
@@ -29,15 +36,27 @@ import java.util.List;
 public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     private SignatureAttribute.TypeParameter wrapped;
-    private boolean declaredOnClass;
     private TypeSolver typeSolver;
-    private String qualifier;
+    private CtMethod qualifierMethod = null;
+    private CtConstructor qualifierConstructor = null;
+    private CtClass qualifierType = null;
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass, String qualifier, TypeSolver typeSolver) {
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, CtMethod qualifierMethod, TypeSolver typeSolver) {
         this.wrapped = wrapped;
-        this.declaredOnClass = declaredOnClass;
         this.typeSolver = typeSolver;
-        this.qualifier = qualifier;
+        this.qualifierMethod = qualifierMethod;
+    }
+
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, CtConstructor qualifierConstructor, TypeSolver typeSolver) {
+        this.wrapped = wrapped;
+        this.typeSolver = typeSolver;
+        this.qualifierConstructor = qualifierConstructor;
+    }
+
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, CtClass qualifierType, TypeSolver typeSolver) {
+        this.wrapped = wrapped;
+        this.typeSolver = typeSolver;
+        this.qualifierType = qualifierType;
     }
 
     @Override
@@ -74,7 +93,7 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public boolean declaredOnType() {
-        return declaredOnClass;
+        return (this.qualifierType != null);
     }
 
     @Override
@@ -84,12 +103,30 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public String getContainerQualifiedName() {
-        return qualifier;
+        TypeParametrizable container = getContainer();
+        if (container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) container).getQualifiedName();
+        } else if (container instanceof MethodLikeDeclaration) {
+            return ((MethodLikeDeclaration) container).getQualifiedName();
+        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getContainerId() {
-        return qualifier;
+        return getContainerQualifiedName();
+    }
+    
+    public TypeParametrizable getContainer() {
+
+        if (qualifierType != null) {
+            return JavassistFactory.toTypeDeclaration(qualifierType, typeSolver);
+        } else if (qualifierMethod != null) {
+            return new JavassistMethodDeclaration(qualifierMethod, typeSolver);
+        } else if (qualifierConstructor != null) {
+            return new JavassistConstructorDeclaration(qualifierConstructor, typeSolver);
+        }
+        throw new UnsupportedOperationException("No qualifier found in JavassistTypeParameter");
     }
 
     @Override
