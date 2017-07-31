@@ -9,6 +9,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -31,7 +32,7 @@ public class Issue144 extends AbstractResolutionTest {
         typeSolver = new JavaParserTypeSolver(srcDir);
     }
 
-    @Test
+    @Test(expected = UnsolvedSymbolException.class)
     public void issue144() throws ParseException {
         CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
@@ -39,6 +40,30 @@ public class Issue144 extends AbstractResolutionTest {
         MethodCallExpr methodCallExpr = (MethodCallExpr) expressionStmt.getExpression();
         Expression firstParameter = methodCallExpr.getArgument(0);
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
+
+        javaParserFacade.solve(firstParameter).isSolved();
+    }
+
+    @Test
+    public void issue144WithReflectionTypeSolver() throws ParseException {
+        CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
+        ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("main").get(0).getBody().get().getStatement(0);
+        MethodCallExpr methodCallExpr = (MethodCallExpr) expressionStmt.getExpression();
+        Expression firstParameter = methodCallExpr.getArgument(0);
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver(true));
+
+        assertEquals(true, javaParserFacade.solve(firstParameter).isSolved());
+    }
+
+    @Test
+    public void issue144WithCombinedTypeSolver() throws ParseException {
+        CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
+        ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("main").get(0).getBody().get().getStatement(0);
+        MethodCallExpr methodCallExpr = (MethodCallExpr) expressionStmt.getExpression();
+        Expression firstParameter = methodCallExpr.getArgument(0);
+        JavaParserFacade javaParserFacade = JavaParserFacade.get(new CombinedTypeSolver(typeSolver, new ReflectionTypeSolver(true)));
 
         assertEquals(true, javaParserFacade.solve(firstParameter).isSolved());
     }
