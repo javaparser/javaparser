@@ -28,8 +28,16 @@ import java.io.InputStream;
  */
 public abstract class AbstractResolutionTest extends AbstractTest {
 
+    protected CompilationUnit parseSampleWithStandardExtension(String sampleName) throws ParseException {
+        return parseSample(sampleName, "java");
+    }
+
     protected CompilationUnit parseSample(String sampleName) throws ParseException {
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + ".java.txt");
+        return parseSample(sampleName, "java.txt");
+    }
+
+    private CompilationUnit parseSample(String sampleName, String extension) throws ParseException {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + "." + extension);
         if (is == null) {
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
