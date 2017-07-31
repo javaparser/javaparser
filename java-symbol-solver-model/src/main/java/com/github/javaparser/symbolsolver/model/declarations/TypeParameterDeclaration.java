@@ -87,7 +87,7 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
 
             @Override
             public Optional<ReferenceTypeDeclaration> containerType() {
-                return Optional.empty();
+                throw new UnsupportedOperationException();
             }
         };
     }
