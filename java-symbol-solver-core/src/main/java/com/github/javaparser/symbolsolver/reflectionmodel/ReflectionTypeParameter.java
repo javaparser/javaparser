@@ -76,7 +76,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     @Override
     public int hashCode() {
         int result = typeVariable.hashCode();
-        result = 31 * result + (declaredOnType() ? 1 : 0);
+        result = 31 * result + container.hashCode();
         return result;
     }
 
