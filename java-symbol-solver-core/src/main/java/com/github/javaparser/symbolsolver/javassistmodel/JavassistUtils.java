@@ -22,10 +22,8 @@ import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclar
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
-import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
+import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
+import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -57,7 +55,9 @@ class JavassistUtils {
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         // consume one parametersOfReturnType at the time
-                        newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
+                        if (!(newReturnType instanceof VoidType)) {
+                            newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
+                        }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
                     }
                     return Optional.of(methodUsage);
@@ -123,12 +123,20 @@ class JavassistUtils {
             SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
             List<Type> typeParameters = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
             final String typeName =
-                classType.getDeclaringClass() != null ?
-                classType.getDeclaringClass().getName() + "." + classType.getName() :
-                classType.getName();
+                    classType.getDeclaringClass() != null ?
+                            classType.getDeclaringClass().getName() + "." + classType.getName() :
+                            classType.getName();
             ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
-                internalNameToCanonicalName(typeName));
+                    internalNameToCanonicalName(typeName));
             return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
+        } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
+            SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable)signatureType;
+            Optional<TypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
+            if (!typeParameterDeclarationOpt.isPresent()) {
+                throw new UnsolvedSymbolException("Unable to solve TypeVariable " + typeVariableSignature);
+            }
+            TypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
+            return new TypeVariable(typeParameterDeclaration);
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
@@ -148,7 +156,7 @@ class JavassistUtils {
 
     private static Optional<Type> getGenericParameterByName(String typeName, TypeParametrizable typeParametrizable) {
         Optional<TypeParameterDeclaration> tp = typeParametrizable.findTypeParameter(typeName);
-        return tp.map(it -> new TypeVariable(it));
+        return tp.map(TypeVariable::new);
     }
 
     private static Type typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
