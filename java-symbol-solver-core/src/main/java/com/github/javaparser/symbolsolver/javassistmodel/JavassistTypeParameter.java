@@ -16,8 +16,12 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
 import javassist.bytecode.SignatureAttribute;
 
 import java.util.ArrayList;
@@ -29,15 +33,13 @@ import java.util.List;
 public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     private SignatureAttribute.TypeParameter wrapped;
-    private boolean declaredOnClass;
     private TypeSolver typeSolver;
-    private String qualifier;
+    private TypeParametrizable container;
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, boolean declaredOnClass, String qualifier, TypeSolver typeSolver) {
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, TypeParametrizable container, TypeSolver typeSolver) {
         this.wrapped = wrapped;
-        this.declaredOnClass = declaredOnClass;
         this.typeSolver = typeSolver;
-        this.qualifier = qualifier;
+        this.container = container;
     }
 
     @Override
@@ -74,7 +76,7 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public boolean declaredOnType() {
-        return declaredOnClass;
+        return (this.container instanceof ReferenceTypeDeclaration);
     }
 
     @Override
@@ -84,12 +86,21 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public String getContainerQualifiedName() {
-        return qualifier;
+        if (this.container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) this.container).getQualifiedName();
+        } else if (this.container instanceof MethodLikeDeclaration) {
+            return ((MethodLikeDeclaration) this.container).getQualifiedName();
+        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getContainerId() {
-        return qualifier;
+        return getContainerQualifiedName();
+    }
+    
+    public TypeParametrizable getContainer() {
+        return this.container;
     }
 
     @Override
