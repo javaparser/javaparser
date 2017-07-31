@@ -45,6 +45,6 @@ public class Issue128 extends AbstractResolutionTest {
         MethodCallExpr methodCallExpr = (MethodCallExpr) expressionStmt.getExpression();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
-        javaParserFacade.solve(methodCallExpr);
+        assertEquals(false, javaParserFacade.solve(methodCallExpr).isSolved());
     }
 }

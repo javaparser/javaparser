@@ -580,7 +580,9 @@ public class MethodResolutionLogic {
          * @param staticOnly
          * @return
          */
-    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration,
+                                                                       String name, List<Type> argumentsTypes, boolean staticOnly,
+                                                                       TypeSolver typeSolver) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);

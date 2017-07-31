@@ -21,6 +21,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -208,12 +209,34 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
     }
 
+    private String toSimpleName(String qName) {
+        String[] parts = qName.split("\\.");
+        return parts[parts.length - 1];
+    }
+
+    private String packageName(String qName) {
+        int lastDot = qName.lastIndexOf('.');
+        if (lastDot == -1) {
+            throw new UnsupportedOperationException();
+        } else {
+            return qName.substring(0, lastDot);
+        }
+    }
+
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if(importDecl.isStatic()){
                 if(importDecl.isAsterisk()){
                     String importString = importDecl.getNameAsString();
+
+                    if (this.wrappedNode.getPackageDeclaration().isPresent()
+                            && this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier().equals(packageName(importString))
+                            && this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString)))) {
+                        // We are using a static import on a type defined in this file. It means the value was not found at
+                        // a lower level so this will fail
+                        return SymbolReference.unsolved(MethodDeclaration.class);
+                    }
 
                     com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(importString);
                     SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver);
