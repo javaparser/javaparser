@@ -57,20 +57,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ReferenceTypeDeclaration declaringType() {
-        if (getParentNode(wrappedNode) instanceof ClassOrInterfaceDeclaration) {
-            ClassOrInterfaceDeclaration parent = (ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
-            if (parent.isInterface()) {
-                return new JavaParserInterfaceDeclaration(parent, typeSolver);
-            } else {
-                return new JavaParserClassDeclaration(parent, typeSolver);
-            }
-        } else if (getParentNode(wrappedNode) instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver);
-        } else if (getParentNode(wrappedNode) instanceof ObjectCreationExpr) {
+        if (getParentNode(wrappedNode) instanceof ObjectCreationExpr) {
             ObjectCreationExpr parentNode = (ObjectCreationExpr) getParentNode(wrappedNode);
             return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);
         } else {
-            throw new UnsupportedOperationException(getParentNode(wrappedNode).getClass().getCanonicalName());
+            return JavaParserFactory.toTypeDeclaration(getParentNode(wrappedNode), typeSolver);
         }
     }
 
