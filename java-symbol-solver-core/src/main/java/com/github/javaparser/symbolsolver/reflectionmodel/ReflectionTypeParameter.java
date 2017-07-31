@@ -45,9 +45,9 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
         if (genericDeclaration instanceof Class) {
             container = ReflectionFactory.typeDeclarationFor((Class) genericDeclaration, typeSolver);
         } else if (genericDeclaration instanceof Method) {
-            new ReflectionMethodDeclaration((Method) genericDeclaration, typeSolver);
+            container = new ReflectionMethodDeclaration((Method) genericDeclaration, typeSolver);
         } else if (genericDeclaration instanceof Constructor) {
-            new ReflectionConstructorDeclaration((Constructor) genericDeclaration, typeSolver);
+            container = new ReflectionConstructorDeclaration((Constructor) genericDeclaration, typeSolver);
         }
         this.typeVariable = typeVariable;
         this.typeSolver = typeSolver;
