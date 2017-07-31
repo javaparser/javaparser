@@ -16,10 +16,14 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
@@ -33,23 +37,19 @@ import java.util.stream.Collectors;
 public class ReflectionTypeParameter implements TypeParameterDeclaration {
 
     private TypeVariable typeVariable;
-    private boolean declaredOnClass;
-    private String qNameOfDeclaringClass;
-    private String idOfDeclaringClass;
     private TypeSolver typeSolver;
+    private TypeParametrizable container;
 
     public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass, TypeSolver typeSolver) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
         if (genericDeclaration instanceof Class) {
-            TypeDeclaration typeDeclaration = ReflectionFactory.typeDeclarationFor((Class) genericDeclaration, typeSolver);
-            qNameOfDeclaringClass = typeDeclaration.getQualifiedName();
-            idOfDeclaringClass = typeDeclaration.getId();
-        } else {
-            qNameOfDeclaringClass = null;
-            idOfDeclaringClass = null;
+            container = ReflectionFactory.typeDeclarationFor((Class) genericDeclaration, typeSolver);
+        } else if (genericDeclaration instanceof Method) {
+            new ReflectionMethodDeclaration((Method) genericDeclaration, typeSolver);
+        } else if (genericDeclaration instanceof Constructor) {
+            new ReflectionConstructorDeclaration((Constructor) genericDeclaration, typeSolver);
         }
         this.typeVariable = typeVariable;
-        this.declaredOnClass = declaredOnClass;
         this.typeSolver = typeSolver;
     }
 
@@ -76,7 +76,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     @Override
     public int hashCode() {
         int result = typeVariable.hashCode();
-        result = 31 * result + (declaredOnClass ? 1 : 0);
+        result = 31 * result + (declaredOnType() ? 1 : 0);
         return result;
     }
 
@@ -86,33 +86,26 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public boolean declaredOnType() {
-        return declaredOnClass;
-    }
-
-    @Override
-    public boolean declaredOnMethod() {
-        return !declaredOnClass;
-    }
-
-    @Override
     public String getContainerQualifiedName() {
-        if (this.declaredOnType()) {
-            return qNameOfDeclaringClass;
+        if (container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) container).getQualifiedName();
         } else {
-            String qNameContainer = new ReflectionMethodDeclaration((Method) typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
-            return qNameContainer;
+            return ((MethodLikeDeclaration) container).getQualifiedSignature();
         }
     }
 
     @Override
     public String getContainerId() {
-        if (this.declaredOnType()) {
-            return idOfDeclaringClass;
+        if (container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) container).getId();
         } else {
-            String qNameContainer = new ReflectionMethodDeclaration((Method) typeVariable.getGenericDeclaration(), typeSolver).getQualifiedSignature();
-            return qNameContainer;
+            return ((MethodLikeDeclaration) container).getQualifiedSignature();
         }
+    }
+    
+    @Override
+    public TypeParametrizable getContainer() {
+        return this.container;
     }
 
     @Override

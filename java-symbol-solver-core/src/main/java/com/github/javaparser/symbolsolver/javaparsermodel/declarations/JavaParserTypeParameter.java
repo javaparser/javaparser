@@ -32,6 +32,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -89,39 +90,49 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public boolean declaredOnType() {
-        return (getParentNode(wrappedNode) instanceof ClassOrInterfaceDeclaration);
-    }
-
-    @Override
-    public boolean declaredOnMethod() {
-        return getParentNode(wrappedNode) instanceof com.github.javaparser.ast.body.MethodDeclaration;
-    }
-
-    @Override
     public String getContainerQualifiedName() {
-        if (this.declaredOnType()) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
-            TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
-            return typeDeclaration.getQualifiedName();
+        TypeParametrizable container = getContainer();
+        if (container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) container).getQualifiedName();
+        } else if (container instanceof JavaParserConstructorDeclaration) {
+            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
         } else {
-            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) getParentNode(wrappedNode);
-            MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver);
-            return methodDeclaration.getQualifiedSignature();
+            return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
         }
     }
 
     @Override
     public String getContainerId() {
-        if (this.declaredOnType()) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) getParentNode(wrappedNode);
-            TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
-            return typeDeclaration.getId();
+        TypeParametrizable container = getContainer();
+        if (container instanceof ReferenceTypeDeclaration) {
+            return ((ReferenceTypeDeclaration) container).getId();
+        } else if (container instanceof JavaParserConstructorDeclaration) {
+            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
         } else {
-            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) getParentNode(wrappedNode);
-            MethodDeclaration methodDeclaration = new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver);
-            return methodDeclaration.getQualifiedSignature();
+            return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
         }
+    }
+
+    @Override
+    public TypeParametrizable getContainer() {
+        Node parentNode = getParentNode(wrappedNode);
+        if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
+            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
+            return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
+        } else if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration){
+            com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
+            Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.getAncestorOfType(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
+            if (jpTypeDeclaration.isPresent()) {
+                ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
+                if (typeDeclaration.isClass()) {
+                    return new JavaParserConstructorDeclaration(typeDeclaration.asClass(), jpConstructorDeclaration, typeSolver);
+                }
+            }
+        } else {
+            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) parentNode;
+            return new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver);
+        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
