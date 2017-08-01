@@ -155,7 +155,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(EnclosedExpr node, Boolean solveLambdas) {
-        return node.getInner().get().accept(this, solveLambdas);
+        return node.getInner().accept(this, solveLambdas);
     }
 
     /**
