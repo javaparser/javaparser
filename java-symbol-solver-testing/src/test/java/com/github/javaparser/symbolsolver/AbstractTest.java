@@ -24,7 +24,7 @@ public abstract class AbstractTest {
         if (path.exists()) {
             return path;
         } else {
-            File underJavaParserCore = new File("java-symbol-solver-core/" + path.getPath());
+            File underJavaParserCore = new File("java-symbol-solver-testing/" + path.getPath());
             if (underJavaParserCore.exists()) {
                 return underJavaParserCore;
             } else {

@@ -2,9 +2,11 @@ rootProject.name = 'java-symbol-solver-parent'
 include ':java-symbol-solver-model'
 include ':java-symbol-solver-logic'
 include ':java-symbol-solver-core'
+include ':java-symbol-solver-testing'
 include ':java-symbol-solver-examples'
 
 project(':java-symbol-solver-model').projectDir = "$rootDir/java-symbol-solver-model" as File
 project(':java-symbol-solver-logic').projectDir = "$rootDir/java-symbol-solver-logic" as File
 project(':java-symbol-solver-core').projectDir = "$rootDir/java-symbol-solver-core" as File
+project(':java-symbol-solver-testing').projectDir = "$rootDir/java-symbol-solver-testing" as File
 project(':java-symbol-solver-examples').projectDir = "$rootDir/java-symbol-solver-examples" as File

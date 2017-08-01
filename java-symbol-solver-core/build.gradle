@@ -6,16 +6,4 @@ dependencies {
     compile project(':java-symbol-solver-model')
     compile project(':java-symbol-solver-logic')
     compile group: 'io.javaslang', name: 'javaslang', version: '2.0.3'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.easymock', name: 'easymock', version: '3.3.1'
 }
-
-idea {
-    module {
-        excludeDirs += file('src/test/resources/javaparser_expected_output')
-        excludeDirs += file('src/test/resources/javaparser_src')
-        excludeDirs += file('src/test/resources/javaparser_methodcalls_expected_output')
-        excludeDirs += file('src/test/resources/javaparser_new_src')
-    }
-}
-
