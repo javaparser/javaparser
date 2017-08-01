@@ -5,6 +5,16 @@
 
 A Symbol Solver for Java built on top of [JavaParser](https://github.com/javaparser/javaparser/) from the same team of committers.
 
+# Documentation
+
+Currently the best source of documentation is in [this book](https://leanpub.com/javaparservisited)
+
+<a href="https://leanpub.com/javaparservisited"><img src="https://s3.amazonaws.com/titlepages.leanpub.com/javaparservisited/hero?1484223491" width="200" height="319" /></a>
+
+You can also read this article:
+
+* [Resolve method calls in Java code using the JavaSymbolSolver	](https://tomassetti.me/resolve-method-calls-using-java-symbol-solver/)
+
 ## How this complement JavaParser?
 
 JavaParser is a parser: given a source file it recognizes the different syntatic
