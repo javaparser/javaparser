@@ -118,6 +118,10 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
                 }
             }
         }
+        // setting annotations for array for the Checker Framework
+        if (arrayBracketPairLists.length > 0) {
+            return type.setArrayAnnotations(arrayBracketPairLists[0]);
+        }
         return type;
     }
 

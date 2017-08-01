@@ -29,8 +29,12 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+
+import java.util.List;
 
 /**
  * Base class for types.
@@ -38,6 +42,8 @@ import com.github.javaparser.TokenRange;
  * @author Julio Vilmar Gesser
  */
 public abstract class Type extends Node {
+
+    private List<ArrayType.ArrayBracketPair> arrayAnnotations;
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -145,5 +151,28 @@ public abstract class Type extends Node {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    public List<AnnotationExpr> getAnnotationsAtLevel(int level) {
+        if (level == -1) {
+            return this.getAnnotations();
+        } else if (arrayAnnotations != null && arrayAnnotations.size() > level) {
+            return arrayAnnotations.get(level).getAnnotations();
+        } else {
+            return null;
+        }
+    }
+
+    public List<ArrayType.ArrayBracketPair> getArrayAnnotations() {
+        return arrayAnnotations;
+    }
+
+    public Type setArrayAnnotations(List<ArrayType.ArrayBracketPair> arrayAnnotations) {
+        this.arrayAnnotations = arrayAnnotations;
+        return this;
+    }
+
+    public int getArrayCount() {
+        return arrayAnnotations == null ? 0 : arrayAnnotations.size();
     }
 }
