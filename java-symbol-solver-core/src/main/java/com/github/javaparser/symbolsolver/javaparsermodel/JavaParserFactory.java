@@ -21,12 +21,19 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
+import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
@@ -107,5 +114,22 @@ public class JavaParserFactory {
             return new NoSymbolDeclarator<Node>(node, typeSolver);
         }
     }
-
+    
+    public static ReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            if (((ClassOrInterfaceDeclaration) node).isInterface()) {
+                return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+            } else {
+                return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+            }
+        } else if (node instanceof TypeParameter) {
+            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
+        } else if (node instanceof EnumDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+        } else if (node instanceof AnnotationDeclaration) {
+            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
+        } else {
+            throw new IllegalArgumentException(node.getClass().getCanonicalName());
+        }
+    }
 }

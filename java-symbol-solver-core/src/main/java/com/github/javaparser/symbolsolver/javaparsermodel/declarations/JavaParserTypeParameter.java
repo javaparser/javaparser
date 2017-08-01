@@ -212,4 +212,13 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     public String toString() {
         return "JPTypeParameter(" + wrappedNode.getName() + ", bounds=" + wrappedNode.getTypeBound() + ")";
     }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        TypeParametrizable container = getContainer();
+        if (container instanceof ReferenceTypeDeclaration) {
+            return Optional.of((ReferenceTypeDeclaration) container);
+        }
+        return Optional.empty();
+    }
 }

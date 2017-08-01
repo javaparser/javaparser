@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -193,5 +194,10 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   @Override
   public List<TypeParameterDeclaration> getTypeParameters() {
     return Lists.newArrayList();
+  }
+
+  @Override
+  public Optional<ReferenceTypeDeclaration> containerType() {
+    throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
   }
 }

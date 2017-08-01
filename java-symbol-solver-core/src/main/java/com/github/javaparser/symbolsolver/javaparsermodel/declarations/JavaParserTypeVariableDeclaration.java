@@ -33,6 +33,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -177,5 +178,10 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
      */
     public TypeParameter getWrappedNode() {
         return wrappedNode;
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return asTypeParameter().containerType();
     }
 }

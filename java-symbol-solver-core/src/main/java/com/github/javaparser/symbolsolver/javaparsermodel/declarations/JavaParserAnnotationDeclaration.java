@@ -7,6 +7,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
@@ -82,5 +83,10 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
     }
 }

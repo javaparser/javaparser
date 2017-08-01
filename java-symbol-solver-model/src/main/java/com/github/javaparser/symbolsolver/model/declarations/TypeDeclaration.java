@@ -60,13 +60,11 @@ public interface TypeDeclaration extends Declaration {
     }
 
     /**
-     * Get the TypeDeclaration enclosing this declaration.
+     * Get the ReferenceTypeDeclaration enclosing this declaration.
      *
      * @return
      */
-    default Optional<ReferenceTypeDeclaration> containerType() {
-        throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
-    }
+    Optional<ReferenceTypeDeclaration> containerType();
 
     ///
     /// Misc

@@ -333,6 +333,22 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
     }
 
+    @Override
+    public Set<ReferenceTypeDeclaration> internalTypes() {
+        Set<ReferenceTypeDeclaration> res = new HashSet<>();
+        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return javaParserTypeAdapter.containerType();
+    }
+
     ///
     /// Private methods
     ///
@@ -361,16 +377,5 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
                 .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters, typeSolver);
-    }
-
-    @Override
-    public Set<ReferenceTypeDeclaration> internalTypes() {
-        Set<ReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
-            }
-        }
-        return res;
     }
 }

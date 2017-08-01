@@ -507,11 +507,7 @@ public class JavaParserFacade {
     }
 
     public ReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
-        if (classOrInterfaceDeclaration.isInterface()) {
-            return new JavaParserInterfaceDeclaration(classOrInterfaceDeclaration, typeSolver);
-        } else {
-            return new JavaParserClassDeclaration(classOrInterfaceDeclaration, typeSolver);
-        }
+        return JavaParserFactory.toTypeDeclaration(classOrInterfaceDeclaration, typeSolver);
     }
 
     /**
@@ -530,14 +526,6 @@ public class JavaParserFacade {
     }
 
     public ReferenceTypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?> typeDeclaration) {
-        if (typeDeclaration instanceof ClassOrInterfaceDeclaration) {
-            return getTypeDeclaration((ClassOrInterfaceDeclaration) typeDeclaration);
-        } else if (typeDeclaration instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) typeDeclaration, typeSolver);
-        } else if (typeDeclaration instanceof com.github.javaparser.ast.body.AnnotationDeclaration) {
-            return new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) typeDeclaration, typeSolver);
-        } else {
-            throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
-        }
+        return JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver);
     }
 }

@@ -30,13 +30,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.NullType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -273,6 +269,11 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
         }
         return res;
+    }
+    
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return reflectionClassAdapter.containerType();
     }
 
     @Override

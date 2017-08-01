@@ -332,4 +332,9 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
         return res;
     }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return javaParserTypeAdapter.containerType();
+    }
 }

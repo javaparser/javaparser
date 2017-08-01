@@ -285,6 +285,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         return res;
     }
 
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return javaParserTypeAdapter.containerType();
+    }
+
     ///
     /// Private methods
     ///

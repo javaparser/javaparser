@@ -85,7 +85,7 @@ public class JavassistTypeDeclarationAdapter {
     try {
       return ctClass.getDeclaringClass() == null ?
           Optional.empty() :
-          Optional.of(new JavassistClassDeclaration(ctClass.getDeclaringClass(), typeSolver));
+          Optional.of(JavassistFactory.toTypeDeclaration(ctClass.getDeclaringClass(), typeSolver));
     } catch (NotFoundException e) {
       throw new RuntimeException(e);
     }
