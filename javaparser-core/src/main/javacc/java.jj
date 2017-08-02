@@ -715,7 +715,8 @@ StubUnit StubUnit():
 {
     ( LOOKAHEAD(2) ";" )*
     /*
-     * Stub file format described in the Checker Framework Manual 28.4.2
+     * Stub file format described in the Checker Framework Manual:
+     * https://checkerframework.org/manual/#stub-format .
      * All imports must be at the beginning of the file.
      * The only required import statements are the ones to import type annotations.
      * Import statements for types are optional.
