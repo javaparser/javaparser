@@ -283,7 +283,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayType r = new ArrayType(n.getTokenRange().orElse(null), componentType, annotations);
         r.setComment(comment);
-        r.setArrayAnnotations(n.getArrayAnnotations());
+        r.setArrayBracketPairs(n.getArrayBracketPairs());
         return r;
     }
 
