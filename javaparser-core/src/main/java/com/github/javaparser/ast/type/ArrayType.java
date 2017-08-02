@@ -118,9 +118,11 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
                 }
             }
         }
-        // setting annotations for array for the Checker Framework
+        // The above code concatenates the arrayBracketPairLists, because they represent different
+        // parts of the array rather than two sources of information about the same parts of the
+        // array.
         if (arrayBracketPairLists.length > 0) {
-            return type.setArrayAnnotations(arrayBracketPairLists[0]);
+            type.setArrayAnnotations(arrayBracketPairLists[0]);
         }
         return type;
     }

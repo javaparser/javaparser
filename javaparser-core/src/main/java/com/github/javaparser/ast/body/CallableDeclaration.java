@@ -133,7 +133,6 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         assertNotNull(parameters);
         if (parameters.size() > 0 && parameters.get(0).getNameAsString().equals("this")) {
             setReceiverAnnotations(parameters.get(0).getAnnotations());
-            // Removing receiver parameter as it should only be added to pass the annotations for receiver
             parameters.remove(0);
         } else {
             setReceiverAnnotations(new NodeList<>());
