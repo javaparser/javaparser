@@ -738,8 +738,8 @@ StubUnit StubUnit():
     (LOOKAHEAD(3, PackageDeclaration())
         (
             /*
-             * At this point the Stub parser met anothed package declaration.
-             * Writing the previous Compilation unit that was compleately read.
+             * The Stub parser encountered a package declaration.
+             * Write the previous Compilation unit, which has been completely read.
              */
             {
                 cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
