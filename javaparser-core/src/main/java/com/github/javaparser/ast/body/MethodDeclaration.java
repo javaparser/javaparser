@@ -158,11 +158,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     }
 
     @Override
-    public MethodDeclaration setParameters(final NodeList<Parameter> parameters) {
-        return super.setParameters(parameters);
-    }
-
-    @Override
     public MethodDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         return super.setThrownExceptions(thrownExceptions);
     }

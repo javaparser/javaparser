@@ -193,11 +193,10 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
-    // TODO Implement VoidVisitorAdapter for StubUnit
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final StubUnit n, final A arg) {
-        throw new RuntimeException("The method is not implemented!");
+        n.getCompilationUnits().forEach(cu -> cu.accept(this, arg));
     }
 
     @Override

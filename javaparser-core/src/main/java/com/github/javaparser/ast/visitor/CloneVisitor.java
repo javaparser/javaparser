@@ -48,18 +48,13 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         return r;
     }
 
-    // TODO Implement clone visitor for the StubUnit
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(StubUnit n, Object arg) {
-        /*NodeList<ImportDeclaration> imports = cloneList(n.getImports(), arg);
-        ModuleDeclaration module = cloneNode(n.getModule(), arg);
-        PackageDeclaration packageDeclaration = cloneNode(n.getPackageDeclaration(), arg);
-        NodeList<TypeDeclaration<?>> types = cloneList(n.getTypes(), arg);
-        Comment comment = cloneNode(n.getComment(), arg);
-        StubUnit r = new StubUnit(n.getTokenRange().orElse(null), packageDeclaration, imports, types, module);
-        r.setComment(comment);*/
-        throw new RuntimeException("The method is not implemented!");
+        NodeList<CompilationUnit> compilationUnits = new NodeList<>();
+        n.getCompilationUnits().forEach(cu -> compilationUnits.add(cloneNode(cu, arg)));
+        StubUnit su = new StubUnit(compilationUnits);
+        return su;
     }
 
     @Override
@@ -288,6 +283,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayType r = new ArrayType(n.getTokenRange().orElse(null), componentType, annotations);
         r.setComment(comment);
+        r.setArrayBracketPairs(n.getArrayBracketPairs());
         return r;
     }
 

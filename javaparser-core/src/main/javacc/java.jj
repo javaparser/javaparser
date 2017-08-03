@@ -714,7 +714,12 @@ StubUnit StubUnit():
 }
 {
     ( LOOKAHEAD(2) ";" )*
-    [ LOOKAHEAD(PackageDeclaration()) pakage = PackageDeclaration() ]
+    /*
+     * Stub file format described in the Checker Framework Manual:
+     * https://checkerframework.org/manual/#stub-format.
+     */
+    (in = ImportDeclaration() { imports = add(imports, in); })*
+
     /**
      * The stub file format permits having multiple classes and packages.
      * The packages are separated by a package statement: package my.package;.
@@ -722,48 +727,50 @@ StubUnit StubUnit():
      *
      * Going through a stub file and reading one compilation unit at a time
      * Number of compilation units in a stub file is 1+
-     */
-    (
-        /* Additional package declaration is not require, but still possible */
-        (pakage = PackageDeclaration())?
+     * Each CompilationUnit declaration starts with a package declaration.
+    */
+    (pakage = PackageDeclaration())?
+    (in = ImportDeclaration() { imports = add(imports, in); })*
 
-        /*
-         * The only required import statements are the ones to import type annotations.
-         * Import statements for types are optional.
-         */
-        (in = ImportDeclaration() { imports = add(imports, in); })*
-
-        {
-            types = emptyList();
-            modifier = null;
-            tn = null;
-            module = null;
-        }
-
-            (
-                /**
-                 * Declaration specifiers (e.g., public, final, volatile) may be omitted.
-                 */
-                modifier = Modifiers()
-                (
-                    tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
-                |
-                    tn = EnumDeclaration(modifier) { types = add(types, tn); }
-                |
-                    tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
-                |
-                    module = ModuleDeclaration(modifier)
-                |
-                    ";"
-                )
-            )
+    (LOOKAHEAD(3, PackageDeclaration())
+        (
+            /*
+             * The Stub parser encountered a package declaration.
+             * Write the previous Compilation unit, which has been completely read.
+             */
             {
-
                 cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
                 compilationUnits.add(cu);
+                types = emptyList();
+                tn = null;
+                module = null;
             }
-    )+
-
+            pakage = PackageDeclaration()
+            (in = ImportDeclaration() { imports = add(imports, in); })*
+        )
+        |
+        (
+            /**
+             * Declaration specifiers (e.g., public, final, volatile) may be omitted.
+             */
+            modifier = Modifiers()
+            (
+                tn = ClassOrInterfaceDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = EnumDeclaration(modifier) { types = add(types, tn); }
+            |
+                tn = AnnotationTypeDeclaration(modifier) { types = add(types, tn); }
+            |
+                module = ModuleDeclaration(modifier)
+            |
+                ";"
+            )
+        )
+    )*
+    {
+        cu = new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module);
+        compilationUnits.add(cu);
+    }
 
     (<EOF> | "\u001A" /** ctrl+z char **/)
     { return new StubUnit(compilationUnits); }
@@ -822,7 +829,6 @@ PackageDeclaration PackageDeclaration():
   "package" {begin = token();}  name = Name() ";"
   { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
-
 
 ImportDeclaration ImportDeclaration():
 {
