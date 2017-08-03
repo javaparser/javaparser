@@ -151,25 +151,23 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
     }
 
     // Look into extended classes and implemented interfaces
-
-    if (myDeclaration.getSuperTypeDeclaration().getName().equals(name)) {
-      return SymbolReference.solved(myDeclaration.getSuperTypeDeclaration());
-    } else {
-      // Look into extended classes and implemented interfaces
-      Optional<SymbolReference<TypeDeclaration>> superClassInternalTypesMatch =
-          myDeclaration
-              .getSuperTypeDeclaration()
-              .internalTypes()
-              .stream()
-              .filter(internalType -> internalType.getName().equals(name))
-              .findFirst()
-              .map(SymbolReference::solved);
-
-      if (superClassInternalTypesMatch.isPresent()) {
-        return superClassInternalTypesMatch.get();
+    for (ReferenceType ancestor : myDeclaration.getAncestors()) {
+      // look at names of extended classes and implemented interfaces (this may not be important because they are checked in CompilationUnitContext)
+      if (ancestor.getTypeDeclaration().getName().equals(name)) {
+        return SymbolReference.solved(ancestor.getTypeDeclaration());
+      } 
+      // look into internal types of extended classes and implemented interfaces
+      try {
+        for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+          if (internalTypeDeclaration.getName().equals(name)) {
+            return SymbolReference.solved(internalTypeDeclaration);
+          }
+        }
+      } catch (UnsupportedOperationException e) {
+        // just continue using the next ancestor
       }
     }
-
+    
     return getParent().solveType(name, typeSolver);
   }
 

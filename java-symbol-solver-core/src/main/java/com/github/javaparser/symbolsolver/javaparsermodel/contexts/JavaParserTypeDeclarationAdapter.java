@@ -78,7 +78,6 @@ public class JavaParserTypeDeclarationAdapter {
         	} catch (UnsupportedOperationException e) {
 	            // just continue using the next ancestor
             }
-        	
         }
 
         return context.getParent().solveType(name, typeSolver);
