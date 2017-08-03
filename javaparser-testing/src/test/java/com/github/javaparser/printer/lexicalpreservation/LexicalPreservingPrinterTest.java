@@ -977,4 +977,38 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         cu.accept(new ModifierVisitor<>(), null);
     }
 
+    @Test
+    public void handleDeprecatedAnnotationFinalClass() {
+        String code = "public final class A {}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+        cu.getTypes().forEach(type -> {
+            type.addAndGetAnnotation(Deprecated.class);
+        });
+
+        assertEquals("@Deprecated()" + EOL +
+                "public final class A {}" , result.b.print(cu));
+
+    }
+
+    @Test
+    public void handleDeprecatedAnnotationAbstractClass() {
+        String code = "public abstract class A {}";
+
+        Pair<ParseResult<CompilationUnit>, LexicalPreservingPrinter> result = LexicalPreservingPrinter
+                .setup(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+
+        CompilationUnit cu = result.a.getResult().get();
+        cu.getTypes().forEach(type -> {
+            type.addAndGetAnnotation(Deprecated.class);
+        });
+
+        assertEquals("@Deprecated()" + EOL +
+                "public abstract class A {}" , result.b.print(cu));
+
+    }
+
 }
