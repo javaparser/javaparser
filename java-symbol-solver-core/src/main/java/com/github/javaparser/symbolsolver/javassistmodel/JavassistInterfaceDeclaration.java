@@ -197,7 +197,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public String getName() {
-        return ctClass.getSimpleName();
+        String[] nameElements = ctClass.getSimpleName().replace('$', '.').split("\\.");
+        return nameElements[nameElements.length - 1];
     }
 
     @Override
