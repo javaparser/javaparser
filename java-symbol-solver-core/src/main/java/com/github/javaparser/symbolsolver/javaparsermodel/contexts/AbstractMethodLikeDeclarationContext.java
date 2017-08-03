@@ -4,6 +4,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -76,6 +77,19 @@ public abstract class AbstractMethodLikeDeclarationContext
                 }
             }
         }
+        
+        // Local types
+        List<com.github.javaparser.ast.body.TypeDeclaration> localTypes = wrappedNode.getChildNodesByType(
+                com.github.javaparser.ast.body.TypeDeclaration.class);
+        for (com.github.javaparser.ast.body.TypeDeclaration<?> localType : localTypes) {
+            if (localType.getName().getId().equals(name)) {
+                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
+            } else if (name.startsWith(String.format("%s.", localType.getName()))) {
+                return JavaParserFactory.getContext(localType, typeSolver).solveType(
+                        name.substring(localType.getName().getId().length() + 1), typeSolver);
+            }
+        }
+        
         return getParent().solveType(name, typeSolver);
     }
 
