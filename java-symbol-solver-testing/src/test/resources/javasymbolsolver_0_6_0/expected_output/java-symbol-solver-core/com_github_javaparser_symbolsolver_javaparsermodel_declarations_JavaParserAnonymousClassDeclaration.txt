@@ -1,0 +1,87 @@
+  Line 37) UUID.randomUUID() ==> java.util.UUID.randomUUID()
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver).getCorrespondingDeclaration() ==> ERROR
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver) ==> ERROR
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver) ==> ERROR
+  Line 44) wrappedNode.getParentNode().get() ==> ERROR
+  Line 44) wrappedNode.getParentNode() ==> ERROR
+  Line 45) wrappedNode.getType().getName().getId() ==> ERROR
+  Line 45) wrappedNode.getType().getName() ==> ERROR
+  Line 45) wrappedNode.getType() ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())).map(node -> (T) node).collect(Collectors.toList()) ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())).map(node -> (T) node) ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())) ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody().get().stream() ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody().get() ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody() ==> ERROR
+  Line 58) memberClass.isAssignableFrom(node.getClass()) ==> ERROR
+  Line 58) node.getClass() ==> ERROR
+  Line 60) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 65) typeSolver.solveType(Object.class.getCanonicalName()) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 65) Object.class.getCanonicalName() ==> java.lang.Class.getCanonicalName()
+  Line 70) superTypeDeclaration.asReferenceType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asReferenceType()
+  Line 76) superTypeDeclaration.asReferenceType().getAncestors().stream().filter(type -> type.getTypeDeclaration().isInterface()).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 76) superTypeDeclaration.asReferenceType().getAncestors().stream().filter(type -> type.getTypeDeclaration().isInterface()) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
+  Line 76) superTypeDeclaration.asReferenceType().getAncestors().stream() ==> java.util.Collection.stream()
+  Line 76) superTypeDeclaration.asReferenceType().getAncestors() ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.getAncestors()
+  Line 76) superTypeDeclaration.asReferenceType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asReferenceType()
+  Line 79) type.getTypeDeclaration().isInterface() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.isInterface()
+  Line 79) type.getTypeDeclaration() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeDeclaration()
+  Line 80) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 86) findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class).stream().map(ctor -> new JavaParserConstructorDeclaration(this, ctor, typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 86) findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class).stream().map(ctor -> new JavaParserConstructorDeclaration(this, ctor, typeSolver)) ==> ERROR
+  Line 86) findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class).stream() ==> ERROR
+  Line 86) findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class) ==> ERROR
+  Line 89) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 100) ImmutableList.<ReferenceType>builder().add(getSuperClass()).addAll(superTypeDeclaration.asReferenceType().getAncestors()).build() ==> ERROR
+  Line 100) ImmutableList.<ReferenceType>builder().add(getSuperClass()).addAll(superTypeDeclaration.asReferenceType().getAncestors()) ==> ERROR
+  Line 100) ImmutableList.<ReferenceType>builder().add(getSuperClass()) ==> ERROR
+  Line 100) ImmutableList.<ReferenceType>builder() ==> ERROR
+  Line 102) getSuperClass() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.getSuperClass()
+  Line 103) superTypeDeclaration.asReferenceType().getAncestors() ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.getAncestors()
+  Line 103) superTypeDeclaration.asReferenceType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asReferenceType()
+  Line 111) findMembersOfKind(com.github.javaparser.ast.body.FieldDeclaration.class).stream().flatMap(field -> field.getVariables().stream().map(variable -> new JavaParserFieldDeclaration(variable, typeSolver))).collect(Collectors.toList()) ==> ERROR
+  Line 111) findMembersOfKind(com.github.javaparser.ast.body.FieldDeclaration.class).stream().flatMap(field -> field.getVariables().stream().map(variable -> new JavaParserFieldDeclaration(variable, typeSolver))) ==> ERROR
+  Line 111) findMembersOfKind(com.github.javaparser.ast.body.FieldDeclaration.class).stream() ==> ERROR
+  Line 111) findMembersOfKind(com.github.javaparser.ast.body.FieldDeclaration.class) ==> ERROR
+  Line 114) field.getVariables().stream().map(variable -> new JavaParserFieldDeclaration(variable, typeSolver)) ==> ERROR
+  Line 114) field.getVariables().stream() ==> ERROR
+  Line 114) field.getVariables() ==> ERROR
+  Line 117) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 120) getSuperClass().getTypeDeclaration().getAllFields() ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.getAllFields()
+  Line 120) getSuperClass().getTypeDeclaration() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeDeclaration()
+  Line 120) getSuperClass() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.getSuperClass()
+  Line 123) getInterfaces().stream().flatMap(inteface -> inteface.getTypeDeclaration().getAllFields().stream()).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
+  Line 123) getInterfaces().stream().flatMap(inteface -> inteface.getTypeDeclaration().getAllFields().stream()) ==> java.util.stream.Stream.flatMap(java.util.function.Function<? super T, ? extends java.util.stream.Stream<? extends R>>)
+  Line 123) getInterfaces().stream() ==> java.util.Collection.stream()
+  Line 123) getInterfaces() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.getInterfaces()
+  Line 124) inteface.getTypeDeclaration().getAllFields().stream() ==> java.util.Collection.stream()
+  Line 124) inteface.getTypeDeclaration().getAllFields() ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.getAllFields()
+  Line 124) inteface.getTypeDeclaration() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeDeclaration()
+  Line 125) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 128) ImmutableList.<FieldDeclaration>builder().addAll(myFields).addAll(superClassFields).addAll(interfaceFields).build() ==> ERROR
+  Line 128) ImmutableList.<FieldDeclaration>builder().addAll(myFields).addAll(superClassFields).addAll(interfaceFields) ==> ERROR
+  Line 128) ImmutableList.<FieldDeclaration>builder().addAll(myFields).addAll(superClassFields) ==> ERROR
+  Line 128) ImmutableList.<FieldDeclaration>builder().addAll(myFields) ==> ERROR
+  Line 128) ImmutableList.<FieldDeclaration>builder() ==> ERROR
+  Line 139) findMembersOfKind(com.github.javaparser.ast.body.MethodDeclaration.class).stream().map(method -> new JavaParserMethodDeclaration(method, typeSolver)).collect(Collectors.toSet()) ==> ERROR
+  Line 139) findMembersOfKind(com.github.javaparser.ast.body.MethodDeclaration.class).stream().map(method -> new JavaParserMethodDeclaration(method, typeSolver)) ==> ERROR
+  Line 139) findMembersOfKind(com.github.javaparser.ast.body.MethodDeclaration.class).stream() ==> ERROR
+  Line 139) findMembersOfKind(com.github.javaparser.ast.body.MethodDeclaration.class) ==> ERROR
+  Line 142) Collectors.toSet() ==> java.util.stream.Collectors.toSet()
+  Line 162) Helper.getPackageName(wrappedNode) ==> ERROR
+  Line 167) Helper.getClassName("", wrappedNode) ==> ERROR
+  Line 172) Helper.containerName(getParentNode(wrappedNode)) ==> ERROR
+  Line 172) getParentNode(wrappedNode) ==> ERROR
+  Line 173) containerName.isEmpty() ==> java.lang.String.isEmpty()
+  Line 174) getName() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.getName()
+  Line 176) getName() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration.getName()
+  Line 183) findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class).stream().map(typeMember -> JavaParserFacade.get(typeSolver).getTypeDeclaration(typeMember)).collect(Collectors.toSet()) ==> ERROR
+  Line 183) findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class).stream().map(typeMember -> JavaParserFacade.get(typeSolver).getTypeDeclaration(typeMember)) ==> ERROR
+  Line 183) findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class).stream() ==> ERROR
+  Line 183) findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class) ==> ERROR
+  Line 185) JavaParserFacade.get(typeSolver).getTypeDeclaration(typeMember) ==> ERROR
+  Line 185) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 186) Collectors.toSet() ==> java.util.stream.Collectors.toSet()
+  Line 196) Lists.newArrayList() ==> ERROR
+  Line 201) this.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
+  Line 201) this.getClass() ==> java.lang.Object.getClass()

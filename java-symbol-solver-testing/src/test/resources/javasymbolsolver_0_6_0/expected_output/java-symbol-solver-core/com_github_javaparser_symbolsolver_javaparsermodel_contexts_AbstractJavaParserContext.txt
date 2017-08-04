@@ -1,0 +1,30 @@
+  Line 49) symbolDeclarator.getSymbolDeclarations() ==> com.github.javaparser.symbolsolver.resolution.SymbolDeclarator.getSymbolDeclarations()
+  Line 50) decl.getName().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 50) decl.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
+  Line 51) SymbolReference.solved(decl) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
+  Line 54) SymbolReference.unsolved(ValueDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
+  Line 76) getClass() ==> java.lang.Object.getClass()
+  Line 76) o.getClass() ==> java.lang.Object.getClass()
+  Line 80) wrappedNode.equals(that.wrappedNode) ==> ERROR
+  Line 87) wrappedNode.hashCode() ==> ERROR
+  Line 92) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
+  Line 94) Optional.empty() ==> java.util.Optional.empty()
+  Line 96) parent.solveGenericType(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveGenericType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 102) getParentNode(wrappedNode) ==> ERROR
+  Line 103) getParentNode(wrappedNode) ==> ERROR
+  Line 105) parentCall.getArguments() ==> ERROR
+  Line 106) parentCall.getArguments() ==> ERROR
+  Line 113) getParentNode(wrappedNode) ==> ERROR
+  Line 115) getParentNode(notMethod) ==> ERROR
+  Line 117) JavaParserFactory.getContext(notMethod, typeSolver) ==> ERROR
+  Line 120) getParentNode(wrappedNode) ==> ERROR
+  Line 122) getParentNode(notMethod) ==> ERROR
+  Line 124) JavaParserFactory.getContext(notMethod, typeSolver) ==> ERROR
+  Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)).map(d -> Value.from(d)).findFirst() ==> ERROR
+  Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)).map(d -> Value.from(d)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
+  Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
+  Line 132) symbolDeclarator.getSymbolDeclarations().stream() ==> java.util.Collection.stream()
+  Line 132) symbolDeclarator.getSymbolDeclarations() ==> com.github.javaparser.symbolsolver.resolution.SymbolDeclarator.getSymbolDeclarations()
+  Line 133) d.getName().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 133) d.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
+  Line 134) Value.from(d) ==> com.github.javaparser.symbolsolver.model.resolution.Value.from(com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration)

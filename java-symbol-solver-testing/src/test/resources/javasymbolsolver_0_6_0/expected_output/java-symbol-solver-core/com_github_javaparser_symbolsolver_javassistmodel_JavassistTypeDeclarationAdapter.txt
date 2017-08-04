@@ -1,0 +1,32 @@
+  Line 41) Arrays.stream(ctClass.getDeclaredMethods()).map(m -> new JavassistMethodDeclaration(m, typeSolver)).collect(Collectors.toSet()) ==> ERROR
+  Line 41) Arrays.stream(ctClass.getDeclaredMethods()).map(m -> new JavassistMethodDeclaration(m, typeSolver)) ==> ERROR
+  Line 41) Arrays.stream(ctClass.getDeclaredMethods()) ==> ERROR
+  Line 41) ctClass.getDeclaredMethods() ==> ERROR
+  Line 42) Collectors.toSet() ==> java.util.stream.Collectors.toSet()
+  Line 46) Arrays.stream(ctClass.getConstructors()).map(m -> new JavassistConstructorDeclaration(m, typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 46) Arrays.stream(ctClass.getConstructors()).map(m -> new JavassistConstructorDeclaration(m, typeSolver)) ==> ERROR
+  Line 46) Arrays.stream(ctClass.getConstructors()) ==> ERROR
+  Line 46) ctClass.getConstructors() ==> ERROR
+  Line 47) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 52) collectDeclaredFields(ctClass, fieldDecls) ==> ERROR
+  Line 58) Arrays.stream(ctClass.getDeclaredFields()).forEach(f -> fieldDecls.add(new JavassistFieldDeclaration(f, typeSolver))) ==> ERROR
+  Line 58) Arrays.stream(ctClass.getDeclaredFields()) ==> ERROR
+  Line 58) ctClass.getDeclaredFields() ==> ERROR
+  Line 59) fieldDecls.add(new JavassistFieldDeclaration(f, typeSolver)) ==> java.util.List.add(E)
+  Line 61) collectDeclaredFields(ctClass.getSuperclass(), fieldDecls) ==> ERROR
+  Line 61) ctClass.getSuperclass() ==> ERROR
+  Line 69) ctClass.getGenericSignature() ==> ERROR
+  Line 70) Collections.emptyList() ==> java.util.Collections.emptyList()
+  Line 74) SignatureAttribute.toClassSignature(ctClass.getGenericSignature()) ==> ERROR
+  Line 74) ctClass.getGenericSignature() ==> ERROR
+  Line 75) Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 75) Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()).map((tp) -> new JavassistTypeParameter(tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver)) ==> ERROR
+  Line 75) Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters()) ==> ERROR
+  Line 75) classSignature.getParameters() ==> ERROR
+  Line 76) JavassistFactory.toTypeDeclaration(ctClass, typeSolver) ==> ERROR
+  Line 77) Collectors.toList() ==> java.util.stream.Collectors.toList()
+  Line 86) ctClass.getDeclaringClass() ==> ERROR
+  Line 87) Optional.empty() ==> java.util.Optional.empty()
+  Line 88) Optional.of(JavassistFactory.toTypeDeclaration(ctClass.getDeclaringClass(), typeSolver)) ==> ERROR
+  Line 88) JavassistFactory.toTypeDeclaration(ctClass.getDeclaringClass(), typeSolver) ==> ERROR
+  Line 88) ctClass.getDeclaringClass() ==> ERROR

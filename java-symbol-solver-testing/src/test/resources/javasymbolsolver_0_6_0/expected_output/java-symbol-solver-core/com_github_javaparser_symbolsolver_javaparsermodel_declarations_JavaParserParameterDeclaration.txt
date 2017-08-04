@@ -1,0 +1,7 @@
+  Line 41) wrappedNode.getName().getId() ==> ERROR
+  Line 41) wrappedNode.getName() ==> ERROR
+  Line 56) wrappedNode.isVarArgs() ==> ERROR
+  Line 66) JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode) ==> ERROR
+  Line 66) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 66) wrappedNode.getType() ==> ERROR
+  Line 67) isVariadic() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserParameterDeclaration.isVariadic()

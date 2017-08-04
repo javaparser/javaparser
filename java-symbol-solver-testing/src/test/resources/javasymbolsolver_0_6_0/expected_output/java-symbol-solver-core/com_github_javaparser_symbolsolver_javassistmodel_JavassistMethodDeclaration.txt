@@ -1,0 +1,33 @@
+  Line 51) ctMethod.getDeclaringClass().isInterface() ==> ERROR
+  Line 51) ctMethod.getDeclaringClass() ==> ERROR
+  Line 51) isAbstract() ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistMethodDeclaration.isAbstract()
+  Line 56) Modifier.isStatic(ctMethod.getModifiers()) ==> ERROR
+  Line 56) ctMethod.getModifiers() ==> ERROR
+  Line 68) ctMethod.getName() ==> ERROR
+  Line 88) ctMethod.getDeclaringClass().isInterface() ==> ERROR
+  Line 88) ctMethod.getDeclaringClass() ==> ERROR
+  Line 89) ctMethod.getDeclaringClass() ==> ERROR
+  Line 91) ctMethod.getDeclaringClass() ==> ERROR
+  Line 98) JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver) ==> ERROR
+  Line 98) ctMethod.getReturnType() ==> ERROR
+  Line 108) ctMethod.getParameterTypes() ==> ERROR
+  Line 118) ctMethod.getModifiers() ==> ERROR
+  Line 119) ctMethod.getParameterTypes() ==> ERROR
+  Line 121) ctMethod.getGenericSignature() ==> ERROR
+  Line 122) SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature()) ==> ERROR
+  Line 122) ctMethod.getGenericSignature() ==> ERROR
+  Line 123) methodSignature.getParameterTypes() ==> ERROR
+  Line 124) JavassistUtils.signatureTypeToType(signatureType, typeSolver, this) ==> ERROR
+  Line 126) ctMethod.getParameterTypes() ==> ERROR
+  Line 140) new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes) ==> com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic.resolveTypeVariables(com.github.javaparser.symbolsolver.core.resolution.Context, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>)
+  Line 145) Modifier.isAbstract(ctMethod.getModifiers()) ==> ERROR
+  Line 145) ctMethod.getModifiers() ==> ERROR
+  Line 151) ctMethod.getGenericSignature() ==> ERROR
+  Line 152) Collections.emptyList() ==> java.util.Collections.emptyList()
+  Line 154) SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature()) ==> ERROR
+  Line 154) ctMethod.getGenericSignature() ==> ERROR
+  Line 155) Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, this, typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 155) Arrays.stream(methodSignature.getTypeParameters()).map((jasTp) -> new JavassistTypeParameter(jasTp, this, typeSolver)) ==> ERROR
+  Line 155) Arrays.stream(methodSignature.getTypeParameters()) ==> ERROR
+  Line 155) methodSignature.getTypeParameters() ==> ERROR
+  Line 155) Collectors.toList() ==> java.util.stream.Collectors.toList()

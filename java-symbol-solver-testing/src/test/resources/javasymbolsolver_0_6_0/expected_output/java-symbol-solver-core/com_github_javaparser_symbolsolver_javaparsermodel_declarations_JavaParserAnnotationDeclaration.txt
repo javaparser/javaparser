@@ -1,0 +1,12 @@
+  Line 60) Helper.getPackageName(wrappedNode) ==> ERROR
+  Line 65) Helper.getClassName("", wrappedNode) ==> ERROR
+  Line 70) Helper.containerName(getParentNode(wrappedNode)) ==> ERROR
+  Line 70) getParentNode(wrappedNode) ==> ERROR
+  Line 71) containerName.isEmpty() ==> java.lang.String.isEmpty()
+  Line 72) wrappedNode.getName().getId() ==> ERROR
+  Line 72) wrappedNode.getName() ==> ERROR
+  Line 74) wrappedNode.getName() ==> ERROR
+  Line 80) wrappedNode.getName().getId() ==> ERROR
+  Line 80) wrappedNode.getName() ==> ERROR
+  Line 90) this.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
+  Line 90) this.getClass() ==> java.lang.Object.getClass()

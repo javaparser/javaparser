@@ -1,0 +1,3 @@
+  Line 40) wrappedNode.getVariables() ==> ERROR
+  Line 41) symbols.add(JavaParserSymbolDeclaration.field(v, typeSolver)) ==> ERROR
+  Line 41) JavaParserSymbolDeclaration.field(v, typeSolver) ==> ERROR

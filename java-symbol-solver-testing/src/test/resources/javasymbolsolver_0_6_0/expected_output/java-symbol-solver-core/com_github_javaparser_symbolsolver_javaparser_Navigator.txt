@@ -1,0 +1,104 @@
+  Line 44) node.getParentNode().orElse(null) ==> ERROR
+  Line 44) node.getParentNode() ==> ERROR
+  Line 49) cu.getTypes().isEmpty() ==> ERROR
+  Line 49) cu.getTypes() ==> ERROR
+  Line 50) Optional.empty() ==> java.util.Optional.empty()
+  Line 53) getOuterTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getOuterTypeName(java.lang.String)
+  Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst() ==> ERROR
+  Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)) ==> ERROR
+  Line 54) cu.getTypes().stream() ==> ERROR
+  Line 54) cu.getTypes() ==> ERROR
+  Line 54) t.getName().getId().equals(typeName) ==> ERROR
+  Line 54) t.getName().getId() ==> ERROR
+  Line 54) t.getName() ==> ERROR
+  Line 56) getInnerTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getInnerTypeName(java.lang.String)
+  Line 57) type.isPresent() ==> ERROR
+  Line 57) innerTypeName.isEmpty() ==> java.lang.String.isEmpty()
+  Line 58) findType(type.get(), innerTypeName) ==> ERROR
+  Line 58) type.get() ==> ERROR
+  Line 64) getOuterTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getOuterTypeName(java.lang.String)
+  Line 66) Optional.empty() ==> java.util.Optional.empty()
+  Line 67) td.getMembers() ==> ERROR
+  Line 68) ((TypeDeclaration<?>) n).getName().getId().equals(typeName) ==> ERROR
+  Line 68) ((TypeDeclaration<?>) n).getName().getId() ==> ERROR
+  Line 68) ((TypeDeclaration<?>) n).getName() ==> ERROR
+  Line 69) Optional.of((TypeDeclaration<?>) n) ==> ERROR
+  Line 73) getInnerTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getInnerTypeName(java.lang.String)
+  Line 74) type.isPresent() ==> ERROR
+  Line 74) innerTypeName.isEmpty() ==> java.lang.String.isEmpty()
+  Line 75) findType(type.get(), innerTypeName) ==> ERROR
+  Line 75) type.get() ==> ERROR
+  Line 81) demandClassOrInterface(cu, qualifiedName) ==> ERROR
+  Line 82) cd.isInterface() ==> ERROR
+  Line 89) findType(cu, qualifiedName) ==> ERROR
+  Line 90) res.isPresent() ==> ERROR
+  Line 93) res.get() ==> ERROR
+  Line 96) res.get() ==> ERROR
+  Line 101) cd.getMembers() ==> ERROR
+  Line 104) md.getName().getId().equals(name) ==> ERROR
+  Line 104) md.getName().getId() ==> ERROR
+  Line 104) md.getName() ==> ERROR
+  Line 119) cd.getMembers() ==> ERROR
+  Line 122) fd.getVariables() ==> ERROR
+  Line 123) vd.getName().getId().equals(name) ==> ERROR
+  Line 123) vd.getName().getId() ==> ERROR
+  Line 123) vd.getName() ==> ERROR
+  Line 135) nameExpr.getName() ==> ERROR
+  Line 135) nameExpr.getName().getId().equals(name) ==> ERROR
+  Line 135) nameExpr.getName().getId() ==> ERROR
+  Line 135) nameExpr.getName() ==> ERROR
+  Line 139) node.getChildNodes() ==> ERROR
+  Line 140) findNameExpression(child, name) ==> ERROR
+  Line 151) nameExpr.getId() ==> ERROR
+  Line 151) nameExpr.getId().equals(name) ==> ERROR
+  Line 151) nameExpr.getId() ==> ERROR
+  Line 155) node.getChildNodes() ==> ERROR
+  Line 156) findSimpleName(child, name) ==> ERROR
+  Line 167) methodCallExpr.getName().getId().equals(methodName) ==> ERROR
+  Line 167) methodCallExpr.getName().getId() ==> ERROR
+  Line 167) methodCallExpr.getName() ==> ERROR
+  Line 171) node.getChildNodes() ==> ERROR
+  Line 172) findMethodCall(child, methodName) ==> ERROR
+  Line 183) variableDeclarator.getName().getId().equals(name) ==> ERROR
+  Line 183) variableDeclarator.getName().getId() ==> ERROR
+  Line 183) variableDeclarator.getName() ==> ERROR
+  Line 187) node.getChildNodes() ==> ERROR
+  Line 188) demandVariableDeclaration(child, name) ==> ERROR
+  Line 197) findType(compilationUnit, qualifiedName) ==> ERROR
+  Line 198) res.isPresent() ==> ERROR
+  Line 201) res.get() ==> ERROR
+  Line 202) res.get().getClass().getCanonicalName() ==> ERROR
+  Line 202) res.get().getClass() ==> ERROR
+  Line 202) res.get() ==> ERROR
+  Line 204) res.get() ==> ERROR
+  Line 209) findSwitchHelper(node) ==> ERROR
+  Line 218) findNodeOfGivenClassHelper(node, clazz) ==> ERROR
+  Line 228) findAllNodesOfGivenClassHelper(node, clazz, res) ==> ERROR
+  Line 233) findNodeOfGivenClass(method, ReturnStmt.class) ==> ERROR
+  Line 237) node.getParentNode().isPresent() ==> ERROR
+  Line 237) node.getParentNode() ==> ERROR
+  Line 238) Optional.empty() ==> java.util.Optional.empty()
+  Line 239) clazz.isInstance(node.getParentNode().get()) ==> ERROR
+  Line 239) node.getParentNode().get() ==> ERROR
+  Line 239) node.getParentNode() ==> ERROR
+  Line 240) Optional.of(clazz.cast(node.getParentNode().get())) ==> ERROR
+  Line 240) clazz.cast(node.getParentNode().get()) ==> ERROR
+  Line 240) node.getParentNode().get() ==> ERROR
+  Line 240) node.getParentNode() ==> ERROR
+  Line 242) findAncestor(node.getParentNode().get(), clazz) ==> ERROR
+  Line 242) node.getParentNode().get() ==> ERROR
+  Line 242) node.getParentNode() ==> ERROR
+  Line 251) qualifiedName.split("\\.", 2) ==> java.lang.String.split(java.lang.String, int)
+  Line 255) qualifiedName.contains(".") ==> java.lang.String.contains(java.lang.CharSequence)
+  Line 256) qualifiedName.split("\\.", 2) ==> java.lang.String.split(java.lang.String, int)
+  Line 265) node.getChildNodes() ==> ERROR
+  Line 266) findSwitchHelper(child) ==> ERROR
+  Line 275) clazz.isInstance(node) ==> ERROR
+  Line 276) clazz.cast(node) ==> ERROR
+  Line 278) node.getChildNodes() ==> ERROR
+  Line 279) findNodeOfGivenClassHelper(child, clazz) ==> ERROR
+  Line 288) clazz.isInstance(node) ==> ERROR
+  Line 289) collector.add(clazz.cast(node)) ==> ERROR
+  Line 289) clazz.cast(node) ==> ERROR
+  Line 291) node.getChildNodes() ==> ERROR
+  Line 292) findAllNodesOfGivenClassHelper(child, clazz, collector) ==> ERROR

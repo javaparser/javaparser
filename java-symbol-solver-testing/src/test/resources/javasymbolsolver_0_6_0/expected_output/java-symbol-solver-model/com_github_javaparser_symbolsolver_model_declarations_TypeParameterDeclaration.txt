@@ -1,0 +1,7 @@
+  Line 104) getContainer() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getContainer()
+  Line 111) getContainer() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getContainer()
+  Line 118) getContainer() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getContainer()
+  Line 143) String.format("%s.%s", getContainerId(), getName()) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 143) getContainerId() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getContainerId()
+  Line 143) getName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getName()
+  Line 218) isExtends() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound.isExtends()

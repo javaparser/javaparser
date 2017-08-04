@@ -1,0 +1,3 @@
+  Line 42) getParentNode(wrappedNode) ==> ERROR
+  Line 47) wrappedNode.getName().getId() ==> ERROR
+  Line 47) wrappedNode.getName() ==> ERROR

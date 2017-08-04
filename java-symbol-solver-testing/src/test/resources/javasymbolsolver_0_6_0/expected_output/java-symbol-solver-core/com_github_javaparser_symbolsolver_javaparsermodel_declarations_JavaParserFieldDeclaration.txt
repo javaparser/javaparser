@@ -1,0 +1,23 @@
+  Line 51) getParentNode(variableDeclarator) ==> ERROR
+  Line 52) getParentNode(variableDeclarator).getClass().getCanonicalName() ==> ERROR
+  Line 52) getParentNode(variableDeclarator).getClass() ==> ERROR
+  Line 52) getParentNode(variableDeclarator) ==> ERROR
+  Line 54) getParentNode(variableDeclarator) ==> ERROR
+  Line 68) getParentNode(enumConstantDeclaration) ==> ERROR
+  Line 71) JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), wrappedNode) ==> ERROR
+  Line 71) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 71) variableDeclarator.getType() ==> ERROR
+  Line 79) enumConstantDeclaration.getName().getId() ==> ERROR
+  Line 79) enumConstantDeclaration.getName() ==> ERROR
+  Line 81) variableDeclarator.getName().getId() ==> ERROR
+  Line 81) variableDeclarator.getName() ==> ERROR
+  Line 87) wrappedNode.getModifiers().contains(Modifier.STATIC) ==> ERROR
+  Line 87) wrappedNode.getModifiers() ==> ERROR
+  Line 106) getName() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserFieldDeclaration.getName()
+  Line 111) Helper.toAccessLevel(wrappedNode.getModifiers()) ==> ERROR
+  Line 111) wrappedNode.getModifiers() ==> ERROR
+  Line 116) Navigator.findAncestor(wrappedNode, com.github.javaparser.ast.body.TypeDeclaration.class) ==> ERROR
+  Line 117) typeDeclaration.isPresent() ==> ERROR
+  Line 118) JavaParserFacade.get(typeSolver).getTypeDeclaration(typeDeclaration.get()) ==> ERROR
+  Line 118) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 118) typeDeclaration.get() ==> ERROR

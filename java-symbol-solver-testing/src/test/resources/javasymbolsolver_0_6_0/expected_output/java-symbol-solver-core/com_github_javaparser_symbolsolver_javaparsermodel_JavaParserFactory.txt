@@ -1,0 +1,26 @@
+  Line 79) ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent() ==> ERROR
+  Line 79) ((ObjectCreationExpr) node).getAnonymousClassBody() ==> ERROR
+  Line 84) node.getParentNode().isPresent() ==> ERROR
+  Line 84) node.getParentNode() ==> ERROR
+  Line 84) node.getParentNode().get() ==> ERROR
+  Line 84) node.getParentNode() ==> ERROR
+  Line 84) node.getParentNode().get().getParentNode().isPresent() ==> ERROR
+  Line 84) node.getParentNode().get().getParentNode() ==> ERROR
+  Line 84) node.getParentNode().get() ==> ERROR
+  Line 84) node.getParentNode() ==> ERROR
+  Line 85) getContext(node.getParentNode().get().getParentNode().get(), typeSolver) ==> ERROR
+  Line 85) node.getParentNode().get().getParentNode().get() ==> ERROR
+  Line 85) node.getParentNode().get().getParentNode() ==> ERROR
+  Line 85) node.getParentNode().get() ==> ERROR
+  Line 85) node.getParentNode() ==> ERROR
+  Line 88) getParentNode(node) ==> ERROR
+  Line 89) ((ObjectCreationExpr) parentNode).getType() ==> ERROR
+  Line 90) getContext(getParentNode(parentNode), typeSolver) ==> ERROR
+  Line 90) getParentNode(parentNode) ==> ERROR
+  Line 92) getContext(parentNode, typeSolver) ==> ERROR
+  Line 103) expressionStmt.getExpression() ==> ERROR
+  Line 104) expressionStmt.getExpression() ==> ERROR
+  Line 112) foreachStmt.getVariable() ==> ERROR
+  Line 120) ((ClassOrInterfaceDeclaration) node).isInterface() ==> ERROR
+  Line 132) node.getClass().getCanonicalName() ==> ERROR
+  Line 132) node.getClass() ==> ERROR

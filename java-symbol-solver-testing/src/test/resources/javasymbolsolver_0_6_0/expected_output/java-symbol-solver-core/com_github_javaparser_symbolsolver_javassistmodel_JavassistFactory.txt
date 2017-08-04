@@ -1,0 +1,17 @@
+  Line 33) ctClazz.isArray() ==> ERROR
+  Line 34) typeUsageFor(ctClazz.getComponentType(), typeSolver) ==> ERROR
+  Line 34) ctClazz.getComponentType() ==> ERROR
+  Line 35) ctClazz.isPrimitive() ==> ERROR
+  Line 36) ctClazz.getName().equals("void") ==> ERROR
+  Line 36) ctClazz.getName() ==> ERROR
+  Line 39) PrimitiveType.byName(ctClazz.getName()) ==> ERROR
+  Line 39) ctClazz.getName() ==> ERROR
+  Line 42) ctClazz.isInterface() ==> ERROR
+  Line 45) ctClazz.isEnum() ==> ERROR
+  Line 59) ctClazz.isInterface() ==> ERROR
+  Line 61) ctClazz.isEnum() ==> ERROR
+  Line 63) ctClazz.isAnnotation() ==> ERROR
+  Line 65) ctClazz.isArray() ==> ERROR
+  Line 73) Modifier.isPublic(modifiers) ==> java.lang.reflect.Modifier.isPublic(int)
+  Line 75) Modifier.isProtected(modifiers) ==> java.lang.reflect.Modifier.isProtected(int)
+  Line 77) Modifier.isPrivate(modifiers) ==> java.lang.reflect.Modifier.isPrivate(int)

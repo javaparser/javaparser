@@ -1,0 +1,46 @@
+  Line 67) variableDeclarator.getName().getId() ==> ERROR
+  Line 67) variableDeclarator.getName() ==> ERROR
+  Line 72) getParentNode(parameter).getChildNodes() ==> ERROR
+  Line 72) getParentNode(parameter) ==> ERROR
+  Line 83) getParentNode(node) ==> ERROR
+  Line 84) getParentNode(node) ==> ERROR
+  Line 85) call.getArguments().size() ==> ERROR
+  Line 85) call.getArguments() ==> ERROR
+  Line 86) call.getArguments().get(i) ==> ERROR
+  Line 86) call.getArguments() ==> ERROR
+  Line 126) getParentNode(wrappedNode) ==> ERROR
+  Line 127) getParamPos(parameter) ==> ERROR
+  Line 128) JavaParserFacade.get(typeSolver).getType(getParentNode(wrappedNode)) ==> ERROR
+  Line 128) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 128) getParentNode(wrappedNode) ==> ERROR
+  Line 133) wrappedNode.getClass().getCanonicalName() ==> ERROR
+  Line 133) wrappedNode.getClass() ==> ERROR
+  Line 136) parameter.getType() ==> ERROR
+  Line 137) PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name()) ==> ERROR
+  Line 137) ((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name() ==> ERROR
+  Line 137) ((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType() ==> ERROR
+  Line 137) parameter.getType() ==> ERROR
+  Line 139) JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode) ==> ERROR
+  Line 139) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 139) parameter.getType() ==> ERROR
+  Line 141) parameter.isVarArgs() ==> ERROR
+  Line 149) getParentNode(wrappedNode) ==> ERROR
+  Line 150) JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver)) ==> ERROR
+  Line 150) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 150) variableDeclarator.getType() ==> ERROR
+  Line 150) JavaParserFactory.getContext(wrappedNode, typeSolver) ==> ERROR
+  Line 152) getParentNode(wrappedNode) ==> ERROR
+  Line 153) JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver)) ==> ERROR
+  Line 153) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 153) variableDeclarator.getType() ==> ERROR
+  Line 153) JavaParserFactory.getContext(wrappedNode, typeSolver) ==> ERROR
+  Line 155) getParentNode(wrappedNode).getClass().getCanonicalName() ==> ERROR
+  Line 155) getParentNode(wrappedNode).getClass() ==> ERROR
+  Line 155) getParentNode(wrappedNode) ==> ERROR
+  Line 158) wrappedNode.getClass().getCanonicalName() ==> ERROR
+  Line 158) wrappedNode.getClass() ==> ERROR
+  Line 164) this.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
+  Line 164) this.getClass() ==> java.lang.Object.getClass()
+  Line 164) this.getWrappedNode().getClass().getCanonicalName() ==> ERROR
+  Line 164) this.getWrappedNode().getClass() ==> ERROR
+  Line 164) this.getWrappedNode() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration.getWrappedNode()

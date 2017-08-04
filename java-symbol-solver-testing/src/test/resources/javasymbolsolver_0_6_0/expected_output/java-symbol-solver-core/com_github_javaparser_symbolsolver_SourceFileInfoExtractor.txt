@@ -1,0 +1,77 @@
+  Line 100) JavaParserFacade.get(typeSolver).getTypeDeclaration(node) ==> ERROR
+  Line 100) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 101) typeDeclaration.isClass() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.isClass()
+  Line 102) out.println("\n[ Class " + typeDeclaration.getQualifiedName() + " ]") ==> java.io.PrintStream.println(java.lang.String)
+  Line 102) typeDeclaration.getQualifiedName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.getQualifiedName()
+  Line 103) typeDeclaration.asClass().getAllSuperClasses() ==> com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration.getAllSuperClasses()
+  Line 103) typeDeclaration.asClass() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asClass()
+  Line 104) out.println("  superclass: " + sc.getQualifiedName()) ==> java.io.PrintStream.println(java.lang.String)
+  Line 104) sc.getQualifiedName() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getQualifiedName()
+  Line 106) typeDeclaration.asClass().getAllInterfaces() ==> com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration.getAllInterfaces()
+  Line 106) typeDeclaration.asClass() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asClass()
+  Line 107) out.println("  interface: " + sc.getQualifiedName()) ==> java.io.PrintStream.println(java.lang.String)
+  Line 107) sc.getQualifiedName() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getQualifiedName()
+  Line 114) solveTypeDecl((ClassOrInterfaceDeclaration) node) ==> ERROR
+  Line 116) getParentNode(node) ==> ERROR
+  Line 116) getParentNode(node) ==> ERROR
+  Line 117) getParentNode(node) ==> ERROR
+  Line 118) getParentNode(node) ==> ERROR
+  Line 120) getParentNode(node) ==> ERROR
+  Line 120) getParentNode(node) ==> ERROR
+  Line 122) JavaParserFacade.get(typeSolver).getType(node) ==> ERROR
+  Line 122) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 123) out.println("  Line " + node.getRange().get().begin.line + ") " + node + " ==> " + ref.describe()) ==> ERROR
+  Line 123) node.getRange().get() ==> ERROR
+  Line 123) node.getRange() ==> ERROR
+  Line 123) ref.describe() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.describe()
+  Line 127) err.println(upe.getMessage()) ==> java.io.PrintStream.println(java.lang.String)
+  Line 127) upe.getMessage() ==> java.lang.Throwable.getMessage()
+  Line 131) err.println(re.getMessage()) ==> java.io.PrintStream.println(java.lang.String)
+  Line 131) re.getMessage() ==> java.lang.Throwable.getMessage()
+  Line 140) out.println("  Line " + node.getBegin().get().line + ") " + node + " ==> " + toString((MethodCallExpr) node)) ==> ERROR
+  Line 140) node.getBegin().get() ==> ERROR
+  Line 140) node.getBegin() ==> ERROR
+  Line 140) toString((MethodCallExpr) node) ==> ERROR
+  Line 142) node.getChildNodes() ==> ERROR
+  Line 143) solveMethodCalls(child) ==> ERROR
+  Line 149) toString(JavaParserFacade.get(typeSolver).solve(node)) ==> ERROR
+  Line 149) JavaParserFacade.get(typeSolver).solve(node) ==> ERROR
+  Line 149) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 152) System.err.println("Error resolving call at L" + node.getBegin().get().line + ": " + node) ==> ERROR
+  Line 152) node.getBegin().get() ==> ERROR
+  Line 152) node.getBegin() ==> ERROR
+  Line 153) e.printStackTrace() ==> java.lang.Throwable.printStackTrace()
+  Line 160) methodDeclarationSymbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 161) methodDeclarationSymbolReference.getCorrespondingDeclaration().getQualifiedSignature() ==> com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration.getQualifiedSignature()
+  Line 161) methodDeclarationSymbolReference.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 169) collectAllNodes(node, nodes) ==> ERROR
+  Line 170) nodes.sort((n1, n2) -> n1.getBegin().get().compareTo(n2.getBegin().get())) ==> ERROR
+  Line 170) n1.getBegin().get().compareTo(n2.getBegin().get()) ==> ERROR
+  Line 170) n1.getBegin().get() ==> ERROR
+  Line 170) n1.getBegin() ==> ERROR
+  Line 170) n2.getBegin().get() ==> ERROR
+  Line 170) n2.getBegin() ==> ERROR
+  Line 175) nodes.add(node) ==> ERROR
+  Line 176) node.getChildNodes().forEach(c -> collectAllNodes(c, nodes)) ==> ERROR
+  Line 176) node.getChildNodes() ==> ERROR
+  Line 176) collectAllNodes(c, nodes) ==> ERROR
+  Line 180) file.isDirectory() ==> java.io.File.isDirectory()
+  Line 181) file.listFiles() ==> java.io.File.listFiles()
+  Line 182) solve(f) ==> ERROR
+  Line 185) file.getName().endsWith(".java") ==> java.lang.String.endsWith(java.lang.String)
+  Line 185) file.getName() ==> java.io.File.getName()
+  Line 187) out.println("- parsing " + file.getAbsolutePath()) ==> java.io.PrintStream.println(java.lang.String)
+  Line 187) file.getAbsolutePath() ==> java.io.File.getAbsolutePath()
+  Line 189) JavaParser.parse(file) ==> ERROR
+  Line 190) collectAllNodes(cu) ==> ERROR
+  Line 191) nodes.forEach(n -> solve(n)) ==> ERROR
+  Line 191) solve(n) ==> ERROR
+  Line 197) file.isDirectory() ==> java.io.File.isDirectory()
+  Line 198) file.listFiles() ==> java.io.File.listFiles()
+  Line 199) solveMethodCalls(f) ==> ERROR
+  Line 202) file.getName().endsWith(".java") ==> java.lang.String.endsWith(java.lang.String)
+  Line 202) file.getName() ==> java.io.File.getName()
+  Line 204) out.println("- parsing " + file.getAbsolutePath()) ==> java.io.PrintStream.println(java.lang.String)
+  Line 204) file.getAbsolutePath() ==> java.io.File.getAbsolutePath()
+  Line 206) JavaParser.parse(file) ==> ERROR
+  Line 207) solveMethodCalls(cu) ==> ERROR

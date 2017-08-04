@@ -1,0 +1,1 @@
+  Line 33) JavassistFactory.typeUsageFor(type, typeSolver) ==> ERROR

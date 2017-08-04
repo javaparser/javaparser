@@ -1,0 +1,279 @@
+  Line 41) Logger.getLogger(TypeExtractor.class.getCanonicalName()) ==> java.util.logging.Logger.getLogger(java.lang.String)
+  Line 41) TypeExtractor.class.getCanonicalName() ==> java.lang.Class.getCanonicalName()
+  Line 44) logger.setLevel(Level.INFO) ==> ERROR
+  Line 46) consoleHandler.setLevel(Level.INFO) ==> java.util.logging.Handler.setLevel(java.util.logging.Level)
+  Line 47) logger.addHandler(consoleHandler) ==> ERROR
+  Line 60) getParentNode(node) ==> ERROR
+  Line 62) facade.convertToUsageVariableType(node) ==> ERROR
+  Line 63) getParentNode(node) ==> ERROR
+  Line 65) facade.convertToUsageVariableType(node) ==> ERROR
+  Line 67) getParentNode(node).getClass().getCanonicalName() ==> ERROR
+  Line 67) getParentNode(node).getClass() ==> ERROR
+  Line 67) getParentNode(node) ==> ERROR
+  Line 73) node.getType() ==> ERROR
+  Line 76) facade.convertToUsage(node.getType(), node) ==> ERROR
+  Line 76) node.getType() ==> ERROR
+  Line 82) node.getName().accept(this, solveLambdas) ==> ERROR
+  Line 82) node.getName() ==> ERROR
+  Line 83) arrayUsageType.isArray() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isArray()
+  Line 84) ((ArrayType) arrayUsageType).getComponentType() ==> com.github.javaparser.symbolsolver.model.typesystem.ArrayType.getComponentType()
+  Line 91) facade.convertToUsage(node.getElementType(), JavaParserFactory.getContext(node, typeSolver)) ==> ERROR
+  Line 91) node.getElementType() ==> ERROR
+  Line 91) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 92) node.getLevels().size() ==> ERROR
+  Line 92) node.getLevels() ==> ERROR
+  Line 100) node.getClass().getCanonicalName() ==> ERROR
+  Line 100) node.getClass() ==> ERROR
+  Line 105) node.getTarget().accept(this, solveLambdas) ==> ERROR
+  Line 105) node.getTarget() ==> ERROR
+  Line 110) node.getOperator() ==> ERROR
+  Line 115) facade.getBinaryTypeConcrete(node.getLeft(), node.getRight(), solveLambdas) ==> ERROR
+  Line 115) node.getLeft() ==> ERROR
+  Line 115) node.getRight() ==> ERROR
+  Line 132) node.getLeft().accept(this, solveLambdas) ==> ERROR
+  Line 132) node.getLeft() ==> ERROR
+  Line 134) node.getOperator().name() ==> ERROR
+  Line 134) node.getOperator() ==> ERROR
+  Line 140) facade.convertToUsage(node.getType(), JavaParserFactory.getContext(node, typeSolver)) ==> ERROR
+  Line 140) node.getType() ==> ERROR
+  Line 140) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 146) node.getType() ==> ERROR
+  Line 147) facade.convertToUsage(astType, node.getType()) ==> ERROR
+  Line 147) node.getType() ==> ERROR
+  Line 148) ImmutableList.of(jssType) ==> ERROR
+  Line 153) node.getThenExpr().accept(this, solveLambdas) ==> ERROR
+  Line 153) node.getThenExpr() ==> ERROR
+  Line 158) node.getInner().accept(this, solveLambdas) ==> ERROR
+  Line 158) node.getInner() ==> ERROR
+  Line 168) parentType.hasField(node.getName().getId()) ==> ERROR
+  Line 168) node.getName().getId() ==> ERROR
+  Line 168) node.getName() ==> ERROR
+  Line 169) parentType.getField(node.getName().getId()).getType() ==> ERROR
+  Line 169) parentType.getField(node.getName().getId()) ==> ERROR
+  Line 169) node.getName().getId() ==> ERROR
+  Line 169) node.getName() ==> ERROR
+  Line 170) parentType.hasInternalType(node.getName().getId()) ==> ERROR
+  Line 170) node.getName().getId() ==> ERROR
+  Line 170) node.getName() ==> ERROR
+  Line 171) parentType.getInternalType(node.getName().getId()) ==> ERROR
+  Line 171) node.getName().getId() ==> ERROR
+  Line 171) node.getName() ==> ERROR
+  Line 173) node.getName().getId() ==> ERROR
+  Line 173) node.getName() ==> ERROR
+  Line 180) node.getScope() ==> ERROR
+  Line 181) node.getScope() ==> ERROR
+  Line 182) node.getScope() ==> ERROR
+  Line 183) JavaParserFactory.getContext(node, typeSolver).solveType(staticValue.toString(), typeSolver) ==> ERROR
+  Line 183) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 183) staticValue.toString() ==> ERROR
+  Line 184) typeAccessedStatically.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 186) solveDotExpressionType(typeAccessedStatically.getCorrespondingDeclaration().asReferenceType(), node) ==> ERROR
+  Line 187) typeAccessedStatically.getCorrespondingDeclaration().asReferenceType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asReferenceType()
+  Line 187) typeAccessedStatically.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 189) node.getScope() ==> ERROR
+  Line 192) facade.solve((ThisExpr) node.getScope()) ==> ERROR
+  Line 192) node.getScope() ==> ERROR
+  Line 194) solve.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 195) solve.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 197) solveDotExpressionType(correspondingDeclaration.asReferenceType(), node) ==> ERROR
+  Line 197) correspondingDeclaration.asReferenceType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.asReferenceType()
+  Line 201) node.getScope().toString().indexOf('.') ==> ERROR
+  Line 201) node.getScope().toString() ==> ERROR
+  Line 201) node.getScope() ==> ERROR
+  Line 203) typeSolver.tryToSolveType(node.getScope().toString()) ==> ERROR
+  Line 203) node.getScope().toString() ==> ERROR
+  Line 203) node.getScope() ==> ERROR
+  Line 204) sr.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 205) solveDotExpressionType(sr.getCorrespondingDeclaration(), node) ==> ERROR
+  Line 205) sr.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 210) new SymbolSolver(typeSolver).solveSymbolAsValue(node.getField().getId(), node) ==> ERROR
+  Line 210) node.getField().getId() ==> ERROR
+  Line 210) node.getField() ==> ERROR
+  Line 214) typeSolver.tryToSolveType(node.toString()) ==> ERROR
+  Line 214) node.toString() ==> ERROR
+  Line 215) sref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 216) sref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 219) value.isPresent() ==> java.util.Optional.isPresent()
+  Line 220) value.get().getType() ==> com.github.javaparser.symbolsolver.model.resolution.Value.getType()
+  Line 220) value.get() ==> java.util.Optional.get()
+  Line 222) node.getField().getId() ==> ERROR
+  Line 222) node.getField() ==> ERROR
+  Line 233) new ReflectionTypeSolver().solveType("java.lang.String") ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 253) node.getValue().toLowerCase().endsWith("f") ==> ERROR
+  Line 253) node.getValue().toLowerCase() ==> ERROR
+  Line 253) node.getValue() ==> ERROR
+  Line 271) logger.finest("getType on method call " + node) ==> ERROR
+  Line 273) facade.solveMethodAsUsage(node) ==> ERROR
+  Line 274) logger.finest("getType on method call " + node + " resolved to " + ref) ==> ERROR
+  Line 275) logger.finest("getType on method call " + node + " return type is " + ref.returnType()) ==> ERROR
+  Line 275) ref.returnType() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.returnType()
+  Line 276) ref.returnType() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.returnType()
+  Line 282) logger.finest("getType on name expr " + node) ==> ERROR
+  Line 283) new SymbolSolver(typeSolver).solveSymbolAsValue(node.getName().getId(), node) ==> ERROR
+  Line 283) node.getName().getId() ==> ERROR
+  Line 283) node.getName() ==> ERROR
+  Line 284) value.isPresent() ==> java.util.Optional.isPresent()
+  Line 285) node.getName().getId() ==> ERROR
+  Line 285) node.getName() ==> ERROR
+  Line 287) value.get().getType() ==> com.github.javaparser.symbolsolver.model.resolution.Value.getType()
+  Line 287) value.get() ==> java.util.Optional.get()
+  Line 293) facade.convertToUsage(node.getType(), node) ==> ERROR
+  Line 293) node.getType() ==> ERROR
+  Line 300) node.getClassExpr().isPresent() ==> ERROR
+  Line 300) node.getClassExpr() ==> ERROR
+  Line 302) node.getClassExpr().get().toString() ==> ERROR
+  Line 302) node.getClassExpr().get() ==> ERROR
+  Line 302) node.getClassExpr() ==> ERROR
+  Line 304) typeSolver.tryToSolveType(className) ==> ERROR
+  Line 305) clazz.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 306) clazz.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 309) node.getAncestorOfType(CompilationUnit.class) ==> ERROR
+  Line 310) cu.isPresent() ==> ERROR
+  Line 311) cu.get().getClassByName(className) ==> ERROR
+  Line 311) cu.get() ==> ERROR
+  Line 312) classByName.isPresent() ==> ERROR
+  Line 313) facade.getTypeDeclaration(classByName.get()) ==> ERROR
+  Line 313) classByName.get() ==> ERROR
+  Line 318) facade.getTypeDeclaration(facade.findContainingTypeDecl(node)) ==> ERROR
+  Line 318) facade.findContainingTypeDecl(node) ==> ERROR
+  Line 323) facade.getTypeDeclaration(facade.findContainingTypeDecl(node)) ==> ERROR
+  Line 323) facade.findContainingTypeDecl(node) ==> ERROR
+  Line 325) ((ClassDeclaration) typeOfNode).getSuperClass() ==> com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration.getSuperClass()
+  Line 327) node.getClass().getCanonicalName() ==> ERROR
+  Line 327) node.getClass() ==> ERROR
+  Line 333) node.getOperator() ==> ERROR
+  Line 336) node.getExpression().accept(this, solveLambdas) ==> ERROR
+  Line 336) node.getExpression() ==> ERROR
+  Line 343) node.getExpression().accept(this, solveLambdas) ==> ERROR
+  Line 343) node.getExpression() ==> ERROR
+  Line 345) node.getOperator().name() ==> ERROR
+  Line 345) node.getOperator() ==> ERROR
+  Line 351) node.getVariables().size() ==> ERROR
+  Line 351) node.getVariables() ==> ERROR
+  Line 354) facade.convertToUsageVariableType(node.getVariables().get(0)) ==> ERROR
+  Line 354) node.getVariables().get(0) ==> ERROR
+  Line 354) node.getVariables() ==> ERROR
+  Line 360) getParentNode(node) ==> ERROR
+  Line 361) getParentNode(node) ==> ERROR
+  Line 362) JavaParserSymbolDeclaration.getParamPos(node) ==> ERROR
+  Line 363) facade.solve(callExpr) ==> ERROR
+  Line 364) refMethod.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 365) getParentNode(node).toString() ==> ERROR
+  Line 365) getParentNode(node) ==> ERROR
+  Line 365) callExpr.getName().getId() ==> ERROR
+  Line 365) callExpr.getName() ==> ERROR
+  Line 367) logger.finest("getType on lambda expr " + refMethod.getCorrespondingDeclaration().getName()) ==> ERROR
+  Line 367) refMethod.getCorrespondingDeclaration().getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
+  Line 367) refMethod.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 371) refMethod.getCorrespondingDeclaration().getParam(pos).getType() ==> com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration.getType()
+  Line 371) refMethod.getCorrespondingDeclaration().getParam(pos) ==> com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration.getParam(int)
+  Line 371) refMethod.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 373) callExpr.getScope().isPresent() ==> ERROR
+  Line 373) callExpr.getScope() ==> ERROR
+  Line 374) callExpr.getScope().get() ==> ERROR
+  Line 374) callExpr.getScope() ==> ERROR
+  Line 381) JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName().getId(), typeSolver) ==> ERROR
+  Line 381) JavaParserFactory.getContext(nameExpr, typeSolver) ==> ERROR
+  Line 381) nameExpr.getName().getId() ==> ERROR
+  Line 381) nameExpr.getName() ==> ERROR
+  Line 382) type.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 391) facade.getType(scope) ==> ERROR
+  Line 392) scopeType.isReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isReferenceType()
+  Line 393) scopeType.asReferenceType().useThisTypeParametersOnTheGivenType(result) ==> com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParameterValueProvider.useThisTypeParametersOnTheGivenType(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 393) scopeType.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
+  Line 399) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 400) facade.solveGenericTypes(result, ctx, typeSolver) ==> ERROR
+  Line 405) FunctionalInterfaceLogic.getFunctionalMethod(result) ==> com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic.getFunctionalMethod(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 406) functionalMethod.isPresent() ==> java.util.Optional.isPresent()
+  Line 415) ReferenceTypeImpl.undeterminedParameters(functionalMethod.get().getDeclaration().declaringType(), typeSolver) ==> ERROR
+  Line 415) functionalMethod.get().getDeclaration().declaringType() ==> com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration.declaringType()
+  Line 415) functionalMethod.get().getDeclaration() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.getDeclaration()
+  Line 415) functionalMethod.get() ==> java.util.Optional.get()
+  Line 417) lambdaCtx.addPair(result, functionalInterfaceType) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addPair(com.github.javaparser.symbolsolver.model.typesystem.Type, com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 421) lambdaExpr.getBody() ==> ERROR
+  Line 422) facade.getType(((ExpressionStmt) lambdaExpr.getBody()).getExpression()) ==> ERROR
+  Line 422) ((ExpressionStmt) lambdaExpr.getBody()).getExpression() ==> ERROR
+  Line 422) lambdaExpr.getBody() ==> ERROR
+  Line 423) lambdaExpr.getBody() ==> ERROR
+  Line 424) lambdaExpr.getBody() ==> ERROR
+  Line 425) blockStmt.getStatements() ==> ERROR
+  Line 428) blockStmt.getNodesByType(ReturnStmt.class) ==> ERROR
+  Line 430) returnStmts.size() ==> ERROR
+  Line 432) returnStmts.stream().map(returnStmt -> {
+    Optional<Expression> expression = returnStmt.getExpression();
+    if (expression.isPresent()) {
+        return facade.getType(expression.get());
+    } else {
+        return VoidType.INSTANCE;
+    }
+}).filter(x -> x != null && !x.isVoid() && !x.isNull()).findFirst().orElse(VoidType.INSTANCE) ==> ERROR
+  Line 432) returnStmts.stream().map(returnStmt -> {
+    Optional<Expression> expression = returnStmt.getExpression();
+    if (expression.isPresent()) {
+        return facade.getType(expression.get());
+    } else {
+        return VoidType.INSTANCE;
+    }
+}).filter(x -> x != null && !x.isVoid() && !x.isNull()).findFirst() ==> ERROR
+  Line 432) returnStmts.stream().map(returnStmt -> {
+    Optional<Expression> expression = returnStmt.getExpression();
+    if (expression.isPresent()) {
+        return facade.getType(expression.get());
+    } else {
+        return VoidType.INSTANCE;
+    }
+}).filter(x -> x != null && !x.isVoid() && !x.isNull()) ==> ERROR
+  Line 432) returnStmts.stream().map(returnStmt -> {
+    Optional<Expression> expression = returnStmt.getExpression();
+    if (expression.isPresent()) {
+        return facade.getType(expression.get());
+    } else {
+        return VoidType.INSTANCE;
+    }
+}) ==> ERROR
+  Line 432) returnStmts.stream() ==> ERROR
+  Line 434) returnStmt.getExpression() ==> ERROR
+  Line 435) expression.isPresent() ==> ERROR
+  Line 436) facade.getType(expression.get()) ==> ERROR
+  Line 436) expression.get() ==> ERROR
+  Line 441) x.isVoid() ==> ERROR
+  Line 441) x.isNull() ==> ERROR
+  Line 454) functionalMethod.get().returnType() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.returnType()
+  Line 454) functionalMethod.get() ==> java.util.Optional.get()
+  Line 457) funcInterfaceCtx.addPair(formalType, actualType) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addPair(com.github.javaparser.symbolsolver.model.typesystem.Type, com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 459) funcInterfaceCtx.resolve(funcInterfaceCtx.addSingle(functionalInterfaceType)) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.resolve(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 459) funcInterfaceCtx.addSingle(functionalInterfaceType) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addSingle(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 464) lambdaCtx.addPair(result, functionalTypeWithReturn) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addPair(com.github.javaparser.symbolsolver.model.typesystem.Type, com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 465) lambdaCtx.resolve(lambdaCtx.addSingle(result)) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.resolve(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 465) lambdaCtx.addSingle(result) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addSingle(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 471) refMethod.getCorrespondingDeclaration().getParam(pos).getType() ==> com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration.getType()
+  Line 471) refMethod.getCorrespondingDeclaration().getParam(pos) ==> com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration.getParam(int)
+  Line 471) refMethod.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 480) getParentNode(node) ==> ERROR
+  Line 481) getParentNode(node) ==> ERROR
+  Line 482) JavaParserSymbolDeclaration.getParamPos(node) ==> ERROR
+  Line 483) facade.solve(callExpr, false) ==> ERROR
+  Line 484) refMethod.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 485) getParentNode(node).toString() ==> ERROR
+  Line 485) getParentNode(node) ==> ERROR
+  Line 485) callExpr.getName().getId() ==> ERROR
+  Line 485) callExpr.getName() ==> ERROR
+  Line 487) logger.finest("getType on method reference expr " + refMethod.getCorrespondingDeclaration().getName()) ==> ERROR
+  Line 487) refMethod.getCorrespondingDeclaration().getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
+  Line 487) refMethod.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 490) facade.solveMethodAsUsage(callExpr) ==> ERROR
+  Line 491) usage.getParamType(pos) ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.getParamType(int)
+  Line 493) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 494) facade.solveGenericTypes(result, ctx, typeSolver) ==> ERROR
+  Line 499) FunctionalInterfaceLogic.getFunctionalMethod(result) ==> com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic.getFunctionalMethod(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 500) functionalMethod.isPresent() ==> java.util.Optional.isPresent()
+  Line 504) facade.toMethodUsage(methodReferenceExpr).returnType() ==> ERROR
+  Line 504) facade.toMethodUsage(methodReferenceExpr) ==> ERROR
+  Line 505) functionalMethod.get().returnType() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.returnType()
+  Line 505) functionalMethod.get() ==> java.util.Optional.get()
+  Line 508) inferenceContext.addPair(formalType, actualType) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addPair(com.github.javaparser.symbolsolver.model.typesystem.Type, com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 509) inferenceContext.resolve(inferenceContext.addSingle(result)) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.resolve(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 509) inferenceContext.addSingle(result) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addSingle(com.github.javaparser.symbolsolver.model.typesystem.Type)
+  Line 515) refMethod.getCorrespondingDeclaration().getParam(pos).getType() ==> com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration.getType()
+  Line 515) refMethod.getCorrespondingDeclaration().getParam(pos) ==> com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration.getParam(int)
+  Line 515) refMethod.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()

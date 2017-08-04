@@ -1,0 +1,17 @@
+  Line 41) wrappedNode.getVariable().getVariables().size() ==> ERROR
+  Line 41) wrappedNode.getVariable().getVariables() ==> ERROR
+  Line 41) wrappedNode.getVariable() ==> ERROR
+  Line 44) wrappedNode.getVariable().getVariables().get(0) ==> ERROR
+  Line 44) wrappedNode.getVariable().getVariables() ==> ERROR
+  Line 44) wrappedNode.getVariable() ==> ERROR
+  Line 45) variableDeclarator.getName().getId().equals(name) ==> ERROR
+  Line 45) variableDeclarator.getName().getId() ==> ERROR
+  Line 45) variableDeclarator.getName() ==> ERROR
+  Line 46) SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver)) ==> ERROR
+  Line 46) JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver) ==> ERROR
+  Line 48) getParentNode(wrappedNode) ==> ERROR
+  Line 49) StatementContext.solveInBlock(name, typeSolver, wrappedNode) ==> ERROR
+  Line 51) getParent().solveSymbol(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbol(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 51) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
+  Line 58) getParent().solveMethod(name, argumentsTypes, false, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethod(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 58) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()

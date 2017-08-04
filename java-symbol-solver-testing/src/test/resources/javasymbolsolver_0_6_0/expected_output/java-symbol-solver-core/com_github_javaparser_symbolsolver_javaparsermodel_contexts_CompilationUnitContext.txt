@@ -1,0 +1,130 @@
+  Line 49) name.contains(".") ==> java.lang.String.contains(java.lang.CharSequence)
+  Line 69) itName.contains(".") ==> java.lang.String.contains(java.lang.CharSequence)
+  Line 70) getType(itName) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.getType(java.lang.String)
+  Line 71) getMember(itName) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.getMember(java.lang.String)
+  Line 72) this.solveType(typeName, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 73) type.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 74) new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbolInType(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration, java.lang.String)
+  Line 74) type.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 81) wrappedNode.getImports() ==> ERROR
+  Line 82) wrappedNode.getImports() ==> ERROR
+  Line 83) importDecl.isStatic() ==> ERROR
+  Line 84) importDecl.isAsterisk() ==> ERROR
+  Line 85) importDecl.getNameAsString() ==> ERROR
+  Line 86) typeSolver.solveType(qName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 87) new SymbolSolver(typeSolver).solveSymbolInType(importedType, name) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbolInType(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration, java.lang.String)
+  Line 88) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 92) importDecl.getNameAsString() ==> ERROR
+  Line 95) getMember(whole) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.getMember(java.lang.String)
+  Line 96) getType(whole) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.getType(java.lang.String)
+  Line 98) memberName.equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 99) typeSolver.solveType(typeName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 100) new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbolInType(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration, java.lang.String)
+  Line 107) SymbolReference.unsolved(ValueDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
+  Line 112) wrappedNode.getTypes() ==> ERROR
+  Line 113) wrappedNode.getTypes() ==> ERROR
+  Line 114) type.getName().getId().equals(name) ==> ERROR
+  Line 114) type.getName().getId() ==> ERROR
+  Line 114) type.getName() ==> ERROR
+  Line 116) SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type)) ==> ERROR
+  Line 116) JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type) ==> ERROR
+  Line 116) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 118) SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration) type, typeSolver)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
+  Line 120) type.getClass().getCanonicalName() ==> ERROR
+  Line 120) type.getClass() ==> ERROR
+  Line 126) wrappedNode.getImports() ==> ERROR
+  Line 127) name.indexOf('.') ==> java.lang.String.indexOf(int)
+  Line 130) name.substring(0, dotPos) ==> java.lang.String.substring(int, int)
+  Line 133) wrappedNode.getImports() ==> ERROR
+  Line 134) importDecl.isAsterisk() ==> ERROR
+  Line 135) importDecl.getNameAsString() ==> ERROR
+  Line 136) importDecl.getName().getQualifier().isPresent() ==> ERROR
+  Line 136) importDecl.getName().getQualifier() ==> ERROR
+  Line 136) importDecl.getName() ==> ERROR
+  Line 137) importDecl.getName().getIdentifier().equals(name) ==> ERROR
+  Line 137) importDecl.getName().getIdentifier() ==> ERROR
+  Line 137) importDecl.getName() ==> ERROR
+  Line 140) qName.endsWith("." + prefix) ==> java.lang.String.endsWith(java.lang.String)
+  Line 142) name.substring(dotPos) ==> java.lang.String.substring(int)
+  Line 147) typeSolver.tryToSolveType(qName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 148) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 149) SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
+  Line 155) wrappedNode.getImports() ==> ERROR
+  Line 156) importDecl.isAsterisk() ==> ERROR
+  Line 157) importDecl.getNameAsString() ==> ERROR
+  Line 158) typeSolver.tryToSolveType(qName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 159) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 160) SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
+  Line 167) this.wrappedNode.getPackageDeclaration().isPresent() ==> ERROR
+  Line 167) this.wrappedNode.getPackageDeclaration() ==> ERROR
+  Line 168) this.wrappedNode.getPackageDeclaration().get().getName().toString() ==> ERROR
+  Line 168) this.wrappedNode.getPackageDeclaration().get().getName() ==> ERROR
+  Line 168) this.wrappedNode.getPackageDeclaration().get() ==> ERROR
+  Line 168) this.wrappedNode.getPackageDeclaration() ==> ERROR
+  Line 169) typeSolver.tryToSolveType(qName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 170) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 171) SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
+  Line 176) typeSolver.tryToSolveType(qName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 177) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 178) SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
+  Line 183) typeSolver.tryToSolveType("java.lang." + name) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 184) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 185) SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
+  Line 189) isQualifiedName(name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.isQualifiedName(java.lang.String)
+  Line 190) SymbolReference.adapt(typeSolver.tryToSolveType(name), com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
+  Line 190) typeSolver.tryToSolveType(name) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 192) SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
+  Line 197) type.getScope().isPresent() ==> ERROR
+  Line 197) type.getScope() ==> ERROR
+  Line 198) qName(type.getScope().get()) ==> ERROR
+  Line 198) type.getScope().get() ==> ERROR
+  Line 198) type.getScope() ==> ERROR
+  Line 198) type.getName().getId() ==> ERROR
+  Line 198) type.getName() ==> ERROR
+  Line 200) type.getName().getId() ==> ERROR
+  Line 200) type.getName() ==> ERROR
+  Line 205) name.getQualifier().isPresent() ==> ERROR
+  Line 205) name.getQualifier() ==> ERROR
+  Line 206) qName(name.getQualifier().get()) ==> ERROR
+  Line 206) name.getQualifier().get() ==> ERROR
+  Line 206) name.getQualifier() ==> ERROR
+  Line 206) name.getId() ==> ERROR
+  Line 208) name.getId() ==> ERROR
+  Line 213) qName.split("\\.") ==> java.lang.String.split(java.lang.String)
+  Line 218) qName.lastIndexOf('.') ==> java.lang.String.lastIndexOf(int)
+  Line 222) qName.substring(0, lastDot) ==> java.lang.String.substring(int, int)
+  Line 228) wrappedNode.getImports() ==> ERROR
+  Line 229) importDecl.isStatic() ==> ERROR
+  Line 230) importDecl.isAsterisk() ==> ERROR
+  Line 231) importDecl.getNameAsString() ==> ERROR
+  Line 233) this.wrappedNode.getPackageDeclaration().isPresent() ==> ERROR
+  Line 233) this.wrappedNode.getPackageDeclaration() ==> ERROR
+  Line 234) this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier().equals(packageName(importString)) ==> ERROR
+  Line 234) this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier() ==> ERROR
+  Line 234) this.wrappedNode.getPackageDeclaration().get().getName() ==> ERROR
+  Line 234) this.wrappedNode.getPackageDeclaration().get() ==> ERROR
+  Line 234) this.wrappedNode.getPackageDeclaration() ==> ERROR
+  Line 234) packageName(importString) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.packageName(java.lang.String)
+  Line 235) this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString))) ==> ERROR
+  Line 235) this.wrappedNode.getTypes().stream() ==> ERROR
+  Line 235) this.wrappedNode.getTypes() ==> ERROR
+  Line 235) it.getName().getIdentifier().equals(toSimpleName(importString)) ==> ERROR
+  Line 235) it.getName().getIdentifier() ==> ERROR
+  Line 235) it.getName() ==> ERROR
+  Line 235) toSimpleName(importString) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.toSimpleName(java.lang.String)
+  Line 238) SymbolReference.unsolved(MethodDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
+  Line 241) typeSolver.solveType(importString) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 242) MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver) ==> com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic.solveMethodInType(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration, java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 244) method.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 248) importDecl.getNameAsString() ==> ERROR
+  Line 250) qName.equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 250) qName.endsWith("." + name) ==> java.lang.String.endsWith(java.lang.String)
+  Line 251) getType(qName) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.getType(java.lang.String)
+  Line 252) typeSolver.solveType(typeName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 253) MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver) ==> com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic.solveMethodInType(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration, java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 254) method.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 261) SymbolReference.unsolved(MethodDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
+  Line 269) qName.lastIndexOf('.') ==> java.lang.String.lastIndexOf(int)
+  Line 273) qName.substring(0, index) ==> java.lang.String.substring(int, int)
+  Line 278) qName.lastIndexOf('.') ==> java.lang.String.lastIndexOf(int)
+  Line 282) qName.substring(index + 1) ==> java.lang.String.substring(int)

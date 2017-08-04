@@ -1,0 +1,23 @@
+  Line 53) getQualifiedName().equals(that.getQualifiedName()) ==> java.lang.String.equals(java.lang.Object)
+  Line 53) getQualifiedName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getQualifiedName()
+  Line 53) that.getQualifiedName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getQualifiedName()
+  Line 56) declaredOnType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnType()
+  Line 56) that.declaredOnType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnType()
+  Line 59) declaredOnMethod() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnMethod()
+  Line 59) that.declaredOnMethod() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnMethod()
+  Line 69) wrapped.getName() ==> ERROR
+  Line 75) wrapped.getName() ==> ERROR
+  Line 81) ((ReferenceTypeDeclaration) this.container).getQualifiedName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.getQualifiedName()
+  Line 83) ((MethodLikeDeclaration) this.container).getQualifiedName() ==> com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration.getQualifiedName()
+  Line 90) getContainerQualifiedName() ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistTypeParameter.getContainerQualifiedName()
+  Line 101) wrapped.getClassBound() ==> ERROR
+  Line 101) wrapped.getClassBound().toString().equals(Object.class.getCanonicalName()) ==> ERROR
+  Line 101) wrapped.getClassBound().toString() ==> ERROR
+  Line 101) wrapped.getClassBound() ==> ERROR
+  Line 101) Object.class.getCanonicalName() ==> java.lang.Class.getCanonicalName()
+  Line 102) wrapped.getClassBound().toString() ==> ERROR
+  Line 102) wrapped.getClassBound() ==> ERROR
+  Line 104) wrapped.getInterfaceBound() ==> ERROR
+  Line 105) ot.toString() ==> ERROR
+  Line 113) Optional.of((ReferenceTypeDeclaration) container) ==> java.util.Optional.of(T)
+  Line 115) Optional.empty() ==> java.util.Optional.empty()

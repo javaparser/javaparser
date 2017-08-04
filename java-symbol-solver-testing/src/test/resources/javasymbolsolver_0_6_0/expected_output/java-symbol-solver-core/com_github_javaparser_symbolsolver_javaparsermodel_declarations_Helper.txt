@@ -1,0 +1,26 @@
+  Line 36) modifiers.contains(Modifier.PRIVATE) ==> ERROR
+  Line 38) modifiers.contains(Modifier.PROTECTED) ==> ERROR
+  Line 40) modifiers.contains(Modifier.PUBLIC) ==> ERROR
+  Line 48) getPackageName(container) ==> ERROR
+  Line 49) getClassName("", container) ==> ERROR
+  Line 51) packageName.isEmpty() ==> java.lang.String.isEmpty()
+  Line 51) className.isEmpty() ==> java.lang.String.isEmpty()
+  Line 57) ((CompilationUnit) container).getPackageDeclaration() ==> ERROR
+  Line 58) p.isPresent() ==> ERROR
+  Line 59) p.get().getName().toString() ==> ERROR
+  Line 59) p.get().getName() ==> ERROR
+  Line 59) p.get() ==> ERROR
+  Line 62) getPackageName(getParentNode(container)) ==> ERROR
+  Line 62) getParentNode(container) ==> ERROR
+  Line 69) getClassName(base, getParentNode(container)) ==> ERROR
+  Line 69) getParentNode(container) ==> ERROR
+  Line 70) ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName().getId() ==> ERROR
+  Line 70) ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName() ==> ERROR
+  Line 71) b.isEmpty() ==> java.lang.String.isEmpty()
+  Line 77) getClassName(base, getParentNode(container)) ==> ERROR
+  Line 77) getParentNode(container) ==> ERROR
+  Line 78) ((com.github.javaparser.ast.body.EnumDeclaration) container).getName().getId() ==> ERROR
+  Line 78) ((com.github.javaparser.ast.body.EnumDeclaration) container).getName() ==> ERROR
+  Line 79) b.isEmpty() ==> java.lang.String.isEmpty()
+  Line 85) getClassName(base, getParentNode(container)) ==> ERROR
+  Line 85) getParentNode(container) ==> ERROR
