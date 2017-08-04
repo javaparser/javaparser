@@ -2005,4 +2005,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         return null;
     }
+
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
+    public abstract R visit(ReferenceType type, A arg);
 }
