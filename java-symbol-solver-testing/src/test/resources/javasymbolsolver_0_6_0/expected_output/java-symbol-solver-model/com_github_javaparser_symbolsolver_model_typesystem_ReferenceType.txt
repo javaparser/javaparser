@@ -113,7 +113,7 @@
   Line 290) isRawType() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.isRawType()
   Line 291) typeDeclaration.getTypeParameters().size() ==> java.util.List.size()
   Line 291) typeDeclaration.getTypeParameters() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable.getTypeParameters()
-  Line 292) typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i))) ==> ERROR
+  Line 292) typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i))) ==> java.util.List.add(E)
   Line 292) typeDeclaration.getTypeParameters().get(0) ==> java.util.List.get(int)
   Line 292) typeDeclaration.getTypeParameters() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable.getTypeParameters()
   Line 292) typeParametersValues().get(i) ==> java.util.List.get(int)

@@ -1,8 +1,8 @@
   Line 41) getDeclaration() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext.getDeclaration()
-  Line 49) wrappedNode.getEntries() ==> ERROR
-  Line 50) constant.getName().getId().equals(name) ==> ERROR
-  Line 50) constant.getName().getId() ==> ERROR
-  Line 50) constant.getName() ==> ERROR
+  Line 49) wrappedNode.getEntries() ==> UNSOLVED
+  Line 50) constant.getName().getId().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 50) constant.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 50) constant.getName() ==> com.github.javaparser.ast.body.EnumConstantDeclaration.getName()
   Line 51) SymbolReference.solved(new JavaParserEnumConstantDeclaration(constant, typeSolver)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
   Line 55) this.getDeclaration().hasField(name) ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.hasField(java.lang.String)
   Line 55) this.getDeclaration() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext.getDeclaration()

@@ -20,8 +20,11 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.*;
@@ -37,7 +40,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
-    private static final File src = adaptPath(new File("src/test/resources/javasymbolsolver_0_6_0/src"));
+    private static final File root = adaptPath(new File("src/test/resources/javasymbolsolver_0_6_0"));
+    private static final File src = adaptPath(new File(root + "/src"));
+    private static final File lib = adaptPath(new File(root + "/lib"));
+    private static final File expectedOutput = adaptPath(new File(root + "/expected_output"));
 
     private static SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
@@ -45,6 +51,15 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         combinedTypeSolver.add(new JavaParserTypeSolver(new File(src + "/java-symbol-solver-core")));
         combinedTypeSolver.add(new JavaParserTypeSolver(new File(src + "/java-symbol-solver-logic")));
         combinedTypeSolver.add(new JavaParserTypeSolver(new File(src + "/java-symbol-solver-model")));
+        try {
+			combinedTypeSolver.add(new JarTypeSolver(lib + "/guava-21.0.jar"));
+			combinedTypeSolver.add(new JarTypeSolver(lib + "/javaparser-core-3.3.0.jar"));
+			combinedTypeSolver.add(new JarTypeSolver(lib + "/javaslang-2.0.3.jar"));
+			combinedTypeSolver.add(new JarTypeSolver(lib + "/javassist-3.19.0-GA.jar"));
+		} catch (IOException e) {
+			Assert.fail("one or more jar dependencies could not be found.");
+			e.printStackTrace();
+		}
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
@@ -78,7 +93,7 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         sourceFileInfoExtractor.solveMethodCalls(sourceFile);
         String output = outErrStream.toString();
 
-        String path = adaptPath(new File("src/test/resources/javasymbolsolver_0_6_0/expected_output")).getPath() + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
+        String path = adaptPath(expectedOutput).getPath() + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
         File dstFile = new File(path);
 
         if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {

@@ -1,26 +1,26 @@
   Line 58) context.solveSymbol(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbol(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 62) solveSymbol(name, JavaParserFactory.getContext(node, typeSolver)) ==> ERROR
-  Line 62) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 62) solveSymbol(name, JavaParserFactory.getContext(node, typeSolver)) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbol(java.lang.String, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 62) JavaParserFactory.getContext(node, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 66) context.solveSymbolAsValue(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 70) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
-  Line 71) solveSymbolAsValue(name, context) ==> ERROR
+  Line 70) JavaParserFactory.getContext(node, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 71) solveSymbolAsValue(name, context) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.core.resolution.Context)
   Line 75) context.solveType(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 79) solveType(name, JavaParserFactory.getContext(node, typeSolver)) ==> ERROR
-  Line 79) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
+  Line 79) solveType(name, JavaParserFactory.getContext(node, typeSolver)) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveType(java.lang.String, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 79) JavaParserFactory.getContext(node, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 83) context.solveMethod(methodName, argumentsTypes, false, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethod(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 84) decl.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 87) decl.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
-  Line 91) solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver)) ==> ERROR
-  Line 91) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
-  Line 99) ((ClassOrInterfaceType) type).getName().getId() ==> ERROR
-  Line 99) ((ClassOrInterfaceType) type).getName() ==> ERROR
-  Line 100) JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver) ==> ERROR
-  Line 100) JavaParserFactory.getContext(type, typeSolver) ==> ERROR
+  Line 91) solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver)) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveMethod(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 91) JavaParserFactory.getContext(node, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 99) ((ClassOrInterfaceType) type).getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 99) ((ClassOrInterfaceType) type).getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
+  Line 100) JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 100) JavaParserFactory.getContext(type, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 101) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
-  Line 102) JavaParserFactory.getContext(type, typeSolver) ==> ERROR
+  Line 102) JavaParserFactory.getContext(type, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 104) ref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 106) type.getClass().getCanonicalName() ==> ERROR
-  Line 106) type.getClass() ==> ERROR
+  Line 106) type.getClass() ==> java.lang.Object.getClass()
   Line 111) context.solveGenericType(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveGenericType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 112) genericType.isPresent() ==> java.util.Optional.isPresent()
   Line 113) genericType.get() ==> java.util.Optional.get()

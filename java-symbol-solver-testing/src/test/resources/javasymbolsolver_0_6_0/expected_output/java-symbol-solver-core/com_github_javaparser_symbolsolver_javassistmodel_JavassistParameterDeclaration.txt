@@ -1,1 +1,1 @@
-  Line 33) JavassistFactory.typeUsageFor(type, typeSolver) ==> ERROR
+  Line 33) JavassistFactory.typeUsageFor(type, typeSolver) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory.typeUsageFor(javassist.CtClass, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

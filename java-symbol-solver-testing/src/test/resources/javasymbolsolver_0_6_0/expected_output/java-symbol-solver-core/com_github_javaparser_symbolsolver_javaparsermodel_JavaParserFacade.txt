@@ -22,64 +22,64 @@
   Line 111) wildcardUsage.isExtends() ==> com.github.javaparser.symbolsolver.model.typesystem.Wildcard.isExtends()
   Line 112) Wildcard.extendsBound(boundResolved) ==> com.github.javaparser.symbolsolver.model.typesystem.Wildcard.extendsBound(com.github.javaparser.symbolsolver.model.typesystem.Type)
   Line 114) Wildcard.superBound(boundResolved) ==> com.github.javaparser.symbolsolver.model.typesystem.Wildcard.superBound(com.github.javaparser.symbolsolver.model.typesystem.Type)
-  Line 126) symbolSolver.solveSymbol(nameExpr.getName().getId(), nameExpr) ==> ERROR
-  Line 126) nameExpr.getName().getId() ==> ERROR
-  Line 126) nameExpr.getName() ==> ERROR
-  Line 130) symbolSolver.solveSymbol(nameExpr.getId(), nameExpr) ==> ERROR
-  Line 130) nameExpr.getId() ==> ERROR
-  Line 135) solve((NameExpr) expr) ==> ERROR
+  Line 126) symbolSolver.solveSymbol(nameExpr.getName().getId(), nameExpr) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbol(java.lang.String, com.github.javaparser.ast.Node)
+  Line 126) nameExpr.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 126) nameExpr.getName() ==> com.github.javaparser.ast.expr.NameExpr.getName()
+  Line 130) symbolSolver.solveSymbol(nameExpr.getId(), nameExpr) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbol(java.lang.String, com.github.javaparser.ast.Node)
+  Line 130) nameExpr.getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 135) solve((NameExpr) expr) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solve(com.github.javaparser.ast.expr.NameExpr)
   Line 137) expr.getClass().getCanonicalName() ==> ERROR
-  Line 137) expr.getClass() ==> ERROR
-  Line 142) solve(methodCallExpr, true) ==> ERROR
-  Line 146) solve(objectCreationExpr, true) ==> ERROR
-  Line 150) solve(explicitConstructorInvocationStmt, true) ==> ERROR
+  Line 137) expr.getClass() ==> java.lang.Object.getClass()
+  Line 142) solve(methodCallExpr, true) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solve(com.github.javaparser.ast.expr.MethodCallExpr, boolean)
+  Line 146) solve(objectCreationExpr, true) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solve(com.github.javaparser.ast.expr.ObjectCreationExpr, boolean)
+  Line 150) solve(explicitConstructorInvocationStmt, true) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solve(com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt, boolean)
   Line 157) solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders) ==> ERROR
-  Line 157) explicitConstructorInvocationStmt.getArguments() ==> ERROR
-  Line 159) explicitConstructorInvocationStmt.getAncestorOfType(ClassOrInterfaceDeclaration.class) ==> ERROR
-  Line 160) optAncestor.isPresent() ==> ERROR
+  Line 157) explicitConstructorInvocationStmt.getArguments() ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt.getArguments()
+  Line 159) explicitConstructorInvocationStmt.getAncestorOfType(ClassOrInterfaceDeclaration.class) ==> com.github.javaparser.HasParentNode.getAncestorOfType(java.lang.Class<N>)
+  Line 160) optAncestor.isPresent() ==> java.util.Optional.isPresent()
   Line 161) SymbolReference.unsolved(ConstructorDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
-  Line 163) optAncestor.get() ==> ERROR
-  Line 165) explicitConstructorInvocationStmt.isThis() ==> ERROR
+  Line 163) optAncestor.get() ==> java.util.Optional.get()
+  Line 165) explicitConstructorInvocationStmt.isThis() ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt.isThis()
   Line 166) JavaParserFacade.get(typeSolver).convert(classNode.getExtendedTypes(0), classNode) ==> ERROR
   Line 166) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 166) classNode.getExtendedTypes(0) ==> ERROR
+  Line 166) classNode.getExtendedTypes(0) ==> com.github.javaparser.ast.nodeTypes.NodeWithExtends.getExtendedTypes(int)
   Line 167) classDecl.isReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isReferenceType()
   Line 168) classDecl.asReferenceType().getTypeDeclaration() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeDeclaration()
   Line 168) classDecl.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 171) JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString(), typeSolver) ==> ERROR
-  Line 171) JavaParserFactory.getContext(classNode, typeSolver) ==> ERROR
-  Line 171) classNode.getNameAsString() ==> ERROR
+  Line 171) JavaParserFactory.getContext(classNode, typeSolver).solveType(classNode.getNameAsString(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 171) JavaParserFactory.getContext(classNode, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 171) classNode.getNameAsString() ==> com.github.javaparser.ast.nodeTypes.NodeWithSimpleName.getNameAsString()
   Line 172) sr.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 173) sr.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 177) SymbolReference.unsolved(ConstructorDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
   Line 179) ConstructorResolutionLogic.findMostApplicable(((ClassDeclaration) typeDecl).getConstructors(), argumentTypes, typeSolver) ==> com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic.findMostApplicable(java.util.List<com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration>, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 179) ((ClassDeclaration) typeDecl).getConstructors() ==> com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration.getConstructors()
   Line 181) placeholder.setMethod(res) ==> com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder.setMethod(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration>)
-  Line 188) node.getClassExpr().isPresent() ==> ERROR
-  Line 188) node.getClassExpr() ==> ERROR
-  Line 190) node.getClassExpr().get().toString() ==> ERROR
-  Line 190) node.getClassExpr().get() ==> ERROR
-  Line 190) node.getClassExpr() ==> ERROR
+  Line 188) node.getClassExpr().isPresent() ==> java.util.Optional.isPresent()
+  Line 188) node.getClassExpr() ==> com.github.javaparser.ast.expr.ThisExpr.getClassExpr()
+  Line 190) node.getClassExpr().get().toString() ==> java.lang.Object.toString()
+  Line 190) node.getClassExpr().get() ==> java.util.Optional.get()
+  Line 190) node.getClassExpr() ==> com.github.javaparser.ast.expr.ThisExpr.getClassExpr()
   Line 192) typeSolver.tryToSolveType(className) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
   Line 193) clazz.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 194) SymbolReference.solved(clazz.getCorrespondingDeclaration()) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
   Line 194) clazz.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
-  Line 197) node.getAncestorOfType(CompilationUnit.class) ==> ERROR
-  Line 198) cu.isPresent() ==> ERROR
-  Line 199) cu.get().getClassByName(className) ==> ERROR
-  Line 199) cu.get() ==> ERROR
-  Line 200) classByName.isPresent() ==> ERROR
-  Line 201) SymbolReference.solved(getTypeDeclaration(classByName.get())) ==> ERROR
-  Line 201) getTypeDeclaration(classByName.get()) ==> ERROR
-  Line 201) classByName.get() ==> ERROR
-  Line 205) SymbolReference.solved(getTypeDeclaration(findContainingTypeDecl(node))) ==> ERROR
-  Line 205) getTypeDeclaration(findContainingTypeDecl(node)) ==> ERROR
-  Line 205) findContainingTypeDecl(node) ==> ERROR
+  Line 197) node.getAncestorOfType(CompilationUnit.class) ==> com.github.javaparser.HasParentNode.getAncestorOfType(java.lang.Class<N>)
+  Line 198) cu.isPresent() ==> java.util.Optional.isPresent()
+  Line 199) cu.get().getClassByName(className) ==> com.github.javaparser.ast.CompilationUnit.getClassByName(java.lang.String)
+  Line 199) cu.get() ==> java.util.Optional.get()
+  Line 200) classByName.isPresent() ==> java.util.Optional.isPresent()
+  Line 201) SymbolReference.solved(getTypeDeclaration(classByName.get())) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
+  Line 201) getTypeDeclaration(classByName.get()) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)
+  Line 201) classByName.get() ==> java.util.Optional.get()
+  Line 205) SymbolReference.solved(getTypeDeclaration(findContainingTypeDecl(node))) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
+  Line 205) getTypeDeclaration(findContainingTypeDecl(node)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?>)
+  Line 205) findContainingTypeDecl(node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.findContainingTypeDecl(com.github.javaparser.ast.Node)
   Line 215) solveArguments(objectCreationExpr, objectCreationExpr.getArguments(), solveLambdas, argumentTypes, placeholders) ==> ERROR
-  Line 215) objectCreationExpr.getArguments() ==> ERROR
-  Line 217) JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr) ==> ERROR
+  Line 215) objectCreationExpr.getArguments() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getArguments()
+  Line 217) JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convert(com.github.javaparser.ast.type.Type, com.github.javaparser.ast.Node)
   Line 217) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 217) objectCreationExpr.getType() ==> ERROR
+  Line 217) objectCreationExpr.getType() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getType()
   Line 218) classDecl.isReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isReferenceType()
   Line 219) SymbolReference.unsolved(ConstructorDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
   Line 221) ConstructorResolutionLogic.findMostApplicable(((ClassDeclaration) classDecl.asReferenceType().getTypeDeclaration()).getConstructors(), argumentTypes, typeSolver) ==> com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic.findMostApplicable(java.util.List<com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration>, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
@@ -89,165 +89,165 @@
   Line 223) placeholder.setMethod(res) ==> com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder.setMethod(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration>)
   Line 233) argumentTypes.add(placeholder) ==> java.util.List.add(E)
   Line 234) placeholders.add(placeholder) ==> java.util.List.add(E)
-  Line 237) argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas)) ==> ERROR
-  Line 237) JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas) ==> ERROR
+  Line 237) argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas)) ==> java.util.List.add(E)
+  Line 237) JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node, boolean)
   Line 237) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 241) String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s", node, parameterValue) ==> ERROR
+  Line 241) String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s", node, parameterValue) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
   Line 256) solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders) ==> ERROR
-  Line 256) methodCallExpr.getArguments() ==> ERROR
-  Line 258) JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, typeSolver) ==> ERROR
-  Line 258) JavaParserFactory.getContext(methodCallExpr, typeSolver) ==> ERROR
-  Line 258) methodCallExpr.getName().getId() ==> ERROR
-  Line 258) methodCallExpr.getName() ==> ERROR
+  Line 256) methodCallExpr.getArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getArguments()
+  Line 258) JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, false, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethod(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 258) JavaParserFactory.getContext(methodCallExpr, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 258) methodCallExpr.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 258) methodCallExpr.getName() ==> com.github.javaparser.ast.expr.MethodCallExpr.getName()
   Line 260) placeholder.setMethod(res) ==> com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder.setMethod(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration>)
-  Line 266) JavaParserFactory.getContext(annotationExpr, typeSolver) ==> ERROR
-  Line 267) context.solveType(annotationExpr.getNameAsString(), typeSolver) ==> ERROR
-  Line 267) annotationExpr.getNameAsString() ==> ERROR
+  Line 266) JavaParserFactory.getContext(annotationExpr, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 267) context.solveType(annotationExpr.getNameAsString(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 267) annotationExpr.getNameAsString() ==> com.github.javaparser.ast.nodeTypes.NodeWithName.getNameAsString()
   Line 268) typeDeclarationSymbolReference.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 269) typeDeclarationSymbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 270) SymbolReference.solved(annotationDeclaration) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
   Line 272) SymbolReference.unsolved(AnnotationDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
-  Line 277) getType(node, true) ==> ERROR
-  Line 282) cacheWithLambdasSolved.containsKey(node) ==> ERROR
-  Line 283) getTypeConcrete(node, solveLambdas) ==> ERROR
-  Line 285) cacheWithLambdasSolved.put(node, res) ==> ERROR
-  Line 290) methodCallExpr.getArguments() ==> ERROR
-  Line 291) cacheWithLambdasSolved.containsKey(arg) ==> ERROR
-  Line 292) getType(arg, true) ==> ERROR
-  Line 298) cacheWithLambdasSolved.remove(node) ==> ERROR
-  Line 299) cacheWithLambdasSolved.put(node, getType(node, true)) ==> ERROR
-  Line 299) getType(node, true) ==> ERROR
-  Line 301) logger.finer("getType on " + node + " -> " + res) ==> ERROR
-  Line 303) cacheWithLambdasSolved.get(node) ==> ERROR
-  Line 305) find(cacheWithLambdasSolved, node) ==> ERROR
+  Line 277) getType(node, true) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node, boolean)
+  Line 282) cacheWithLambdasSolved.containsKey(node) ==> java.util.Map.containsKey(java.lang.Object)
+  Line 283) getTypeConcrete(node, solveLambdas) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(com.github.javaparser.ast.Node, boolean)
+  Line 285) cacheWithLambdasSolved.put(node, res) ==> java.util.Map.put(K, V)
+  Line 290) methodCallExpr.getArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getArguments()
+  Line 291) cacheWithLambdasSolved.containsKey(arg) ==> java.util.Map.containsKey(java.lang.Object)
+  Line 292) getType(arg, true) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node, boolean)
+  Line 298) cacheWithLambdasSolved.remove(node) ==> java.util.Map.remove(java.lang.Object)
+  Line 299) cacheWithLambdasSolved.put(node, getType(node, true)) ==> java.util.Map.put(K, V)
+  Line 299) getType(node, true) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node, boolean)
+  Line 301) logger.finer("getType on " + node + " -> " + res) ==> java.util.logging.Logger.finer(java.lang.String)
+  Line 303) cacheWithLambdasSolved.get(node) ==> java.util.Map.get(java.lang.Object)
+  Line 305) find(cacheWithLambdasSolved, node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.find(java.util.Map<com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.ast.Node)
   Line 306) res.isPresent() ==> java.util.Optional.isPresent()
   Line 307) res.get() ==> java.util.Optional.get()
-  Line 309) find(cacheWithoutLambdasSolved, node) ==> ERROR
+  Line 309) find(cacheWithoutLambdasSolved, node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.find(java.util.Map<com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.ast.Node)
   Line 310) res.isPresent() ==> java.util.Optional.isPresent()
-  Line 311) getTypeConcrete(node, solveLambdas) ==> ERROR
-  Line 312) cacheWithoutLambdasSolved.put(node, resType) ==> ERROR
-  Line 313) logger.finer("getType on " + node + " (no solveLambdas) -> " + res) ==> ERROR
+  Line 311) getTypeConcrete(node, solveLambdas) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(com.github.javaparser.ast.Node, boolean)
+  Line 312) cacheWithoutLambdasSolved.put(node, resType) ==> java.util.Map.put(K, V)
+  Line 313) logger.finer("getType on " + node + " (no solveLambdas) -> " + res) ==> java.util.logging.Logger.finer(java.lang.String)
   Line 316) res.get() ==> java.util.Optional.get()
-  Line 321) map.containsKey(node) ==> ERROR
-  Line 322) Optional.of(map.get(node)) ==> ERROR
-  Line 322) map.get(node) ==> ERROR
-  Line 325) find(map, (LambdaExpr) node) ==> ERROR
+  Line 321) map.containsKey(node) ==> java.util.Map.containsKey(java.lang.Object)
+  Line 322) Optional.of(map.get(node)) ==> java.util.Optional.of(T)
+  Line 322) map.get(node) ==> java.util.Map.get(java.lang.Object)
+  Line 325) find(map, (LambdaExpr) node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.find(java.util.Map<com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.ast.expr.LambdaExpr)
   Line 327) Optional.empty() ==> java.util.Optional.empty()
-  Line 338) map.keySet() ==> ERROR
-  Line 341) keyLambdaExpr.toString().equals(lambdaExpr.toString()) ==> ERROR
-  Line 341) keyLambdaExpr.toString() ==> ERROR
-  Line 341) lambdaExpr.toString() ==> ERROR
-  Line 341) getParentNode(keyLambdaExpr) ==> ERROR
-  Line 341) getParentNode(lambdaExpr) ==> ERROR
-  Line 342) Optional.of(map.get(keyLambdaExpr)) ==> ERROR
-  Line 342) map.get(keyLambdaExpr) ==> ERROR
+  Line 338) map.keySet() ==> java.util.Map.keySet()
+  Line 341) keyLambdaExpr.toString().equals(lambdaExpr.toString()) ==> java.lang.String.equals(java.lang.Object)
+  Line 341) keyLambdaExpr.toString() ==> com.github.javaparser.ast.Node.toString()
+  Line 341) lambdaExpr.toString() ==> com.github.javaparser.ast.Node.toString()
+  Line 341) getParentNode(keyLambdaExpr) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 341) getParentNode(lambdaExpr) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 342) Optional.of(map.get(keyLambdaExpr)) ==> java.util.Optional.of(T)
+  Line 342) map.get(keyLambdaExpr) ==> java.util.Map.get(java.lang.Object)
   Line 346) Optional.empty() ==> java.util.Optional.empty()
-  Line 350) methodReferenceExpr.getScope() ==> ERROR
-  Line 353) methodReferenceExpr.getScope() ==> ERROR
-  Line 354) typeExpr.getType() ==> ERROR
+  Line 350) methodReferenceExpr.getScope() ==> com.github.javaparser.ast.expr.MethodReferenceExpr.getScope()
+  Line 353) methodReferenceExpr.getScope() ==> com.github.javaparser.ast.expr.MethodReferenceExpr.getScope()
+  Line 354) typeExpr.getType() ==> com.github.javaparser.ast.expr.TypeExpr.getType()
   Line 355) typeExpr.getType().getClass().getCanonicalName() ==> ERROR
-  Line 355) typeExpr.getType().getClass() ==> ERROR
-  Line 355) typeExpr.getType() ==> ERROR
-  Line 357) typeExpr.getType() ==> ERROR
-  Line 358) JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId(), typeSolver) ==> ERROR
-  Line 358) JavaParserFactory.getContext(classOrInterfaceType, typeSolver) ==> ERROR
-  Line 358) classOrInterfaceType.getName().getId() ==> ERROR
-  Line 358) classOrInterfaceType.getName() ==> ERROR
+  Line 355) typeExpr.getType().getClass() ==> java.lang.Object.getClass()
+  Line 355) typeExpr.getType() ==> com.github.javaparser.ast.expr.TypeExpr.getType()
+  Line 357) typeExpr.getType() ==> com.github.javaparser.ast.expr.TypeExpr.getType()
+  Line 358) JavaParserFactory.getContext(classOrInterfaceType, typeSolver).solveType(classOrInterfaceType.getName().getId(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 358) JavaParserFactory.getContext(classOrInterfaceType, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 358) classOrInterfaceType.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 358) classOrInterfaceType.getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
   Line 359) typeDeclarationSymbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
-  Line 362) ((ReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList()) ==> ERROR
+  Line 362) ((ReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 362) ((ReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream().filter(it -> it.getName().equals(methodReferenceExpr.getIdentifier())) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 362) ((ReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods().stream() ==> java.util.Collection.stream()
   Line 362) ((ReferenceTypeDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration()).getAllMethods() ==> com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.getAllMethods()
   Line 362) typeDeclarationSymbolReference.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
-  Line 362) it.getName().equals(methodReferenceExpr.getIdentifier()) ==> ERROR
+  Line 362) it.getName().equals(methodReferenceExpr.getIdentifier()) ==> java.lang.String.equals(java.lang.Object)
   Line 362) it.getName() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.getName()
-  Line 362) methodReferenceExpr.getIdentifier() ==> ERROR
+  Line 362) methodReferenceExpr.getIdentifier() ==> com.github.javaparser.ast.expr.MethodReferenceExpr.getIdentifier()
   Line 362) Collectors.toList() ==> java.util.stream.Collectors.toList()
   Line 363) methodUsages.size() ==> java.util.List.size()
   Line 367) methodUsages.get(0) ==> java.util.List.get(int)
-  Line 374) getTypeConcrete(left, solveLambdas) ==> ERROR
-  Line 375) getTypeConcrete(right, solveLambdas) ==> ERROR
+  Line 374) getTypeConcrete(left, solveLambdas) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(com.github.javaparser.ast.Node, boolean)
+  Line 375) getTypeConcrete(right, solveLambdas) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(com.github.javaparser.ast.Node, boolean)
   Line 376) rightType.isAssignableBy(leftType) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isAssignableBy(com.github.javaparser.symbolsolver.model.typesystem.Type)
-  Line 391) node.accept(typeExtractor, solveLambdas) ==> ERROR
-  Line 399) getParentNode(node) ==> ERROR
-  Line 402) findContainingTypeDecl(getParentNode(node)) ==> ERROR
-  Line 402) getParentNode(node) ==> ERROR
-  Line 407) JavaParserFacade.get(typeSolver).convertToUsage(var.getType(), var) ==> ERROR
+  Line 391) node.accept(typeExtractor, solveLambdas) ==> com.github.javaparser.ast.visitor.Visitable.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
+  Line 399) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 402) findContainingTypeDecl(getParentNode(node)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.findContainingTypeDecl(com.github.javaparser.ast.Node)
+  Line 402) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 407) JavaParserFacade.get(typeSolver).convertToUsage(var.getType(), var) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type, com.github.javaparser.ast.Node)
   Line 407) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 407) var.getType() ==> ERROR
-  Line 415) convertToUsage(type, JavaParserFactory.getContext(context, typeSolver)) ==> ERROR
-  Line 415) JavaParserFactory.getContext(context, typeSolver) ==> ERROR
-  Line 419) convertToUsage(type, type) ==> ERROR
-  Line 424) classOrInterfaceType.getName().getId() ==> ERROR
-  Line 424) classOrInterfaceType.getName() ==> ERROR
-  Line 425) classOrInterfaceType.getScope().isPresent() ==> ERROR
-  Line 425) classOrInterfaceType.getScope() ==> ERROR
-  Line 426) qName(classOrInterfaceType.getScope().get()) ==> ERROR
-  Line 426) classOrInterfaceType.getScope().get() ==> ERROR
-  Line 426) classOrInterfaceType.getScope() ==> ERROR
-  Line 435) qName(classOrInterfaceType) ==> ERROR
+  Line 407) var.getType() ==> com.github.javaparser.ast.body.VariableDeclarator.getType()
+  Line 415) convertToUsage(type, JavaParserFactory.getContext(context, typeSolver)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 415) JavaParserFactory.getContext(context, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 419) convertToUsage(type, type) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type, com.github.javaparser.ast.Node)
+  Line 424) classOrInterfaceType.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 424) classOrInterfaceType.getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
+  Line 425) classOrInterfaceType.getScope().isPresent() ==> java.util.Optional.isPresent()
+  Line 425) classOrInterfaceType.getScope() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getScope()
+  Line 426) qName(classOrInterfaceType.getScope().get()) ==> UNSOLVED
+  Line 426) classOrInterfaceType.getScope().get() ==> java.util.Optional.get()
+  Line 426) classOrInterfaceType.getScope() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getScope()
+  Line 435) qName(classOrInterfaceType) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.qName(com.github.javaparser.ast.type.ClassOrInterfaceType)
   Line 436) context.solveType(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 437) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 440) ref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 441) Collections.emptyList() ==> java.util.Collections.emptyList()
   Line 442) classOrInterfaceType.getTypeArguments().isPresent() ==> ERROR
-  Line 442) classOrInterfaceType.getTypeArguments() ==> ERROR
+  Line 442) classOrInterfaceType.getTypeArguments() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getTypeArguments()
   Line 443) classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)).collect(Collectors.toList()) ==> ERROR
   Line 443) classOrInterfaceType.getTypeArguments().get().stream().map((pt) -> convertToUsage(pt, context)) ==> ERROR
   Line 443) classOrInterfaceType.getTypeArguments().get().stream() ==> ERROR
   Line 443) classOrInterfaceType.getTypeArguments().get() ==> ERROR
-  Line 443) classOrInterfaceType.getTypeArguments() ==> ERROR
+  Line 443) classOrInterfaceType.getTypeArguments() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getTypeArguments()
   Line 443) convertToUsage(pt, context) ==> ERROR
   Line 443) Collectors.toList() ==> java.util.stream.Collectors.toList()
   Line 445) typeDeclaration.isTypeParameter() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.isTypeParameter()
   Line 450) javaParserTypeVariableDeclaration.asTypeParameter() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration.asTypeParameter()
-  Line 456) PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name()) ==> ERROR
-  Line 456) ((com.github.javaparser.ast.type.PrimitiveType) type).getType().name() ==> ERROR
-  Line 456) ((com.github.javaparser.ast.type.PrimitiveType) type).getType() ==> ERROR
-  Line 459) wildcardType.getExtendedTypes().isPresent() ==> ERROR
-  Line 459) wildcardType.getExtendedTypes() ==> ERROR
-  Line 459) wildcardType.getSuperTypes().isPresent() ==> ERROR
-  Line 459) wildcardType.getSuperTypes() ==> ERROR
+  Line 456) PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) type).getType().name()) ==> com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.byName(java.lang.String)
+  Line 456) ((com.github.javaparser.ast.type.PrimitiveType) type).getType().name() ==> java.lang.Enum.name()
+  Line 456) ((com.github.javaparser.ast.type.PrimitiveType) type).getType() ==> com.github.javaparser.ast.type.PrimitiveType.getType()
+  Line 459) wildcardType.getExtendedTypes().isPresent() ==> java.util.Optional.isPresent()
+  Line 459) wildcardType.getExtendedTypes() ==> com.github.javaparser.ast.type.WildcardType.getExtendedTypes()
+  Line 459) wildcardType.getSuperTypes().isPresent() ==> java.util.Optional.isPresent()
+  Line 459) wildcardType.getSuperTypes() ==> com.github.javaparser.ast.type.WildcardType.getSuperTypes()
   Line 460) Wildcard.extendsBound(convertToUsage(wildcardType.getExtendedTypes().get(), context)) ==> ERROR
-  Line 460) convertToUsage(wildcardType.getExtendedTypes().get(), context) ==> ERROR
-  Line 460) wildcardType.getExtendedTypes().get() ==> ERROR
-  Line 460) wildcardType.getExtendedTypes() ==> ERROR
-  Line 461) wildcardType.getExtendedTypes().isPresent() ==> ERROR
-  Line 461) wildcardType.getExtendedTypes() ==> ERROR
-  Line 461) wildcardType.getSuperTypes().isPresent() ==> ERROR
-  Line 461) wildcardType.getSuperTypes() ==> ERROR
+  Line 460) convertToUsage(wildcardType.getExtendedTypes().get(), context) ==> UNSOLVED
+  Line 460) wildcardType.getExtendedTypes().get() ==> java.util.Optional.get()
+  Line 460) wildcardType.getExtendedTypes() ==> com.github.javaparser.ast.type.WildcardType.getExtendedTypes()
+  Line 461) wildcardType.getExtendedTypes().isPresent() ==> java.util.Optional.isPresent()
+  Line 461) wildcardType.getExtendedTypes() ==> com.github.javaparser.ast.type.WildcardType.getExtendedTypes()
+  Line 461) wildcardType.getSuperTypes().isPresent() ==> java.util.Optional.isPresent()
+  Line 461) wildcardType.getSuperTypes() ==> com.github.javaparser.ast.type.WildcardType.getSuperTypes()
   Line 462) Wildcard.superBound(convertToUsage(wildcardType.getSuperTypes().get(), context)) ==> ERROR
-  Line 462) convertToUsage(wildcardType.getSuperTypes().get(), context) ==> ERROR
-  Line 462) wildcardType.getSuperTypes().get() ==> ERROR
-  Line 462) wildcardType.getSuperTypes() ==> ERROR
-  Line 463) wildcardType.getExtendedTypes().isPresent() ==> ERROR
-  Line 463) wildcardType.getExtendedTypes() ==> ERROR
-  Line 463) wildcardType.getSuperTypes().isPresent() ==> ERROR
-  Line 463) wildcardType.getSuperTypes() ==> ERROR
-  Line 466) wildcardType.toString() ==> ERROR
-  Line 472) convertToUsage(jpArrayType.getComponentType(), context) ==> ERROR
-  Line 472) jpArrayType.getComponentType() ==> ERROR
+  Line 462) convertToUsage(wildcardType.getSuperTypes().get(), context) ==> UNSOLVED
+  Line 462) wildcardType.getSuperTypes().get() ==> java.util.Optional.get()
+  Line 462) wildcardType.getSuperTypes() ==> com.github.javaparser.ast.type.WildcardType.getSuperTypes()
+  Line 463) wildcardType.getExtendedTypes().isPresent() ==> java.util.Optional.isPresent()
+  Line 463) wildcardType.getExtendedTypes() ==> com.github.javaparser.ast.type.WildcardType.getExtendedTypes()
+  Line 463) wildcardType.getSuperTypes().isPresent() ==> java.util.Optional.isPresent()
+  Line 463) wildcardType.getSuperTypes() ==> com.github.javaparser.ast.type.WildcardType.getSuperTypes()
+  Line 466) wildcardType.toString() ==> com.github.javaparser.ast.Node.toString()
+  Line 472) convertToUsage(jpArrayType.getComponentType(), context) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 472) jpArrayType.getComponentType() ==> com.github.javaparser.ast.type.ArrayType.getComponentType()
   Line 474) type.getClass().getCanonicalName() ==> ERROR
-  Line 474) type.getClass() ==> ERROR
-  Line 480) convert(type, JavaParserFactory.getContext(node, typeSolver)) ==> ERROR
-  Line 480) JavaParserFactory.getContext(node, typeSolver) ==> ERROR
-  Line 484) convertToUsage(type, context) ==> ERROR
-  Line 489) call.getArguments() ==> ERROR
-  Line 490) call.getArguments() ==> ERROR
-  Line 493) params.add(getType(param, false)) ==> ERROR
-  Line 493) getType(param, false) ==> ERROR
-  Line 495) String.format("Error calculating the type of parameter %s of method call %s", param, call) ==> ERROR
-  Line 500) JavaParserFactory.getContext(call, typeSolver) ==> ERROR
-  Line 501) context.solveMethodAsUsage(call.getName().getId(), params, typeSolver) ==> ERROR
-  Line 501) call.getName().getId() ==> ERROR
-  Line 501) call.getName() ==> ERROR
+  Line 474) type.getClass() ==> java.lang.Object.getClass()
+  Line 480) convert(type, JavaParserFactory.getContext(node, typeSolver)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convert(com.github.javaparser.ast.type.Type, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 480) JavaParserFactory.getContext(node, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 484) convertToUsage(type, context) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type, com.github.javaparser.symbolsolver.core.resolution.Context)
+  Line 489) call.getArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getArguments()
+  Line 490) call.getArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getArguments()
+  Line 493) params.add(getType(param, false)) ==> java.util.List.add(E)
+  Line 493) getType(param, false) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node, boolean)
+  Line 495) String.format("Error calculating the type of parameter %s of method call %s", param, call) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 500) JavaParserFactory.getContext(call, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 501) context.solveMethodAsUsage(call.getName().getId(), params, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethodAsUsage(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 501) call.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 501) call.getName() ==> com.github.javaparser.ast.expr.MethodCallExpr.getName()
   Line 502) methodUsage.isPresent() ==> java.util.Optional.isPresent()
-  Line 503) call.getName() ==> ERROR
-  Line 504) call.getRange().get() ==> ERROR
-  Line 504) call.getRange() ==> ERROR
+  Line 503) call.getName() ==> com.github.javaparser.ast.expr.MethodCallExpr.getName()
+  Line 504) call.getRange().get() ==> java.util.Optional.get()
+  Line 504) call.getRange() ==> com.github.javaparser.ast.Node.getRange()
   Line 506) methodUsage.get() ==> java.util.Optional.get()
-  Line 510) JavaParserFactory.toTypeDeclaration(classOrInterfaceDeclaration, typeSolver) ==> ERROR
-  Line 519) getTypeDeclaration((ClassOrInterfaceDeclaration) node) ==> ERROR
-  Line 524) getTypeOfThisIn(getParentNode(node)) ==> ERROR
-  Line 524) getParentNode(node) ==> ERROR
-  Line 529) JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver) ==> ERROR
+  Line 510) JavaParserFactory.toTypeDeclaration(classOrInterfaceDeclaration, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.toTypeDeclaration(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 519) getTypeDeclaration((ClassOrInterfaceDeclaration) node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)
+  Line 524) getTypeOfThisIn(getParentNode(node)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeOfThisIn(com.github.javaparser.ast.Node)
+  Line 524) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 529) JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.toTypeDeclaration(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

@@ -1,7 +1,7 @@
   Line 46) addPathToJar(pathToJar) ==> com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver.addPathToJar(java.lang.String)
   Line 53) instance.addPathToJar(pathToJar) ==> com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver.addPathToJar(java.lang.String)
-  Line 60) classPool.appendClassPath(pathToJar) ==> ERROR
-  Line 61) classPool.appendSystemPath() ==> ERROR
+  Line 60) classPool.appendClassPath(pathToJar) ==> javassist.ClassPool.appendClassPath(java.lang.String)
+  Line 61) classPool.appendSystemPath() ==> javassist.ClassPool.appendSystemPath()
   Line 67) jarFile.entries() ==> java.util.jar.JarFile.entries()
   Line 68) e.hasMoreElements() ==> java.util.Enumeration.hasMoreElements()
   Line 69) e.nextElement() ==> java.util.Enumeration.nextElement()
@@ -18,8 +18,8 @@
   Line 92) className.replace('/', '.') ==> java.lang.String.replace(char, char)
   Line 93) className.replace('$', '.') ==> java.lang.String.replace(char, char)
   Line 100) classpathElements.containsKey(name) ==> java.util.Map.containsKey(java.lang.Object)
-  Line 101) SymbolReference.solved(JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot())) ==> ERROR
-  Line 102) JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot()) ==> ERROR
+  Line 101) SymbolReference.solved(JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot())) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
+  Line 102) JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot()) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory.toTypeDeclaration(javassist.CtClass, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 102) classpathElements.get(name).toCtClass() ==> com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver.ClasspathElement.toCtClass()
   Line 102) classpathElements.get(name) ==> java.util.Map.get(java.lang.Object)
   Line 102) getRoot() ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.getRoot()
@@ -28,4 +28,4 @@
   Line 114) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 115) ref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 133) jarFile.getInputStream(entry) ==> java.util.jar.JarFile.getInputStream(java.util.zip.ZipEntry)
-  Line 134) classPool.makeClass(is) ==> ERROR
+  Line 134) classPool.makeClass(is) ==> javassist.ClassPool.makeClass(java.io.InputStream)

@@ -227,7 +227,7 @@
   Line 333) expectedType2.isAssignableBy(actualType) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isAssignableBy(com.github.javaparser.symbolsolver.model.typesystem.Type)
   Line 334) expectedTypeWithInference.isAssignableBy(actualType) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isAssignableBy(com.github.javaparser.symbolsolver.model.typesystem.Type)
   Line 335) expectedTypeWithoutSubstitutions.isAssignableBy(actualType) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isAssignableBy(com.github.javaparser.symbolsolver.model.typesystem.Type)
-  Line 347) ((JavaParserMethodDeclaration) m1).getWrappedNode().equals(((JavaParserMethodDeclaration) m2).getWrappedNode()) ==> ERROR
+  Line 347) ((JavaParserMethodDeclaration) m1).getWrappedNode().equals(((JavaParserMethodDeclaration) m2).getWrappedNode()) ==> com.github.javaparser.ast.Node.equals(java.lang.Object)
   Line 347) ((JavaParserMethodDeclaration) m1).getWrappedNode() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration.getWrappedNode()
   Line 347) ((JavaParserMethodDeclaration) m2).getWrappedNode() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration.getWrappedNode()
   Line 353) s.addAll(methods) ==> java.util.Set.addAll(java.util.Collection<? extends E>)

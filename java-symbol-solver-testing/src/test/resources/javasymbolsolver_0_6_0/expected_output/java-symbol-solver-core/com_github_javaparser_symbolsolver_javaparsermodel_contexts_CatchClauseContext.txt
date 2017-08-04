@@ -1,11 +1,11 @@
   Line 26) JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver) ==> ERROR
-  Line 26) wrappedNode.getParameter() ==> ERROR
+  Line 26) wrappedNode.getParameter() ==> UNSOLVED
   Line 27) AbstractJavaParserContext.solveWith(sb, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 28) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 33) getParent().solveSymbol(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbol(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 33) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
   Line 38) JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver) ==> ERROR
-  Line 38) wrappedNode.getParameter() ==> ERROR
+  Line 38) wrappedNode.getParameter() ==> UNSOLVED
   Line 39) solveWithAsValue(sb, name, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWithAsValue(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 40) symbolReference.isPresent() ==> java.util.Optional.isPresent()
   Line 46) getParent().solveSymbolAsValue(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
