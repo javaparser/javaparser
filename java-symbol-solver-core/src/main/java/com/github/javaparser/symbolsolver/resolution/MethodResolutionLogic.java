@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
@@ -596,6 +597,10 @@ public class MethodResolutionLogic {
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod((JavaParserEnumDeclaration) typeDeclaration, typeSolver));
             }
             Context ctx = ((JavaParserEnumDeclaration) typeDeclaration).getContext();
+            return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
+        }
+        if (typeDeclaration instanceof JavaParserAnonymousClassDeclaration) {
+        	Context ctx = ((JavaParserAnonymousClassDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
         }
         if (typeDeclaration instanceof ReflectionClassDeclaration) {
