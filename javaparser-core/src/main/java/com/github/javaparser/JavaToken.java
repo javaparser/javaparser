@@ -24,9 +24,8 @@ package com.github.javaparser;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.Optional.*;
 
 /**
  * A token from a parsed source file.
@@ -38,18 +37,18 @@ public class JavaToken {
     private Range range;
     private int kind;
     private String text;
-    private Optional<JavaToken> previousToken;
-    private Optional<JavaToken> nextToken = empty();
+    private JavaToken previousToken = null;
+    private JavaToken nextToken = null;
 
     private JavaToken() {
-        this( new Range(pos(-1,-1), pos(-1,-1)), 0, "INVALID", empty(), empty());
-       }
-
-    public JavaToken(int kind, String text ) {
-        this(new Range(pos(-1, -1), pos(-1, -1)), kind, text, empty(),empty());
+        this(null, 0, "INVALID", null, null);
     }
 
-    public JavaToken(Token token, List<JavaToken> tokens) {
+    public JavaToken(int kind, String text) {
+        this(null, kind, text, null, null);
+    }
+
+    JavaToken(Token token, List<JavaToken> tokens) {
         Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
         String text = token.image;
 
@@ -97,14 +96,16 @@ public class JavaToken {
         this.text = text;
         if (!tokens.isEmpty()) {
             final JavaToken previousToken = tokens.get(tokens.size() - 1);
-            this.previousToken = of(previousToken);
-            previousToken.nextToken = of(this);
+            this.previousToken = previousToken;
+            previousToken.nextToken = this;
         } else {
-            previousToken = empty();
+            previousToken = null;
         }
     }
 
-    public JavaToken(Range range, int kind, String text, Optional<JavaToken> previousToken, Optional<JavaToken> nextToken) {
+    public JavaToken(Range range, int kind, String text, JavaToken previousToken, JavaToken nextToken) {
+        assertNotNull(text);
+
         this.range = range;
         this.kind = kind;
         this.text = text;
@@ -112,8 +113,8 @@ public class JavaToken {
         this.nextToken = nextToken;
     }
 
-    public Range getRange() {
-        return range;
+    public Optional<Range> getRange() {
+        return Optional.ofNullable(range);
     }
 
     public int getKind() {
@@ -129,18 +130,18 @@ public class JavaToken {
     }
 
     public Optional<JavaToken> getNextToken() {
-        return nextToken;
+        return Optional.ofNullable(nextToken);
     }
 
     public Optional<JavaToken> getPreviousToken() {
-        return previousToken;
+        return Optional.ofNullable(previousToken);
     }
 
-    public void setNextToken(Optional<JavaToken> nextToken) {
+    public void setNextToken(JavaToken nextToken) {
         this.nextToken = nextToken;
     }
 
-    public void setPreviousToken(Optional<JavaToken> previousToken) {
+    public void setPreviousToken(JavaToken previousToken) {
         this.previousToken = previousToken;
     }
 
@@ -152,9 +153,16 @@ public class JavaToken {
         this.text = text;
     }
 
+    public String asString() {
+        return text;
+    }
+
     @Override
     public String toString() {
-        return text;
+        return f("\"%s\" <%s> %s",
+                getText(),
+                getKind(),
+                getRange().map(r -> r.toString()).orElse("(?)-(?)"));
     }
 
     /**
@@ -180,6 +188,14 @@ public class JavaToken {
             return this;
         }
         return anotherToken;
+    }
+
+    public void setNextToken(Optional<JavaToken> nextToken) {
+        this.nextToken = nextToken.orElse(null);
+    }
+
+    public void setPreviousToken(Optional<JavaToken> previousToken) {
+        this.previousToken = previousToken.orElse(null);
     }
 
     public enum Category {
@@ -229,6 +245,7 @@ public class JavaToken {
     public JavaToken.Category getCategory() {
         return TokenTypes.getCategory(kind);
     }
+
     public TokenCursor createCursor() {
         return new TokenCursor(this);
     }

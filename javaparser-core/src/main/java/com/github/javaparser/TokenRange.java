@@ -35,7 +35,7 @@ public class TokenRange {
     }
 
     public Range toRange() {
-        return new Range(begin.getRange().begin, end.getRange().end);
+        return new Range(begin.getRange().get().begin, end.getRange().get().end);
     }
 
     public TokenRange withBegin(JavaToken begin) {

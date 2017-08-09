@@ -36,15 +36,14 @@ public class TokenTypes {
     }
 
     /**
-     * @deprecated use eolTokenKind
+     * @return the kind of EOL token to use on the platform you're running on.
      */
-    @Deprecated
-    public static int eolToken() {
-        return eolTokenKind();
+    public static JavaToken eolToken() {
+        return new JavaToken(eolTokenKind(), EOL);
     }
 
     /**
-     * @return the kind of EOL token to use on the platform you're running on.
+     * @return the kind of EOL token kind to use on the platform you're running on.
      */
     public static int eolTokenKind() {
         if (EOL.equals("\n")) {
@@ -67,11 +66,10 @@ public class TokenTypes {
     }
 
     /**
-     * @deprecated use spaceTokenKind
+     * @return the token for a single space.
      */
-    @Deprecated
-    public static int spaceToken() {
-        return spaceTokenKind();
+    public static JavaToken spaceToken() {
+        return new JavaToken(spaceTokenKind(), " ");
     }
 
     /**
