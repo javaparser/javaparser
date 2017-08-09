@@ -1,3 +1,5 @@
+package tmp;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaToken;
@@ -7,7 +9,7 @@ import com.github.javaparser.ast.visitor.TreeVisitor;
 
 public class Issue1029 {
     public static void main(String[] args) {
-        BodyDeclaration<?> mainMethod = JavaParser.parseBodyDeclaration("int main(){\n" +
+        final BodyDeclaration<?> mainMethod = JavaParser.parseBodyDeclaration("int main(){\n" +
                 "          return 0;\n" +
                 "     }");
 

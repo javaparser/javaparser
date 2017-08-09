@@ -26,8 +26,7 @@ import java.util.Optional;
 
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
+import static java.util.Optional.*;
 
 /**
  * A token from a parsed source file.
@@ -43,11 +42,11 @@ public class JavaToken {
     private Optional<JavaToken> nextToken = empty();
 
     private JavaToken() {
-        this(new Range(pos(-1, -1), pos(-1, -1)), 0, "INVALID", empty(), empty());
-    }
+        this( new Range(pos(-1,-1), pos(-1,-1)), 0, "INVALID", empty(), empty());
+       }
 
-    public JavaToken(int kind, String text) {
-        this(new Range(pos(-1, -1), pos(-1, -1)), kind, text, empty(), empty());
+    public JavaToken(int kind, String text ) {
+        this(new Range(pos(-1, -1), pos(-1, -1)), kind, text, empty(),empty());
     }
 
     public JavaToken(Token token, List<JavaToken> tokens) {
@@ -183,10 +182,6 @@ public class JavaToken {
         return anotherToken;
     }
 
-    public TokenCursor createCursor() {
-        return new TokenCursor(this);
-    }
-
     public enum Category {
         WHITESPACE_NO_EOL, EOL, COMMENT, IDENTIFIER, KEYWORD, LITERAL, SEPARATOR, OPERATOR;
 
@@ -233,5 +228,8 @@ public class JavaToken {
 
     public JavaToken.Category getCategory() {
         return TokenTypes.getCategory(kind);
+    }
+    public TokenCursor createCursor() {
+        return new TokenCursor(this);
     }
 }
