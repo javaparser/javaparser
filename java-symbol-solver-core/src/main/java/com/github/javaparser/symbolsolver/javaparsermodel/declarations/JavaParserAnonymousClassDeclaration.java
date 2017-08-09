@@ -3,6 +3,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
@@ -58,6 +59,10 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
         .filter(node -> memberClass.isAssignableFrom(node.getClass()))
         .map(node -> (T) node)
         .collect(Collectors.toList());
+  }
+  
+  public Context getContext() {
+      return JavaParserFactory.getContext(wrappedNode, typeSolver);
   }
 
   @Override

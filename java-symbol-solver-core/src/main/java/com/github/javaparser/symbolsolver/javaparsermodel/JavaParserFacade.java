@@ -520,6 +520,9 @@ public class JavaParserFacade {
         } else if (node instanceof EnumDeclaration) {
             JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
             return new ReferenceTypeImpl(enumDeclaration, typeSolver);
+        } else if (node instanceof ObjectCreationExpr && ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+            JavaParserAnonymousClassDeclaration anonymousDeclaration = new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
+            return new ReferenceTypeImpl(anonymousDeclaration, typeSolver);
         } else {
             return getTypeOfThisIn(getParentNode(node));
         }
