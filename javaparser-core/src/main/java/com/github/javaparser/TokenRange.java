@@ -10,8 +10,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class TokenRange {
     public static final TokenRange INVALID = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
 
-    private final JavaToken begin;
-    private final JavaToken end;
+    private JavaToken begin;
+    private JavaToken end;
 
     public TokenRange(JavaToken begin, JavaToken end) {
         this.begin = assertNotNull(begin);
@@ -24,6 +24,14 @@ public class TokenRange {
 
     public JavaToken getEnd() {
         return end;
+    }
+
+    public void setBegin(JavaToken begin) {
+        this.begin = begin;
+    }
+
+    public void setEnd(JavaToken end) {
+        this.end = end;
     }
 
     public Range toRange() {

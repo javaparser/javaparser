@@ -26,7 +26,8 @@ import java.util.Optional;
 
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.Optional.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 /**
  * A token from a parsed source file.
@@ -46,7 +47,7 @@ public class JavaToken {
     }
 
     public JavaToken(int kind, String text) {
-        this(new Range(pos(-1,-1), pos(-1,-1)), kind, text, empty(), empty());
+        this(new Range(pos(-1, -1), pos(-1, -1)), kind, text, empty(), empty());
     }
 
     public JavaToken(Token token, List<JavaToken> tokens) {
@@ -134,6 +135,22 @@ public class JavaToken {
 
     public Optional<JavaToken> getPreviousToken() {
         return previousToken;
+    }
+
+    public void setNextToken(Optional<JavaToken> nextToken) {
+        this.nextToken = nextToken;
+    }
+
+    public void setPreviousToken(Optional<JavaToken> previousToken) {
+        this.previousToken = previousToken;
+    }
+
+    public void setRange(Range range) {
+        this.range = range;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
