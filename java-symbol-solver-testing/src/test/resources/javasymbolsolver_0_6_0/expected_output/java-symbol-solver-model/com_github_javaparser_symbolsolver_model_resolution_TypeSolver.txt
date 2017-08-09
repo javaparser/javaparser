@@ -1,0 +1,6 @@
+  Line 33) getParent() ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.getParent()
+  Line 36) getParent().getRoot() ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.getRoot()
+  Line 36) getParent() ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.getParent()
+  Line 60) tryToSolveType(name) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
+  Line 61) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
+  Line 62) ref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()

@@ -1,0 +1,7 @@
+  Line 41) wrappedNode.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
+  Line 41) wrappedNode.getName() ==> com.github.javaparser.ast.body.Parameter.getName()
+  Line 56) wrappedNode.isVarArgs() ==> com.github.javaparser.ast.body.Parameter.isVarArgs()
+  Line 66) JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convert(com.github.javaparser.ast.type.Type, com.github.javaparser.ast.Node)
+  Line 66) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 66) wrappedNode.getType() ==> com.github.javaparser.ast.body.Parameter.getType()
+  Line 67) isVariadic() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserParameterDeclaration.isVariadic()
