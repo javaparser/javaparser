@@ -34,14 +34,17 @@ public class TokenCursor {
      */
     public TokenCursor insert(JavaToken newToken) {
         assertNotNull(newToken);
-        token.ifPresent(t -> {
-            t.getPreviousToken().ifPresent(p -> {
-                p.setNextToken(newToken);
-                newToken.setPreviousToken(p);
-            });
-            t.setPreviousToken(newToken);
-            newToken.setNextToken(t);
-        });
+        token.ifPresent(t -> t.insert(newToken));
+        return this;
+    }
+
+    /**
+     * Inserts newToken at the cursor, moving the current token forward.
+     * Cursor stays at current token.
+     */
+    public TokenCursor insertAfter(JavaToken newToken) {
+        assertNotNull(newToken);
+        token.ifPresent(t -> t.insert(newToken));
         return this;
     }
 
@@ -96,33 +99,26 @@ public class TokenCursor {
     public TokenCursor deleteToken() {
         token.ifPresent(t -> {
             final Optional<JavaToken> nextToken = t.getNextToken();
-            final Optional<JavaToken> previousToken = t.getPreviousToken();
-
-            previousToken.ifPresent(p -> p.setNextToken(nextToken));
-            nextToken.ifPresent(n -> n.setPreviousToken(previousToken));
-
+            t.deleteToken();
             token = nextToken;
         });
         return this;
     }
 
+    /**
+     * Replaces the current token with newToken.
+     * The cursor is now at newToken.
+     */
     public TokenCursor replaceToken(JavaToken newToken) {
         assertNotNull(newToken);
-        token.ifPresent(t -> {
-            t.getPreviousToken().ifPresent(p -> {
-                p.setNextToken(newToken);
-                newToken.setPreviousToken(p);
-            });
-            t.getNextToken().ifPresent(n -> {
-                n.setPreviousToken(newToken);
-                newToken.setNextToken(n);
-            });
-        });
+        token.ifPresent(t -> t.replaceToken(newToken));
+        token = Optional.of(newToken);
         return this;
     }
 
     /**
-     *
+     * Replaces the current token with the result of replacer.
+     * The cursor is now at newToken.
      */
     public TokenCursor replaceToken(Function<JavaToken, JavaToken> replacer) {
         assertNotNull(replacer);
@@ -149,6 +145,22 @@ public class TokenCursor {
      */
     public TokenCursor toPreviousToken() {
         token = token.flatMap(JavaToken::getPreviousToken);
+        return this;
+    }
+
+    /**
+     * Move the cursor to the first token in the token list.
+     */
+    public TokenCursor toFirstToken() {
+        token = token.map(JavaToken::findFirstToken);
+        return this;
+    }
+
+    /**
+     * Move the cursor to the last token in the token list.
+     */
+    public TokenCursor toLastToken() {
+        token = token.map(JavaToken::findLastToken);
         return this;
     }
 
