@@ -44,7 +44,7 @@ public class TokenCursor {
      */
     public TokenCursor insertAfter(JavaToken newToken) {
         assertNotNull(newToken);
-        token.ifPresent(t -> t.insert(newToken));
+        token.ifPresent(t -> t.insertAfter(newToken));
         return this;
     }
 

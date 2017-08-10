@@ -26,8 +26,8 @@ public class Issue1029 {
                     JavaToken endComment = new JavaToken(MULTI_LINE_COMMENT, "/* ] " + count + " */");
                     // Go to the beginning of the node in the token list, and insert the start comment there.
                     r.getBegin().createCursor().insert(startComment);
-                    // Go to after the end of the node in the token list, and insert the end comment there.
-                    r.getEnd().createCursor().toNextToken().insert(endComment);
+                    // Go to the end of the node in the token list, and insert the end comment after it.
+                    r.getEnd().createCursor().insertAfter(endComment);
                     // Update the node's token range to include these comments.
                     // (Otherwise tokenRange.toString misses the first and last comment)
                     r.setBegin(startComment);
