@@ -158,6 +158,18 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == condition) {
+            setCondition((Expression) replacementNode);
+            return true;
+        }
+        if (node == elseExpr) {
+            setElseExpr((Expression) replacementNode);
+            return true;
+        }
+        if (node == thenExpr) {
+            setThenExpr((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

@@ -37,11 +37,7 @@ public class ReplaceMethodGenerator extends NodeGenerator {
             if (property.isNodeList()) {
                 check = nodeListCheck(property);
             } else {
-                if (property.isRequired()) {
-                    continue;
-                }
-                String replaceAttributeMethodName = generateReplaceMethodForAttribute(nodeCoid, nodeMetaModel, property);
-                check = attributeCheck(property, replaceAttributeMethodName);
+                check = attributeCheck(property, property.getSetterMethodName());
             }
             if (property.isOptional()) {
                 check = f("if (%s != null) { %s }", property.getName(), check);
@@ -58,11 +54,11 @@ public class ReplaceMethodGenerator extends NodeGenerator {
         annotateGenerated(replaceNodeMethod);
     }
 
-    private String attributeCheck(PropertyMetaModel property, String replaceAttributeMethodName) {
+    private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {
         return f("if (node == %s) {" +
                 "    %s((%s) replacementNode);" +
                 "    return true;\n" +
-                "}", property.getName(), replaceAttributeMethodName, property.getTypeName());
+                "}", property.getName(), attributeSetterName, property.getTypeName());
     }
 
     private String nodeListCheck(PropertyMetaModel property) {
@@ -72,17 +68,5 @@ public class ReplaceMethodGenerator extends NodeGenerator {
                 "    return true;" +
                 "  }" +
                 "}", property.getName(), property.getName(), property.getName(), property.getTypeName());
-    }
-
-    private String generateReplaceMethodForAttribute(ClassOrInterfaceDeclaration nodeCoid, BaseNodeMetaModel nodeMetaModel, PropertyMetaModel property) {
-        final String methodName = "replace" + capitalize(property.getName());
-        final MethodDeclaration replaceMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s %s(%s replacement) {}", nodeMetaModel.getTypeName(), methodName, property.getTypeName()));
-
-        final BlockStmt block = replaceMethod.getBody().get();
-        block.addStatement(f("return %s((%s) replacement);", property.getSetterMethodName(), property.getTypeNameForSetter()));
-
-        addOrReplaceWhenSameSignature(nodeCoid, replaceMethod);
-        annotateGenerated(replaceMethod);
-        return methodName;
     }
 }

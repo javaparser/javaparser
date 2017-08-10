@@ -110,8 +110,8 @@ public final class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<BlockStmt> getTryBlock() {
-        return Optional.ofNullable(tryBlock);
+    public BlockStmt getTryBlock() {
+        return tryBlock;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -148,6 +148,7 @@ public final class TryStmt extends Statement {
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TryStmt setTryBlock(final BlockStmt tryBlock) {
+        assertNotNull(tryBlock);
         if (tryBlock == this.tryBlock) {
             return (TryStmt) this;
         }
@@ -202,12 +203,6 @@ public final class TryStmt extends Statement {
                 return true;
             }
         }
-        if (tryBlock != null) {
-            if (node == tryBlock) {
-                removeTryBlock();
-                return true;
-            }
-        }
         return super.remove(node);
     }
 
@@ -233,16 +228,6 @@ public final class TryStmt extends Statement {
         return JavaParserMetaModel.tryStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public TryStmt replaceFinallyBlock(BlockStmt replacement) {
-        return setFinallyBlock((BlockStmt) replacement);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public TryStmt replaceTryBlock(BlockStmt replacement) {
-        return setTryBlock((BlockStmt) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -256,7 +241,7 @@ public final class TryStmt extends Statement {
         }
         if (finallyBlock != null) {
             if (node == finallyBlock) {
-                replaceFinallyBlock((BlockStmt) replacementNode);
+                setFinallyBlock((BlockStmt) replacementNode);
                 return true;
             }
         }
@@ -266,11 +251,9 @@ public final class TryStmt extends Statement {
                 return true;
             }
         }
-        if (tryBlock != null) {
-            if (node == tryBlock) {
-                replaceTryBlock((BlockStmt) replacementNode);
-                return true;
-            }
+        if (node == tryBlock) {
+            setTryBlock((BlockStmt) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }

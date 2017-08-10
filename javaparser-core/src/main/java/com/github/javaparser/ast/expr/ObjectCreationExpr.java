@@ -44,9 +44,12 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 
 /**
- * A constructor call. <br/>In <code>new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};</code>
- * HashMap is the scope, Entry is the type, String and Long are type arguments, 15 is an argument, and everything in { }
+ * A constructor call.
+ * <br/>In <code>new HashMap.Entry&lt;String, Long>(15) {public String getKey() {return null;}};</code>
+ * HashMap.Entry is the type, String and Long are type arguments, 15 is an argument, and everything in { }
  * is the anonymous class body.
+ * <p/>In <code>class B { class C { public void a() { new B().new C(); } } }</code> the scope is <code>new B()</code>
+ * of ObjectCreationExpr <code>new B().new C()</code>
  *
  * @author Julio Vilmar Gesser
  */
@@ -281,11 +284,6 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         return JavaParserMetaModel.objectCreationExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ObjectCreationExpr replaceScope(Expression replacement) {
-        return setScope((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -307,9 +305,13 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         }
         if (scope != null) {
             if (node == scope) {
-                replaceScope((Expression) replacementNode);
+                setScope((Expression) replacementNode);
                 return true;
             }
+        }
+        if (node == type) {
+            setType((ClassOrInterfaceType) replacementNode);
+            return true;
         }
         if (typeArguments != null) {
             for (int i = 0; i < typeArguments.size(); i++) {

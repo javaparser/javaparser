@@ -64,7 +64,9 @@ public class Java1_0ValidatorTest {
     @Test
     public void leftHandAssignmentCannotBeEmptyBraces() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("()=3"));
-        assertProblems(result, "(line 1,col 1) Illegal left hand side of an assignment.");
+        assertProblems(result,
+                "(line 1,col 1) Illegal left hand side of an assignment.",
+                "(line 1,col 1) Lambdas are not supported.");
     }
 
     @Test

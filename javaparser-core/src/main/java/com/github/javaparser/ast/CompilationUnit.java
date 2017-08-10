@@ -637,16 +637,6 @@ public class CompilationUnit extends Node {
         return JavaParserMetaModel.compilationUnitMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public CompilationUnit replaceModule(ModuleDeclaration replacement) {
-        return setModule((ModuleDeclaration) replacement);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public CompilationUnit replacePackageDeclaration(PackageDeclaration replacement) {
-        return setPackageDeclaration((PackageDeclaration) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -660,13 +650,13 @@ public class CompilationUnit extends Node {
         }
         if (module != null) {
             if (node == module) {
-                replaceModule((ModuleDeclaration) replacementNode);
+                setModule((ModuleDeclaration) replacementNode);
                 return true;
             }
         }
         if (packageDeclaration != null) {
             if (node == packageDeclaration) {
-                replacePackageDeclaration((PackageDeclaration) replacementNode);
+                setPackageDeclaration((PackageDeclaration) replacementNode);
                 return true;
             }
         }

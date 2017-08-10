@@ -32,10 +32,13 @@ public class Java5Validator extends Java1_4Validator {
         }
     });
 
+    protected final Validator enumNotAllowed = new ReservedKeywordValidator("enum");
+
     public Java5Validator() {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
         add(noPrimitiveGenericArguments);
+        add(enumNotAllowed);
         
         // TODO validate annotations on classes, fields and methods but nowhere else
         // The following is probably too simple.

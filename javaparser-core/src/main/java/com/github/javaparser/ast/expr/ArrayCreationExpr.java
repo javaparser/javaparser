@@ -38,8 +38,8 @@ import java.util.Optional;
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
-
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.Node;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
@@ -231,19 +231,18 @@ public final class ArrayCreationExpr extends Expression {
         return JavaParserMetaModel.arrayCreationExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public ArrayCreationExpr replaceInitializer(ArrayInitializerExpr replacement) {
-        return setInitializer((ArrayInitializerExpr) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == elementType) {
+            setElementType((Type) replacementNode);
+            return true;
+        }
         if (initializer != null) {
             if (node == initializer) {
-                replaceInitializer((ArrayInitializerExpr) replacementNode);
+                setInitializer((ArrayInitializerExpr) replacementNode);
                 return true;
             }
         }

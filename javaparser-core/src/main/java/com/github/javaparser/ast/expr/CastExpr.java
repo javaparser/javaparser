@@ -138,6 +138,14 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

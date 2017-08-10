@@ -178,11 +178,6 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         return JavaParserMetaModel.switchEntryStmtMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public SwitchEntryStmt replaceLabel(Expression replacement) {
-        return setLabel((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
@@ -190,7 +185,7 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
             return false;
         if (label != null) {
             if (node == label) {
-                replaceLabel((Expression) replacementNode);
+                setLabel((Expression) replacementNode);
                 return true;
             }
         }

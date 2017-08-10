@@ -112,6 +112,10 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == memberValue) {
+            setMemberValue((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

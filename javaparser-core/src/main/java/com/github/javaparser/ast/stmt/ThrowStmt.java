@@ -116,6 +116,10 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == expression) {
+            setExpression((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

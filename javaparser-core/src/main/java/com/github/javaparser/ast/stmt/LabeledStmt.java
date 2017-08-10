@@ -139,6 +139,14 @@ public final class LabeledStmt extends Statement {
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == label) {
+            setLabel((SimpleName) replacementNode);
+            return true;
+        }
+        if (node == statement) {
+            setStatement((Statement) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

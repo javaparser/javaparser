@@ -174,6 +174,10 @@ public final class SwitchStmt extends Statement {
                 return true;
             }
         }
+        if (node == selector) {
+            setSelector((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

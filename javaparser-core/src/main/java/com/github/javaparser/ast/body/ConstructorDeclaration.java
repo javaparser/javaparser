@@ -200,6 +200,10 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == body) {
+            setBody((BlockStmt) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

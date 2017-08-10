@@ -123,6 +123,10 @@ public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModi
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 }

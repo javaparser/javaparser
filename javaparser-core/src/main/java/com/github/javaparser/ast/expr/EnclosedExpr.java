@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.EnclosedExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression between ( ).
@@ -70,8 +71,8 @@ public final class EnclosedExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Expression> getInner() {
-        return Optional.ofNullable(inner);
+    public Expression getInner() {
+        return inner;
     }
 
     /**
@@ -82,6 +83,7 @@ public final class EnclosedExpr extends Expression {
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public EnclosedExpr setInner(final Expression inner) {
+        assertNotNull(inner);
         if (inner == this.inner) {
             return (EnclosedExpr) this;
         }
@@ -98,12 +100,6 @@ public final class EnclosedExpr extends Expression {
     public boolean remove(Node node) {
         if (node == null)
             return false;
-        if (inner != null) {
-            if (node == inner) {
-                removeInner();
-                return true;
-            }
-        }
         return super.remove(node);
     }
 
@@ -124,21 +120,14 @@ public final class EnclosedExpr extends Expression {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public EnclosedExpr replaceInner(Expression replacement) {
-        return setInner((Expression) replacement);
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
             return false;
-        if (inner != null) {
-            if (node == inner) {
-                replaceInner((Expression) replacementNode);
-                return true;
-            }
+        if (node == inner) {
+            setInner((Expression) replacementNode);
+            return true;
         }
         return super.replace(node, replacementNode);
     }
