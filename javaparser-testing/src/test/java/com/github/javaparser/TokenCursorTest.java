@@ -66,7 +66,19 @@ public class TokenCursorTest {
                 // insert a new token.
                 .insert(SINGLE_LINE_COMMENT, "// TODO 1212");
         // we have now put a line comment just above the statement.
-        System.out.println(cu.getTokenRange().get().toString());
+        assertEquals("package com.github.javaparser.wiki_samples;" + EOL +
+                "" + EOL +
+                "public class TestFile {" + EOL +
+                "    public void foo(int e) {" + EOL +
+                "        /* what a nice int */" + EOL +
+                "// TODO 1212" + EOL +
+                "        int a = 20;" + EOL +
+                "    }" + EOL +
+                "" + EOL +
+                "    public void abc() {" + EOL +
+                "" + EOL +
+                "    }" + EOL +
+                "}" + EOL, cu.getTokenRange().map(TokenRange::toString).get());
     }
 
     @Test
@@ -82,7 +94,18 @@ public class TokenCursorTest {
         // Clean up trailing whitespace
 //                .deleteWhitespace()
         ;
-        System.out.println(cu.getTokenRange().get().toString());
+        assertEquals("package com.github.javaparser.wiki_samples;" + EOL +
+                "" + EOL +
+                "public class TestFile {" + EOL +
+                "    public void foo(int e) {" + EOL +
+                "        " + EOL +
+                "        int a = 20;" + EOL +
+                "    }" + EOL +
+                "" + EOL +
+                "    public void abc() {" + EOL +
+                "" + EOL +
+                "    }" + EOL +
+                "}" + EOL, cu.getTokenRange().map(TokenRange::toString).get());
     }
 
     @Test
@@ -93,7 +116,6 @@ public class TokenCursorTest {
                         cursor
                                 .toEndOfLine()
                                 .insert(SINGLE_LINE_COMMENT, "// hi")
-                                .toEndOfLine()
                                 .toNextToken();
                     }
                 }
