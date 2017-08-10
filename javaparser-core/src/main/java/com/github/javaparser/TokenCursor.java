@@ -21,6 +21,13 @@ public class TokenCursor {
     }
 
     /**
+     * @return a copy of the cursor.
+     */
+    public TokenCursor clone() {
+        return new TokenCursor(token.orElse(null));
+    }
+
+    /**
      * Like pressing enter: a new line is started with the current token at the beginning of it.
      * The cursor is now at this token at the beginning.
      */
