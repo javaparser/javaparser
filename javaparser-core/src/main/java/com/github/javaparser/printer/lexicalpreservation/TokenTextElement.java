@@ -93,22 +93,22 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isWhiteSpace() {
-        return TokenTypes.isWhitespace(token.getKind());
+        return token.getCategory().isWhitespace();
     }
 
     @Override
     public boolean isSpaceOrTab() {
-        return TokenTypes.isSpaceOrTab(token.getKind());
+        return token.getCategory().isWhitespaceButNotEndOfLine();
     }
 
     @Override
     public boolean isComment() {
-        return TokenTypes.isComment(token.getKind());
+        return token.getCategory().isComment();
     }
 
     @Override
     public boolean isNewline() {
-        return TokenTypes.isEndOfLineToken(token.getKind());
+        return token.getCategory().isEndOfLine();
     }
 
     @Override
