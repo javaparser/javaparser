@@ -24,30 +24,32 @@ package com.github.javaparser;
 import java.util.List;
 import java.util.Optional;
 
-import static com.github.javaparser.Position.pos;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A token from a parsed source file.
  * (Awkwardly named "Java"Token since JavaCC already generates an internal class Token.)
+ * It is a node in a double linked list called token list.
  */
 public class JavaToken {
     public static final JavaToken INVALID = new JavaToken();
 
-    private final Range range;
+    private Range range;
     private int kind;
-    private final String text;
-    private final Optional<JavaToken> previousToken;
-    private Optional<JavaToken> nextToken = Optional.empty();
+    private String text;
+    private JavaToken previousToken = null;
+    private JavaToken nextToken = null;
 
     private JavaToken() {
-        range = new Range(pos(-1, -1), pos(-1, -1));
-        kind = 0;
-        text = "INVALID";
-        previousToken = Optional.empty();
+        this(null, 0, "INVALID", null, null);
     }
 
-    public JavaToken(Token token, List<JavaToken> tokens) {
+    public JavaToken(int kind, String text) {
+        this(null, kind, text, null, null);
+    }
+
+    JavaToken(Token token, List<JavaToken> tokens) {
         Range range = Range.range(token.beginLine, token.beginColumn, token.endLine, token.endColumn);
         String text = token.image;
 
@@ -95,14 +97,16 @@ public class JavaToken {
         this.text = text;
         if (!tokens.isEmpty()) {
             final JavaToken previousToken = tokens.get(tokens.size() - 1);
-            this.previousToken = Optional.of(previousToken);
-            previousToken.nextToken = Optional.of(this);
+            this.previousToken = previousToken;
+            previousToken.nextToken = this;
         } else {
-            previousToken = Optional.empty();
+            previousToken = null;
         }
     }
 
-    public JavaToken(Range range, int kind, String text, Optional<JavaToken> previousToken, Optional<JavaToken> nextToken) {
+    public JavaToken(Range range, int kind, String text, JavaToken previousToken, JavaToken nextToken) {
+        assertNotNull(text);
+
         this.range = range;
         this.kind = kind;
         this.text = text;
@@ -110,8 +114,8 @@ public class JavaToken {
         this.nextToken = nextToken;
     }
 
-    public Range getRange() {
-        return range;
+    public Optional<Range> getRange() {
+        return Optional.ofNullable(range);
     }
 
     public int getKind() {
@@ -127,16 +131,31 @@ public class JavaToken {
     }
 
     public Optional<JavaToken> getNextToken() {
-        return nextToken;
+        return Optional.ofNullable(nextToken);
     }
 
     public Optional<JavaToken> getPreviousToken() {
-        return previousToken;
+        return Optional.ofNullable(previousToken);
+    }
+
+    public void setRange(Range range) {
+        this.range = range;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String asString() {
+        return text;
     }
 
     @Override
     public String toString() {
-        return text;
+        return f("\"%s\" <%s> %s",
+                getText(),
+                getKind(),
+                getRange().map(Range::toString).orElse("(?)-(?)"));
     }
 
     /**
@@ -210,5 +229,83 @@ public class JavaToken {
 
     public JavaToken.Category getCategory() {
         return TokenTypes.getCategory(kind);
+    }
+
+    public TokenCursor createCursor() {
+        return new TokenCursor(this);
+    }
+
+    /**
+     * Inserts newToken into the token list just before this token.
+     */
+    public void insert(JavaToken newToken) {
+        assertNotNull(newToken);
+        getPreviousToken().ifPresent(p -> {
+            p.nextToken = newToken;
+            newToken.previousToken = p;
+        });
+        previousToken = newToken;
+        newToken.nextToken = this;
+    }
+
+    /**
+     * Inserts newToken into the token list just after this token.
+     */
+    public void insertAfter(JavaToken newToken) {
+        assertNotNull(newToken);
+        getNextToken().ifPresent(n -> {
+            n.previousToken = newToken;
+            newToken.nextToken = n;
+        });
+        nextToken = newToken;
+        newToken.previousToken = this;
+    }
+
+    /**
+     * Links the tokens around the current token together, making the current token disappear from the list.
+     */
+    public void deleteToken() {
+        final Optional<JavaToken> nextToken = getNextToken();
+        final Optional<JavaToken> previousToken = getPreviousToken();
+
+        previousToken.ifPresent(p -> p.nextToken = nextToken.orElse(null));
+        nextToken.ifPresent(n -> n.previousToken = previousToken.orElse(null));
+    }
+
+    /**
+     * Replaces the current token with newToken.
+     */
+    public void replaceToken(JavaToken newToken) {
+        assertNotNull(newToken);
+        getPreviousToken().ifPresent(p -> {
+            p.nextToken = newToken;
+            newToken.previousToken = p;
+        });
+        getNextToken().ifPresent(n -> {
+            n.previousToken = newToken;
+            newToken.nextToken = n;
+        });
+    }
+
+    /**
+     * @return the last token in the token list.
+     */
+    public JavaToken findLastToken() {
+        JavaToken current = this;
+        while (current.getNextToken().isPresent()) {
+            current = current.getNextToken().get();
+        }
+        return current;
+    }
+
+    /**
+     * @return the first token in the token list.
+     */
+    public JavaToken findFirstToken() {
+        JavaToken current = this;
+        while (current.getPreviousToken().isPresent()) {
+            current = current.getPreviousToken().get();
+        }
+        return current;
     }
 }

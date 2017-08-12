@@ -20,7 +20,7 @@ public class ProblemTest {
     public void testVerboseMessage() {
         Problem problem = new Problem("Parse error", TokenRange.INVALID, null);
 
-        assertEquals("(line -1,col -1) Parse error", problem.getVerboseMessage());
+        assertEquals("(?,?) Parse error", problem.getVerboseMessage());
     }
 
     @Test
