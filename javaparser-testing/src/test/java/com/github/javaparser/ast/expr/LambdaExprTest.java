@@ -22,7 +22,7 @@ public class LambdaExprTest {
 
     private void assertRange(String startToken, String endToken, Node node) {
         TokenRange tokenRange = node.getTokenRange().get();
-        assertEquals(startToken, tokenRange.getBegin().toString());
-        assertEquals(endToken, tokenRange.getEnd().toString());
+        assertEquals(startToken, tokenRange.getBegin().asString());
+        assertEquals(endToken, tokenRange.getEnd().asString());
     }
 }
