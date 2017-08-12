@@ -437,7 +437,6 @@ public class LexicalPreservingPrinter {
         }
         ParameterizedType parameterizedType = (ParameterizedType) m.getGenericReturnType();
         java.lang.reflect.Type optionalArgument = parameterizedType.getActualTypeArguments()[0];
-        String typeName = optionalArgument.getTypeName();
         return (parameterizedType.getActualTypeArguments()[0].getTypeName().startsWith(NodeList.class.getCanonicalName()));
     }
 
