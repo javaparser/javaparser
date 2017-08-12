@@ -474,6 +474,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Try to replace this node in the parent with the supplied node.
+     *
+     * @return true if removed, or if the parent isn't set.
+     * @throws RuntimeException if it fails in an unexpected way
+     */
+    public boolean replace(Node node) {
+        if (parentNode == null) {
+            return false;
+        }
+        return parentNode.replace(this, node);
+    }
+
+    /**
      * Forcibly removes this node from the AST.
      * If it cannot be removed from the parent with remove(),
      * it will try to remove its parent instead,
