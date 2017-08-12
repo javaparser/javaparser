@@ -206,11 +206,11 @@ public class LexicalPreservingPrinter {
         // We go over tokens and find to which nodes belong. Note that we start from the most specific nodes
         // and we move up to more general nodes
         for (JavaToken token : root.getTokenRange().get()) {
-            Optional<Node> maybeOwner = nodesDepthFirst.stream().filter(n -> n.getRange().get().contains(token.getRange())).findFirst();
-            if (!maybeOwner.isPresent()) {
-                throw new RuntimeException("Token without node owning it: " + token);
-            }
-            Node owner = maybeOwner.get();
+            Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
+            Node owner = nodesDepthFirst.stream()
+                    .filter(n -> n.getRange().get().contains(tokenRange))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
             if (!tokensByNode.containsKey(owner)) {
                 tokensByNode.put(owner, new LinkedList<>());
             }
@@ -242,7 +242,7 @@ public class LexicalPreservingPrinter {
             }
         }
         for (JavaToken token : nodeTokens) {
-            elements.add(new Pair<>(token.getRange(), new TokenTextElement(token)));
+            elements.add(new Pair<>(token.getRange().get(), new TokenTextElement(token)));
         }
         elements.sort(Comparator.comparing(e -> e.a.begin));
         textForNodes.put(node, new NodeText(this, elements.stream().map(p -> p.b).collect(Collectors.toList())));

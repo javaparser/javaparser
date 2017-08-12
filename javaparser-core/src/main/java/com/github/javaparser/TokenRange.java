@@ -27,8 +27,11 @@ public class TokenRange implements Iterable<JavaToken> {
         return end;
     }
 
-    public Range toRange() {
-        return new Range(begin.getRange().begin, end.getRange().end);
+    public Optional<Range> toRange() {
+        if (begin.getRange().isPresent() && end.getRange().isPresent()) {
+            return Optional.of(new Range(begin.getRange().get().begin, end.getRange().get().end));
+        }
+        return Optional.empty();
     }
 
     public TokenRange withBegin(JavaToken begin) {
