@@ -30,6 +30,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * A token from a parsed source file.
  * (Awkwardly named "Java"Token since JavaCC already generates an internal class Token.)
+ * It is a node in a double linked list called token list.
  */
 public class JavaToken {
     public static final JavaToken INVALID = new JavaToken();
