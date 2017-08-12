@@ -51,11 +51,13 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
- * operating on the AST and then used them to produce code.
+ * operating on the AST and then used them to reproduce the source code 
+ * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
 
@@ -65,6 +67,7 @@ public class LexicalPreservingPrinter {
 
     /**
      * Parse the code and setup the LexicalPreservingPrinter.
+     * @deprecated just use the other constructor.
      */
     public static <N extends Node> Pair<ParseResult<N>, LexicalPreservingPrinter> setup(ParseStart<N> parseStart,
                                                                                         Provider provider) {
@@ -73,7 +76,7 @@ public class LexicalPreservingPrinter {
             throw new RuntimeException("Parsing failed, unable to setup the lexical preservation printer: "
                     + parseResult.getProblems());
         }
-        LexicalPreservingPrinter lexicalPreservingPrinter = new LexicalPreservingPrinter(parseResult);
+        LexicalPreservingPrinter lexicalPreservingPrinter = new LexicalPreservingPrinter(parseResult.getResult().get());
         return new Pair<>(parseResult, lexicalPreservingPrinter);
     }
 
@@ -90,17 +93,18 @@ public class LexicalPreservingPrinter {
     // Constructor and setup
     //
 
-    private LexicalPreservingPrinter(ParseResult<? extends Node> parseResult) {
-        if (parseResult.getResult().isPresent() && parseResult.getTokens().isPresent()) {
+    public LexicalPreservingPrinter(Node node) {
+        assertNotNull(node);
+        
+        node.getTokenRange().ifPresent(r -> {
             // Store initial text
-            storeInitialText(parseResult.getResult().get(), parseResult.getTokens().get());
+            storeInitialText(node);
 
             // Setup observer
             AstObserver observer = createObserver(this);
 
-            Node root = parseResult.getResult().get();
-            root.registerForSubtree(observer);
-        }
+            node.registerForSubtree(observer);
+        });
     }
 
     private static AstObserver createObserver(LexicalPreservingPrinter lpp) {
@@ -184,7 +188,7 @@ public class LexicalPreservingPrinter {
         };
     }
 
-    private void storeInitialText(Node root, List<JavaToken> documentTokens) {
+    private void storeInitialText(Node root) {
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
         // Take all nodes and sort them to get the leaves first
@@ -201,7 +205,7 @@ public class LexicalPreservingPrinter {
 
         // We go over tokens and find to which nodes belong. Note that we start from the most specific nodes
         // and we move up to more general nodes
-        for (JavaToken token : documentTokens) {
+        for (JavaToken token : root.getTokenRange().get()) {
             Optional<Node> maybeOwner = nodesDepthFirst.stream().filter(n -> n.getRange().get().contains(token.getRange())).findFirst();
             if (!maybeOwner.isPresent()) {
                 throw new RuntimeException("Token without node owning it: " + token);
