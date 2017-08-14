@@ -57,8 +57,12 @@ public class SourceRoot {
     }
 
     /**
-     * Tries to parse all .java files in a package recursively, caches them, and returns all files ever parsed with this source
-     * root.
+     * Tries to parse all .java files in a package recursively, and returns all files ever parsed with this source root. 
+     * It keeps track of all parsed files so you can write them out with a single saveAll() call.
+     * Note that the cache grows with every file parsed, 
+     * so if you don't need saveAll(),
+     * or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you might want to use
+     * the parse method with a callback.
      */
     public List<ParseResult<CompilationUnit>> tryToParse(String startPackage) throws IOException {
         assertNotNull(startPackage);
@@ -78,9 +82,9 @@ public class SourceRoot {
     }
 
     /**
-     * Parses a package recursively with a callback.
-     * The advantage: it doesn't keep all files and AST's in memory.
-     * The disadvantage: you have to do your processing directly.
+     * Tries to parse all .java files in a package recursively and passes them one by one to the callback.
+     * In comparison to the other parse methods, this is much more memory efficient,
+     * but saveAll() won't work.
      */
     public SourceRoot parse(String startPackage, JavaParser javaParser, Callback callback) throws IOException {
         assertNotNull(startPackage);
@@ -109,21 +113,26 @@ public class SourceRoot {
     }
 
     /**
-     * Try to parse every .java file in this source root.
+     * Tries to parse all .java files under the source root recursively, and returns all files ever parsed with this source root. 
+     * It keeps track of all parsed files so you can write them out with a single saveAll() call.
+     * Note that the cache grows with every file parsed, 
+     * so if you don't need saveAll(),
+     * or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you might want to use
+     * the parse method with a callback.
      */
     public List<ParseResult<CompilationUnit>> tryToParse() throws IOException {
         return tryToParse("");
     }
 
     /**
-     * Save all files back to where they were found.
+     * Save all previously parsed files back to where they were found.
      */
     public SourceRoot saveAll() {
         return saveAll(root);
     }
 
     /**
-     * Save all files back to another path.
+     * Save all previously parsed files back to a new path.
      */
     public SourceRoot saveAll(Path root) {
         assertNotNull(root);
@@ -167,12 +176,17 @@ public class SourceRoot {
     }
 
     /**
-     * Try to parse a single Java file and return the result of parsing.
+     * Tries to parse a .java files under the source root and returns the ParseResult. 
+     * It keeps track of the parsed file so you can write it out with the saveAll() call.
+     * Note that the cache grows with every file parsed,
+     * so if you don't need saveAll(),
+     * or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you might want to use
+     * the parse method with a callback.
      */
-    public ParseResult<CompilationUnit> tryToParse(String packag, String filename) throws IOException {
-        assertNotNull(packag);
+    public ParseResult<CompilationUnit> tryToParse(String pkg, String filename) throws IOException {
+        assertNotNull(pkg);
         assertNotNull(filename);
-        final Path relativePath = fileInPackageRelativePath(packag, filename);
+        final Path relativePath = fileInPackageRelativePath(pkg, filename);
         if (cache.containsKey(relativePath)) {
             Log.trace("Retrieving cached %s", relativePath);
             return cache.get(relativePath);
@@ -186,15 +200,20 @@ public class SourceRoot {
     }
 
     /**
-     * Try to parse a single Java file and return it.
-     *
+     * Parses a .java files under the source root and returns its CompilationUnit. 
+     * It keeps track of the parsed file so you can write it out with the saveAll() call.
+     * Note that the cache grows with every file parsed,
+     * so if you don't need saveAll(),
+     * or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you might want to use
+     * the parse method with a callback.
+     * 
      * @throws ParseProblemException when something went wrong.
      */
-    public CompilationUnit parse(String packag, String filename) {
-        assertNotNull(packag);
+    public CompilationUnit parse(String pkg, String filename) {
+        assertNotNull(pkg);
         assertNotNull(filename);
         try {
-            final ParseResult<CompilationUnit> result = tryToParse(packag, filename);
+            final ParseResult<CompilationUnit> result = tryToParse(pkg, filename);
             if (result.isSuccessful()) {
                 return result.getResult().get();
             }
@@ -205,7 +224,8 @@ public class SourceRoot {
     }
 
     /**
-     * Add a newly created Java file to this source root. It will be saved when saveAll is called.
+     * Add a newly created Java file to the cache of this source root. 
+     * It will be saved when saveAll is called.
      */
     public SourceRoot add(String pkg, String filename, CompilationUnit compilationUnit) {
         assertNotNull(pkg);
@@ -219,7 +239,9 @@ public class SourceRoot {
     }
 
     /**
-     * Add a newly created Java file to this source root. It needs to have its path set.
+     * Add a newly created Java file to the cache of this source root. 
+     * It will be saved when saveAll is called.
+     * It needs to have its path set.
      */
     public SourceRoot add(CompilationUnit compilationUnit) {
         assertNotNull(compilationUnit);
