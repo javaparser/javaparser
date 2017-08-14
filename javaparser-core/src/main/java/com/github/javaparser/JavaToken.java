@@ -169,6 +169,13 @@ public class JavaToken {
         return text;
     }
 
+    /**
+     * @return the token range that goes from the beginning to the end of the token list this token is a part of.
+     */
+    public TokenRange toTokenRange() {
+        return new TokenRange(findFirstToken(), findLastToken());
+    }
+
     @Override
     public String toString() {
         return f("\"%s\" <%s> %s",
