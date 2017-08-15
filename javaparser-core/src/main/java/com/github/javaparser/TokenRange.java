@@ -1,5 +1,6 @@
 package com.github.javaparser;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -7,7 +8,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * The range of tokens covered by this node.
  */
-public class TokenRange {
+public class TokenRange implements Iterable<JavaToken> {
     public static final TokenRange INVALID = new TokenRange(JavaToken.INVALID, JavaToken.INVALID);
 
     private final JavaToken begin;
@@ -57,5 +58,28 @@ public class TokenRange {
                 return result.toString();
             }
         }
+    }
+
+    @Override
+    public Iterator<JavaToken> iterator() {
+        return new Iterator<JavaToken>() {
+            private boolean hasNext = true;
+            private JavaToken current = begin;
+
+            @Override
+            public boolean hasNext() {
+                return hasNext;
+            }
+
+            @Override
+            public JavaToken next() {
+                JavaToken retval = current;
+                if (current == end) {
+                    hasNext = false;
+                }
+                current = current.getNextToken().orElse(null);
+                return retval;
+            }
+        };
     }
 }

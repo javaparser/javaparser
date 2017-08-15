@@ -21,57 +21,41 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.TokenTypes;
-
-import static com.github.javaparser.utils.Utils.EOL;
+import com.github.javaparser.ast.Node;
 
 class TokenTextElement extends TextElement {
-
-    private final int tokenKind;
-    private final String text;
-
-    public static TokenTextElement newLine() {
-        return new TokenTextElement(TokenTypes.eolTokenKind(), EOL);
-    }
+    private final JavaToken token;
 
     TokenTextElement(JavaToken token) {
-        this(token.getKind(), token.getText());
+        this.token = token;
     }
 
     TokenTextElement(int tokenKind, String text) {
-        this.tokenKind = tokenKind;
-        this.text = text;
+        this(new JavaToken(tokenKind, text));
     }
 
     TokenTextElement(int tokenKind) {
-        String content = GeneratedJavaParserConstants.tokenImage[tokenKind];
-        if (content.startsWith("\"")) {
-            content = content.substring(1, content.length() - 1);
-        }
-        if (TokenTypes.isEndOfLineToken(tokenKind)) {
-            content = EOL;
-        } else if (TokenTypes.isWhitespace(tokenKind)) {
-            content = " ";
-        }
-        this.tokenKind = tokenKind;
-        this.text = content;
+        this(new JavaToken(tokenKind));
     }
 
     @Override
     String expand() {
-        return text;
+        return token.getText();
     }
 
     // Visible for testing
     String getText() {
-        return text;
+        return token.getText();
     }
 
     public int getTokenKind() {
-        return tokenKind;
+        return token.getKind();
+    }
+
+    public JavaToken getToken() {
+        return token;
     }
 
     @Override
@@ -81,27 +65,22 @@ class TokenTextElement extends TextElement {
 
         TokenTextElement that = (TokenTextElement) o;
 
-        if (tokenKind != that.tokenKind) return false;
-        return text.equals(that.text);
-
+        return token.equals(that.token);
     }
 
     @Override
     public int hashCode() {
-        int result = tokenKind;
-        result = 31 * result + text.hashCode();
-        return result;
+        return token.hashCode();
     }
 
     @Override
     public String toString() {
-        return "TokenTextElement(" + tokenKind +
-                ") {" + text + '}';
+        return token.toString();
     }
 
     @Override
     boolean isToken(int tokenKind) {
-        return this.tokenKind == tokenKind;
+        return token.getKind() == tokenKind;
     }
 
     @Override
@@ -111,22 +90,22 @@ class TokenTextElement extends TextElement {
 
     @Override
     public boolean isWhiteSpace() {
-        return TokenTypes.isWhitespace(tokenKind);
+        return token.getCategory().isWhitespace();
     }
 
     @Override
     public boolean isSpaceOrTab() {
-        return TokenTypes.isSpaceOrTab(tokenKind);
+        return token.getCategory().isWhitespaceButNotEndOfLine();
     }
 
     @Override
     public boolean isComment() {
-        return TokenTypes.isComment(tokenKind);
+        return token.getCategory().isComment();
     }
 
     @Override
     public boolean isNewline() {
-        return TokenTypes.isEndOfLineToken(tokenKind);
+        return token.getCategory().isEndOfLine();
     }
 
     @Override
