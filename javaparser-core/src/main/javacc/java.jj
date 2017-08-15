@@ -732,7 +732,7 @@ StubUnit StubUnit():
     (pakage = PackageDeclaration())?
     (in = ImportDeclaration() { imports = add(imports, in); })*
 
-    (LOOKAHEAD(3, PackageDeclaration())
+    (LOOKAHEAD(999, PackageDeclaration())
         (
             /*
              * The Stub parser encountered a package declaration.
