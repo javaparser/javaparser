@@ -338,5 +338,16 @@ public class JavaToken {
         return result;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        JavaToken javaToken = (JavaToken) o;
+
+        if (kind != javaToken.kind) return false;
+        if (!text.equals(javaToken.text)) return false;
+
+        return true;
+    }
 }
