@@ -16,6 +16,8 @@ public class VoidVisitorGenerator extends VisitorGenerator {
 
     @Override
     protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+        visitMethod.getParameters().forEach(p -> p.setFinal(false));
+
         visitMethod.setBody(null);
     }
 }

@@ -200,8 +200,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
-        if (tokenRange == null || 
-                !(tokenRange.getBegin().getRange().isPresent() && tokenRange.getBegin().getRange().isPresent())) {
+        if (tokenRange == null || !(tokenRange.getBegin().getRange().isPresent() && tokenRange.getBegin().getRange().isPresent())) {
             range = null;
         } else {
             range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end);

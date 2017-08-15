@@ -48,277 +48,277 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(AnnotationDeclaration n, Void arg) {
+    public Integer visit(final AnnotationDeclaration n, final Void arg) {
         return (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(AnnotationMemberDeclaration n, Void arg) {
+    public Integer visit(final AnnotationMemberDeclaration n, final Void arg) {
         return (n.getDefaultValue().isPresent() ? n.getDefaultValue().get().accept(this, arg) : 0) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ArrayAccessExpr n, Void arg) {
+    public Integer visit(final ArrayAccessExpr n, final Void arg) {
         return (n.getIndex().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ArrayCreationExpr n, Void arg) {
+    public Integer visit(final ArrayCreationExpr n, final Void arg) {
         return (n.getElementType().accept(this, arg)) * 31 + (n.getInitializer().isPresent() ? n.getInitializer().get().accept(this, arg) : 0) * 31 + (n.getLevels().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ArrayCreationLevel n, Void arg) {
+    public Integer visit(final ArrayCreationLevel n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getDimension().isPresent() ? n.getDimension().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ArrayInitializerExpr n, Void arg) {
+    public Integer visit(final ArrayInitializerExpr n, final Void arg) {
         return (n.getValues().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ArrayType n, Void arg) {
+    public Integer visit(final ArrayType n, final Void arg) {
         return (n.getComponentType().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(AssertStmt n, Void arg) {
+    public Integer visit(final AssertStmt n, final Void arg) {
         return (n.getCheck().accept(this, arg)) * 31 + (n.getMessage().isPresent() ? n.getMessage().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(AssignExpr n, Void arg) {
+    public Integer visit(final AssignExpr n, final Void arg) {
         return (n.getOperator().hashCode()) * 31 + (n.getTarget().accept(this, arg)) * 31 + (n.getValue().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(BinaryExpr n, Void arg) {
+    public Integer visit(final BinaryExpr n, final Void arg) {
         return (n.getLeft().accept(this, arg)) * 31 + (n.getOperator().hashCode()) * 31 + (n.getRight().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(BlockComment n, Void arg) {
+    public Integer visit(final BlockComment n, final Void arg) {
         return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(BlockStmt n, Void arg) {
+    public Integer visit(final BlockStmt n, final Void arg) {
         return (n.getStatements().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(BooleanLiteralExpr n, Void arg) {
+    public Integer visit(final BooleanLiteralExpr n, final Void arg) {
         return (n.getValue() ? 1 : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(BreakStmt n, Void arg) {
+    public Integer visit(final BreakStmt n, final Void arg) {
         return (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(CastExpr n, Void arg) {
+    public Integer visit(final CastExpr n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(CatchClause n, Void arg) {
+    public Integer visit(final CatchClause n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getParameter().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(CharLiteralExpr n, Void arg) {
+    public Integer visit(final CharLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ClassExpr n, Void arg) {
+    public Integer visit(final ClassExpr n, final Void arg) {
         return (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ClassOrInterfaceDeclaration n, Void arg) {
+    public Integer visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         return (n.getExtendedTypes().accept(this, arg)) * 31 + (n.getImplementedTypes().accept(this, arg)) * 31 + (n.isInterface() ? 1 : 0) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ClassOrInterfaceType n, Void arg) {
+    public Integer visit(final ClassOrInterfaceType n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getScope().isPresent() ? n.getScope().get().accept(this, arg) : 0) * 31 + (n.getTypeArguments().isPresent() ? n.getTypeArguments().get().accept(this, arg) : 0) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(CompilationUnit n, Void arg) {
+    public Integer visit(final CompilationUnit n, final Void arg) {
         return (n.getImports().accept(this, arg)) * 31 + (n.getModule().isPresent() ? n.getModule().get().accept(this, arg) : 0) * 31 + (n.getPackageDeclaration().isPresent() ? n.getPackageDeclaration().get().accept(this, arg) : 0) * 31 + (n.getTypes().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ConditionalExpr n, Void arg) {
+    public Integer visit(final ConditionalExpr n, final Void arg) {
         return (n.getCondition().accept(this, arg)) * 31 + (n.getElseExpr().accept(this, arg)) * 31 + (n.getThenExpr().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ConstructorDeclaration n, Void arg) {
+    public Integer visit(final ConstructorDeclaration n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ContinueStmt n, Void arg) {
+    public Integer visit(final ContinueStmt n, final Void arg) {
         return (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(DoStmt n, Void arg) {
+    public Integer visit(final DoStmt n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getCondition().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(DoubleLiteralExpr n, Void arg) {
+    public Integer visit(final DoubleLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(EmptyStmt n, Void arg) {
+    public Integer visit(final EmptyStmt n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(EnclosedExpr n, Void arg) {
+    public Integer visit(final EnclosedExpr n, final Void arg) {
         return (n.getInner().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(EnumConstantDeclaration n, Void arg) {
+    public Integer visit(final EnumConstantDeclaration n, final Void arg) {
         return (n.getArguments().accept(this, arg)) * 31 + (n.getClassBody().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(EnumDeclaration n, Void arg) {
+    public Integer visit(final EnumDeclaration n, final Void arg) {
         return (n.getEntries().accept(this, arg)) * 31 + (n.getImplementedTypes().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ExplicitConstructorInvocationStmt n, Void arg) {
+    public Integer visit(final ExplicitConstructorInvocationStmt n, final Void arg) {
         return (n.getArguments().accept(this, arg)) * 31 + (n.getExpression().isPresent() ? n.getExpression().get().accept(this, arg) : 0) * 31 + (n.isThis() ? 1 : 0) * 31 + (n.getTypeArguments().isPresent() ? n.getTypeArguments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ExpressionStmt n, Void arg) {
+    public Integer visit(final ExpressionStmt n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(FieldAccessExpr n, Void arg) {
+    public Integer visit(final FieldAccessExpr n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getScope().accept(this, arg)) * 31 + (n.getTypeArguments().isPresent() ? n.getTypeArguments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(FieldDeclaration n, Void arg) {
+    public Integer visit(final FieldDeclaration n, final Void arg) {
         return (n.getModifiers().hashCode()) * 31 + (n.getVariables().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ForStmt n, Void arg) {
+    public Integer visit(final ForStmt n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getCompare().isPresent() ? n.getCompare().get().accept(this, arg) : 0) * 31 + (n.getInitialization().accept(this, arg)) * 31 + (n.getUpdate().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ForeachStmt n, Void arg) {
+    public Integer visit(final ForeachStmt n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getIterable().accept(this, arg)) * 31 + (n.getVariable().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(IfStmt n, Void arg) {
+    public Integer visit(final IfStmt n, final Void arg) {
         return (n.getCondition().accept(this, arg)) * 31 + (n.getElseStmt().isPresent() ? n.getElseStmt().get().accept(this, arg) : 0) * 31 + (n.getThenStmt().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ImportDeclaration n, Void arg) {
+    public Integer visit(final ImportDeclaration n, final Void arg) {
         return (n.isAsterisk() ? 1 : 0) * 31 + (n.isStatic() ? 1 : 0) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(InitializerDeclaration n, Void arg) {
+    public Integer visit(final InitializerDeclaration n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.isStatic() ? 1 : 0) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(InstanceOfExpr n, Void arg) {
+    public Integer visit(final InstanceOfExpr n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(IntegerLiteralExpr n, Void arg) {
+    public Integer visit(final IntegerLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(IntersectionType n, Void arg) {
+    public Integer visit(final IntersectionType n, final Void arg) {
         return (n.getElements().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(JavadocComment n, Void arg) {
+    public Integer visit(final JavadocComment n, final Void arg) {
         return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(LabeledStmt n, Void arg) {
+    public Integer visit(final LabeledStmt n, final Void arg) {
         return (n.getLabel().accept(this, arg)) * 31 + (n.getStatement().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(LambdaExpr n, Void arg) {
+    public Integer visit(final LambdaExpr n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.isEnclosingParameters() ? 1 : 0) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(LineComment n, Void arg) {
+    public Integer visit(final LineComment n, final Void arg) {
         return (n.getContent().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(LocalClassDeclarationStmt n, Void arg) {
+    public Integer visit(final LocalClassDeclarationStmt n, final Void arg) {
         return (n.getClassDeclaration().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(LongLiteralExpr n, Void arg) {
+    public Integer visit(final LongLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(MarkerAnnotationExpr n, Void arg) {
+    public Integer visit(final MarkerAnnotationExpr n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(MemberValuePair n, Void arg) {
+    public Integer visit(final MemberValuePair n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getValue().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(MethodCallExpr n, Void arg) {
+    public Integer visit(final MethodCallExpr n, final Void arg) {
         return (n.getArguments().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getScope().isPresent() ? n.getScope().get().accept(this, arg) : 0) * 31 + (n.getTypeArguments().isPresent() ? n.getTypeArguments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(MethodDeclaration n, Void arg) {
+    public Integer visit(final MethodDeclaration n, final Void arg) {
         return (n.getBody().isPresent() ? n.getBody().get().accept(this, arg) : 0) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getParameters().accept(this, arg)) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(MethodReferenceExpr n, Void arg) {
+    public Integer visit(final MethodReferenceExpr n, final Void arg) {
         return (n.getIdentifier().hashCode()) * 31 + (n.getScope().accept(this, arg)) * 31 + (n.getTypeArguments().isPresent() ? n.getTypeArguments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(NameExpr n, Void arg) {
+    public Integer visit(final NameExpr n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(Name n, Void arg) {
+    public Integer visit(final Name n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getIdentifier().hashCode()) * 31 + (n.getQualifier().isPresent() ? n.getQualifier().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
@@ -331,177 +331,177 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(NormalAnnotationExpr n, Void arg) {
+    public Integer visit(final NormalAnnotationExpr n, final Void arg) {
         return (n.getPairs().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(NullLiteralExpr n, Void arg) {
+    public Integer visit(final NullLiteralExpr n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ObjectCreationExpr n, Void arg) {
+    public Integer visit(final ObjectCreationExpr n, final Void arg) {
         return (n.getAnonymousClassBody().isPresent() ? n.getAnonymousClassBody().get().accept(this, arg) : 0) * 31 + (n.getArguments().accept(this, arg)) * 31 + (n.getScope().isPresent() ? n.getScope().get().accept(this, arg) : 0) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getTypeArguments().isPresent() ? n.getTypeArguments().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(PackageDeclaration n, Void arg) {
+    public Integer visit(final PackageDeclaration n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(Parameter n, Void arg) {
+    public Integer visit(final Parameter n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.isVarArgs() ? 1 : 0) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getVarArgsAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(PrimitiveType n, Void arg) {
+    public Integer visit(final PrimitiveType n, final Void arg) {
         return (n.getType().hashCode()) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ReturnStmt n, Void arg) {
+    public Integer visit(final ReturnStmt n, final Void arg) {
         return (n.getExpression().isPresent() ? n.getExpression().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(SimpleName n, Void arg) {
+    public Integer visit(final SimpleName n, final Void arg) {
         return (n.getIdentifier().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(SingleMemberAnnotationExpr n, Void arg) {
+    public Integer visit(final SingleMemberAnnotationExpr n, final Void arg) {
         return (n.getMemberValue().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(StringLiteralExpr n, Void arg) {
+    public Integer visit(final StringLiteralExpr n, final Void arg) {
         return (n.getValue().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(SuperExpr n, Void arg) {
+    public Integer visit(final SuperExpr n, final Void arg) {
         return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(SwitchEntryStmt n, Void arg) {
+    public Integer visit(final SwitchEntryStmt n, final Void arg) {
         return (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getStatements().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(SwitchStmt n, Void arg) {
+    public Integer visit(final SwitchStmt n, final Void arg) {
         return (n.getEntries().accept(this, arg)) * 31 + (n.getSelector().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(SynchronizedStmt n, Void arg) {
+    public Integer visit(final SynchronizedStmt n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getExpression().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ThisExpr n, Void arg) {
+    public Integer visit(final ThisExpr n, final Void arg) {
         return (n.getClassExpr().isPresent() ? n.getClassExpr().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ThrowStmt n, Void arg) {
+    public Integer visit(final ThrowStmt n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(TryStmt n, Void arg) {
+    public Integer visit(final TryStmt n, final Void arg) {
         return (n.getCatchClauses().accept(this, arg)) * 31 + (n.getFinallyBlock().isPresent() ? n.getFinallyBlock().get().accept(this, arg) : 0) * 31 + (n.getResources().accept(this, arg)) * 31 + (n.getTryBlock().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(TypeExpr n, Void arg) {
+    public Integer visit(final TypeExpr n, final Void arg) {
         return (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(TypeParameter n, Void arg) {
+    public Integer visit(final TypeParameter n, final Void arg) {
         return (n.getName().accept(this, arg)) * 31 + (n.getTypeBound().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(UnaryExpr n, Void arg) {
+    public Integer visit(final UnaryExpr n, final Void arg) {
         return (n.getExpression().accept(this, arg)) * 31 + (n.getOperator().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(UnionType n, Void arg) {
+    public Integer visit(final UnionType n, final Void arg) {
         return (n.getElements().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(UnknownType n, Void arg) {
+    public Integer visit(final UnknownType n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(VariableDeclarationExpr n, Void arg) {
+    public Integer visit(final VariableDeclarationExpr n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getModifiers().hashCode()) * 31 + (n.getVariables().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(VariableDeclarator n, Void arg) {
+    public Integer visit(final VariableDeclarator n, final Void arg) {
         return (n.getInitializer().isPresent() ? n.getInitializer().get().accept(this, arg) : 0) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(VoidType n, Void arg) {
+    public Integer visit(final VoidType n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(WhileStmt n, Void arg) {
+    public Integer visit(final WhileStmt n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getCondition().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(WildcardType n, Void arg) {
+    public Integer visit(final WildcardType n, final Void arg) {
         return (n.getExtendedType().isPresent() ? n.getExtendedType().get().accept(this, arg) : 0) * 31 + (n.getSuperType().isPresent() ? n.getSuperType().get().accept(this, arg) : 0) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ModuleDeclaration n, Void arg) {
+    public Integer visit(final ModuleDeclaration n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.isOpen() ? 1 : 0) * 31 + (n.getModuleStmts().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ModuleRequiresStmt n, Void arg) {
+    public Integer visit(final ModuleRequiresStmt n, final Void arg) {
         return (n.getModifiers().hashCode()) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ModuleExportsStmt n, Void arg) {
+    public Integer visit(final ModuleExportsStmt n, final Void arg) {
         return (n.getModuleNames().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ModuleProvidesStmt n, Void arg) {
+    public Integer visit(final ModuleProvidesStmt n, final Void arg) {
         return (n.getType().accept(this, arg)) * 31 + (n.getWithTypes().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override()
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ModuleUsesStmt n, Void arg) {
+    public Integer visit(final ModuleUsesStmt n, final Void arg) {
         return (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(ModuleOpensStmt n, Void arg) {
+    public Integer visit(final ModuleOpensStmt n, final Void arg) {
         return (n.getModuleNames().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
-    public Integer visit(UnparsableStmt n, Void arg) {
+    public Integer visit(final UnparsableStmt n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 }
