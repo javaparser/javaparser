@@ -52,7 +52,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Raquel Pau
  */
-public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr> {
+public final class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr> {
 
     private Expression scope;
 

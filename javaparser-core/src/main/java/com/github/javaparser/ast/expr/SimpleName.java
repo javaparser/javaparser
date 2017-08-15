@@ -40,7 +40,7 @@ import com.github.javaparser.TokenRange;
  *
  * @see Name
  */
-public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
+public final class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @NonEmptyProperty
     private String identifier;

@@ -15,7 +15,7 @@ import static com.github.javaparser.ast.Node.Parsedness.*;
  * A statement that had parse errors.
  * Nothing is known about it except the tokens it covers.
  */
-public class UnparsableStmt extends Statement {
+public final class UnparsableStmt extends Statement {
 
     @AllFieldsConstructor
     public UnparsableStmt() {
