@@ -19,6 +19,8 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
 
     @Override
     protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+        visitMethod.getParameters().forEach(p -> p.setFinal(true));
+
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
