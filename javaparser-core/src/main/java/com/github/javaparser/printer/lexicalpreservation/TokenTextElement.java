@@ -65,9 +65,7 @@ class TokenTextElement extends TextElement {
 
         TokenTextElement that = (TokenTextElement) o;
 
-        if (token.getKind() != that.token.getKind()) return false;
-        return getText().equals(that.getText());
-
+        return token.equals(that.token);
     }
 
     @Override
@@ -77,8 +75,7 @@ class TokenTextElement extends TextElement {
 
     @Override
     public String toString() {
-        return "TokenTextElement(" + token.getKind() +
-                ") {" + getText() + '}';
+        return token.toString();
     }
 
     @Override
