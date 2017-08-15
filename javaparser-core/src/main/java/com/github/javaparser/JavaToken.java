@@ -330,4 +330,13 @@ public class JavaToken {
         }
         return current;
     }
+
+    @Override
+    public int hashCode() {
+        int result = kind;
+        result = 31 * result + text.hashCode();
+        return result;
+    }
+
+
 }
