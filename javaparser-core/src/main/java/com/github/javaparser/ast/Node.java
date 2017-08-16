@@ -598,6 +598,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return (Node) accept(new CloneVisitor(), null);
     }
 
+    /**
+     * @return get JavaParser specific node introspection information.
+     */
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NodeMetaModel getMetaModel() {
         return JavaParserMetaModel.nodeMetaModel;
