@@ -51,7 +51,7 @@ import com.github.javaparser.TokenRange;
  *
  * @since 3.0.0
  */
-public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
+public final class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
     @NonEmptyProperty
     private NodeList<ReferenceType> elements;

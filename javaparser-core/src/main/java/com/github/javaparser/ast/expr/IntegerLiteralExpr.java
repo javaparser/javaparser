@@ -40,7 +40,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Julio Vilmar Gesser
  */
-public class IntegerLiteralExpr extends LiteralStringValueExpr {
+public final class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     public IntegerLiteralExpr() {
         this(null, "0");

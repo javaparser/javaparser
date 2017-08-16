@@ -44,7 +44,7 @@ import com.github.javaparser.TokenRange;
  * As of Java 8 it is only used in catch clauses.
  * <br/><code>try { ... } catch(<b>IOException | NullPointerException ex</b>) { ... }</code>
  */
-public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
+public final class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @NonEmptyProperty
     private NodeList<ReferenceType> elements;

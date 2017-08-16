@@ -44,5 +44,6 @@ public class CoreGenerator {
         new CloneGenerator(sourceRoot).generate();
         new GetMetaModelGenerator(sourceRoot).generate();
         new MainConstructorGenerator(sourceRoot).generate();
+        new FinalGenerator(sourceRoot).generate();
     }
 }

@@ -45,7 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
  * So, int[][] becomes ArrayType(ArrayType(int)).
  */
-public class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
+public final class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
 
     private Type componentType;
 

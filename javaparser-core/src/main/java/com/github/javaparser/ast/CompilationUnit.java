@@ -75,7 +75,7 @@ import com.github.javaparser.ast.Node;
  * @see ImportDeclaration
  * @see TypeDeclaration
  */
-public class CompilationUnit extends Node {
+public final class CompilationUnit extends Node {
 
     private PackageDeclaration packageDeclaration;
 

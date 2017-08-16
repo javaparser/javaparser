@@ -53,7 +53,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Raquel Pau
  */
-public class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr> {
+public final class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr> {
 
     private NodeList<Parameter> parameters;
 

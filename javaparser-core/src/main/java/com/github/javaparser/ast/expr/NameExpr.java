@@ -39,7 +39,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr> {
+public final class NameExpr extends Expression implements NodeWithSimpleName<NameExpr> {
 
     private SimpleName name;
 
