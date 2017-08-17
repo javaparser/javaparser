@@ -44,9 +44,12 @@ public class JavaParserTypeSolver implements TypeSolver {
     private Map<String, Optional<CompilationUnit>> parsedFiles = new HashMap<>();
     private Map<String, List<CompilationUnit>> parsedDirectories = new HashMap<>();
     private Map<String, ReferenceTypeDeclaration> foundTypes = new HashMap<>();
+    
+    private boolean hasValidSrcDir = false;
 
     public JavaParserTypeSolver(File srcDir) {
         this.srcDir = srcDir;
+        hasValidSrcDir = srcDir.exists() && srcDir.isDirectory();
     }
 
     @Override
@@ -103,7 +106,7 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
-        if (!srcDir.exists() || !srcDir.isDirectory()) {
+        if (!hasValidSrcDir) {
             throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
         }
 
