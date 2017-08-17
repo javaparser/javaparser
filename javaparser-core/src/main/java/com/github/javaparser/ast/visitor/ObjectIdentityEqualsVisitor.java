@@ -44,10 +44,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
         return n.accept(SINGLETON, n2);
     }
 
-    private ObjectIdentityEqualsVisitor() {
-    // hide constructor
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityEqualsVisitorGenerator")
     public Boolean visit(final CompilationUnit n, final Visitable arg) {

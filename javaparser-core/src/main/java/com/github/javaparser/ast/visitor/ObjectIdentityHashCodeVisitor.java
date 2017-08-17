@@ -39,10 +39,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     private static final ObjectIdentityHashCodeVisitor SINGLETON = new ObjectIdentityHashCodeVisitor();
 
-    private ObjectIdentityHashCodeVisitor() {
-    // hide constructor
-    }
-
     public static int hashCode(final Node node) {
         return node.accept(SINGLETON, null);
     }
