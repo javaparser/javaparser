@@ -189,7 +189,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     public List<FieldDeclaration> getAllFields() {
         List<FieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
         
-        getAllAncestors().forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
+        getAncestors().forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
             fields.add(new FieldDeclaration() {
                 
                 @Override

@@ -105,7 +105,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     public List<FieldDeclaration> getAllFields() {
         List<FieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
         
-        getAllAncestors().forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
+        getAncestors().forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
             fields.add(new FieldDeclaration() {
                 
                 @Override

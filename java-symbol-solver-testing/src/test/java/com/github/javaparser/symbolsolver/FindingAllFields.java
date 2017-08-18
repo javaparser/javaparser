@@ -52,6 +52,6 @@ public class FindingAllFields extends AbstractResolutionTest {
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
                 typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
-        assertEquals("java.util.List<T>", typeDeclaration.getField("b").getType().describe());
+        assertEquals("java.util.List<java.lang.String>", typeDeclaration.getField("b").getType().describe());
     }
 }
