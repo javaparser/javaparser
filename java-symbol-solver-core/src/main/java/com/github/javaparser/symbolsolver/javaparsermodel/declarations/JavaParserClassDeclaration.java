@@ -66,7 +66,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         }
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
-        this.javaParserTypeAdapter = new JavaParserTypeAdapter<ClassOrInterfaceDeclaration>(wrappedNode, typeSolver);
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
     }
 
     ///
@@ -103,27 +103,41 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-        ArrayList<FieldDeclaration> fields = new ArrayList<>();
-        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+        List<FieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
+        
+        getAncestors().forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
+            fields.add(new FieldDeclaration() {
+                
+                @Override
+                public AccessLevel accessLevel() {
+                    return f.accessLevel();
                 }
-            }
-        }
-
-        ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        if (superclass!=this)
-            fields.addAll(superclass.getAllFields());
-
-        getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
-            fields.add(f);
+                
+                @Override
+                public String getName() {
+                    return f.getName();
+                }
+                
+                @Override
+                public Type getType() {
+                    return ancestor.useThisTypeParametersOnTheGivenType(f.getType());
+                }
+                
+                @Override
+                public boolean isStatic() {
+                    return f.isStatic();
+                }
+                
+                @Override
+                public TypeDeclaration declaringType() {
+                    return f.declaringType();
+                }
+            });
         }));
-
+        
         return fields;
     }
-
+    
     ///
     /// Public methods
     ///
@@ -336,7 +350,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     @Override
     public Set<ReferenceTypeDeclaration> internalTypes() {
         Set<ReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
             }

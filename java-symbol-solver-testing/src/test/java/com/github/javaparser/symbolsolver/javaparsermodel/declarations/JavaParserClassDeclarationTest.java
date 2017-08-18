@@ -495,7 +495,7 @@ public class JavaParserClassDeclarationTest extends AbstractTest {
         assertEquals(string, rtClassDeclaration.getFieldType("s").get());
 
         assertEquals("t", classDeclaration.getAllFields().get(1).getName());
-        assertEquals("T", classDeclaration.getAllFields().get(1).getType().describe());
+        assertEquals("java.util.List<java.lang.Boolean>", classDeclaration.getAllFields().get(1).getType().describe());
         assertEquals(listOfBoolean, rtClassDeclaration.getFieldType("t").get());
 
         assertEquals("i", classDeclaration.getAllFields().get(2).getName());

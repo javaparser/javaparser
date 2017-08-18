@@ -4,10 +4,12 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -17,6 +19,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,5 +119,20 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         return parent.isPresent() ? 
                 Optional.of(JavaParserFactory.toTypeDeclaration(parent.get(), typeSolver)) :
                 Optional.empty();
+    }
+    
+    public List<FieldDeclaration> getFieldsForDeclaredVariables() {
+        ArrayList<FieldDeclaration> fields = new ArrayList<>();
+        if (wrappedNode.getMembers() != null) {
+            for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
+                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
+                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                    for (VariableDeclarator vd : field.getVariables()) {
+                        fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+                    }
+                }
+            }
+        }
+        return fields;
     }
 }

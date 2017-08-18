@@ -1,5 +1,5 @@
   Line 41) getDeclaration() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext.getDeclaration()
-  Line 49) wrappedNode.getEntries() ==> UNSOLVED
+  Line 49) wrappedNode.getEntries() ==> com.github.javaparser.ast.body.EnumDeclaration.getEntries()
   Line 50) constant.getName().getId().equals(name) ==> java.lang.String.equals(java.lang.Object)
   Line 50) constant.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
   Line 50) constant.getName() ==> com.github.javaparser.ast.body.EnumConstantDeclaration.getName()

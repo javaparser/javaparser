@@ -19,7 +19,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -46,7 +45,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     private TypeSolver typeSolver;
     private ClassOrInterfaceDeclaration wrappedNode;
-    private JavaParserTypeAdapter javaParserTypeAdapter;
+    private JavaParserTypeAdapter<ClassOrInterfaceDeclaration> javaParserTypeAdapter;
 
     public JavaParserInterfaceDeclaration(ClassOrInterfaceDeclaration wrappedNode, TypeSolver typeSolver) {
         if (!wrappedNode.isInterface()) {
@@ -54,13 +53,13 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
-        this.javaParserTypeAdapter = new JavaParserTypeAdapter(wrappedNode, typeSolver);
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
     }
 
     @Override
     public Set<MethodDeclaration> getDeclaredMethods() {
         Set<MethodDeclaration> methods = new HashSet<>();
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.MethodDeclaration) {
                 methods.add(new JavaParserMethodDeclaration((com.github.javaparser.ast.body.MethodDeclaration) member, typeSolver));
             }
@@ -188,22 +187,38 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-        ArrayList<FieldDeclaration> fields = new ArrayList<>();
-        for (BodyDeclaration member : wrappedNode.getMembers()) {
-            if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
-                for (VariableDeclarator vd : field.getVariables()) {
-                    fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
+        List<FieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
+        
+        getAncestors().forEach(ancestor -> ancestor.getTypeDeclaration().getAllFields().forEach(f -> {
+            fields.add(new FieldDeclaration() {
+                
+                @Override
+                public AccessLevel accessLevel() {
+                    return f.accessLevel();
                 }
-            }
-        }
-
-        getAncestors().forEach(a -> {
-            if (a.getTypeDeclaration() != this) {
-                fields.addAll(a.getTypeDeclaration().getAllFields());
-            }
-        });
-
+                
+                @Override
+                public String getName() {
+                    return f.getName();
+                }
+                
+                @Override
+                public Type getType() {
+                    return ancestor.useThisTypeParametersOnTheGivenType(f.getType());
+                }
+                
+                @Override
+                public boolean isStatic() {
+                    return f.isStatic();
+                }
+                
+                @Override
+                public TypeDeclaration declaringType() {
+                    return f.declaringType();
+                }
+            });
+        }));
+        
         return fields;
     }
 
@@ -277,7 +292,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Override
     public Set<ReferenceTypeDeclaration> internalTypes() {
         Set<ReferenceTypeDeclaration> res = new HashSet<>();
-        for (BodyDeclaration member : this.wrappedNode.getMembers()) {
+        for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
             }

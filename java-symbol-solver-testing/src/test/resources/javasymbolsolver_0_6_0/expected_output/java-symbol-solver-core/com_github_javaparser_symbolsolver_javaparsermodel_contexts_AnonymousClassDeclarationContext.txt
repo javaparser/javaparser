@@ -66,7 +66,7 @@
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream() ==> ERROR
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()) ==> ERROR
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())) ==> ERROR
-  Line 135) wrappedNode.getTypeArguments() ==> UNSOLVED
+  Line 135) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getTypeArguments()
   Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>()) ==> ERROR
   Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.getTypeArguments()
   Line 142) type.toString().equals(name) ==> ERROR
