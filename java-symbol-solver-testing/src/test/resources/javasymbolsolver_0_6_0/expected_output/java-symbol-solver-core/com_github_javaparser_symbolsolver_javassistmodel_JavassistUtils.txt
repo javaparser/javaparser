@@ -53,7 +53,7 @@
   Line 134) typeVariableSignature.getName() ==> javassist.bytecode.SignatureAttribute.TypeVariable.getName()
   Line 135) typeParameterDeclarationOpt.isPresent() ==> java.util.Optional.isPresent()
   Line 138) typeParameterDeclarationOpt.get() ==> java.util.Optional.get()
-  Line 141) signatureType.getClass().getCanonicalName() ==> ERROR
+  Line 141) signatureType.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 141) signatureType.getClass() ==> java.lang.Object.getClass()
   Line 146) typeName.replaceAll("\\$", ".") ==> java.lang.String.replaceAll(java.lang.String, java.lang.String)
   Line 150) typeArgument.jvmTypeName() ==> javassist.bytecode.SignatureAttribute.Type.jvmTypeName()

@@ -38,9 +38,9 @@
   Line 118) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
   Line 120) parentContext.getParent() ==> com.github.javaparser.symbolsolver.core.resolution.Context.getParent()
   Line 122) parentContext.solveMethodAsUsage(name, argumentsTypes, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethodAsUsage(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 127) wrappedNode.getTypeArguments().isPresent() ==> ERROR
+  Line 127) wrappedNode.getTypeArguments().isPresent() ==> java.util.Optional.isPresent()
   Line 127) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getTypeArguments()
-  Line 129) wrappedNode.getTypeArguments().get() ==> ERROR
+  Line 129) wrappedNode.getTypeArguments().get() ==> java.util.Optional.get()
   Line 129) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getTypeArguments()
   Line 130) typeArguments.add(JavaParserFacade.get(typeSolver).convertToUsage(ty)) ==> java.util.List.add(E)
   Line 130) JavaParserFacade.get(typeSolver).convertToUsage(ty) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type)

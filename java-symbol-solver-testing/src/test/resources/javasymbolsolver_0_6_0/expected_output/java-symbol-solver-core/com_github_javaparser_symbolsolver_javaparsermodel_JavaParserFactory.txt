@@ -1,4 +1,4 @@
-  Line 79) ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent() ==> ERROR
+  Line 79) ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent() ==> java.util.Optional.isPresent()
   Line 79) ((ObjectCreationExpr) node).getAnonymousClassBody() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getAnonymousClassBody()
   Line 84) node.getParentNode().isPresent() ==> java.util.Optional.isPresent()
   Line 84) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
@@ -22,5 +22,5 @@
   Line 104) expressionStmt.getExpression() ==> com.github.javaparser.ast.stmt.ExpressionStmt.getExpression()
   Line 112) foreachStmt.getVariable() ==> com.github.javaparser.ast.stmt.ForeachStmt.getVariable()
   Line 120) ((ClassOrInterfaceDeclaration) node).isInterface() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.isInterface()
-  Line 132) node.getClass().getCanonicalName() ==> ERROR
+  Line 132) node.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 132) node.getClass() ==> java.lang.Object.getClass()

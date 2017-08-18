@@ -10,8 +10,8 @@
   Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())).map(node -> (T) node).collect(Collectors.toList()) ==> ERROR
   Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())).map(node -> (T) node) ==> ERROR
   Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())) ==> ERROR
-  Line 54) wrappedNode.getAnonymousClassBody().get().stream() ==> ERROR
-  Line 54) wrappedNode.getAnonymousClassBody().get() ==> ERROR
+  Line 54) wrappedNode.getAnonymousClassBody().get().stream() ==> UNSOLVED
+  Line 54) wrappedNode.getAnonymousClassBody().get() ==> java.util.Optional.get()
   Line 54) wrappedNode.getAnonymousClassBody() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getAnonymousClassBody()
   Line 58) memberClass.isAssignableFrom(node.getClass()) ==> ERROR
   Line 58) node.getClass() ==> ERROR

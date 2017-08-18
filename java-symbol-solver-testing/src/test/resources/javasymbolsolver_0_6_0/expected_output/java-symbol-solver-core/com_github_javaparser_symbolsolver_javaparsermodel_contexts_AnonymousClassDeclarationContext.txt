@@ -1,5 +1,5 @@
-  Line 37) Preconditions.checkArgument(node.getAnonymousClassBody().isPresent(), "An anonymous class must have a body") ==> ERROR
-  Line 37) node.getAnonymousClassBody().isPresent() ==> ERROR
+  Line 37) Preconditions.checkArgument(node.getAnonymousClassBody().isPresent(), "An anonymous class must have a body") ==> com.google.common.base.Preconditions.checkArgument(boolean, java.lang.Object)
+  Line 37) node.getAnonymousClassBody().isPresent() ==> java.util.Optional.isPresent()
   Line 37) node.getAnonymousClassBody() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getAnonymousClassBody()
   Line 47) myDeclaration.getDeclaredMethods().stream().filter(m -> m.getName().equals(name) && (!staticOnly || m.isStatic())).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 47) myDeclaration.getDeclaredMethods().stream().filter(m -> m.getName().equals(name) && (!staticOnly || m.isStatic())) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
@@ -65,9 +65,9 @@
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)) ==> ERROR
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream() ==> ERROR
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()) ==> ERROR
-  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())) ==> ERROR
+  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())) ==> java.util.Optional.map(java.util.function.Function<? super T, ? extends U>)
   Line 135) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getTypeArguments()
-  Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>()) ==> ERROR
+  Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>()) ==> java.util.Optional.orElse(T)
   Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.getTypeArguments()
   Line 142) type.toString().equals(name) ==> ERROR
   Line 142) type.toString() ==> ERROR

@@ -13,7 +13,7 @@
   Line 128) JavaParserFacade.get(typeSolver).getType(getParentNode(wrappedNode)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node)
   Line 128) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 128) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
-  Line 133) wrappedNode.getClass().getCanonicalName() ==> ERROR
+  Line 133) wrappedNode.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 133) wrappedNode.getClass() ==> java.lang.Object.getClass()
   Line 136) parameter.getType() ==> com.github.javaparser.ast.body.Parameter.getType()
   Line 137) PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name()) ==> com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType.byName(java.lang.String)
@@ -34,13 +34,13 @@
   Line 153) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 153) variableDeclarator.getType() ==> com.github.javaparser.ast.body.VariableDeclarator.getType()
   Line 153) JavaParserFactory.getContext(wrappedNode, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 155) getParentNode(wrappedNode).getClass().getCanonicalName() ==> ERROR
+  Line 155) getParentNode(wrappedNode).getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 155) getParentNode(wrappedNode).getClass() ==> java.lang.Object.getClass()
   Line 155) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
-  Line 158) wrappedNode.getClass().getCanonicalName() ==> ERROR
+  Line 158) wrappedNode.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 158) wrappedNode.getClass() ==> java.lang.Object.getClass()
   Line 164) this.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 164) this.getClass() ==> java.lang.Object.getClass()
-  Line 164) this.getWrappedNode().getClass().getCanonicalName() ==> ERROR
+  Line 164) this.getWrappedNode().getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 164) this.getWrappedNode().getClass() ==> java.lang.Object.getClass()
   Line 164) this.getWrappedNode() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration.getWrappedNode()

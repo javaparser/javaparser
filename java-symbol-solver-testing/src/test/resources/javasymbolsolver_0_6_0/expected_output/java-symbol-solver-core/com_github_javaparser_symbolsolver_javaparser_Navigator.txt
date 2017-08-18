@@ -1,12 +1,12 @@
   Line 44) node.getParentNode().orElse(null) ==> java.util.Optional.orElse(T)
   Line 44) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
-  Line 49) cu.getTypes().isEmpty() ==> ERROR
+  Line 49) cu.getTypes().isEmpty() ==> com.github.javaparser.ast.NodeList.isEmpty()
   Line 49) cu.getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
   Line 50) Optional.empty() ==> java.util.Optional.empty()
   Line 53) getOuterTypeName(qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getOuterTypeName(java.lang.String)
   Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst() ==> ERROR
   Line 54) cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)) ==> ERROR
-  Line 54) cu.getTypes().stream() ==> ERROR
+  Line 54) cu.getTypes().stream() ==> java.util.Collection.stream()
   Line 54) cu.getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
   Line 54) t.getName().getId().equals(typeName) ==> ERROR
   Line 54) t.getName().getId() ==> ERROR
@@ -67,7 +67,7 @@
   Line 197) findType(compilationUnit, qualifiedName) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.findType(com.github.javaparser.ast.CompilationUnit, java.lang.String)
   Line 198) res.isPresent() ==> java.util.Optional.isPresent()
   Line 201) res.get() ==> java.util.Optional.get()
-  Line 202) res.get().getClass().getCanonicalName() ==> ERROR
+  Line 202) res.get().getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 202) res.get().getClass() ==> java.lang.Object.getClass()
   Line 202) res.get() ==> java.util.Optional.get()
   Line 204) res.get() ==> java.util.Optional.get()
