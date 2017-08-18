@@ -1,4 +1,4 @@
-  Line 58) wrappedNode.getParameters() ==> UNSOLVED
+  Line 58) wrappedNode.getParameters() ==> com.github.javaparser.ast.expr.LambdaExpr.getParameters()
   Line 59) JavaParserFactory.getSymbolDeclarator(parameter, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 61) sb.getSymbolDeclarations() ==> com.github.javaparser.symbolsolver.resolution.SymbolDeclarator.getSymbolDeclarations()
   Line 62) decl.getName().equals(name) ==> java.lang.String.equals(java.lang.Object)
@@ -7,7 +7,7 @@
   Line 64) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 65) JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(com.github.javaparser.ast.expr.MethodCallExpr)
   Line 65) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 66) pos(methodCallExpr, wrappedNode) ==> UNSOLVED
+  Line 66) pos(methodCallExpr, wrappedNode) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext.pos(com.github.javaparser.ast.expr.MethodCallExpr, com.github.javaparser.ast.expr.Expression)
   Line 67) methodUsage.getParamTypes().get(i) ==> java.util.List.get(int)
   Line 67) methodUsage.getParamTypes() ==> com.github.javaparser.symbolsolver.model.methods.MethodUsage.getParamTypes()
   Line 70) FunctionalInterfaceLogic.getFunctionalMethod(lambdaType) ==> com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic.getFunctionalMethod(com.github.javaparser.symbolsolver.model.typesystem.Type)
@@ -16,12 +16,12 @@
   Line 77) inferenceContext.addPair(lambdaType, new ReferenceTypeImpl(lambdaType.asReferenceType().getTypeDeclaration(), typeSolver)) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addPair(com.github.javaparser.symbolsolver.model.typesystem.Type, com.github.javaparser.symbolsolver.model.typesystem.Type)
   Line 77) lambdaType.asReferenceType().getTypeDeclaration() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeDeclaration()
   Line 77) lambdaType.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 82) wrappedNode.getParameters().size() ==> ERROR
-  Line 82) wrappedNode.getParameters() ==> UNSOLVED
-  Line 83) wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name) ==> ERROR
-  Line 83) wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier() ==> ERROR
-  Line 83) wrappedNode.getParameter(lambdaParamIndex).getName() ==> ERROR
-  Line 83) wrappedNode.getParameter(lambdaParamIndex) ==> UNSOLVED
+  Line 82) wrappedNode.getParameters().size() ==> com.github.javaparser.ast.NodeList.size()
+  Line 82) wrappedNode.getParameters() ==> com.github.javaparser.ast.expr.LambdaExpr.getParameters()
+  Line 83) wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 83) wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier() ==> com.github.javaparser.ast.expr.SimpleName.getIdentifier()
+  Line 83) wrappedNode.getParameter(lambdaParamIndex).getName() ==> com.github.javaparser.ast.body.Parameter.getName()
+  Line 83) wrappedNode.getParameter(lambdaParamIndex) ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParameter(int)
   Line 88) Optional.empty() ==> java.util.Optional.empty()
   Line 91) inferenceContext.resolve(inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex))) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.resolve(com.github.javaparser.symbolsolver.model.typesystem.Type)
   Line 91) inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)) ==> com.github.javaparser.symbolsolver.logic.InferenceContext.addSingle(com.github.javaparser.symbolsolver.model.typesystem.Type)
@@ -61,7 +61,7 @@
   Line 125) Optional.of(value) ==> java.util.Optional.of(T)
   Line 138) getParent().solveSymbolAsValue(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 138) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
-  Line 143) wrappedNode.getParameters() ==> UNSOLVED
+  Line 143) wrappedNode.getParameters() ==> com.github.javaparser.ast.expr.LambdaExpr.getParameters()
   Line 144) JavaParserFactory.getSymbolDeclarator(parameter, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 145) solveWith(sb, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 146) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()

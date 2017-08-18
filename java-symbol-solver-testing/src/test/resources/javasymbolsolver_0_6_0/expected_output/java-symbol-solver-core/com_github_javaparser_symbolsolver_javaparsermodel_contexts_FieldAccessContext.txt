@@ -1,7 +1,7 @@
-  Line 52) wrappedNode.getField().toString().equals(name) ==> ERROR
-  Line 52) wrappedNode.getField().toString() ==> ERROR
-  Line 52) wrappedNode.getField() ==> UNSOLVED
-  Line 53) wrappedNode.getScope() ==> UNSOLVED
+  Line 52) wrappedNode.getField().toString().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 52) wrappedNode.getField().toString() ==> com.github.javaparser.ast.Node.toString()
+  Line 52) wrappedNode.getField() ==> com.github.javaparser.ast.expr.FieldAccessExpr.getField()
+  Line 53) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.FieldAccessExpr.getScope()
   Line 54) JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeOfThisIn(com.github.javaparser.ast.Node)
   Line 54) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 55) new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name) ==> com.github.javaparser.symbolsolver.resolution.SymbolSolver.solveSymbolInType(com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration, java.lang.String)
@@ -16,10 +16,10 @@
   Line 68) JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, false, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethod(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, boolean, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 68) JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 68) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
-  Line 73) wrappedNode.getScope() ==> UNSOLVED
-  Line 74) wrappedNode.getField().toString().equals(name) ==> ERROR
-  Line 74) wrappedNode.getField().toString() ==> ERROR
-  Line 74) wrappedNode.getField() ==> UNSOLVED
+  Line 73) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.FieldAccessExpr.getScope()
+  Line 74) wrappedNode.getField().toString().equals(name) ==> java.lang.String.equals(java.lang.Object)
+  Line 74) wrappedNode.getField().toString() ==> com.github.javaparser.ast.Node.toString()
+  Line 74) wrappedNode.getField() ==> com.github.javaparser.ast.expr.FieldAccessExpr.getField()
   Line 75) JavaParserFacade.get(typeSolver).getType(scope) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node)
   Line 75) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 76) typeOfScope.isArray() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isArray()

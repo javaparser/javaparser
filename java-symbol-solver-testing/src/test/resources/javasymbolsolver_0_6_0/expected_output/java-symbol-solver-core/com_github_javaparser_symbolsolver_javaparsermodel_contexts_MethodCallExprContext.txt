@@ -1,16 +1,16 @@
-  Line 64) wrappedNode.getScope().isPresent() ==> ERROR
-  Line 64) wrappedNode.getScope() ==> UNSOLVED
-  Line 65) JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get()) ==> ERROR
+  Line 64) wrappedNode.getScope().isPresent() ==> java.util.Optional.isPresent()
+  Line 64) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
+  Line 65) JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get()) ==> UNSOLVED
   Line 65) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 65) wrappedNode.getScope().get() ==> ERROR
-  Line 65) wrappedNode.getScope() ==> UNSOLVED
+  Line 65) wrappedNode.getScope().get() ==> java.util.Optional.get()
+  Line 65) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
   Line 66) typeOfScope.asReferenceType().getGenericParameterByName(name) ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getGenericParameterByName(java.lang.String)
   Line 66) typeOfScope.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
   Line 69) Optional.empty() ==> java.util.Optional.empty()
-  Line 80) wrappedNode.getScope().isPresent() ==> ERROR
-  Line 80) wrappedNode.getScope() ==> UNSOLVED
-  Line 81) wrappedNode.getScope().get() ==> ERROR
-  Line 81) wrappedNode.getScope() ==> UNSOLVED
+  Line 80) wrappedNode.getScope().isPresent() ==> java.util.Optional.isPresent()
+  Line 80) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
+  Line 81) wrappedNode.getScope().get() ==> java.util.Optional.get()
+  Line 81) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
   Line 84) ((NameExpr) scope).getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
   Line 84) ((NameExpr) scope).getName() ==> com.github.javaparser.ast.expr.NameExpr.getName()
   Line 85) solveType(className, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
@@ -39,9 +39,9 @@
   Line 120) parentContext.getParent() ==> com.github.javaparser.symbolsolver.core.resolution.Context.getParent()
   Line 122) parentContext.solveMethodAsUsage(name, argumentsTypes, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveMethodAsUsage(java.lang.String, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 127) wrappedNode.getTypeArguments().isPresent() ==> ERROR
-  Line 127) wrappedNode.getTypeArguments() ==> UNSOLVED
+  Line 127) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getTypeArguments()
   Line 129) wrappedNode.getTypeArguments().get() ==> ERROR
-  Line 129) wrappedNode.getTypeArguments() ==> UNSOLVED
+  Line 129) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getTypeArguments()
   Line 130) typeArguments.add(JavaParserFacade.get(typeSolver).convertToUsage(ty)) ==> java.util.List.add(E)
   Line 130) JavaParserFacade.get(typeSolver).convertToUsage(ty) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsage(com.github.javaparser.ast.type.Type)
   Line 130) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
@@ -57,10 +57,10 @@
   Line 146) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
   Line 151) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
   Line 152) parentContext.solveSymbolAsValue(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 157) wrappedNode.getScope().isPresent() ==> ERROR
-  Line 157) wrappedNode.getScope() ==> UNSOLVED
-  Line 158) wrappedNode.getScope().get() ==> ERROR
-  Line 158) wrappedNode.getScope() ==> UNSOLVED
+  Line 157) wrappedNode.getScope().isPresent() ==> java.util.Optional.isPresent()
+  Line 157) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
+  Line 158) wrappedNode.getScope().get() ==> java.util.Optional.get()
+  Line 158) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
   Line 163) this.solveType(scopeAsName.getName().getId(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 163) scopeAsName.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
   Line 163) scopeAsName.getName() ==> com.github.javaparser.ast.expr.NameExpr.getName()

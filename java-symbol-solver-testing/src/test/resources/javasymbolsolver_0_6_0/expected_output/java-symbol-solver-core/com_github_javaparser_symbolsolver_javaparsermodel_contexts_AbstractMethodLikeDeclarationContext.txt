@@ -1,23 +1,23 @@
-  Line 34) wrappedNode.getParameters() ==> UNSOLVED
+  Line 34) wrappedNode.getParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParameters()
   Line 35) JavaParserFactory.getSymbolDeclarator(parameter, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 36) AbstractJavaParserContext.solveWith(sb, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 37) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 43) getParent().solveSymbol(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbol(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 43) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
-  Line 48) wrappedNode.getTypeParameters() ==> UNSOLVED
+  Line 48) wrappedNode.getTypeParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.getTypeParameters()
   Line 49) tp.getName().getId().equals(name) ==> java.lang.String.equals(java.lang.Object)
   Line 49) tp.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
   Line 49) tp.getName() ==> com.github.javaparser.ast.type.TypeParameter.getName()
   Line 50) Optional.of(new TypeVariable(new JavaParserTypeParameter(tp, typeSolver))) ==> java.util.Optional.of(T)
   Line 53) super.solveGenericType(name, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveGenericType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 58) wrappedNode.getParameters() ==> UNSOLVED
+  Line 58) wrappedNode.getParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParameters()
   Line 59) JavaParserFactory.getSymbolDeclarator(parameter, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 60) solveWithAsValue(sb, name, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWithAsValue(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 61) symbolReference.isPresent() ==> java.util.Optional.isPresent()
   Line 68) getParent().solveSymbolAsValue(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 68) getParent() ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.getParent()
-  Line 73) wrappedNode.getTypeParameters() ==> UNSOLVED
-  Line 74) wrappedNode.getTypeParameters() ==> UNSOLVED
+  Line 73) wrappedNode.getTypeParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.getTypeParameters()
+  Line 74) wrappedNode.getTypeParameters() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.getTypeParameters()
   Line 75) tp.getName().getId().equals(name) ==> java.lang.String.equals(java.lang.Object)
   Line 75) tp.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
   Line 75) tp.getName() ==> com.github.javaparser.ast.type.TypeParameter.getName()
