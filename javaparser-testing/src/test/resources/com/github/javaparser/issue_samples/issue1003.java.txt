@@ -1,0 +1,1470 @@
+package com.trigtech.privateme.server.am;
+
+import android.app.ActivityManager;
+import android.app.ActivityManager.RecentTaskInfo;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Handler;
+import android.os.IBinder;
+import android.util.SparseArray;
+import com.trigtech.privateme.client.AppInterface;
+import com.trigtech.privateme.client.g;
+import com.trigtech.privateme.helper.proto.AppSetting;
+import com.trigtech.privateme.helper.proto.AppTaskInfo;
+import com.trigtech.privateme.helper.proto.i;
+import com.trigtech.privateme.helper.utils.k;
+import com.trigtech.privateme.helper.utils.v;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+
+class ActivityStack
+{
+  private static final String b = ActivityStack.class.getSimpleName();
+  final SparseArray<p> a = new SparseArray();
+  private final ActivityManager c;
+  private final TActivityManagerService d;
+  private com.trigtech.privateme.helper.utils.a<Integer, p> e = new com.trigtech.privateme.helper.utils.a();
+  private com.trigtech.privateme.helper.utils.a<Integer, f> f = new com.trigtech.privateme.helper.utils.a();
+  private com.trigtech.privateme.helper.utils.a<Integer, List<c>> g = new com.trigtech.privateme.helper.utils.a();
+  private com.trigtech.privateme.helper.utils.a<Integer, List<c>> h = new com.trigtech.privateme.helper.utils.a();
+
+  ActivityStack(TActivityManagerService paramTActivityManagerService)
+  {
+    this.d = paramTActivityManagerService;
+    this.c = ((ActivityManager)AppInterface.e().i().getSystemService("activity"));
+  }
+
+  private Intent a(int paramInt, c paramc, Intent paramIntent, ActivityInfo paramActivityInfo)
+  {
+    Intent localIntent1 = new Intent(paramIntent);
+    j localj = this.d.startProcessIfNeedLocked(paramActivityInfo.processName, paramInt, paramActivityInfo.packageName);
+    if (localj == null)
+      return null;
+    Intent localIntent2 = new Intent();
+    localIntent2.setClassName(AppInterface.e().k(), a(localj.i, paramActivityInfo));
+    ComponentName localComponentName1 = localIntent1.getComponent();
+    if (localComponentName1 == null)
+      localComponentName1 = k.a(paramActivityInfo);
+    localIntent2.setType(localComponentName1.flattenToString());
+    if (((0x80 & paramActivityInfo.flags) != 0) || (b(localIntent1, 1073741824)))
+      localIntent2.addFlags(1073741824);
+    if (paramc != null);
+    for (ComponentName localComponentName2 = paramc.b; ; localComponentName2 = null)
+    {
+      i locali = new i(localIntent1, paramActivityInfo, localComponentName2, paramInt);
+      localIntent2.putExtra("_PM_|_intent_", locali.a);
+      localIntent2.putExtra("_PM_|_info_", locali.b);
+      localIntent2.putExtra("_PM_|_caller_", locali.c);
+      localIntent2.putExtra("_PM_|_user_id_", locali.d);
+      return localIntent2;
+    }
+  }
+
+  private static c a(p paramp)
+  {
+    while (true)
+    {
+      int i;
+      synchronized (paramp.e)
+      {
+        i = -1 + paramp.e.size();
+        if (i >= 0)
+        {
+          c localc = (c)paramp.e.get(i);
+          if (!localc.i)
+            return localc;
+        }
+        else
+        {
+          return null;
+        }
+      }
+      i--;
+    }
+  }
+
+  private p a(int paramInt, Intent paramIntent)
+  {
+    for (int i = 0; i < this.a.size(); i++)
+    {
+      p localp = (p)this.a.valueAt(i);
+      if ((paramInt == localp.b) && (localp.d != null) && (paramIntent.getComponent().equals(localp.d.getComponent())))
+        return localp;
+    }
+    return null;
+  }
+
+  // ERROR //
+  private static String a(int paramInt, ActivityInfo paramActivityInfo)
+  {
+    // Byte code:
+    //   0: getstatic 214	tbox/com/android/internal/R_Hide$styleable:Window	Ltbox/RefStaticObject;
+    //   3: invokevirtual 219	tbox/RefStaticObject:get	()Ljava/lang/Object;
+    //   6: checkcast 221	[I
+    //   9: astore 9
+    //   11: getstatic 225	tbox/com/android/internal/R_Hide$styleable:Window_windowIsTranslucent	Ltbox/RefStaticInt;
+    //   14: invokevirtual 229	tbox/RefStaticInt:get	()I
+    //   17: istore 10
+    //   19: getstatic 232	tbox/com/android/internal/R_Hide$styleable:Window_windowIsFloating	Ltbox/RefStaticInt;
+    //   22: invokevirtual 229	tbox/RefStaticInt:get	()I
+    //   25: istore 11
+    //   27: getstatic 235	tbox/com/android/internal/R_Hide$styleable:Window_windowShowWallpaper	Ltbox/RefStaticInt;
+    //   30: invokevirtual 229	tbox/RefStaticInt:get	()I
+    //   33: istore 12
+    //   35: invokestatic 240	com/trigtech/privateme/server/am/h:a	()Lcom/trigtech/privateme/server/am/h;
+    //   38: aload_1
+    //   39: getfield 88	android/content/pm/ActivityInfo:packageName	Ljava/lang/String;
+    //   42: aload_1
+    //   43: getfield 243	android/content/pm/ActivityInfo:theme	I
+    //   46: aload 9
+    //   48: invokevirtual 246	com/trigtech/privateme/server/am/h:a	(Ljava/lang/String;I[I)Lcom/trigtech/privateme/server/am/h$a;
+    //   51: astore 13
+    //   53: aload 13
+    //   55: ifnull +154 -> 209
+    //   58: aload 13
+    //   60: getfield 251	com/trigtech/privateme/server/am/h$a:b	Landroid/content/res/TypedArray;
+    //   63: ifnull +146 -> 209
+    //   66: aload 13
+    //   68: getfield 251	com/trigtech/privateme/server/am/h$a:b	Landroid/content/res/TypedArray;
+    //   71: iload 12
+    //   73: iconst_0
+    //   74: invokevirtual 257	android/content/res/TypedArray:getBoolean	(IZ)Z
+    //   77: istore 14
+    //   79: iload 14
+    //   81: istore 5
+    //   83: aload 13
+    //   85: getfield 251	com/trigtech/privateme/server/am/h$a:b	Landroid/content/res/TypedArray;
+    //   88: iload 10
+    //   90: iconst_0
+    //   91: invokevirtual 257	android/content/res/TypedArray:getBoolean	(IZ)Z
+    //   94: istore 17
+    //   96: iload 17
+    //   98: istore 6
+    //   100: aload 13
+    //   102: getfield 251	com/trigtech/privateme/server/am/h$a:b	Landroid/content/res/TypedArray;
+    //   105: iload 11
+    //   107: iconst_0
+    //   108: invokevirtual 257	android/content/res/TypedArray:getBoolean	(IZ)Z
+    //   111: istore 19
+    //   113: iload 19
+    //   115: istore 7
+    //   117: iload 7
+    //   119: ifne +16 -> 135
+    //   122: iload 6
+    //   124: ifne +11 -> 135
+    //   127: iconst_0
+    //   128: istore 8
+    //   130: iload 5
+    //   132: ifeq +6 -> 138
+    //   135: iconst_1
+    //   136: istore 8
+    //   138: iload 8
+    //   140: ifeq +31 -> 171
+    //   143: iload_0
+    //   144: invokestatic 262	com/trigtech/privateme/client/stub/a:b	(I)Ljava/lang/String;
+    //   147: areturn
+    //   148: astore_2
+    //   149: iconst_0
+    //   150: istore_3
+    //   151: iconst_0
+    //   152: istore 4
+    //   154: aload_2
+    //   155: invokevirtual 265	java/lang/Throwable:printStackTrace	()V
+    //   158: iload_3
+    //   159: istore 5
+    //   161: iload 4
+    //   163: istore 6
+    //   165: iconst_0
+    //   166: istore 7
+    //   168: goto -51 -> 117
+    //   171: iload_0
+    //   172: invokestatic 267	com/trigtech/privateme/client/stub/a:a	(I)Ljava/lang/String;
+    //   175: areturn
+    //   176: astore 15
+    //   178: iload 5
+    //   180: istore 16
+    //   182: aload 15
+    //   184: astore_2
+    //   185: iload 16
+    //   187: istore_3
+    //   188: iconst_0
+    //   189: istore 4
+    //   191: goto -37 -> 154
+    //   194: astore 18
+    //   196: iload 6
+    //   198: istore 4
+    //   200: iload 5
+    //   202: istore_3
+    //   203: aload 18
+    //   205: astore_2
+    //   206: goto -52 -> 154
+    //   209: iconst_0
+    //   210: istore 5
+    //   212: iconst_0
+    //   213: istore 6
+    //   215: iconst_0
+    //   216: istore 7
+    //   218: goto -101 -> 117
+    //
+    // Exception table:
+    //   from	to	target	type
+    //   0	53	148	java/lang/Throwable
+    //   58	79	148	java/lang/Throwable
+    //   83	96	176	java/lang/Throwable
+    //   100	113	194	java/lang/Throwable
+  }
+
+  private void a()
+  {
+    ArrayList localArrayList = new ArrayList(this.c.getRecentTasks(2147483647, 3));
+    int i = this.a.size();
+    int j = i - 1;
+    p localp;
+    int k;
+    if (i > 0)
+    {
+      localp = (p)this.a.valueAt(j);
+      ListIterator localListIterator = localArrayList.listIterator();
+      while (localListIterator.hasNext())
+        if (((ActivityManager.RecentTaskInfo)localListIterator.next()).id == localp.a)
+        {
+          k = 1;
+          localListIterator.remove();
+        }
+    }
+    while (true)
+    {
+      if (k == 0)
+      {
+        this.a.removeAt(j);
+        b(localp);
+      }
+      i = j;
+      break;
+      return;
+      k = 0;
+    }
+  }
+
+  private static void a(Intent paramIntent, int paramInt)
+  {
+    paramIntent.setFlags(paramIntent.getFlags() & (paramInt ^ 0xFFFFFFFF));
+  }
+
+  private static boolean a(p paramp, ClearTarget paramClearTarget, ComponentName paramComponentName)
+  {
+    boolean bool1 = false;
+    boolean bool3;
+    switch (e.a[paramClearTarget.ordinal()])
+    {
+    default:
+      return false;
+    case 1:
+      synchronized (paramp.e)
+      {
+        Iterator localIterator2 = paramp.e.iterator();
+        while (localIterator2.hasNext())
+        {
+          ((c)localIterator2.next()).i = true;
+          bool1 = true;
+        }
+        return bool1;
+      }
+    case 2:
+      synchronized (paramp.e)
+      {
+        Iterator localIterator1 = paramp.e.iterator();
+        if (localIterator1.hasNext())
+        {
+          c localc = (c)localIterator1.next();
+          if (localc.b.equals(paramComponentName))
+          {
+            localc.i = true;
+            bool3 = true;
+            break label307;
+          }
+        }
+        else
+        {
+          return bool1;
+        }
+      }
+    case 3:
+    }
+    while (true)
+    {
+      int i;
+      int j;
+      boolean bool2;
+      int k;
+      synchronized (paramp.e)
+      {
+        i = paramp.e.size();
+        j = i - 1;
+        bool2 = false;
+        if (i <= 0)
+          break label313;
+        if (!((c)paramp.e.get(j)).b.equals(paramComponentName))
+          break label325;
+        bool2 = true;
+        break label313;
+        int m = k + 1;
+        if (k < -1 + paramp.e.size())
+        {
+          ((c)paramp.e.get(m)).i = true;
+          k = m;
+          continue;
+        }
+        return bool2;
+      }
+      bool3 = bool1;
+      label307: bool1 = bool3;
+      break;
+      label313: if (bool2)
+      {
+        k = j;
+        continue;
+        label325: i = j;
+      }
+    }
+  }
+
+  private p b(int paramInt, String paramString)
+  {
+    for (int i = 0; i < this.a.size(); i++)
+    {
+      p localp = (p)this.a.valueAt(i);
+      if ((paramInt == localp.b) && (paramString.equals(localp.c)))
+        return localp;
+    }
+    return null;
+  }
+
+  private void b()
+  {
+    int j;
+    for (int i = this.a.size(); ; i = j)
+    {
+      j = i - 1;
+      if (i <= 0)
+        break;
+      Iterator localIterator = ((p)this.a.valueAt(j)).e.iterator();
+      while (localIterator.hasNext())
+      {
+        c localc = (c)localIterator.next();
+        if (localc.i)
+          g.a().post(new d(this, localc));
+      }
+    }
+  }
+
+  private void b(p paramp)
+  {
+    Iterator localIterator1 = this.h.keySet().iterator();
+    while (localIterator1.hasNext())
+    {
+      Integer localInteger2 = (Integer)localIterator1.next();
+      List localList2 = (List)this.h.get(localInteger2);
+      Iterator localIterator4 = paramp.e.iterator();
+      while (localIterator4.hasNext())
+      {
+        c localc2 = (c)localIterator4.next();
+        if (localList2.contains(localc2))
+        {
+          v.a(b, "optimizeActivities started, activity: %s", new Object[] { localc2 });
+          localList2.remove(localc2);
+        }
+      }
+    }
+    Iterator localIterator2 = this.g.keySet().iterator();
+    while (localIterator2.hasNext())
+    {
+      Integer localInteger1 = (Integer)localIterator2.next();
+      List localList1 = (List)this.g.get(localInteger1);
+      Iterator localIterator3 = paramp.e.iterator();
+      while (localIterator3.hasNext())
+      {
+        c localc1 = (c)localIterator3.next();
+        if (localList1.contains(localc1))
+        {
+          v.a(b, "optimizeActivities resumed, activity: %s", new Object[] { localc1 });
+          localList1.remove(localc1);
+        }
+      }
+    }
+  }
+
+  private static boolean b(Intent paramIntent, int paramInt)
+  {
+    return (paramInt & paramIntent.getFlags()) != 0;
+  }
+
+  private List<c> e(int paramInt)
+  {
+    Object localObject = (List)this.g.get(Integer.valueOf(paramInt));
+    if (localObject == null)
+    {
+      localObject = new ArrayList();
+      this.g.put(Integer.valueOf(paramInt), localObject);
+    }
+    return localObject;
+  }
+
+  private f f(int paramInt)
+  {
+    f localf = (f)this.f.get(Integer.valueOf(paramInt));
+    if (localf == null)
+    {
+      localf = new f();
+      this.f.put(Integer.valueOf(paramInt), localf);
+    }
+    return localf;
+  }
+
+  // ERROR //
+  final int a(int paramInt1, Intent paramIntent, ActivityInfo paramActivityInfo, IBinder paramIBinder, android.os.Bundle paramBundle, String paramString, int paramInt2)
+  {
+    // Byte code:
+    //   0: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   3: astore 8
+    //   5: iconst_2
+    //   6: anewarray 4	java/lang/Object
+    //   9: astore 9
+    //   11: aload 9
+    //   13: iconst_0
+    //   14: aload_3
+    //   15: getfield 402	android/content/pm/ActivityInfo:name	Ljava/lang/String;
+    //   18: aastore
+    //   19: aload 9
+    //   21: iconst_1
+    //   22: aload 4
+    //   24: aastore
+    //   25: aload 8
+    //   27: ldc_w 404
+    //   30: aload 9
+    //   32: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   35: aload_0
+    //   36: invokespecial 406	com/trigtech/privateme/server/am/ActivityStack:a	()V
+    //   39: aload_0
+    //   40: iload_1
+    //   41: aload 4
+    //   43: invokevirtual 409	com/trigtech/privateme/server/am/ActivityStack:a	(ILandroid/os/IBinder;)Lcom/trigtech/privateme/server/am/c;
+    //   46: astore 10
+    //   48: aload 10
+    //   50: ifnull +594 -> 644
+    //   53: aload 10
+    //   55: getfield 412	com/trigtech/privateme/server/am/c:a	Lcom/trigtech/privateme/server/am/p;
+    //   58: astore 11
+    //   60: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   63: ldc_w 414
+    //   66: iconst_1
+    //   67: anewarray 4	java/lang/Object
+    //   70: dup
+    //   71: iconst_0
+    //   72: aload 11
+    //   74: aastore
+    //   75: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   78: getstatic 420	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:CURRENT	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   81: astore 12
+    //   83: getstatic 424	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:NOTHING	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   86: astore 13
+    //   88: aload_2
+    //   89: ldc_w 425
+    //   92: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   95: istore 14
+    //   97: aload_2
+    //   98: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   101: ifnonnull +36 -> 137
+    //   104: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   107: ldc_w 427
+    //   110: iconst_0
+    //   111: anewarray 4	java/lang/Object
+    //   114: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   117: aload_2
+    //   118: new 121	android/content/ComponentName
+    //   121: dup
+    //   122: aload_3
+    //   123: getfield 88	android/content/pm/ActivityInfo:packageName	Ljava/lang/String;
+    //   126: aload_3
+    //   127: getfield 402	android/content/pm/ActivityInfo:name	Ljava/lang/String;
+    //   130: invokespecial 430	android/content/ComponentName:<init>	(Ljava/lang/String;Ljava/lang/String;)V
+    //   133: invokevirtual 434	android/content/Intent:setComponent	(Landroid/content/ComponentName;)Landroid/content/Intent;
+    //   136: pop
+    //   137: aload 10
+    //   139: ifnull +33 -> 172
+    //   142: aload 10
+    //   144: getfield 436	com/trigtech/privateme/server/am/c:g	I
+    //   147: iconst_3
+    //   148: if_icmpne +24 -> 172
+    //   151: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   154: ldc_w 438
+    //   157: iconst_0
+    //   158: anewarray 4	java/lang/Object
+    //   161: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   164: aload_2
+    //   165: ldc_w 439
+    //   168: invokevirtual 139	android/content/Intent:addFlags	(I)Landroid/content/Intent;
+    //   171: pop
+    //   172: iload 14
+    //   174: ifeq +28 -> 202
+    //   177: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   180: ldc_w 441
+    //   183: iconst_0
+    //   184: anewarray 4	java/lang/Object
+    //   187: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   190: aload_2
+    //   191: ldc_w 442
+    //   194: invokestatic 444	com/trigtech/privateme/server/am/ActivityStack:a	(Landroid/content/Intent;I)V
+    //   197: getstatic 447	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:TOP	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   200: astore 13
+    //   202: aload_2
+    //   203: ldc_w 448
+    //   206: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   209: ifeq +31 -> 240
+    //   212: aload_2
+    //   213: ldc_w 439
+    //   216: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   219: ifeq +431 -> 650
+    //   222: getstatic 451	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:TASK	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   225: astore 13
+    //   227: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   230: ldc_w 453
+    //   233: iconst_0
+    //   234: anewarray 4	java/lang/Object
+    //   237: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   240: getstatic 458	android/os/Build$VERSION:SDK_INT	I
+    //   243: bipush 21
+    //   245: if_icmplt +31 -> 276
+    //   248: aload_3
+    //   249: getfield 461	android/content/pm/ActivityInfo:documentLaunchMode	I
+    //   252: tableswitch	default:+24 -> 276, 1:+421->673, 2:+434->686
+    //   277: getfield 464	android/content/pm/ActivityInfo:launchMode	I
+    //   280: tableswitch	default:+28 -> 308, 1:+414->694, 2:+466->746, 3:+509->789
+    //   309: ldc_w 465
+    //   312: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   315: ifeq +1290 -> 1605
+    //   318: aload 13
+    //   320: astore 19
+    //   322: aconst_null
+    //   323: astore 17
+    //   325: aload 12
+    //   327: astore 18
+    //   329: iconst_1
+    //   330: istore 20
+    //   332: aload 19
+    //   334: getstatic 424	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:NOTHING	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   337: if_acmpne +1261 -> 1598
+    //   340: aload_2
+    //   341: ldc_w 442
+    //   344: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   347: ifeq +1251 -> 1598
+    //   350: getstatic 468	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:SPEC_ACTIVITY	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   353: astore 21
+    //   355: aload 11
+    //   357: ifnonnull +16 -> 373
+    //   360: aload 18
+    //   362: getstatic 420	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:CURRENT	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   365: if_acmpne +8 -> 373
+    //   368: getstatic 471	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:AFFINITY	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   371: astore 18
+    //   373: aload_3
+    //   374: invokestatic 474	com/trigtech/privateme/helper/utils/k:a	(Landroid/content/pm/ActivityInfo;)Ljava/lang/String;
+    //   377: astore 22
+    //   379: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   382: ldc_w 476
+    //   385: iconst_2
+    //   386: anewarray 4	java/lang/Object
+    //   389: dup
+    //   390: iconst_0
+    //   391: aload 22
+    //   393: aastore
+    //   394: dup
+    //   395: iconst_1
+    //   396: aload 17
+    //   398: aastore
+    //   399: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   402: getstatic 478	com/trigtech/privateme/server/am/e:b	[I
+    //   405: aload 18
+    //   407: invokevirtual 479	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:ordinal	()I
+    //   410: iaload
+    //   411: istore 23
+    //   413: aconst_null
+    //   414: astore 24
+    //   416: iload 23
+    //   418: tableswitch	default:+26 -> 444, 1:+400->818, 2:+412->830, 3:+423->841
+    //   445: aconst_null
+    //   446: <illegal opcode>
+    //   447: aload 22
+    //   449: invokevirtual 338	java/lang/String:equals	(Ljava/lang/Object;)Z
+    //   452: ifeq +19 -> 471
+    //   455: aload_0
+    //   456: getfield 40	com/trigtech/privateme/server/am/ActivityStack:e	Lcom/trigtech/privateme/helper/utils/a;
+    //   459: iload_1
+    //   460: invokestatic 385	java/lang/Integer:valueOf	(I)Ljava/lang/Integer;
+    //   463: invokevirtual 366	com/trigtech/privateme/helper/utils/a:get	(Ljava/lang/Object;)Ljava/lang/Object;
+    //   466: checkcast 177	com/trigtech/privateme/server/am/p
+    //   469: astore 24
+    //   471: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   474: ldc_w 483
+    //   477: iconst_1
+    //   478: anewarray 4	java/lang/Object
+    //   481: dup
+    //   482: iconst_0
+    //   483: aload 24
+    //   485: aastore
+    //   486: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   489: aload 24
+    //   491: ifnonnull +383 -> 874
+    //   494: invokestatic 489	android/os/SystemClock:elapsedRealtime	()J
+    //   497: lstore 53
+    //   499: aload_0
+    //   500: iload_1
+    //   501: aconst_null
+    //   502: aload_2
+    //   503: aload_3
+    //   504: invokespecial 491	com/trigtech/privateme/server/am/ActivityStack:a	(ILcom/trigtech/privateme/server/am/c;Landroid/content/Intent;Landroid/content/pm/ActivityInfo;)Landroid/content/Intent;
+    //   507: astore 55
+    //   509: aload 55
+    //   511: ifnull +68 -> 579
+    //   514: aload 55
+    //   516: ldc_w 439
+    //   519: invokevirtual 139	android/content/Intent:addFlags	(I)Landroid/content/Intent;
+    //   522: pop
+    //   523: aload 55
+    //   525: ldc_w 492
+    //   528: invokevirtual 139	android/content/Intent:addFlags	(I)Landroid/content/Intent;
+    //   531: pop
+    //   532: aload 55
+    //   534: ldc_w 493
+    //   537: invokevirtual 139	android/content/Intent:addFlags	(I)Landroid/content/Intent;
+    //   540: pop
+    //   541: getstatic 458	android/os/Build$VERSION:SDK_INT	I
+    //   544: bipush 21
+    //   546: if_icmpge +302 -> 848
+    //   549: aload 55
+    //   551: ldc_w 494
+    //   554: invokevirtual 139	android/content/Intent:addFlags	(I)Landroid/content/Intent;
+    //   557: pop
+    //   558: getstatic 458	android/os/Build$VERSION:SDK_INT	I
+    //   561: bipush 16
+    //   563: if_icmplt +297 -> 860
+    //   566: invokestatic 58	com/trigtech/privateme/client/AppInterface:e	()Lcom/trigtech/privateme/client/AppInterface;
+    //   569: invokevirtual 62	com/trigtech/privateme/client/AppInterface:i	()Landroid/content/Context;
+    //   572: aload 55
+    //   574: aload 5
+    //   576: invokevirtual 498	android/content/Context:startActivity	(Landroid/content/Intent;Landroid/os/Bundle;)V
+    //   579: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   582: astore 56
+    //   584: iconst_1
+    //   585: anewarray 4	java/lang/Object
+    //   588: astore 57
+    //   590: aload 57
+    //   592: iconst_0
+    //   593: invokestatic 489	android/os/SystemClock:elapsedRealtime	()J
+    //   596: lload 53
+    //   598: lsub
+    //   599: invokestatic 503	java/lang/Long:valueOf	(J)Ljava/lang/Long;
+    //   602: aastore
+    //   603: aload 56
+    //   605: ldc_w 505
+    //   608: aload 57
+    //   610: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   613: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   616: astore 31
+    //   618: iconst_1
+    //   619: anewarray 4	java/lang/Object
+    //   622: astore 32
+    //   624: aload 32
+    //   626: iconst_0
+    //   627: aload_3
+    //   628: getfield 402	android/content/pm/ActivityInfo:name	Ljava/lang/String;
+    //   631: aastore
+    //   632: aload 31
+    //   634: ldc_w 507
+    //   637: aload 32
+    //   639: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   642: iconst_0
+    //   643: ireturn
+    //   644: aconst_null
+    //   645: astore 11
+    //   647: goto -587 -> 60
+    //   650: aload_2
+    //   651: ldc_w 448
+    //   654: invokestatic 444	com/trigtech/privateme/server/am/ActivityStack:a	(Landroid/content/Intent;I)V
+    //   657: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   660: ldc_w 509
+    //   663: iconst_0
+    //   664: anewarray 4	java/lang/Object
+    //   667: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   670: goto -430 -> 240
+    //   673: getstatic 451	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:TASK	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   676: astore 13
+    //   678: getstatic 512	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:DOCUMENT	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   681: astore 12
+    //   683: goto -407 -> 276
+    //   686: getstatic 515	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:MULTIPLE	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   689: astore 12
+    //   691: goto -415 -> 276
+    //   694: aload_2
+    //   695: ldc_w 439
+    //   698: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   701: ifeq +18 -> 719
+    //   704: aload_2
+    //   705: ldc_w 492
+    //   708: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   711: ifeq +27 -> 738
+    //   714: getstatic 515	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:MULTIPLE	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   717: astore 12
+    //   719: aload 13
+    //   721: astore 19
+    //   723: ldc_w 517
+    //   726: astore 17
+    //   728: aload 12
+    //   730: astore 18
+    //   732: iconst_1
+    //   733: istore 20
+    //   735: goto -403 -> 332
+    //   738: getstatic 471	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:AFFINITY	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   741: astore 12
+    //   743: goto -24 -> 719
+    //   746: getstatic 447	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:TOP	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   749: astore 19
+    //   751: aload_2
+    //   752: ldc_w 492
+    //   755: invokestatic 135	com/trigtech/privateme/server/am/ActivityStack:b	(Landroid/content/Intent;I)Z
+    //   758: ifeq +23 -> 781
+    //   761: getstatic 515	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:MULTIPLE	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   764: astore 63
+    //   766: aload 63
+    //   768: astore 18
+    //   770: ldc_w 519
+    //   773: astore 17
+    //   775: iconst_0
+    //   776: istore 20
+    //   778: goto -446 -> 332
+    //   781: getstatic 471	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:AFFINITY	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   784: astore 63
+    //   786: goto -20 -> 766
+    //   789: getstatic 447	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:TOP	Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;
+    //   792: astore 15
+    //   794: getstatic 471	com/trigtech/privateme/server/am/ActivityStack$ReuseTarget:AFFINITY	Lcom/trigtech/privateme/server/am/ActivityStack$ReuseTarget;
+    //   797: astore 16
+    //   799: ldc_w 521
+    //   802: astore 17
+    //   804: aload 16
+    //   806: astore 18
+    //   808: aload 15
+    //   810: astore 19
+    //   812: iconst_0
+    //   813: istore 20
+    //   815: goto -483 -> 332
+    //   818: aload_0
+    //   819: iload_1
+    //   820: aload 22
+    //   822: invokespecial 523	com/trigtech/privateme/server/am/ActivityStack:b	(ILjava/lang/String;)Lcom/trigtech/privateme/server/am/p;
+    //   825: astore 24
+    //   827: goto -383 -> 444
+    //   830: aload_0
+    //   831: iload_1
+    //   832: aload_2
+    //   833: invokespecial 525	com/trigtech/privateme/server/am/ActivityStack:a	(ILandroid/content/Intent;)Lcom/trigtech/privateme/server/am/p;
+    //   836: astore 24
+    //   838: goto -394 -> 444
+    //   841: aload 11
+    //   843: astore 24
+    //   845: goto -401 -> 444
+    //   848: aload 55
+    //   850: ldc_w 494
+    //   853: invokevirtual 139	android/content/Intent:addFlags	(I)Landroid/content/Intent;
+    //   856: pop
+    //   857: goto -299 -> 558
+    //   860: invokestatic 58	com/trigtech/privateme/client/AppInterface:e	()Lcom/trigtech/privateme/client/AppInterface;
+    //   863: invokevirtual 62	com/trigtech/privateme/client/AppInterface:i	()Landroid/content/Context;
+    //   866: aload 55
+    //   868: invokevirtual 527	android/content/Context:startActivity	(Landroid/content/Intent;)V
+    //   871: goto -292 -> 579
+    //   874: aload_0
+    //   875: getfield 74	com/trigtech/privateme/server/am/ActivityStack:c	Landroid/app/ActivityManager;
+    //   878: aload 24
+    //   880: getfield 297	com/trigtech/privateme/server/am/p:a	I
+    //   883: iconst_0
+    //   884: invokevirtual 531	android/app/ActivityManager:moveTaskToFront	(II)V
+    //   887: iload 14
+    //   889: ifne +654 -> 1543
+    //   892: aload 24
+    //   894: getfield 202	com/trigtech/privateme/server/am/p:d	Landroid/content/Intent;
+    //   897: astore 49
+    //   899: aload_2
+    //   900: ifnull +637 -> 1537
+    //   903: aload 49
+    //   905: ifnull +632 -> 1537
+    //   908: aload_2
+    //   909: invokevirtual 534	android/content/Intent:getAction	()Ljava/lang/String;
+    //   912: aload 49
+    //   914: invokevirtual 534	android/content/Intent:getAction	()Ljava/lang/String;
+    //   917: invokestatic 539	com/trigtech/privateme/helper/a/f:a	(Ljava/lang/Object;Ljava/lang/Object;)Z
+    //   920: ifne +460 -> 1380
+    //   923: iconst_0
+    //   924: istore 50
+    //   926: iload 50
+    //   928: ifeq +615 -> 1543
+    //   931: iconst_1
+    //   932: istore 25
+    //   934: aload 24
+    //   936: aload 11
+    //   938: if_acmpne +653 -> 1591
+    //   941: aload 24
+    //   943: invokevirtual 541	com/trigtech/privateme/server/am/p:a	()Z
+    //   946: ifne +645 -> 1591
+    //   949: iconst_0
+    //   950: istore 26
+    //   952: aload 21
+    //   954: getfield 544	com/trigtech/privateme/server/am/ActivityStack$ClearTarget:deliverIntent	Z
+    //   957: ifne +11 -> 968
+    //   960: iconst_0
+    //   961: istore 27
+    //   963: iload 20
+    //   965: ifeq +620 -> 1585
+    //   968: aload 24
+    //   970: aload 21
+    //   972: aload_2
+    //   973: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   976: invokestatic 546	com/trigtech/privateme/server/am/ActivityStack:a	(Lcom/trigtech/privateme/server/am/p;Lcom/trigtech/privateme/server/am/ActivityStack$ClearTarget;Landroid/content/ComponentName;)Z
+    //   979: istore 27
+    //   981: aload 24
+    //   983: invokestatic 548	com/trigtech/privateme/server/am/ActivityStack:a	(Lcom/trigtech/privateme/server/am/p;)Lcom/trigtech/privateme/server/am/c;
+    //   986: astore 45
+    //   988: iload 14
+    //   990: ifeq +24 -> 1014
+    //   993: iload 20
+    //   995: ifne +19 -> 1014
+    //   998: aload 45
+    //   1000: ifnull +14 -> 1014
+    //   1003: iload 27
+    //   1005: ifeq +9 -> 1014
+    //   1008: aload 45
+    //   1010: iconst_1
+    //   1011: putfield 193	com/trigtech/privateme/server/am/c:i	Z
+    //   1014: aload 45
+    //   1016: ifnull +569 -> 1585
+    //   1019: aload 45
+    //   1021: getfield 193	com/trigtech/privateme/server/am/c:i	Z
+    //   1024: ifne +561 -> 1585
+    //   1027: aload 45
+    //   1029: getfield 144	com/trigtech/privateme/server/am/c:b	Landroid/content/ComponentName;
+    //   1032: aload_2
+    //   1033: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1036: invokevirtual 206	android/content/ComponentName:equals	(Ljava/lang/Object;)Z
+    //   1039: ifeq +546 -> 1585
+    //   1042: aload 45
+    //   1044: ifnull +39 -> 1083
+    //   1047: aload 10
+    //   1049: ifnull +500 -> 1549
+    //   1052: aload 10
+    //   1054: getfield 144	com/trigtech/privateme/server/am/c:b	Landroid/content/ComponentName;
+    //   1057: invokevirtual 551	android/content/ComponentName:getPackageName	()Ljava/lang/String;
+    //   1060: astore 46
+    //   1062: aload 45
+    //   1064: getfield 554	com/trigtech/privateme/server/am/c:f	Lcom/trigtech/privateme/server/am/j;
+    //   1067: getfield 557	com/trigtech/privateme/server/am/j:e	Lcom/trigtech/privateme/client/AppClient;
+    //   1070: aload 46
+    //   1072: aload 45
+    //   1074: getfield 560	com/trigtech/privateme/server/am/c:d	Landroid/os/IBinder;
+    //   1077: aload_2
+    //   1078: invokeinterface 566 4 0
+    //   1083: iconst_1
+    //   1084: istore 28
+    //   1086: iload 27
+    //   1088: ifeq +19 -> 1107
+    //   1091: aload_0
+    //   1092: getfield 45	com/trigtech/privateme/server/am/ActivityStack:a	Landroid/util/SparseArray;
+    //   1095: astore 43
+    //   1097: aload 43
+    //   1099: monitorenter
+    //   1100: aload_0
+    //   1101: invokespecial 568	com/trigtech/privateme/server/am/ActivityStack:b	()V
+    //   1104: aload 43
+    //   1106: monitorexit
+    //   1107: iload 26
+    //   1109: ifne -496 -> 613
+    //   1112: iload 28
+    //   1114: ifne -501 -> 613
+    //   1117: aload_0
+    //   1118: iload_1
+    //   1119: aload 10
+    //   1121: aload_2
+    //   1122: aload_3
+    //   1123: invokespecial 491	com/trigtech/privateme/server/am/ActivityStack:a	(ILcom/trigtech/privateme/server/am/c;Landroid/content/Intent;Landroid/content/pm/ActivityInfo;)Landroid/content/Intent;
+    //   1126: astore 29
+    //   1128: aload 29
+    //   1130: ifnull -517 -> 613
+    //   1133: aload 24
+    //   1135: invokestatic 548	com/trigtech/privateme/server/am/ActivityStack:a	(Lcom/trigtech/privateme/server/am/p;)Lcom/trigtech/privateme/server/am/c;
+    //   1138: astore 30
+    //   1140: aload 30
+    //   1142: ifnull +222 -> 1364
+    //   1145: aload_0
+    //   1146: aload 24
+    //   1148: getfield 200	com/trigtech/privateme/server/am/p:b	I
+    //   1151: aload 30
+    //   1153: aload 29
+    //   1155: aload_3
+    //   1156: invokespecial 491	com/trigtech/privateme/server/am/ActivityStack:a	(ILcom/trigtech/privateme/server/am/c;Landroid/content/Intent;Landroid/content/pm/ActivityInfo;)Landroid/content/Intent;
+    //   1159: ifnull +205 -> 1364
+    //   1162: aload 30
+    //   1164: getfield 560	com/trigtech/privateme/server/am/c:d	Landroid/os/IBinder;
+    //   1167: astore 33
+    //   1169: getstatic 573	tbox/android/app/IActivityManager:startActivity	Ltbox/RefMethod;
+    //   1172: invokevirtual 579	tbox/RefMethod:paramList	()[Ljava/lang/Class;
+    //   1175: astore 34
+    //   1177: aload 34
+    //   1179: arraylength
+    //   1180: anewarray 4	java/lang/Object
+    //   1183: astore 35
+    //   1185: aload 34
+    //   1187: iconst_0
+    //   1188: aaload
+    //   1189: getstatic 585	tbox/android/app/IApplicationThread:TYPE	Ljava/lang/Class;
+    //   1192: if_acmpne +20 -> 1212
+    //   1195: aload 35
+    //   1197: iconst_0
+    //   1198: getstatic 590	tbox/android/app/ActivityThread:getApplicationThread	Ltbox/RefMethod;
+    //   1201: invokestatic 592	com/trigtech/privateme/client/AppInterface:g	()Ljava/lang/Object;
+    //   1204: iconst_0
+    //   1205: anewarray 4	java/lang/Object
+    //   1208: invokevirtual 596	tbox/RefMethod:call	(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    //   1211: aastore
+    //   1212: aload 34
+    //   1214: ldc 77
+    //   1216: invokestatic 601	com/trigtech/privateme/helper/utils/e:a	([Ljava/lang/Class;Ljava/lang/Class;)I
+    //   1219: istore 36
+    //   1221: aload 34
+    //   1223: ldc_w 603
+    //   1226: iconst_2
+    //   1227: invokestatic 606	com/trigtech/privateme/helper/utils/e:a	([Ljava/lang/Class;Ljava/lang/Class;I)I
+    //   1230: istore 37
+    //   1232: aload 34
+    //   1234: ldc_w 608
+    //   1237: invokestatic 601	com/trigtech/privateme/helper/utils/e:a	([Ljava/lang/Class;Ljava/lang/Class;)I
+    //   1240: istore 38
+    //   1242: iload 36
+    //   1244: iconst_1
+    //   1245: iadd
+    //   1246: istore 39
+    //   1248: iload 37
+    //   1250: iconst_1
+    //   1251: iadd
+    //   1252: istore 40
+    //   1254: iload 37
+    //   1256: iconst_2
+    //   1257: iadd
+    //   1258: istore 41
+    //   1260: aload 35
+    //   1262: iload 36
+    //   1264: aload 29
+    //   1266: aastore
+    //   1267: aload 35
+    //   1269: iload 37
+    //   1271: aload 33
+    //   1273: aastore
+    //   1274: aload 35
+    //   1276: iload 40
+    //   1278: aload 6
+    //   1280: aastore
+    //   1281: aload 35
+    //   1283: iload 41
+    //   1285: iload 7
+    //   1287: invokestatic 385	java/lang/Integer:valueOf	(I)Ljava/lang/Integer;
+    //   1290: aastore
+    //   1291: iload 38
+    //   1293: iconst_m1
+    //   1294: if_icmpeq +10 -> 1304
+    //   1297: aload 35
+    //   1299: iload 38
+    //   1301: aload 5
+    //   1303: aastore
+    //   1304: aload 35
+    //   1306: iload 39
+    //   1308: aload 29
+    //   1310: invokevirtual 611	android/content/Intent:getType	()Ljava/lang/String;
+    //   1313: aastore
+    //   1314: getstatic 458	android/os/Build$VERSION:SDK_INT	I
+    //   1317: bipush 18
+    //   1319: if_icmplt +16 -> 1335
+    //   1322: aload 35
+    //   1324: iload 36
+    //   1326: iconst_1
+    //   1327: isub
+    //   1328: invokestatic 58	com/trigtech/privateme/client/AppInterface:e	()Lcom/trigtech/privateme/client/AppInterface;
+    //   1331: invokevirtual 98	com/trigtech/privateme/client/AppInterface:k	()Ljava/lang/String;
+    //   1334: aastore
+    //   1335: aload 34
+    //   1337: aload 35
+    //   1339: invokestatic 616	com/trigtech/privateme/helper/utils/i:a	([Ljava/lang/Class;[Ljava/lang/Object;)V
+    //   1342: getstatic 573	tbox/android/app/IActivityManager:startActivity	Ltbox/RefMethod;
+    //   1345: getstatic 622	tbox/android/app/ActivityManagerNative:getDefault	Ltbox/RefStaticMethod;
+    //   1348: iconst_0
+    //   1349: anewarray 4	java/lang/Object
+    //   1352: invokevirtual 627	tbox/RefStaticMethod:call	([Ljava/lang/Object;)Ljava/lang/Object;
+    //   1355: aload 35
+    //   1357: checkcast 629	[Ljava/lang/Object;
+    //   1360: invokevirtual 596	tbox/RefMethod:call	(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    //   1363: pop
+    //   1364: getstatic 31	com/trigtech/privateme/server/am/ActivityStack:b	Ljava/lang/String;
+    //   1367: ldc_w 631
+    //   1370: iconst_0
+    //   1371: anewarray 4	java/lang/Object
+    //   1374: invokestatic 376	com/trigtech/privateme/helper/utils/v:a	(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+    //   1377: goto -764 -> 613
+    //   1380: aload_2
+    //   1381: invokevirtual 635	android/content/Intent:getData	()Landroid/net/Uri;
+    //   1384: aload 49
+    //   1386: invokevirtual 635	android/content/Intent:getData	()Landroid/net/Uri;
+    //   1389: invokestatic 539	com/trigtech/privateme/helper/a/f:a	(Ljava/lang/Object;Ljava/lang/Object;)Z
+    //   1392: ifne +9 -> 1401
+    //   1395: iconst_0
+    //   1396: istore 50
+    //   1398: goto -472 -> 926
+    //   1401: aload_2
+    //   1402: invokevirtual 611	android/content/Intent:getType	()Ljava/lang/String;
+    //   1405: aload 49
+    //   1407: invokevirtual 611	android/content/Intent:getType	()Ljava/lang/String;
+    //   1410: invokestatic 539	com/trigtech/privateme/helper/a/f:a	(Ljava/lang/Object;Ljava/lang/Object;)Z
+    //   1413: ifne +9 -> 1422
+    //   1416: iconst_0
+    //   1417: istore 50
+    //   1419: goto -493 -> 926
+    //   1422: aload_2
+    //   1423: invokevirtual 638	android/content/Intent:getPackage	()Ljava/lang/String;
+    //   1426: astore 51
+    //   1428: aload 51
+    //   1430: ifnonnull +19 -> 1449
+    //   1433: aload_2
+    //   1434: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1437: ifnull +12 -> 1449
+    //   1440: aload_2
+    //   1441: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1444: invokevirtual 551	android/content/ComponentName:getPackageName	()Ljava/lang/String;
+    //   1447: astore 51
+    //   1449: aload 49
+    //   1451: invokevirtual 638	android/content/Intent:getPackage	()Ljava/lang/String;
+    //   1454: astore 52
+    //   1456: aload 52
+    //   1458: ifnonnull +21 -> 1479
+    //   1461: aload 49
+    //   1463: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1466: ifnull +13 -> 1479
+    //   1469: aload 49
+    //   1471: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1474: invokevirtual 551	android/content/ComponentName:getPackageName	()Ljava/lang/String;
+    //   1477: astore 52
+    //   1479: aload 51
+    //   1481: aload 52
+    //   1483: invokestatic 539	com/trigtech/privateme/helper/a/f:a	(Ljava/lang/Object;Ljava/lang/Object;)Z
+    //   1486: ifne +9 -> 1495
+    //   1489: iconst_0
+    //   1490: istore 50
+    //   1492: goto -566 -> 926
+    //   1495: aload_2
+    //   1496: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1499: aload 49
+    //   1501: invokevirtual 114	android/content/Intent:getComponent	()Landroid/content/ComponentName;
+    //   1504: invokestatic 539	com/trigtech/privateme/helper/a/f:a	(Ljava/lang/Object;Ljava/lang/Object;)Z
+    //   1507: ifne +9 -> 1516
+    //   1510: iconst_0
+    //   1511: istore 50
+    //   1513: goto -587 -> 926
+    //   1516: aload_2
+    //   1517: invokevirtual 641	android/content/Intent:getCategories	()Ljava/util/Set;
+    //   1520: aload 49
+    //   1522: invokevirtual 641	android/content/Intent:getCategories	()Ljava/util/Set;
+    //   1525: invokestatic 539	com/trigtech/privateme/helper/a/f:a	(Ljava/lang/Object;Ljava/lang/Object;)Z
+    //   1528: ifne +9 -> 1537
+    //   1531: iconst_0
+    //   1532: istore 50
+    //   1534: goto -608 -> 926
+    //   1537: iconst_1
+    //   1538: istore 50
+    //   1540: goto -614 -> 926
+    //   1543: iconst_0
+    //   1544: istore 25
+    //   1546: goto -612 -> 934
+    //   1549: ldc_w 643
+    //   1552: astore 46
+    //   1554: goto -492 -> 1062
+    //   1557: astore 48
+    //   1559: aload 48
+    //   1561: invokevirtual 644	android/os/RemoteException:printStackTrace	()V
+    //   1564: goto -481 -> 1083
+    //   1567: astore 47
+    //   1569: aload 47
+    //   1571: invokevirtual 645	java/lang/NullPointerException:printStackTrace	()V
+    //   1574: goto -491 -> 1083
+    //   1577: astore 44
+    //   1579: aload 43
+    //   1581: monitorexit
+    //   1582: aload 44
+    //   1584: athrow
+    //   1585: iconst_0
+    //   1586: istore 28
+    //   1588: goto -502 -> 1086
+    //   1591: iload 25
+    //   1593: istore 26
+    //   1595: goto -643 -> 952
+    //   1598: aload 19
+    //   1600: astore 21
+    //   1602: goto -1247 -> 355
+    //   1605: aload 13
+    //   1607: astore 19
+    //   1609: aload 12
+    //   1611: astore 18
+    //   1613: aconst_null
+    //   1614: astore 17
+    //   1616: iconst_0
+    //   1617: istore 20
+    //   1619: goto -1287 -> 332
+    //
+    // Exception table:
+    //   from	to	target	type
+    //   1062	1083	1557	android/os/RemoteException
+    //   1062	1083	1567	java/lang/NullPointerException
+    //   1100	1107	1577	finally
+    //   1579	1582	1577	finally
+  }
+
+  final c a(int paramInt)
+  {
+    List localList = e(paramInt);
+    if (!localList.isEmpty())
+      return (c)localList.get(-1 + localList.size());
+    return null;
+  }
+
+  final c a(int paramInt, IBinder paramIBinder)
+  {
+    Object localObject1 = null;
+    if (paramIBinder != null);
+    for (int i = 0; ; i++)
+    {
+      p localp;
+      if (i < this.a.size())
+      {
+        localp = (p)this.a.valueAt(i);
+        if (localp.b != paramInt);
+      }
+      else
+      {
+        while (true)
+        {
+          synchronized (localp.e)
+          {
+            Iterator localIterator = localp.e.iterator();
+            if (localIterator.hasNext())
+            {
+              localObject3 = (c)localIterator.next();
+              if (((c)localObject3).d != paramIBinder)
+                break label116;
+              break label119;
+            }
+          }
+          return localObject1;
+        }
+      }
+    }
+  }
+
+  final void a(int paramInt, String paramString)
+  {
+    if (paramInt != -1)
+      f(paramInt).a(paramString);
+    while (true)
+    {
+      return;
+      Iterator localIterator = this.f.keySet().iterator();
+      while (localIterator.hasNext())
+        f(((Integer)localIterator.next()).intValue()).a(paramString);
+    }
+  }
+
+  final void a(j paramj)
+  {
+    while (true)
+    {
+      int j;
+      synchronized (this.a)
+      {
+        a();
+        i = this.a.size();
+        j = i - 1;
+        if (i <= 0)
+          break;
+        p localp = (p)this.a.valueAt(j);
+        synchronized (localp.e)
+        {
+          Iterator localIterator = localp.e.iterator();
+          if (localIterator.hasNext())
+          {
+            c localc = (c)localIterator.next();
+            if (localc.f.g != paramj.g)
+              continue;
+            localIterator.remove();
+            if (localp.e.isEmpty())
+              this.a.remove(localp.a);
+            this.g.remove(localc);
+          }
+        }
+      }
+      int i = j;
+    }
+  }
+
+  final void a(j paramj, ComponentName paramComponentName1, ComponentName paramComponentName2, IBinder paramIBinder, Intent paramIntent, String paramString, int paramInt1, int paramInt2, int paramInt3)
+  {
+    v.a(b, "onActivityCreated>>>>>>>>>>>>>>>token: %s", new Object[] { paramIBinder });
+    while (true)
+    {
+      p localp1;
+      synchronized (this.a)
+      {
+        a();
+        localp1 = (p)this.a.get(paramInt1);
+        if (localp1 == null)
+        {
+          localp2 = new p(paramInt1, paramj.j, paramString, paramIntent);
+          this.a.put(paramInt1, localp2);
+          c localc = new c(localp2, paramComponentName1, paramComponentName2, paramIBinder, paramj.j, paramj, paramInt2, paramInt3, paramString);
+          synchronized (localp2.e)
+          {
+            localp2.e.add(localc);
+            return;
+          }
+        }
+      }
+      p localp2 = localp1;
+    }
+  }
+
+  final List<c> b(int paramInt)
+  {
+    Object localObject = (List)this.h.get(Integer.valueOf(paramInt));
+    if (localObject == null)
+    {
+      localObject = new ArrayList();
+      this.h.put(Integer.valueOf(paramInt), localObject);
+    }
+    return localObject;
+  }
+
+  final void b(int paramInt, IBinder paramIBinder)
+  {
+    v.a(b, "onActivityResumed>>>>>>>>>>>>>>>token: %s", new Object[] { paramIBinder });
+    synchronized (this.a)
+    {
+      a();
+      c localc = a(paramInt, paramIBinder);
+      v.a(b, "onActivityResumed, r: %s", new Object[] { localc });
+      if (localc != null)
+        if (localc.b != null)
+        {
+          a.a();
+          a.a(localc.b.getPackageName());
+          f localf = f(paramInt);
+          String str = localc.b.getPackageName();
+          localf.a(AppInterface.e().b(str));
+        }
+      synchronized (localc.a.e)
+      {
+        localc.a.e.remove(localc);
+        localc.a.e.add(localc);
+        this.e.put(Integer.valueOf(paramInt), localc.a);
+        List localList2 = e(paramInt);
+        if (!localList2.contains(localc))
+        {
+          v.a(b, "onActivityResumed, add r: %s", new Object[] { localc });
+          localList2.add(localc);
+        }
+        return;
+      }
+    }
+  }
+
+  final List<AppSetting> c(int paramInt)
+  {
+    return f(paramInt).a();
+  }
+
+  final void c(int paramInt, IBinder paramIBinder)
+  {
+    v.a(b, "onActivityStarted>>>>>>>>>>>>>>>token: %s", new Object[] { paramIBinder });
+    synchronized (this.a)
+    {
+      a();
+      c localc = a(paramInt, paramIBinder);
+      v.a(b, "onActivityStarted, r: %s", new Object[] { localc });
+      List localList = b(paramInt);
+      if ((localc != null) && (!localList.contains(localc)))
+      {
+        localList.add(localc);
+        v.a(b, "onActivityStarted, add r: %s", new Object[] { localc });
+      }
+      return;
+    }
+  }
+
+  final AppTaskInfo d(int paramInt)
+  {
+    synchronized (this.a)
+    {
+      p localp = (p)this.a.get(paramInt);
+      if (localp != null)
+      {
+        int i = localp.e.size();
+        if (i <= 0);
+        ComponentName localComponentName;
+        for (AppTaskInfo localAppTaskInfo = null; ; localAppTaskInfo = new AppTaskInfo(localp.a, localp.d, localp.d.getComponent(), localComponentName))
+        {
+          return localAppTaskInfo;
+          localComponentName = ((c)localp.e.get(i - 1)).b;
+        }
+      }
+      return null;
+    }
+  }
+
+  final void d(int paramInt, IBinder paramIBinder)
+  {
+    v.a(b, "onActivityPaused>>>>>>>>>>>>>>>token: %s", new Object[] { paramIBinder });
+    synchronized (this.a)
+    {
+      a();
+      c localc = a(paramInt, paramIBinder);
+      v.a(b, "onActivityPaused, r: %s", new Object[] { localc });
+      List localList = e(paramInt);
+      if ((localc != null) && (localList.contains(localc)))
+      {
+        localList.remove(localc);
+        v.a(b, "onActivityPaused, remove r: %s", new Object[] { localc });
+      }
+      return;
+    }
+  }
+
+  final void e(int paramInt, IBinder paramIBinder)
+  {
+    v.a(b, "onActivityStopped>>>>>>>>>>>>>>>token: %s", new Object[] { paramIBinder });
+    synchronized (this.a)
+    {
+      a();
+      c localc = a(paramInt, paramIBinder);
+      v.a(b, "onActivityStopped, r: %s", new Object[] { localc });
+      List localList = b(paramInt);
+      if ((localc != null) && (localList.contains(localc)))
+      {
+        localList.remove(localc);
+        v.a(b, "onActivityStopped, remove r: %s", new Object[] { localc });
+      }
+      return;
+    }
+  }
+
+  final boolean f(int paramInt, IBinder paramIBinder)
+  {
+    v.a(b, "onActivityDestroyed>>>>>>>>>>>>>>>token: %s", new Object[] { paramIBinder });
+    synchronized (this.a)
+    {
+      c localc = a(paramInt, paramIBinder);
+      v.a(b, "onActivityDestroyed, r: %s", new Object[] { localc });
+      if (localc != null);
+      synchronized (localc.a.e)
+      {
+        localc.a.e.remove(localc);
+        List localList2 = e(paramInt);
+        if (localList2.contains(localc))
+        {
+          localList2.remove(localc);
+          v.a(b, "onActivityDestroyed, remove resumed r: %s", new Object[] { localc });
+        }
+        List localList3 = b(paramInt);
+        if (localList3.contains(localc))
+        {
+          localList3.remove(localc);
+          v.a(b, "onActivityDestroyed, remove started r: %s", new Object[] { localc });
+        }
+        a();
+        return false;
+      }
+    }
+  }
+
+  final String g(int paramInt, IBinder paramIBinder)
+  {
+    synchronized (this.a)
+    {
+      c localc = a(paramInt, paramIBinder);
+      if (localc != null)
+      {
+        String str = localc.b.getPackageName();
+        return str;
+      }
+      return null;
+    }
+  }
+
+  final ComponentName h(int paramInt, IBinder paramIBinder)
+  {
+    synchronized (this.a)
+    {
+      c localc = a(paramInt, paramIBinder);
+      if (localc != null)
+      {
+        ComponentName localComponentName = localc.c;
+        return localComponentName;
+      }
+      return null;
+    }
+  }
+
+  public final String i(int paramInt, IBinder paramIBinder)
+  {
+    synchronized (this.a)
+    {
+      c localc = a(paramInt, paramIBinder);
+      if (localc != null)
+      {
+        ComponentName localComponentName = localc.c;
+        String str = null;
+        if (localComponentName != null)
+          str = localc.c.getPackageName();
+        return str;
+      }
+      return null;
+    }
+  }
+
+  final ComponentName j(int paramInt, IBinder paramIBinder)
+  {
+    synchronized (this.a)
+    {
+      c localc = a(paramInt, paramIBinder);
+      if (localc != null)
+      {
+        ComponentName localComponentName = localc.b;
+        return localComponentName;
+      }
+      return null;
+    }
+  }
+
+
+}
+
+/* Location:
+ * Qualified Name:     com.trigtech.privateme.server.am.ActivityStack
+ * Java Class Version: 6 (50.0)
+ * JD-Core Version:    0.6.1-SNAPSHOT
+ */

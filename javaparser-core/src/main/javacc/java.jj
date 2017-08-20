@@ -207,6 +207,7 @@ TOKEN_MGR_DECLS :
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
+    private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -226,33 +227,40 @@ TOKEN_MGR_DECLS :
     }
 
     private void CommonTokenAction(Token rawToken) {
+        // Use an intermediary stack to avoid recursion, see issue 1003
         CustomToken token = (CustomToken) rawToken;
-        if(token.specialToken!=null) {
-            CommonTokenAction(token.specialToken);
-        }
-        token.javaToken = new JavaToken(token, tokens);
-        tokens.add(token.javaToken);
-        if (homeToken == null) {
-            homeToken = token.javaToken;
-        }
+        do {
+            tokenWorkStack.push(token);
+            token = (CustomToken) token.specialToken;
+        } while (token != null);
 
-        String commentText = token.image;
-        if (token.kind == JAVA_DOC_COMMENT) {
-            JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-            commentsCollection.addComment(comment);
-        } else if (token.kind == MULTI_LINE_COMMENT) {
-            BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-            commentsCollection.addComment(comment);
-        } else if (token.kind == SINGLE_LINE_COMMENT) {
-            // line comments have their end of line character(s) included, and we don't want that.
-            Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
-            while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                commentText = commentText.substring(0, commentText.length() - 1);
+        // The stack is now filled with tokens in left-to-right order. Process them.
+        while(!tokenWorkStack.empty()) {
+            token = tokenWorkStack.pop();
+            token.javaToken = new JavaToken(token, tokens);
+            tokens.add(token.javaToken);
+            if (homeToken == null) {
+                homeToken = token.javaToken;
             }
-            range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-            LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
-            comment.setRange(range);
-            commentsCollection.addComment(comment);
+
+            String commentText = token.image;
+            if (token.kind == JAVA_DOC_COMMENT) {
+                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
+                commentsCollection.addComment(comment);
+            } else if (token.kind == MULTI_LINE_COMMENT) {
+                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
+                commentsCollection.addComment(comment);
+            } else if (token.kind == SINGLE_LINE_COMMENT) {
+                // line comments have their end of line character(s) included, and we don't want that.
+                Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
+                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
+                    commentText = commentText.substring(0, commentText.length() - 1);
+                }
+                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
+                LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
+                comment.setRange(range);
+                commentsCollection.addComment(comment);
+            }
         }
     }
 }
