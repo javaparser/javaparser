@@ -1,3 +1,8 @@
+Version 3.3.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/54?closed=1)
+* `VisitorMap` lets you overre hashcode/equals for nodes when used as a key for a map.
+
 Version 3.3.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/53?closed=1)
