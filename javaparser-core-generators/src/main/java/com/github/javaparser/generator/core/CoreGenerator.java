@@ -30,10 +30,12 @@ public class CoreGenerator {
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorAdapterGenerator(sourceRoot).generate();
         new EqualsVisitorGenerator(sourceRoot).generate();
+        new ObjectIdentityEqualsVisitorGenerator(sourceRoot).generate();
         new VoidVisitorAdapterGenerator(sourceRoot).generate();
         new VoidVisitorGenerator(sourceRoot).generate();
         new GenericVisitorGenerator(sourceRoot).generate();
         new HashCodeVisitorGenerator(sourceRoot).generate();
+        new ObjectIdentityHashCodeVisitorGenerator(sourceRoot).generate();
         new CloneVisitorGenerator(sourceRoot).generate();
         new ModifierVisitorGenerator(sourceRoot).generate();
 
