@@ -453,9 +453,6 @@ public class Difference {
     /**
      * If we are at the beginning of a line, with just spaces or tabs before us we should force the space to be
      * the same as the indentation.
-     *
-     * @param nodeText
-     * @param nodeTextIndex
      */
     private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
         boolean hasOnlyWsBefore = true;

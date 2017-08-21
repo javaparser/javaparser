@@ -14,7 +14,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 
-public class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
+public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
 
     private Type type;
 

@@ -53,7 +53,7 @@ import com.github.javaparser.TokenRange;
  * @author Julio Vilmar Gesser
  * @see SimpleName
  */
-public class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnnotations<Name> {
+public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWithAnnotations<Name> {
 
     @NonEmptyProperty
     private String identifier;

@@ -29,14 +29,14 @@ For Maven:
 <dependency>
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-core</artifactId>
-    <version>3.3.0</version>
+    <version>3.3.2</version>
 </dependency>
 ```
 
 For Gradle:
 
 ```
-compile 'com.github.javaparser:javaparser-core:3.3.0'
+compile 'com.github.javaparser:javaparser-core:3.3.2'
 ```
 
 ## How To Compile Sources

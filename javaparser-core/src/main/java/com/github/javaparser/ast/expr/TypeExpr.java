@@ -42,7 +42,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Raquel Pau
  */
-public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type> {
+public final class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type> {
 
     private Type type;
 

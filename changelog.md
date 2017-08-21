@@ -1,3 +1,14 @@
+Version 3.3.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/54?closed=1)
+* `VisitorMap` lets you overre hashcode/equals for nodes when used as a key for a map.
+
+Version 3.3.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/53?closed=1)
+* The token list is now mutable - see methods on `JavaToken`.
+This caused mild breakage - some fields have become `Optional`.
+
 Version 3.3.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/52?closed=1)

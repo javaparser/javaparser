@@ -37,7 +37,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(CompilationUnit n, Object arg) {
+    public Visitable visit(final CompilationUnit n, final Object arg) {
         NodeList<ImportDeclaration> imports = cloneList(n.getImports(), arg);
         ModuleDeclaration module = cloneNode(n.getModule(), arg);
         PackageDeclaration packageDeclaration = cloneNode(n.getPackageDeclaration(), arg);
@@ -59,7 +59,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(PackageDeclaration n, Object arg) {
+    public Visitable visit(final PackageDeclaration n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -70,7 +70,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(TypeParameter n, Object arg) {
+    public Visitable visit(final TypeParameter n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<ClassOrInterfaceType> typeBound = cloneList(n.getTypeBound(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
@@ -82,7 +82,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(LineComment n, Object arg) {
+    public Visitable visit(final LineComment n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         LineComment r = new LineComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
@@ -91,7 +91,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(BlockComment n, Object arg) {
+    public Visitable visit(final BlockComment n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         BlockComment r = new BlockComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
@@ -100,7 +100,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ClassOrInterfaceDeclaration n, Object arg) {
+    public Visitable visit(final ClassOrInterfaceDeclaration n, final Object arg) {
         NodeList<ClassOrInterfaceType> extendedTypes = cloneList(n.getExtendedTypes(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
@@ -115,7 +115,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(EnumDeclaration n, Object arg) {
+    public Visitable visit(final EnumDeclaration n, final Object arg) {
         NodeList<EnumConstantDeclaration> entries = cloneList(n.getEntries(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
@@ -129,7 +129,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(EnumConstantDeclaration n, Object arg) {
+    public Visitable visit(final EnumConstantDeclaration n, final Object arg) {
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         NodeList<BodyDeclaration<?>> classBody = cloneList(n.getClassBody(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
@@ -142,7 +142,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(AnnotationDeclaration n, Object arg) {
+    public Visitable visit(final AnnotationDeclaration n, final Object arg) {
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
@@ -154,7 +154,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(AnnotationMemberDeclaration n, Object arg) {
+    public Visitable visit(final AnnotationMemberDeclaration n, final Object arg) {
         Expression defaultValue = cloneNode(n.getDefaultValue(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Type type = cloneNode(n.getType(), arg);
@@ -167,7 +167,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(FieldDeclaration n, Object arg) {
+    public Visitable visit(final FieldDeclaration n, final Object arg) {
         NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -178,7 +178,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(VariableDeclarator n, Object arg) {
+    public Visitable visit(final VariableDeclarator n, final Object arg) {
         Expression initializer = cloneNode(n.getInitializer(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Type type = cloneNode(n.getType(), arg);
@@ -190,7 +190,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ConstructorDeclaration n, Object arg) {
+    public Visitable visit(final ConstructorDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
@@ -205,7 +205,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(MethodDeclaration n, Object arg) {
+    public Visitable visit(final MethodDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Type type = cloneNode(n.getType(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
@@ -221,7 +221,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(Parameter n, Object arg) {
+    public Visitable visit(final Parameter n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Type type = cloneNode(n.getType(), arg);
@@ -234,7 +234,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(InitializerDeclaration n, Object arg) {
+    public Visitable visit(final InitializerDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -245,7 +245,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(JavadocComment n, Object arg) {
+    public Visitable visit(final JavadocComment n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         JavadocComment r = new JavadocComment(n.getTokenRange().orElse(null), n.getContent());
         r.setComment(comment);
@@ -254,7 +254,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ClassOrInterfaceType n, Object arg) {
+    public Visitable visit(final ClassOrInterfaceType n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         ClassOrInterfaceType scope = cloneNode(n.getScope(), arg);
         NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
@@ -267,7 +267,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(PrimitiveType n, Object arg) {
+    public Visitable visit(final PrimitiveType n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         PrimitiveType r = new PrimitiveType(n.getTokenRange().orElse(null), n.getType());
@@ -277,7 +277,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ArrayType n, Object arg) {
+    public Visitable visit(final ArrayType n, final Object arg) {
         Type componentType = cloneNode(n.getComponentType(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -289,7 +289,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ArrayCreationLevel n, Object arg) {
+    public Visitable visit(final ArrayCreationLevel n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Expression dimension = cloneNode(n.getDimension(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -300,7 +300,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(IntersectionType n, Object arg) {
+    public Visitable visit(final IntersectionType n, final Object arg) {
         NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -311,7 +311,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(UnionType n, Object arg) {
+    public Visitable visit(final UnionType n, final Object arg) {
         NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -322,7 +322,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(VoidType n, Object arg) {
+    public Visitable visit(final VoidType n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         VoidType r = new VoidType(n.getTokenRange().orElse(null));
@@ -332,7 +332,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(WildcardType n, Object arg) {
+    public Visitable visit(final WildcardType n, final Object arg) {
         ReferenceType extendedType = cloneNode(n.getExtendedType(), arg);
         ReferenceType superType = cloneNode(n.getSuperType(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
@@ -344,7 +344,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(UnknownType n, Object arg) {
+    public Visitable visit(final UnknownType n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         UnknownType r = new UnknownType(n.getTokenRange().orElse(null));
@@ -354,7 +354,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ArrayAccessExpr n, Object arg) {
+    public Visitable visit(final ArrayAccessExpr n, final Object arg) {
         Expression index = cloneNode(n.getIndex(), arg);
         Expression name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -365,7 +365,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ArrayCreationExpr n, Object arg) {
+    public Visitable visit(final ArrayCreationExpr n, final Object arg) {
         Type elementType = cloneNode(n.getElementType(), arg);
         ArrayInitializerExpr initializer = cloneNode(n.getInitializer(), arg);
         NodeList<ArrayCreationLevel> levels = cloneList(n.getLevels(), arg);
@@ -377,7 +377,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ArrayInitializerExpr n, Object arg) {
+    public Visitable visit(final ArrayInitializerExpr n, final Object arg) {
         NodeList<Expression> values = cloneList(n.getValues(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ArrayInitializerExpr r = new ArrayInitializerExpr(n.getTokenRange().orElse(null), values);
@@ -387,7 +387,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(AssignExpr n, Object arg) {
+    public Visitable visit(final AssignExpr n, final Object arg) {
         Expression target = cloneNode(n.getTarget(), arg);
         Expression value = cloneNode(n.getValue(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -398,7 +398,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(BinaryExpr n, Object arg) {
+    public Visitable visit(final BinaryExpr n, final Object arg) {
         Expression left = cloneNode(n.getLeft(), arg);
         Expression right = cloneNode(n.getRight(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -409,7 +409,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(CastExpr n, Object arg) {
+    public Visitable visit(final CastExpr n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -420,7 +420,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ClassExpr n, Object arg) {
+    public Visitable visit(final ClassExpr n, final Object arg) {
         Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ClassExpr r = new ClassExpr(n.getTokenRange().orElse(null), type);
@@ -430,7 +430,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ConditionalExpr n, Object arg) {
+    public Visitable visit(final ConditionalExpr n, final Object arg) {
         Expression condition = cloneNode(n.getCondition(), arg);
         Expression elseExpr = cloneNode(n.getElseExpr(), arg);
         Expression thenExpr = cloneNode(n.getThenExpr(), arg);
@@ -442,7 +442,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(EnclosedExpr n, Object arg) {
+    public Visitable visit(final EnclosedExpr n, final Object arg) {
         Expression inner = cloneNode(n.getInner(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         EnclosedExpr r = new EnclosedExpr(n.getTokenRange().orElse(null), inner);
@@ -452,7 +452,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(FieldAccessExpr n, Object arg) {
+    public Visitable visit(final FieldAccessExpr n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         Expression scope = cloneNode(n.getScope(), arg);
         NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
@@ -464,7 +464,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(InstanceOfExpr n, Object arg) {
+    public Visitable visit(final InstanceOfExpr n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         ReferenceType type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -475,7 +475,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(StringLiteralExpr n, Object arg) {
+    public Visitable visit(final StringLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         StringLiteralExpr r = new StringLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
@@ -484,7 +484,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(IntegerLiteralExpr n, Object arg) {
+    public Visitable visit(final IntegerLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         IntegerLiteralExpr r = new IntegerLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
@@ -493,7 +493,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(LongLiteralExpr n, Object arg) {
+    public Visitable visit(final LongLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         LongLiteralExpr r = new LongLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
@@ -502,7 +502,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(CharLiteralExpr n, Object arg) {
+    public Visitable visit(final CharLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         CharLiteralExpr r = new CharLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
@@ -511,7 +511,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(DoubleLiteralExpr n, Object arg) {
+    public Visitable visit(final DoubleLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         DoubleLiteralExpr r = new DoubleLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
@@ -520,7 +520,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(BooleanLiteralExpr n, Object arg) {
+    public Visitable visit(final BooleanLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         BooleanLiteralExpr r = new BooleanLiteralExpr(n.getTokenRange().orElse(null), n.getValue());
         r.setComment(comment);
@@ -529,7 +529,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(NullLiteralExpr n, Object arg) {
+    public Visitable visit(final NullLiteralExpr n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         NullLiteralExpr r = new NullLiteralExpr(n.getTokenRange().orElse(null));
         r.setComment(comment);
@@ -538,7 +538,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(MethodCallExpr n, Object arg) {
+    public Visitable visit(final MethodCallExpr n, final Object arg) {
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         Expression scope = cloneNode(n.getScope(), arg);
@@ -551,7 +551,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(NameExpr n, Object arg) {
+    public Visitable visit(final NameExpr n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         NameExpr r = new NameExpr(n.getTokenRange().orElse(null), name);
@@ -561,7 +561,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ObjectCreationExpr n, Object arg) {
+    public Visitable visit(final ObjectCreationExpr n, final Object arg) {
         NodeList<BodyDeclaration<?>> anonymousClassBody = cloneList(n.getAnonymousClassBody().orElse(null), arg);
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         Expression scope = cloneNode(n.getScope(), arg);
@@ -575,7 +575,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(Name n, Object arg) {
+    public Visitable visit(final Name n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Name qualifier = cloneNode(n.getQualifier(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -586,7 +586,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(SimpleName n, Object arg) {
+    public Visitable visit(final SimpleName n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         SimpleName r = new SimpleName(n.getTokenRange().orElse(null), n.getIdentifier());
         r.setComment(comment);
@@ -595,7 +595,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ThisExpr n, Object arg) {
+    public Visitable visit(final ThisExpr n, final Object arg) {
         Expression classExpr = cloneNode(n.getClassExpr(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ThisExpr r = new ThisExpr(n.getTokenRange().orElse(null), classExpr);
@@ -605,7 +605,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(SuperExpr n, Object arg) {
+    public Visitable visit(final SuperExpr n, final Object arg) {
         Expression classExpr = cloneNode(n.getClassExpr(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         SuperExpr r = new SuperExpr(n.getTokenRange().orElse(null), classExpr);
@@ -615,7 +615,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(UnaryExpr n, Object arg) {
+    public Visitable visit(final UnaryExpr n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         UnaryExpr r = new UnaryExpr(n.getTokenRange().orElse(null), expression, n.getOperator());
@@ -625,7 +625,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(VariableDeclarationExpr n, Object arg) {
+    public Visitable visit(final VariableDeclarationExpr n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         NodeList<VariableDeclarator> variables = cloneList(n.getVariables(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -636,7 +636,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(MarkerAnnotationExpr n, Object arg) {
+    public Visitable visit(final MarkerAnnotationExpr n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         MarkerAnnotationExpr r = new MarkerAnnotationExpr(n.getTokenRange().orElse(null), name);
@@ -646,7 +646,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(SingleMemberAnnotationExpr n, Object arg) {
+    public Visitable visit(final SingleMemberAnnotationExpr n, final Object arg) {
         Expression memberValue = cloneNode(n.getMemberValue(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -657,7 +657,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(NormalAnnotationExpr n, Object arg) {
+    public Visitable visit(final NormalAnnotationExpr n, final Object arg) {
         NodeList<MemberValuePair> pairs = cloneList(n.getPairs(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -668,7 +668,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(MemberValuePair n, Object arg) {
+    public Visitable visit(final MemberValuePair n, final Object arg) {
         SimpleName name = cloneNode(n.getName(), arg);
         Expression value = cloneNode(n.getValue(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -679,7 +679,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ExplicitConstructorInvocationStmt n, Object arg) {
+    public Visitable visit(final ExplicitConstructorInvocationStmt n, final Object arg) {
         NodeList<Expression> arguments = cloneList(n.getArguments(), arg);
         Expression expression = cloneNode(n.getExpression(), arg);
         NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
@@ -691,7 +691,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(LocalClassDeclarationStmt n, Object arg) {
+    public Visitable visit(final LocalClassDeclarationStmt n, final Object arg) {
         ClassOrInterfaceDeclaration classDeclaration = cloneNode(n.getClassDeclaration(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         LocalClassDeclarationStmt r = new LocalClassDeclarationStmt(n.getTokenRange().orElse(null), classDeclaration);
@@ -701,7 +701,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(AssertStmt n, Object arg) {
+    public Visitable visit(final AssertStmt n, final Object arg) {
         Expression check = cloneNode(n.getCheck(), arg);
         Expression message = cloneNode(n.getMessage(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -712,7 +712,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(BlockStmt n, Object arg) {
+    public Visitable visit(final BlockStmt n, final Object arg) {
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         BlockStmt r = new BlockStmt(n.getTokenRange().orElse(null), statements);
@@ -722,7 +722,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(LabeledStmt n, Object arg) {
+    public Visitable visit(final LabeledStmt n, final Object arg) {
         SimpleName label = cloneNode(n.getLabel(), arg);
         Statement statement = cloneNode(n.getStatement(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -733,7 +733,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(EmptyStmt n, Object arg) {
+    public Visitable visit(final EmptyStmt n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         EmptyStmt r = new EmptyStmt(n.getTokenRange().orElse(null));
         r.setComment(comment);
@@ -742,7 +742,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ExpressionStmt n, Object arg) {
+    public Visitable visit(final ExpressionStmt n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ExpressionStmt r = new ExpressionStmt(n.getTokenRange().orElse(null), expression);
@@ -752,7 +752,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(SwitchStmt n, Object arg) {
+    public Visitable visit(final SwitchStmt n, final Object arg) {
         NodeList<SwitchEntryStmt> entries = cloneList(n.getEntries(), arg);
         Expression selector = cloneNode(n.getSelector(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -763,7 +763,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(SwitchEntryStmt n, Object arg) {
+    public Visitable visit(final SwitchEntryStmt n, final Object arg) {
         Expression label = cloneNode(n.getLabel(), arg);
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -774,7 +774,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(BreakStmt n, Object arg) {
+    public Visitable visit(final BreakStmt n, final Object arg) {
         SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         BreakStmt r = new BreakStmt(n.getTokenRange().orElse(null), label);
@@ -784,7 +784,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ReturnStmt n, Object arg) {
+    public Visitable visit(final ReturnStmt n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ReturnStmt r = new ReturnStmt(n.getTokenRange().orElse(null), expression);
@@ -794,7 +794,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(IfStmt n, Object arg) {
+    public Visitable visit(final IfStmt n, final Object arg) {
         Expression condition = cloneNode(n.getCondition(), arg);
         Statement elseStmt = cloneNode(n.getElseStmt(), arg);
         Statement thenStmt = cloneNode(n.getThenStmt(), arg);
@@ -806,7 +806,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(WhileStmt n, Object arg) {
+    public Visitable visit(final WhileStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression condition = cloneNode(n.getCondition(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -817,7 +817,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ContinueStmt n, Object arg) {
+    public Visitable visit(final ContinueStmt n, final Object arg) {
         SimpleName label = cloneNode(n.getLabel(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ContinueStmt r = new ContinueStmt(n.getTokenRange().orElse(null), label);
@@ -827,7 +827,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(DoStmt n, Object arg) {
+    public Visitable visit(final DoStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression condition = cloneNode(n.getCondition(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -838,7 +838,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ForeachStmt n, Object arg) {
+    public Visitable visit(final ForeachStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression iterable = cloneNode(n.getIterable(), arg);
         VariableDeclarationExpr variable = cloneNode(n.getVariable(), arg);
@@ -850,7 +850,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ForStmt n, Object arg) {
+    public Visitable visit(final ForStmt n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         Expression compare = cloneNode(n.getCompare(), arg);
         NodeList<Expression> initialization = cloneList(n.getInitialization(), arg);
@@ -863,7 +863,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ThrowStmt n, Object arg) {
+    public Visitable visit(final ThrowStmt n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ThrowStmt r = new ThrowStmt(n.getTokenRange().orElse(null), expression);
@@ -873,7 +873,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(SynchronizedStmt n, Object arg) {
+    public Visitable visit(final SynchronizedStmt n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Expression expression = cloneNode(n.getExpression(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -884,7 +884,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(TryStmt n, Object arg) {
+    public Visitable visit(final TryStmt n, final Object arg) {
         NodeList<CatchClause> catchClauses = cloneList(n.getCatchClauses(), arg);
         BlockStmt finallyBlock = cloneNode(n.getFinallyBlock(), arg);
         NodeList<VariableDeclarationExpr> resources = cloneList(n.getResources(), arg);
@@ -897,7 +897,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(CatchClause n, Object arg) {
+    public Visitable visit(final CatchClause n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
         Parameter parameter = cloneNode(n.getParameter(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -908,7 +908,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(LambdaExpr n, Object arg) {
+    public Visitable visit(final LambdaExpr n, final Object arg) {
         Statement body = cloneNode(n.getBody(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -919,7 +919,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(MethodReferenceExpr n, Object arg) {
+    public Visitable visit(final MethodReferenceExpr n, final Object arg) {
         Expression scope = cloneNode(n.getScope(), arg);
         NodeList<Type> typeArguments = cloneList(n.getTypeArguments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -930,7 +930,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(TypeExpr n, Object arg) {
+    public Visitable visit(final TypeExpr n, final Object arg) {
         Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         TypeExpr r = new TypeExpr(n.getTokenRange().orElse(null), type);
@@ -952,7 +952,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Node visit(ImportDeclaration n, Object arg) {
+    public Node visit(final ImportDeclaration n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ImportDeclaration r = new ImportDeclaration(n.getTokenRange().orElse(null), name, n.isStatic(), n.isAsterisk());
@@ -962,7 +962,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ModuleDeclaration n, Object arg) {
+    public Visitable visit(final ModuleDeclaration n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         NodeList<ModuleStmt> moduleStmts = cloneList(n.getModuleStmts(), arg);
         Name name = cloneNode(n.getName(), arg);
@@ -974,7 +974,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ModuleRequiresStmt n, Object arg) {
+    public Visitable visit(final ModuleRequiresStmt n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleRequiresStmt r = new ModuleRequiresStmt(n.getTokenRange().orElse(null), n.getModifiers(), name);
@@ -1015,7 +1015,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ModuleExportsStmt n, Object arg) {
+    public Visitable visit(final ModuleExportsStmt n, final Object arg) {
         NodeList<Name> moduleNames = cloneList(n.getModuleNames(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -1026,7 +1026,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ModuleProvidesStmt n, Object arg) {
+    public Visitable visit(final ModuleProvidesStmt n, final Object arg) {
         Type type = cloneNode(n.getType(), arg);
         NodeList<Type> withTypes = cloneList(n.getWithTypes(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -1037,7 +1037,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ModuleUsesStmt n, Object arg) {
+    public Visitable visit(final ModuleUsesStmt n, final Object arg) {
         Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         ModuleUsesStmt r = new ModuleUsesStmt(n.getTokenRange().orElse(null), type);
@@ -1047,7 +1047,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(ModuleOpensStmt n, Object arg) {
+    public Visitable visit(final ModuleOpensStmt n, final Object arg) {
         NodeList<Name> moduleNames = cloneList(n.getModuleNames(), arg);
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -1058,7 +1058,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
-    public Visitable visit(UnparsableStmt n, Object arg) {
+    public Visitable visit(final UnparsableStmt n, final Object arg) {
         Comment comment = cloneNode(n.getComment(), arg);
         UnparsableStmt r = new UnparsableStmt(n.getTokenRange().orElse(null));
         r.setComment(comment);

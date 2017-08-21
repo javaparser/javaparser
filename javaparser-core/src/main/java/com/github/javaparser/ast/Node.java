@@ -200,10 +200,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
-        if (tokenRange == null) {
+        if (tokenRange == null || !(tokenRange.getBegin().getRange().isPresent() && tokenRange.getBegin().getRange().isPresent())) {
             range = null;
         } else {
-            range = new Range(tokenRange.getBegin().getRange().begin, tokenRange.getEnd().getRange().end);
+            range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end);
         }
         return this;
     }
@@ -474,6 +474,19 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Try to replace this node in the parent with the supplied node.
+     *
+     * @return true if removed, or if the parent isn't set.
+     * @throws RuntimeException if it fails in an unexpected way
+     */
+    public boolean replace(Node node) {
+        if (parentNode == null) {
+            return false;
+        }
+        return parentNode.replace(this, node);
+    }
+
+    /**
      * Forcibly removes this node from the AST.
      * If it cannot be removed from the parent with remove(),
      * it will try to remove its parent instead,
@@ -585,6 +598,9 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return (Node) accept(new CloneVisitor(), null);
     }
 
+    /**
+     * @return get JavaParser specific node introspection information.
+     */
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public NodeMetaModel getMetaModel() {
         return JavaParserMetaModel.nodeMetaModel;

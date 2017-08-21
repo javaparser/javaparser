@@ -53,11 +53,19 @@ public class JavaTokenTest {
 
     private void assertToken(String image, Range range, int kind, JavaToken.Category category, JavaToken token) {
         assertEquals(image, token.getText());
-        assertEquals(range, token.getRange());
+        assertEquals(range, token.getRange().get());
         assertEquals(kind, token.getKind());
         assertEquals(category, token.getCategory());
         token.getNextToken().ifPresent(nt -> assertEquals(token, nt.getPreviousToken().get()));
         token.getPreviousToken().ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
         assertTrue(token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
+    }
+    
+    @Test
+    public void testAFewImagesForTokenKinds() {
+        assertEquals("=", new JavaToken(ASSIGN).getText());
+        // TODO this shouldn't be a space.
+        assertEquals(" ", new JavaToken(EOF).getText());
+        assertEquals("*/", new JavaToken(JAVA_DOC_COMMENT).getText());
     }
 }

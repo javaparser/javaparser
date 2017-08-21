@@ -17,7 +17,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 
-public class ModuleExportsStmt extends ModuleStmt implements NodeWithName<ModuleExportsStmt> {
+public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<ModuleExportsStmt> {
 
     private Name name;
 
