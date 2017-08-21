@@ -44,12 +44,12 @@ public class JavaParserTypeSolver implements TypeSolver {
     private Map<String, Optional<CompilationUnit>> parsedFiles = new HashMap<>();
     private Map<String, List<CompilationUnit>> parsedDirectories = new HashMap<>();
     private Map<String, ReferenceTypeDeclaration> foundTypes = new HashMap<>();
-    
-    private boolean hasValidSrcDir = false;
 
     public JavaParserTypeSolver(File srcDir) {
+        if (!srcDir.exists() || !srcDir.isDirectory()) {
+            throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
+        }
         this.srcDir = srcDir;
-        hasValidSrcDir = srcDir.exists() && srcDir.isDirectory();
     }
 
     @Override
@@ -106,10 +106,6 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     @Override
     public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
-        if (!hasValidSrcDir) {
-            throw new IllegalStateException("SrcDir does not exist or is not a directory: " + srcDir.getAbsolutePath());
-        }
-
         // TODO support enums
         // TODO support interfaces
         if (foundTypes.containsKey(name))
