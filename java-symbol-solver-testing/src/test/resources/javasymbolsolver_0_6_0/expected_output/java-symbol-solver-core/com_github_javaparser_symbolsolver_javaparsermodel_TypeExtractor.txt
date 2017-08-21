@@ -150,8 +150,8 @@
   Line 345) node.getOperator() ==> com.github.javaparser.ast.expr.UnaryExpr.getOperator()
   Line 351) node.getVariables().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 351) node.getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
-  Line 354) facade.convertToUsageVariableType(node.getVariables().get(0)) ==> ERROR
-  Line 354) node.getVariables().get(0) ==> ERROR
+  Line 354) facade.convertToUsageVariableType(node.getVariables().get(0)) ==> UNSOLVED
+  Line 354) node.getVariables().get(0) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 354) node.getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
   Line 360) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 361) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)

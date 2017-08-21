@@ -6,7 +6,7 @@
   Line 84) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 85) call.getArguments().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 85) call.getArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getArguments()
-  Line 86) call.getArguments().get(i) ==> ERROR
+  Line 86) call.getArguments().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 86) call.getArguments() ==> com.github.javaparser.ast.expr.MethodCallExpr.getArguments()
   Line 126) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 127) getParamPos(parameter) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration.getParamPos(com.github.javaparser.ast.body.Parameter)

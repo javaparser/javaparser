@@ -11,7 +11,7 @@
   Line 78) getNumberOfParams() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration.getNumberOfParams()
   Line 79) String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
   Line 79) getNumberOfParams() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration.getNumberOfParams()
-  Line 81) wrappedNode.getParameters().get(i) ==> ERROR
+  Line 81) wrappedNode.getParameters().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 81) wrappedNode.getParameters() ==> com.github.javaparser.ast.body.CallableDeclaration.getParameters()
   Line 89) new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes) ==> com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic.resolveTypeVariables(com.github.javaparser.symbolsolver.core.resolution.Context, java.util.List<com.github.javaparser.symbolsolver.model.typesystem.Type>)
   Line 93) JavaParserFactory.getContext(wrappedNode, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

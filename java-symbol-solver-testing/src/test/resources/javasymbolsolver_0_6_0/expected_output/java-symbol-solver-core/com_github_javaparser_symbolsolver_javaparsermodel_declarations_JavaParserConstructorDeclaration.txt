@@ -3,7 +3,7 @@
   Line 53) getNumberOfParams() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration.getNumberOfParams()
   Line 54) String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
   Line 54) getNumberOfParams() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration.getNumberOfParams()
-  Line 56) wrappedNode.getParameters().get(i) ==> ERROR
+  Line 56) wrappedNode.getParameters().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 56) wrappedNode.getParameters() ==> com.github.javaparser.ast.body.CallableDeclaration.getParameters()
   Line 61) this.classDeclaration.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
   Line 75) Helper.toAccessLevel(wrappedNode.getModifiers()) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.Helper.toAccessLevel(java.util.EnumSet<com.github.javaparser.ast.Modifier>)
