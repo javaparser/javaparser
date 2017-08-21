@@ -55,7 +55,7 @@ class JavassistUtils {
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         // consume one parametersOfReturnType at the time
-                        if (!(newReturnType instanceof VoidType)) {
+                        if (newReturnType instanceof ReferenceType && parametersOfReturnType.size() > 0) {
                             newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
                         }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
@@ -119,7 +119,8 @@ class JavassistUtils {
             }
             
             Type type = new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext);
-            if (!typeParameters.isEmpty() && !(type instanceof VoidType)) {
+
+            if (type instanceof ReferenceType && typeParameters.size() > 0) {
                 type = type.asReferenceType().transformTypeParameters(tp -> typeParameters.remove(0));
             }
             List<Type> types = new ArrayList<>();
@@ -133,14 +134,14 @@ class JavassistUtils {
     static Type signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
         if (signatureType instanceof SignatureAttribute.ClassType) {
             SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
-            List<Type> typeParameters = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
+            List<Type> typeArguments = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
             final String typeName =
                     classType.getDeclaringClass() != null ?
                             classType.getDeclaringClass().getName() + "." + classType.getName() :
                             classType.getName();
             ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
                     internalNameToCanonicalName(typeName));
-            return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
+            return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable)signatureType;
             Optional<TypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
@@ -158,7 +159,11 @@ class JavassistUtils {
     }
 
     private static String internalNameToCanonicalName(String typeName) {
-        return typeName.replaceAll("\\$", ".");
+        String canonicalName = typeName.replaceAll("\\$", ".");
+        if (canonicalName.contains("<")) {
+            canonicalName = canonicalName.substring(0, canonicalName.indexOf('<'));
+        }
+        return canonicalName;
     }
 
     private static Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {

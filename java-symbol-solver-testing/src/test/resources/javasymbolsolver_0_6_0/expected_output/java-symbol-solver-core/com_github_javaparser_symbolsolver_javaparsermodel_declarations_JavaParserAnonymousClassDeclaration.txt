@@ -1,7 +1,7 @@
   Line 37) UUID.randomUUID() ==> java.util.UUID.randomUUID()
-  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver).getCorrespondingDeclaration() ==> ERROR
-  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver) ==> ERROR
-  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver) ==> UNSOLVED
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver).getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver).solveType(wrappedNode.getType().getName().getId(), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 44) JavaParserFactory.getContext(wrappedNode.getParentNode().get(), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 44) wrappedNode.getParentNode().get() ==> java.util.Optional.get()
   Line 44) wrappedNode.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 45) wrappedNode.getType().getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
@@ -10,7 +10,7 @@
   Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())).map(node -> (T) node).collect(Collectors.toList()) ==> ERROR
   Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())).map(node -> (T) node) ==> ERROR
   Line 54) wrappedNode.getAnonymousClassBody().get().stream().filter(node -> memberClass.isAssignableFrom(node.getClass())) ==> ERROR
-  Line 54) wrappedNode.getAnonymousClassBody().get().stream() ==> UNSOLVED
+  Line 54) wrappedNode.getAnonymousClassBody().get().stream() ==> java.util.Collection.stream()
   Line 54) wrappedNode.getAnonymousClassBody().get() ==> java.util.Optional.get()
   Line 54) wrappedNode.getAnonymousClassBody() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getAnonymousClassBody()
   Line 58) memberClass.isAssignableFrom(node.getClass()) ==> ERROR

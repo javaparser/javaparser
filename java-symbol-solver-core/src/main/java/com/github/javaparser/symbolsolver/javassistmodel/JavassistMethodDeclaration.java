@@ -95,8 +95,15 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     @Override
     public Type getReturnType() {
         try {
-            return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
+            if (ctMethod.getGenericSignature() != null) {
+                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toMethodSignature(ctMethod.getGenericSignature()).getReturnType();
+                return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, this);
+            } else {
+                return JavassistFactory.typeUsageFor(ctMethod.getReturnType(), typeSolver);
+            }
         } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }

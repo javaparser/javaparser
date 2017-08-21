@@ -28,7 +28,7 @@
   Line 152) wrappedNode.getExtendedTypes().isEmpty() ==> com.github.javaparser.ast.NodeList.isEmpty()
   Line 152) wrappedNode.getExtendedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getExtendedTypes()
   Line 153) object() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration.object()
-  Line 155) toReferenceType(wrappedNode.getExtendedTypes().get(0)) ==> UNSOLVED
+  Line 155) toReferenceType(wrappedNode.getExtendedTypes().get(0)) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration.toReferenceType(com.github.javaparser.ast.type.ClassOrInterfaceType)
   Line 155) wrappedNode.getExtendedTypes().get(0) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 155) wrappedNode.getExtendedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getExtendedTypes()
   Line 162) wrappedNode.getImplementedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getImplementedTypes()
@@ -107,7 +107,7 @@
   Line 357) classOrInterfaceType.getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
   Line 358) classOrInterfaceType.getScope().isPresent() ==> java.util.Optional.isPresent()
   Line 358) classOrInterfaceType.getScope() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getScope()
-  Line 360) classOrInterfaceType.getScope().get().toString() ==> java.lang.Object.toString()
+  Line 360) classOrInterfaceType.getScope().get().toString() ==> com.github.javaparser.ast.Node.toString()
   Line 360) classOrInterfaceType.getScope().get() ==> java.util.Optional.get()
   Line 360) classOrInterfaceType.getScope() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getScope()
   Line 362) solveType(className, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
@@ -129,7 +129,7 @@
   Line 374) ref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 376) classOrInterfaceType.getTypeArguments().get().stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta))).collect(Collectors.toList()) ==> ERROR
   Line 376) classOrInterfaceType.getTypeArguments().get().stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta))) ==> ERROR
-  Line 376) classOrInterfaceType.getTypeArguments().get().stream() ==> UNSOLVED
+  Line 376) classOrInterfaceType.getTypeArguments().get().stream() ==> java.util.Collection.stream()
   Line 376) classOrInterfaceType.getTypeArguments().get() ==> java.util.Optional.get()
   Line 376) classOrInterfaceType.getTypeArguments() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getTypeArguments()
   Line 377) JavaParserFacade.get(typeSolver).convert(ta, ta) ==> ERROR

@@ -85,7 +85,7 @@
   Line 240) clazz.cast(node.getParentNode().get()) ==> java.lang.Class.cast(java.lang.Object)
   Line 240) node.getParentNode().get() ==> java.util.Optional.get()
   Line 240) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
-  Line 242) findAncestor(node.getParentNode().get(), clazz) ==> UNSOLVED
+  Line 242) findAncestor(node.getParentNode().get(), clazz) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.findAncestor(com.github.javaparser.ast.Node, java.lang.Class<N>)
   Line 242) node.getParentNode().get() ==> java.util.Optional.get()
   Line 242) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 251) qualifiedName.split("\\.", 2) ==> java.lang.String.split(java.lang.String, int)

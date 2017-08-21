@@ -1,6 +1,6 @@
   Line 64) wrappedNode.getScope().isPresent() ==> java.util.Optional.isPresent()
   Line 64) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()
-  Line 65) JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get()) ==> UNSOLVED
+  Line 65) JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get()) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(com.github.javaparser.ast.Node)
   Line 65) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 65) wrappedNode.getScope().get() ==> java.util.Optional.get()
   Line 65) wrappedNode.getScope() ==> com.github.javaparser.ast.expr.MethodCallExpr.getScope()

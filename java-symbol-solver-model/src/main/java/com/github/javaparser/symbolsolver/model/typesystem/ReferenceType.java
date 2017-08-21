@@ -53,20 +53,20 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         this(typeDeclaration, deriveParams(typeDeclaration), typeSolver);
     }
 
-    public ReferenceType(ReferenceTypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
+    public ReferenceType(ReferenceTypeDeclaration typeDeclaration, List<Type> typeArguments, TypeSolver typeSolver) {
         if (typeSolver == null) {
             throw new IllegalArgumentException("typeSolver should not be null");
         }
         if (typeDeclaration.isTypeParameter()) {
             throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
         }
-        if (typeParameters.size() > 0 && typeParameters.size() != typeDeclaration.getTypeParameters().size()) {
-            throw new IllegalArgumentException(String.format("expected either zero type parameters or has many as defined in the declaration (%d). Found %d",
-                    typeDeclaration.getTypeParameters().size(), typeParameters.size()));
+        if (typeArguments.size() > 0 && typeArguments.size() != typeDeclaration.getTypeParameters().size()) {
+            throw new IllegalArgumentException(String.format("expected either zero type arguments or has many as defined in the declaration (%d). Found %d",
+                    typeDeclaration.getTypeParameters().size(), typeArguments.size()));
         }
         TypeParametersMap.Builder typeParametersMapBuilder = new TypeParametersMap.Builder();
-        for (int i = 0; i < typeParameters.size(); i++) {
-            typeParametersMapBuilder.setValue(typeDeclaration.getTypeParameters().get(i), typeParameters.get(i));
+        for (int i = 0; i < typeArguments.size(); i++) {
+            typeParametersMapBuilder.setValue(typeDeclaration.getTypeParameters().get(i), typeArguments.get(i));
         }
         this.typeParametersMap = typeParametersMapBuilder.build();
         this.typeDeclaration = typeDeclaration;
