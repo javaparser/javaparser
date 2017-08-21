@@ -2,11 +2,11 @@
   Line 52) getParentNode(stmt) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 54) blockStmt.getStatements().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 54) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 55) blockStmt.getStatements().get(i).equals(stmt) ==> ERROR
-  Line 55) blockStmt.getStatements().get(i) ==> ERROR
+  Line 55) blockStmt.getStatements().get(i).equals(stmt) ==> com.github.javaparser.ast.Node.equals(java.lang.Object)
+  Line 55) blockStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 55) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 63) JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver) ==> ERROR
-  Line 63) blockStmt.getStatements().get(i) ==> ERROR
+  Line 63) JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 63) blockStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 63) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
   Line 64) solveWith(symbolDeclarator, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 65) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
@@ -17,11 +17,11 @@
   Line 78) getParentNode(stmt) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 80) blockStmt.getStatements().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 80) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 81) blockStmt.getStatements().get(i).equals(stmt) ==> ERROR
-  Line 81) blockStmt.getStatements().get(i) ==> ERROR
+  Line 81) blockStmt.getStatements().get(i).equals(stmt) ==> com.github.javaparser.ast.Node.equals(java.lang.Object)
+  Line 81) blockStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 81) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 89) JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver) ==> ERROR
-  Line 89) blockStmt.getStatements().get(i) ==> ERROR
+  Line 89) JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 89) blockStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 89) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
   Line 90) solveWith(symbolDeclarator, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 91) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
@@ -49,11 +49,11 @@
   Line 123) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 125) nodeWithStmt.getStatements().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 125) nodeWithStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 126) nodeWithStmt.getStatements().get(i).equals(wrappedNode) ==> ERROR
-  Line 126) nodeWithStmt.getStatements().get(i) ==> ERROR
+  Line 126) nodeWithStmt.getStatements().get(i).equals(wrappedNode) ==> com.github.javaparser.ast.Node.equals(java.lang.Object)
+  Line 126) nodeWithStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 126) nodeWithStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 134) JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver) ==> ERROR
-  Line 134) nodeWithStmt.getStatements().get(i) ==> ERROR
+  Line 134) JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 134) nodeWithStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 134) nodeWithStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
   Line 135) solveWithAsValue(symbolDeclarator, name, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWithAsValue(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 136) symbolReference.isPresent() ==> java.util.Optional.isPresent()
@@ -77,11 +77,11 @@
   Line 169) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 171) nodeWithStmt.getStatements().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 171) nodeWithStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 172) nodeWithStmt.getStatements().get(i).equals(wrappedNode) ==> ERROR
-  Line 172) nodeWithStmt.getStatements().get(i) ==> ERROR
+  Line 172) nodeWithStmt.getStatements().get(i).equals(wrappedNode) ==> com.github.javaparser.ast.Node.equals(java.lang.Object)
+  Line 172) nodeWithStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 172) nodeWithStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
-  Line 180) JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver) ==> ERROR
-  Line 180) nodeWithStmt.getStatements().get(i) ==> ERROR
+  Line 180) JavaParserFactory.getSymbolDeclarator(nodeWithStmt.getStatements().get(i), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getSymbolDeclarator(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 180) nodeWithStmt.getStatements().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 180) nodeWithStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
   Line 181) solveWith(symbolDeclarator, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 182) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()

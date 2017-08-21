@@ -1,7 +1,7 @@
   Line 41) wrappedNode.getVariable().getVariables().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 41) wrappedNode.getVariable().getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
   Line 41) wrappedNode.getVariable() ==> com.github.javaparser.ast.stmt.ForeachStmt.getVariable()
-  Line 44) wrappedNode.getVariable().getVariables().get(0) ==> ERROR
+  Line 44) wrappedNode.getVariable().getVariables().get(0) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 44) wrappedNode.getVariable().getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
   Line 44) wrappedNode.getVariable() ==> com.github.javaparser.ast.stmt.ForeachStmt.getVariable()
   Line 45) variableDeclarator.getName().getId().equals(name) ==> java.lang.String.equals(java.lang.Object)

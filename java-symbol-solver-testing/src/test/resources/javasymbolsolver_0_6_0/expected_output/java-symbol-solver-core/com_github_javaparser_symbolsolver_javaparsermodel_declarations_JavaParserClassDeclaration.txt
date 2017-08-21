@@ -28,8 +28,8 @@
   Line 152) wrappedNode.getExtendedTypes().isEmpty() ==> com.github.javaparser.ast.NodeList.isEmpty()
   Line 152) wrappedNode.getExtendedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getExtendedTypes()
   Line 153) object() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration.object()
-  Line 155) toReferenceType(wrappedNode.getExtendedTypes().get(0)) ==> ERROR
-  Line 155) wrappedNode.getExtendedTypes().get(0) ==> ERROR
+  Line 155) toReferenceType(wrappedNode.getExtendedTypes().get(0)) ==> UNSOLVED
+  Line 155) wrappedNode.getExtendedTypes().get(0) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 155) wrappedNode.getExtendedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getExtendedTypes()
   Line 162) wrappedNode.getImplementedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getImplementedTypes()
   Line 163) wrappedNode.getImplementedTypes() ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.getImplementedTypes()
