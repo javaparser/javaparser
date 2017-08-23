@@ -85,10 +85,10 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
         @Override
         public boolean equals(final Object obj) {
-            if (obj == null || !(obj instanceof Node)) {
+            if (obj == null || !(obj instanceof VisitorMap.EqualsHashcodeOverridingFacade)) {
                 return false;
             }
-            return overridden.accept(equalsVisitor, (Node) obj);
+            return overridden.accept(equalsVisitor, ((EqualsHashcodeOverridingFacade) obj).overridden);
         }
     }
 
