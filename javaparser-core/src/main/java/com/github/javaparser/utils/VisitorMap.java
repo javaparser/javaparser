@@ -99,7 +99,7 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public void putAll(Map<? extends N, ? extends V> m) {
-        innerMap.putAll(m);
+        m.forEach((key, value) -> this.put(key,value));
     }
 
     @Override
