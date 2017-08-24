@@ -43,7 +43,7 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        return innerMap.containsKey(key);
+        return innerMap.containsKey(new EqualsHashcodeOverridingFacade((N) key));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public V get(Object key) {
-        return (V) innerMap.get(key);
+        return (V) innerMap.get(new EqualsHashcodeOverridingFacade((N) key));
     }
 
     @Override
@@ -85,10 +85,10 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
         @Override
         public boolean equals(final Object obj) {
-            if (obj == null || !(obj instanceof Node)) {
+            if (obj == null || !(obj instanceof VisitorMap.EqualsHashcodeOverridingFacade)) {
                 return false;
             }
-            return overridden.accept(equalsVisitor, (Node) obj);
+            return overridden.accept(equalsVisitor, ((EqualsHashcodeOverridingFacade) obj).overridden);
         }
     }
 
