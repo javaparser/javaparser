@@ -161,6 +161,11 @@ final class GeneratedJavaParser {
     public void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
+
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        token_source.setStoreTokens(storeTokens);
+    }
 }
 
 PARSER_END(GeneratedJavaParser)
@@ -208,6 +213,7 @@ TOKEN_MGR_DECLS :
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
     private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
+    private boolean storeTokens;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -215,15 +221,24 @@ TOKEN_MGR_DECLS :
     }
 
     List<JavaToken> getTokens() {
-        return tokens;
+        if(storeTokens) {
+            return tokens;
+        }
+        return null;
     }
 
     CommentsCollection getCommentsCollection() {
         return commentsCollection;
     }
 
+    /* Get the very first token in the file */
     JavaToken getHomeToken() {
         return homeToken;
+    }
+
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        this.storeTokens = storeTokens;
     }
 
     private void CommonTokenAction(Token rawToken) {
@@ -238,7 +253,9 @@ TOKEN_MGR_DECLS :
         while(!tokenWorkStack.empty()) {
             token = tokenWorkStack.pop();
             token.javaToken = new JavaToken(token, tokens);
-            tokens.add(token.javaToken);
+            if(storeTokens) {
+                tokens.add(token.javaToken);
+            }
             if (homeToken == null) {
                 homeToken = token.javaToken;
             }
