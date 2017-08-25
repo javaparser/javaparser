@@ -152,7 +152,11 @@ class JavassistUtils {
             return new TypeVariable(typeParameterDeclaration);
         } else if (signatureType instanceof SignatureAttribute.BaseType) {
             SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType)signatureType;
-            return PrimitiveType.byName(baseType.toString());
+            if (baseType.toString().equals("void")) {
+                return VoidType.INSTANCE;
+            } else {
+                return PrimitiveType.byName(baseType.toString());
+            }
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
