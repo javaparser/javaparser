@@ -307,16 +307,16 @@
   Line 458) type.isReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isReferenceType()
   Line 459) type.asReferenceType().getTypeParametersMap() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeParametersMap()
   Line 459) type.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 460) entry._1.declaredOnType() ==> UNSOLVED
-  Line 460) scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent() ==> ERROR
-  Line 460) scope.asReferenceType().getGenericParameterByName(entry._1.getName()) ==> ERROR
+  Line 460) entry._1.declaredOnType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnType()
+  Line 460) scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent() ==> java.util.Optional.isPresent()
+  Line 460) scope.asReferenceType().getGenericParameterByName(entry._1.getName()) ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getGenericParameterByName(java.lang.String)
   Line 460) scope.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 460) entry._1.getName() ==> UNSOLVED
-  Line 461) type.replaceTypeVariables(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get(), inferredTypes) ==> ERROR
-  Line 461) scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get() ==> ERROR
-  Line 461) scope.asReferenceType().getGenericParameterByName(entry._1.getName()) ==> ERROR
+  Line 460) entry._1.getName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getName()
+  Line 461) type.replaceTypeVariables(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get(), inferredTypes) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.replaceTypeVariables(com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type, java.util.Map<com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type>)
+  Line 461) scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get() ==> java.util.Optional.get()
+  Line 461) scope.asReferenceType().getGenericParameterByName(entry._1.getName()) ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getGenericParameterByName(java.lang.String)
   Line 461) scope.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 461) entry._1.getName() ==> UNSOLVED
+  Line 461) entry._1.getName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.getName()
   Line 471) inferredTypes.keySet() ==> java.util.Map.keySet()
   Line 472) type.replaceTypeVariables(tp, inferredTypes.get(tp), inferredTypes) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.replaceTypeVariables(com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type, java.util.Map<com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type>)
   Line 472) inferredTypes.get(tp) ==> java.util.Map.get(java.lang.Object)

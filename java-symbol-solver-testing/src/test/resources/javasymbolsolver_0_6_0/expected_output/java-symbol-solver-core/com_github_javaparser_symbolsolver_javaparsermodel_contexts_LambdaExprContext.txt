@@ -44,13 +44,13 @@
   Line 113) lambdaType.isReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isReferenceType()
   Line 114) lambdaType.asReferenceType().getTypeParametersMap() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getTypeParametersMap()
   Line 114) lambdaType.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 115) entry._2.isTypeVariable() ==> UNSOLVED
-  Line 115) entry._2.asTypeParameter().declaredOnType() ==> ERROR
-  Line 115) entry._2.asTypeParameter() ==> UNSOLVED
-  Line 116) t.asReferenceType().typeParametersMap().getValue(entry._1) ==> UNSOLVED
+  Line 115) entry._2.isTypeVariable() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isTypeVariable()
+  Line 115) entry._2.asTypeParameter().declaredOnType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnType()
+  Line 115) entry._2.asTypeParameter() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asTypeParameter()
+  Line 116) t.asReferenceType().typeParametersMap().getValue(entry._1) ==> com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParametersMap.getValue(com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration)
   Line 116) t.asReferenceType().typeParametersMap() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.typeParametersMap()
   Line 116) t.asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
-  Line 117) lambdaType.replaceTypeVariables(entry._1, ot, inferredTypes) ==> UNSOLVED
+  Line 117) lambdaType.replaceTypeVariables(entry._1, ot, inferredTypes) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.replaceTypeVariables(com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type, java.util.Map<com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type>)
   Line 120) lambdaType.isTypeVariable() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.isTypeVariable()
   Line 120) lambdaType.asTypeParameter().declaredOnType() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.declaredOnType()
   Line 120) lambdaType.asTypeParameter() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asTypeParameter()
