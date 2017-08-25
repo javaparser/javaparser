@@ -154,12 +154,12 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ReferenceType getSpecifiedException(int index) {
+    public Type getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
                     index, getNumberOfSpecifiedExceptions()));
         }
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getThrownExceptions()
-                .get(index), wrappedNode).asReferenceType();
+                .get(index), wrappedNode);
     }
 }

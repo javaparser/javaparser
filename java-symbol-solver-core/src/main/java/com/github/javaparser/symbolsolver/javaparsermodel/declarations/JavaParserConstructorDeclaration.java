@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,13 +89,12 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public ReferenceType getSpecifiedException(int index) {
+    public Type getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
                     index, getNumberOfSpecifiedExceptions()));
         }
         return JavaParserFacade.get(typeSolver)
-                .convert(wrappedNode.getThrownExceptions().get(index), wrappedNode)
-                .asReferenceType();
+                .convert(wrappedNode.getThrownExceptions().get(index), wrappedNode);
     }
 }

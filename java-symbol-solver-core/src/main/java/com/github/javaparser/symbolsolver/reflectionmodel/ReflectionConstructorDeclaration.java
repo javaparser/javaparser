@@ -18,7 +18,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -82,10 +82,10 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public ReferenceType getSpecifiedException(int index) {
+    public Type getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException();
         }
-        return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver).asReferenceType();
+        return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver);
     }
 }

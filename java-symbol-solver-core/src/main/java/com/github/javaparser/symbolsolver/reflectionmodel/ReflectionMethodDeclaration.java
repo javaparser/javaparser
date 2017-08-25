@@ -139,10 +139,10 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ReferenceType getSpecifiedException(int index) {
+    public Type getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException();
         }
-        return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver).asReferenceType();
+        return ReflectionFactory.typeUsageFor(this.method.getExceptionTypes()[index], typeSolver);
     }
 }

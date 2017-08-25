@@ -181,13 +181,13 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ReferenceType getSpecifiedException(int index) {
+    public Type getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
                     index, getNumberOfSpecifiedExceptions()));
         }
         try {
-            return JavassistFactory.typeUsageFor(ctMethod.getExceptionTypes()[index], typeSolver).asReferenceType();
+            return JavassistFactory.typeUsageFor(ctMethod.getExceptionTypes()[index], typeSolver);
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
