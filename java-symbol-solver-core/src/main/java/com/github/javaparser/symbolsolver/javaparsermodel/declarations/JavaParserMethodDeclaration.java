@@ -155,6 +155,11 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
 
     @Override
     public ReferenceType getSpecifiedException(int index) {
-        return JavaParserFacade.get(typeSolver).convert(wrappedNode.getThrownExceptions().get(index), wrappedNode).asReferenceType();
+        if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
+            throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
+                    index, getNumberOfSpecifiedExceptions()));
+        }
+        return JavaParserFacade.get(typeSolver).convert(wrappedNode.getThrownExceptions()
+                .get(index), wrappedNode).asReferenceType();
     }
 }
