@@ -27,7 +27,7 @@ jobs:
               ($TRAVIS_PULL_REQUEST == false) ]] ; then
           curl -LO https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
           SLUGOWNER=${TRAVIS_REPO_SLUG%/*}
-          sh trigger-travis.sh ${SLUGOWNER} checker-framework $TRAVISTOKEN
+          sh trigger-travis.sh ${SLUGOWNER} checker-framework $TRAVIS_ACCESS_TOKEN
         fi
 
 git:
