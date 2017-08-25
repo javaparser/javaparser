@@ -166,6 +166,58 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
     List<Bound> getBounds(TypeSolver typeSolver);
 
     /**
+     * Has the type parameter a lower bound?
+     */
+    default boolean hasLowerBound(TypeSolver typeSolver) {
+        for (Bound b : getBounds(typeSolver)) {
+            if (b.isExtends()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Has the type parameter an upper bound?
+     */
+    default boolean hasUpperBound(TypeSolver typeSolver) {
+        for (Bound b : getBounds(typeSolver)) {
+            if (b.isSuper()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the type used as lower bound.
+     *
+     * @throws IllegalStateException if there is no lower bound
+     */
+    default Type getLowerBound(TypeSolver typeSolver) {
+        for (Bound b : getBounds(typeSolver)) {
+            if (b.isExtends()) {
+                return b.getType();
+            }
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
+     * Get the type used as upper bound.
+     *
+     * @throws IllegalStateException if there is no upper bound
+     */
+    default Type getUpperBound(TypeSolver typeSolver) {
+        for (Bound b : getBounds(typeSolver)) {
+            if (b.isSuper()) {
+                return b.getType();
+            }
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
      * A Bound on a Type Parameter.
      */
     class Bound {
@@ -216,6 +268,32 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
          */
         public boolean isSuper() {
             return !isExtends();
+        }
+
+        @Override
+        public String toString() {
+            return "Bound{" +
+                    "extendsBound=" + extendsBound +
+                    ", type=" + type +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Bound bound = (Bound) o;
+
+            if (extendsBound != bound.extendsBound) return false;
+            return type != null ? type.equals(bound.type) : bound.type == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (extendsBound ? 1 : 0);
+            result = 31 * result + (type != null ? type.hashCode() : 0);
+            return result;
         }
     }
 

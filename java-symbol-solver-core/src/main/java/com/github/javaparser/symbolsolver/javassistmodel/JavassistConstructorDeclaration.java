@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import javassist.CtConstructor;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -118,5 +119,23 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     @Override
     public AccessLevel accessLevel() {
         return JavassistFactory.modifiersToAccessLevel(ctConstructor.getModifiers());
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        try {
+            return ctConstructor.getExceptionTypes().length;
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ReferenceType getSpecifiedException(int index) {
+        try {
+            return JavassistFactory.typeUsageFor(ctConstructor.getExceptionTypes()[index], typeSolver).asReferenceType();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

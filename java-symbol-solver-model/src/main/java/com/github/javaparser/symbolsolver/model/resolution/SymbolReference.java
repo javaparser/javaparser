@@ -45,7 +45,7 @@ public class SymbolReference<S extends Declaration> {
      * Create an unsolved reference specifying the type of the value expected.
      */
     public static <S extends Declaration, S2 extends S> SymbolReference<S> unsolved(Class<S2> clazz) {
-        return new SymbolReference<S>(Optional.<S>empty());
+        return new SymbolReference<>(Optional.empty());
     }
 
     @Override

@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.model.typesystem;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**

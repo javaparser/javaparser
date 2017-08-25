@@ -17,6 +17,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.util.Collections;
 import java.util.List;
@@ -60,5 +62,15 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        return 0;
+    }
+
+    @Override
+    public ReferenceType getSpecifiedException(int index) {
+        throw new IllegalArgumentException();
     }
 }

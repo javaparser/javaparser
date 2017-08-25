@@ -16,8 +16,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,5 +81,15 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        return wrappedNode.getThrownExceptions().size();
+    }
+
+    @Override
+    public ReferenceType getSpecifiedException(int index) {
+        return JavaParserFacade.get(typeSolver).convert(wrappedNode.getThrownExceptions().get(index), wrappedNode).asReferenceType();
     }
 }

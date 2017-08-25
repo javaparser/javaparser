@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -73,5 +74,18 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        return this.constructor.getExceptionTypes().length;
+    }
+
+    @Override
+    public ReferenceType getSpecifiedException(int index) {
+        if (index >= getNumberOfSpecifiedExceptions()) {
+            throw new IllegalArgumentException();
+        }
+        return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver).asReferenceType();
     }
 }

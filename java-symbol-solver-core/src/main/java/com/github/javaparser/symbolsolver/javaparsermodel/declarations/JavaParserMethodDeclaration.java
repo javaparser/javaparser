@@ -25,6 +25,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
@@ -145,5 +146,15 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     @Override
     public AccessLevel accessLevel() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        return wrappedNode.getThrownExceptions().size();
+    }
+
+    @Override
+    public ReferenceType getSpecifiedException(int index) {
+        return JavaParserFacade.get(typeSolver).convert(wrappedNode.getThrownExceptions().get(index), wrappedNode).asReferenceType();
     }
 }
