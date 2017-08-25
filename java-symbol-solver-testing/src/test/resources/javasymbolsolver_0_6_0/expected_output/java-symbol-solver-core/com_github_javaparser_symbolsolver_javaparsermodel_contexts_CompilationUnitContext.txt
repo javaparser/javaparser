@@ -57,8 +57,8 @@
   Line 160) SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.adapt(com.github.javaparser.symbolsolver.model.resolution.SymbolReference<? extends O>, java.lang.Class<O>)
   Line 167) this.wrappedNode.getPackageDeclaration().isPresent() ==> java.util.Optional.isPresent()
   Line 167) this.wrappedNode.getPackageDeclaration() ==> com.github.javaparser.ast.CompilationUnit.getPackageDeclaration()
-  Line 168) this.wrappedNode.getPackageDeclaration().get().getName().toString() ==> ERROR
-  Line 168) this.wrappedNode.getPackageDeclaration().get().getName() ==> UNSOLVED
+  Line 168) this.wrappedNode.getPackageDeclaration().get().getName().toString() ==> com.github.javaparser.ast.Node.toString()
+  Line 168) this.wrappedNode.getPackageDeclaration().get().getName() ==> com.github.javaparser.ast.PackageDeclaration.getName()
   Line 168) this.wrappedNode.getPackageDeclaration().get() ==> java.util.Optional.get()
   Line 168) this.wrappedNode.getPackageDeclaration() ==> com.github.javaparser.ast.CompilationUnit.getPackageDeclaration()
   Line 169) typeSolver.tryToSolveType(qName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
@@ -76,7 +76,7 @@
   Line 192) SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
   Line 197) type.getScope().isPresent() ==> java.util.Optional.isPresent()
   Line 197) type.getScope() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getScope()
-  Line 198) qName(type.getScope().get()) ==> UNSOLVED
+  Line 198) qName(type.getScope().get()) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.qName(com.github.javaparser.ast.type.ClassOrInterfaceType)
   Line 198) type.getScope().get() ==> java.util.Optional.get()
   Line 198) type.getScope() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getScope()
   Line 198) type.getName().getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
@@ -85,7 +85,7 @@
   Line 200) type.getName() ==> com.github.javaparser.ast.type.ClassOrInterfaceType.getName()
   Line 205) name.getQualifier().isPresent() ==> java.util.Optional.isPresent()
   Line 205) name.getQualifier() ==> com.github.javaparser.ast.expr.Name.getQualifier()
-  Line 206) qName(name.getQualifier().get()) ==> UNSOLVED
+  Line 206) qName(name.getQualifier().get()) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.qName(com.github.javaparser.ast.expr.Name)
   Line 206) name.getQualifier().get() ==> java.util.Optional.get()
   Line 206) name.getQualifier() ==> com.github.javaparser.ast.expr.Name.getQualifier()
   Line 206) name.getId() ==> com.github.javaparser.ast.nodeTypes.NodeWithIdentifier.getId()
@@ -99,9 +99,9 @@
   Line 231) importDecl.getNameAsString() ==> com.github.javaparser.ast.nodeTypes.NodeWithName.getNameAsString()
   Line 233) this.wrappedNode.getPackageDeclaration().isPresent() ==> java.util.Optional.isPresent()
   Line 233) this.wrappedNode.getPackageDeclaration() ==> com.github.javaparser.ast.CompilationUnit.getPackageDeclaration()
-  Line 234) this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier().equals(packageName(importString)) ==> ERROR
-  Line 234) this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier() ==> ERROR
-  Line 234) this.wrappedNode.getPackageDeclaration().get().getName() ==> UNSOLVED
+  Line 234) this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier().equals(packageName(importString)) ==> java.lang.String.equals(java.lang.Object)
+  Line 234) this.wrappedNode.getPackageDeclaration().get().getName().getIdentifier() ==> com.github.javaparser.ast.expr.Name.getIdentifier()
+  Line 234) this.wrappedNode.getPackageDeclaration().get().getName() ==> com.github.javaparser.ast.PackageDeclaration.getName()
   Line 234) this.wrappedNode.getPackageDeclaration().get() ==> java.util.Optional.get()
   Line 234) this.wrappedNode.getPackageDeclaration() ==> com.github.javaparser.ast.CompilationUnit.getPackageDeclaration()
   Line 234) packageName(importString) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.packageName(java.lang.String)

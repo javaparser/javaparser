@@ -4,13 +4,13 @@
   Line 84) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 84) node.getParentNode().get() ==> java.util.Optional.get()
   Line 84) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
-  Line 84) node.getParentNode().get().getParentNode().isPresent() ==> ERROR
-  Line 84) node.getParentNode().get().getParentNode() ==> UNSOLVED
+  Line 84) node.getParentNode().get().getParentNode().isPresent() ==> java.util.Optional.isPresent()
+  Line 84) node.getParentNode().get().getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 84) node.getParentNode().get() ==> java.util.Optional.get()
   Line 84) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
-  Line 85) getContext(node.getParentNode().get().getParentNode().get(), typeSolver) ==> ERROR
-  Line 85) node.getParentNode().get().getParentNode().get() ==> ERROR
-  Line 85) node.getParentNode().get().getParentNode() ==> UNSOLVED
+  Line 85) getContext(node.getParentNode().get().getParentNode().get(), typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
+  Line 85) node.getParentNode().get().getParentNode().get() ==> java.util.Optional.get()
+  Line 85) node.getParentNode().get().getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 85) node.getParentNode().get() ==> java.util.Optional.get()
   Line 85) node.getParentNode() ==> com.github.javaparser.ast.Node.getParentNode()
   Line 88) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)

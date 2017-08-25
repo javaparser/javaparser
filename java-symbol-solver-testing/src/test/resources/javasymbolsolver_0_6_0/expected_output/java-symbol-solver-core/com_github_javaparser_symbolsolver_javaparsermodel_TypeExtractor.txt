@@ -121,7 +121,7 @@
   Line 293) node.getType() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getType()
   Line 300) node.getClassExpr().isPresent() ==> java.util.Optional.isPresent()
   Line 300) node.getClassExpr() ==> com.github.javaparser.ast.expr.ThisExpr.getClassExpr()
-  Line 302) node.getClassExpr().get().toString() ==> java.lang.Object.toString()
+  Line 302) node.getClassExpr().get().toString() ==> com.github.javaparser.ast.Node.toString()
   Line 302) node.getClassExpr().get() ==> java.util.Optional.get()
   Line 302) node.getClassExpr() ==> com.github.javaparser.ast.expr.ThisExpr.getClassExpr()
   Line 304) typeSolver.tryToSolveType(className) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.tryToSolveType(java.lang.String)
@@ -150,7 +150,7 @@
   Line 345) node.getOperator() ==> com.github.javaparser.ast.expr.UnaryExpr.getOperator()
   Line 351) node.getVariables().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 351) node.getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
-  Line 354) facade.convertToUsageVariableType(node.getVariables().get(0)) ==> UNSOLVED
+  Line 354) facade.convertToUsageVariableType(node.getVariables().get(0)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsageVariableType(com.github.javaparser.ast.body.VariableDeclarator)
   Line 354) node.getVariables().get(0) ==> com.github.javaparser.ast.NodeList.get(int)
   Line 354) node.getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
   Line 360) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)

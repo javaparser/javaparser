@@ -58,8 +58,8 @@ public class ReferenceTypeImpl extends ReferenceType {
         super(typeDeclaration, typeSolver);
     }
 
-    public ReferenceTypeImpl(ReferenceTypeDeclaration typeDeclaration, List<Type> typeParameters, TypeSolver typeSolver) {
-        super(typeDeclaration, typeParameters, typeSolver);
+    public ReferenceTypeImpl(ReferenceTypeDeclaration typeDeclaration, List<Type> typeArguments, TypeSolver typeSolver) {
+        super(typeDeclaration, typeArguments, typeSolver);
     }
 
     @Override

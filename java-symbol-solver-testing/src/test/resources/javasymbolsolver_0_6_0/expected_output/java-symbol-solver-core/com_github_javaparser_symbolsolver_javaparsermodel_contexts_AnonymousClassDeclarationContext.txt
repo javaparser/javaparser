@@ -63,8 +63,8 @@
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)).findFirst().map(matchingType -> SymbolReference.solved(new JavaParserTypeParameter(new TypeParameter(matchingType.toString()), typeSolver))) ==> ERROR
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)).findFirst() ==> ERROR
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream().filter(type -> type.toString().equals(name)) ==> ERROR
-  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream() ==> ERROR
-  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()) ==> ERROR
+  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()).stream() ==> java.util.Collection.stream()
+  Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())).orElse(new NodeList<>()) ==> java.util.Optional.orElse(T)
   Line 135) wrappedNode.getTypeArguments().map(nodes -> ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>())) ==> java.util.Optional.map(java.util.function.Function<? super T, ? extends U>)
   Line 135) wrappedNode.getTypeArguments() ==> com.github.javaparser.ast.expr.ObjectCreationExpr.getTypeArguments()
   Line 138) ((NodeWithTypeArguments<?>) nodes).getTypeArguments().orElse(new NodeList<>()) ==> java.util.Optional.orElse(T)
