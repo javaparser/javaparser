@@ -7,7 +7,7 @@
   Line 62) facade.convertToUsageVariableType(node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsageVariableType(com.github.javaparser.ast.body.VariableDeclarator)
   Line 63) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 65) facade.convertToUsageVariableType(node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.convertToUsageVariableType(com.github.javaparser.ast.body.VariableDeclarator)
-  Line 67) getParentNode(node).getClass().getCanonicalName() ==> ERROR
+  Line 67) getParentNode(node).getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 67) getParentNode(node).getClass() ==> java.lang.Object.getClass()
   Line 67) getParentNode(node) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 73) node.getType() ==> com.github.javaparser.ast.body.Parameter.getType()
@@ -22,7 +22,7 @@
   Line 91) JavaParserFactory.getContext(node, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 92) node.getLevels().size() ==> com.github.javaparser.ast.NodeList.size()
   Line 92) node.getLevels() ==> com.github.javaparser.ast.expr.ArrayCreationExpr.getLevels()
-  Line 100) node.getClass().getCanonicalName() ==> ERROR
+  Line 100) node.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 100) node.getClass() ==> java.lang.Object.getClass()
   Line 105) node.getTarget().accept(this, solveLambdas) ==> com.github.javaparser.ast.visitor.Visitable.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
   Line 105) node.getTarget() ==> com.github.javaparser.ast.expr.AssignExpr.getTarget()
@@ -139,7 +139,7 @@
   Line 323) facade.getTypeDeclaration(facade.findContainingTypeDecl(node)) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?>)
   Line 323) facade.findContainingTypeDecl(node) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.findContainingTypeDecl(com.github.javaparser.ast.Node)
   Line 325) ((ClassDeclaration) typeOfNode).getSuperClass() ==> com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration.getSuperClass()
-  Line 327) node.getClass().getCanonicalName() ==> ERROR
+  Line 327) node.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 327) node.getClass() ==> java.lang.Object.getClass()
   Line 333) node.getOperator() ==> com.github.javaparser.ast.expr.UnaryExpr.getOperator()
   Line 336) node.getExpression().accept(this, solveLambdas) ==> com.github.javaparser.ast.visitor.Visitable.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)

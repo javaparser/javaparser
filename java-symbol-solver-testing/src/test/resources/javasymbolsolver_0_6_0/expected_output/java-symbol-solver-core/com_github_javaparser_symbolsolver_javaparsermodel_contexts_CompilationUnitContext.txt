@@ -30,7 +30,7 @@
   Line 116) JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeDeclaration(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration)
   Line 116) JavaParserFacade.get(typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.get(com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 118) SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration) type, typeSolver)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
-  Line 120) type.getClass().getCanonicalName() ==> ERROR
+  Line 120) type.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 120) type.getClass() ==> java.lang.Object.getClass()
   Line 126) wrappedNode.getImports() ==> com.github.javaparser.ast.CompilationUnit.getImports()
   Line 127) name.indexOf('.') ==> java.lang.String.indexOf(int)
@@ -106,7 +106,7 @@
   Line 234) this.wrappedNode.getPackageDeclaration() ==> com.github.javaparser.ast.CompilationUnit.getPackageDeclaration()
   Line 234) packageName(importString) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext.packageName(java.lang.String)
   Line 235) this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString))) ==> ERROR
-  Line 235) this.wrappedNode.getTypes().stream() ==> ERROR
+  Line 235) this.wrappedNode.getTypes().stream() ==> java.util.Collection.stream()
   Line 235) this.wrappedNode.getTypes() ==> com.github.javaparser.ast.CompilationUnit.getTypes()
   Line 235) it.getName().getIdentifier().equals(toSimpleName(importString)) ==> ERROR
   Line 235) it.getName().getIdentifier() ==> ERROR

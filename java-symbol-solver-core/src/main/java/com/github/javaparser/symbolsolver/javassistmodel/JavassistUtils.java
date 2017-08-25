@@ -104,14 +104,26 @@ class JavassistUtils {
             if (signature.contains(",")) {
                 throw new UnsupportedOperationException();
             }
+            if (signature.startsWith("?")) {
+                // TODO: check bounds
+                List<Type> types = new ArrayList<>();
+                types.add(Wildcard.UNBOUNDED);
+                return types;
+            }
+            List<Type> typeParameters = parseTypeParameters(signature, typeSolver, invokationContext);
             if (signature.contains("<")) {
-                throw new UnsupportedOperationException(originalSignature);
+                signature = signature.substring(0, signature.indexOf('<'));
             }
             if (signature.contains(">")) {
                 throw new UnsupportedOperationException();
             }
+            
+            Type type = new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext);
+            if (!typeParameters.isEmpty() && !(type instanceof VoidType)) {
+                type = type.asReferenceType().transformTypeParameters(tp -> typeParameters.remove(0));
+            }
             List<Type> types = new ArrayList<>();
-            types.add(new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext));
+            types.add(type);
             return types;
         } else {
             return Collections.emptyList();

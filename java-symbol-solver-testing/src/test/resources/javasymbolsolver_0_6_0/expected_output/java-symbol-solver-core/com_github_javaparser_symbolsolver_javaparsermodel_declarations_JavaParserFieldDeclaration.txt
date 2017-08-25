@@ -1,5 +1,5 @@
   Line 51) getParentNode(variableDeclarator) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
-  Line 52) getParentNode(variableDeclarator).getClass().getCanonicalName() ==> ERROR
+  Line 52) getParentNode(variableDeclarator).getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 52) getParentNode(variableDeclarator).getClass() ==> java.lang.Object.getClass()
   Line 52) getParentNode(variableDeclarator) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 54) getParentNode(variableDeclarator) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)

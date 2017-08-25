@@ -19,7 +19,7 @@
   Line 101) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 102) JavaParserFactory.getContext(type, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 104) ref.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
-  Line 106) type.getClass().getCanonicalName() ==> ERROR
+  Line 106) type.getClass().getCanonicalName() ==> java.lang.Class.getCanonicalName()
   Line 106) type.getClass() ==> java.lang.Object.getClass()
   Line 111) context.solveGenericType(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveGenericType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 112) genericType.isPresent() ==> java.util.Optional.isPresent()
