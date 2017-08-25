@@ -18,12 +18,14 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
+ * This represents the default construction added by the compiler for objects not declaring one.
+ * It takes no parameters.
+ *
  * @author Federico Tomassetti
  */
 class DefaultConstructorDeclaration implements ConstructorDeclaration {
@@ -46,7 +48,7 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("The default constructor has not parameters");
     }
 
     @Override
@@ -71,6 +73,6 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public ReferenceType getSpecifiedException(int index) {
-        throw new IllegalArgumentException();
+        throw new UnsupportedOperationException("The default constructor does not throw exceptions");
     }
 }
