@@ -52,7 +52,7 @@
   Line 122) name.startsWith(String.format("%s.", internalType.getName())) ==> java.lang.String.startsWith(java.lang.String)
   Line 122) String.format("%s.", internalType.getName()) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
   Line 122) internalType.getName() ==> com.github.javaparser.ast.body.TypeDeclaration.getName()
-  Line 125) JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeSolver) ==> ERROR
+  Line 125) JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveType(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 125) JavaParserFactory.getContext(internalType, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
   Line 127) name.substring(internalType.getName().getId().length() + 1) ==> java.lang.String.substring(int)
   Line 127) internalType.getName().getId().length() ==> java.lang.String.length()

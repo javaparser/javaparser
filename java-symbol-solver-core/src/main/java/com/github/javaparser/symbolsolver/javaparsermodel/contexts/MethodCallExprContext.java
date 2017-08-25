@@ -401,15 +401,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     actualType.asArrayType().getComponentType(),
                     matchedTypeParameters);
         } else if (expectedType.isReferenceType()) {
-            // avoid cases such as: "classX extends classY<Integer>"
-            if (actualType.asReferenceType().typeParametersValues().size() > 0) {
+            // avoid cases where the actual type has no type parameters but the expected one has. Such as: "classX extends classY<Integer>"
+            if (actualType.isReferenceType() && actualType.asReferenceType().typeParametersValues().size() > 0) {
                 int i = 0;
                 for (Type tp : expectedType.asReferenceType().typeParametersValues()) {
                     matchTypeParameters(tp, actualType.asReferenceType().typeParametersValues().get(i), matchedTypeParameters);
                     i++;
                 }
             }
-
         } else if (expectedType.isPrimitive()) {
             // nothing to do
         } else if (expectedType.isWildcard()) {

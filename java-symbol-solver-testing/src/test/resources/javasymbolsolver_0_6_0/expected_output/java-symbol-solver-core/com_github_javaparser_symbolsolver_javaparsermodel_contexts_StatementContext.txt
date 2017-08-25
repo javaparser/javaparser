@@ -25,7 +25,7 @@
   Line 89) blockStmt.getStatements() ==> com.github.javaparser.ast.nodeTypes.NodeWithStatements.getStatements()
   Line 90) solveWith(symbolDeclarator, name) ==> com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.solveWith(com.github.javaparser.symbolsolver.resolution.SymbolDeclarator, java.lang.String)
   Line 91) symbolReference.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
-  Line 92) Optional.of(Value.from(symbolReference.getCorrespondingDeclaration())) ==> ERROR
+  Line 92) Optional.of(Value.from(symbolReference.getCorrespondingDeclaration())) ==> java.util.Optional.of(T)
   Line 92) Value.from(symbolReference.getCorrespondingDeclaration()) ==> com.github.javaparser.symbolsolver.model.resolution.Value.from(com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration)
   Line 92) symbolReference.getCorrespondingDeclaration() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.getCorrespondingDeclaration()
   Line 97) JavaParserFactory.getContext(getParentNode(stmt), typeSolver).solveSymbolAsValue(name, typeSolver) ==> com.github.javaparser.symbolsolver.core.resolution.Context.solveSymbolAsValue(java.lang.String, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

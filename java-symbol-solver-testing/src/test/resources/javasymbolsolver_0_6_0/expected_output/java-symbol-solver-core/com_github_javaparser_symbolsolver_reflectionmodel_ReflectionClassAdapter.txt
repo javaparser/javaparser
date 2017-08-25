@@ -1,6 +1,6 @@
   Line 36) clazz.getGenericSuperclass() ==> java.lang.Class.getGenericSuperclass()
   Line 39) clazz.getGenericSuperclass() ==> java.lang.Class.getGenericSuperclass()
-  Line 42) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 42) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 42) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 42) Arrays.stream(parameterizedType.getActualTypeArguments()) ==> java.util.Arrays.stream(T[])
   Line 42) parameterizedType.getActualTypeArguments() ==> java.lang.reflect.ParameterizedType.getActualTypeArguments()
@@ -9,7 +9,7 @@
   Line 45) clazz.getSuperclass() ==> java.lang.Class.getSuperclass()
   Line 47) clazz.getSuperclass() ==> java.lang.Class.getSuperclass()
   Line 52) clazz.getGenericInterfaces() ==> java.lang.Class.getGenericInterfaces()
-  Line 55) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 55) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 55) Arrays.stream(parameterizedType.getActualTypeArguments()).map((t) -> ReflectionFactory.typeUsageFor(t, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 55) Arrays.stream(parameterizedType.getActualTypeArguments()) ==> java.util.Arrays.stream(T[])
   Line 55) parameterizedType.getActualTypeArguments() ==> java.lang.reflect.ParameterizedType.getActualTypeArguments()

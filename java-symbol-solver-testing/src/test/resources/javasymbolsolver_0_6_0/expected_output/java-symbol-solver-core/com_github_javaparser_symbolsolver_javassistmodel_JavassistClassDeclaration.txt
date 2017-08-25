@@ -94,11 +94,11 @@
   Line 306) Collectors.toList() ==> java.util.stream.Collectors.toList()
   Line 308) SignatureAttribute.toClassSignature(ctClass.getGenericSignature()) ==> javassist.bytecode.SignatureAttribute.toClassSignature(java.lang.String)
   Line 308) ctClass.getGenericSignature() ==> javassist.CtClass.getGenericSignature()
-  Line 309) Arrays.stream(classSignature.getInterfaces()).map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType()).collect(Collectors.toList()) ==> ERROR
+  Line 309) Arrays.stream(classSignature.getInterfaces()).map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType()).collect(Collectors.toList()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 309) Arrays.stream(classSignature.getInterfaces()).map(i -> JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType()) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 309) Arrays.stream(classSignature.getInterfaces()) ==> java.util.Arrays.stream(T[])
   Line 309) classSignature.getInterfaces() ==> javassist.bytecode.SignatureAttribute.ClassSignature.getInterfaces()
-  Line 310) JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType() ==> ERROR
+  Line 310) JavassistUtils.signatureTypeToType(i, typeSolver, this).asReferenceType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asReferenceType()
   Line 310) JavassistUtils.signatureTypeToType(i, typeSolver, this) ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistUtils.signatureTypeToType(javassist.bytecode.SignatureAttribute.Type, com.github.javaparser.symbolsolver.model.resolution.TypeSolver, com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable)
   Line 311) Collectors.toList() ==> java.util.stream.Collectors.toList()
   Line 322) ctClass.isInterface() ==> javassist.CtClass.isInterface()
@@ -108,7 +108,7 @@
   Line 337) ctClass.getModifiers() ==> javassist.CtClass.getModifiers()
   Line 342) javassistTypeDeclarationAdapter.getConstructors() ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistTypeDeclarationAdapter.getConstructors()
   Line 347) javassistTypeDeclarationAdapter.containerType() ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistTypeDeclarationAdapter.containerType()
-  Line 357) Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet()) ==> ERROR
+  Line 357) Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 357) Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 357) Arrays.stream(ctClass.getDeclaredClasses()) ==> java.util.Arrays.stream(T[])
   Line 357) ctClass.getDeclaredClasses() ==> javassist.CtClass.getDeclaredClasses()
