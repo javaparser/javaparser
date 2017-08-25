@@ -55,7 +55,7 @@ class JavassistUtils {
                         List<Type> parametersOfReturnType = parseTypeParameters(classSignature.getReturnType().toString(), typeSolver, invokationContext);
                         Type newReturnType = methodUsage.returnType();
                         // consume one parametersOfReturnType at the time
-                        if (newReturnType instanceof ReferenceType && parametersOfReturnType.size() > 0) {
+                        if (newReturnType.isReferenceType() && parametersOfReturnType.size() > 0) {
                             newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
                         }
                         methodUsage = methodUsage.replaceReturnType(newReturnType);
@@ -120,7 +120,7 @@ class JavassistUtils {
             
             Type type = new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext);
 
-            if (type instanceof ReferenceType && typeParameters.size() > 0) {
+            if (type.isReferenceType() && typeParameters.size() > 0) {
                 type = type.asReferenceType().transformTypeParameters(tp -> typeParameters.remove(0));
             }
             List<Type> types = new ArrayList<>();
@@ -140,7 +140,7 @@ class JavassistUtils {
                             classType.getDeclaringClass().getName() + "." + classType.getName() :
                             classType.getName();
             ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
-                    internalNameToCanonicalName(typeName));
+                    removeTypeArguments(internalNameToCanonicalName(typeName)));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable)signatureType;
@@ -161,20 +161,24 @@ class JavassistUtils {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
     }
+    
+    private static String removeTypeArguments(String typeName) {
+        if (typeName.contains("<")) {
+            return typeName.substring(0, typeName.indexOf('<'));
+        } else {
+            return typeName;
+        }
+    }
 
     private static String internalNameToCanonicalName(String typeName) {
-        String canonicalName = typeName.replaceAll("\\$", ".");
-        if (canonicalName.contains("<")) {
-            canonicalName = canonicalName.substring(0, canonicalName.indexOf('<'));
-        }
-        return canonicalName;
+        return typeName.replaceAll("\\$", ".");
     }
 
     private static Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
         String typeName = typeArgument.jvmTypeName();
         Optional<Type> type = getGenericParameterByName(typeName, typeParametrizable);
         return type.orElseGet(() -> new ReferenceTypeImpl(
-            typeSolver.solveType(internalNameToCanonicalName(typeName)),
+            typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),
             typeSolver));
     }
 
