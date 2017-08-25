@@ -132,6 +132,10 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public ReferenceType getSpecifiedException(int index) {
+        if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
+            throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
+                    index, getNumberOfSpecifiedExceptions()));
+        }
         try {
             return JavassistFactory.typeUsageFor(ctConstructor.getExceptionTypes()[index], typeSolver).asReferenceType();
         } catch (NotFoundException e) {

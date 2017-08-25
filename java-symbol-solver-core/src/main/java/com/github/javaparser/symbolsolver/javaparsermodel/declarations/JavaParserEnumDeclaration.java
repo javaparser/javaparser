@@ -312,7 +312,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
         @Override
         public ReferenceType getSpecifiedException(int index) {
-            throw new IllegalArgumentException();
+            throw new UnsupportedOperationException("The values method of an enum does not throw any exception");
         }
     }
 

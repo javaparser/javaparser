@@ -130,8 +130,9 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
     /**
      * Type of the corresponding entry in the throws clause.
      *
-     * @throws IllegalArgumentException if the index is equal or greater than the value returned by
+     * @throws IllegalArgumentException if the index is negative or it is equal or greater than the value returned by
      *                                  getNumberOfSpecifiedExceptions
+     * @throws UnsupportedOperationException for those types of methods of constructor that do not declare exceptions
      */
     ReferenceType getSpecifiedException(int index);
 }

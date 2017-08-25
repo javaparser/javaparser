@@ -83,7 +83,7 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
 
     @Override
     public ReferenceType getSpecifiedException(int index) {
-        if (index >= getNumberOfSpecifiedExceptions()) {
+        if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException();
         }
         return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver).asReferenceType();

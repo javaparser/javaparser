@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This represents the default construction added by the compiler for objects not declaring one.
- * It takes no parameters.
+ * This represents the default constructor added by the compiler for objects not declaring one.
+ * It takes no parameters. See JLS 8.8.9 for details.
  *
  * @author Federico Tomassetti
  */

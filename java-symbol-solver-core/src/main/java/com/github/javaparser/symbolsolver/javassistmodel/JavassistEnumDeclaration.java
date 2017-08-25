@@ -166,11 +166,6 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         return javassistTypeDeclarationAdapter.containerType();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(MethodCallExpr methodCall, boolean staticOnly) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly) {
         List<MethodDeclaration> candidates = new ArrayList<>();
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
