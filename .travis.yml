@@ -19,7 +19,7 @@ after_success:
 
 jobs:
   include:
-    - stage: trigger downstream
+    - stage: trigger-downstream
       jdk: oraclejdk8
       script: |
         echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
