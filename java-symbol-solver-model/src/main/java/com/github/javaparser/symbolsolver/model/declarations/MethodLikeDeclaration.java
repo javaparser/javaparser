@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.declarations;
 
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+
 import java.util.Optional;
 
 /**
@@ -119,4 +121,17 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
         }
         return declaringType().findTypeParameter(name);
     }
+
+    /**
+     * Number of exceptions listed in the throws clause.
+     */
+    int getNumberOfSpecifiedExceptions();
+
+    /**
+     * Type of the corresponding entry in the throws clause.
+     *
+     * @throws IllegalArgumentException if the index is equal or greater than the value returned by
+     *                                  getNumberOfSpecifiedExceptions
+     */
+    ReferenceType getSpecifiedException(int index);
 }

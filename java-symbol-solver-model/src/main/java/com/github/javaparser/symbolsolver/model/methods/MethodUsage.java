@@ -145,4 +145,13 @@ public class MethodUsage implements TypeParametrized {
         // TODO use the type parameters
         return this.getDeclaration().getQualifiedSignature();
     }
+
+    public List<ReferenceType> exceptionTypes() {
+        // FIXME
+        List<ReferenceType> res = new LinkedList<>();
+        for (int i=0;i<this.getDeclaration().getNumberOfSpecifiedExceptions();i++) {
+            res.add(this.getDeclaration().getSpecifiedException(i));
+        }
+        return res;
+    }
 }
