@@ -29,7 +29,7 @@ public class VisitorMapTest {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         CompilationUnit x2 = JavaParser.parse("class X{}");
 
-        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new HashMap<>(), new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         normalMap.put(x1, 1);
         normalMap.put(x2, 2);
         assertEquals(2, normalMap.size());
@@ -39,7 +39,7 @@ public class VisitorMapTest {
     public void visitorMapGet(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
 
-        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new HashMap<>(), new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         normalMap.put(x1, 1);
         assertEquals(1, (int)normalMap.get(x1));
     }
@@ -48,7 +48,7 @@ public class VisitorMapTest {
     public void visitorMapContainsKey(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
 
-        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new HashMap<>(), new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         normalMap.put(x1, 1);
         assertTrue(normalMap.containsKey(x1));
     }
@@ -60,7 +60,7 @@ public class VisitorMapTest {
     	Map<CompilationUnit, Integer> normalMap = new HashMap<>();
     	normalMap.put(x1, 1);
     	normalMap.put(x2, 2);
-    	Map<CompilationUnit, Integer> visitorMap = new VisitorMap<>(new HashMap<>(), new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+    	Map<CompilationUnit, Integer> visitorMap = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         visitorMap.putAll(normalMap);
         assertEquals(2, visitorMap.size());
     }

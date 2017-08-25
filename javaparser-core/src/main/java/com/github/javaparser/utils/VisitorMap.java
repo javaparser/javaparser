@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
  */
 public class VisitorMap<N extends Node, V> implements Map<N, V> {
     // Cheat generics by removing them
-    private final Map innerMap;
+    private final Map<EqualsHashcodeOverridingFacade, V> innerMap;
     private final GenericVisitor<Integer, Void> hashcodeVisitor;
     private final GenericVisitor<Boolean, Visitable> equalsVisitor;
 
     /**
      * Wrap a map and use different visitors for equals and hashcode.
      */
-    public VisitorMap(Map<N, V> innerMap, GenericVisitor<Integer, Void> hashcodeVisitor, GenericVisitor<Boolean, Visitable> equalsVisitor) {
-        this.innerMap = innerMap;
+    public VisitorMap(GenericVisitor<Integer, Void> hashcodeVisitor, GenericVisitor<Boolean, Visitable> equalsVisitor) {
+        this.innerMap = new HashMap<>();
         this.hashcodeVisitor = hashcodeVisitor;
         this.equalsVisitor = equalsVisitor;
     }
