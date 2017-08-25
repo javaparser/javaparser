@@ -208,7 +208,21 @@ public class MethodResolutionLogic {
                     }
                 }
             } else if (expectedParam.isReferenceType()) {
-                if (!expectedParam.equals(actualParam)) {
+                if (actualParam.isTypeVariable()) {    
+                    String actualParamName = actualParam.asTypeParameter().getName();
+                    if (matchedParameters.containsKey(actualParamName)) {
+                        Type matchedParameter = matchedParameters.get(actualParamName);
+                        if (matchedParameter.isAssignableBy(expectedParam)) {
+                            return true;
+                        } else if (expectedParam.isAssignableBy(matchedParameter)) {
+                            matchedParameters.put(actualParamName, expectedParam);
+                            return true;
+                        }
+                        return false;
+                    } else {
+                        matchedParameters.put(actualParamName, expectedParam);
+                    }
+                } else if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
             } else if (expectedParam.isWildcard()) {

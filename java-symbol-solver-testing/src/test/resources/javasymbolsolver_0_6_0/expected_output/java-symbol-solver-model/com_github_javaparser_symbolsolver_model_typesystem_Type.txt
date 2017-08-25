@@ -14,4 +14,4 @@
   Line 122) String.format("%s is not a Primitive type", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
   Line 126) String.format("%s is not a Wildcard", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
   Line 130) String.format("%s is not a constraint type", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
-  Line 156) replaceTypeVariables(tp, replaced, new HashMap<>()) ==> UNSOLVED
+  Line 156) replaceTypeVariables(tp, replaced, new HashMap<>()) ==> com.github.javaparser.symbolsolver.model.typesystem.Type.replaceTypeVariables(com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type, java.util.Map<com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration, com.github.javaparser.symbolsolver.model.typesystem.Type>)
