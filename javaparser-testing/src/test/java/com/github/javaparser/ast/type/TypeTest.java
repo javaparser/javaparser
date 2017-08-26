@@ -17,10 +17,10 @@ import static org.junit.Assert.assertTrue;
 public class TypeTest {
     @Test
     public void asString() {
-        assertEquals("int", typeAsString("int x;"));
-        assertEquals("List<Long>", typeAsString("List<Long> x;"));
-        assertEquals("String", typeAsString("@A String x;"));
-        assertEquals("List<? extends Object>", typeAsString("List<? extends Object> x;"));
+        assertEquals("int", typeAsString("int x"));
+        assertEquals("List<Long>", typeAsString("List<Long> x"));
+        assertEquals("String", typeAsString("@A String x"));
+        assertEquals("List<? extends Object>", typeAsString("List<? extends Object> x"));
     }
 
     @Test(expected = ParseProblemException.class)
@@ -36,7 +36,7 @@ public class TypeTest {
         }});
 
         ParseResult<VariableDeclarationExpr> result = new JavaParser(config).parse(
-                VARIABLE_DECLARATION_EXPR, provider("List<long> x;"));
+                VARIABLE_DECLARATION_EXPR, provider("List<long> x"));
         assertTrue(result.isSuccessful());
 
         VariableDeclarationExpr decl = result.getResult().get();
