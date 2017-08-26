@@ -117,4 +117,8 @@ public class TypeVariable implements Type {
         }
     }
 
+    @Override
+    public boolean mention(List<TypeParameterDeclaration> typeParameters) {
+        return typeParameters.contains(typeParameter);
+    }
 }

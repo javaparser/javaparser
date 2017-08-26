@@ -157,6 +157,11 @@ public class Wildcard implements Type {
         }
     }
 
+    @Override
+    public boolean mention(List<TypeParameterDeclaration> typeParameters) {
+        return boundedType != null && boundedType.mention(typeParameters);
+    }
+
     public boolean isUpperBounded() {
         return isSuper();
     }

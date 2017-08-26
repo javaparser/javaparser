@@ -157,6 +157,13 @@ public interface Type {
         return replaceTypeVariables(tp, replaced, new HashMap<>());
     }
 
+    /**
+     * Does this type mention at all, directly or indirectly, the given type parameters?
+     */
+    default boolean mention(List<TypeParameterDeclaration> typeParameters) {
+        throw new UnsupportedOperationException(this.getClass().getCanonicalName());
+    }
+
     ///
     /// Assignability
     ///
