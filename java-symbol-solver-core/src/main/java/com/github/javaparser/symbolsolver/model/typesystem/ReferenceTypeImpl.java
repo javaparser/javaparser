@@ -144,5 +144,18 @@ public class ReferenceTypeImpl extends ReferenceType {
         return methods;
     }
 
+    @Override
+    public Type toRawType() {
+        if (this.isRawType()) {
+                return this;
+        } else {
+            return new ReferenceTypeImpl(typeDeclaration, typeSolver);
+        }
+    }
+
+    @Override
+    public boolean mention(List<TypeParameterDeclaration> typeParameters) {
+        return typeParametersValues().stream().anyMatch(tp -> tp.mention(typeParameters));
+    }
 
 }
