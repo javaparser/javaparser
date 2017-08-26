@@ -90,7 +90,7 @@ public abstract class Bound {
      * Other bounds relate two inference variables, or an inference variable to a type that contains inference
      * variables. Such bounds, of the form S = T or S <: T, are called dependencies.
      */
-    boolean isADependency() {
+    public boolean isADependency() {
         return false;
     }
 
