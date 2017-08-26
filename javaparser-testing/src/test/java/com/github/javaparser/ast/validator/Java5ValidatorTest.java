@@ -130,7 +130,7 @@ public class Java5ValidatorTest {
 
     @Test
     public void foreach() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){};"));
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){}"));
         assertNoProblems(result);
     }
 

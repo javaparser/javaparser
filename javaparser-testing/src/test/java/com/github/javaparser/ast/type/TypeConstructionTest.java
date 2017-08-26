@@ -82,7 +82,7 @@ public class TypeConstructionTest {
 
     @Test
     public void getMethodDeclarationWithArrays() {
-        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("@C int @A[] a() @B[] {};");
+        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("@C int @A[] a() @B[] {}");
 
         ArrayType arrayType1 = (ArrayType) methodDeclaration.getType();
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
@@ -97,7 +97,7 @@ public class TypeConstructionTest {
 
     @Test
     public void getParameterWithArrays() {
-        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("void a(@C int @A[] a @B[]) {};");
+        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("void a(@C int @A[] a @B[]) {}");
 
         Parameter parameter = methodDeclaration.getParameter(0);
 
@@ -141,7 +141,7 @@ public class TypeConstructionTest {
 
     @Test
     public void setParameterWithArrays() {
-        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("void a(int[][] a[][]) {};");
+        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("void a(int[][] a[][]) {}");
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
