@@ -131,7 +131,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             case XOR:
                 return node.getLeft().accept(this, solveLambdas);
             default:
-                throw new UnsupportedOperationException("FOO " + node.getOperator().name());
+                throw new UnsupportedOperationException("Operator " + node.getOperator().name());
         }
     }
 
@@ -230,7 +230,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public Type visit(StringLiteralExpr node, Boolean solveLambdas) {
-        return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType("java.lang.String"), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
     }
 
     @Override
