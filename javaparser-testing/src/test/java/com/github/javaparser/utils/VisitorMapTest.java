@@ -25,7 +25,7 @@ public class VisitorMapTest {
     }
 
     @Test
-    public void objectIdentityEqualsDoesShallowCompare() {
+    public void objectIdentityEqualsDoesShallowCompare1() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         CompilationUnit x2 = JavaParser.parse("class X{}");
 
@@ -33,6 +33,16 @@ public class VisitorMapTest {
         normalMap.put(x1, 1);
         normalMap.put(x2, 2);
         assertEquals(2, normalMap.size());
+    }
+
+    @Test
+    public void objectIdentityEqualsDoesShallowCompare2() {
+        CompilationUnit x1 = JavaParser.parse("class X{}");
+
+        Map<CompilationUnit, Integer> normalMap = new VisitorMap<>(new HashMap<>(), new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        normalMap.put(x1, 1);
+        normalMap.put(x1, 2);
+        assertEquals(1, normalMap.size());
     }
     
     @Test
@@ -64,6 +74,4 @@ public class VisitorMapTest {
         visitorMap.putAll(normalMap);
         assertEquals(2, visitorMap.size());
     }
-    
-
 }
