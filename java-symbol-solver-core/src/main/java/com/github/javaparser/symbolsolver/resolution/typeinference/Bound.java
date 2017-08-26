@@ -6,21 +6,33 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Bound are defined for Inference Variables.
+ * Bounds are defined for Inference Variables.
  *
  * @author Federico Tomassetti
  */
 public abstract class Bound {
 
-    public static Bound falseBound() {
+    ///
+    /// Creation of bounds
+    ///
+
+    static Bound falseBound() {
         return FalseBound.getInstance();
     }
+
+    ///
+    /// Satisfiability
+    ///
 
     /**
      * A bound is satisfied by an inference variable substitution if, after applying the substitution,
      * the assertion is true.
      */
     public abstract boolean isSatisfied(InferenceVariableSubstitution inferenceVariableSubstitution);
+
+    ///
+    /// Classification of bounds
+    ///
 
     /**
      * Given a bound of the form α = T or T = α, we say T is an instantiation of α.
@@ -32,7 +44,7 @@ public abstract class Bound {
         return Optional.empty();
     }
 
-    public boolean isAnInstantiationFor(InferenceVariable v) {
+    boolean isAnInstantiationFor(InferenceVariable v) {
         return isAnInstantiation().isPresent() && isAnInstantiation().get().getInferenceVariable().equals(v);
     }
 
@@ -56,7 +68,7 @@ public abstract class Bound {
         return Optional.empty();
     }
 
-    public Optional<ProperLowerBound> isProperLowerBoundFor(InferenceVariable inferenceVariable) {
+    Optional<ProperLowerBound> isProperLowerBoundFor(InferenceVariable inferenceVariable) {
         Optional<ProperLowerBound> partial = isProperLowerBound();
         if (partial.isPresent() && partial.get().getInferenceVariable().equals(inferenceVariable)) {
             return partial;
@@ -65,7 +77,7 @@ public abstract class Bound {
         }
     }
 
-    public Optional<ProperUpperBound> isProperUpperBoundFor(InferenceVariable inferenceVariable) {
+    Optional<ProperUpperBound> isProperUpperBoundFor(InferenceVariable inferenceVariable) {
         Optional<ProperUpperBound> partial = isProperUpperBound();
         if (partial.isPresent() && partial.get().getInferenceVariable().equals(inferenceVariable)) {
             return partial;
@@ -78,13 +90,17 @@ public abstract class Bound {
      * Other bounds relate two inference variables, or an inference variable to a type that contains inference
      * variables. Such bounds, of the form S = T or S <: T, are called dependencies.
      */
-    public boolean isADependency() {
+    boolean isADependency() {
         return false;
     }
+
+    boolean isThrowsBoundOn(InferenceVariable inferenceVariable) {
+        return false;
+    }
+
+    ///
+    /// Other methods
+    ///
 
     public abstract Set<InferenceVariable> usedInferenceVariables();
-
-    public boolean isThrowsBoundOn(InferenceVariable inferenceVariable) {
-        return false;
-    }
 }
