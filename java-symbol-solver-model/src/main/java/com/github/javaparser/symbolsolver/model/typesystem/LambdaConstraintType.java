@@ -1,9 +1,9 @@
 package com.github.javaparser.symbolsolver.model.typesystem;
 
 public class LambdaConstraintType  implements Type {
-    Type bound;
+    private Type bound;
 
-    public LambdaConstraintType(Type bound) {
+    private LambdaConstraintType(Type bound) {
         this.bound = bound;
     }
 
@@ -33,5 +33,12 @@ public class LambdaConstraintType  implements Type {
     @Override
     public boolean isAssignableBy(Type other) {
         return bound.isAssignableBy(other);
+    }
+
+    @Override
+    public String toString() {
+        return "LambdaConstraintType{" +
+                "bound=" + bound +
+                '}';
     }
 }

@@ -22,6 +22,7 @@ import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationC
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtMethod;
 import javassist.NotFoundException;
@@ -168,5 +169,27 @@ public class JavassistMethodDeclaration implements MethodDeclaration {
     @Override
     public AccessLevel accessLevel() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        try {
+            return ctMethod.getExceptionTypes().length;
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Type getSpecifiedException(int index) {
+        if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
+            throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
+                    index, getNumberOfSpecifiedExceptions()));
+        }
+        try {
+            return JavassistFactory.typeUsageFor(ctMethod.getExceptionTypes()[index], typeSolver);
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

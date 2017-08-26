@@ -37,4 +37,8 @@ public interface TypeParametrizable {
      */
     Optional<TypeParameterDeclaration> findTypeParameter(String name);
 
+    default boolean isGeneric() {
+        return !getTypeParameters().isEmpty();
+    }
+
 }

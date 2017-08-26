@@ -18,7 +18,6 @@ package com.github.javaparser.symbolsolver.model.typesystem;
 
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.parametrization.TypeParameterValueProvider;
@@ -61,7 +60,8 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
         }
         if (typeArguments.size() > 0 && typeArguments.size() != typeDeclaration.getTypeParameters().size()) {
-            throw new IllegalArgumentException(String.format("expected either zero type arguments or has many as defined in the declaration (%d). Found %d",
+            throw new IllegalArgumentException(String.format(
+                    "expected either zero type arguments or has many as defined in the declaration (%d). Found %d",
                     typeDeclaration.getTypeParameters().size(), typeArguments.size()));
         }
         TypeParametersMap.Builder typeParametersMapBuilder = new TypeParametersMap.Builder();
@@ -168,7 +168,8 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
+    public Type replaceTypeVariables(TypeParameterDeclaration tpToReplace, Type replaced,
+                                     Map<TypeParameterDeclaration, Type> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
@@ -181,6 +182,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
             if (tp.isTypeVariable() && tp.asTypeVariable().describe().equals(tpToReplace.getName())) {
                 inferredTypes.put(tp.asTypeParameter(), replaced);
             }
+            // FIXME
             if (true) {
                 List<Type> typeParametersCorrected = result.asReferenceType().typeParametersValues();
                 typeParametersCorrected.set(i, transformedTp);
@@ -190,12 +192,12 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         }
 
         List<Type> values = result.typeParametersValues();
+        // FIXME
         if(values.contains(tpToReplace)){
             int index = values.indexOf(tpToReplace);
             values.set(index, replaced);
             return create(result.getTypeDeclaration(), values, typeSolver);
         }
-
 
         return result;
     }
@@ -392,7 +394,7 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
 
     protected ReferenceType create(ReferenceTypeDeclaration typeDeclaration, TypeParametersMap typeParametersMap, TypeSolver typeSolver) {
         return create(typeDeclaration, typeDeclaration.getTypeParameters().stream()
-                .map(tp -> typeParametersMap.getValue(tp))
+                .map(typeParametersMap::getValue)
                 .collect(Collectors.toList()), typeSolver);
     }
 

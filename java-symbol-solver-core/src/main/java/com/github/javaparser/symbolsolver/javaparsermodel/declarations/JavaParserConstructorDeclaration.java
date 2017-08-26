@@ -16,8 +16,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,8 +34,8 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     private com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
-    public JavaParserConstructorDeclaration(ClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
-                                            TypeSolver typeSolver) {
+    JavaParserConstructorDeclaration(ClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
+                                     TypeSolver typeSolver) {
         this.classDeclaration = classDeclaration;
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
@@ -78,5 +81,20 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        return wrappedNode.getThrownExceptions().size();
+    }
+
+    @Override
+    public Type getSpecifiedException(int index) {
+        if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
+            throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
+                    index, getNumberOfSpecifiedExceptions()));
+        }
+        return JavaParserFacade.get(typeSolver)
+                .convert(wrappedNode.getThrownExceptions().get(index), wrappedNode);
     }
 }

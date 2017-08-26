@@ -16,6 +16,12 @@
 
 package com.github.javaparser.symbolsolver.model.declarations;
 
+import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -118,5 +124,31 @@ public interface MethodLikeDeclaration extends Declaration, TypeParametrizable, 
             }
         }
         return declaringType().findTypeParameter(name);
+    }
+
+    /**
+     * Number of exceptions listed in the throws clause.
+     */
+    int getNumberOfSpecifiedExceptions();
+
+    /**
+     * Type of the corresponding entry in the throws clause.
+     *
+     * @throws IllegalArgumentException if the index is negative or it is equal or greater than the value returned by
+     *                                  getNumberOfSpecifiedExceptions
+     * @throws UnsupportedOperationException for those types of methods of constructor that do not declare exceptions
+     */
+    Type getSpecifiedException(int index);
+
+    default List<Type> getSpecifiedExceptions() {
+        if (getNumberOfSpecifiedExceptions() == 0) {
+            return Collections.emptyList();
+        } else {
+            List<Type> exceptions = new LinkedList<>();
+            for (int i=0;i<getNumberOfSpecifiedExceptions();i++) {
+                exceptions.add(getSpecifiedException(i));
+            }
+            return exceptions;
+        }
     }
 }

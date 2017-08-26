@@ -41,7 +41,7 @@ public interface TypeParameterValueProvider {
         }
 
         if (type.isReferenceType()) {
-            type = type.asReferenceType().transformTypeParameters(tp -> useThisTypeParametersOnTheGivenType(tp));
+            type = type.asReferenceType().transformTypeParameters(this::useThisTypeParametersOnTheGivenType);
         }
 
         return type;

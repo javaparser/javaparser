@@ -17,11 +17,15 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
+ * This represents the default constructor added by the compiler for objects not declaring one.
+ * It takes no parameters. See JLS 8.8.9 for details.
+ *
  * @author Federico Tomassetti
  */
 class DefaultConstructorDeclaration implements ConstructorDeclaration {
@@ -44,7 +48,7 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
 
     @Override
     public ParameterDeclaration getParam(int i) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("The default constructor has not parameters");
     }
 
     @Override
@@ -60,5 +64,15 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     @Override
     public List<TypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public int getNumberOfSpecifiedExceptions() {
+        return 0;
+    }
+
+    @Override
+    public Type getSpecifiedException(int index) {
+        throw new UnsupportedOperationException("The default constructor does not throw exceptions");
     }
 }
