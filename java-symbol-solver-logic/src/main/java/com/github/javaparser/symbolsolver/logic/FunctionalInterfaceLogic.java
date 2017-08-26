@@ -67,6 +67,10 @@ public final class FunctionalInterfaceLogic {
         }
     }
 
+    public static boolean isFunctionalInterfaceType(Type type) {
+        return getFunctionalMethod(type).isPresent();
+    }
+
     private static String getSignature(Method m) {
         return String.format("%s(%s)", m.getName(), String.join(", ", Arrays.stream(m.getParameters()).map(p -> toSignature(p)).collect(Collectors.toList())));
     }
