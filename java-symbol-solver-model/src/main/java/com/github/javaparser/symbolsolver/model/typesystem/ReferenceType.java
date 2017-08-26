@@ -386,6 +386,8 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
         return Optional.empty();
     }
 
+    public abstract Type toRawType();
+
     //
     // Protected methods
     //
