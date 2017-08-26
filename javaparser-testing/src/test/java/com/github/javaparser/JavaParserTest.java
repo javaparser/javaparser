@@ -39,6 +39,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.*;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -97,7 +98,7 @@ public class JavaParserTest {
 
     @Test
     public void parseErrorContainsLocation() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, Providers.provider("class X { // blah"));
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X { // blah"));
 
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
@@ -189,6 +190,13 @@ public class JavaParserTest {
         LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
         Statement lambdaBody = lambdaExpr.getBody();
         assertEquals(range(3, 68, 3, 101), lambdaBody.getRange().get());
+    }
+    
+    @Test
+    public void testNotStoringTokens() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
+        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
+        assertEquals(false, result.getTokens().isPresent());
     }
 
     @Test(expected = ParseProblemException.class)

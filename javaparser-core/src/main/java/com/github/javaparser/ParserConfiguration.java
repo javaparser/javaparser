@@ -33,6 +33,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+    private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
     private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
@@ -68,6 +69,15 @@ public class ParserConfiguration {
     public ParserConfiguration setDoNotConsiderAnnotationsAsNodeStartForCodeAttribution(boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution) {
         this.doNotConsiderAnnotationsAsNodeStartForCodeAttribution = doNotConsiderAnnotationsAsNodeStartForCodeAttribution;
         return this;
+    }
+
+    public ParserConfiguration setStoreTokens(boolean storeTokens) {
+        this.storeTokens = storeTokens;
+        return this;
+    }
+
+    public boolean isStoreTokens() {
+        return storeTokens;
     }
 
     public int getTabSize() {
