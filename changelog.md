@@ -1,3 +1,9 @@
+Version 3.3.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/55?closed=1)
+* Parsing a partial java file (like an expression or statement) no longer ignores trailing code.
+* New memory saving option: turn off token list.
+
 Version 3.3.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/54?closed=1)
