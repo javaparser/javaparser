@@ -19,10 +19,13 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtField;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.SignatureAttribute;
 
 import java.lang.reflect.Modifier;
 
@@ -41,8 +44,15 @@ public class JavassistFieldDeclaration implements FieldDeclaration {
     @Override
     public Type getType() {
         try {
-            return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
+            if (ctField.getGenericSignature() != null && declaringType() instanceof TypeParametrizable) {
+                javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toFieldSignature(ctField.getGenericSignature());
+                return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (TypeParametrizable) declaringType());
+            } else {
+                return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
+            }
         } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
     }
