@@ -12,25 +12,22 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * A facade for another java.util.Map that overrides the equals and hashcode calculation of the added nodes
- * by using another visitor for those methods.
+ * A map that overrides the equals and hashcode calculation of the added nodes
+ * by using another equals and hashcode visitor for those methods.
  */
 public class VisitorMap<N extends Node, V> implements Map<N, V> {
-    // Cheat generics by removing them
-    private final Map<EqualsHashcodeOverridingFacade, V> innerMap;
+    private final Map<EqualsHashcodeOverridingFacade, V> innerMap = new HashMap<>();
     private final GenericVisitor<Integer, Void> hashcodeVisitor;
     private final GenericVisitor<Boolean, Visitable> equalsVisitor;
 
     /**
-     * Wrap a map and use different visitors for equals and hashcode.
+     * Pass the visitors to use for equals and hashcode.
      */
     public VisitorMap(GenericVisitor<Integer, Void> hashcodeVisitor, GenericVisitor<Boolean, Visitable> equalsVisitor) {
-        this.innerMap = new HashMap<>();
         this.hashcodeVisitor = hashcodeVisitor;
         this.equalsVisitor = equalsVisitor;
     }
-
-
+    
     @Override
     public int size() {
         return innerMap.size();
@@ -53,18 +50,18 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public V get(Object key) {
-        return (V) innerMap.get(new EqualsHashcodeOverridingFacade((N) key));
+        return innerMap.get(new EqualsHashcodeOverridingFacade((N) key));
     }
 
     @Override
     public V put(N key, V value) {
-        return (V) innerMap.put(new EqualsHashcodeOverridingFacade(key), value);
+        return innerMap.put(new EqualsHashcodeOverridingFacade(key), value);
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
         private final N overridden;
 
-        public EqualsHashcodeOverridingFacade(N overridden) {
+        EqualsHashcodeOverridingFacade(N overridden) {
             this.overridden = overridden;
         }
 
@@ -94,12 +91,12 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public V remove(Object key) {
-        return (V) innerMap.remove(key);
+        return innerMap.remove(new EqualsHashcodeOverridingFacade((N) key));
     }
 
     @Override
     public void putAll(Map<? extends N, ? extends V> m) {
-        m.forEach((key, value) -> this.put(key,value));
+        m.forEach(this::put);
     }
 
     @Override
@@ -109,7 +106,7 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public Set<N> keySet() {
-        return ((Map<EqualsHashcodeOverridingFacade, V>) innerMap).keySet().stream()
+        return innerMap.keySet().stream()
                 .map(k -> k.overridden)
                 .collect(Collectors.toSet());
     }
@@ -121,8 +118,8 @@ public class VisitorMap<N extends Node, V> implements Map<N, V> {
 
     @Override
     public Set<Entry<N, V>> entrySet() {
-        return ((Map<EqualsHashcodeOverridingFacade, V>) innerMap).entrySet().stream()
-                .map(e -> new HashMap.SimpleEntry<N, V>(e.getKey().overridden, e.getValue()))
+        return innerMap.entrySet().stream()
+                .map(e -> new HashMap.SimpleEntry<>(e.getKey().overridden, e.getValue()))
                 .collect(Collectors.toSet());
     }
 }
