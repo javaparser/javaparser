@@ -69,7 +69,7 @@
   Line 268) clazz.getInterfaces() ==> java.lang.Class.getInterfaces()
   Line 269) res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver)) ==> java.util.List.add(E)
   Line 276) reflectionClassAdapter.containerType() ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassAdapter.containerType()
-  Line 281) Arrays.stream(this.clazz.getDeclaredClasses()).map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver)).collect(Collectors.toSet()) ==> ERROR
+  Line 281) Arrays.stream(this.clazz.getDeclaredClasses()).map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver)).collect(Collectors.toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 281) Arrays.stream(this.clazz.getDeclaredClasses()).map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 281) Arrays.stream(this.clazz.getDeclaredClasses()) ==> java.util.Arrays.stream(T[])
   Line 281) this.clazz.getDeclaredClasses() ==> java.lang.Class.getDeclaredClasses()

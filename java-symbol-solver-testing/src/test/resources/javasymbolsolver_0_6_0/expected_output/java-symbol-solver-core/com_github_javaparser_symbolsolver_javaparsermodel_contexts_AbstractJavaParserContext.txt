@@ -20,7 +20,7 @@
   Line 120) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 122) getParentNode(notMethod) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
   Line 124) JavaParserFactory.getContext(notMethod, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory.getContext(com.github.javaparser.ast.Node, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)
-  Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)).map(d -> Value.from(d)).findFirst() ==> ERROR
+  Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)).map(d -> Value.from(d)).findFirst() ==> java.util.stream.Stream.findFirst()
   Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)).map(d -> Value.from(d)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 132) symbolDeclarator.getSymbolDeclarations().stream().filter(d -> d.getName().equals(name)) ==> java.util.stream.Stream.filter(java.util.function.Predicate<? super T>)
   Line 132) symbolDeclarator.getSymbolDeclarations().stream() ==> java.util.Collection.stream()

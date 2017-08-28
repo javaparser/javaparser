@@ -84,7 +84,7 @@
   Line 231) ref.isSolved() ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.isSolved()
   Line 239) SymbolReference.unsolved(ValueDeclaration.class) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.unsolved(java.lang.Class<S2>)
   Line 244) javassistTypeDeclarationAdapter.containerType() ==> com.github.javaparser.symbolsolver.javassistmodel.JavassistTypeDeclarationAdapter.containerType()
-  Line 254) Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet()) ==> ERROR
+  Line 254) Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)).collect(Collectors.toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 254) Arrays.stream(ctClass.getDeclaredClasses()).map(itype -> JavassistFactory.toTypeDeclaration(itype, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 254) Arrays.stream(ctClass.getDeclaredClasses()) ==> java.util.Arrays.stream(T[])
   Line 254) ctClass.getDeclaredClasses() ==> javassist.CtClass.getDeclaredClasses()

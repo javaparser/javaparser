@@ -111,7 +111,7 @@
   Line 314) this.clazz.getModifiers() ==> java.lang.Class.getModifiers()
   Line 319) reflectionClassAdapter.getConstructors() ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassAdapter.getConstructors()
   Line 324) reflectionClassAdapter.containerType() ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassAdapter.containerType()
-  Line 329) Arrays.stream(this.clazz.getDeclaredClasses()).map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver)).collect(Collectors.toSet()) ==> ERROR
+  Line 329) Arrays.stream(this.clazz.getDeclaredClasses()).map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver)).collect(Collectors.toSet()) ==> java.util.stream.Stream.collect(java.util.stream.Collector<? super T, A, R>)
   Line 329) Arrays.stream(this.clazz.getDeclaredClasses()).map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver)) ==> java.util.stream.Stream.map(java.util.function.Function<? super T, ? extends R>)
   Line 329) Arrays.stream(this.clazz.getDeclaredClasses()) ==> java.util.Arrays.stream(T[])
   Line 329) this.clazz.getDeclaredClasses() ==> java.lang.Class.getDeclaredClasses()
