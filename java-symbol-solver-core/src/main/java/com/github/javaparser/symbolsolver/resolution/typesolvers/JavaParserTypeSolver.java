@@ -23,6 +23,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Federico Tomassetti
@@ -41,9 +45,9 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
 
-    private Map<String, Optional<CompilationUnit>> parsedFiles = new HashMap<>();
-    private Map<String, List<CompilationUnit>> parsedDirectories = new HashMap<>();
-    private Map<String, ReferenceTypeDeclaration> foundTypes = new HashMap<>();
+    private Cache<String, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
+    private Cache<String, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
+    private Cache<String, SymbolReference<ReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
 
     public JavaParserTypeSolver(File srcDir) {
         if (!srcDir.exists() || !srcDir.isDirectory()) {
@@ -72,51 +76,58 @@ public class JavaParserTypeSolver implements TypeSolver {
 
 
     private Optional<CompilationUnit> parse(File srcFile) {
-        if (!parsedFiles.containsKey(srcFile.getAbsolutePath())) {
-            Optional<CompilationUnit> cu;
-            try {
-                cu = Optional.of(JavaParser.parse(srcFile));
-            } catch (FileNotFoundException e) {
-                cu = Optional.empty();
-            }
-            parsedFiles.put(srcFile.getAbsolutePath(), cu);
+        try {
+            return parsedFiles.get(srcFile.getAbsolutePath(), () -> {
+                Optional<CompilationUnit> cu;
+                try {
+                    cu = Optional.of(JavaParser.parse(srcFile));
+                } catch (FileNotFoundException e) {
+                    cu = Optional.empty();
+                }
+                return cu;
+            });
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
-        return parsedFiles.get(srcFile.getAbsolutePath());
     }
 
     private List<CompilationUnit> parseDirectory(File srcDirectory) {
-        if (!parsedDirectories.containsKey(srcDirectory.getAbsolutePath())) {
-            List<CompilationUnit> units = new ArrayList<>();
-            File[] files = srcDirectory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.getName().toLowerCase().endsWith(".java")) {
-                        Optional<CompilationUnit> unit = parse(file);
-                        if (unit.isPresent()) {
-                            units.add(unit.get());
+        try {
+            return parsedDirectories.get(srcDirectory.getAbsolutePath(), () -> {
+                List<CompilationUnit> units = new ArrayList<>();
+                File[] files = srcDirectory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.getName().toLowerCase().endsWith(".java")) {
+                            Optional<CompilationUnit> unit = parse(file);
+                            if (unit.isPresent()) {
+                                units.add(unit.get());
+                            }
                         }
                     }
                 }
-            }
-            parsedDirectories.put(srcDirectory.getAbsolutePath(), units);
+                return units;
+            });
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
-
-        return parsedDirectories.get(srcDirectory.getAbsolutePath());
     }
 
     @Override
     public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
         // TODO support enums
         // TODO support interfaces
-        if (foundTypes.containsKey(name))
-        	return SymbolReference.solved(foundTypes.get(name));
-
-        SymbolReference<ReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
-        if (result.isSolved()) {
-            foundTypes.put(name, result.getCorrespondingDeclaration());
+        try {
+            return foundTypes.get(name, () -> {
+                SymbolReference<ReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
+                if (result.isSolved()) {
+                    return SymbolReference.solved(result.getCorrespondingDeclaration());
+                }
+                return result;
+            });
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
-
-        return result;
     }
 
     private SymbolReference<ReferenceTypeDeclaration> tryToSolveTypeUncached(String name) {
