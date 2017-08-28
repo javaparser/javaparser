@@ -78,7 +78,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
             //   variables and the inference variables in T.
 
             if (expression instanceof ObjectCreationExpr) {
-                throw new UnsupportedOperationException();
+                BoundSet B3 = new TypeInference(typeSolver).invocationTypeInferenceBoundsSetB3();
+                return ReductionResult.bounds(B3);
             }
 
             if (expression instanceof MethodCallExpr) {

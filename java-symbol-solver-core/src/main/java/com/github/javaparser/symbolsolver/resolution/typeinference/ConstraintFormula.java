@@ -104,6 +104,12 @@ public abstract class ConstraintFormula {
             reductionResult.constraintFormulas.addAll(constraints);
             return reductionResult;
         }
+
+        public static ReductionResult bounds(BoundSet bounds) {
+            ReductionResult reductionResult = new ReductionResult();
+            reductionResult.boundSet = bounds;
+            return reductionResult;
+        }
     }
 
     /**

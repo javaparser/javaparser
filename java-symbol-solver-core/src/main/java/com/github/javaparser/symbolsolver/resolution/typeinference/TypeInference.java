@@ -177,32 +177,50 @@ public class TypeInference {
         return true;
     }
 
+    public BoundSet invocationTypeInferenceBoundsSetB3() {
+        // Given a method invocation that provides no explicit type arguments, and a corresponding most specific
+        // applicable generic method m, the process to infer the invocation type (§15.12.2.6) of the chosen method is
+        // as follows:
+        //
+        // - Let θ be the substitution [P1:=α1, ..., Pp:=αp] defined in §18.5.1 to replace the type parameters of m with inference variables.
+        //
+        // - Let B2 be the bound set produced by reduction in order to demonstrate that m is applicable in §18.5.1. (While it was necessary in §18.5.1 to demonstrate that the inference variables in B2 could be resolved, in order to establish applicability, the instantiations produced by this resolution step are not considered part of B2.)
+        //
+        // - If the invocation is not a poly expression, let the bound set B3 be the same as B2.
+        //
+        //   If the invocation is a poly expression, let the bound set B3 be derived from B2 as follows. Let R be the
+        //   return type of m, let T be the invocation's target type, and then:
+        //
+        //   - If unchecked conversion was necessary for the method to be applicable during constraint set reduction
+        //     in §18.5.1, the constraint formula ‹|R| → T› is reduced and incorporated with B2.
+        //
+        //   - Otherwise, if R θ is a parameterized type, G<A1, ..., An>, and one of A1, ..., An is a wildcard, then,
+        //     for fresh inference variables β1, ..., βn, the constraint formula ‹G<β1, ..., βn> → T› is reduced and
+        //     incorporated, along with the bound G<β1, ..., βn> = capture(G<A1, ..., An>), with B2.
+        //
+        //   - Otherwise, if R θ is an inference variable α, and one of the following is true:
+        //
+        //     - T is a reference type, but is not a wildcard-parameterized type, and either i) B2 contains a bound of
+        //       one of the forms α = S or S <: α, where S is a wildcard-parameterized type, or ii) B2 contains two
+        //       bounds of the forms S1 <: α and S2 <: α, where S1 and S2 have supertypes that are two different
+        //       parameterizations of the same generic class or interface.
+        //
+        //     - T is a parameterization of a generic class or interface, G, and B2 contains a bound of one of the
+        //       forms α = S or S <: α, where there exists no type of the form G<...> that is a supertype of S, but the
+        //       raw type |G<...>| is a supertype of S.
+        //
+        //     - T is a primitive type, and one of the primitive wrapper classes mentioned in §5.1.7 is an
+        //       instantiation, upper bound, or lower bound for α in B2.
+        //
+        //     then α is resolved in B2, and where the capture of the resulting instantiation of α is U, the constraint
+        //     formula ‹U → T› is reduced and incorporated with B2.
+        //
+        //   - Otherwise, the constraint formula ‹R θ → T› is reduced and incorporated with B2.
+        throw new UnsupportedOperationException();
+    }
+
     public void invocationTypeInference() {
-        //Given a method invocation that provides no explicit type arguments, and a corresponding most specific applicable generic method m, the process to infer the invocation type (§15.12.2.6) of the chosen method is as follows:
-        //
-        //Let θ be the substitution [P1:=α1, ..., Pp:=αp] defined in §18.5.1 to replace the type parameters of m with inference variables.
-        //
-        //Let B2 be the bound set produced by reduction in order to demonstrate that m is applicable in §18.5.1. (While it was necessary in §18.5.1 to demonstrate that the inference variables in B2 could be resolved, in order to establish applicability, the instantiations produced by this resolution step are not considered part of B2.)
-        //
-        //If the invocation is not a poly expression, let the bound set B3 be the same as B2.
-        //
-        //        If the invocation is a poly expression, let the bound set B3 be derived from B2 as follows. Let R be the return type of m, let T be the invocation's target type, and then:
-        //
-        //If unchecked conversion was necessary for the method to be applicable during constraint set reduction in §18.5.1, the constraint formula ‹|R| → T› is reduced and incorporated with B2.
-        //
-        //Otherwise, if R θ is a parameterized type, G<A1, ..., An>, and one of A1, ..., An is a wildcard, then, for fresh inference variables β1, ..., βn, the constraint formula ‹G<β1, ..., βn> → T› is reduced and incorporated, along with the bound G<β1, ..., βn> = capture(G<A1, ..., An>), with B2.
-        //
-        //Otherwise, if R θ is an inference variable α, and one of the following is true:
-        //
-        //T is a reference type, but is not a wildcard-parameterized type, and either i) B2 contains a bound of one of the forms α = S or S <: α, where S is a wildcard-parameterized type, or ii) B2 contains two bounds of the forms S1 <: α and S2 <: α, where S1 and S2 have supertypes that are two different parameterizations of the same generic class or interface.
-        //
-        //T is a parameterization of a generic class or interface, G, and B2 contains a bound of one of the forms α = S or S <: α, where there exists no type of the form G<...> that is a supertype of S, but the raw type |G<...>| is a supertype of S.
-        //
-        //        T is a primitive type, and one of the primitive wrapper classes mentioned in §5.1.7 is an instantiation, upper bound, or lower bound for α in B2.
-        //
-        //        then α is resolved in B2, and where the capture of the resulting instantiation of α is U, the constraint formula ‹U → T› is reduced and incorporated with B2.
-        //
-        //Otherwise, the constraint formula ‹R θ → T› is reduced and incorporated with B2.
+        BoundSet B3 = invocationTypeInferenceBoundsSetB3();
         //
         //A set of constraint formulas, C, is constructed as follows.
         //
