@@ -111,6 +111,7 @@ public final class JavaParser {
             astParser.reset(provider);
         }
         astParser.setTabSize(configuration.getTabSize());
+        astParser.setStoreTokens(configuration.isStoreTokens());
         return astParser;
     }
 

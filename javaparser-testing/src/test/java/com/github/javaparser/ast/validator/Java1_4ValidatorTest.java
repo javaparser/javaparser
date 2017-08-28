@@ -49,7 +49,7 @@ public class Java1_4ValidatorTest {
 
     @Test
     public void noforeach() {
-        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){};"));
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x: xs){}"));
         assertProblems(result, "(line 1,col 1) For-each loops are not supported.");
     }
 

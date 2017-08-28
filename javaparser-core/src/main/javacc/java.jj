@@ -161,6 +161,11 @@ final class GeneratedJavaParser {
     public void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
+
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        token_source.setStoreTokens(storeTokens);
+    }
 }
 
 PARSER_END(GeneratedJavaParser)
@@ -208,6 +213,7 @@ TOKEN_MGR_DECLS :
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
     private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
+    private boolean storeTokens;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -215,15 +221,24 @@ TOKEN_MGR_DECLS :
     }
 
     List<JavaToken> getTokens() {
-        return tokens;
+        if(storeTokens) {
+            return tokens;
+        }
+        return null;
     }
 
     CommentsCollection getCommentsCollection() {
         return commentsCollection;
     }
 
+    /* Get the very first token in the file */
     JavaToken getHomeToken() {
         return homeToken;
+    }
+
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        this.storeTokens = storeTokens;
     }
 
     private void CommonTokenAction(Token rawToken) {
@@ -238,7 +253,9 @@ TOKEN_MGR_DECLS :
         while(!tokenWorkStack.empty()) {
             token = tokenWorkStack.pop();
             token.javaToken = new JavaToken(token, tokens);
-            tokens.add(token.javaToken);
+            if(storeTokens) {
+                tokens.add(token.javaToken);
+            }
             if (homeToken == null) {
                 homeToken = token.javaToken;
             }
@@ -2804,3 +2821,72 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
     "}"
     { return new ModuleDeclaration(range(begin, token()), modifier.annotations, name, open, statements); }
 }
+
+/* Rules for matching partial inputs.
+These rules are needed to properly terminate them -
+if we simply use the usual rules, they will ignore everything in the provider
+after they matched their desired input, which will lead to unexpected behaviour
+*/
+
+
+BlockStmt BlockParseStart():
+{ BlockStmt ret; }
+{ ret = Block() <EOF> { return ret; } }
+
+Statement BlockStatementParseStart():
+{ Statement ret; }
+{ ret = BlockStatement() <EOF> { return ret; } }
+
+ImportDeclaration ImportDeclarationParseStart():
+{ ImportDeclaration ret; }
+{ ret = ImportDeclaration() <EOF> { return ret; } }
+
+Expression ExpressionParseStart():
+{ Expression ret; }
+{ ret = Expression() <EOF> { return ret; } }
+
+AnnotationExpr AnnotationParseStart():
+{ AnnotationExpr ret; }
+{ ret = Annotation() <EOF> { return ret; } }
+
+BodyDeclaration<?> AnnotationBodyDeclarationParseStart():
+{ BodyDeclaration<?> ret; }
+{ ret = AnnotationBodyDeclaration() <EOF> { return ret; } }
+
+BodyDeclaration<?> ClassOrInterfaceBodyDeclarationParseStart():
+{ BodyDeclaration<?> ret; }
+{ ret = ClassOrInterfaceBodyDeclaration() <EOF> { return ret; } }
+
+ClassOrInterfaceType ClassOrInterfaceTypeParseStart():
+{ ClassOrInterfaceType ret; }
+{ ret = ClassOrInterfaceType() <EOF> { return ret; } }
+
+Type ResultTypeParseStart():
+{ Type ret; }
+{ ret = ResultType() <EOF> { return ret; } }
+
+
+VariableDeclarationExpr VariableDeclarationExpressionParseStart():
+{ VariableDeclarationExpr ret; }
+{ ret = VariableDeclarationExpression() <EOF> { return ret; } }
+
+
+ExplicitConstructorInvocationStmt ExplicitConstructorInvocationParseStart():
+{ ExplicitConstructorInvocationStmt ret; }
+{ ret = ExplicitConstructorInvocation() <EOF> { return ret; } }
+
+
+Name NameParseStart():
+{ Name ret; }
+{ ret = Name() <EOF> { return ret; } }
+
+
+Parameter ParameterParseStart():
+{ Parameter ret; }
+{ ret = Parameter() <EOF> { return ret; } }
+
+
+PackageDeclaration PackageDeclarationParseStart():
+{ PackageDeclaration ret; }
+{ ret = PackageDeclaration() <EOF> { return ret; } }
+
