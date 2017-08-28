@@ -17,11 +17,17 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
 import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -63,6 +69,12 @@ public class JavaParserParameterDeclaration implements ParameterDeclaration {
 
     @Override
     public Type getType() {
+        if (wrappedNode.getType() instanceof UnknownType && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
+            Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver).solveSymbolAsValue(wrappedNode.getNameAsString(), typeSolver);
+            if (value.isPresent()) {
+                return value.get().getType();
+            }
+        }
         Type res = JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), wrappedNode);
         if (isVariadic()) {
             res = new ArrayType(res);
