@@ -95,6 +95,15 @@ public final class JavaParser {
         JavaParser.staticConfiguration = staticConfiguration;
     }
 
+    /**
+     * Get the non-static configuration for this parser.
+     *
+     * @return The non-static configuration for this parser.
+     */
+    public ParserConfiguration getParserConfiguration() {
+        return this.configuration;
+    }
+
     private GeneratedJavaParser getParserForProvider(Provider provider) {
         if (astParser == null) {
             astParser = new GeneratedJavaParser(provider);
