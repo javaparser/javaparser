@@ -53,7 +53,6 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
         // to ‹S → T›.
 
         if (isStandaloneExpression(expression)) {
-            System.out.println("STANDALONE EXPRESSION " + expression);
             Type s = JavaParserFacade.get(typeSolver).getType(expression, false);
             return ReductionResult.empty().withConstraint(new TypeCompatibleWithType(typeSolver, s, T));
         }
