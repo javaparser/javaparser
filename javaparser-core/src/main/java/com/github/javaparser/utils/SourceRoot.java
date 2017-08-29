@@ -155,7 +155,7 @@ public class SourceRoot {
         assertNotNull(startPackage);
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
-        ParallelParse w = new ParallelParse(path, new ParallelParse.VisitFileCallback() {
+        ParallelParse parse = new ParallelParse(path, new ParallelParse.VisitFileCallback() {
             @Override
             public FileVisitResult process(Path file, BasicFileAttributes attrs) {
                 if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
@@ -170,8 +170,8 @@ public class SourceRoot {
                 return FileVisitResult.CONTINUE;
             }
         });
-        ForkJoinPool p = new ForkJoinPool();
-        p.invoke(w);
+        ForkJoinPool pool = new ForkJoinPool();
+        pool.invoke(parse);
         return getCache();
     }
 
@@ -267,7 +267,7 @@ public class SourceRoot {
         assertNotNull(callback);
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
-        ParallelParse w = new ParallelParse(path, new ParallelParse.VisitFileCallback() {
+        ParallelParse parse = new ParallelParse(path, new ParallelParse.VisitFileCallback() {
             @Override
             public FileVisitResult process(Path file, BasicFileAttributes attrs) {
                 if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
@@ -290,8 +290,8 @@ public class SourceRoot {
                 return FileVisitResult.CONTINUE;
             }
         });
-        ForkJoinPool p = new ForkJoinPool();
-        p.invoke(w);
+        ForkJoinPool pool = new ForkJoinPool();
+        pool.invoke(parse);
         return this;
     }
 
