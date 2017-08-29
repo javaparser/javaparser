@@ -73,52 +73,48 @@ public class SourceRoot {
         assertNotNull(startPackage);
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
-        class AsynchronousParse extends RecursiveAction {
-
-            private static final long serialVersionUID = 1L;
-            private final Path path;
-
-            public AsynchronousParse(Path path) {
-                this.path = path;
-            }
-
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
-            protected void compute() {
-                final List<AsynchronousParse> walks = new ArrayList<>();
-                try {
-                    Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-                        @Override
-                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                                throws IOException {
-                            if (!dir.equals(AsynchronousParse.this.path)) {
-                                AsynchronousParse w = new AsynchronousParse(dir);
-                                w.fork();
-                                walks.add(w);
-                                return FileVisitResult.SKIP_SUBTREE;
-                            } else {
-                                return FileVisitResult.CONTINUE;
-                            }
-                        }
-
-                        @Override
-                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
-                                Path relative = root.relativize(file.getParent());
-                                tryToParse(relative.toString(), file.getFileName().toString());
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.error(e);
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
+                    Path relative = root.relativize(file.getParent());
+                    tryToParse(relative.toString(), file.getFileName().toString());
                 }
-
-                for (AsynchronousParse w : walks) {
-                    w.join();
-                }
+                return FileVisitResult.CONTINUE;
             }
-        }
-        AsynchronousParse w = new AsynchronousParse(path);
+        });
+        return getCache();
+    }
+
+    /**
+     * Tries to parse all .java files in a package recursively using multiple threads, and returns all files ever
+     * parsed with this source root.
+     * A new thread is forked each time a new directory is visited and is responsible for parsing all .java files in
+     * that directory.
+     * It keeps track of all parsed files so you can write them out with a single saveAll() call.
+     * Note that the cache grows with every file parsed,
+     * so if you don't need saveAll(),
+     * or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you might want to use
+     * the parse method with a callback.
+     */
+    public List<ParseResult<CompilationUnit>> tryToParseParallelized(String startPackage) throws IOException {
+        assertNotNull(startPackage);
+        Log.info("Parsing package \"%s\"", startPackage);
+        final Path path = packageAbsolutePath(root, startPackage);
+        AsynchronousParse w = new AsynchronousParse(path, new AsynchronousParse.VisitFileCallback() {
+            @Override
+            public FileVisitResult process(Path file, BasicFileAttributes attrs) {
+                if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
+                    Path relative = root.relativize(file.getParent());
+                    try {
+                        tryToParse(relative.toString(), file.getFileName().toString());
+                    } catch (IOException e) {
+                        Log.error(e);
+                    }
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
         ForkJoinPool p = new ForkJoinPool();
         p.invoke(w);
         return getCache();
@@ -135,63 +131,66 @@ public class SourceRoot {
         assertNotNull(callback);
         Log.info("Parsing package \"%s\"", startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
-        class AsynchronousParse extends RecursiveAction {
-
-            private static final long serialVersionUID = 1L;
-            private final Path path;
-
-            public AsynchronousParse(Path path) {
-                this.path = path;
-            }
-
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
-            protected void compute() {
-                final List<AsynchronousParse> walks = new ArrayList<>();
-                try {
-                    Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-
-                        @Override
-                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                                throws IOException {
-                            if (!dir.equals(AsynchronousParse.this.path)) {
-                                AsynchronousParse w = new AsynchronousParse(dir);
-                                w.fork();
-                                walks.add(w);
-                                return FileVisitResult.SKIP_SUBTREE;
-                            } else {
-                                return FileVisitResult.CONTINUE;
-                            }
+            public FileVisitResult visitFile(Path absolutePath, BasicFileAttributes attrs) throws IOException {
+                if (!attrs.isDirectory() && absolutePath.toString().endsWith(".java")) {
+                    Path localPath = root.relativize(absolutePath);
+                    Log.trace("Parsing %s", localPath);
+                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT,
+                            provider(absolutePath));
+                    result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
+                    if (callback.process(localPath, absolutePath, result) == SAVE) {
+                        if (result.getResult().isPresent()) {
+                            save(result.getResult().get(), path);
                         }
-
-                        @Override
-                        public FileVisitResult visitFile(Path absolutePath, BasicFileAttributes attrs)
-                                throws IOException {
-                            if (!attrs.isDirectory() && absolutePath.toString().endsWith(".java")) {
-                                Path localPath = root.relativize(absolutePath);
-                                Log.trace("Parsing %s", localPath);
-                                final ParseResult<CompilationUnit> result = new JavaParser(
-                                        SourceRoot.this.javaParser.getParserConfiguration()).parse(COMPILATION_UNIT,
-                                                provider(absolutePath));
-                                result.getResult().ifPresent(cu -> cu.setStorage(absolutePath));
-                                if (callback.process(localPath, absolutePath, result) == SAVE) {
-                                    if (result.getResult().isPresent()) {
-                                        save(result.getResult().get(), path);
-                                    }
-                                }
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.error(e);
+                    }
                 }
-
-                for (AsynchronousParse w : walks) {
-                    w.join();
-                }
+                return FileVisitResult.CONTINUE;
             }
-        }
-        AsynchronousParse w = new AsynchronousParse(path);
+        });
+        return this;
+    }
+
+    /**
+     * Tries to parse all .java files in a package recursively using multiple threads, and passes them one by one to
+     * the callback.
+     * A new thread is forked each time a new directory is visited and is responsible for parsing all .java files in
+     * that directory.
+     * <b>Note that</b> the provided {@link Callback} code must be thread-safe.
+     * In comparison to the other parse methods, this is much more memory efficient,
+     * but saveAll() won't work.
+     */
+    public SourceRoot parseParallelized(String startPackage, JavaParser javaParser, Callback callback)
+            throws IOException {
+        assertNotNull(startPackage);
+        assertNotNull(javaParser);
+        assertNotNull(callback);
+        Log.info("Parsing package \"%s\"", startPackage);
+        final Path path = packageAbsolutePath(root, startPackage);
+        AsynchronousParse w = new AsynchronousParse(path, new AsynchronousParse.VisitFileCallback() {
+            @Override
+            public FileVisitResult process(Path file, BasicFileAttributes attrs) {
+                if (!attrs.isDirectory() && file.toString().endsWith(".java")) {
+                    Path localPath = root.relativize(file);
+                    Log.trace("Parsing %s", localPath);
+                    try {
+                        ParseResult<CompilationUnit> result = new JavaParser(
+                                SourceRoot.this.javaParser.getParserConfiguration()).parse(COMPILATION_UNIT,
+                                        provider(file));
+                        result.getResult().ifPresent(cu -> cu.setStorage(file));
+                        if (callback.process(localPath, file, result) == SAVE) {
+                            if (result.getResult().isPresent()) {
+                                save(result.getResult().get(), path);
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.error(e);
+                    }
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
         ForkJoinPool p = new ForkJoinPool();
         p.invoke(w);
         return this;
@@ -208,6 +207,22 @@ public class SourceRoot {
      */
     public List<ParseResult<CompilationUnit>> tryToParse() throws IOException {
         return tryToParse("");
+    }
+
+    /**
+     * Tries to parse all .java files under the source root recursively using multiple threads, and returns all files
+     * ever parsed with this
+     * source root.
+     * A new thread is forked each time a new directory is visited and is responsible for parsing all .java files in
+     * that directory.
+     * It keeps track of all parsed files so you can write them out with a single saveAll() call.
+     * Note that the cache grows with every file parsed,
+     * so if you don't need saveAll(),
+     * or you don't ask SourceRoot to parse files multiple times (where the cache is useful) you might want to use
+     * the parse method with a callback.
+     */
+    public List<ParseResult<CompilationUnit>> tryToParseParallelized() throws IOException {
+        return tryToParseParallelized("");
     }
 
     /**
@@ -343,6 +358,60 @@ public class SourceRoot {
             throw new AssertionError("Files added with this method should have their path set.");
         }
         return this;
+    }
+
+    /**
+     * Executes a recursive file tree walk using threads. A new thread is invoked for each new directory discovered
+     * during the walk. For each file visited, the user-provided {@link VisitFileCallback} is called
+     * with the current path and file attributes. Any shared resources accessed in a {@link VisitFileCallback} should
+     * be thread-safe.
+     */
+    private static class AsynchronousParse extends RecursiveAction {
+
+        private static final long serialVersionUID = 1L;
+        private final Path path;
+        private final VisitFileCallback callback;
+
+        AsynchronousParse(Path path, VisitFileCallback callback) {
+            this.path = path;
+            this.callback = callback;
+        }
+
+        @Override
+        protected void compute() {
+            final List<AsynchronousParse> walks = new ArrayList<>();
+            try {
+                Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                            throws IOException {
+                        if (!dir.equals(AsynchronousParse.this.path)) {
+                            AsynchronousParse w = new AsynchronousParse(dir, callback);
+                            w.fork();
+                            walks.add(w);
+                            return FileVisitResult.SKIP_SUBTREE;
+                        } else {
+                            return FileVisitResult.CONTINUE;
+                        }
+                    }
+
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        return callback.process(file, attrs);
+                    }
+                });
+            } catch (IOException e) {
+                Log.error(e);
+            }
+
+            for (AsynchronousParse w : walks) {
+                w.join();
+            }
+        }
+
+        static interface VisitFileCallback {
+            FileVisitResult process(Path file, BasicFileAttributes attrs);
+        }
     }
 
     /**
