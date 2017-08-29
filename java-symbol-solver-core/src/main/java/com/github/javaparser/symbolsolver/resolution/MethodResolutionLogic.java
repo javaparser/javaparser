@@ -194,34 +194,11 @@ public class MethodResolutionLogic {
             if (expectedParam.isTypeVariable()) {
                 String expectedParamName = expectedParam.asTypeParameter().getName();
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
-                    if (matchedParameters.containsKey(expectedParamName)) {
-                        Type matchedParameter = matchedParameters.get(expectedParamName);
-                        if (matchedParameter.isAssignableBy(actualParam)) {
-                            return true;
-                        } else if (actualParam.isAssignableBy(matchedParameter)) {
-                            matchedParameters.put(expectedParamName, actualParam);
-                            return true;
-                        }
-                        return false;
-                    } else {
-                        matchedParameters.put(expectedParamName, actualParam);
-                    }
+                    return matchTypeVariable(expectedParam.asTypeVariable(), actualParam, matchedParameters);
                 }
             } else if (expectedParam.isReferenceType()) {
-                if (actualParam.isTypeVariable()) {    
-                    String actualParamName = actualParam.asTypeParameter().getName();
-                    if (matchedParameters.containsKey(actualParamName)) {
-                        Type matchedParameter = matchedParameters.get(actualParamName);
-                        if (matchedParameter.isAssignableBy(expectedParam)) {
-                            return true;
-                        } else if (expectedParam.isAssignableBy(matchedParameter)) {
-                            matchedParameters.put(actualParamName, expectedParam);
-                            return true;
-                        }
-                        return false;
-                    } else {
-                        matchedParameters.put(actualParamName, expectedParam);
-                    }
+                if (actualParam.isTypeVariable()) {
+                    return matchTypeVariable(actualParam.asTypeVariable(), expectedParam, matchedParameters);
                 } else if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
@@ -234,6 +211,24 @@ public class MethodResolutionLogic {
             } else {
                 throw new UnsupportedOperationException(expectedParam.describe());
             }
+        }
+        return true;
+    }
+
+    private static boolean matchTypeVariable(TypeVariable typeVariable, Type type, Map<String, Type> matchedParameters) {
+        String typeParameterName = typeVariable.asTypeParameter().getName();
+        if (matchedParameters.containsKey(typeParameterName)) {
+            Type matchedParameter = matchedParameters.get(typeParameterName);
+            if (matchedParameter.isAssignableBy(type)) {
+                return true;
+            } else if (type.isAssignableBy(matchedParameter)) {
+                // update matchedParameters to contain the more general type
+                matchedParameters.put(typeParameterName, type);
+                return true;
+            }
+            return false;
+        } else {
+            matchedParameters.put(typeParameterName, type);
         }
         return true;
     }
