@@ -150,8 +150,11 @@ class JavassistUtils {
             }
             TypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
             return new TypeVariable(typeParameterDeclaration);
+        } else if (signatureType instanceof SignatureAttribute.ArrayType) {
+            SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
+            return new ArrayType(signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable));
         } else if (signatureType instanceof SignatureAttribute.BaseType) {
-            SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType)signatureType;
+            SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
             if (baseType.toString().equals("void")) {
                 return VoidType.INSTANCE;
             } else {

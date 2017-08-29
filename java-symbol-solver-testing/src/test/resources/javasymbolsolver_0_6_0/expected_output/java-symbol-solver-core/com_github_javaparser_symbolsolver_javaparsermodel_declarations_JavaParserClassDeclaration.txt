@@ -38,7 +38,7 @@
   Line 173) wrappedNode.getMembers() ==> com.github.javaparser.ast.body.TypeDeclaration.getMembers()
   Line 176) declared.add(new JavaParserConstructorDeclaration(this, constructorDeclaration, typeSolver)) ==> java.util.List.add(E)
   Line 179) declared.isEmpty() ==> java.util.List.isEmpty()
-  Line 181) ImmutableList.of(new DefaultConstructorDeclaration(this)) ==> ERROR
+  Line 181) ImmutableList.of(new DefaultConstructorDeclaration(this)) ==> com.google.common.collect.ImmutableList.of(E)
   Line 189) wrappedNode.getAnnotations() ==> com.github.javaparser.ast.body.BodyDeclaration.getAnnotations()
   Line 190) solveType(annotationExpr.getName().getId(), typeSolver).getCorrespondingDeclaration().getQualifiedName().equals(canonicalName) ==> java.lang.String.equals(java.lang.Object)
   Line 190) solveType(annotationExpr.getName().getId(), typeSolver).getCorrespondingDeclaration().getQualifiedName() ==> com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.getQualifiedName()
