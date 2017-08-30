@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.InternalProperty;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -471,5 +472,10 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         if (childNode != null) {
             childNode.setParentNode(getParentNodeForChildren());
         }
+    }
+
+    @Override
+    public String toString() {
+        return innerList.stream().map(Node::toString).collect(Collectors.joining());
     }
 }
