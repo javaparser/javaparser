@@ -29,6 +29,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private boolean printJavaDoc = true;
+    private boolean columnAlignParameters = false;
     private String indent = "    ";
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
@@ -53,6 +54,10 @@ public class PrettyPrinterConfiguration {
     public boolean isPrintJavaDoc() {
         return printJavaDoc;
     }
+    
+    public boolean isColumnAlignParameters() {
+        return columnAlignParameters;
+    }
 
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
@@ -61,6 +66,11 @@ public class PrettyPrinterConfiguration {
 
     public PrettyPrinterConfiguration setPrintJavaDoc(boolean printJavaDoc) {
         this.printJavaDoc = printJavaDoc;
+        return this;
+    }
+    
+    public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
+        this.columnAlignParameters = columnAlignParameters;
         return this;
     }
 

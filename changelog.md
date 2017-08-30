@@ -1,7 +1,13 @@
+Version 3.3.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/55?closed=1)
+* Parsing a partial java file (like an expression or statement) no longer ignores trailing code.
+* New memory saving option: turn off token list.
+
 Version 3.3.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/54?closed=1)
-* `VisitorMap` lets you overre hashcode/equals for nodes when used as a key for a map.
+* `VisitorMap` lets you override hashcode/equals for nodes when used as a key for a map.
 
 Version 3.3.1
 ------------------

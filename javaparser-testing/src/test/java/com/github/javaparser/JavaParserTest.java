@@ -28,20 +28,19 @@ import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.Range.*;
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
@@ -99,7 +98,7 @@ public class JavaParserTest {
 
     @Test
     public void parseErrorContainsLocation() {
-        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, Providers.provider("class X { // blah"));
+        ParseResult<CompilationUnit> result = new JavaParser().parse(COMPILATION_UNIT, provider("class X { // blah"));
 
         Problem problem = result.getProblem(0);
         assertEquals(range(1, 9, 1, 17), problem.getLocation().get().toRange().get());
@@ -191,5 +190,23 @@ public class JavaParserTest {
         LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
         Statement lambdaBody = lambdaExpr.getBody();
         assertEquals(range(3, 68, 3, 101), lambdaBody.getRange().get());
+    }
+    
+    @Test
+    public void testNotStoringTokens() {
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
+        ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
+        assertEquals(false, result.getTokens().isPresent());
+    }
+
+    @Test(expected = ParseProblemException.class)
+    public void trailingCodeIsAnError() {
+        JavaParser.parseBlock("{} efijqoifjqefj");
+    }
+
+    @Test
+    public void trailingWhitespaceIsIgnored() {
+        BlockStmt blockStmt = JavaParser.parseBlock("{} // hello");
+        assertEquals("\"}\" <120> (line 1,col 2)-(line 1,col 2)", blockStmt.getTokenRange().get().getEnd().toString());
     }
 }
