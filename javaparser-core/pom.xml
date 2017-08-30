@@ -50,7 +50,7 @@
                     <dependency>
                         <groupId>net.java.dev.javacc</groupId>
                         <artifactId>javacc</artifactId>
-                        <version>6.1.2</version>
+                        <version>7.0.2</version>
                     </dependency>
                 </dependencies>
             </plugin>
