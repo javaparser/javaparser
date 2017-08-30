@@ -195,6 +195,12 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
+    public void visit(final StubUnit n, final A arg) {
+        n.getCompilationUnits().forEach(cu -> cu.accept(this, arg));
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorAdapterGenerator")
     public void visit(final ConditionalExpr n, final A arg) {
         n.getCondition().accept(this, arg);
         n.getElseExpr().accept(this, arg);

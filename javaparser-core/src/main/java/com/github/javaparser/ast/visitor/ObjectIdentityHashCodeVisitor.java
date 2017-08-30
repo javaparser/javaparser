@@ -144,6 +144,11 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityHashCodeVisitorGenerator")
+    public Integer visit(final StubUnit n, final Void arg) {
+        return n.hashCode();
+    }
+
+    @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityHashCodeVisitorGenerator")
     public Integer visit(final CompilationUnit n, final Void arg) {
         return n.hashCode();
     }

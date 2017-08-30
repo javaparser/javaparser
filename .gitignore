@@ -11,3 +11,4 @@ target
 *.iml
 release.properties
 **/.DS_Store
+stubparser.jar

@@ -214,6 +214,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final StubUnit n, final Void arg) {
+        n.getCompilationUnits().forEach(cu -> cu.accept(this, arg));
+    }
+
+    @Override
     public void visit(final PackageDeclaration n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);

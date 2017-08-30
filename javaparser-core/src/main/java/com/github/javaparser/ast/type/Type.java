@@ -29,8 +29,11 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+
+import java.util.List;
 
 /**
  * Base class for types.
@@ -38,6 +41,8 @@ import com.github.javaparser.TokenRange;
  * @author Julio Vilmar Gesser
  */
 public abstract class Type extends Node {
+
+    private List<ArrayType.ArrayBracketPair> arrayBracketPairs;
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -145,5 +150,37 @@ public abstract class Type extends Node {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    /**
+     * Finds the list of annotations at the particular array level of the type and returns it.
+     * Throws the IllegalArgumentException if specified level is greater then maximal level
+     * of the array in this type or less then 0.
+     * @param level the array level which annotations should be returned.
+     * @return the annotations at the particular array level.
+     */
+    public List<AnnotationExpr> getAnnotationsAtLevel(int level) {
+        if (level >= getArrayCount() || level < 0) {
+            throw new IllegalArgumentException("The level argument should be greater then 0 and" +
+                    "less then the array count (" + getArrayCount() + "). Specified level is " + level);
+        }
+        return arrayBracketPairs.get(level).getAnnotations();
+    }
+
+    public List<ArrayType.ArrayBracketPair> getArrayBracketPairs() {
+        return arrayBracketPairs;
+    }
+
+    public Type setArrayBracketPairs(List<ArrayType.ArrayBracketPair> arrayBracketPairs) {
+        this.arrayBracketPairs = arrayBracketPairs;
+        return this;
+    }
+
+    /**
+     * Checks and returns the maximum level of the array.
+     * If the type is not array it should return 0.
+     */
+    public int getArrayCount() {
+        return arrayBracketPairs == null ? 0 : arrayBracketPairs.size();
     }
 }

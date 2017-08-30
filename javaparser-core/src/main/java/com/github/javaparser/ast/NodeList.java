@@ -472,4 +472,11 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             childNode.setParentNode(getParentNodeForChildren());
         }
     }
+
+    @Override
+    public String toString() {
+        return "NodeList{" +
+                "innerList=" + innerList +
+                '}';
+    }
 }

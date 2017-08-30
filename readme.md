@@ -1,3 +1,11 @@
+## Stub Parser
+
+This package contains a parser for the Checker Framework's stub files:
+https://checkerframework.org/manual/#stub
+It is a fork of the [JavaParser](http://javaparser.org) project.
+The remainder of this README file is the JavaParser README.
+
+
 ## Java Parser and Abstract Syntax Tree
 
 This package contains a Java 1.0 - Java 9 Parser with AST generation and visitor support.

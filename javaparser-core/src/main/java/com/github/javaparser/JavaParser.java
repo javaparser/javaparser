@@ -23,6 +23,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.StubUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -294,6 +295,157 @@ public final class JavaParser {
      */
     public static CompilationUnit parse(String code) {
         return simplifiedParse(COMPILATION_UNIT, provider(code));
+    }
+
+    /**
+     * Parses the stub files code contained in the {@link InputStream} and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param in {@link InputStream} containing stub files source code. It will be closed after parsing.
+     * @param encoding encoding of the source code.
+     * @return CompilationUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     */
+    public static StubUnit parseStubUnit(final InputStream in, Charset encoding) {
+        return simplifiedParse(STUB_UNIT, provider(in, encoding));
+    }
+
+    /**
+     * Parses the stub files code contained in the {@link InputStream} and returns a
+     * {@link StubUnit} that represents it.
+     * Note: Uses UTF-8 encoding.
+     *
+     * @param in {@link InputStream} containing stub files source code. It will be closed after parsing.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     */
+    public static StubUnit parseStubUnit(final InputStream in) {
+        return parseStubUnit(in, UTF8);
+    }
+
+    /**
+     * Parses the stub files code contained in a {@link File} and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param file {@link File} containing stub classes source code. It will be closed after parsing.
+     * @param encoding encoding of the source code.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     * @throws FileNotFoundException the file was not found.
+     */
+    public static StubUnit parseStubUnit(final File file, final Charset encoding) throws FileNotFoundException {
+        return simplifiedParse(STUB_UNIT, provider(file, encoding)).setStorage(file.toPath());
+    }
+
+    /**
+     * Parses the stub files code contained in a {@link File} and returns a
+     * {@link StubUnit} that represents it.
+     * Note: Uses UTF-8 encoding.
+     *
+     * @param file {@link File} containing stub files source code. It will be closed after parsing.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     * @throws FileNotFoundException the file was not found.
+     */
+    public static StubUnit parseStubUnit(final File file) throws FileNotFoundException {
+        return simplifiedParse(STUB_UNIT, provider(file)).setStorage(file.toPath());
+    }
+
+    /**
+     * Parses the stub files code contained in a file and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param path path to a file containing stub files source code.
+     * @param encoding encoding of the source code.
+     * @return StubUnit representing the stub files source code.
+     * @throws IOException the path could not be accessed.
+     * @throws ParseProblemException if the source code has parser errors.
+     */
+    public static StubUnit parseStubUnit(final Path path, final Charset encoding) throws IOException {
+        return simplifiedParse(STUB_UNIT, provider(path, encoding)).setStorage(path);
+    }
+
+    /**
+     * Parses the stub files code contained in a file and returns a
+     * {@link StubUnit} that represents it.
+     * Note: Uses UTF-8 encoding.
+     *
+     * @param path path to a file containing stub files source code.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     * @throws IOException the path could not be accessed.
+     */
+    public static StubUnit parseStubUnit(final Path path) throws IOException {
+        return simplifiedParse(STUB_UNIT, provider(path)).setStorage(path);
+    }
+
+    /**
+     * Parses the stub files code contained in a resource and returns a
+     * {@link StubUnit} that represents it.
+     * Note: Uses UTF-8 encoding.
+     *
+     * @param path path to a resource containing stub files source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     * @throws IOException the path could not be accessed.
+     */
+    public static StubUnit parseResourceStubUnit(final String path) throws IOException {
+        return simplifiedParse(STUB_UNIT, resourceProvider(path));
+    }
+
+    /**
+     * Parses the stub files code contained in a resource and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param path path to a resource containing stub files source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource.
+     * @param encoding encoding of the source code.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     * @throws IOException the path could not be accessed.
+     */
+    public static StubUnit parseResourceStubUnit(final String path, Charset encoding) throws IOException {
+        return simplifiedParse(STUB_UNIT, resourceProvider(path, encoding));
+    }
+
+    /**
+     * Parses the stub files code contained in a resource and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param classLoader the classLoader that is asked to load the resource
+     * @param path path to a resource containing stub files source code. As resource is accessed through a class loader, a
+     * leading "/" is not allowed in pathToResource.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     * @throws IOException the path could not be accessed.
+     */
+    public static StubUnit parseResourceStubUnit(final ClassLoader classLoader, final String path, Charset encoding) throws IOException {
+        return simplifiedParse(STUB_UNIT, resourceProvider(classLoader, path, encoding));
+    }
+
+    /**
+     * Parses stub files code from a Reader and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param reader the reader containing stub files source code. It will be closed after parsing.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     */
+    public static StubUnit parseStubUnit(final Reader reader) {
+        return simplifiedParse(STUB_UNIT, provider(reader));
+    }
+
+    /**
+     * Parses the stub files code contained in code and returns a
+     * {@link StubUnit} that represents it.
+     *
+     * @param code stub files source code.
+     * @return StubUnit representing the stub files source code.
+     * @throws ParseProblemException if the source code has parser errors.
+     */
+    public static StubUnit parseStubUnit(String code) {
+        return simplifiedParse(STUB_UNIT, provider(code));
     }
 
     /**

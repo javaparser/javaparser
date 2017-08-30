@@ -104,6 +104,9 @@ public interface VoidVisitor<A> {
     void visit(CompilationUnit n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
+    void visit(StubUnit n, A arg);
+
+    @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(ConditionalExpr n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")

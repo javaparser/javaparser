@@ -299,6 +299,24 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         return n;
     }
 
+    // TODO Implement ModifierVisitor for StubUnit
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
+    public Visitable visit(final StubUnit n, final A arg) {
+        /*NodeList<ImportDeclaration> imports = modifyList(n.getImports(), arg);
+        ModuleDeclaration module = n.getModule().map(s -> (ModuleDeclaration) s.accept(this, arg)).orElse(null);
+        PackageDeclaration packageDeclaration = n.getPackageDeclaration().map(s -> (PackageDeclaration) s.accept(this, arg)).orElse(null);
+        NodeList<TypeDeclaration<?>> types = modifyList(n.getTypes(), arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setImports(imports);
+        n.setModule(module);
+        n.setPackageDeclaration(packageDeclaration);
+        n.setTypes(types);
+        n.setComment(comment);
+        return n;*/
+        throw new RuntimeException("The method is not implemented!");
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final ConditionalExpr n, final A arg) {
