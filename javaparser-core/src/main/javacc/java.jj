@@ -161,6 +161,11 @@ final class GeneratedJavaParser {
     public void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
+
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        token_source.setStoreTokens(storeTokens);
+    }
 }
 
 PARSER_END(GeneratedJavaParser)
@@ -207,6 +212,8 @@ TOKEN_MGR_DECLS :
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
+    private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
+    private boolean storeTokens;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
@@ -214,45 +221,63 @@ TOKEN_MGR_DECLS :
     }
 
     List<JavaToken> getTokens() {
-        return tokens;
+        if(storeTokens) {
+            return tokens;
+        }
+        return null;
     }
 
     CommentsCollection getCommentsCollection() {
         return commentsCollection;
     }
 
+    /* Get the very first token in the file */
     JavaToken getHomeToken() {
         return homeToken;
     }
 
-    private void CommonTokenAction(Token rawToken) {
-        CustomToken token = (CustomToken) rawToken;
-        if(token.specialToken!=null) {
-            CommonTokenAction(token.specialToken);
-        }
-        token.javaToken = new JavaToken(token, tokens);
-        tokens.add(token.javaToken);
-        if (homeToken == null) {
-            homeToken = token.javaToken;
-        }
+    /* Makes the parser keep a list of tokens */
+    public void setStoreTokens(boolean storeTokens) {
+        this.storeTokens = storeTokens;
+    }
 
-        String commentText = token.image;
-        if (token.kind == JAVA_DOC_COMMENT) {
-            JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-            commentsCollection.addComment(comment);
-        } else if (token.kind == MULTI_LINE_COMMENT) {
-            BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-            commentsCollection.addComment(comment);
-        } else if (token.kind == SINGLE_LINE_COMMENT) {
-            // line comments have their end of line character(s) included, and we don't want that.
-            Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
-            while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                commentText = commentText.substring(0, commentText.length() - 1);
+    private void CommonTokenAction(Token rawToken) {
+        // Use an intermediary stack to avoid recursion, see issue 1003
+        CustomToken token = (CustomToken) rawToken;
+        do {
+            tokenWorkStack.push(token);
+            token = (CustomToken) token.specialToken;
+        } while (token != null);
+
+        // The stack is now filled with tokens in left-to-right order. Process them.
+        while(!tokenWorkStack.empty()) {
+            token = tokenWorkStack.pop();
+            token.javaToken = new JavaToken(token, tokens);
+            if(storeTokens) {
+                tokens.add(token.javaToken);
             }
-            range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-            LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
-            comment.setRange(range);
-            commentsCollection.addComment(comment);
+            if (homeToken == null) {
+                homeToken = token.javaToken;
+            }
+
+            String commentText = token.image;
+            if (token.kind == JAVA_DOC_COMMENT) {
+                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
+                commentsCollection.addComment(comment);
+            } else if (token.kind == MULTI_LINE_COMMENT) {
+                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
+                commentsCollection.addComment(comment);
+            } else if (token.kind == SINGLE_LINE_COMMENT) {
+                // line comments have their end of line character(s) included, and we don't want that.
+                Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
+                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
+                    commentText = commentText.substring(0, commentText.length() - 1);
+                }
+                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
+                LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
+                comment.setRange(range);
+                commentsCollection.addComment(comment);
+            }
         }
     }
 }
@@ -266,7 +291,7 @@ SPECIAL_TOKEN :
 
 MORE :
 {
-  <"/**" ~["/"]> { input_stream.backup(1); } : IN_JAVA_DOC_COMMENT
+  <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVA_DOC_COMMENT
 |
   <"/*"> : IN_MULTI_LINE_COMMENT
 }
@@ -286,7 +311,7 @@ SPECIAL_TOKEN :
 <IN_JAVA_DOC_COMMENT, IN_MULTI_LINE_COMMENT>
 MORE :
 {
-  < ~[] >
+  <COMMENT_CONTENT: ~[] >
 }
 
 /* RESERVED WORDS AND LITERALS */
@@ -2899,3 +2924,72 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
     "}"
     { return new ModuleDeclaration(range(begin, token()), modifier.annotations, name, open, statements); }
 }
+
+/* Rules for matching partial inputs.
+These rules are needed to properly terminate them -
+if we simply use the usual rules, they will ignore everything in the provider
+after they matched their desired input, which will lead to unexpected behaviour
+*/
+
+
+BlockStmt BlockParseStart():
+{ BlockStmt ret; }
+{ ret = Block() <EOF> { return ret; } }
+
+Statement BlockStatementParseStart():
+{ Statement ret; }
+{ ret = BlockStatement() <EOF> { return ret; } }
+
+ImportDeclaration ImportDeclarationParseStart():
+{ ImportDeclaration ret; }
+{ ret = ImportDeclaration() <EOF> { return ret; } }
+
+Expression ExpressionParseStart():
+{ Expression ret; }
+{ ret = Expression() <EOF> { return ret; } }
+
+AnnotationExpr AnnotationParseStart():
+{ AnnotationExpr ret; }
+{ ret = Annotation() <EOF> { return ret; } }
+
+BodyDeclaration<?> AnnotationBodyDeclarationParseStart():
+{ BodyDeclaration<?> ret; }
+{ ret = AnnotationBodyDeclaration() <EOF> { return ret; } }
+
+BodyDeclaration<?> ClassOrInterfaceBodyDeclarationParseStart():
+{ BodyDeclaration<?> ret; }
+{ ret = ClassOrInterfaceBodyDeclaration() <EOF> { return ret; } }
+
+ClassOrInterfaceType ClassOrInterfaceTypeParseStart():
+{ ClassOrInterfaceType ret; }
+{ ret = ClassOrInterfaceType() <EOF> { return ret; } }
+
+Type ResultTypeParseStart():
+{ Type ret; }
+{ ret = ResultType() <EOF> { return ret; } }
+
+
+VariableDeclarationExpr VariableDeclarationExpressionParseStart():
+{ VariableDeclarationExpr ret; }
+{ ret = VariableDeclarationExpression() <EOF> { return ret; } }
+
+
+ExplicitConstructorInvocationStmt ExplicitConstructorInvocationParseStart():
+{ ExplicitConstructorInvocationStmt ret; }
+{ ret = ExplicitConstructorInvocation() <EOF> { return ret; } }
+
+
+Name NameParseStart():
+{ Name ret; }
+{ ret = Name() <EOF> { return ret; } }
+
+
+Parameter ParameterParseStart():
+{ Parameter ret; }
+{ ret = Parameter() <EOF> { return ret; } }
+
+
+PackageDeclaration PackageDeclarationParseStart():
+{ PackageDeclaration ret; }
+{ ret = PackageDeclaration() <EOF> { return ret; } }
+

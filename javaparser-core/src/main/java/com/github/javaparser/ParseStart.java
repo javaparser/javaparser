@@ -50,20 +50,20 @@ import com.github.javaparser.ast.type.Type;
 public interface ParseStart<R> {
     ParseStart<StubUnit> STUB_UNIT = GeneratedJavaParser::StubUnit;
     ParseStart<CompilationUnit> COMPILATION_UNIT = GeneratedJavaParser::CompilationUnit;
-    ParseStart<BlockStmt> BLOCK = GeneratedJavaParser::Block;
-    ParseStart<Statement> STATEMENT = GeneratedJavaParser::BlockStatement;
-    ParseStart<ImportDeclaration> IMPORT_DECLARATION = GeneratedJavaParser::ImportDeclaration;
-    ParseStart<Expression> EXPRESSION = GeneratedJavaParser::Expression;
-    ParseStart<AnnotationExpr> ANNOTATION = GeneratedJavaParser::Annotation;
-    ParseStart<BodyDeclaration<?>> ANNOTATION_BODY = GeneratedJavaParser::AnnotationBodyDeclaration;
-    ParseStart<BodyDeclaration<?>> CLASS_BODY = GeneratedJavaParser::ClassOrInterfaceBodyDeclaration;
-    ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = GeneratedJavaParser::ClassOrInterfaceType;
-    ParseStart<Type> TYPE = GeneratedJavaParser::ResultType;
-    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpression;
-    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocation;
-    ParseStart<Name> NAME = GeneratedJavaParser::Name;
-    ParseStart<Parameter> PARAMETER = GeneratedJavaParser::Parameter;
-    ParseStart<PackageDeclaration> PACKAGE_DECLARATION = GeneratedJavaParser::PackageDeclaration;
+    ParseStart<BlockStmt> BLOCK = GeneratedJavaParser::BlockParseStart;
+    ParseStart<Statement> STATEMENT = GeneratedJavaParser::BlockStatementParseStart;
+    ParseStart<ImportDeclaration> IMPORT_DECLARATION = GeneratedJavaParser::ImportDeclarationParseStart;
+    ParseStart<Expression> EXPRESSION = GeneratedJavaParser::ExpressionParseStart;
+    ParseStart<AnnotationExpr> ANNOTATION = GeneratedJavaParser::AnnotationParseStart;
+    ParseStart<BodyDeclaration<?>> ANNOTATION_BODY = GeneratedJavaParser::AnnotationBodyDeclarationParseStart;
+    ParseStart<BodyDeclaration<?>> CLASS_BODY = GeneratedJavaParser::ClassOrInterfaceBodyDeclarationParseStart;
+    ParseStart<ClassOrInterfaceType> CLASS_OR_INTERFACE_TYPE = GeneratedJavaParser::ClassOrInterfaceTypeParseStart;
+    ParseStart<Type> TYPE = GeneratedJavaParser::ResultTypeParseStart;
+    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpressionParseStart;
+    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocationParseStart;
+    ParseStart<Name> NAME = GeneratedJavaParser::NameParseStart;
+    ParseStart<Parameter> PARAMETER = GeneratedJavaParser::ParameterParseStart;
+    ParseStart<PackageDeclaration> PACKAGE_DECLARATION = GeneratedJavaParser::PackageDeclarationParseStart;
 
     R parse(GeneratedJavaParser parser) throws ParseException;
 }

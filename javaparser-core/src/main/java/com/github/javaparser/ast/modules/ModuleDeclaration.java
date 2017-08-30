@@ -22,7 +22,7 @@ import com.github.javaparser.TokenRange;
 /**
  * A Java 9 Jigsaw module declaration. <code>@Foo module com.github.abc { requires a.B; }</code>
  */
-public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
+public final class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
 
     private Name name;
 

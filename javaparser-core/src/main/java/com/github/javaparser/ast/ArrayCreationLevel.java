@@ -43,7 +43,7 @@ import com.github.javaparser.TokenRange;
  * the first one contains the expression "1",
  * the second the expression "2".
  */
-public class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
+public final class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
 
     private Expression dimension;
 

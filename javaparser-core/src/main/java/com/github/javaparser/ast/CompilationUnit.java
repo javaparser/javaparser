@@ -75,7 +75,7 @@ import com.github.javaparser.ast.Node;
  * @see ImportDeclaration
  * @see TypeDeclaration
  */
-public class CompilationUnit extends Node {
+public final class CompilationUnit extends Node {
 
     private PackageDeclaration packageDeclaration;
 
@@ -165,8 +165,8 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Return the list of types declared in this compilation unit.<br>
-     * If there is no types declared, <code>none</code> is returned.
+     * Return the list of top level types declared in this compilation unit.<br>
+     * If there are no types declared, <code>none</code> is returned.
      *
      * @return the list of types or <code>none</code> null if there is no type
      * @see AnnotationDeclaration
@@ -432,7 +432,7 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Try to get a class by its name
+     * Try to get a top level class declaration by its name
      *
      * @param className the class name (case-sensitive)
      */
@@ -441,7 +441,7 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Try to get an interface by its name
+     * Try to get a top level interface declaration by its name
      *
      * @param interfaceName the interface name (case-sensitive)
      */
@@ -450,7 +450,7 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Try to get an enum by its name
+     * Try to get a top level enum declaration by its name
      *
      * @param enumName the enum name (case-sensitive)
      */
@@ -459,7 +459,7 @@ public class CompilationUnit extends Node {
     }
 
     /**
-     * Try to get an annotation by its name
+     * Try to get a top level annotation type declaration by its name
      *
      * @param annotationName the annotation name (case-sensitive)
      */
@@ -510,6 +510,9 @@ public class CompilationUnit extends Node {
         return setPackageDeclaration((PackageDeclaration) null);
     }
 
+    /**
+     * @return the module declared in this compilation unit.
+     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ModuleDeclaration> getModule() {
         return Optional.ofNullable(module);

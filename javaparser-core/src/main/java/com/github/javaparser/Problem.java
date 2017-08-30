@@ -69,7 +69,7 @@ public class Problem {
      * @return the message plus location information.
      */
     public String getVerboseMessage() {
-        return getLocation().map(l -> l.getBegin().getRange().begin + " " + message).orElse(message);
+        return getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.toString()).orElse("(line ?,col ?)") + " " + message).orElse(message);
     }
 
     /**
@@ -98,8 +98,11 @@ public class Problem {
      * Sorts problems on position.
      */
     public static Comparator<Problem> PROBLEM_BY_BEGIN_POSITION = (a, b) -> {
-        if (a.getLocation().isPresent() && b.getLocation().isPresent()) {
-            return a.getLocation().get().getBegin().getRange().begin.compareTo(b.getLocation().get().getBegin().getRange().begin);
+        final Optional<Position> aBegin= a.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
+        final Optional<Position> bBegin = b.getLocation().flatMap(l -> l.getBegin().getRange().map(r -> r.begin));
+
+        if (aBegin.isPresent() && bBegin.isPresent()) {
+            return aBegin.get().compareTo(bBegin.get());
         }
         if (a.getLocation().isPresent() || b.getLocation().isPresent()) {
             if (a.getLocation().isPresent()) {

@@ -21,6 +21,7 @@
 
 package com.github.javaparser.printer;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -130,12 +131,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     private void printArguments(final NodeList<Expression> args, final Void arg) {
         printer.print("(");
+        Position cursorRef = printer.getCursor();
         if (!isNullOrEmpty(args)) {
             for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
                 final Expression e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
-                    printer.print(", ");
+                    printer.print(",");
+                    if (configuration.isColumnAlignParameters()) {
+                        printer.wrapToColumn(cursorRef.column);
+                    } else {
+                        printer.print(" ");
+                    }
                 }
             }
         }

@@ -94,5 +94,25 @@ public class PrettyPrinterTest {
         code = "class A { void foo(){ int a, b[]; }}";
         assertEquals("test", prettyPrintConfigurable(code));
     }
+    
+    @Test
+    public void prettyColumnAlignParameters() {
+        String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
+        String expected = "class Example {\n" + 
+                "\n" + 
+                "\tvoid foo(Object arg0, Object arg1) {\n" + 
+                "\t\tmyMethod(1,\n" + 
+                "\t\t         2,\n" + 
+                "\t\t         3,\n" + 
+                "\t\t         5,\n" + 
+                "\t\t         Object.class);\n" + 
+                "\t}\n" + 
+                "}\n" + 
+                "";
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
+        config.setIndent("\t");
+        config.setColumnAlignParameters(true);
+        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+    }
 
 }

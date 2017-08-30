@@ -21,7 +21,7 @@ import com.github.javaparser.TokenRange;
 /**
  * A require statement in module-info.java. <code>require a.b.C;</code>
  */
-public class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModifier<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
+public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStaticModifier<ModuleRequiresStmt>, NodeWithName<ModuleRequiresStmt> {
 
     private EnumSet<Modifier> modifiers;
 
