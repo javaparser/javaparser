@@ -30,6 +30,7 @@ public class PrettyPrinterConfiguration {
     private boolean printComments = true;
     private boolean printJavaDoc = true;
     private boolean columnAlignParameters = false;
+    private boolean columnAlignFirstMethodChain = false;
     private String indent = "    ";
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
@@ -59,6 +60,10 @@ public class PrettyPrinterConfiguration {
         return columnAlignParameters;
     }
 
+    public boolean isColumnAlignFirstMethodChain() {
+        return columnAlignFirstMethodChain;
+    }
+
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
         return this;
@@ -71,6 +76,11 @@ public class PrettyPrinterConfiguration {
     
     public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
         this.columnAlignParameters = columnAlignParameters;
+        return this;
+    }
+    
+    public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
+        this.columnAlignFirstMethodChain = columnAlignFirstMethodChain;
         return this;
     }
 
