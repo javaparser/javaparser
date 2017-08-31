@@ -54,6 +54,9 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
+
+import javax.annotation.Generated;
+
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;
@@ -64,9 +67,7 @@ import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 
-/**
- * <p>This class was generated automatically by javacc, do not edit.</p>
- */
+@Generated("JavaCC")
 final class GeneratedJavaParser {
     /* The problems encountered while parsing */
     List<Problem> problems = new ArrayList<Problem>();
