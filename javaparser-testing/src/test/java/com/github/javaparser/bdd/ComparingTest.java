@@ -23,7 +23,7 @@ package com.github.javaparser.bdd;
 
 import com.github.javaparser.bdd.steps.ComparingSteps;
 import com.github.javaparser.bdd.steps.SharedSteps;
-import de.codecentric.jbehave.junit.monitoring.JUnitReportingRunner;
+import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
