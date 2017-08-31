@@ -224,6 +224,6 @@ public class NodeListTest {
     public void toStringTest() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
-        assertEquals("abcbcdcde", list.toString());
+        assertEquals("[abc, bcd, cde]", list.toString());
     }
 }

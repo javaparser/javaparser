@@ -476,6 +476,6 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public String toString() {
-        return innerList.stream().map(Node::toString).collect(Collectors.joining());
+        return innerList.stream().map(Node::toString).collect(Collectors.joining(", ", "[", "]"));
     }
 }
