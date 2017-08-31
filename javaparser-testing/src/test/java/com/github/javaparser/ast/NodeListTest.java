@@ -219,4 +219,11 @@ public class NodeListTest {
         assertEquals("z", list.get(1).asString());
         assertEquals("c", list.get(2).asString());
     }
+
+    @Test
+    public void toStringTest() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        assertEquals("[abc, bcd, cde]", list.toString());
+    }
 }
