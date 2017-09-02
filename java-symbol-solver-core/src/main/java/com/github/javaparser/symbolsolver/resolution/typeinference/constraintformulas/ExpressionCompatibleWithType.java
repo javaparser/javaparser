@@ -264,34 +264,13 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 .collect(Collectors.toList());
     }
 
-    // See JLS 14.21
-    private boolean canCompleteNormally(Statement statement) {
-        if (!isReachable(statement)) {
-            return false;
-        }
-        if (statement instanceof BlockStmt) {
-            BlockStmt blockStmt = (BlockStmt)statement;
-            if (blockStmt.isEmpty()) {
-                return true;
-            }
-            return canCompleteNormally(blockStmt.getStatement(blockStmt.getStatements().size() - 1));
-        }
-        // FIXME
-        return true;
-    }
-
-    private boolean isReachable(Statement statement) {
-        // FIXME
-        return true;
-    }
-
     private boolean isValueCompatibleBlock(Statement statement) {
         // A block lambda body is value-compatible if it cannot complete normally (§14.21) and every return statement
         // in the block has the form return Expression;.
 
         if (statement instanceof BlockStmt) {
             BlockStmt blockStmt = (BlockStmt)statement;
-            if (!canCompleteNormally(statement)) {
+            if (!ControlFlowLogic.getInstance().canCompleteNormally(statement)) {
                 return true;
             }
             List<ReturnStmt> returnStmts = Navigator.findAllNodesOfGivenClass(statement, ReturnStmt.class);
