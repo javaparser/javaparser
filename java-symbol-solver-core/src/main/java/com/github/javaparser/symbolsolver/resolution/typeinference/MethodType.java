@@ -17,12 +17,19 @@ import java.util.Map;
  * 2. argument types: a list of the types of the arguments to the method member.
  * 3. return type: the return type of the method member.
  * 4. throws clause: exception types declared in the throws clause of the method member.
+ *
+ * See JLS 8.2
  */
 public class MethodType {
     private List<TypeParameterDeclaration> typeParameters;
     private List<Type> formalArgumentTypes;
     private Type returnType;
     private List<Type> exceptionTypes;
+
+    public static MethodType fromMethodUsage(MethodUsage methodUsage) {
+        return new MethodType(methodUsage.getDeclaration().getTypeParameters(), methodUsage.getParamTypes(),
+                methodUsage.returnType(), methodUsage.exceptionTypes());
+    }
 
     public MethodType(List<TypeParameterDeclaration> typeParameters, List<Type> formalArgumentTypes, Type returnType,
                       List<Type> exceptionTypes) {
@@ -46,34 +53,5 @@ public class MethodType {
 
     public List<Type> getExceptionTypes() {
         return exceptionTypes;
-    }
-
-    public static MethodType fromMethodUsage(MethodUsage methodUsage) {
-        return new MethodType(methodUsage.getDeclaration().getTypeParameters(), methodUsage.getParamTypes(),
-                methodUsage.returnType(), methodUsage.exceptionTypes());
-    }
-
-    public MethodType replaceTypeVariablesWithInferenceVariables() {
-        // Find all type variable
-        Map<TypeVariable, InferenceVariable> correspondences = new HashMap<>();
-        List<Type> newFormalArgumentTypes = new LinkedList<>();
-        for (Type formalArg : formalArgumentTypes) {
-            newFormalArgumentTypes.add(replaceTypeVariablesWithInferenceVariables(formalArg, correspondences));
-        }
-        Type newReturnType = replaceTypeVariablesWithInferenceVariables(returnType, correspondences);
-        return new MethodType(typeParameters, newFormalArgumentTypes, newReturnType, exceptionTypes);
-    }
-
-    private Type replaceTypeVariablesWithInferenceVariables(Type originalType, Map<TypeVariable, InferenceVariable> correspondences) {
-        if (originalType.isTypeVariable()) {
-            if (!correspondences.containsKey(originalType.asTypeVariable())) {
-                correspondences.put(originalType.asTypeVariable(), InferenceVariable.unnamed(originalType.asTypeVariable().asTypeParameter()));
-            }
-            return correspondences.get(originalType.asTypeVariable());
-        }
-        if (originalType.isPrimitive()) {
-            return originalType;
-        }
-        throw new UnsupportedOperationException(originalType.toString());
     }
 }

@@ -9,6 +9,8 @@ import java.util.List;
 /**
  * Are meta-variables for types - that is, they are special names that allow abstract reasoning about types.
  * To distinguish them from type variables, inference variables are represented with Greek letters, principally α.
+ *
+ * See JLS 18
  */
 public class InferenceVariable implements Type {
 
@@ -52,7 +54,12 @@ public class InferenceVariable implements Type {
 
     @Override
     public boolean isAssignableBy(Type other) {
-        throw new UnsupportedOperationException();
+        if (other.equals(this)) {
+            return true;
+        }
+        throw new UnsupportedOperationException(
+                "We are unable to determine the assignability of an inference variable without knowing the bounds and"
+                        + " constraints");
     }
 
     public static List<InferenceVariable> instantiate(List<TypeParameterDeclaration> typeParameterDeclarations) {
@@ -84,7 +91,6 @@ public class InferenceVariable implements Type {
 
     @Override
     public boolean mention(List<TypeParameterDeclaration> typeParameters) {
-        // NOT SURE
         return false;
     }
 }
