@@ -15,18 +15,24 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public class InferenceVariable implements Type {
+    private static int unnamedInstantiated = 0;
 
     private String name;
-    private static int unnamedInstantiated = 0;
     private TypeParameterDeclaration typeParameterDeclaration;
 
-    @Deprecated
-    public InferenceVariable(String name) {
-        this(name, null);
+    public static List<InferenceVariable> instantiate(List<TypeParameterDeclaration> typeParameterDeclarations) {
+        List<InferenceVariable> inferenceVariables = new LinkedList<>();
+        for (TypeParameterDeclaration tp : typeParameterDeclarations) {
+            inferenceVariables.add(InferenceVariable.unnamed(tp));
+        }
+        return inferenceVariables;
+    }
+
+    public static InferenceVariable unnamed(TypeParameterDeclaration typeParameterDeclaration) {
+        return new InferenceVariable("__unnamed__" + (unnamedInstantiated++), typeParameterDeclaration);
     }
 
     public InferenceVariable(String name, TypeParameterDeclaration typeParameterDeclaration) {
-
         this.name = name;
         this.typeParameterDeclaration = typeParameterDeclaration;
     }
@@ -44,7 +50,8 @@ public class InferenceVariable implements Type {
         InferenceVariable that = (InferenceVariable) o;
 
         if (!name.equals(that.name)) return false;
-        return typeParameterDeclaration != null ? typeParameterDeclaration.equals(that.typeParameterDeclaration) : that.typeParameterDeclaration == null;
+        return typeParameterDeclaration != null ? typeParameterDeclaration.equals(that.typeParameterDeclaration)
+                : that.typeParameterDeclaration == null;
     }
 
     @Override
@@ -62,18 +69,6 @@ public class InferenceVariable implements Type {
         throw new UnsupportedOperationException(
                 "We are unable to determine the assignability of an inference variable without knowing the bounds and"
                         + " constraints");
-    }
-
-    public static List<InferenceVariable> instantiate(List<TypeParameterDeclaration> typeParameterDeclarations) {
-        List<InferenceVariable> inferenceVariables = new LinkedList<>();
-        for (TypeParameterDeclaration tp : typeParameterDeclarations) {
-            inferenceVariables.add(InferenceVariable.unnamed(tp));
-        }
-        return inferenceVariables;
-    }
-
-    public static InferenceVariable unnamed(TypeParameterDeclaration typeParameterDeclaration) {
-        return new InferenceVariable("__unnamed__" + (unnamedInstantiated++), typeParameterDeclaration);
     }
 
     public TypeParameterDeclaration getTypeParameterDeclaration() {
