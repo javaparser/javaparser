@@ -27,6 +27,13 @@ public class ParseErrorRecoveryTest {
     }
 
     @Test
+    public void bodystatementClosingBraceRecovery() {
+        MethodDeclaration cu = (MethodDeclaration) parser.parse(ParseStart.CLASS_BODY, provider("int x(){X X X}")).getResult().get();
+        Statement xxx = cu.getBody().get();
+        assertEquals(UNPARSABLE, xxx.getParsed());
+    }
+
+    @Test
     public void labeledStatementSemicolonRecovery() {
         CompilationUnit cu = parser.parse(ParseStart.COMPILATION_UNIT, provider("class X{int x(){aaa:X X X;}}")).getResult().get();
         LabeledStmt xxx = (LabeledStmt) cu.getClassByName("X").get().getMethods().get(0).getBody().get().getStatements().get(0);
