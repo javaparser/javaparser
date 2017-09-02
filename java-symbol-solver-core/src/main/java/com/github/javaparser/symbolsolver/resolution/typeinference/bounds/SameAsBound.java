@@ -1,10 +1,12 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.typeinference.*;
-import com.github.javaparser.utils.Pair;
+import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariableSubstitution;
+import com.github.javaparser.symbolsolver.resolution.typeinference.Instantiation;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;

@@ -10,13 +10,18 @@ import java.util.List;
  */
 public class InferenceVariableSubstitution {
 
+    private final static InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
+
     private List<InferenceVariable> inferenceVariables;
     private List<Type> types;
 
-    private final static InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
-
     public static InferenceVariableSubstitution empty() {
         return EMPTY;
+    }
+
+    private InferenceVariableSubstitution() {
+        this.inferenceVariables = new LinkedList<>();
+        this.types = new LinkedList<>();
     }
 
     public InferenceVariableSubstitution withPair(InferenceVariable inferenceVariable, Type type) {
@@ -26,12 +31,6 @@ public class InferenceVariableSubstitution {
         newInstance.inferenceVariables.add(inferenceVariable);
         newInstance.types.add(type);
         return newInstance;
-
-    }
-
-    private InferenceVariableSubstitution() {
-        this.inferenceVariables = new LinkedList<>();
-        this.types = new LinkedList<>();
     }
 
 }
