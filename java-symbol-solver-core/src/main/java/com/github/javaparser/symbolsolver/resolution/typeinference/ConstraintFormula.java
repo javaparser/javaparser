@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Constraint formulas are assertions of compatibility or subtyping that may involve inference variables.
+ *
+ * @author Federico Tomassetti
  */
 public abstract class ConstraintFormula {
 

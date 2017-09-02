@@ -6,6 +6,9 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.*;
 
+/**
+ * @author Federico Tomassetti
+ */
 public class TypeInferenceCache {
 
     private static Map<TypeSolver, IdentityHashMap<LambdaExpr, Map<String, Type>>> typeForLambdaParameters = new HashMap<>();

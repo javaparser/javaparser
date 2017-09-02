@@ -10,6 +10,8 @@ import com.github.javaparser.ast.stmt.Statement;
  *
  * Except for the special treatment of while, do, and for statements whose condition expression has the constant value
  * true, the values of expressions are not taken into account in the flow analysis.
+ *
+ * @author Federico Tomassetti
  */
 public class ControlFlowLogic {
 
