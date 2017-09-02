@@ -19,6 +19,8 @@ import java.util.Map;
  * 4. throws clause: exception types declared in the throws clause of the method member.
  *
  * See JLS 8.2
+ *
+ * @author Federico Tomassetti
  */
 public class MethodType {
     private List<TypeParameterDeclaration> typeParameters;

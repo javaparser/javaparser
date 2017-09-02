@@ -11,6 +11,8 @@ import java.util.List;
  * To distinguish them from type variables, inference variables are represented with Greek letters, principally α.
  *
  * See JLS 18
+ *
+ * @author Federico Tomassetti
  */
 public class InferenceVariable implements Type {
 
