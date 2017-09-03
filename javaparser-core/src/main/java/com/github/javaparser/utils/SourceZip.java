@@ -28,7 +28,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -40,6 +42,7 @@ import com.github.javaparser.ast.CompilationUnit;
 /**
  * A collection of Java source files and its sub-directories located in a ZIP or JAR file on the file system.
  * Files can be parsed with a callback.
+ *
  */
 public class SourceZip {
 
@@ -72,28 +75,27 @@ public class SourceZip {
     }
 
     /**
-     * Tries to parse all '.java' files in the ZIP located at this <i>SourceZip</i>'s path and passes them one by one
-     * to the provided callback.
+     * Tries to parse all '.java' files in the ZIP located at this <i>SourceZip</i>'s path and returns the parse
+     * results in a list.
      *
-     * @param callback A callback method for the post-processing of a parsed ZIP file.
-     * @return This {@link SourceZip} object.
+     * @return A list of path-compilation unit pairs.
      *
      * @throws {@link IOException} If an error occurs while trying to parse the given source.
      */
-    public SourceZip parse(Callback callback) throws IOException {
-        assertNotNull(callback);
+    public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
         Log.info("Parsing zip at \"%s\"", zipPath);
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
+            List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
             for (ZipEntry entry : Collections.list(zipFile.entries())) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
                     Log.info("Parsing zip entry \"%s\"", entry.getName());
                     final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT,
                             provider(zipFile.getInputStream(entry)));
-                    callback.process(Paths.get(entry.getName()), result);
+                    results.add(new Pair(Paths.get(entry.getName()), result));
                 }
             }
+            return results;
         }
-        return this;
     }
 
     /**
@@ -123,20 +125,5 @@ public class SourceZip {
         assertNotNull(javaParser);
         this.javaParser = javaParser;
         return this;
-    }
-
-    /**
-     * An interface to define a callback for each file that's parsed.
-     *
-     */
-    public interface Callback {
-
-        /**
-         * Process the given parse result.
-         *
-         * @param relativeZipEntryPath The relative path of the entry in the ZIP file that was parsed.
-         * @param result The parse result of file located at <i>absolutePath</i>.
-         */
-        void process(Path relativeZipEntryPath, ParseResult<CompilationUnit> result);
     }
 }

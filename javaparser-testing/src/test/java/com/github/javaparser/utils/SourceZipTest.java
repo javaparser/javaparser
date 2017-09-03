@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
 public class SourceZipTest {
@@ -44,26 +45,22 @@ public class SourceZipTest {
 
     @Test
     public void parseTestDirectory() throws URISyntaxException, IOException {
-        List<CompilationUnit> units = new ArrayList<>();
         SourceZip sourceZip = new SourceZip(testDir.resolve("test.zip"));
-        sourceZip.parse((path, result) -> {
-            units.add(result.getResult().get());
-        });
-        assertEquals(3, units.size());
+        List<Pair<Path, ParseResult<CompilationUnit>>> results = sourceZip.parse();
+        assertEquals(3, results.size());
+        List<CompilationUnit> units = new ArrayList<>();
+        for (Pair<Path, ParseResult<CompilationUnit>> pr : results)
+            units.add(pr.b.getResult().get());
         assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty()));
     }
 
     @Test(expected = IOException.class)
     public void dirAsZipIsNotAllowed() throws IOException {
-        new SourceZip(testDir.resolve("test")).parse((path, result) -> {
-
-        });
+        new SourceZip(testDir.resolve("test")).parse();
     }
 
     @Test(expected = IOException.class)
     public void fileAsZipIsNotAllowed() throws IOException {
-        new SourceZip(testDir.resolve("test.txt")).parse((path, result) -> {
-
-        });
+        new SourceZip(testDir.resolve("test.txt")).parse();
     }
 }
