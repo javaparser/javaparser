@@ -110,7 +110,7 @@ public class SourceRoot {
      */
     public List<ParseResult<CompilationUnit>> tryToParse(String startPackage) throws IOException {
         assertNotNull(startPackage);
-        Log.info("Parsing package \"%s\"", startPackage);
+        logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
@@ -153,7 +153,7 @@ public class SourceRoot {
      */
     public List<ParseResult<CompilationUnit>> tryToParseParallelized(String startPackage) throws IOException {
         assertNotNull(startPackage);
-        Log.info("Parsing package \"%s\"", startPackage);
+        logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         ParallelParse parse = new ParallelParse(path, new ParallelParse.VisitFileCallback() {
             @Override
@@ -226,7 +226,7 @@ public class SourceRoot {
         assertNotNull(startPackage);
         assertNotNull(javaParser);
         assertNotNull(callback);
-        Log.info("Parsing package \"%s\"", startPackage);
+        logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
             @Override
@@ -249,6 +249,13 @@ public class SourceRoot {
         return this;
     }
 
+    private void logPackage(String startPackage) {
+        if (startPackage.isEmpty()) {
+            return;
+        }
+        Log.info("Parsing package \"%s\"", startPackage);
+    }
+
     /**
      * Tries to parse all .java files in a package recursively using multiple threads, and passes them one by one to
      * the callback.
@@ -265,7 +272,7 @@ public class SourceRoot {
         assertNotNull(startPackage);
         assertNotNull(javaParser);
         assertNotNull(callback);
-        Log.info("Parsing package \"%s\"", startPackage);
+        logPackage(startPackage);
         final Path path = packageAbsolutePath(root, startPackage);
         ParallelParse parse = new ParallelParse(path, new ParallelParse.VisitFileCallback() {
             @Override
