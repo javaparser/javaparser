@@ -34,6 +34,7 @@ import com.github.javaparser.printer.PrettyPrinter;
  * used is thread-safe.
  */
 public class SourceRoot {
+    @FunctionalInterface
     public interface Callback {
         enum Result {
             SAVE, DONT_SAVE
