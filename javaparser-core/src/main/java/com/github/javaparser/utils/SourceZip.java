@@ -84,18 +84,9 @@ public class SourceZip {
      */
     public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
         Log.info("Parsing zip at \"%s\"", zipPath);
-        try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
-            List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
-            for (ZipEntry entry : Collections.list(zipFile.entries())) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
-                    Log.info("Parsing zip entry \"%s\"", entry.getName());
-                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT,
-                            provider(zipFile.getInputStream(entry)));
-                    results.add(new Pair<>(Paths.get(entry.getName()), result));
-                }
-            }
-            return results;
-        }
+        List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
+        parse((path, result) -> results.add(new Pair<>(path, result)));
+        return results;
     }
 
     /**
