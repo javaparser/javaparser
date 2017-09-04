@@ -2215,14 +2215,21 @@ BlockStmt Block():
 	JavaToken begin;
 }
 {
-  "{" {begin=token();}
-  	stmts = Statements()
-  "}"
-  { return new BlockStmt(range(begin, token()), stmts); }
+    "{" {begin=token();}
+    try {
+        stmts = Statements()
+        "}"
+        { return new BlockStmt(range(begin, token()), stmts); }
+    } catch (ParseException e) {
+        recover(RBRACE, e);
+        BlockStmt block = new BlockStmt(range(begin, token()), new NodeList<Statement>());
+        block.setParsed(UNPARSABLE);
+        return block;
+    }
 }
 
 /*
- * Classes inside body stametents can only be abstract or final. The semantic must check it.
+ * Classes inside body statements can only be abstract or final. The semantic must check it.
  */
 Statement BlockStatement():
 {
