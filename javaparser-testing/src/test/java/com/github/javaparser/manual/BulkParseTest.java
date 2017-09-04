@@ -31,24 +31,23 @@ public class BulkParseTest {
      * exception, increase the JVM's stack size.
      */
     public static void main(String[] args) throws IOException {
+        // This contains all kinds of test cases so it will lead to a lot of errors:
+        new BulkParseTest().parseOpenJdkLangToolsRepository();
+        // This contains the JDK source code, so it should have zero errors:
         new BulkParseTest().parseJdkSrcZip();
     }
 
-    private void parseOpenJdkSourceRepository() throws IOException {
-        Path workdir = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get(temporaryDirectory(), "javaparser_openjdk_download"));
+    private void parseOpenJdkLangToolsRepository() throws IOException {
+        Path workdir = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get(temporaryDirectory(), "javaparser_bulkparsetest"));
         workdir.toFile().mkdirs();
-        Path openJdkZipPath = workdir.resolve("openjdk.zip");
+        Path openJdkZipPath = workdir.resolve("langtools.zip");
         if (Files.notExists(openJdkZipPath)) {
-            Log.info("Downloading openjdk");
-            // FIXME this file is lost :-(
-            download(new URL("https://home.java.net/download/openjdk/jdk8/promoted/b132/openjdk-8-src-b132-03_mar_2014.zip"), openJdkZipPath);
+            Log.info("Downloading JDK langtools");
+            /* Found by choosing a tag here: http://hg.openjdk.java.net/jdk8/jdk8/langtools/tags
+             then copying the "zip" link to the line below: */ 
+            download(new URL("http://hg.openjdk.java.net/jdk8/jdk8/langtools/archive/c8a87a58eb3e.zip"), openJdkZipPath);
         }
-        if (Files.notExists(workdir.resolve("openjdk"))) {
-            Log.info("Unzipping openjdk");
-            unzip(openJdkZipPath, workdir);
-        }
-
-        bulkTest(new SourceRoot(workdir), "openjdk_src_repo_test_results.txt");
+        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt");
     }
 
     private void parseJdkSrcZip() throws IOException {
