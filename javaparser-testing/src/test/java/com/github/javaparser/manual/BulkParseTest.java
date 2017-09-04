@@ -7,11 +7,19 @@ import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
+import net.sourceforge.javadpkg.impl.DebianPackageParserImpl;
 import org.junit.Test;
+import org.redline_rpm.ReadableChannelWrapper;
+import org.redline_rpm.Scanner;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,9 +34,8 @@ import static java.util.Comparator.comparing;
 
 public class BulkParseTest {
     /**
-     * Running this will download a version of the OpenJDK,
-     * unzip it, and parse it.
-     * If it throws a stack overflow exception, increase the JVM's stack size.
+     * Running this will download a version of the OpenJDK, unzip it, and parse it. If it throws a stack overflow
+     * exception, increase the JVM's stack size.
      */
     public static void main(String[] args) throws IOException {
         new BulkParseTest().parseOpenJdk();
@@ -37,17 +44,19 @@ public class BulkParseTest {
     private void parseOpenJdk() throws IOException {
         Path workdir = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get(temporaryDirectory(), "javaparser_openjdk_download"));
         workdir.toFile().mkdirs();
-        Path openJdkZipPath = workdir.resolve("openjdk.zip");
+        Path openJdkZipPath = workdir.resolve("openjdk.deb");
         if (Files.notExists(openJdkZipPath)) {
             Log.info("Downloading openjdk");
-            download(new URL("https://home.java.net/download/openjdk/jdk8/promoted/b132/openjdk-8-src-b132-03_mar_2014.zip"), openJdkZipPath);
+            download(new URL("http://nl.archive.ubuntu.com/ubuntu/pool/main/o/openjdk-8/openjdk-8-source_8u131-b11-2ubuntu1.17.04.3_all.deb"), openJdkZipPath);
         }
-        if (Files.notExists(workdir.resolve("openjdk"))) {
-            Log.info("Unzipping openjdk");
-            unzip(openJdkZipPath, workdir);
-        }
-
-        bulkTest(new SourceRoot(workdir), "openjdk_test_results.txt");
+        new DebianPackageParserImpl();
+        
+//        if (Files.notExists(workdir.resolve("openjdk"))) {
+//            Log.info("Unzipping openjdk");
+//            unzip(openJdkZipPath, workdir);
+//        }
+//
+//        bulkTest(new SourceRoot(workdir), "openjdk_test_results.txt");
     }
 
     @Test

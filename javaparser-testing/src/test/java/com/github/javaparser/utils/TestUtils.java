@@ -5,6 +5,9 @@ import com.github.javaparser.Problem;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
+import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
 import java.net.URL;
@@ -97,6 +100,36 @@ public class TestUtils {
 
         Response response = client.newCall(request).execute();
         Files.write(destination, response.body().bytes());
+    }
+
+    public static void downloadFtp(String server, String path, String user, String pass, OutputStream outputStream) throws IOException {
+        FTPClient ftp = new FTPClient();
+        try {
+            ftp.connect(server);
+            System.out.println("Connected to " + server + ".");
+            System.out.print(ftp.getReplyString());
+
+            if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                throw new RuntimeException("FTP server refused connection.");
+            }
+
+            ftp.user(user);
+            if (!FTPReply.isPositiveCompletion(ftp.pass(pass))) {
+                throw new RuntimeException("Password not accepted");
+            }
+            Log.info("Authenticated.");
+            ftp.enterLocalPassiveMode();
+            Log.info("Downloading...");
+            if (!ftp.retrieveFile(path, outputStream)) {
+                throw new RuntimeException("Couldn't download " + path);
+            }
+            Log.info("Logging out.");
+            ftp.logout();
+        } finally {
+            if (ftp.isConnected()) {
+                ftp.disconnect();
+            }
+        }
     }
 
     public static String temporaryDirectory() {
