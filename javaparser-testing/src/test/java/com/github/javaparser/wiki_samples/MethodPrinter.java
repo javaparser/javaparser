@@ -38,7 +38,7 @@ public class MethodPrinter {
         CompilationUnit cu = JavaParser.parse(in);
 
         // visit and print the methods names
-        new MethodVisitor().visit(cu, null);
+        cu.accept(new MethodVisitor(), null);
     }
 
     /**

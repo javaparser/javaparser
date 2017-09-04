@@ -35,7 +35,7 @@ public class MethodChanger_1 {
         CompilationUnit cu = JavaParser.parse(new File("test.java"));
 
         // visit and change the methods names and parameters
-        new MethodChangerVisitor().visit(cu, null);
+        cu.accept(new MethodChangerVisitor(), null);
 
         // prints the changed compilation unit
         System.out.println(cu);
