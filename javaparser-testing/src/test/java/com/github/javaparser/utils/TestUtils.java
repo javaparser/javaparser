@@ -5,9 +5,6 @@ import com.github.javaparser.Problem;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPClientConfig;
-import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
 import java.net.URL;
