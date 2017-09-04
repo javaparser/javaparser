@@ -7,19 +7,12 @@ import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
-import net.sourceforge.javadpkg.impl.DebianPackageParserImpl;
+import com.github.javaparser.utils.SourceZip;
 import org.junit.Test;
-import org.redline_rpm.ReadableChannelWrapper;
-import org.redline_rpm.Scanner;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,25 +31,30 @@ public class BulkParseTest {
      * exception, increase the JVM's stack size.
      */
     public static void main(String[] args) throws IOException {
-        new BulkParseTest().parseOpenJdk();
+        new BulkParseTest().parseJdkSrcZip();
     }
 
-    private void parseOpenJdk() throws IOException {
+    private void parseOpenJdkSourceRepository() throws IOException {
         Path workdir = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get(temporaryDirectory(), "javaparser_openjdk_download"));
         workdir.toFile().mkdirs();
-        Path openJdkZipPath = workdir.resolve("openjdk.deb");
+        Path openJdkZipPath = workdir.resolve("openjdk.zip");
         if (Files.notExists(openJdkZipPath)) {
             Log.info("Downloading openjdk");
-            download(new URL("http://nl.archive.ubuntu.com/ubuntu/pool/main/o/openjdk-8/openjdk-8-source_8u131-b11-2ubuntu1.17.04.3_all.deb"), openJdkZipPath);
+            // FIXME this file is lost :-(
+            download(new URL("https://home.java.net/download/openjdk/jdk8/promoted/b132/openjdk-8-src-b132-03_mar_2014.zip"), openJdkZipPath);
         }
-        new DebianPackageParserImpl();
-        
-//        if (Files.notExists(workdir.resolve("openjdk"))) {
-//            Log.info("Unzipping openjdk");
-//            unzip(openJdkZipPath, workdir);
-//        }
-//
-//        bulkTest(new SourceRoot(workdir), "openjdk_test_results.txt");
+        if (Files.notExists(workdir.resolve("openjdk"))) {
+            Log.info("Unzipping openjdk");
+            unzip(openJdkZipPath, workdir);
+        }
+
+        bulkTest(new SourceRoot(workdir), "openjdk_src_repo_test_results.txt");
+    }
+
+    private void parseJdkSrcZip() throws IOException {
+        // This is where Ubuntu stores the contents of package openjdk-8-src
+        Path path = Paths.get("/usr/lib/jvm/openjdk-8/src.zip");
+        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt");
     }
 
     @Test
@@ -66,9 +64,6 @@ public class BulkParseTest {
 
     public void bulkTest(SourceRoot sourceRoot, String testResultsFileName) throws IOException {
         sourceRoot.setJavaParser(new JavaParser(new ParserConfiguration().setValidator(new Java9Validator())));
-        Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
-        testResults.toFile().mkdirs();
-        testResults = testResults.resolve(testResultsFileName);
         TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
         sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
             if (!localPath.toString().contains("target")) {
@@ -78,7 +73,28 @@ public class BulkParseTest {
             }
             return DONT_SAVE;
         });
+        writeResults(results, testResultsFileName);
+    }
+
+    public void bulkTest(SourceZip sourceRoot, String testResultsFileName) throws IOException {
+        sourceRoot.setJavaParser(new JavaParser(new ParserConfiguration().setValidator(new Java9Validator())));
+        TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
+        sourceRoot.parse((path, result) -> {
+            if (!path.toString().contains("target")) {
+                if (!result.isSuccessful()) {
+                    results.put(path, result.getProblems());
+                }
+            }
+        });
+        writeResults(results, testResultsFileName);
+    }
+
+    private void writeResults(TreeMap<Path, List<Problem>> results, String testResultsFileName) throws IOException {
         Log.info("Writing results...");
+
+        Path testResults = CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve(Paths.get("..", "javaparser-testing", "src", "test", "resources", "com", "github", "javaparser", "bulk_test_results")).normalize();
+        testResults.toFile().mkdirs();
+        testResults = testResults.resolve(testResultsFileName);
 
         int problemTotal = 0;
         try (BufferedWriter writer = Files.newBufferedWriter(testResults)) {
