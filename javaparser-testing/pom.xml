@@ -119,17 +119,6 @@
             <version>3.6.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>net.sourceforge.javadpkg</groupId>
-            <artifactId>dpkg</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-net</groupId>
-            <artifactId>commons-net</artifactId>
-            <version>3.6</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
