@@ -102,36 +102,6 @@ public class TestUtils {
         Files.write(destination, response.body().bytes());
     }
 
-    public static void downloadFtp(String server, String path, String user, String pass, OutputStream outputStream) throws IOException {
-        FTPClient ftp = new FTPClient();
-        try {
-            ftp.connect(server);
-            System.out.println("Connected to " + server + ".");
-            System.out.print(ftp.getReplyString());
-
-            if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-                throw new RuntimeException("FTP server refused connection.");
-            }
-
-            ftp.user(user);
-            if (!FTPReply.isPositiveCompletion(ftp.pass(pass))) {
-                throw new RuntimeException("Password not accepted");
-            }
-            Log.info("Authenticated.");
-            ftp.enterLocalPassiveMode();
-            Log.info("Downloading...");
-            if (!ftp.retrieveFile(path, outputStream)) {
-                throw new RuntimeException("Couldn't download " + path);
-            }
-            Log.info("Logging out.");
-            ftp.logout();
-        } finally {
-            if (ftp.isConnected()) {
-                ftp.disconnect();
-            }
-        }
-    }
-
     public static String temporaryDirectory() {
         return System.getProperty("java.io.tmpdir");
     }
