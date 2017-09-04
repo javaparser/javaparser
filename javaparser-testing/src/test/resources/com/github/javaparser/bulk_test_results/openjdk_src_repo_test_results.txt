@@ -1,6 +1,3 @@
-langtools-c8a87a58eb3e/test/com/sun/javadoc/testAnchorNames/pkg1/RegClass.java
-(line 68,col 16) '_' is a reserved keyword.
-
 langtools-c8a87a58eb3e/test/com/sun/javadoc/testSourceTab/DoubleTab/C.java
 Lexical error at line 33, column 1.  Encountered: "\\" (92), after : ""
 
@@ -282,12 +279,6 @@ Lexical error at line 31, column 0.  Encountered: <EOF> after : ""
 langtools-c8a87a58eb3e/test/tools/javac/diags/examples/UnclosedStringLiteral.java
 Lexical error at line 27, column 21.  Encountered: "\n" (10), after : "\"abc;"
 
-langtools-c8a87a58eb3e/test/tools/javac/diags/examples/UnderscoreAsIdentifier.java
-(line 27,col 12) '_' is a reserved keyword.
-
-langtools-c8a87a58eb3e/test/tools/javac/diags/examples/UnderscoreInLambdaExpression.java
-(line 26,col 52) '_' is a reserved keyword.
-
 langtools-c8a87a58eb3e/test/tools/javac/Digits.java
 Lexical error at line 11, column 43.  Encountered: "\u0663" (1635), after : ""
 
@@ -373,76 +364,11 @@ langtools-c8a87a58eb3e/test/tools/javac/lambda/funcInterfaces/LambdaTest1_neg1.j
 (line 15,col 2) Parse error. Found <EOF>, expected "}"
 (line 15,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
-langtools-c8a87a58eb3e/test/tools/javac/lambda/IdentifierTest.java
-(line 40,col 11) '_' is a reserved keyword.
-(line 43,col 16) '_' is a reserved keyword.
-(line 44,col 20) '_' is a reserved keyword.
-(line 45,col 22) '_' is a reserved keyword.
-(line 50,col 13) '_' is a reserved keyword.
-(line 50,col 15) '_' is a reserved keyword.
-(line 50,col 23) '_' is a reserved keyword.
-(line 52,col 13) '_' is a reserved keyword.
-(line 54,col 13) '_' is a reserved keyword.
-(line 60,col 21) '_' is a reserved keyword.
-(line 61,col 42) '_' is a reserved keyword.
-(line 62,col 67) '_' is a reserved keyword.
-(line 69,col 13) '_' is a reserved keyword.
-(line 70,col 14) '_' is a reserved keyword.
-(line 71,col 18) '_' is a reserved keyword.
-(line 76,col 22) '_' is a reserved keyword.
-(line 78,col 13) '_' is a reserved keyword.
-(line 78,col 15) '_' is a reserved keyword.
-(line 80,col 13) '_' is a reserved keyword.
-(line 80,col 15) '_' is a reserved keyword.
-(line 87,col 10) '_' is a reserved keyword.
-(line 87,col 38) '_' is a reserved keyword.
-(line 93,col 14) '_' is a reserved keyword.
-(line 100,col 17) '_' is a reserved keyword.
-(line 100,col 26) '_' is a reserved keyword.
-(line 117,col 20) '_' is a reserved keyword.
-(line 122,col 10) '_' is a reserved keyword.
-(line 127,col 17) '_' is a reserved keyword.
-(line 130,col 17) '_' is a reserved keyword.
-(line 137,col 17) '_' is a reserved keyword.
-(line 137,col 24) '_' is a reserved keyword.
-(line 137,col 33) '_' is a reserved keyword.
-(line 138,col 39) '_' is a reserved keyword.
-(line 142,col 13) '_' is a reserved keyword.
-(line 143,col 15) '_' is a reserved keyword.
-(line 144,col 13) '_' is a reserved keyword.
-(line 149,col 15) '_' is a reserved keyword.
-(line 150,col 17) '_' is a reserved keyword.
-(line 156,col 16) '_' is a reserved keyword.
-(line 158,col 25) '_' is a reserved keyword.
-(line 167,col 5) '_' is a reserved keyword.
-(line 171,col 26) '_' is a reserved keyword.
-(line 173,col 19) '_' is a reserved keyword.
-(line 179,col 11) '_' is a reserved keyword.
-
 langtools-c8a87a58eb3e/test/tools/javac/lambda/lambdaExpression/InvalidExpression1.java
 (line 15,col 66) Parse error. Found "}", expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 (line 16,col 5) Parse error. Found "}", expected one of  "," ";"
 (line 17,col 2) Parse error. Found <EOF>, expected "}"
 (line 17,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-langtools-c8a87a58eb3e/test/tools/javac/lambda/WarnUnderscoreAsIdent.java
-(line 29,col 9) '_' is a reserved keyword.
-(line 29,col 9) '_' is a reserved keyword.
-(line 31,col 8) '_' is a reserved keyword.
-(line 31,col 8) '_' is a reserved keyword.
-(line 33,col 7) '_' is a reserved keyword.
-(line 34,col 12) '_' is a reserved keyword.
-(line 35,col 10) '_' is a reserved keyword.
-(line 35,col 19) '_' is a reserved keyword.
-(line 37,col 16) '_' is a reserved keyword.
-(line 40,col 18) '_' is a reserved keyword.
-(line 40,col 25) '_' is a reserved keyword.
-(line 40,col 33) '_' is a reserved keyword.
-(line 43,col 34) '_' is a reserved keyword.
-(line 46,col 9) '_' is a reserved keyword.
-(line 48,col 19) '_' is a reserved keyword.
-(line 50,col 9) '_' is a reserved keyword.
-(line 52,col 22) '_' is a reserved keyword.
 
 langtools-c8a87a58eb3e/test/tools/javac/literals/BadBinaryLiterals.java
 (line 11,col 20) Parse error. Found  "2" <INTEGER_LITERAL>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -487,14 +413,6 @@ langtools-c8a87a58eb3e/test/tools/javac/processing/6994946/SyntaxErrorTest.java
 langtools-c8a87a58eb3e/test/tools/javac/processing/errors/TestParseErrors/ParseErrors.java
 (line 37,col 36) Parse error. Found ",", expected one of  "..." "@" "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
 
-langtools-c8a87a58eb3e/test/tools/javac/processing/model/util/elements/doccomments/TestDocComments.java
-(line 276,col 63) '_' is a reserved keyword.
-(line 278,col 45) '_' is a reserved keyword.
-(line 281,col 51) '_' is a reserved keyword.
-(line 283,col 39) '_' is a reserved keyword.
-(line 286,col 59) '_' is a reserved keyword.
-(line 288,col 43) '_' is a reserved keyword.
-
 langtools-c8a87a58eb3e/test/tools/javac/quid/T6999438.java
 Lexical error at line 8, column 9.  Encountered: "#" (35), after : ""
 
@@ -516,10 +434,6 @@ langtools-c8a87a58eb3e/test/tools/javac/T6882235.java
 
 langtools-c8a87a58eb3e/test/tools/javac/T8026963/TypeAnnotationsCrashWithErroneousTreeTest.java
 (line 9,col 19) Parse error. Found "this", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "default" "double" "enum" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
-
-langtools-c8a87a58eb3e/test/tools/javac/tree/TreePosRoundsTest.java
-(line 142,col 59) '_' is a reserved keyword.
-(line 144,col 46) '_' is a reserved keyword.
 
 langtools-c8a87a58eb3e/test/tools/javac/TryWithResources/BadTwrSyntax.java
 (line 14,col 42) Parse error. Found ";", expected ")"
@@ -564,4 +478,4 @@ langtools-c8a87a58eb3e/test/tools/javadoc/sourceOption/p/A.java
 langtools-c8a87a58eb3e/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-266 problems in 150 files
+194 problems in 143 files

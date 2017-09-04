@@ -3,6 +3,7 @@ package com.github.javaparser.manual;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
+import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
@@ -47,22 +48,22 @@ public class BulkParseTest {
              then copying the "zip" link to the line below: */ 
             download(new URL("http://hg.openjdk.java.net/jdk8/jdk8/langtools/archive/c8a87a58eb3e.zip"), openJdkZipPath);
         }
-        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt");
+        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setValidator(new Java8Validator()));
     }
 
     private void parseJdkSrcZip() throws IOException {
         // This is where Ubuntu stores the contents of package openjdk-8-src
         Path path = Paths.get("/usr/lib/jvm/openjdk-8/src.zip");
-        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt");
+        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setValidator(new Java8Validator()));
     }
 
     @Test
     public void parseOwnSourceCode() throws IOException {
-        bulkTest(new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), "javaparser_test_results.txt");
+        bulkTest(new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), "javaparser_test_results.txt", new ParserConfiguration().setValidator(new Java9Validator()));
     }
 
-    public void bulkTest(SourceRoot sourceRoot, String testResultsFileName) throws IOException {
-        sourceRoot.setJavaParser(new JavaParser(new ParserConfiguration().setValidator(new Java9Validator())));
+    public void bulkTest(SourceRoot sourceRoot, String testResultsFileName, ParserConfiguration configuration) throws IOException {
+        sourceRoot.setJavaParser(new JavaParser(configuration));
         TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
         sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
             if (!localPath.toString().contains("target")) {
@@ -75,8 +76,8 @@ public class BulkParseTest {
         writeResults(results, testResultsFileName);
     }
 
-    public void bulkTest(SourceZip sourceRoot, String testResultsFileName) throws IOException {
-        sourceRoot.setJavaParser(new JavaParser(new ParserConfiguration().setValidator(new Java9Validator())));
+    public void bulkTest(SourceZip sourceRoot, String testResultsFileName, ParserConfiguration configuration) throws IOException {
+        sourceRoot.setJavaParser(new JavaParser(configuration));
         TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
         sourceRoot.parse((path, result) -> {
             if (!path.toString().contains("target")) {
