@@ -24,6 +24,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.ImportDeclaration.Staticness;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -59,7 +60,6 @@ import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -138,8 +138,7 @@ public final class CompilationUnit extends Node {
     }
 
     /**
-     * Retrieves the list of imports declared in this compilation unit or
-     * <code>null</code> if there is no import.
+     * Retrieves the list of imports declared in this compilation unit or <code>null</code> if there is no import.
      *
      * @return the list of imports or <code>none</code> if there is no import
      */
@@ -311,18 +310,24 @@ public final class CompilationUnit extends Node {
         return addImport(clazz.getName());
     }
 
+    public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
+        return addImport(name,
+                isStatic ? Staticness.STATIC : Staticness.TYPE,
+                isAsterisk);
+    }
+
     /**
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * <b>This method check if no import with the same name is already in the list</b>
      *
      * @param name the import name
-     * @param isStatic is it an "import static"
+     * @param staticness is it an "import static"
      * @param isAsterisk does the import end with ".*"
      * @return this, the {@link CompilationUnit}
      */
-    public CompilationUnit addImport(String name, boolean isStatic, boolean isAsterisk) {
+    public CompilationUnit addImport(String name, Staticness staticness, boolean isAsterisk) {
         final StringBuilder i = new StringBuilder("import ");
-        if (isStatic) {
+        if (staticness == Staticness.STATIC) {
             i.append("static ");
         }
         i.append(name);
