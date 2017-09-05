@@ -21,8 +21,9 @@
 
 package com.github.javaparser.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ast.CompilationUnit;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,10 +32,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ast.CompilationUnit;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SourceZipTest {
 
@@ -49,9 +48,25 @@ public class SourceZipTest {
         List<Pair<Path, ParseResult<CompilationUnit>>> results = sourceZip.parse();
         assertEquals(3, results.size());
         List<CompilationUnit> units = new ArrayList<>();
-        for (Pair<Path, ParseResult<CompilationUnit>> pr : results)
+        for (Pair<Path, ParseResult<CompilationUnit>> pr : results) {
             units.add(pr.b.getResult().get());
-        assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty()));
+        }
+        assertTrue(units.stream().noneMatch(unit -> unit.getTypes().isEmpty()));
+    }
+
+    @Test
+    public void parseTestDirectoryWithCallback() throws URISyntaxException, IOException {
+        SourceZip sourceZip = new SourceZip(testDir.resolve("test.zip"));
+        List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
+
+        sourceZip.parse((path, result) -> results.add(new Pair<>(path, result)));
+
+        assertEquals(3, results.size());
+        List<CompilationUnit> units = new ArrayList<>();
+        for (Pair<Path, ParseResult<CompilationUnit>> pr : results) {
+            units.add(pr.b.getResult().get());
+        }
+        assertTrue(units.stream().noneMatch(unit -> unit.getTypes().isEmpty()));
     }
 
     @Test(expected = IOException.class)
