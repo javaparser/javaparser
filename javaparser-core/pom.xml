@@ -2,7 +2,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.3.4-SNAPSHOT</version>
+        <version>3.3.5-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -32,8 +32,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>javacc-maven-plugin</artifactId>
+                <groupId>com.helger.maven</groupId>
+                <artifactId>ph-javacc-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>javacc</id>
@@ -50,7 +50,7 @@
                     <dependency>
                         <groupId>net.java.dev.javacc</groupId>
                         <artifactId>javacc</artifactId>
-                        <version>6.1.2</version>
+                        <version>7.0.2</version>
                     </dependency>
                 </dependencies>
             </plugin>

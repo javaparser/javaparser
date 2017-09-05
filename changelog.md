@@ -1,3 +1,14 @@
+Version 3.3.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/56?closed=1)
+* `SourceZip` has been added.
+Use it to read source code from jars or zip files.
+Thank you @ryan-beckett !
+* JavaCC was upgraded to 7.0.2
+* A new option for the pretty printer was added.
+You can now wrap-and-column-align parameters of method calls.
+Thank you @tarilabs !
+
 Version 3.3.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/55?closed=1)
