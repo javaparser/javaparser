@@ -4,7 +4,7 @@ This package contains a parser for the Checker Framework's stub files:
 https://checkerframework.org/manual/#stub
 It is a fork of the [JavaParser](http://javaparser.org) project.
 
-## Differences the StubParser and JavaParser
+## Differences between the StubParser and JavaParser
 
 Following list is the differences that were added to the JavaParser to adjust it for using as Stubparser for [the Checker Framework](https://github.com/typetools/checker-framework).
 
