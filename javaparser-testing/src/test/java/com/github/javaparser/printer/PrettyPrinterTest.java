@@ -98,7 +98,7 @@ public class PrettyPrinterTest {
     }
     
     @Test
-    public void prettyColumnAlignParameters() {
+    public void prettyColumnAlignParameters_enabled() {
         PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
         config.setIndent("\t");
         config.setColumnAlignParameters(true);
@@ -122,8 +122,24 @@ public class PrettyPrinterTest {
     }
     
     @Test
-    public void prettyAlignMethodCallChains() {
-        IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println);
+    public void prettyColumnAlignParameters_disabled() {
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
+        final String EOL = config.getEndOfLineCharacter();
+        
+        String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
+        String expected = "class Example {" + EOL + 
+                "" + EOL + 
+                "    void foo(Object arg0, Object arg1) {" + EOL + 
+                "        myMethod(1, 2, 3, 5, Object.class);" + EOL + 
+                "    }" + EOL + 
+                "}" + EOL + 
+                "";
+        
+        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+    }
+    
+    @Test
+    public void prettyAlignMethodCallChains_enabled() {
         PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
         config.setIndent("\t");
         config.setColumnAlignFirstMethodChain(true);
@@ -140,6 +156,23 @@ public class PrettyPrinterTest {
                 "\t\t                                .sum())" + EOL + 
                 "\t\t         .forEach(System.out::println);" + EOL + 
                 "\t}" + EOL + 
+                "}" + EOL + 
+                "";
+
+        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+    }
+    
+    @Test
+    public void prettyAlignMethodCallChains_disabled() {
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
+        final String EOL = config.getEndOfLineCharacter();
+        
+        String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
+        String expected = "class Example {" + EOL + 
+                "" + EOL + 
+                "    void foo() {" + EOL + 
+                "        IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1, 3, 5, 1).sum()).forEach(System.out::println);" + EOL + 
+                "    }" + EOL + 
                 "}" + EOL + 
                 "";
 
