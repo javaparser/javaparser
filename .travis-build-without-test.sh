@@ -14,4 +14,4 @@ fi
 ## Compile
 echo "running \"mvn package\" for stubparser"
 mvn package -Dmaven.test.skip=true
-cp -i ./javaparser-core/target/javaparser-core-3.3.4-SNAPSHOT.jar stubparser.jar
+cp -i ./javaparser-core/target/stubparser.jar stubparser.jar
