@@ -66,6 +66,7 @@ import static com.github.javaparser.GeneratedJavaParserSupport.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
+import com.github.javaparser.ast.ImportDeclaration.*;
 
 @Generated("JavaCC")
 final class GeneratedJavaParser {
@@ -774,16 +775,16 @@ PackageDeclaration PackageDeclaration():
 ImportDeclaration ImportDeclaration():
 {
     Name name;
-    boolean isStatic = false;
+    Staticness staticness = Staticness.TYPE;
     boolean isAsterisk = false;
     JavaToken begin;
 }
 {
     "import" {begin = token();} 
-    [ "static" { isStatic = true; } ] 
+    [ "static" { staticness = Staticness.STATIC; } ] 
     name = Name() 
     [ "." "*" { isAsterisk = true; } ] ";"
-    { return new ImportDeclaration(range(begin, token()), name, isStatic, isAsterisk); }
+    { return new ImportDeclaration(range(begin, token()), name, staticness, isAsterisk); }
 }
 
 /*

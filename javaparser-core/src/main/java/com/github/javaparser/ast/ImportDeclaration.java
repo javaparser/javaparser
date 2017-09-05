@@ -20,53 +20,72 @@
  */
 package com.github.javaparser.ast;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
+
+import static com.github.javaparser.ast.ImportDeclaration.Staticness.STATIC;
+import static com.github.javaparser.ast.ImportDeclaration.Staticness.TYPE;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * An import declaration.
- * <br/><code>import com.github.javaparser.JavaParser;</code>
- * <br/><code>import com.github.javaparser.*;</code>
- * <br/><code>import com.github.javaparser.JavaParser.*; </code>
- * <br/><code>import static com.github.javaparser.JavaParser.*;</code> 
- * <br/><code>import static com.github.javaparser.JavaParser.parse;</code> 
- * 
- * <p>The name does not include the asterisk or the static keyword.</p>
+ * An import declaration. <br/><code>import com.github.javaparser.JavaParser;</code> <br/><code>import
+ * com.github.javaparser.*;</code> <br/><code>import com.github.javaparser.JavaParser.*; </code> <br/><code>import
+ * static com.github.javaparser.JavaParser.*;</code> <br/><code>import static com.github.javaparser.JavaParser.parse;</code>
+ * <p>
+ * <p>The name does not include the asterisk or the static keyword.</p> <p>An import with .* is called an on demand
+ * import declaration.</p>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ImportDeclaration extends Node implements NodeWithName<ImportDeclaration> {
 
+    public enum Staticness {
+
+        /**
+         * imports a type
+         */
+        TYPE, /**
+         * imports static methods (adds the "static" keyword)
+         */
+        STATIC
+    }
+
     private Name name;
 
-    private boolean isStatic;
+    private Staticness staticness;
 
     private boolean isAsterisk;
 
-    private ImportDeclaration() {
-        this(null, new Name(), false, false);
+    public ImportDeclaration() {
+        this(null, new Name(), TYPE, false);
+    }
+
+    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
+        this(null, name, isStatic ? STATIC : TYPE, isAsterisk);
     }
 
     @AllFieldsConstructor
-    public ImportDeclaration(Name name, boolean isStatic, boolean isAsterisk) {
-        this(null, name, isStatic, isAsterisk);
+    public ImportDeclaration(Name name, Staticness staticness, boolean isAsterisk) {
+        this(null, name, staticness, isAsterisk);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
+    public ImportDeclaration(TokenRange tokenRange, Name name, Staticness staticness, boolean isAsterisk) {
         super(tokenRange);
         setName(name);
-        setStatic(isStatic);
+        setStaticness(staticness);
         setAsterisk(isAsterisk);
         customInitialization();
     }
@@ -97,9 +116,12 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return isAsterisk;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    /**
+     * Use setStaticness instead
+     */
+    @Deprecated
     public boolean isStatic() {
-        return isStatic;
+        return staticness == STATIC;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -126,14 +148,28 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    /**
+     * Use setStaticness instead
+     */
+    @Deprecated
     public ImportDeclaration setStatic(final boolean isStatic) {
-        if (isStatic == this.isStatic) {
+        return setStaticness(isStatic ? STATIC : TYPE);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ImportDeclaration setStaticness(final Staticness staticness) {
+        assertNotNull(staticness);
+        if (staticness == this.staticness) {
             return (ImportDeclaration) this;
         }
-        notifyPropertyChange(ObservableProperty.STATIC, this.isStatic, isStatic);
-        this.isStatic = isStatic;
+        notifyPropertyChange(ObservableProperty.STATICNESS, this.staticness, staticness);
+        this.staticness = staticness;
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Staticness getStaticness() {
+        return staticness;
     }
 
     @Override

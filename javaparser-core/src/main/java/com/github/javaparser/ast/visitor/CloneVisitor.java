@@ -945,7 +945,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Node visit(final ImportDeclaration n, final Object arg) {
         Name name = cloneNode(n.getName(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ImportDeclaration r = new ImportDeclaration(n.getTokenRange().orElse(null), name, n.isStatic(), n.isAsterisk());
+        ImportDeclaration r = new ImportDeclaration(n.getTokenRange().orElse(null), name, n.getStaticness(), n.isAsterisk());
         r.setComment(comment);
         return r;
     }

@@ -10,7 +10,7 @@ public class ImportDeclarationMetaModel extends NodeMetaModel {
 
     public PropertyMetaModel isAsteriskPropertyMetaModel;
 
-    public PropertyMetaModel isStaticPropertyMetaModel;
-
     public PropertyMetaModel namePropertyMetaModel;
+
+    public PropertyMetaModel staticnessPropertyMetaModel;
 }
