@@ -63,6 +63,38 @@ Make sure that `javaparser-core` at least compiles before you run these.
 
 Examples of how to use the library can be found on the [Manual](https://github.com/javaparser/javaparser/wiki/Manual) page of the wiki
 
+## Upgrading the stubparser module
+
+Next steps should be made in order to upgrade the stubparser project:
+
+1. Fork [the stubparser project](https://github.com/typetools/stubparser) to your github account.
+2. Enable Travis build for your fork of the stubparser.
+3. Clone the repository to your local environment.
+```bash
+git clone https://github.com/{user.name}/stubparser
+```
+4. Enter to the main directory of the local project.
+```bash
+cd ../{place-where-repository-cloned}/stubparser
+```
+5. Create and checkout to the branch (e.g updating).
+```bash
+git checkout -b updating
+```
+6. Pull the upstream of [the javaparser project](https://github.com/javaparser/javaparser).
+```bash
+git pull https://github.com/javaparser/javaparser master
+```
+7. Resolve the conflicts if required and commit it.
+8. Run maven tests in the root stubparser directory.
+```bash
+mvn test
+```
+9. If something failed in tests the stubparser project should be fixed before continuing.
+10. Push commits to your fork of the stubparser.
+11. Check that Travis build is successfully finished. If not resolve the issues and repeat steps 8-11.
+12. Create pull requests to the typetools/stubparser.
+
 ## Troubleshooting
 
 First try the [wiki](https://github.com/javaparser/javaparser/wiki).
