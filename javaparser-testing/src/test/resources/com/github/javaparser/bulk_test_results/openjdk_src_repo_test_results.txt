@@ -379,10 +379,6 @@ langtools-c8a87a58eb3e/test/tools/javac/literals/BadUnderscoreLiterals.java
 langtools-c8a87a58eb3e/test/tools/javac/literals/T6891079.java
 (line 8,col 14) Parse error. Found  "B" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
-langtools-c8a87a58eb3e/test/tools/javac/literals/UnderscoreLiterals.java
-(line 176,col 14) Parse error. Found  ".00_00_02" <FLOATING_POINT_LITERAL>, expected one of  "!=" "%" "%=" "&" "&&" "&=" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
-(line 178,col 14) Parse error. Found  ".000_000_000_000_1" <FLOATING_POINT_LITERAL>, expected one of  "!=" "%" "%=" "&" "&&" "&=" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
-
 langtools-c8a87a58eb3e/test/tools/javac/overrridecrash/A.java
 (line 25,col 5) Can have only one of 'protected', 'private'.
 
@@ -478,4 +474,4 @@ langtools-c8a87a58eb3e/test/tools/javadoc/sourceOption/p/A.java
 langtools-c8a87a58eb3e/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-194 problems in 143 files
+192 problems in 142 files
