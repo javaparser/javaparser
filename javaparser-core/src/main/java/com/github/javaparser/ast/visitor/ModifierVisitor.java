@@ -946,7 +946,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final TryStmt n, final A arg) {
         NodeList<CatchClause> catchClauses = modifyList(n.getCatchClauses(), arg);
         BlockStmt finallyBlock = n.getFinallyBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
-        NodeList<VariableDeclarationExpr> resources = modifyList(n.getResources(), arg);
+        NodeList<Expression> resources = modifyList(n.getResources(), arg);
         BlockStmt tryBlock = (BlockStmt) n.getTryBlock().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (tryBlock == null)
@@ -1262,6 +1262,18 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final UnparsableStmt n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
+    public Visitable visit(final QualifiedNameExpr n, final A arg) {
+        Name name = (Name) n.getName().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setName(name);
         n.setComment(comment);
         return n;
     }

@@ -504,4 +504,10 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final UnparsableStmt n, final Void arg) {
         return (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
+    public Integer visit(final QualifiedNameExpr n, final Void arg) {
+        return (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
 }

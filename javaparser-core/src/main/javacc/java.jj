@@ -2521,7 +2521,7 @@ SynchronizedStmt SynchronizedStatement():
 
 TryStmt TryStatement():
 {
-	NodeList<VariableDeclarationExpr> resources = emptyList();
+	NodeList<Expression> resources = emptyList();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	NodeList<CatchClause> catchs = emptyList();
@@ -2569,9 +2569,9 @@ TryStmt TryStatement():
 }
 
 
-NodeList<VariableDeclarationExpr> ResourceSpecification() :
+NodeList<Expression> ResourceSpecification() :
 {
-  NodeList<VariableDeclarationExpr> variables;
+  NodeList<Expression> variables;
 }
 {
   "("
@@ -2582,15 +2582,31 @@ NodeList<VariableDeclarationExpr> ResourceSpecification() :
 }
 
 
-NodeList<VariableDeclarationExpr> Resources() :
+NodeList<Expression> Resources() :
 {
-	NodeList<VariableDeclarationExpr> variables = new NodeList<VariableDeclarationExpr>();
-	VariableDeclarationExpr var;
+	NodeList<Expression> expressions = new NodeList<Expression>();
+	Expression expr;
 }
 {
-  /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
-  var = VariableDeclarationExpression() {variables.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {variables.add(var);})*
-  { return variables; }
+    expr = Resource() {expressions.add(expr);} (LOOKAHEAD(2) ";" expr = Resource() {expressions.add(expr);})*
+    { return expressions; }
+}
+
+Expression Resource() :
+{
+	Expression expr;
+	Name name;
+}
+{
+    ( LOOKAHEAD( Modifiers() partialType = Type() VariableDeclarator(partialType))
+        /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
+        expr = VariableDeclarationExpression()
+    |
+        expr = PrimaryExpression()
+    |
+        name = Name() { expr = new QualifiedNameExpr(name); }
+    )
+    { return expr; }
 }
 
 

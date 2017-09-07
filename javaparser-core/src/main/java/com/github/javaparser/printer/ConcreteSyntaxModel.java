@@ -409,6 +409,12 @@ public class ConcreteSyntaxModel {
                 orphanCommentsEnding()
         ));
 
+        concreteSyntaxModelByClass.put(QualifiedNameExpr.class, sequence(
+                comment(),
+                child(ObservableProperty.NAME),
+                orphanCommentsEnding()
+        ));
+
         concreteSyntaxModelByClass.put(NormalAnnotationExpr.class, sequence(
                 comment(),
                 token(GeneratedJavaParserConstants.AT),

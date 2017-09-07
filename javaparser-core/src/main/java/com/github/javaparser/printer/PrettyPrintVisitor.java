@@ -1184,10 +1184,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("try ");
         if (!n.getResources().isEmpty()) {
             printer.print("(");
-            Iterator<VariableDeclarationExpr> resources = n.getResources().iterator();
+            Iterator<Expression> resources = n.getResources().iterator();
             boolean first = true;
             while (resources.hasNext()) {
-                visit(resources.next(), arg);
+                resources.next().accept(this, arg);
                 if (resources.hasNext()) {
                     printer.print(";");
                     printer.println();
@@ -1453,6 +1453,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(UnparsableStmt n, Void arg) {
         printer.print("???;");
+    }
+
+    @Override
+    public void visit(QualifiedNameExpr n, Void arg) {
+        printJavaComment(n.getComment(), arg);
+        n.getName().accept(this, arg);
+
+        printOrphanCommentsEnding(n);
     }
 
     private void printOrphanCommentsBeforeThisChildNode(final Node node) {

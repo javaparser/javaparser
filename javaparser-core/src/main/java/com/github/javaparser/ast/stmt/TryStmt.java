@@ -22,6 +22,7 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -57,7 +58,7 @@ import com.github.javaparser.TokenRange;
  */
 public final class TryStmt extends Statement {
 
-    private NodeList<VariableDeclarationExpr> resources;
+    private NodeList<Expression> resources;
 
     private BlockStmt tryBlock;
 
@@ -74,13 +75,13 @@ public final class TryStmt extends Statement {
     }
 
     @AllFieldsConstructor
-    public TryStmt(NodeList<VariableDeclarationExpr> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+    public TryStmt(NodeList<Expression> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
         this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TryStmt(TokenRange tokenRange, NodeList<VariableDeclarationExpr> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
+    public TryStmt(TokenRange tokenRange, NodeList<Expression> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
         super(tokenRange);
         setResources(resources);
         setTryBlock(tryBlock);
@@ -115,7 +116,7 @@ public final class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarationExpr> getResources() {
+    public NodeList<Expression> getResources() {
         return resources;
     }
 
@@ -161,7 +162,7 @@ public final class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TryStmt setResources(final NodeList<VariableDeclarationExpr> resources) {
+    public TryStmt setResources(final NodeList<Expression> resources) {
         assertNotNull(resources);
         if (resources == this.resources) {
             return (TryStmt) this;
@@ -247,7 +248,7 @@ public final class TryStmt extends Statement {
         }
         for (int i = 0; i < resources.size(); i++) {
             if (resources.get(i) == node) {
-                resources.set(i, (VariableDeclarationExpr) replacementNode);
+                resources.set(i, (Expression) replacementNode);
                 return true;
             }
         }
