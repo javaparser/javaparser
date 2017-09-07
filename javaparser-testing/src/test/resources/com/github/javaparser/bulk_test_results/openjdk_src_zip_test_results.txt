@@ -1,17 +1,1 @@
-java/awt/Cursor.java
-(line 339,col 18) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 342,col 13) Parse error. Found "catch", expected one of  "else" "}"
-(line 346,col 13) Parse error. Found "if", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-javax/sql/rowset/spi/SyncFactory.java
-(line 392,col 30) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 394,col 25) Parse error. Found "return", expected one of  ")" ","
-(line 396,col 21) Parse error. Found ")", expected one of  "catch" "finally" "}"
-(line 412,col 13) Parse error. Found "catch", expected one of  "else" "}"
-(line 414,col 13) Parse error. Found "catch", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-sun/reflect/misc/MethodUtil.java
-(line 335,col 22) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 340,col 9) Parse error. Found "catch", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-10 problems in 3 files
+0 problems in 0 files
