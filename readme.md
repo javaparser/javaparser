@@ -3,8 +3,45 @@
 This package contains a parser for the Checker Framework's stub files:
 https://checkerframework.org/manual/#stub
 It is a fork of the [JavaParser](http://javaparser.org) project.
-The remainder of this README file is the JavaParser README.
 
+## Updating from upstream JavaParser
+
+This section describes how to incorporate changes from JavaParser into
+StubParser.  Only developers, not users, of StubParser need to do this.
+
+1. Fork [the stubparser project](https://github.com/typetools/stubparser) to your github account.
+2. Enable Travis build for your fork of the stubparser.
+3. Clone the repository.
+```bash
+git clone https://github.com/{user.name}/stubparser
+```
+4. Enter to the main directory of the local project.
+```bash
+cd stubparser
+```
+5. Create and checkout a branch named `updating`.
+```bash
+git checkout -b updating
+```
+6. Pull the upstream of [the JavaParser project](https://github.com/javaparser/javaparser).
+```bash
+git pull https://github.com/javaparser/javaparser master
+```
+7. Resolve conflicts if required and commit it.
+8. Run maven tests in the root stubparser directory.  If any tests fail, fix them before continuing.
+```bash
+mvn test
+```
+10. Push commits to your fork of the stubparser.
+```bash
+git push
+```
+11. Check that the Travis build was successful. If not, resolve the issues and repeat steps 8-10.
+12. Create a pull request to the typetools/stubparser.
+
+## Original JavaParser README
+
+The remainder of this README file is the original JavaParser README.
 
 ## Java Parser and Abstract Syntax Tree
 
@@ -62,38 +99,6 @@ Make sure that `javaparser-core` at least compiles before you run these.
 ## Manual
 
 Examples of how to use the library can be found on the [Manual](https://github.com/javaparser/javaparser/wiki/Manual) page of the wiki
-
-## Upgrading the stubparser module
-
-Next steps should be made in order to upgrade the stubparser project:
-
-1. Fork [the stubparser project](https://github.com/typetools/stubparser) to your github account.
-2. Enable Travis build for your fork of the stubparser.
-3. Clone the repository to your local environment.
-```bash
-git clone https://github.com/{user.name}/stubparser
-```
-4. Enter to the main directory of the local project.
-```bash
-cd ../{place-where-repository-cloned}/stubparser
-```
-5. Create and checkout to the branch (e.g updating).
-```bash
-git checkout -b updating
-```
-6. Pull the upstream of [the javaparser project](https://github.com/javaparser/javaparser).
-```bash
-git pull https://github.com/javaparser/javaparser master
-```
-7. Resolve the conflicts if required and commit it.
-8. Run maven tests in the root stubparser directory.
-```bash
-mvn test
-```
-9. If something failed in tests the stubparser project should be fixed before continuing.
-10. Push commits to your fork of the stubparser.
-11. Check that Travis build is successfully finished. If not resolve the issues and repeat steps 8-11.
-12. Create pull requests to the typetools/stubparser.
 
 ## Troubleshooting
 
