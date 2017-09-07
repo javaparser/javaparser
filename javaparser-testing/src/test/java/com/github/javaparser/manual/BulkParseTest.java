@@ -44,17 +44,17 @@ public class BulkParseTest {
         Path openJdkZipPath = workdir.resolve("langtools.zip");
         if (Files.notExists(openJdkZipPath)) {
             Log.info("Downloading JDK langtools");
-            /* Found by choosing a tag here: http://hg.openjdk.java.net/jdk8/jdk8/langtools/tags
+            /* Found by choosing a tag here: http://hg.openjdk.java.net/jdk9/jdk9/langtools/tags
              then copying the "zip" link to the line below: */ 
-            download(new URL("http://hg.openjdk.java.net/jdk8/jdk8/langtools/archive/c8a87a58eb3e.zip"), openJdkZipPath);
+            download(new URL("http://hg.openjdk.java.net/jdk9/jdk9/langtools/archive/5ecbed313125.zip"), openJdkZipPath);
         }
-        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setValidator(new Java8Validator()));
+        bulkTest(new SourceZip(openJdkZipPath), "openjdk_src_repo_test_results.txt", new ParserConfiguration().setValidator(new Java9Validator()));
     }
 
     private void parseJdkSrcZip() throws IOException {
         // This is where Ubuntu stores the contents of package openjdk-8-src
-        Path path = Paths.get("/usr/lib/jvm/openjdk-8/src.zip");
-        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setValidator(new Java8Validator()));
+        Path path = Paths.get("/usr/lib/jvm/openjdk-9/src.zip");
+        bulkTest(new SourceZip(path), "openjdk_src_zip_test_results.txt", new ParserConfiguration().setValidator(new Java9Validator()));
     }
 
     @Test
