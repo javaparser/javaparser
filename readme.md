@@ -6,24 +6,35 @@ It is a fork of the [JavaParser](http://javaparser.org) project.
 
 ## Differences between the StubParser and JavaParser
 
-Following list is the differences that were added to the JavaParser to adjust it for using as Stubparser for [the Checker Framework](https://github.com/typetools/checker-framework).
+Following list is the differences that were added to the JavaParser to adjust it for using as StubParser for 
+[the Checker Framework](https://github.com/typetools/checker-framework).
 
 1. StubUnit class that represents the parsed [stubfile](https://checkerframework.org/manual/#stub).
-2. Changes at the java.jj file to parse the stubfiles.
-3. Methods for parsing the stubfiles at the JavaParser.class.
+2. Changes at the java.jj file to parse the stub files.
+3. Methods for parsing the stub files at the JavaParser.class.
+
+To check the code difference "git diff" could be used. 
+[Stackoverflow link on how to get diff between forks](https://stackoverflow.com/questions/4927519/diff-a-git-fork).
+Enter the root directory of the StubParser and perform following commands:
+```bash
+git remote add original https://github.com/javaparser/javaparser
+git fetch original
+git diff HEAD original/master
+```
 
 ## Updating from upstream JavaParser
 
 This section describes how to incorporate changes from JavaParser into
 StubParser.  Only developers, not users, of StubParser need to do this.
 
-1. Fork [the stubparser project](https://github.com/typetools/stubparser) to your github account.
-2. Enable Travis build for your fork of the stubparser.
+1. Fork [the StubParser project](https://github.com/typetools/stubparser) to your GitHub account.
+2. Enable Travis build for your fork of the StubParser. 
+[How to get started with Travis CI](https://docs.travis-ci.com/user/getting-started/#To-get-started-with-Travis-CI).
 3. Clone the repository.
 ```bash
 git clone https://github.com/{user.name}/stubparser
 ```
-4. Enter to the main directory of the local project.
+4. Enter the main directory of the local project.
 ```bash
 cd stubparser
 ```
@@ -36,16 +47,16 @@ git checkout -b updating
 git pull https://github.com/javaparser/javaparser master
 ```
 7. Resolve conflicts if required and commit it.
-8. Run maven tests in the root stubparser directory.  If any tests fail, fix them before continuing.
+8. Run maven tests in the root StubParser directory. If any tests fail, fix them before continuing.
 ```bash
 mvn test
 ```
-10. Push commits to your fork of the stubparser.
+9. Push commits to your fork of the StubParser.
 ```bash
 git push
 ```
-11. Check that the Travis build was successful. If not, resolve the issues and repeat steps 8-10.
-12. Create a pull request to the typetools/stubparser.
+10. Check that the Travis build was successful. If not, resolve the issues and repeat steps 7-9.
+11. Create a pull request to the typetools/stubparser.
 
 ## Original JavaParser README
 
