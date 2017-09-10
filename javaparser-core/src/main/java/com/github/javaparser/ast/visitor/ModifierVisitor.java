@@ -1118,7 +1118,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(NodeList n, A arg) {
+    public Visitable visit(NodeList<?> n, A arg) {
         if (n.isEmpty()) {
             return n;
         }
@@ -1135,7 +1135,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
                 final int i = n.indexOf(change.a);
                 // If the user removed this item by hand, ignore the change.
                 if (i != -1) {
-                    n.set(i, change.b);
+                    n.set(i, (Object)change.b);
                 }
             }
         }

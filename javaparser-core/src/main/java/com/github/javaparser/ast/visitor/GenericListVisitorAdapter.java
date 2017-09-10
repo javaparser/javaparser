@@ -1854,7 +1854,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(NodeList n, A arg) {
+    public List<R> visit(NodeList<?> n, A arg) {
         return ((NodeList<? extends Node>) n).stream().filter(Objects::nonNull).flatMap(v -> v.accept(this, arg).stream()).collect(Collectors.toList());
     }
 

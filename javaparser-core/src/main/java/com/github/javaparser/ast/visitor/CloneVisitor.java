@@ -929,7 +929,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(NodeList n, Object arg) {
+    public Visitable visit(NodeList<?> n, Object arg) {
         NodeList<Node> newNodes = new NodeList<>();
         for (Object node : n) {
             Node resultNode = (Node) ((Node) node).accept(this, arg);

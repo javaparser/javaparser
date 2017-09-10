@@ -38,7 +38,7 @@ import javax.annotation.Generated;
  */
 public interface VoidVisitor<A> {
 
-    void visit(NodeList n, A arg);
+    void visit(NodeList<?> n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.VoidVisitorGenerator")
     void visit(AnnotationDeclaration n, A arg);
