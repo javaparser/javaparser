@@ -38,13 +38,15 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+
 import javax.annotation.Generated;
 import java.util.*;
-import static com.github.javaparser.ast.Node.Parsedness.*;
+
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
-import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -571,7 +573,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * The list of NodeLists owned by this node.
      */
     public List<NodeList<?>> getNodeLists() {
-        return Collections.emptyList();
+        List<NodeList<?>> nodeLists = new ArrayList<>();
+        for (PropertyMetaModel property : getMetaModel().getAllPropertyMetaModels()) {
+            if (property.isNodeList()) {
+                nodeLists.add((NodeList<?>) property.getValue(this));
+            }
+        }
+        return nodeLists;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")

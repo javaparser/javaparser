@@ -39,7 +39,7 @@ public class GetNodeListsGenerator extends NodeGenerator {
         }
 
         final MethodDeclaration getNodeListsMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public List<NodeList<?>> getNodeLists() {%s}", statement));
-        addOrReplaceWhenSameSignature(nodeCoid, getNodeListsMethod);
+        removeMethodWithSameSignature(nodeCoid, getNodeListsMethod);
         annotateGenerated(getNodeListsMethod);
     }
 }

@@ -104,12 +104,6 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getModuleNames());
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleExportsStmt clone() {
         return (ModuleExportsStmt) accept(new CloneVisitor(), null);
