@@ -558,28 +558,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public void registerForSubtree(AstObserver observer) {
         register(observer);
         this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
-        this.getNodeLists().forEach(nl -> {
-            if (nl != null)
-                nl.register(observer);
-        });
+        for (PropertyMetaModel property : getMetaModel().getAllPropertyMetaModels()) {
+            if (property.isNodeList()) {
+                NodeList<?> nodeList = (NodeList<?>) property.getValue(this);
+                if (nodeList != null)
+                    nodeList.register(observer);
+            }
+        }
     }
 
     @Override
     public boolean isRegistered(AstObserver observer) {
         return this.observers.contains(observer);
-    }
-
-    /**
-     * The list of NodeLists owned by this node.
-     */
-    public List<NodeList<?>> getNodeLists() {
-        List<NodeList<?>> nodeLists = new ArrayList<>();
-        for (PropertyMetaModel property : getMetaModel().getAllPropertyMetaModels()) {
-            if (property.isNodeList()) {
-                nodeLists.add((NodeList<?>) property.getValue(this));
-            }
-        }
-        return nodeLists;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
