@@ -311,7 +311,4 @@ public interface GenericVisitor<R, A> {
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(UnparsableStmt n, A arg);
-
-    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
-    R visit(QualifiedNameExpr n, A arg);
 }

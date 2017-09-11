@@ -2595,7 +2595,6 @@ NodeList<Expression> Resources() :
 Expression Resource() :
 {
 	Expression expr;
-	Name name;
 }
 {
     ( LOOKAHEAD( Modifiers() partialType = Type() VariableDeclarator(partialType))
@@ -2603,8 +2602,6 @@ Expression Resource() :
         expr = VariableDeclarationExpression()
     |
         expr = PrimaryExpression()
-    |
-        name = Name() { expr = new QualifiedNameExpr(name); }
     )
     { return expr; }
 }
