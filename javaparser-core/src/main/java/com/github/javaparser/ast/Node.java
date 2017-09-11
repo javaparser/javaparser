@@ -41,10 +41,8 @@ import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
-
 import javax.annotation.Generated;
 import java.util.*;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
 
