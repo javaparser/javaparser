@@ -20,41 +20,79 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.TryStmtMetaModel;
+
+import javax.annotation.Generated;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.TryStmtMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
 
 /**
- * The try statement.
- * <br/><pre>
- * try (InputStream i = new FileInputStream("file")) {
- *   // do things
+ * <h1>The try statement</h1>
+ * <h2>Java 1-6</h2>
+ * <pre>
+ * try {
+ *   // ...
  * } catch (IOException e) {
- *   e.printStackTrace();
+ *   // ...
  * } finally {
- *   System.out.println("Finally!!!");
+ *   // ...
  * }
  * </pre>
- * In this code, "i" is a resource, "// do things" is the content of the tryBlock,
- * there is one catch clause that catches IOException e, and there is a finally block.
- * <p>All of these are optional, but they should not all be empty or none at the same time.
+ * In this code, "// do things" is the content of the tryBlock, there is one catch clause that catches IOException e,
+ * and there is a finally block.
+ * <p>
+ * The catch and finally blocks are optional, but they should not be empty at the same time.
+ * <h2>Java 7-8</h2>
+ * <pre>
+ * try (InputStream i = new FileInputStream("file")) {
+ *   // ...
+ * } catch (IOException|NullPointerException e) {
+ *   // ...
+ * } finally {
+ *   // ...
+ * }
+ * </pre>
+ * Java 7 introduced two things:
+ * <ul>
+ *     <li>Resources can be specified after "try", but only variable declarations (VariableDeclarationExpr.)</li>
+ *     <li>A single catch can catch multiple exception types. This uses the IntersectionType.</li>
+ * </ul>
+ * <h2>Java 9+</h2>
+ * <pre>
+ * try (r) {
+ *   // ...
+ * } catch (IOException|NullPointerException e) {
+ *   // ...
+ * } finally {
+ *   // ...
+ * }
+ * </pre>
+ * Java 9 finishes resources: you can now refer to a resource that was declared somewhere else.
+ * The following types are allowed:
+ * <ul>
+ *     <li>VariableDeclarationExpr: "X x = new X()" like in Java 7-8.</li>
+ *     <li>NameExpr: "a".</li>
+ *     <li>FieldAccessExpr: "x.y.z", "super.test" etc.</li>
+ * </ul>
  *
  * @author Julio Vilmar Gesser
  * @see CatchClause
+ * @see com.github.javaparser.ast.type.IntersectionType
+ * @see com.github.javaparser.ast.expr.FieldAccessExpr
+ * @see com.github.javaparser.ast.expr.NameExpr
  */
 public final class TryStmt extends Statement {
 
