@@ -34,9 +34,16 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.EnumDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
@@ -144,6 +151,60 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         return enumConstant;
     }
 
+    /**
+     * Try to find a {@link ConstructorDeclaration} with no parameters by its name
+     *
+     * @return the methods found (multiple in case of polymorphism)
+     */
+    public Optional<ConstructorDeclaration> getDefaultConstructor() {
+        return getMembers().stream().filter(bd -> bd instanceof ConstructorDeclaration).map(bd -> (ConstructorDeclaration) bd).filter(cd -> cd.getParameters().isEmpty()).findFirst();
+    }
+
+    /**
+     * Adds a constructor to this
+     *
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @return the {@link MethodDeclaration} created
+     */
+    public ConstructorDeclaration addConstructor(Modifier... modifiers) {
+        ConstructorDeclaration constructorDeclaration = new ConstructorDeclaration();
+        constructorDeclaration.setModifiers(Arrays.stream(modifiers).collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
+        constructorDeclaration.setName(getName());
+        getMembers().add(constructorDeclaration);
+        return constructorDeclaration;
+    }
+
+    /**
+     * Find all constructors for this class.
+     *
+     * @return the constructors found. This list is immutable.
+     */
+    public List<ConstructorDeclaration> getConstructors() {
+        return unmodifiableList(getMembers().stream().filter(m -> m instanceof ConstructorDeclaration).map(m -> (ConstructorDeclaration) m).collect(toList()));
+    }
+
+    /**
+     * Try to find a {@link MethodDeclaration} by its parameters types
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return the methods found (multiple in case of overloading)
+     */
+    public Optional<ConstructorDeclaration> getConstructorByParameterTypes(String... paramTypes) {
+        return getConstructors().stream().filter(m -> m.hasParametersOfType(paramTypes)).findFirst();
+    }
+
+    /**
+     * Try to find a {@link MethodDeclaration} by its parameters types
+     *
+     * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br> void
+     * foo(Map&lt;Integer,String&gt; myMap,int number)
+     * @return the methods found (multiple in case of overloading)
+     */
+    public Optional<ConstructorDeclaration> getConstructorByParameterTypes(Class<?>... paramTypes) {
+        return getConstructors().stream().filter(m -> m.hasParametersOfType(paramTypes)).findFirst();
+    }
+    
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
