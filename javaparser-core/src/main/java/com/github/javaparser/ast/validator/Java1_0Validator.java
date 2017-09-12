@@ -2,7 +2,10 @@ package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
@@ -19,6 +22,8 @@ import com.github.javaparser.ast.validator.chunks.CommonValidators;
 import com.github.javaparser.ast.validator.chunks.ModifierValidator;
 import com.github.javaparser.ast.validator.chunks.NoBinaryIntegerLiteralsValidator;
 import com.github.javaparser.ast.validator.chunks.NoUnderscoresInIntegerLiteralsValidator;
+
+import static com.github.javaparser.ast.ImportDeclaration.Staticness.STATIC;
 
 /**
  * This validator validates according to Java 1.0 syntax rules.
@@ -76,7 +81,7 @@ public class Java1_0Validator extends Validators {
             (n, reporter) -> reporter.report(n, "For-each loops are not supported.")
     );
     protected final Validator noStaticImports = new SimpleValidator<>(ImportDeclaration.class,
-            ImportDeclaration::isStatic,
+            n -> n.getStaticness() == STATIC,
             (n, reporter) -> reporter.report(n, "Static imports are not supported.")
     );
     protected final Validator noStringsInSwitch = new SimpleValidator<>(SwitchEntryStmt.class,

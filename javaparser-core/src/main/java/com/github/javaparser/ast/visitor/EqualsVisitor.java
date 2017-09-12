@@ -1253,9 +1253,9 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ImportDeclaration n2 = (ImportDeclaration) arg;
         if (!objEquals(n.isAsterisk(), n2.isAsterisk()))
             return false;
-        if (!objEquals(n.isStatic(), n2.isStatic()))
-            return false;
         if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!objEquals(n.getStaticness(), n2.getStaticness()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;

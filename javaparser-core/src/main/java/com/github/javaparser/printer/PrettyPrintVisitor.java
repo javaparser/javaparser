@@ -1384,7 +1384,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final ImportDeclaration n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printer.print("import ");
-        if (n.isStatic()) {
+        if (n.getStaticness() == ImportDeclaration.Staticness.STATIC) {
             printer.print("static ");
         }
         n.getName().accept(this, arg);
