@@ -86,11 +86,6 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Override
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(annotations);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)

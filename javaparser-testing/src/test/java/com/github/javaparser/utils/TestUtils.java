@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -46,8 +47,8 @@ public class TestUtils {
         }
     }
 
-    public static void assertInstanceOf(Class<? extends Throwable> expectedType, Throwable instance) {
-        assertTrue(expectedType.isAssignableFrom(instance.getClass()));
+    public static void assertInstanceOf(Class<?> expectedType, Object instance) {
+        assertTrue(f("%s is not an instance of %s.", instance.getClass(), expectedType), expectedType.isAssignableFrom(instance.getClass()));
     }
 
     /**
