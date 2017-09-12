@@ -56,7 +56,7 @@ public abstract class NodeGenerator extends Generator {
                     throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
                 });
     }
-    
+
     private void addMethod(
             ClassOrInterfaceDeclaration containingClassOrInterface,
             CallableDeclaration<?> callable,
@@ -72,5 +72,14 @@ public abstract class NodeGenerator extends Generator {
         final CallableDeclaration<?> existingCallable = existingCallables.get(0);
         callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
         containingClassOrInterface.getMembers().replace(existingCallable, callable);
+    }
+
+    /**
+     * Removes all methods from containingClassOrInterface that have the same signature as callable.
+     */
+    protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
+            containingClassOrInterface.remove(existingCallable);
+        }
     }
 }

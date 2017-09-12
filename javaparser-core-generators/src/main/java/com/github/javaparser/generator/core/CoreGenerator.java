@@ -39,7 +39,6 @@ public class CoreGenerator {
         new CloneVisitorGenerator(sourceRoot).generate();
         new ModifierVisitorGenerator(sourceRoot).generate();
 
-        new GetNodeListsGenerator(sourceRoot).generate();
         new PropertyGenerator(sourceRoot).generate();
         new RemoveMethodGenerator(sourceRoot).generate();
         new ReplaceMethodGenerator(sourceRoot).generate();
