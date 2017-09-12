@@ -681,11 +681,20 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printJavaComment(n.getComment(), arg);
         if (n.getScope().isPresent()) {
             n.getScope().get().accept(this, arg);
+            if (configuration.isColumnAlignFirstMethodChain()) {
+                if (!(n.getScope().get() instanceof MethodCallExpr) || (!((MethodCallExpr)n.getScope().get()).getScope().isPresent())) {
+                    printer.resetMethodChainPosition(printer.getCursor());
+                } else {
+                    printer.wrapToColumn(printer.peekMethodChainPosition().column);
+                }
+            }
             printer.print(".");
         }
         printTypeArgs(n, arg);
         n.getName().accept(this, arg);
+        printer.pushMethodChainPosition(printer.getCursor());
         printArguments(n.getArguments(), arg);
+        printer.popMethodChainPosition();
     }
 
     @Override
