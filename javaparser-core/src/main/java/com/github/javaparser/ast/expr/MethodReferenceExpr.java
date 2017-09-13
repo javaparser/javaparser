@@ -150,12 +150,6 @@ public final class MethodReferenceExpr extends Expression implements NodeWithTyp
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getTypeArguments().orElse(null));
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)

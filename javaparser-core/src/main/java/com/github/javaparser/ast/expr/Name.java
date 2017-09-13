@@ -202,12 +202,6 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnnotations());
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public Name clone() {
         return (Name) accept(new CloneVisitor(), null);

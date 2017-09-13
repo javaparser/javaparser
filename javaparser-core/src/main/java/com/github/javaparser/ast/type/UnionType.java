@@ -101,12 +101,6 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getElements(), getAnnotations());
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)

@@ -180,12 +180,6 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getTypeArguments().orElse(null));
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public FieldAccessExpr clone() {
         return (FieldAccessExpr) accept(new CloneVisitor(), null);

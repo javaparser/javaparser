@@ -128,12 +128,6 @@ public final class ArrayCreationLevel extends Node implements NodeWithAnnotation
         return this;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnnotations());
-    }
-
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public ArrayCreationLevel removeDimension() {
         return setDimension((Expression) null);

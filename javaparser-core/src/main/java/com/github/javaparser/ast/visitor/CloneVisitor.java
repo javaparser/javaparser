@@ -877,7 +877,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final TryStmt n, final Object arg) {
         NodeList<CatchClause> catchClauses = cloneList(n.getCatchClauses(), arg);
         BlockStmt finallyBlock = cloneNode(n.getFinallyBlock(), arg);
-        NodeList<VariableDeclarationExpr> resources = cloneList(n.getResources(), arg);
+        NodeList<Expression> resources = cloneList(n.getResources(), arg);
         BlockStmt tryBlock = cloneNode(n.getTryBlock(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         TryStmt r = new TryStmt(n.getTokenRange().orElse(null), resources, tryBlock, catchClauses, finallyBlock);

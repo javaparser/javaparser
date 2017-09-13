@@ -104,12 +104,6 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getElements(), getAnnotations());
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)
