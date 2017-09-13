@@ -45,6 +45,7 @@ import javax.annotation.Generated;
 import java.util.*;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.

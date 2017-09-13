@@ -35,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
 import javax.annotation.Generated;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.NodeList.nodeList;
@@ -47,22 +46,35 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
 
+    /**
+     * The origin of a pair of array brackets [].
+     */
+    public enum Origin {
+
+        /** The [] were found on the name, like "int a[]" or "String abc()[][]" */
+        NAME, /** The [] were found on the type, like "int[] a" or "String[][] abc()" */
+        TYPE
+    }
+
     private Type componentType;
 
+    private Origin origin;
+
     @AllFieldsConstructor
-    public ArrayType(Type componentType, NodeList<AnnotationExpr> annotations) {
-        this(null, componentType, annotations);
+    public ArrayType(Type componentType, Origin origin, NodeList<AnnotationExpr> annotations) {
+        this(null, componentType, origin, annotations);
     }
 
     public ArrayType(Type type, AnnotationExpr... annotations) {
-        this(type, nodeList(annotations));
+        this(type, Origin.TYPE, nodeList(annotations));
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ArrayType(TokenRange tokenRange, Type componentType, NodeList<AnnotationExpr> annotations) {
+    public ArrayType(TokenRange tokenRange, Type componentType, Origin origin, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         setComponentType(componentType);
+        setOrigin(origin);
         customInitialization();
     }
 
@@ -111,7 +123,7 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
                     if (type.getTokenRange().isPresent() && pair.getTokenRange().isPresent()) {
                         tokenRange = new TokenRange(type.getTokenRange().get().getBegin(), pair.getTokenRange().get().getEnd());
                     }
-                    type = new ArrayType(tokenRange, type, pair.getAnnotations());
+                    type = new ArrayType(tokenRange, type, pair.getOrigin(), pair.getAnnotations());
                     if (tokenRange != null) {
                         type.setRange(tokenRange.toRange().get());
                     }
@@ -130,14 +142,15 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
         final List<ArrayBracketPair> arrayBracketPairs = new ArrayList<>(0);
         while (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType) type;
-            arrayBracketPairs.add(new ArrayBracketPair(type.getTokenRange().orElse(null), arrayType.getAnnotations()));
+            arrayBracketPairs.add(new ArrayBracketPair(type.getTokenRange().orElse(null), arrayType.getOrigin(), arrayType.getAnnotations()));
             type = arrayType.getComponentType();
         }
         return new Pair<>(type, arrayBracketPairs);
     }
 
     /**
-     * Helper class that stores information about a pair of brackets.
+     * Helper class that stores information about a pair of brackets in a non-recursive way
+     * (unlike ArrayType.)
      */
     public static class ArrayBracketPair {
 
@@ -145,9 +158,12 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
 
         private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
-        public ArrayBracketPair(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+        private Origin origin;
+
+        public ArrayBracketPair(TokenRange tokenRange, Origin origin, NodeList<AnnotationExpr> annotations) {
             setTokenRange(tokenRange);
             setAnnotations(annotations);
+            setOrigin(origin);
         }
 
         public NodeList<AnnotationExpr> getAnnotations() {
@@ -167,11 +183,36 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
         public Optional<TokenRange> getTokenRange() {
             return Optional.ofNullable(tokenRange);
         }
+
+        public Origin getOrigin() {
+            return origin;
+        }
+
+        public ArrayBracketPair setOrigin(Origin origin) {
+            this.origin = assertNotNull(origin);
+            return this;
+        }
     }
 
     @Override
     public ArrayType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (ArrayType) super.setAnnotations(annotations);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Origin getOrigin() {
+        return origin;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ArrayType setOrigin(final Origin origin) {
+        assertNotNull(origin);
+        if (origin == this.origin) {
+            return (ArrayType) this;
+        }
+        notifyPropertyChange(ObservableProperty.ORIGIN, this.origin, origin);
+        this.origin = origin;
+        return this;
     }
 
     @Override
