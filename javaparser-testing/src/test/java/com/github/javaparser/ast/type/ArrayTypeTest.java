@@ -142,6 +142,24 @@ public class ArrayTypeTest {
     }
 
     @Test
+    public void fieldDeclarationWithArraysHasCorrectOrigins() {
+        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseBodyDeclaration("int[] a[];");
+
+        Type outerType = fieldDeclaration.getVariables().get(0).getType();
+        assertEquals(ArrayType.Origin.TYPE, ((ArrayType)outerType).getOrigin());
+        assertEquals(ArrayType.Origin.NAME, ((ArrayType) ((ArrayType) outerType).getComponentType()).getOrigin());
+    }
+
+    @Test
+    public void methodDeclarationWithArraysHasCorrectOrigins() {
+        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("int[] a()[] {}");
+
+        Type outerType = method.getType();
+        assertEquals(ArrayType.Origin.TYPE, ((ArrayType)outerType).getOrigin());
+        assertEquals(ArrayType.Origin.NAME, ((ArrayType) ((ArrayType) outerType).getComponentType()).getOrigin());
+    }
+
+    @Test
     public void setParameterWithArrays() {
         MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("void a(int[][] a[][]) {}");
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));

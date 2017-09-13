@@ -1063,7 +1063,7 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
-    name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     {
         name.setTokenRange(name.getTokenRange().get().withEnd(token()));    
         return new Pair(name, arrayBracketPairs);
@@ -1113,7 +1113,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = begin.orIfInvalid(nodeListBegin(annotations)); }
     type = ResultType() { begin = begin.orIfInvalid(type.getTokenRange().get().getBegin()); }
-    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
       ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
     ( body = Block() | ";" )
@@ -1322,14 +1322,14 @@ ReferenceType ReferenceType():
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
+   type = PrimitiveType() ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair(Origin.TYPE) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+   type = ClassOrInterfaceType()  ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair(Origin.TYPE) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
   { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
-ArrayBracketPair ArrayBracketPair():
+ArrayBracketPair ArrayBracketPair(Origin origin):
 {
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     JavaToken begin = INVALID;
@@ -1337,7 +1337,7 @@ ArrayBracketPair ArrayBracketPair():
 {
     annotations = Annotations()
     "[" { begin = begin.orIfInvalid(token()); } "]"
-    { return new ArrayBracketPair(range(begin, token()), annotations); }
+    { return new ArrayBracketPair(range(begin, token()), origin, annotations); }
 }
 
 IntersectionType IntersectionType():

@@ -37,11 +37,9 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import javax.annotation.Generated;
 import java.util.EnumSet;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;

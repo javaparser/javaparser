@@ -42,10 +42,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import javax.annotation.Generated;
 import java.util.EnumSet;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

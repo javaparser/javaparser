@@ -168,7 +168,7 @@ public final class ArrayCreationExpr extends Expression {
     public Type createdType() {
         Type result = elementType;
         for (int i = 0; i < levels.size(); i++) {
-            result = new ArrayType(result, new NodeList<>());
+            result = new ArrayType(result, ArrayType.Origin.TYPE, new NodeList<>());
         }
         return result;
     }
