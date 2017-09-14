@@ -2,14 +2,10 @@ package com.github.javaparser.ast.expr;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static com.github.javaparser.utils.TestUtils.assertExpressionValid;
 import static org.junit.Assert.assertTrue;
 
-public class MethodReferenceTest {
+public class MethodReferenceExprTest {
 
     @Test
     public void methodReferenceExprHasAlwaysAScope() {
@@ -64,6 +60,11 @@ public class MethodReferenceTest {
     @Test
     public void reference10() {
         assertExpressionValid("(test ? list.replaceAll(String::trim) : list) :: iterator");
+    }
+        
+    @Test
+    public void reference10Annotated1() {
+        assertExpressionValid("(test ? list.replaceAll(@A String::trim) : list) :: iterator");
     }
         
     @Test
