@@ -35,6 +35,7 @@ import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -88,7 +89,8 @@ public class ArrayTypeTest {
 
         ArrayType arrayType1 = (ArrayType) methodDeclaration.getType();
         ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
-        Assertions.assertThat(arrayType2.getComponentType()).isInstanceOf(PrimitiveType.class);
+        Type elementType = arrayType2.getComponentType();
+        assertThat(elementType).isInstanceOf(PrimitiveType.class);
 
         assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
         assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));

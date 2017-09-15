@@ -221,6 +221,7 @@ public final class JavaParserMetaModel {
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         intersectionTypeMetaModel.getConstructorParameters().add(intersectionTypeMetaModel.elementsPropertyMetaModel);
         primitiveTypeMetaModel.getConstructorParameters().add(primitiveTypeMetaModel.typePropertyMetaModel);
+        primitiveTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeParameterMetaModel.namePropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeParameterMetaModel.typeBoundPropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
