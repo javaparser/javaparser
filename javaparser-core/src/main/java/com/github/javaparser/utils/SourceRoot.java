@@ -145,7 +145,7 @@ public class SourceRoot {
      * A new thread is forked each time a new directory is visited and is responsible for parsing all .java files in
      * that directory.
      * <b>Note that</b> to ensure thread safety, a new parser instance is created for every file with the internal
-     * parser's (i.e. {@link setJavaParser}) configuration.
+     * parser's (i.e. {@link #setJavaParser}) configuration.
      * It keeps track of all parsed files so you can write them out with a single saveAll() call.
      * Note that the cache grows with every file parsed,
      * so if you don't need saveAll(),
@@ -183,7 +183,7 @@ public class SourceRoot {
      * A new thread is forked each time a new directory is visited and is responsible for parsing all .java files in
      * that directory.
      * <b>Note that</b> to ensure thread safety, a new parser instance is created for every file with the internal
-     * parser's (i.e. {@link setJavaParser}) configuration.
+     * parser's (i.e. {@link #setJavaParser}) configuration.
      * It keeps track of all parsed files so you can write them out with a single saveAll() call.
      * Note that the cache grows with every file parsed,
      * so if you don't need saveAll(),
