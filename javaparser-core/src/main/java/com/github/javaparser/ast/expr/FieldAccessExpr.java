@@ -163,7 +163,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     /**
      * Sets the type arguments
      *
-     * @param types the type arguments, can be null
+     * @param typeArguments the type arguments, can be null
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
