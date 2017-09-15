@@ -105,7 +105,7 @@ public final class AssertStmt extends Statement {
     /**
      * Sets the message
      *
-     * @param msg the message, can be null
+     * @param message the message, can be null
      * @return this, the AssertStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
