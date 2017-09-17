@@ -31,6 +31,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
+/**
+ * Outputs a YAML file containing the AST meant for inspecting it.
+ */
 public class YamlPrinter {
 
     private static final int NUM_SPACES_FOR_INDENT = 4;
