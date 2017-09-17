@@ -35,12 +35,12 @@ public class YamlPrinterTest {
         String expectedOutput = "---" + System.lineSeparator();
         expectedOutput += "root(Type=MethodCallExpr): " + System.lineSeparator();
         expectedOutput += "    name(Type=SimpleName): " + System.lineSeparator();
-        expectedOutput += "        identifier: x" + System.lineSeparator();
+        expectedOutput += "        identifier: \"x\"" + System.lineSeparator();
         expectedOutput += "    arguments: " + System.lineSeparator();
         expectedOutput += "        - argument(Type=IntegerLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "            value: 1" + System.lineSeparator();
+        expectedOutput += "            value: \"1\"" + System.lineSeparator();
         expectedOutput += "        - argument(Type=IntegerLiteralExpr): " + System.lineSeparator();
-        expectedOutput += "            value: 1" + System.lineSeparator();
+        expectedOutput += "            value: \"1\"" + System.lineSeparator();
         expectedOutput += "...";
 
         YamlPrinter YamlPrinter = new YamlPrinter(true);
@@ -53,15 +53,41 @@ public class YamlPrinterTest {
     public void testWithoutType() {
         String expectedOutput = "---" + System.lineSeparator();
         expectedOutput += "root: " + System.lineSeparator();
-        expectedOutput += "    operator: PLUS" + System.lineSeparator();
+        expectedOutput += "    operator: \"PLUS\"" + System.lineSeparator();
         expectedOutput += "    left: " + System.lineSeparator();
-        expectedOutput += "        value: 1" + System.lineSeparator();
+        expectedOutput += "        value: \"1\"" + System.lineSeparator();
         expectedOutput += "    right: " + System.lineSeparator();
-        expectedOutput += "        value: 1" + System.lineSeparator();
+        expectedOutput += "        value: \"1\"" + System.lineSeparator();
         expectedOutput += "...";
 
         YamlPrinter YamlPrinter = new YamlPrinter(false);
         Expression expression = JavaParser.parseExpression("1+1");
+        String output = YamlPrinter.output(expression);
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void testWithColonFollowedBySpaceInValue() {
+        String expectedOutput = "---" + System.lineSeparator();
+        expectedOutput += "root(Type=StringLiteralExpr): " + System.lineSeparator();
+        expectedOutput += "    value: \"a\\\\: b\"" + System.lineSeparator();
+        expectedOutput += "...";
+
+        YamlPrinter YamlPrinter = new YamlPrinter(true);
+        Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
+        String output = YamlPrinter.output(expression);
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void testWithColonFollowedByLineSeparatorInValue() {
+        String expectedOutput = "---" + System.lineSeparator();
+        expectedOutput += "root(Type=StringLiteralExpr): " + System.lineSeparator();
+        expectedOutput += "    value: \"a\\\\:\\\\nb\"" + System.lineSeparator();
+        expectedOutput += "...";
+
+        YamlPrinter YamlPrinter = new YamlPrinter(true);
+        Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
         String output = YamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }

@@ -65,8 +65,10 @@ public class YamlPrinter {
             builder.append(System.lineSeparator() + indent(level) + name + ": ");
 
         level++;
-        for (PropertyMetaModel a : attributes)
-            builder.append(System.lineSeparator() + indent(level) + a.getName() + ": " + a.getValue(node).toString());
+        for (PropertyMetaModel a : attributes) {
+            builder.append(System.lineSeparator() + indent(level) + a.getName() + ": \""
+                    + a.getValue(node).toString() + "\"");
+        }
 
         for (PropertyMetaModel sn : subNodes) {
             Node nd = (Node) sn.getValue(node);
