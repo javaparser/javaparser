@@ -201,7 +201,7 @@ public class ControlFlowLogic {
                         return true;
                     }
                 }
-                return isReachableBecauseOfPosition();
+                return isReachableBecauseOfPosition(statement);
             }
 
             @Override
@@ -284,7 +284,7 @@ public class ControlFlowLogic {
         //        This approach would be consistent with the treatment of other control structures. However, in order to allow the if statement to be used conveniently for "conditional compilation" purposes, the actual rules differ.
 
         // FIXME
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 
 
