@@ -29,10 +29,12 @@ public class CoreGenerator {
     private void run(SourceRoot sourceRoot) throws Exception {
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorAdapterGenerator(sourceRoot).generate();
+        new GenericVisitorWithDefaultsGenerator(sourceRoot).generate();
         new EqualsVisitorGenerator(sourceRoot).generate();
         new ObjectIdentityEqualsVisitorGenerator(sourceRoot).generate();
         new VoidVisitorAdapterGenerator(sourceRoot).generate();
         new VoidVisitorGenerator(sourceRoot).generate();
+        new VoidVisitorWithDefaultsGenerator(sourceRoot).generate();
         new GenericVisitorGenerator(sourceRoot).generate();
         new HashCodeVisitorGenerator(sourceRoot).generate();
         new ObjectIdentityHashCodeVisitorGenerator(sourceRoot).generate();
