@@ -10,6 +10,7 @@ See also the Javadoc for `TryStmt`.
 but all the visit methods call a default method by default.
 * Annotation support was cleaned up, adding some obscure locations where you can have annotations.
 * `EnumDeclaration` regained its constructor builder methods. They were accidentally lost around 3.2.2.
+* `ArrayType` now has an `origin` field which indicates in which position the array brackets were found.
 
 Version 3.3.5
 ------------------
