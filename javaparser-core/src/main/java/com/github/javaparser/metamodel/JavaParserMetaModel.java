@@ -213,6 +213,7 @@ public final class JavaParserMetaModel {
         whileStmtMetaModel.getConstructorParameters().add(whileStmtMetaModel.conditionPropertyMetaModel);
         whileStmtMetaModel.getConstructorParameters().add(whileStmtMetaModel.bodyPropertyMetaModel);
         arrayTypeMetaModel.getConstructorParameters().add(arrayTypeMetaModel.componentTypePropertyMetaModel);
+        arrayTypeMetaModel.getConstructorParameters().add(arrayTypeMetaModel.originPropertyMetaModel);
         arrayTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(classOrInterfaceTypeMetaModel.scopePropertyMetaModel);
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(classOrInterfaceTypeMetaModel.namePropertyMetaModel);
@@ -220,6 +221,7 @@ public final class JavaParserMetaModel {
         classOrInterfaceTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         intersectionTypeMetaModel.getConstructorParameters().add(intersectionTypeMetaModel.elementsPropertyMetaModel);
         primitiveTypeMetaModel.getConstructorParameters().add(primitiveTypeMetaModel.typePropertyMetaModel);
+        primitiveTypeMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeParameterMetaModel.namePropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeParameterMetaModel.typeBoundPropertyMetaModel);
         typeParameterMetaModel.getConstructorParameters().add(typeMetaModel.annotationsPropertyMetaModel);
@@ -674,7 +676,7 @@ public final class JavaParserMetaModel {
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.catchClausesPropertyMetaModel);
         tryStmtMetaModel.finallyBlockPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "finallyBlock", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), true, false, false, false, false);
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.finallyBlockPropertyMetaModel);
-        tryStmtMetaModel.resourcesPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "resources", com.github.javaparser.ast.expr.VariableDeclarationExpr.class, Optional.of(variableDeclarationExprMetaModel), false, false, true, false, false);
+        tryStmtMetaModel.resourcesPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "resources", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false, false);
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.resourcesPropertyMetaModel);
         tryStmtMetaModel.tryBlockPropertyMetaModel = new PropertyMetaModel(tryStmtMetaModel, "tryBlock", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false, false);
         tryStmtMetaModel.getDeclaredPropertyMetaModels().add(tryStmtMetaModel.tryBlockPropertyMetaModel);
@@ -686,6 +688,8 @@ public final class JavaParserMetaModel {
         whileStmtMetaModel.getDeclaredPropertyMetaModels().add(whileStmtMetaModel.conditionPropertyMetaModel);
         arrayTypeMetaModel.componentTypePropertyMetaModel = new PropertyMetaModel(arrayTypeMetaModel, "componentType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false, false);
         arrayTypeMetaModel.getDeclaredPropertyMetaModels().add(arrayTypeMetaModel.componentTypePropertyMetaModel);
+        arrayTypeMetaModel.originPropertyMetaModel = new PropertyMetaModel(arrayTypeMetaModel, "origin", com.github.javaparser.ast.type.ArrayType.Origin.class, Optional.empty(), false, false, false, false, false);
+        arrayTypeMetaModel.getDeclaredPropertyMetaModels().add(arrayTypeMetaModel.originPropertyMetaModel);
         classOrInterfaceTypeMetaModel.namePropertyMetaModel = new PropertyMetaModel(classOrInterfaceTypeMetaModel, "name", com.github.javaparser.ast.expr.SimpleName.class, Optional.of(simpleNameMetaModel), false, false, false, false, false);
         classOrInterfaceTypeMetaModel.getDeclaredPropertyMetaModels().add(classOrInterfaceTypeMetaModel.namePropertyMetaModel);
         classOrInterfaceTypeMetaModel.scopePropertyMetaModel = new PropertyMetaModel(classOrInterfaceTypeMetaModel, "scope", com.github.javaparser.ast.type.ClassOrInterfaceType.class, Optional.of(classOrInterfaceTypeMetaModel), true, false, false, false, false);

@@ -38,11 +38,12 @@ import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import javax.annotation.Generated;
 import java.util.*;
-import static com.github.javaparser.ast.Node.Parsedness.*;
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
 import com.github.javaparser.ast.Node;
 
@@ -556,22 +557,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public void registerForSubtree(AstObserver observer) {
         register(observer);
         this.getChildNodes().forEach(c -> c.registerForSubtree(observer));
-        this.getNodeLists().forEach(nl -> {
-            if (nl != null)
-                nl.register(observer);
-        });
+        for (PropertyMetaModel property : getMetaModel().getAllPropertyMetaModels()) {
+            if (property.isNodeList()) {
+                NodeList<?> nodeList = (NodeList<?>) property.getValue(this);
+                if (nodeList != null)
+                    nodeList.register(observer);
+            }
+        }
     }
 
     @Override
     public boolean isRegistered(AstObserver observer) {
         return this.observers.contains(observer);
-    }
-
-    /**
-     * The list of NodeLists owned by this node.
-     */
-    public List<NodeList<?>> getNodeLists() {
-        return Collections.emptyList();
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")

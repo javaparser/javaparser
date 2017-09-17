@@ -51,6 +51,9 @@ import com.github.javaparser.TokenRange;
  * or the resources part of the try statement.
  * <br/><code>final int x=3, y=55</code>
  *
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the method or the type.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarationExpr extends Expression implements NodeWithFinalModifier<VariableDeclarationExpr>, NodeWithAnnotations<VariableDeclarationExpr>, NodeWithVariables<VariableDeclarationExpr> {
@@ -173,12 +176,6 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
         this.variables = variables;
         setAsParentNodeOf(variables);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnnotations(), getVariables());
     }
 
     @Override

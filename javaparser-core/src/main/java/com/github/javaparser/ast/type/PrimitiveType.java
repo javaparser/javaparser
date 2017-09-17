@@ -114,18 +114,22 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     private Primitive type;
 
     public PrimitiveType() {
-        this(null, Primitive.INT);
+        this(null, Primitive.INT, new NodeList<>());
+    }
+
+    public PrimitiveType(final Primitive type) {
+        this(null, type, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public PrimitiveType(final Primitive type) {
-        this(null, type);
+    public PrimitiveType(final Primitive type, NodeList<AnnotationExpr> annotations) {
+        this(null, type, annotations);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PrimitiveType(TokenRange tokenRange, Primitive type) {
-        super(tokenRange);
+    public PrimitiveType(TokenRange tokenRange, Primitive type, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setType(type);
         customInitialization();
     }
@@ -168,12 +172,6 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     @Override
     public PrimitiveType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (PrimitiveType) super.setAnnotations(annotations);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnnotations());
     }
 
     @Override

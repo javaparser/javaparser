@@ -145,12 +145,6 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getArguments(), getClassBody(), getAnnotations());
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)

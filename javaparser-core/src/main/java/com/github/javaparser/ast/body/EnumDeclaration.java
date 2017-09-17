@@ -20,12 +20,14 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithConstructors;
 import com.github.javaparser.ast.nodeTypes.NodeWithImplements;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -34,20 +36,17 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.EnumDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import java.util.Arrays;
+import javax.annotation.Generated;
 import java.util.EnumSet;
-import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
  *
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration> {
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, NodeWithConstructors<EnumDeclaration> {
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
@@ -142,12 +141,6 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
         return enumConstant;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getEntries(), getImplementedTypes(), getMembers(), getAnnotations());
     }
 
     @Override

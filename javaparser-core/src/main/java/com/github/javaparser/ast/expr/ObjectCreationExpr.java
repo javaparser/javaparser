@@ -226,12 +226,6 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnonymousClassBody().orElse(null), getArguments(), getTypeArguments().orElse(null));
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public boolean remove(Node node) {
         if (node == null)

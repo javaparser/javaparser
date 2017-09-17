@@ -20,44 +20,81 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.TryStmtMetaModel;
+import javax.annotation.Generated;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.TryStmtMetaModel;
-import com.github.javaparser.metamodel.JavaParserMetaModel;
-import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
 
 /**
- * The try statement.
- * <br/><pre>
- * try (InputStream i = new FileInputStream("file")) {
- *   // do things
+ * <h1>The try statement</h1>
+ * <h2>Java 1-6</h2>
+ * <pre>
+ * try {
+ *   // ...
  * } catch (IOException e) {
- *   e.printStackTrace();
+ *   // ...
  * } finally {
- *   System.out.println("Finally!!!");
+ *   // ...
  * }
  * </pre>
- * In this code, "i" is a resource, "// do things" is the content of the tryBlock,
- * there is one catch clause that catches IOException e, and there is a finally block.
- * <p>All of these are optional, but they should not all be empty or none at the same time.
+ * In this code, "// do things" is the content of the tryBlock, there is one catch clause that catches IOException e,
+ * and there is a finally block.
+ * <p>
+ * The catch and finally blocks are optional, but they should not be empty at the same time.
+ * <h2>Java 7-8</h2>
+ * <pre>
+ * try (InputStream i = new FileInputStream("file")) {
+ *   // ...
+ * } catch (IOException|NullPointerException e) {
+ *   // ...
+ * } finally {
+ *   // ...
+ * }
+ * </pre>
+ * Java 7 introduced two things:
+ * <ul>
+ *     <li>Resources can be specified after "try", but only variable declarations (VariableDeclarationExpr.)</li>
+ *     <li>A single catch can catch multiple exception types. This uses the IntersectionType.</li>
+ * </ul>
+ * <h2>Java 9+</h2>
+ * <pre>
+ * try (r) {
+ *   // ...
+ * } catch (IOException|NullPointerException e) {
+ *   // ...
+ * } finally {
+ *   // ...
+ * }
+ * </pre>
+ * Java 9 finishes resources: you can now refer to a resource that was declared somewhere else.
+ * The following types are allowed:
+ * <ul>
+ *     <li>VariableDeclarationExpr: "X x = new X()" like in Java 7-8.</li>
+ *     <li>NameExpr: "a".</li>
+ *     <li>FieldAccessExpr: "x.y.z", "super.test" etc.</li>
+ * </ul>
  *
  * @author Julio Vilmar Gesser
  * @see CatchClause
+ * @see com.github.javaparser.ast.type.IntersectionType
+ * @see com.github.javaparser.ast.expr.FieldAccessExpr
+ * @see com.github.javaparser.ast.expr.NameExpr
  */
 public final class TryStmt extends Statement {
 
-    private NodeList<VariableDeclarationExpr> resources;
+    private NodeList<Expression> resources;
 
     private BlockStmt tryBlock;
 
@@ -74,13 +111,13 @@ public final class TryStmt extends Statement {
     }
 
     @AllFieldsConstructor
-    public TryStmt(NodeList<VariableDeclarationExpr> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
+    public TryStmt(NodeList<Expression> resources, final BlockStmt tryBlock, final NodeList<CatchClause> catchClauses, final BlockStmt finallyBlock) {
         this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TryStmt(TokenRange tokenRange, NodeList<VariableDeclarationExpr> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
+    public TryStmt(TokenRange tokenRange, NodeList<Expression> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
         super(tokenRange);
         setResources(resources);
         setTryBlock(tryBlock);
@@ -115,7 +152,7 @@ public final class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarationExpr> getResources() {
+    public NodeList<Expression> getResources() {
         return resources;
     }
 
@@ -161,7 +198,7 @@ public final class TryStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TryStmt setResources(final NodeList<VariableDeclarationExpr> resources) {
+    public TryStmt setResources(final NodeList<Expression> resources) {
         assertNotNull(resources);
         if (resources == this.resources) {
             return (TryStmt) this;
@@ -172,12 +209,6 @@ public final class TryStmt extends Statement {
         this.resources = resources;
         setAsParentNodeOf(resources);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getCatchClauses(), getResources());
     }
 
     @Override
@@ -247,7 +278,7 @@ public final class TryStmt extends Statement {
         }
         for (int i = 0; i < resources.size(); i++) {
             if (resources.get(i) == node) {
-                resources.set(i, (VariableDeclarationExpr) replacementNode);
+                resources.set(i, (Expression) replacementNode);
                 return true;
             }
         }
