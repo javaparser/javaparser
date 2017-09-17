@@ -21,7 +21,7 @@ public class SameAsBoundTest {
     @Test
     public void recognizeInstantiation() {
         // { α = String } contains a single bound, instantiating α as String.
-        InferenceVariable inferenceVariable = new InferenceVariable("α");
+        InferenceVariable inferenceVariable = new InferenceVariable("α", null);
         Bound bound1 = new SameAsBound(inferenceVariable, stringType);
         Bound bound2 = new SameAsBound(stringType, inferenceVariable);
 

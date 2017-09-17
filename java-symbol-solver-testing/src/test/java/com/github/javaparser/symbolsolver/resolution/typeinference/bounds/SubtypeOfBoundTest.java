@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
@@ -8,6 +9,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -28,9 +30,11 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperLowerBound1() {
+        TypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(TypeParameterDeclaration.class);
+
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
-        InferenceVariable inferenceVariable = new InferenceVariable("α");
+        InferenceVariable inferenceVariable = new InferenceVariable("α", typeParameterDeclaration);
         Bound bound = new SubtypeOfBound(integerType, inferenceVariable);
 
         assertEquals(Optional.of(new ProperLowerBound(inferenceVariable, integerType)), bound.isProperLowerBound());
@@ -38,9 +42,11 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperLowerBound2() {
+        TypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(TypeParameterDeclaration.class);
+
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
-        InferenceVariable inferenceVariable = new InferenceVariable("α");
+        InferenceVariable inferenceVariable = new InferenceVariable("α", typeParameterDeclaration);
         Bound bound = new SubtypeOfBound(doubleType, inferenceVariable);
 
         assertEquals(Optional.of(new ProperLowerBound(inferenceVariable, doubleType)), bound.isProperLowerBound());
@@ -48,9 +54,11 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperUpperBound1() {
+        TypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(TypeParameterDeclaration.class);
+
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
-        InferenceVariable inferenceVariable = new InferenceVariable("α");
+        InferenceVariable inferenceVariable = new InferenceVariable("α", typeParameterDeclaration);
         Bound bound = new SubtypeOfBound(inferenceVariable, objectType);
 
         assertEquals(Optional.of(new ProperUpperBound(inferenceVariable, objectType)), bound.isProperUpperBound());
@@ -58,10 +66,12 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperUpperBound2() {
+        TypeParameterDeclaration typeParameterDeclaration1 = EasyMock.createMock(TypeParameterDeclaration.class);
+        TypeParameterDeclaration typeParameterDeclaration2 = EasyMock.createMock(TypeParameterDeclaration.class);
         // { α <: Iterable<?>, β <: Object, α <: List<β> } describes a proper upper bound for each of α and β, along with a dependency between them.
 
-        InferenceVariable alpha = new InferenceVariable("α");
-        InferenceVariable beta = new InferenceVariable("β");
+        InferenceVariable alpha = new InferenceVariable("α", typeParameterDeclaration1);
+        InferenceVariable beta = new InferenceVariable("β", typeParameterDeclaration2);
         Type iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration(), Arrays.asList(Wildcard.UNBOUNDED), typeSolver);
         Type listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration(), Arrays.asList(beta), typeSolver);
 

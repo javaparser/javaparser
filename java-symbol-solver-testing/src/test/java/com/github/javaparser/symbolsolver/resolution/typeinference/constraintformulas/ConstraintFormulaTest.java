@@ -2,6 +2,7 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.constraintfo
 
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
@@ -11,6 +12,7 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVari
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.ExpressionCompatibleWithType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Pair;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -32,8 +34,10 @@ public class ConstraintFormulaTest {
      */
     @Test
     public void testExpressionCompatibleWithTypeReduce1() {
+        TypeParameterDeclaration tp = EasyMock.createMock(TypeParameterDeclaration.class);
+
         Expression e = new StringLiteralExpr("hi");
-        InferenceVariable inferenceVariable = new InferenceVariable("α");
+        InferenceVariable inferenceVariable = new InferenceVariable("α", tp);
 
         ExpressionCompatibleWithType formula = new ExpressionCompatibleWithType(typeSolver, e, inferenceVariable);
 
