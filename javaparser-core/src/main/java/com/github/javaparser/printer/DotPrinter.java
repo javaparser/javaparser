@@ -41,6 +41,7 @@ public class DotPrinter {
     }
 
     public String output(Node node) {
+        nodeCount = 0;
         StringBuilder output = new StringBuilder();
         output.append("digraph {");
         output(node, null, "root", output);
