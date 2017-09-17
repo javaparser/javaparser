@@ -31,6 +31,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
+/**
+ * Outputs a Graphviz diagram of the AST.
+ */
 public class DotPrinter {
 
     private int nodeCount;
