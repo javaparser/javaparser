@@ -43,9 +43,9 @@ public class YamlPrinterTest {
         expectedOutput += "            value: \"1\"" + System.lineSeparator();
         expectedOutput += "...";
 
-        YamlPrinter YamlPrinter = new YamlPrinter(true);
+        YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("x(1,1)");
-        String output = YamlPrinter.output(expression);
+        String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
 
@@ -60,9 +60,9 @@ public class YamlPrinterTest {
         expectedOutput += "        value: \"1\"" + System.lineSeparator();
         expectedOutput += "...";
 
-        YamlPrinter YamlPrinter = new YamlPrinter(false);
+        YamlPrinter yamlPrinter = new YamlPrinter(false);
         Expression expression = JavaParser.parseExpression("1+1");
-        String output = YamlPrinter.output(expression);
+        String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
 
@@ -73,9 +73,9 @@ public class YamlPrinterTest {
         expectedOutput += "    value: \"a\\\\: b\"" + System.lineSeparator();
         expectedOutput += "...";
 
-        YamlPrinter YamlPrinter = new YamlPrinter(true);
+        YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\: b\"");
-        String output = YamlPrinter.output(expression);
+        String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
 
@@ -86,9 +86,9 @@ public class YamlPrinterTest {
         expectedOutput += "    value: \"a\\\\:\\\\nb\"" + System.lineSeparator();
         expectedOutput += "...";
 
-        YamlPrinter YamlPrinter = new YamlPrinter(true);
+        YamlPrinter yamlPrinter = new YamlPrinter(true);
         Expression expression = JavaParser.parseExpression("\"a\\\\:\\\\nb\"");
-        String output = YamlPrinter.output(expression);
+        String output = yamlPrinter.output(expression);
         assertEquals(expectedOutput, output);
     }
 }
