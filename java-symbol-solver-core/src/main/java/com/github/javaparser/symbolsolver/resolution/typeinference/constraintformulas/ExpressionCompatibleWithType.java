@@ -8,11 +8,14 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.utils.Pair;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper.isPolyExpression;
@@ -119,7 +122,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 Pair<Type, Boolean> result = TypeHelper.groundTargetTypeOfLambda(lambdaExpr, T, typeSolver);
                 Type TFirst = result.a;
                 MethodType targetFunctionType = TypeHelper.getFunctionType(TFirst);
-                targetFunctionType = targetFunctionType.replaceTypeVariablesWithInferenceVariables();
+                targetFunctionType = replaceTypeVariablesWithInferenceVariables(targetFunctionType);
                 if (result.b) {
                     throw new UnsupportedOperationException();
                 }
@@ -307,5 +310,29 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 ", expression=" + expression +
                 ", T=" + T +
                 '}';
+    }
+
+    private MethodType replaceTypeVariablesWithInferenceVariables(MethodType methodType) {
+        // Find all type variable
+        Map<TypeVariable, InferenceVariable> correspondences = new HashMap<>();
+        List<Type> newFormalArgumentTypes = new LinkedList<>();
+        for (Type formalArg : methodType.getFormalArgumentTypes()) {
+            newFormalArgumentTypes.add(replaceTypeVariablesWithInferenceVariables(formalArg, correspondences));
+        }
+        Type newReturnType = replaceTypeVariablesWithInferenceVariables(methodType.getReturnType(), correspondences);
+        return new MethodType(methodType.getTypeParameters(), newFormalArgumentTypes, newReturnType, methodType.getExceptionTypes());
+    }
+
+    private Type replaceTypeVariablesWithInferenceVariables(Type originalType, Map<TypeVariable, InferenceVariable> correspondences) {
+        if (originalType.isTypeVariable()) {
+            if (!correspondences.containsKey(originalType.asTypeVariable())) {
+                correspondences.put(originalType.asTypeVariable(), InferenceVariable.unnamed(originalType.asTypeVariable().asTypeParameter()));
+            }
+            return correspondences.get(originalType.asTypeVariable());
+        }
+        if (originalType.isPrimitive()) {
+            return originalType;
+        }
+        throw new UnsupportedOperationException(originalType.toString());
     }
 }
