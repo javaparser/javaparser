@@ -26,6 +26,17 @@ public class VisitorMapTest {
     }
 
     @Test
+    public void normalEqualsWithDifferentCommentsDoesDeepCompare() {
+        CompilationUnit x1 = JavaParser.parse("/* a */ class X { /** b */} //c");
+        CompilationUnit x2 = JavaParser.parse("/* b */ class X { }  //c");
+
+        Map<CompilationUnit, Integer> map = new HashMap<>();
+        map.put(x1, 1);
+        map.put(x2, 2);
+        assertEquals(1, map.size());
+    }
+
+    @Test
     public void objectIdentityEqualsDoesShallowCompare() {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         CompilationUnit x2 = JavaParser.parse("class X{}");
@@ -35,7 +46,19 @@ public class VisitorMapTest {
         map.put(x2, 2);
         assertEquals(2, map.size());
     }
-    
+
+    @Test
+    public void objectIdentityEqualsWithDifferentCommentsDoesShallowCompare() {
+        CompilationUnit x1 = JavaParser.parse("/* a */ class X { /** b */} //c");
+        CompilationUnit x2 = JavaParser.parse("/* b */ class X { }  //c");
+
+        Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(),
+                new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 2);
+        assertEquals(2, map.size());
+    }
+
     @Test
     public void visitorMapGet(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
@@ -44,7 +67,7 @@ public class VisitorMapTest {
         map.put(x1, 1);
         assertEquals(1, (int)map.get(x1));
     }
-    
+
     @Test
     public void visitorMapContainsKey(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
@@ -53,7 +76,7 @@ public class VisitorMapTest {
         map.put(x1, 1);
         assertTrue(map.containsKey(x1));
     }
-    
+
     @Test
     public void visitorMapPutAll(){
     	CompilationUnit x1 = JavaParser.parse("class X{}");
@@ -65,16 +88,16 @@ public class VisitorMapTest {
         visitorMap.putAll(map);
         assertEquals(2, visitorMap.size());
     }
-    
+
     @Test
     public void remove(){
         CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorMap<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         map.put(x1, 1);
         assertTrue(map.containsKey(x1));
-        
+
         map.remove(x1);
-        
+
         assertFalse(map.containsKey(x1));
     }
 }

@@ -22,19 +22,29 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod,
+                                           CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         final BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
 
         final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
-        final List<PropertyMetaModel> propertyMetaModels= node.getAllPropertyMetaModels();
-        if (propertyMetaModels.isEmpty()) {
+        final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
+        String ndName = node.getTypeName();
+        if (ndName.equals("JavadocComment") || ndName.equals("LineComment") || ndName.equals("BlockComment")
+                || propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {
             for (PropertyMetaModel field : propertyMetaModels) {
                 final String getter = field.getGetterMethodName() + "()";
+                if (getter.equals("getComment()")) {
+                    if (propertyMetaModels.size() == 1) {
+                        builder.append("0");
+                        break;
+                    } else
+                        continue;
+                }
                 // Is this field another AST node? Visit it.
                 if (field.getNodeReference().isPresent()) {
                     if (field.isOptional()) {

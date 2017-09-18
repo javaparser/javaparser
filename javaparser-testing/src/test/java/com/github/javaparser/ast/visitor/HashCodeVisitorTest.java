@@ -16,6 +16,15 @@ public class HashCodeVisitorTest {
     }
 
     @Test
+    public void testEqualsWithDifferentComments() {
+        CompilationUnit p1 = JavaParser.parse("/* a */ class X { /** b */} //c");
+        CompilationUnit p2 = JavaParser.parse("/* b */ class X { }  //c");
+        assertEquals(p1.hashCode(), p2.hashCode());
+        assertEquals(p1.getComments().size(), 3);
+        assertEquals(p2.getComments().size(), 2);
+    }
+
+    @Test
     public void testNotEquals() {
         CompilationUnit p1 = JavaParser.parse("class X { }");
         CompilationUnit p2 = JavaParser.parse("class Y { }");
