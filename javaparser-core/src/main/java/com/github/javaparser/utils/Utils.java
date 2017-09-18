@@ -190,9 +190,9 @@ public class Utils {
     }
 
     /**
-     * Return true if the value is null, an empty Optional or an empty String.
+     * Return true if the value is null, an empty Optional, or an empty String.
      * @param value
-     * @return
+     * @return true if the value is null, an empty Optional, or an empty String.
      */
     public static boolean valueIsNullOrEmpty(Object value) {
         if (value == null) {

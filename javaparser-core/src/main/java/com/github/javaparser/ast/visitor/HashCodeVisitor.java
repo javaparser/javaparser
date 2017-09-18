@@ -79,7 +79,7 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")
     public Integer visit(final ArrayType n, final Void arg) {
-        return (n.getComponentType().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getComponentType().accept(this, arg)) * 31 + (n.getOrigin().hashCode()) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     @Generated("com.github.javaparser.generator.core.visitor.HashCodeVisitorGenerator")

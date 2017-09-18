@@ -948,19 +948,19 @@ RangedList<TypeParameter> TypeParameters():
 {
 	RangedList<TypeParameter> ret = new RangedList<TypeParameter>(new NodeList<TypeParameter>());
 	TypeParameter tp;
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	NodeList<AnnotationExpr> annotations;
 }
 {
    "<" { ret.beginAt(token()); }
    annotations = Annotations() 
-   tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; }
+   tp = TypeParameter(annotations) { ret.add(tp); annotations = null; }
    ( "," 
-   annotations = Annotations() tp = TypeParameter() { ret.add(tp); tp.setAnnotations(annotations); annotations = null; } )*
+   annotations = Annotations() tp = TypeParameter(annotations) { ret.add(tp); annotations = null; } )*
    ">" { ret.endAt(token()); }
    { return ret; }
 }
 
-TypeParameter TypeParameter():
+TypeParameter TypeParameter(NodeList<AnnotationExpr> annotations):
 {
 	SimpleName name;
 	NodeList<ClassOrInterfaceType> typeBound  = emptyList();
@@ -968,7 +968,7 @@ TypeParameter TypeParameter():
 }
 {
    name = SimpleName() { begin=token(); } [ typeBound = TypeBound() ]
-   { return new TypeParameter(range(begin, token()), name, typeBound, new NodeList()); }
+   { return new TypeParameter(range(begin, token()), name, typeBound, annotations); }
 }
 
 NodeList<ClassOrInterfaceType> TypeBound():
@@ -1002,7 +1002,6 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
    BodyDeclaration<?> ret;
 }
 {
-  {  }
   (
 	  LOOKAHEAD(2)
 	  ret = InitializerDeclaration()
@@ -1034,12 +1033,10 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
 	VariableDeclarator val;
 }
 {
-  // Modifiers are already matched in the caller
-  partialType = Type()
-          val = VariableDeclarator(partialType) { variables.add(val); }
-  ( "," val = VariableDeclarator(partialType) { variables.add(val); } )* ";"
-
-    { 
+    // Modifiers are already matched in the caller
+    partialType = Type(emptyList()) val = VariableDeclarator(partialType) { variables.add(val); }
+        ( "," val = VariableDeclarator(partialType) { variables.add(val); } )* ";"
+    {
         JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
         return new FieldDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
     }
@@ -1063,7 +1060,7 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 }
 {
-    name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     {
         name.setTokenRange(name.getTokenRange().get().withEnd(token()));    
         return new Pair(name, arrayBracketPairs);
@@ -1112,10 +1109,10 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     // Modifiers already matched in the caller!
     [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
     annotations = Annotations() { modifier.annotations.addAll(annotations); begin = begin.orIfInvalid(nodeListBegin(annotations)); }
-    type = ResultType() { begin = begin.orIfInvalid(type.getTokenRange().get().getBegin()); }
-    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
-    [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-      ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); } )* ]
+    type = ResultType(emptyList()) { begin = begin.orIfInvalid(type.getTokenRange().get().getBegin()); }
+    name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+    [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+      ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )* ]
     ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
@@ -1123,23 +1120,26 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     }
 }
 
-ReferenceType ReferenceTypeWithAnnotations():
+ReferenceType AnnotatedReferenceType():
 {
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	NodeList<AnnotationExpr> annotations;
 	ReferenceType type;
 }
 {
     annotations = Annotations() 
-    type = ReferenceType() {
-        if(annotations != null){
-            if (type.getAnnotations() != null) {
-                type.getAnnotations().addAll(annotations);
-            } else {
-                type.setAnnotations(annotations);
-            }
-        }
-        return type;
-    }
+    type = ReferenceType(annotations)
+    { return type; }
+}
+
+Type AnnotatedType():
+{
+	NodeList<AnnotationExpr> annotations;
+	Type type;
+}
+{
+    annotations = Annotations() 
+    type = Type(annotations)
+    { return type; }
 }
 
 NodeList<Parameter> Parameters():
@@ -1186,7 +1186,7 @@ Parameter Parameter():
 	Parameter ret;
 }
 {
-  modifier = Modifiers() partialType = Type() [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
+  modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
   ( LOOKAHEAD(ReceiverParameterId())
     receiverId = ReceiverParameterId()
     {
@@ -1207,7 +1207,6 @@ SimpleName ReceiverParameterId():
 {
     String id;
 	String ret ="";
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     JavaToken begin = INVALID;
 }
 {
@@ -1232,8 +1231,8 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
   [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); begin = begin.orIfInvalid(token()); } parameters = Parameters() [ "throws" throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); }
-  ("," throwType = ReferenceTypeWithAnnotations() { throws_ = add(throws_, throwType); })* ]
+  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); begin = begin.orIfInvalid(token()); } parameters = Parameters() [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+  ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })* ]
   "{" { blockBegin=token(); }
     [ LOOKAHEAD(ExplicitConstructorInvocation()) exConsInv = ExplicitConstructorInvocation() ]
     stmts = Statements()
@@ -1301,20 +1300,20 @@ InitializerDeclaration InitializerDeclaration():
  * Type, name and expression syntax follows.
  */
 
-Type Type():
+Type Type(NodeList<AnnotationExpr> annotations):
 {
 	Type ret;
 }
 {
  (
-   LOOKAHEAD(2) ret = ReferenceType()
+   LOOKAHEAD(2) ret = ReferenceType(annotations)
  |
-   ret = PrimitiveType()
+   ret = PrimitiveType(annotations )
  )
  { return ret; }
 }
 
-ReferenceType ReferenceType():
+ReferenceType ReferenceType(NodeList<AnnotationExpr> annotations):
 {
 	Type type;
 	ArrayBracketPair arrayBracketPair;
@@ -1322,33 +1321,33 @@ ReferenceType ReferenceType():
 }
 {
   (
-   type = PrimitiveType() ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
+   type = PrimitiveType(annotations) ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair(Origin.TYPE) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )+
   |
-   type = ClassOrInterfaceType()  ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair() { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
+   type = ClassOrInterfaceType(annotations)  ( LOOKAHEAD(Annotations() "[") arrayBracketPair = ArrayBracketPair(Origin.TYPE) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
   )
   { return (ReferenceType)wrapInArrayTypes(type, arrayBracketPairs); }
 }
 
-ArrayBracketPair ArrayBracketPair():
+ArrayBracketPair ArrayBracketPair(Origin origin):
 {
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	NodeList<AnnotationExpr> annotations;
     JavaToken begin = INVALID;
 }
 {
     annotations = Annotations()
     "[" { begin = begin.orIfInvalid(token()); } "]"
-    { return new ArrayBracketPair(range(begin, token()), annotations); }
+    { return new ArrayBracketPair(range(begin, token()), origin, annotations); }
 }
 
-IntersectionType IntersectionType():
+IntersectionType IntersectionType(NodeList<AnnotationExpr> annotations):
 {
 	JavaToken begin;
 	ReferenceType elementType;
 	NodeList<ReferenceType> elements = emptyList();
 }
 {
-    elementType=ReferenceType() { begin=elementType.getTokenRange().get().getBegin(); elements = add(elements, elementType); }
-    "&" (elementType=ReferenceType() { elements = add(elements, elementType); } )+
+    elementType = ReferenceType(annotations) { begin=elementType.getTokenRange().get().getBegin(); elements = add(elements, elementType); }
+    "&" (elementType = AnnotatedReferenceType() { elements = add(elements, elementType); } )+
     { return new IntersectionType(range(begin, token()), elements); }
 }
 
@@ -1359,18 +1358,11 @@ ClassOrInterfaceType AnnotatedClassOrInterfaceType():
 }
 {
     annotations = Annotations()
-    cit = ClassOrInterfaceType()
-    {
-        if (cit.getScope().isPresent()) {
-            cit.getScope().get().setAnnotations(annotations);
-        } else {
-            cit.setAnnotations(annotations);
-        }
-        return cit;
-    }
+    cit = ClassOrInterfaceType(annotations)
+    { return cit; }
 }
 
-ClassOrInterfaceType ClassOrInterfaceType():
+ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotations):
 {
 	ClassOrInterfaceType ret;
 	SimpleName name;
@@ -1382,7 +1374,7 @@ ClassOrInterfaceType ClassOrInterfaceType():
   name = SimpleName() {begin=token();}
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
-      ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, annotations);
+      ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, firstAnnotations);
   }
   (
 	  LOOKAHEAD(2) "." annotations = Annotations()  name = SimpleName()
@@ -1412,19 +1404,19 @@ RangedList<Type> TypeArguments():
 Type TypeArgument():
 {
 	Type ret;
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	NodeList<AnnotationExpr> annotations;
 }
 {
  annotations = Annotations() 
  (
-   ret = Type()
+   ret = Type(annotations)
  |
-   ret = Wildcard()
+   ret = Wildcard(annotations)
  )
- { ret.setAnnotations(annotations); return ret; }
+ { return ret; }
 }
 
-WildcardType Wildcard():
+WildcardType Wildcard(NodeList<AnnotationExpr> firstAnnotations):
 {
 	ReferenceType ext = null;
 	ReferenceType sup = null;
@@ -1434,47 +1426,41 @@ WildcardType Wildcard():
 {
    "?" {begin=token();}
    [
-		"extends" annotations = Annotations() ext = ReferenceType()
-		{
-		  ext.setAnnotations(annotations);
-		}
+		"extends" annotations = Annotations() ext = ReferenceType(annotations)
 	|
-		"super" annotations = Annotations() sup = ReferenceType()
-		{
-		  sup.setAnnotations(annotations);
-		}
+		"super" annotations = Annotations() sup = ReferenceType(annotations)
    ]
    { 
-     return new WildcardType(range(begin, token()), ext, sup, new NodeList<AnnotationExpr>());
+     return new WildcardType(range(begin, token()), ext, sup, firstAnnotations);
    }
 }
 
-PrimitiveType PrimitiveType():
+PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
 {
 	PrimitiveType ret;
 }
 {
 (
-  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN); }
+  "boolean" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BOOLEAN, annotations); }
 |
-  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR); }
+  "char" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.CHAR, annotations); }
 |
-  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE); }
+  "byte" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.BYTE, annotations); }
 |
-  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT); }
+  "short" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.SHORT, annotations); }
 |
-  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT); }
+  "int" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.INT, annotations); }
 |
-  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG); }
+  "long" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.LONG, annotations); }
 |
-  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT); }
+  "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
 |
-  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE); }
+  "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
 )
 { return ret; }
 }
 
-Type ResultType():
+Type ResultType(NodeList<AnnotationExpr> annotations):
 {
 	Type ret;
 }
@@ -1482,7 +1468,7 @@ Type ResultType():
   (
 	  "void" { ret = new VoidType(tokenRange()); }
 	|
-	  ret = Type()
+	  ret = Type(annotations)
   )
   { return ret; }
 }
@@ -1681,8 +1667,7 @@ Expression InstanceOfExpression():
 	NodeList<AnnotationExpr> annotations;
 }
 {
-    ret = RelationalExpression() [ "instanceof" annotations = Annotations() type = ReferenceType() {
-        type.getAnnotations().addAll(annotations);
+    ret = RelationalExpression() [ "instanceof" type = AnnotatedReferenceType() {
         ret = new InstanceOfExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, type); 
     } ]
     { return ret; }
@@ -1842,7 +1827,7 @@ Expression CastExpression():
 	ReferenceType referenceType;
 	PrimitiveType primitiveType;
 	JavaToken begin = INVALID;
-	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
+	NodeList<AnnotationExpr> annotations;
 	NodeList<ReferenceType> typesOfMultiCast = emptyList();
 }
 {
@@ -1850,10 +1835,10 @@ Expression CastExpression():
   annotations = Annotations() 
   (
   	  LOOKAHEAD(2)
-  	  primitiveType = PrimitiveType() ")" ret = UnaryExpression() { primitiveType.setAnnotations(annotations); ret = new CastExpr(range(begin, token()), primitiveType, ret); }
+  	  primitiveType = PrimitiveType(annotations) ")" ret = UnaryExpression() { ret = new CastExpr(range(begin, token()), primitiveType, ret); }
   	|
-  	  referenceType = ReferenceType() { typesOfMultiCast = add(typesOfMultiCast, referenceType); referenceType.setAnnotations(annotations); }
-  	  ( "&" referenceType = ReferenceType() {
+  	  referenceType = ReferenceType(annotations) { typesOfMultiCast = add(typesOfMultiCast, referenceType); }
+  	  ( "&" referenceType = AnnotatedReferenceType() {
   	    typesOfMultiCast = add(typesOfMultiCast, referenceType);
   	    }
   	  )*
@@ -1943,10 +1928,10 @@ Expression PrimaryPrefix():
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType()  "." "class" { ret = new ClassExpr(range(type.getTokenRange().get().getBegin(), token()), type); }
+	  type = ResultType(emptyList())  "." "class" { ret = new ClassExpr(range(type.getTokenRange().get().getBegin(), token()), type); }
 
-	| LOOKAHEAD (ResultType() "::" )
-	  type = ResultType() "::" [typeArgs = TypeArguments() ] (Identifier() | "new")
+	| LOOKAHEAD (AnnotatedType() "::" )
+	  type = AnnotatedType() "::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
 		  ret = new TypeExpr(type.getTokenRange().get(), type);
 		  ret = new MethodReferenceExpr(ret.getTokenRange().get(), ret, typeArgs.list, token.image);
@@ -2101,10 +2086,10 @@ Expression AllocationExpression(Expression scope):
     
     annotations = Annotations() 
     (
-        type = PrimitiveType() { type.setAnnotations(annotations); }
+        type = PrimitiveType(annotations)
         ret = ArrayCreation(begin, type)
     |
-        [ typeArgs = TypeArguments() annotations = Annotations() ]
+        [ typeArgs = TypeArguments() ]
         type = AnnotatedClassOrInterfaceType()
         (
             ret = ArrayCreation(begin, type)
@@ -2266,7 +2251,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
 	VariableDeclarator var;
 }
 {
-    modifier = Modifiers() partialType = Type() var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
+    modifier = Modifiers() partialType = Type(emptyList()) var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
     {
         JavaToken begin=modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
         return new VariableDeclarationExpr(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
@@ -2320,10 +2305,6 @@ ExpressionStmt StatementExpression():
             "--" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
             |
             op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, value, op); }
-            |
-            "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { expr = new MethodReferenceExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, typeArgs.list, token.image); }
-            |
-            "->" lambdaBody = LambdaBody() { expr = generateLambda(this, expr, lambdaBody); }
         ]
     )
     ";"
@@ -2521,7 +2502,7 @@ SynchronizedStmt SynchronizedStatement():
 
 TryStmt TryStatement():
 {
-	NodeList<VariableDeclarationExpr> resources = emptyList();
+	NodeList<Expression> resources = emptyList();
 	BlockStmt tryBlock;
 	BlockStmt finallyBlock = null;
 	NodeList<CatchClause> catchs = emptyList();
@@ -2545,8 +2526,8 @@ TryStmt TryStatement():
   		(
   			"catch" {catchBegin=token();}
   			"(" { typesBegin=token(); }
-  			exceptModifier = Modifiers() exceptionType = ReferenceType() { exceptionTypes.add(exceptionType); }
-  			( "|" exceptionType = ReferenceTypeWithAnnotations() { exceptionTypes.add(exceptionType); } )*
+  			exceptModifier = Modifiers() exceptionType = ReferenceType(emptyList()) { exceptionTypes.add(exceptionType); }
+  			( "|" exceptionType = AnnotatedReferenceType() { exceptionTypes.add(exceptionType); } )*
   			exceptId = VariableDeclaratorId() { paramEnd = token(); }
   			")"
   			 
@@ -2569,9 +2550,9 @@ TryStmt TryStatement():
 }
 
 
-NodeList<VariableDeclarationExpr> ResourceSpecification() :
+NodeList<Expression> ResourceSpecification() :
 {
-  NodeList<VariableDeclarationExpr> variables;
+  NodeList<Expression> variables;
 }
 {
   "("
@@ -2582,15 +2563,28 @@ NodeList<VariableDeclarationExpr> ResourceSpecification() :
 }
 
 
-NodeList<VariableDeclarationExpr> Resources() :
+NodeList<Expression> Resources() :
 {
-	NodeList<VariableDeclarationExpr> variables = new NodeList<VariableDeclarationExpr>();
-	VariableDeclarationExpr var;
+	NodeList<Expression> expressions = new NodeList<Expression>();
+	Expression expr;
 }
 {
-  /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
-  var = VariableDeclarationExpression() {variables.add(var);} (LOOKAHEAD(2) ";" var = VariableDeclarationExpression() {variables.add(var);})*
-  { return variables; }
+    expr = Resource() {expressions.add(expr);} (LOOKAHEAD(2) ";" expr = Resource() {expressions.add(expr);})*
+    { return expressions; }
+}
+
+Expression Resource() :
+{
+	Expression expr;
+}
+{
+    ( LOOKAHEAD( Modifiers() partialType = Type() VariableDeclarator(partialType))
+        /*this is a bit more lenient than we need to be, eg allowing access modifiers like private*/
+        expr = VariableDeclarationExpression()
+    |
+        expr = PrimaryExpression()
+    )
+    { return expr; }
 }
 
 
@@ -2763,7 +2757,7 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
 	Expression defaultVal = null;
 }
 {
-  type = Type() name = SimpleName() "(" ")" [ defaultVal = DefaultValue() ] ";"
+  type = Type(emptyList()) name = SimpleName() "(" ")" [ defaultVal = DefaultValue() ] ";"
 
   {
 	JavaToken begin = modifier.begin.orIfInvalid(type.getTokenRange().get().getBegin());
@@ -2808,9 +2802,9 @@ ModuleStmt ModuleStmt():
     |
         <OPENS> {begin=token();} name=Name() [<TO> tmpName=Name() {names.add(tmpName);} ("," tmpName=Name(){names.add(tmpName);} )* ] ";" {stmt=new ModuleOpensStmt(range(begin, token()), name, names);}
     |
-        <USES> { begin=token();} type=Type() ";" {stmt=new ModuleUsesStmt(range(begin, token()), type);}
+        <USES> { begin=token();} type=Type(emptyList()) ";" {stmt=new ModuleUsesStmt(range(begin, token()), type);}
     |
-        <PROVIDES> { begin=token();} type=Type() <WITH> tmpType=Type() {types.add(tmpType);} ("," tmpType=Type() {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, token()), type, types);}
+        <PROVIDES> { begin=token();} type=Type(emptyList()) <WITH> tmpType=Type(emptyList()) {types.add(tmpType);} ("," tmpType=Type(emptyList()) {types.add(tmpType);}  )* ";" {stmt=new ModuleProvidesStmt(range(begin, token()), type, types);}
     )
     { return stmt; }
 }
@@ -2869,11 +2863,11 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclarationParseStart():
 
 ClassOrInterfaceType ClassOrInterfaceTypeParseStart():
 { ClassOrInterfaceType ret; }
-{ ret = ClassOrInterfaceType() <EOF> { return ret; } }
+{ ret = AnnotatedClassOrInterfaceType() <EOF> { return ret; } }
 
 Type ResultTypeParseStart():
-{ Type ret; }
-{ ret = ResultType() <EOF> { return ret; } }
+{ NodeList<AnnotationExpr> annotations; Type ret; }
+{ annotations = Annotations() ret = ResultType(annotations) <EOF> { return ret; } }
 
 
 VariableDeclarationExpr VariableDeclarationExpressionParseStart():

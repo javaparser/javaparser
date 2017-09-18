@@ -51,6 +51,9 @@ import com.github.javaparser.TokenRange;
 /**
  * The "int id();" in <code>@interface X { int id(); }</code>
  *
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the method or the type.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration> {
@@ -184,12 +187,6 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         this.type = type;
         setAsParentNodeOf(type);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getAnnotations());
     }
 
     @Override

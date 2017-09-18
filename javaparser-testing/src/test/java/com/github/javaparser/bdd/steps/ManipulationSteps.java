@@ -60,7 +60,7 @@ public class ManipulationSteps {
     private BlockStmt blockStmt;
     private Statement statement;
     private TryStmt tryStmt;
-    private NodeList<VariableDeclarationExpr> variableDeclarationExprList;
+    private NodeList<Expression> variableDeclarationExprList;
     private ChangeMethodNameToUpperCaseVisitor changeMethodNameToUpperCaseVisitor;
     private AddNewIntParameterCalledValueVisitor addNewIntParameterCalledValueVisitor;
 
@@ -236,9 +236,7 @@ public class ManipulationSteps {
 
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
-        for (VariableDeclarationExpr expr : variableDeclarationExprList) {
-            assertThat(expr.getParentNode().get(), is(tryStmt));
-        }
+        variableDeclarationExprList.forEach(expr -> assertThat(expr.getParentNode().get(), is(tryStmt)));
     }
 
     @Then("the TryStmt has no child nodes")

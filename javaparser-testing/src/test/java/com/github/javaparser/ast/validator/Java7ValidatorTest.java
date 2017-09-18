@@ -39,6 +39,18 @@ public class Java7ValidatorTest {
     }
 
     @Test
+    public void tryWithResourceVariableDeclaration() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(Reader r = new Reader()){}"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    public void tryWithResourceReference() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(a.b.c){}"));
+        assertProblems(result, "(line 1,col 1) Try with resources only supports variable declarations.");
+    }
+
+    @Test
     public void stringsInSwitch() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case \"abc\": ;}"));
         assertNoProblems(result);

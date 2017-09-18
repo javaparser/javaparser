@@ -108,16 +108,16 @@ langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/6967002/T696
 (line 33,col 16) Parse error. Found "...", expected one of  "!=" "%" "%=" "&" "&&" "&=" "(" ")" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
 langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/failures/AnnotatedClassExpr.java
-(line 12,col 15) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-(line 13,col 8) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-(line 17,col 8) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-(line 18,col 8) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 12,col 15) Parse error. Found "@", expected one of  "!" "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 13,col 8) Parse error. Found "@", expected one of  "!" "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 17,col 8) Parse error. Found "@", expected one of  "!" "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 18,col 8) Parse error. Found "@", expected one of  "!" "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/failures/AnnotatedMethodSelectorTest.java
-(line 12,col 14) Parse error. Found ".", expected one of  "%=" "&=" "(" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 12,col 14) Parse error. Found ".", expected one of  "%=" "&=" "(" "*=" "++" "+=" "--" "-=" "/=" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 
 langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/failures/BadCast.java
-(line 12,col 16) Parse error. Found "@", expected one of  "!" "(" ")" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 12,col 16) Parse error. Found "@", expected one of  "!" "(" ")" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/failures/IncompleteArray.java
 (line 11,col 11) Parse error. Found "@", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -129,14 +129,8 @@ langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/failures/Old
 (line 12,col 10) Parse error. Found "@", expected one of  "]"
 
 langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/failures/StaticFields.java
-(line 13,col 10) Parse error. Found "@", expected one of  "(" "++" "--" ";" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "enum" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-(line 17,col 9) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-
-langtools-5ecbed313125/test/tools/javac/annotations/typeAnnotations/newlocations/AllLocations.java
-(line 59,col 112) Parse error. Found "return", expected "}"
-(line 68,col 78) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-(line 89,col 24) Parse error. Found "@", expected one of  "!" "(" ")" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
-(line 90,col 24) Parse error. Found "@", expected one of  "!" "(" ")" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 13,col 10) Parse error. Found "@", expected one of  "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 17,col 9) Parse error. Found "@", expected one of  "!" "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/api/T6265137a.java
 (line 24,col 1) Parse error. Found <EOF>, expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -248,10 +242,10 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalNonAsciiDigit.java
 Lexical error at line 27, column 14.  Encountered: "\u0660" (1632), after : ""
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalStartOfExpr.java
-(line 27,col 11) Parse error. Found "=", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 11) Parse error. Found "=", expected one of  "!" "(" "+" "++" "-" "--" "@" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalStartOfStmt.java
-(line 29,col 17) Parse error. Found "}", expected one of  "(" "++" "--" ";" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "enum" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 29,col 17) Parse error. Found "}", expected one of  "(" "++" "--" ";" "@" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "enum" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 (line 31,col 2) Parse error. Found <EOF>, expected one of  "else" "}"
 (line 31,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
@@ -262,7 +256,7 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalUnderscore.java
 (line 27,col 13) Parse error. Found  "_" <IDENTIFIER>, expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "," "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalUnicodeEscape.java
-(line 27,col 11) Parse error. Found <EOF>, expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 27,col 11) Parse error. Found <EOF>, expected one of  "!" "(" "+" "++" "-" "--" "@" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/InitializerNotAllowed.java
 (line 27,col 5) An interface cannot have initializers.
@@ -298,10 +292,10 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/ModifierNotAllowed.java
 (line 26,col 1) 'synchronized' is not allowed here.
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/NoAnnotationsOnDotClass.java
-(line 30,col 14) Parse error. Found "@", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 30,col 14) Parse error. Found "@", expected one of  "!" "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/NotAllowedClass.java
-(line 28,col 17) Parse error. Found "class", expected one of  "(" "++" "--" ";" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "enum" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 28,col 17) Parse error. Found "class", expected one of  "(" "++" "--" ";" "@" "assert" "boolean" "break" "byte" "char" "continue" "do" "double" "enum" "exports" "false" "float" "for" "if" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "return" "short" "strictfp" "super" "switch" "synchronized" "this" "throw" "to" "transitive" "true" "try" "uses" "void" "while" "with" "{" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 (line 31,col 2) Parse error. Found <EOF>, expected one of  "else" "}"
 (line 31,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
@@ -335,15 +329,6 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/TryWithoutCatchOrFinally.
 langtools-5ecbed313125/test/tools/javac/diags/examples/TryWithoutCatchOrFinallyOrResource.java
 (line 28,col 9) Try has no finally, no catch, and no resources.
 
-langtools-5ecbed313125/test/tools/javac/diags/examples/TryWithResourcesExprEffectivelyFinalVar.java
-(line 30,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 33,col 5) Parse error. Found "}", expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
-
-langtools-5ecbed313125/test/tools/javac/diags/examples/TryWithResourcesExprNeedsVar.java
-(line 28,col 13) Parse error. Found "new", expected one of  "boolean" "byte" "char" "double" "float" "int" "long" "short"
-(line 37,col 2) Parse error. Found <EOF>, expected "}"
-(line 37,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
 langtools-5ecbed313125/test/tools/javac/diags/examples/TypeReqClassArray.java
 (line 30,col 34) Parse error. Found ")", expected "["
 
@@ -367,11 +352,6 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/UnderscoreInLambdaExpress
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/UnexpectedTokenInModuleInfo/module-info.java
 Parse error. Found  "weak" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
-
-langtools-5ecbed313125/test/tools/javac/diags/examples/VarInTryWithResourcesNotSupportedInSource.java
-(line 32,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 41,col 2) Parse error. Found <EOF>, expected "}"
-(line 41,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
 langtools-5ecbed313125/test/tools/javac/Digits.java
 Lexical error at line 11, column 43.  Encountered: "\u0663" (1635), after : ""
@@ -406,7 +386,7 @@ langtools-5ecbed313125/test/tools/javac/ExtendArray.java
 (line 11,col 34) Parse error. Found "[", expected one of  "," "implements" "{"
 
 langtools-5ecbed313125/test/tools/javac/ExtraneousEquals.java
-(line 10,col 22) Parse error. Found "=", expected one of  "!" "(" "+" "++" "-" "--" "]" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 10,col 22) Parse error. Found "=", expected one of  "!" "(" "+" "++" "-" "--" "@" "]" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/failover/FailOver01.java
 (line 10,col 20) Parse error. Found "}", expected one of  "!=" "%" "%=" "&" "&&" "&=" "*" "*=" "+" "+=" "-" "-=" "->" "/" "/=" "::" ";" "<" "<<=" "<=" "=" "==" ">" ">=" ">>=" ">>>=" "?" "^" "^=" "instanceof" "|" "|=" "||"
@@ -414,7 +394,7 @@ langtools-5ecbed313125/test/tools/javac/failover/FailOver01.java
 (line 10,col 26) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
 langtools-5ecbed313125/test/tools/javac/failover/FailOver15.java
-(line 17,col 9) Parse error. Found "}", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 17,col 9) Parse error. Found "}", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "/=" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 (line 19,col 2) Parse error. Found <EOF>, expected "}"
 (line 19,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
@@ -545,7 +525,7 @@ langtools-5ecbed313125/test/tools/javac/overrridecrash/B.java
 (line 12,col 5) Can have only one of 'protected', 'private'.
 
 langtools-5ecbed313125/test/tools/javac/Parens3.java
-(line 12,col 9) Parse error. Found ":", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "->" "/=" "::" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
+(line 12,col 9) Parse error. Found ":", expected one of  "%=" "&=" "*=" "++" "+=" "--" "-=" "/=" ";" "<<=" "=" ">>=" ">>>=" "^=" "|="
 
 langtools-5ecbed313125/test/tools/javac/ParseConditional.java
 (line 23,col 13) Illegal left hand side of an assignment.
@@ -599,7 +579,7 @@ langtools-5ecbed313125/test/tools/javac/T4994049/T4994049.java
 (line 11,col 5) Parse error. Found  "BAR" <IDENTIFIER>, expected one of  "," ";" "}"
 
 langtools-5ecbed313125/test/tools/javac/T6882235.java
-(line 10,col 11) Parse error. Found ";", expected one of  "!" "(" "+" "++" "-" "--" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+(line 10,col 11) Parse error. Found ";", expected one of  "!" "(" "+" "++" "-" "--" "@" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
 langtools-5ecbed313125/test/tools/javac/T8026963/TypeAnnotationsCrashWithErroneousTreeTest.java
 (line 9,col 19) Parse error. Found "this", expected one of  ")" "@" "abstract" "boolean" "byte" "char" "default" "double" "enum" "exports" "final" "float" "int" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "volatile" "with" <IDENTIFIER>
@@ -619,48 +599,12 @@ langtools-5ecbed313125/test/tools/javac/TryWithResources/PlainTry.java
 (line 11,col 9) Try has no finally, no catch, and no resources.
 
 langtools-5ecbed313125/test/tools/javac/TryWithResources/ResDeclOutsideTry.java
-(line 14,col 14) Parse error. Found "=", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 14,col 14) Parse error. Found "=", expected one of  "(" ")"
 (line 14,col 48) Parse error. Found ")", expected "}"
 (line 15,col 9) Parse error. Found "return", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
-langtools-5ecbed313125/test/tools/javac/TryWithResources/T7022711.java
-(line 22,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 26,col 9) Parse error. Found "catch", expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/T7032633.java
-(line 43,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 46,col 5) Parse error. Found "}", expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrAndLambda.java
-(line 25,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrAndTypeVariables.java
-(line 14,col 14) Parse error. Found ";", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 14,col 18) Parse error. Found ")", expected "}"
-(line 19,col 12) Parse error. Found "<", expected one of  ";" "@" "class" "enum" "interface" "module" "open"
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrForVariable1.java
-(line 13,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 15,col 9) Parse error. Found "try", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
 langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrForVariable2.java
-(line 13,col 20) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 15,col 9) Parse error. Found "try", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrForVariable3.java
-(line 15,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 17,col 9) Parse error. Found "try", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrForVariable4.java
-(line 11,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 14,col 9) Parse error. Found "=", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrVarKinds.java
-(line 20,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
-(line 30,col 9) Parse error. Found "try", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-langtools-5ecbed313125/test/tools/javac/TryWithResources/TwrVarRedeclaration.java
-(line 13,col 14) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
+(line 13,col 13) Parse error. Found "final", expected one of  "(" "@" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 (line 15,col 9) Parse error. Found "try", expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
 langtools-5ecbed313125/test/tools/javac/unicode/NonasciiDigit.java
@@ -684,4 +628,4 @@ langtools-5ecbed313125/test/tools/javadoc/enum/docComments/pkg1/Operation.java
 langtools-5ecbed313125/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-320 problems in 183 files
+290 problems in 170 files

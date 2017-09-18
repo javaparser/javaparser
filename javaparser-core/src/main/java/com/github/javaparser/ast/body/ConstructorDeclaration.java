@@ -48,6 +48,9 @@ import com.github.javaparser.TokenRange;
 /**
  * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
  *
+ * <br/>All annotations preceding the name will be set on this object, not on the class.
+ * JavaParser doesn't know if it they are applicable to the method or the class.
+ * 
  * @author Julio Vilmar Gesser
  */
 public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
@@ -167,12 +170,6 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         sb.append(")");
         sb.append(appendThrowsIfRequested(includingThrows));
         return sb.toString();
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getParameters(), getThrownExceptions(), getTypeParameters(), getAnnotations());
     }
 
     @Override

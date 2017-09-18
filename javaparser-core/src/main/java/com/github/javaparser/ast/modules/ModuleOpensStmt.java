@@ -104,12 +104,6 @@ public final class ModuleOpensStmt extends ModuleStmt implements NodeWithName<Mo
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getModuleNames());
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ModuleOpensStmt clone() {
         return (ModuleOpensStmt) accept(new CloneVisitor(), null);

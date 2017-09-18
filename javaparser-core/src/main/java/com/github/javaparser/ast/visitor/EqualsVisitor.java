@@ -460,6 +460,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final ArrayType n2 = (ArrayType) arg;
         if (!nodeEquals(n.getComponentType(), n2.getComponentType()))
             return false;
+        if (!objEquals(n.getOrigin(), n2.getOrigin()))
+            return false;
         if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return true;

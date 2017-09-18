@@ -68,4 +68,11 @@ public class Java9ValidatorTest {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("open module x {}"));
         assertNoProblems(result);
     }
+
+    @Test
+    public void tryWithResourceReference() {
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(a.b.c){}"));
+        assertNoProblems(result);
+    }
+
 }
