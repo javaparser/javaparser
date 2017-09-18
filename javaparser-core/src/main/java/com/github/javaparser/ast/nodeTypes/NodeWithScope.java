@@ -27,17 +27,15 @@ import com.github.javaparser.ast.expr.Expression;
 import java.util.Optional;
 
 /**
- * Represents a node which has an optional scope expression eg. method calls (object.method()).
+ * Represents a node which has a required scope expression eg. field access (object.method).
  */
-public interface NodeWithOptionalScope<N extends Node> extends NodeWithTraversableScope {
+public interface NodeWithScope<N extends Node> extends NodeWithTraversableScope {
 
-    Optional<Expression> getScope();
+    Expression getScope();
 
     N setScope(Expression scope);
-    
-    N removeScope();
 
     default Optional<Expression> traverseScope() {
-        return getScope();
+        return Optional.of(getScope());
     }
 }
