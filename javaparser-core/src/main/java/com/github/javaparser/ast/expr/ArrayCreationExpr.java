@@ -168,7 +168,7 @@ public final class ArrayCreationExpr extends Expression {
     public Type createdType() {
         Type result = elementType;
         for (int i = 0; i < levels.size(); i++) {
-            result = new ArrayType(result, new NodeList<>());
+            result = new ArrayType(result, ArrayType.Origin.TYPE, new NodeList<>());
         }
         return result;
     }
@@ -186,12 +186,6 @@ public final class ArrayCreationExpr extends Expression {
 
     public ArrayCreationExpr setElementType(final String type) {
         return setElementType(parseType(type));
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getLevels());
     }
 
     @Override

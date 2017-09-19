@@ -10,11 +10,9 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
-// TODO use Java XML API
 /**
- * @deprecated this is a work in progress.
+ * Outputs an XML file containing the AST meant for inspecting it.
  */
-@Deprecated
 public class XmlPrinter {
     private final boolean outputNodeType;
 

@@ -12,9 +12,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
- * @deprecated this is a work in progress.
+ * Outputs a JSON file containing the AST meant for inspecting it.
  */
-@Deprecated
 public class JsonPrinter {
     private final boolean outputNodeType;
 

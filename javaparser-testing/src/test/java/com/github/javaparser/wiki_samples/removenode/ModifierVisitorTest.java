@@ -38,7 +38,7 @@ public class ModifierVisitorTest {
         CompilationUnit cu = JavaParser.parse(new FileInputStream("forGitHubTest.java"));
 
         // The visitor should remove all a=20 variable declarations.
-        new MyVisitor().visit(cu, null);
+        cu.accept(new MyVisitor(), null);
 
         System.out.println(cu.toString());
     }

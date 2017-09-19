@@ -163,7 +163,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     /**
      * Sets the type arguments
      *
-     * @param types the type arguments, can be null
+     * @param typeArguments the type arguments, can be null
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -177,12 +177,6 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetNodeListsGenerator")
-    public List<NodeList<?>> getNodeLists() {
-        return Arrays.asList(getTypeArguments().orElse(null));
     }
 
     @Override

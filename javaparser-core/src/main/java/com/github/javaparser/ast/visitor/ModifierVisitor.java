@@ -964,7 +964,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final TryStmt n, final A arg) {
         NodeList<CatchClause> catchClauses = modifyList(n.getCatchClauses(), arg);
         BlockStmt finallyBlock = n.getFinallyBlock().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
-        NodeList<VariableDeclarationExpr> resources = modifyList(n.getResources(), arg);
+        NodeList<Expression> resources = modifyList(n.getResources(), arg);
         BlockStmt tryBlock = (BlockStmt) n.getTryBlock().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (tryBlock == null)

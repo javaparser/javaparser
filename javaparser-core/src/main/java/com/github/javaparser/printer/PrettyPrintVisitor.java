@@ -1189,10 +1189,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.print("try ");
         if (!n.getResources().isEmpty()) {
             printer.print("(");
-            Iterator<VariableDeclarationExpr> resources = n.getResources().iterator();
+            Iterator<Expression> resources = n.getResources().iterator();
             boolean first = true;
             while (resources.hasNext()) {
-                visit(resources.next(), arg);
+                resources.next().accept(this, arg);
                 if (resources.hasNext()) {
                     printer.print(";");
                     printer.println();
