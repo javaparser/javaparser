@@ -21,23 +21,20 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 
 import java.util.Optional;
 
 /**
- * Represents a node which has an optional scope expression eg. method calls (object.method()).
+ * Represents a node which has a scope expression that can be traversed/walked.
+ * This unifies scope access for NodeWithScope and NodeWithOptionalScope.
  */
-public interface NodeWithOptionalScope<N extends Node> extends NodeWithTraversableScope {
+public interface NodeWithTraversableScope {
 
-    Optional<Expression> getScope();
-
-    N setScope(Expression scope);
-    
-    N removeScope();
-
-    default Optional<Expression> traverseScope() {
-        return getScope();
-    }
+    /**
+     * @return the scope of this node, regardless of optionality.
+     * An optional scope is returned directly.
+     * A required scope is returned in an "Optional", but will never be empty.
+     */
+    Optional<Expression> traverseScope();
 }
