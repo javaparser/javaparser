@@ -169,7 +169,7 @@ final class GeneratedJavaParser {
     /**
      * Return a TokenRange spanning from begin to end
      */
-    private TokenRange range(GeneratedJavaParser generatedJavaParser, Node begin, Node end) {
+    private TokenRange range(Node begin, Node end) {
         if(storeTokens) {
             return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
         } 
@@ -2559,7 +2559,7 @@ TryStmt TryStatement():
   			catchBlock = Block()
   			{
   			    if (exceptionTypes.size() > 1) {
-  			        type = new UnionType(range(this, exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
+  			        type = new UnionType(range(exceptionTypes.get(0), exceptionTypes.get(exceptionTypes.size() - 1)), exceptionTypes);
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
