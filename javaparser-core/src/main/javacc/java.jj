@@ -71,6 +71,7 @@ import static com.github.javaparser.ast.type.ArrayType.*;
 final class GeneratedJavaParser {
     /* The problems encountered while parsing */
     List<Problem> problems = new ArrayList<Problem>();
+    boolean storeTokens;
 
     /* Resets the parser for reuse, gaining a little performance */
     void reset(Provider provider) {
@@ -149,7 +150,30 @@ final class GeneratedJavaParser {
 
     /* Returns a tokenRange that spans the last matched token */
     private TokenRange tokenRange() {
-        return new TokenRange(token(), token());
+        if(storeTokens) {
+            return new TokenRange(token(), token());
+        } 
+        return null;
+    }
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    private TokenRange range(JavaToken begin, JavaToken end) {
+        if(storeTokens) {
+            return new TokenRange(begin, end);
+        } 
+        return null;
+    }
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    private TokenRange range(Node begin, Node end) {
+        if(storeTokens) {
+            return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+        } 
+        return null;
     }
 
     /* Sets the kind of the last matched token to newKind */
@@ -165,6 +189,7 @@ final class GeneratedJavaParser {
 
     /* Makes the parser keep a list of tokens */
     public void setStoreTokens(boolean storeTokens) {
+        this.storeTokens=storeTokens; 
         token_source.setStoreTokens(storeTokens);
     }
 }
