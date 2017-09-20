@@ -17,11 +17,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
+    // Visible for testing
+    NodeText getTextForNode(Node node) {
+        return node.getData(NODE_TEXT_DATA);
+    }
+
 
     //
     // Tests on TextNode definition
@@ -32,22 +38,22 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerCode("class A {}");
 
         // CU
-        assertEquals(1, lpp.getTextForNode(cu).numberOfElements());
-        assertEquals(true, lpp.getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
-        assertEquals(cu.getClassByName("A").get(), ((ChildTextElement)lpp.getTextForNode(cu).getTextElement(0)).getChild());
+        assertEquals(1, getTextForNode(cu).numberOfElements());
+        assertEquals(true, getTextForNode(cu).getTextElement(0) instanceof ChildTextElement);
+        assertEquals(cu.getClassByName("A").get(), ((ChildTextElement)getTextForNode(cu).getTextElement(0)).getChild());
 
         // Class
         ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
-        assertEquals(7, lpp.getTextForNode(classA).numberOfElements());
-        assertEquals("class", lpp.getTextForNode(classA).getTextElement(0).expand());
-        assertEquals(" ", lpp.getTextForNode(classA).getTextElement(1).expand());
-        assertEquals("A", lpp.getTextForNode(classA).getTextElement(2).expand());
-        assertEquals(" ", lpp.getTextForNode(classA).getTextElement(3).expand());
-        assertEquals("{", lpp.getTextForNode(classA).getTextElement(4).expand());
-        assertEquals("}", lpp.getTextForNode(classA).getTextElement(5).expand());
-        assertEquals("", lpp.getTextForNode(classA).getTextElement(6).expand());
-        assertEquals(true, lpp.getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
-        assertEquals(GeneratedJavaParserConstants.EOF, ((TokenTextElement)lpp.getTextForNode(classA).getTextElement(6)).getTokenKind());
+        assertEquals(7, getTextForNode(classA).numberOfElements());
+        assertEquals("class", getTextForNode(classA).getTextElement(0).expand());
+        assertEquals(" ", getTextForNode(classA).getTextElement(1).expand());
+        assertEquals("A", getTextForNode(classA).getTextElement(2).expand());
+        assertEquals(" ", getTextForNode(classA).getTextElement(3).expand());
+        assertEquals("{", getTextForNode(classA).getTextElement(4).expand());
+        assertEquals("}", getTextForNode(classA).getTextElement(5).expand());
+        assertEquals("", getTextForNode(classA).getTextElement(6).expand());
+        assertEquals(true, getTextForNode(classA).getTextElement(6) instanceof TokenTextElement);
+        assertEquals(GeneratedJavaParserConstants.EOF, ((TokenTextElement)getTextForNode(classA).getTextElement(6)).getTokenKind());
     }
 
     @Test
@@ -656,7 +662,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 .getMethodsByName("setAField").get(0);
         NodeText nodeText;
 
-        nodeText = lpp.getTextForNode(setter);
+        nodeText = getTextForNode(setter);
         int index = 0;
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
@@ -670,7 +676,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
         assertEquals(index, nodeText.getElements().size());
 
-        nodeText = lpp.getTextForNode(setter.getBody().get());
+        nodeText = getTextForNode(setter.getBody().get());
         index = 0;
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
         assertTrue(nodeText.getElements().get(index++).isNewline());
@@ -691,7 +697,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
         assertEquals(index, nodeText.getElements().size());
 
-        nodeText = lpp.getTextForNode(setter.getBody().get().getStatement(0));
+        nodeText = getTextForNode(setter.getBody().get().getStatement(0));
         index = 0;
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
@@ -712,7 +718,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 )));
         NodeText nodeText;
 
-        nodeText = lpp.getTextForNode(setter);
+        nodeText = getTextForNode(setter);
         int index = 0;
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
@@ -726,7 +732,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
         assertEquals(index, nodeText.getElements().size());
 
-        nodeText = lpp.getTextForNode(setter.getBody().get());
+        nodeText = getTextForNode(setter.getBody().get());
         index = 0;
         assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
         assertTrue(nodeText.getElements().get(index++).isNewline());

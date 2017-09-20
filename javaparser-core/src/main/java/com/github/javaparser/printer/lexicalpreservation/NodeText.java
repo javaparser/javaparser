@@ -31,14 +31,9 @@ import java.util.List;
  * It is basically a list of tokens and children.
  */
 class NodeText {
-    private final LexicalPreservingPrinter lexicalPreservingPrinter;
     private final List<TextElement> elements;
 
     public static final int NOT_FOUND = -1;
-
-    LexicalPreservingPrinter getLexicalPreservingPrinter() {
-        return lexicalPreservingPrinter;
-    }
 
     enum Option {
         REMOVE_SPACE_IMMEDIATELY_AFTER,
@@ -50,16 +45,15 @@ class NodeText {
     // Constructors
     //
 
-    NodeText(LexicalPreservingPrinter lexicalPreservingPrinter, List<TextElement> elements) {
-        this.lexicalPreservingPrinter = lexicalPreservingPrinter;
+    NodeText(List<TextElement> elements) {
         this.elements = elements;
     }
 
     /**
      * Initialize with an empty list of elements.
      */
-    NodeText(LexicalPreservingPrinter lexicalPreservingPrinter) {
-        this(lexicalPreservingPrinter, new LinkedList<>());
+    NodeText() {
+        this(new LinkedList<>());
     }
 
     //
@@ -81,11 +75,11 @@ class NodeText {
     }
 
     void addChild(Node child) {
-        addElement(new ChildTextElement(lexicalPreservingPrinter, child));
+        addElement(new ChildTextElement(child));
     }
 
     void addChild(int index, Node child) {
-        addElement(index, new ChildTextElement(lexicalPreservingPrinter, child));
+        addElement(index, new ChildTextElement(child));
     }
 
     void addToken(int tokenKind, String text) {
