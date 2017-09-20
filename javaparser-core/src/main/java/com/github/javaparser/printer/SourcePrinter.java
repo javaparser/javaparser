@@ -29,6 +29,9 @@ import java.util.regex.Pattern;
 import com.github.javaparser.Position;
 
 public class SourcePrinter {
+
+    private static final Pattern NEWLINE_PATTERN = Pattern.compile("\r\n|\r|\n");
+
     private final String indentation;
     private final String endOfLineCharacter;
     private int level = 0;
@@ -85,13 +88,8 @@ public class SourcePrinter {
         return buf.append(arg);
     }
 
-    private static final Pattern SPLIT_NEWLINE_PATTERN;
-    static {
-        SPLIT_NEWLINE_PATTERN = Pattern.compile("\r\n|\r|\n");
-    }
-
     private void updateCursor(String arg) {
-        String[] lines = SPLIT_NEWLINE_PATTERN.split(arg);
+        String[] lines = NEWLINE_PATTERN.split(arg);
         if ( lines.length == 0 ) {
             cursor = Position.pos(cursor.line + 1, 0);
         } else if ( lines.length == 1 ) {
