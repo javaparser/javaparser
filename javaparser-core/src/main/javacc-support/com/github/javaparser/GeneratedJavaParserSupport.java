@@ -12,7 +12,10 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.utils.Pair;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
 
 import static com.github.javaparser.GeneratedJavaParser.CustomToken;
 import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
@@ -22,12 +25,16 @@ import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
  * Support class for {@link GeneratedJavaParser}
  */
 class GeneratedJavaParserSupport {
-    /** Quickly create a new NodeList */
+    /**
+     * Quickly create a new NodeList
+     */
     static <X extends Node> NodeList<X> emptyList() {
         return new NodeList<>();
     }
 
-    /** Add obj to list and return it. Create a new list if list is null */
+    /**
+     * Add obj to list and return it. Create a new list if list is null
+     */
     static <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<>();
@@ -36,7 +43,9 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
-    /** Add obj to list only when list is not null */
+    /**
+     * Add obj to list only when list is not null
+     */
     static <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
         if (obj == null) {
             return list;
@@ -44,7 +53,9 @@ class GeneratedJavaParserSupport {
         return add(list, obj);
     }
 
-    /** Add obj to list at position pos */
+    /**
+     * Add obj to list at position pos
+     */
     static <T extends Node> NodeList<T> prepend(NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<>();
@@ -53,7 +64,9 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
-    /** Add obj to list */
+    /**
+     * Add obj to list
+     */
     static <T> List<T> add(List<T> list, T obj) {
         if (list == null) {
             list = new LinkedList<>();
@@ -62,7 +75,9 @@ class GeneratedJavaParserSupport {
         return list;
     }
 
-    /** Add modifier mod to modifiers */
+    /**
+     * Add modifier mod to modifiers
+     */
     static void addModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
             generatedJavaParser.addProblem("Duplicated modifier");
@@ -70,14 +85,24 @@ class GeneratedJavaParserSupport {
         modifiers.add(mod);
     }
 
-    /** Return a TokenRange spanning from begin to end */
-    static TokenRange range(JavaToken begin, JavaToken end) {
-        return new TokenRange(begin, end);
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    static TokenRange range(GeneratedJavaParser generatedJavaParser, JavaToken begin, JavaToken end) {
+        if (generatedJavaParser.storeTokens) {
+            return new TokenRange(begin, end);
+        }
+        return null;
     }
 
-    /** Return a TokenRange spanning from begin to end */
-    static TokenRange range(Node begin, Node end) {
-        return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    static TokenRange range(GeneratedJavaParser generatedJavaParser, Node begin, Node end) {
+        if (generatedJavaParser.storeTokens) {
+            return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+        }
+        return null;
     }
 
     /**
@@ -85,30 +110,32 @@ class GeneratedJavaParserSupport {
      * is determining the right border of the parent (i.e., the child is the last element of the parent). In this case
      * when we "enlarge" the child we should enlarge also the parent.
      */
-    private static void propagateRangeGrowthOnRight(Node node, Node endNode) {
+    private static void propagateRangeGrowthOnRight(GeneratedJavaParser generatedJavaParser, Node node, Node endNode) {
         if (node.getParentNode().isPresent()) {
             boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(node.getParentNode().get().getTokenRange().get().getEnd());
             if (isChildOnTheRightBorderOfParent) {
-                propagateRangeGrowthOnRight(node.getParentNode().get(), endNode);
+                propagateRangeGrowthOnRight(generatedJavaParser, node.getParentNode().get(), endNode);
             }
         }
-        node.setTokenRange(range(node, endNode));
+        node.setTokenRange(range(generatedJavaParser, node, endNode));
     }
 
-    /** Workaround for rather complex ambiguity that lambda's create */
+    /**
+     * Workaround for rather complex ambiguity that lambda's create
+     */
     static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
+            ret = new LambdaExpr(range(generatedJavaParser, ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, false);
+            ret = new LambdaExpr(range(generatedJavaParser, ret, lambdaBody), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
-            propagateRangeGrowthOnRight(ret, lambdaBody);
+            propagateRangeGrowthOnRight(generatedJavaParser, ret, lambdaBody);
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
             Expression inner = generateLambda(generatedJavaParser, castExpr.getExpression(), lambdaBody);
@@ -119,7 +146,9 @@ class GeneratedJavaParserSupport {
         return ret;
     }
 
-    /** Throws together an ArrayCreationExpr from a lot of pieces */
+    /**
+     * Throws together an ArrayCreationExpr from a lot of pieces
+     */
     static ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         NodeList<ArrayCreationLevel> levels = new NodeList<>();
 
@@ -129,7 +158,9 @@ class GeneratedJavaParserSupport {
         return new ArrayCreationExpr(range, type, levels, arrayInitializerExpr);
     }
 
-    /** Throws together a Type, taking care of all the array brackets */
+    /**
+     * Throws together a Type, taking care of all the array brackets
+     */
     static Type juggleArrayType(Type partialType, List<ArrayType.ArrayBracketPair> additionalBrackets) {
         Pair<Type, List<ArrayType.ArrayBracketPair>> partialParts = unwrapArrayTypes(partialType);
         Type elementType = partialParts.a;
@@ -137,13 +168,17 @@ class GeneratedJavaParserSupport {
         return wrapInArrayTypes(elementType, leftMostBrackets, additionalBrackets).clone();
     }
 
-    /** Create a TokenRange that spans exactly one token */
+    /**
+     * Create a TokenRange that spans exactly one token
+     */
     static TokenRange tokenRange(Token token) {
         JavaToken javaToken = ((CustomToken) token).javaToken;
         return new TokenRange(javaToken, javaToken);
     }
 
-    /** Get the token that starts the NodeList l */
+    /**
+     * Get the token that starts the NodeList l
+     */
     static JavaToken nodeListBegin(NodeList<?> l) {
         if (l.isEmpty()) {
             return JavaToken.INVALID;
