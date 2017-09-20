@@ -24,6 +24,7 @@ package com.github.javaparser.printer;
 import java.text.Normalizer;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 import com.github.javaparser.Position;
 
@@ -78,14 +79,19 @@ public class SourcePrinter {
         indented = false;
         return this;
     }
-    
+
     private StringBuilder bufAppend(final String arg) {
         updateCursor(arg);
         return buf.append(arg);
     }
 
+    private static final Pattern SPLIT_NEWLINE_PATTERN;
+    static {
+        SPLIT_NEWLINE_PATTERN = Pattern.compile("\r\n|\r|\n");
+    }
+
     private void updateCursor(String arg) {
-        String[] lines = arg.split("\r\n|\r|\n");
+        String[] lines = SPLIT_NEWLINE_PATTERN.split(arg);
         if ( lines.length == 0 ) {
             cursor = Position.pos(cursor.line + 1, 0);
         } else if ( lines.length == 1 ) {
@@ -94,11 +100,11 @@ public class SourcePrinter {
             cursor = Position.pos(cursor.line + (lines.length -1), 0 + Normalizer.normalize(lines[lines.length-1],Normalizer.Form.NFC).length());
         }
     }
-    
+
     public Position getCursor() {
         return cursor;
     }
-    
+
     public void resetMethodChainPosition(Position position) {
         this.methodChainPositions.pop();
         this.methodChainPositions.push(position);
@@ -107,15 +113,15 @@ public class SourcePrinter {
     public void pushMethodChainPosition(Position position) {
         this.methodChainPositions.push(position);
     }
-    
+
     public Position peekMethodChainPosition() {
         return this.methodChainPositions.peek();
     }
-    
+
     public Position popMethodChainPosition() {
         return this.methodChainPositions.pop();
     }
-    
+
     /**
      * Performs a new line and indent, then prints enough space characters until aligned to the specified column.
      * @param column the column to align to
