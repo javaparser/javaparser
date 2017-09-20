@@ -1,10 +1,12 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import org.junit.Test;
 
 import static com.github.javaparser.Providers.provider;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ParserConfigurationTest {
     @Test
@@ -12,6 +14,6 @@ public class ParserConfigurationTest {
         ParseResult<CompilationUnit> result = new JavaParser(new ParserConfiguration().setStoreTokens(false)).parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
         
         assertFalse(result.getTokens().isPresent());
-        assertFalse(result.getResult().get().getTokenRange().isPresent());
+        assertTrue(result.getResult().get().getChildNodesByType(Node.class).stream().noneMatch(node -> node.getTokenRange().isPresent()));
     }
 }
