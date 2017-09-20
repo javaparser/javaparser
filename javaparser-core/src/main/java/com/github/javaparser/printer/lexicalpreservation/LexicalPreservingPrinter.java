@@ -22,6 +22,7 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.*;
+import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -61,6 +62,11 @@ import static com.github.javaparser.utils.Utils.decapitalize;
  */
 public class LexicalPreservingPrinter {
 
+    /**
+     * The nodetext for a node is stored in the node's data field. This is the key to set and retrieve it.
+     */
+    public static final DataKey<NodeText> NODE_TEXT_DATA = new DataKey<NodeText>() { };
+
     //
     // Factory methods
     //
@@ -79,15 +85,6 @@ public class LexicalPreservingPrinter {
         LexicalPreservingPrinter lexicalPreservingPrinter = new LexicalPreservingPrinter(parseResult.getResult().get());
         return new Pair<>(parseResult, lexicalPreservingPrinter);
     }
-
-    //
-    // Fields
-    //
-
-    /**
-     * For each node we setup and update a NodeText, containing all the lexical information about such node
-     */
-    private final Map<Node, NodeText> textForNodes = new IdentityHashMap<>();
 
     //
     // Constructor and setup
@@ -245,9 +242,9 @@ public class LexicalPreservingPrinter {
             elements.add(new Pair<>(token.getRange().get(), new TokenTextElement(token)));
         }
         elements.sort(Comparator.comparing(e -> e.a.begin));
-        textForNodes.put(node, new NodeText(this, elements.stream().map(p -> p.b).collect(Collectors.toList())));
+        node.setData(NODE_TEXT_DATA, new NodeText(this, elements.stream().map(p -> p.b).collect(Collectors.toList())));
     }
-
+    
     //
     // Iterators
     //
@@ -297,10 +294,10 @@ public class LexicalPreservingPrinter {
      * Print a Node into a Writer, preserving the lexical information.
      */
     public void print(Node node, Writer writer) throws IOException {
-        if (!textForNodes.containsKey(node)) {
+        if (!node.containsData(NODE_TEXT_DATA)) {
             getOrCreateNodeText(node);
         }
-        final NodeText text = textForNodes.get(node);
+        final NodeText text = node.getData(NODE_TEXT_DATA);
         writer.append(text.expand());
     }
 
@@ -394,12 +391,12 @@ public class LexicalPreservingPrinter {
 
     // Visible for testing
     NodeText getOrCreateNodeText(Node node) {
-        if (!textForNodes.containsKey(node)) {
+        if (!node.containsData(NODE_TEXT_DATA)) {
             NodeText nodeText = new NodeText(this);
-            textForNodes.put(node, nodeText);
+            node.setData(NODE_TEXT_DATA, nodeText);
             prettyPrintingTextNode(node, nodeText);
         }
-        return textForNodes.get(node);
+        return node.getData(NODE_TEXT_DATA);
     }
 
     // Visible for testing
@@ -437,7 +434,7 @@ public class LexicalPreservingPrinter {
         }
         ParameterizedType parameterizedType = (ParameterizedType) m.getGenericReturnType();
         java.lang.reflect.Type optionalArgument = parameterizedType.getActualTypeArguments()[0];
-        return (parameterizedType.getActualTypeArguments()[0].getTypeName().startsWith(NodeList.class.getCanonicalName()));
+        return (optionalArgument.getTypeName().startsWith(NodeList.class.getCanonicalName()));
     }
 
     private static ObservableProperty findNodeListName(NodeList nodeList) {
@@ -480,7 +477,7 @@ public class LexicalPreservingPrinter {
 
     // Visible for testing
     NodeText getTextForNode(Node node) {
-        return textForNodes.get(node);
+        return node.getData(NODE_TEXT_DATA);
     }
 
     @Override
