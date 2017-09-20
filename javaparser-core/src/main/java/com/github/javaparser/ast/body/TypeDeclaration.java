@@ -217,4 +217,10 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTypeDeclaration() {
+        return true;
+    }
 }

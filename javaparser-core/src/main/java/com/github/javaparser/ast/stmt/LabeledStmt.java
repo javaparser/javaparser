@@ -149,4 +149,10 @@ public final class LabeledStmt extends Statement {
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLabeledStmt() {
+        return true;
+    }
 }

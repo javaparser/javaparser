@@ -357,4 +357,10 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isCallableDeclaration() {
+        return true;
+    }
 }

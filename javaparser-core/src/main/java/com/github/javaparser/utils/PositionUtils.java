@@ -64,7 +64,13 @@ public final class PositionUtils {
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
-        if (!a.getRange().isPresent() || !b.getRange().isPresent()) {
+        if(a.getRange().isPresent() && !b.getRange().isPresent()) {
+            return -1;
+        }
+        if(!a.getRange().isPresent() && b.getRange().isPresent()) {
+            return 1;
+        }
+        if (!a.getRange().isPresent() && !b.getRange().isPresent()) {
             return 0;
         }
         if (ignoringAnnotations) {

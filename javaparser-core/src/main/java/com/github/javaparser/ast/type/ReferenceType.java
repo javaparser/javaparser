@@ -80,4 +80,10 @@ public abstract class ReferenceType extends Type {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isReferenceType() {
+        return true;
+    }
 }

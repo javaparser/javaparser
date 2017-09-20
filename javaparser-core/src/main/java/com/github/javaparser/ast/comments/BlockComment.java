@@ -94,4 +94,10 @@ public final class BlockComment extends Comment {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isBlockComment() {
+        return true;
+    }
 }

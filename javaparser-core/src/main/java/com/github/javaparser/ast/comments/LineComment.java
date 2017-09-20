@@ -67,6 +67,7 @@ public final class LineComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLineComment() {
         return true;
     }

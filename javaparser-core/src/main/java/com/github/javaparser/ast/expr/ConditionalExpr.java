@@ -172,4 +172,10 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isConditionalExpr() {
+        return true;
+    }
 }

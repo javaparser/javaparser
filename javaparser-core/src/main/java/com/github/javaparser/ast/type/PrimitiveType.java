@@ -201,4 +201,10 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isPrimitiveType() {
+        return true;
+    }
 }

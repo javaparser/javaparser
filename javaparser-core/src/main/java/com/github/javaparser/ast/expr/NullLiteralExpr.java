@@ -87,4 +87,10 @@ public final class NullLiteralExpr extends LiteralExpr {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isNullLiteralExpr() {
+        return true;
+    }
 }

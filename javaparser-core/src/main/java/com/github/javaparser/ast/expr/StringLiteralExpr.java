@@ -140,4 +140,10 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isStringLiteralExpr() {
+        return true;
+    }
 }

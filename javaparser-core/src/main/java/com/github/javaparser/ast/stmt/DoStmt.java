@@ -149,4 +149,10 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isDoStmt() {
+        return true;
+    }
 }

@@ -96,4 +96,10 @@ public final class JavadocComment extends Comment {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJavadocComment() {
+        return true;
+    }
 }

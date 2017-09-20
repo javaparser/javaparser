@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Base class for types.
@@ -145,5 +146,175 @@ public abstract class Type extends Node {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isArrayType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ArrayType asArrayType() {
+        return (ArrayType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isClassOrInterfaceType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ClassOrInterfaceType asClassOrInterfaceType() {
+        return (ClassOrInterfaceType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isIntersectionType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public IntersectionType asIntersectionType() {
+        return (IntersectionType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isPrimitiveType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public PrimitiveType asPrimitiveType() {
+        return (PrimitiveType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isReferenceType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ReferenceType asReferenceType() {
+        return (ReferenceType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTypeParameter() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public TypeParameter asTypeParameter() {
+        return (TypeParameter) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isUnionType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnionType asUnionType() {
+        return (UnionType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isUnknownType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnknownType asUnknownType() {
+        return (UnknownType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isVoidType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public VoidType asVoidType() {
+        return (VoidType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isWildcardType() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public WildcardType asWildcardType() {
+        return (WildcardType) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifArrayType(Consumer<ArrayType> action) {
+        if (isArrayType()) {
+            action.accept(asArrayType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
+        if (isClassOrInterfaceType()) {
+            action.accept(asClassOrInterfaceType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifIntersectionType(Consumer<IntersectionType> action) {
+        if (isIntersectionType()) {
+            action.accept(asIntersectionType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifPrimitiveType(Consumer<PrimitiveType> action) {
+        if (isPrimitiveType()) {
+            action.accept(asPrimitiveType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifReferenceType(Consumer<ReferenceType> action) {
+        if (isReferenceType()) {
+            action.accept(asReferenceType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifTypeParameter(Consumer<TypeParameter> action) {
+        if (isTypeParameter()) {
+            action.accept(asTypeParameter());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifUnionType(Consumer<UnionType> action) {
+        if (isUnionType()) {
+            action.accept(asUnionType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifUnknownType(Consumer<UnknownType> action) {
+        if (isUnknownType()) {
+            action.accept(asUnknownType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVoidType(Consumer<VoidType> action) {
+        if (isVoidType()) {
+            action.accept(asVoidType());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifWildcardType(Consumer<WildcardType> action) {
+        if (isWildcardType()) {
+            action.accept(asWildcardType());
+        }
     }
 }

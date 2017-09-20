@@ -130,4 +130,10 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isBlockStmt() {
+        return true;
+    }
 }

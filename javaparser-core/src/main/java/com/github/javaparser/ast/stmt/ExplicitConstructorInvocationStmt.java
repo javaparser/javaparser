@@ -260,4 +260,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isExplicitConstructorInvocationStmt() {
+        return true;
+    }
 }

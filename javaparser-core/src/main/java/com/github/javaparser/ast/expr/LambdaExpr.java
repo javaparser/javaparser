@@ -195,4 +195,10 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLambdaExpr() {
+        return true;
+    }
 }
