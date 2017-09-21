@@ -182,4 +182,10 @@ public final class BinaryExpr extends Expression {
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isBinaryExpr() {
+        return true;
+    }
 }

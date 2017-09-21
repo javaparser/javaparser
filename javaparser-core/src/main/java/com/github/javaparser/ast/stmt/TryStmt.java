@@ -288,4 +288,10 @@ public final class TryStmt extends Statement {
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTryStmt() {
+        return true;
+    }
 }

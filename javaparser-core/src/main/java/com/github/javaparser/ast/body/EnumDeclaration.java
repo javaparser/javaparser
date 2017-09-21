@@ -194,4 +194,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isEnumDeclaration() {
+        return true;
+    }
 }

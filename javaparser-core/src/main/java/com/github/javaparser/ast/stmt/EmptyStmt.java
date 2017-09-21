@@ -85,4 +85,10 @@ public final class EmptyStmt extends Statement {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isEmptyStmt() {
+        return true;
+    }
 }

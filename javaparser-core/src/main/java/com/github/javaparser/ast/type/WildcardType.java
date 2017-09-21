@@ -258,4 +258,10 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         setSuperType(superType);
         customInitialization();
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isWildcardType() {
+        return true;
+    }
 }

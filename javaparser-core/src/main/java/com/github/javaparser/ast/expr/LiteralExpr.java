@@ -74,4 +74,10 @@ public abstract class LiteralExpr extends Expression {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLiteralExpr() {
+        return true;
+    }
 }

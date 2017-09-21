@@ -203,4 +203,10 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isConstructorDeclaration() {
+        return true;
+    }
 }

@@ -179,4 +179,10 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isForeachStmt() {
+        return true;
+    }
 }

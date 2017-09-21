@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -86,16 +87,14 @@ public abstract class Comment extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLineComment() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        if (isLineComment()) {
-            return (LineComment) this;
-        } else {
-            throw new UnsupportedOperationException("Not a line comment");
-        }
+        return (LineComment) this;
     }
 
     public Optional<Node> getCommentedNode() {
@@ -167,5 +166,46 @@ public abstract class Comment extends Node {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isBlockComment() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BlockComment asBlockComment() {
+        return (BlockComment) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJavadocComment() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JavadocComment asJavadocComment() {
+        return (JavadocComment) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifBlockComment(Consumer<BlockComment> action) {
+        if (isBlockComment()) {
+            action.accept(asBlockComment());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJavadocComment(Consumer<JavadocComment> action) {
+        if (isJavadocComment()) {
+            action.accept(asJavadocComment());
+        }
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLineComment(Consumer<LineComment> action) {
+        if (isLineComment()) {
+            action.accept(asLineComment());
+        }
     }
 }

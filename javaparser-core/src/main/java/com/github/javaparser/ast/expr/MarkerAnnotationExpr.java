@@ -96,4 +96,10 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isMarkerAnnotationExpr() {
+        return true;
+    }
 }

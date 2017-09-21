@@ -103,4 +103,10 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isVoidType() {
+        return true;
+    }
 }

@@ -123,4 +123,10 @@ public final class TypeExpr extends Expression implements NodeWithType<TypeExpr,
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTypeExpr() {
+        return true;
+    }
 }

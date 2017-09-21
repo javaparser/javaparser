@@ -229,4 +229,10 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isFieldAccessExpr() {
+        return true;
+    }
 }

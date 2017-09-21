@@ -317,4 +317,10 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isObjectCreationExpr() {
+        return true;
+    }
 }

@@ -107,4 +107,10 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isAnnotationExpr() {
+        return true;
+    }
 }

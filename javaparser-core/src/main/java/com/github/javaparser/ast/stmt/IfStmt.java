@@ -205,4 +205,10 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isIfStmt() {
+        return true;
+    }
 }

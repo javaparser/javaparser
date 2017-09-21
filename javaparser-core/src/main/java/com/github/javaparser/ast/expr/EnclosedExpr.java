@@ -131,4 +131,10 @@ public final class EnclosedExpr extends Expression {
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isEnclosedExpr() {
+        return true;
+    }
 }

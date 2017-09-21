@@ -122,4 +122,10 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isThrowStmt() {
+        return true;
+    }
 }

@@ -144,4 +144,10 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isUnionType() {
+        return true;
+    }
 }

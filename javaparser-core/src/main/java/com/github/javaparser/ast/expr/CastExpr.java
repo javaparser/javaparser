@@ -148,4 +148,10 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isCastExpr() {
+        return true;
+    }
 }

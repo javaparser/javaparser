@@ -129,4 +129,10 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
         }
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleRequiresStmt() {
+        return true;
+    }
 }
