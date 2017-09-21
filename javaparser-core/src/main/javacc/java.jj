@@ -1036,7 +1036,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 	  modifier = Modifiers()
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
-	    |
+	    | LOOKAHEAD("enum")
 	      ret = EnumDeclaration(modifier)
 	    | LOOKAHEAD("@" "interface")
 	      ret = AnnotationTypeDeclaration(modifier)
