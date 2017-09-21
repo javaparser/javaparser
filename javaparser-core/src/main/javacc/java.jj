@@ -1036,7 +1036,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 	  modifier = Modifiers()
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
-	    |
+	    | LOOKAHEAD("enum")
 	      ret = EnumDeclaration(modifier)
 	    | LOOKAHEAD("@" "interface")
 	      ret = AnnotationTypeDeclaration(modifier)
@@ -2697,7 +2697,7 @@ Expression MemberValue():
 	Expression ret;
 }
 {
-  (
+  ( LOOKAHEAD("@")
 	   ret = Annotation()
 	 |
 	   ret = MemberValueArrayInitializer()
@@ -2764,7 +2764,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 	   ret = AnnotationTypeMemberDeclaration(modifier)
 	  |
 	   ret = ClassOrInterfaceDeclaration(modifier)
-	  |
+	  | LOOKAHEAD("enum")
 	   ret = EnumDeclaration(modifier)
 	  |
 	   ret = AnnotationTypeDeclaration(modifier)
