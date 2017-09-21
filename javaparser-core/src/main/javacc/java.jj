@@ -2764,7 +2764,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 	   ret = AnnotationTypeMemberDeclaration(modifier)
 	  |
 	   ret = ClassOrInterfaceDeclaration(modifier)
-	  |
+	  | LOOKAHEAD("enum")
 	   ret = EnumDeclaration(modifier)
 	  |
 	   ret = AnnotationTypeDeclaration(modifier)
