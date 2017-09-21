@@ -115,4 +115,10 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     public boolean isDoubleLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public DoubleLiteralExpr asDoubleLiteralExpr() {
+        return this;
+    }
 }

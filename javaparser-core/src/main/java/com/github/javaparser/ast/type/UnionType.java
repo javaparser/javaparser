@@ -150,4 +150,10 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
     public boolean isUnionType() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnionType asUnionType() {
+        return this;
+    }
 }

@@ -8,6 +8,7 @@ import com.github.javaparser.metamodel.ModuleStmtMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public abstract class ModuleStmt extends Node {
 
@@ -58,7 +59,7 @@ public abstract class ModuleStmt extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleExportsStmt asModuleExportsStmt() {
-        return (ModuleExportsStmt) this;
+        throw new IllegalStateException(f("%s is not an ModuleExportsStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -68,7 +69,7 @@ public abstract class ModuleStmt extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleOpensStmt asModuleOpensStmt() {
-        return (ModuleOpensStmt) this;
+        throw new IllegalStateException(f("%s is not an ModuleOpensStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -78,7 +79,7 @@ public abstract class ModuleStmt extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleProvidesStmt asModuleProvidesStmt() {
-        return (ModuleProvidesStmt) this;
+        throw new IllegalStateException(f("%s is not an ModuleProvidesStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -88,7 +89,7 @@ public abstract class ModuleStmt extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleRequiresStmt asModuleRequiresStmt() {
-        return (ModuleRequiresStmt) this;
+        throw new IllegalStateException(f("%s is not an ModuleRequiresStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -98,7 +99,7 @@ public abstract class ModuleStmt extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleUsesStmt asModuleUsesStmt() {
-        return (ModuleUsesStmt) this;
+        throw new IllegalStateException(f("%s is not an ModuleUsesStmt", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

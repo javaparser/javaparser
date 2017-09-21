@@ -140,4 +140,10 @@ public final class ThisExpr extends Expression {
     public boolean isThisExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ThisExpr asThisExpr() {
+        return this;
+    }
 }

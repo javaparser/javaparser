@@ -205,4 +205,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     public boolean isEnumConstantDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public EnumConstantDeclaration asEnumConstantDeclaration() {
+        return this;
+    }
 }

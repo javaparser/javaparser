@@ -32,6 +32,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Base class for types.
@@ -155,7 +156,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ArrayType asArrayType() {
-        return (ArrayType) this;
+        throw new IllegalStateException(f("%s is not an ArrayType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -165,7 +166,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ClassOrInterfaceType asClassOrInterfaceType() {
-        return (ClassOrInterfaceType) this;
+        throw new IllegalStateException(f("%s is not an ClassOrInterfaceType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -175,7 +176,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public IntersectionType asIntersectionType() {
-        return (IntersectionType) this;
+        throw new IllegalStateException(f("%s is not an IntersectionType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -185,7 +186,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public PrimitiveType asPrimitiveType() {
-        return (PrimitiveType) this;
+        throw new IllegalStateException(f("%s is not an PrimitiveType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -195,7 +196,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ReferenceType asReferenceType() {
-        return (ReferenceType) this;
+        throw new IllegalStateException(f("%s is not an ReferenceType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -205,7 +206,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TypeParameter asTypeParameter() {
-        return (TypeParameter) this;
+        throw new IllegalStateException(f("%s is not an TypeParameter", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -215,7 +216,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public UnionType asUnionType() {
-        return (UnionType) this;
+        throw new IllegalStateException(f("%s is not an UnionType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -225,7 +226,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public UnknownType asUnknownType() {
-        return (UnknownType) this;
+        throw new IllegalStateException(f("%s is not an UnknownType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -235,7 +236,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public VoidType asVoidType() {
-        return (VoidType) this;
+        throw new IllegalStateException(f("%s is not an VoidType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -245,7 +246,7 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public WildcardType asWildcardType() {
-        return (WildcardType) this;
+        throw new IllegalStateException(f("%s is not an WildcardType", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

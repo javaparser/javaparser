@@ -323,4 +323,10 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public boolean isObjectCreationExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ObjectCreationExpr asObjectCreationExpr() {
+        return this;
+    }
 }

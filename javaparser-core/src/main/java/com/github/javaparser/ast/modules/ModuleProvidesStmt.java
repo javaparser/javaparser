@@ -139,4 +139,10 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
     public boolean isModuleProvidesStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleProvidesStmt asModuleProvidesStmt() {
+        return this;
+    }
 }

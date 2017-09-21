@@ -131,4 +131,10 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
     public boolean isNameExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public NameExpr asNameExpr() {
+        return this;
+    }
 }

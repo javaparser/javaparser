@@ -138,4 +138,10 @@ public final class ArrayInitializerExpr extends Expression {
     public boolean isArrayInitializerExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ArrayInitializerExpr asArrayInitializerExpr() {
+        return this;
+    }
 }

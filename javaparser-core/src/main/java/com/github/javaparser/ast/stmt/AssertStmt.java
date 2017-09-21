@@ -175,4 +175,10 @@ public final class AssertStmt extends Statement {
     public boolean isAssertStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AssertStmt asAssertStmt() {
+        return this;
+    }
 }

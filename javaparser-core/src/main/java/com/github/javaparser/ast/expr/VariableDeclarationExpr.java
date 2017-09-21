@@ -235,4 +235,10 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     public boolean isVariableDeclarationExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public VariableDeclarationExpr asVariableDeclarationExpr() {
+        return this;
+    }
 }

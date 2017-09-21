@@ -138,4 +138,10 @@ public final class ModuleExportsStmt extends ModuleStmt implements NodeWithName<
     public boolean isModuleExportsStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleExportsStmt asModuleExportsStmt() {
+        return this;
+    }
 }

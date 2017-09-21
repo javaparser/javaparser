@@ -80,4 +80,10 @@ public abstract class LiteralExpr extends Expression {
     public boolean isLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LiteralExpr asLiteralExpr() {
+        return this;
+    }
 }

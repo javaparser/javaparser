@@ -86,4 +86,10 @@ public abstract class ReferenceType extends Type {
     public boolean isReferenceType() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ReferenceType asReferenceType() {
+        return this;
+    }
 }

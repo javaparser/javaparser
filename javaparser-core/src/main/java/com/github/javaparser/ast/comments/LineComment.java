@@ -99,4 +99,10 @@ public final class LineComment extends Comment {
             return false;
         return super.replace(node, replacementNode);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LineComment asLineComment() {
+        return this;
+    }
 }

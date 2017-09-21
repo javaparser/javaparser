@@ -254,4 +254,10 @@ public final class ArrayCreationExpr extends Expression {
     public boolean isArrayCreationExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ArrayCreationExpr asArrayCreationExpr() {
+        return this;
+    }
 }

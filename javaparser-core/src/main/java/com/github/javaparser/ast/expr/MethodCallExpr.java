@@ -265,4 +265,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     public boolean isMethodCallExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public MethodCallExpr asMethodCallExpr() {
+        return this;
+    }
 }

@@ -155,4 +155,10 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     public boolean isWhileStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public WhileStmt asWhileStmt() {
+        return this;
+    }
 }

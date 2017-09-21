@@ -153,4 +153,10 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
     public boolean isIntersectionType() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public IntersectionType asIntersectionType() {
+        return this;
+    }
 }

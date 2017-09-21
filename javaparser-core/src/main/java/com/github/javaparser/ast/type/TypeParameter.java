@@ -215,4 +215,10 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
     public boolean isTypeParameter() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public TypeParameter asTypeParameter() {
+        return this;
+    }
 }

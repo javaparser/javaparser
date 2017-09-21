@@ -151,4 +151,10 @@ public final class ReturnStmt extends Statement {
     public boolean isReturnStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ReturnStmt asReturnStmt() {
+        return this;
+    }
 }

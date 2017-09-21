@@ -201,4 +201,10 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     public boolean isLambdaExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LambdaExpr asLambdaExpr() {
+        return this;
+    }
 }

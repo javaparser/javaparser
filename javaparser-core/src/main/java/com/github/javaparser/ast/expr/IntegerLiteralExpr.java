@@ -127,4 +127,10 @@ public final class IntegerLiteralExpr extends LiteralStringValueExpr {
     public boolean isIntegerLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public IntegerLiteralExpr asIntegerLiteralExpr() {
+        return this;
+    }
 }

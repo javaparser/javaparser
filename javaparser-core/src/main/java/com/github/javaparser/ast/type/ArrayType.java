@@ -257,4 +257,10 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
     public boolean isArrayType() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ArrayType asArrayType() {
+        return this;
+    }
 }

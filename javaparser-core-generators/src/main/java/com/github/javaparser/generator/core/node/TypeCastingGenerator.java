@@ -50,28 +50,43 @@ public class TypeCastingGenerator extends NodeGenerator {
             return;
         }
 
-        // Generate the isType() method
         final String typeName = nodeMetaModel.getTypeName();
+        final ClassOrInterfaceDeclaration baseCoid = baseCode.b;
+        final CompilationUnit baseCu = baseCode.a;
+        
+        generateIsType(nodeCoid, baseCoid, typeName);
+        generateAsType(baseCu, nodeCoid, baseCoid, typeName);
+        generateIfType(baseCu, baseCoid, typeName);
+    }
+
+    private void generateAsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { throw new IllegalStateException(f(\"%%s is not an %s\", this)); }", typeName, typeName, typeName));
+        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public %s as%s() { return this; }", typeName, typeName));
+        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
+        annotateGenerated(asTypeNodeMethod);
+        annotateGenerated(asTypeBaseMethod);
+        baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false);
+
+    }
+
+    private void generateIfType(CompilationUnit baseCu, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        final MethodDeclaration ifTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { if (is%s()) { action.accept(as%s()); }}", typeName, typeName, typeName, typeName));
+
+        addOrReplaceWhenSameSignature(baseCoid, ifTypeMethod);
+        annotateGenerated(ifTypeMethod);
+
+        baseCu.addImport(Consumer.class);
+    }
+
+    private void generateIsType(ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
         final MethodDeclaration baseIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
         final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
 
         addOrReplaceWhenSameSignature(nodeCoid, overriddenIsTypeMethod);
-        addOrReplaceWhenSameSignature(baseCode.b, baseIsTypeMethod);
+        addOrReplaceWhenSameSignature(baseCoid, baseIsTypeMethod);
 
         annotateGenerated(overriddenIsTypeMethod);
         annotateGenerated(baseIsTypeMethod);
-        
-        // Generate the asType() method
-        final MethodDeclaration asTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public %s as%s() { return (%s) this; }", typeName, typeName, typeName));
-        addOrReplaceWhenSameSignature(baseCode.b, asTypeMethod);
-        annotateGenerated(asTypeMethod);
-        
-        // Generate the ifType(Consumer) method
-        final MethodDeclaration ifTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { if (is%s()) { action.accept(as%s()); }}", typeName, typeName, typeName, typeName));
-        
-        addOrReplaceWhenSameSignature(baseCode.b, ifTypeMethod);
-        annotateGenerated(ifTypeMethod);
-        
-        baseCode.a.addImport(Consumer.class);
     }
 }

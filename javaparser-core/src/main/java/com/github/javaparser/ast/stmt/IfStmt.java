@@ -211,4 +211,10 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     public boolean isIfStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public IfStmt asIfStmt() {
+        return this;
+    }
 }

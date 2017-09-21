@@ -197,4 +197,10 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     public boolean isSwitchEntryStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SwitchEntryStmt asSwitchEntryStmt() {
+        return this;
+    }
 }

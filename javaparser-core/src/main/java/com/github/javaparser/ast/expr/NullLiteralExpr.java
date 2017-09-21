@@ -93,4 +93,10 @@ public final class NullLiteralExpr extends LiteralExpr {
     public boolean isNullLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public NullLiteralExpr asNullLiteralExpr() {
+        return this;
+    }
 }

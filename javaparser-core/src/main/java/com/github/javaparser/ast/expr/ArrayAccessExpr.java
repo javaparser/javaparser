@@ -151,4 +151,10 @@ public final class ArrayAccessExpr extends Expression {
     public boolean isArrayAccessExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ArrayAccessExpr asArrayAccessExpr() {
+        return this;
+    }
 }

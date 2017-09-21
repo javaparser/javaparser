@@ -124,4 +124,10 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     public boolean isSingleMemberAnnotationExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SingleMemberAnnotationExpr asSingleMemberAnnotationExpr() {
+        return this;
+    }
 }

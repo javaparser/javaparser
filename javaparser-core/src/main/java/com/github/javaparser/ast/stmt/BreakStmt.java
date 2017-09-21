@@ -148,4 +148,10 @@ public final class BreakStmt extends Statement {
     public boolean isBreakStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BreakStmt asBreakStmt() {
+        return this;
+    }
 }

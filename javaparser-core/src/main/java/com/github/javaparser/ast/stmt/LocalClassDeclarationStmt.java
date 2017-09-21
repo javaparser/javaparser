@@ -128,4 +128,10 @@ public final class LocalClassDeclarationStmt extends Statement {
     public boolean isLocalClassDeclarationStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
+        return this;
+    }
 }

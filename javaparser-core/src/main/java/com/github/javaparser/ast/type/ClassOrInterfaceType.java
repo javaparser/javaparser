@@ -268,4 +268,10 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     public boolean isClassOrInterfaceType() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ClassOrInterfaceType asClassOrInterfaceType() {
+        return this;
+    }
 }

@@ -77,4 +77,10 @@ public final class UnparsableStmt extends Statement {
     public boolean isUnparsableStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnparsableStmt asUnparsableStmt() {
+        return this;
+    }
 }

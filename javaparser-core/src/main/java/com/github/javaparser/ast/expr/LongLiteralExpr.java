@@ -131,4 +131,10 @@ public final class LongLiteralExpr extends LiteralStringValueExpr {
     public boolean isLongLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LongLiteralExpr asLongLiteralExpr() {
+        return this;
+    }
 }

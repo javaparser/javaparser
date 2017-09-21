@@ -266,4 +266,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     public boolean isExplicitConstructorInvocationStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ExplicitConstructorInvocationStmt asExplicitConstructorInvocationStmt() {
+        return this;
+    }
 }

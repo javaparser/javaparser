@@ -117,4 +117,10 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     public boolean isBooleanLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BooleanLiteralExpr asBooleanLiteralExpr() {
+        return this;
+    }
 }

@@ -127,4 +127,10 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     public boolean isExpressionStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ExpressionStmt asExpressionStmt() {
+        return this;
+    }
 }

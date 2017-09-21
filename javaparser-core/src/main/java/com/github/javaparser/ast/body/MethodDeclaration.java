@@ -311,4 +311,10 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     public boolean isMethodDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public MethodDeclaration asMethodDeclaration() {
+        return this;
+    }
 }

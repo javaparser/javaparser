@@ -113,4 +113,10 @@ public final class UnknownType extends Type {
     public boolean isUnknownType() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnknownType asUnknownType() {
+        return this;
+    }
 }

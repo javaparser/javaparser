@@ -187,4 +187,10 @@ public final class AssignExpr extends Expression {
     public boolean isAssignExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AssignExpr asAssignExpr() {
+        return this;
+    }
 }

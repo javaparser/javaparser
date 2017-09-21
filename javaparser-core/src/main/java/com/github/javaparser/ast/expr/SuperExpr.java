@@ -146,4 +146,10 @@ public final class SuperExpr extends Expression {
     public boolean isSuperExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SuperExpr asSuperExpr() {
+        return this;
+    }
 }

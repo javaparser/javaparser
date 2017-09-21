@@ -274,4 +274,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public boolean isFieldDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public FieldDeclaration asFieldDeclaration() {
+        return this;
+    }
 }

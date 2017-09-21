@@ -108,4 +108,10 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     public boolean isAnnotationDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AnnotationDeclaration asAnnotationDeclaration() {
+        return this;
+    }
 }

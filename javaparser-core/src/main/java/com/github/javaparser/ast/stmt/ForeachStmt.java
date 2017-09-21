@@ -185,4 +185,10 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     public boolean isForeachStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ForeachStmt asForeachStmt() {
+        return this;
+    }
 }

@@ -155,4 +155,10 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     public boolean isSynchronizedStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SynchronizedStmt asSynchronizedStmt() {
+        return this;
+    }
 }

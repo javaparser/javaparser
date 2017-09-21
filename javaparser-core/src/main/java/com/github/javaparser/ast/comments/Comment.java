@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -94,7 +95,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        return (LineComment) this;
+        throw new IllegalStateException(f("%s is not an LineComment", this));
     }
 
     public Optional<Node> getCommentedNode() {
@@ -175,7 +176,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BlockComment asBlockComment() {
-        return (BlockComment) this;
+        throw new IllegalStateException(f("%s is not an BlockComment", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -185,7 +186,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JavadocComment asJavadocComment() {
-        return (JavadocComment) this;
+        throw new IllegalStateException(f("%s is not an JavadocComment", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

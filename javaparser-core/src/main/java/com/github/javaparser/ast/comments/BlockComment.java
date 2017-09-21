@@ -100,4 +100,10 @@ public final class BlockComment extends Comment {
     public boolean isBlockComment() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BlockComment asBlockComment() {
+        return this;
+    }
 }

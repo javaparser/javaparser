@@ -28,6 +28,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A base class for all expressions.
@@ -83,7 +84,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AnnotationExpr asAnnotationExpr() {
-        return (AnnotationExpr) this;
+        throw new IllegalStateException(f("%s is not an AnnotationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -93,7 +94,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ArrayAccessExpr asArrayAccessExpr() {
-        return (ArrayAccessExpr) this;
+        throw new IllegalStateException(f("%s is not an ArrayAccessExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -103,7 +104,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ArrayCreationExpr asArrayCreationExpr() {
-        return (ArrayCreationExpr) this;
+        throw new IllegalStateException(f("%s is not an ArrayCreationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -113,7 +114,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ArrayInitializerExpr asArrayInitializerExpr() {
-        return (ArrayInitializerExpr) this;
+        throw new IllegalStateException(f("%s is not an ArrayInitializerExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -123,7 +124,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AssignExpr asAssignExpr() {
-        return (AssignExpr) this;
+        throw new IllegalStateException(f("%s is not an AssignExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -133,7 +134,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BinaryExpr asBinaryExpr() {
-        return (BinaryExpr) this;
+        throw new IllegalStateException(f("%s is not an BinaryExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -143,7 +144,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BooleanLiteralExpr asBooleanLiteralExpr() {
-        return (BooleanLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an BooleanLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -153,7 +154,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public CastExpr asCastExpr() {
-        return (CastExpr) this;
+        throw new IllegalStateException(f("%s is not an CastExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -163,7 +164,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public CharLiteralExpr asCharLiteralExpr() {
-        return (CharLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an CharLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -173,7 +174,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ClassExpr asClassExpr() {
-        return (ClassExpr) this;
+        throw new IllegalStateException(f("%s is not an ClassExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -183,7 +184,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ConditionalExpr asConditionalExpr() {
-        return (ConditionalExpr) this;
+        throw new IllegalStateException(f("%s is not an ConditionalExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -193,7 +194,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public DoubleLiteralExpr asDoubleLiteralExpr() {
-        return (DoubleLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an DoubleLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -203,7 +204,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public EnclosedExpr asEnclosedExpr() {
-        return (EnclosedExpr) this;
+        throw new IllegalStateException(f("%s is not an EnclosedExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -213,7 +214,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public FieldAccessExpr asFieldAccessExpr() {
-        return (FieldAccessExpr) this;
+        throw new IllegalStateException(f("%s is not an FieldAccessExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -223,7 +224,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public InstanceOfExpr asInstanceOfExpr() {
-        return (InstanceOfExpr) this;
+        throw new IllegalStateException(f("%s is not an InstanceOfExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -233,7 +234,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public IntegerLiteralExpr asIntegerLiteralExpr() {
-        return (IntegerLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an IntegerLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -243,7 +244,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LambdaExpr asLambdaExpr() {
-        return (LambdaExpr) this;
+        throw new IllegalStateException(f("%s is not an LambdaExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -253,7 +254,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LiteralExpr asLiteralExpr() {
-        return (LiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an LiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -263,7 +264,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LiteralStringValueExpr asLiteralStringValueExpr() {
-        return (LiteralStringValueExpr) this;
+        throw new IllegalStateException(f("%s is not an LiteralStringValueExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -273,7 +274,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LongLiteralExpr asLongLiteralExpr() {
-        return (LongLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an LongLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -283,7 +284,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public MarkerAnnotationExpr asMarkerAnnotationExpr() {
-        return (MarkerAnnotationExpr) this;
+        throw new IllegalStateException(f("%s is not an MarkerAnnotationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -293,7 +294,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public MethodCallExpr asMethodCallExpr() {
-        return (MethodCallExpr) this;
+        throw new IllegalStateException(f("%s is not an MethodCallExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -303,7 +304,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public MethodReferenceExpr asMethodReferenceExpr() {
-        return (MethodReferenceExpr) this;
+        throw new IllegalStateException(f("%s is not an MethodReferenceExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -313,7 +314,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public NameExpr asNameExpr() {
-        return (NameExpr) this;
+        throw new IllegalStateException(f("%s is not an NameExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -323,7 +324,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public NormalAnnotationExpr asNormalAnnotationExpr() {
-        return (NormalAnnotationExpr) this;
+        throw new IllegalStateException(f("%s is not an NormalAnnotationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -333,7 +334,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public NullLiteralExpr asNullLiteralExpr() {
-        return (NullLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an NullLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -343,7 +344,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ObjectCreationExpr asObjectCreationExpr() {
-        return (ObjectCreationExpr) this;
+        throw new IllegalStateException(f("%s is not an ObjectCreationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -353,7 +354,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public SingleMemberAnnotationExpr asSingleMemberAnnotationExpr() {
-        return (SingleMemberAnnotationExpr) this;
+        throw new IllegalStateException(f("%s is not an SingleMemberAnnotationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -363,7 +364,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public StringLiteralExpr asStringLiteralExpr() {
-        return (StringLiteralExpr) this;
+        throw new IllegalStateException(f("%s is not an StringLiteralExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -373,7 +374,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public SuperExpr asSuperExpr() {
-        return (SuperExpr) this;
+        throw new IllegalStateException(f("%s is not an SuperExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -383,7 +384,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ThisExpr asThisExpr() {
-        return (ThisExpr) this;
+        throw new IllegalStateException(f("%s is not an ThisExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -393,7 +394,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TypeExpr asTypeExpr() {
-        return (TypeExpr) this;
+        throw new IllegalStateException(f("%s is not an TypeExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -403,7 +404,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public UnaryExpr asUnaryExpr() {
-        return (UnaryExpr) this;
+        throw new IllegalStateException(f("%s is not an UnaryExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -413,7 +414,7 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public VariableDeclarationExpr asVariableDeclarationExpr() {
-        return (VariableDeclarationExpr) this;
+        throw new IllegalStateException(f("%s is not an VariableDeclarationExpr", this));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

@@ -155,4 +155,10 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     public boolean isInstanceOfExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public InstanceOfExpr asInstanceOfExpr() {
+        return this;
+    }
 }

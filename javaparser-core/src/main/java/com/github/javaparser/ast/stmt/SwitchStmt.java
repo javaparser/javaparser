@@ -180,4 +180,10 @@ public final class SwitchStmt extends Statement {
     public boolean isSwitchStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SwitchStmt asSwitchStmt() {
+        return this;
+    }
 }

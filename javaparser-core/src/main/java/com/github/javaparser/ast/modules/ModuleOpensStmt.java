@@ -138,4 +138,10 @@ public final class ModuleOpensStmt extends ModuleStmt implements NodeWithName<Mo
     public boolean isModuleOpensStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleOpensStmt asModuleOpensStmt() {
+        return this;
+    }
 }

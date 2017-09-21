@@ -150,4 +150,10 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     public boolean isContinueStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ContinueStmt asContinueStmt() {
+        return this;
+    }
 }

@@ -136,4 +136,10 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     public boolean isBlockStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BlockStmt asBlockStmt() {
+        return this;
+    }
 }

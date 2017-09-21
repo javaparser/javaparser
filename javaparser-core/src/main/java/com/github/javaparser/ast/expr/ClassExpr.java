@@ -128,4 +128,10 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     public boolean isClassExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ClassExpr asClassExpr() {
+        return this;
+    }
 }

@@ -187,4 +187,10 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     public boolean isUnaryExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnaryExpr asUnaryExpr() {
+        return this;
+    }
 }

@@ -148,4 +148,10 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     public boolean isInitializerDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public InitializerDeclaration asInitializerDeclaration() {
+        return this;
+    }
 }

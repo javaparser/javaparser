@@ -91,4 +91,10 @@ public final class EmptyStmt extends Statement {
     public boolean isEmptyStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public EmptyStmt asEmptyStmt() {
+        return this;
+    }
 }

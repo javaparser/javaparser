@@ -101,4 +101,10 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
     public boolean isModuleUsesStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleUsesStmt asModuleUsesStmt() {
+        return this;
+    }
 }

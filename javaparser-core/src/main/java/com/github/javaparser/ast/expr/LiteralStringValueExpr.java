@@ -99,4 +99,10 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     public boolean isLiteralStringValueExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LiteralStringValueExpr asLiteralStringValueExpr() {
+        return this;
+    }
 }

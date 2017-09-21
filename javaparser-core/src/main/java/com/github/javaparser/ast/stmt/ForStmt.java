@@ -245,4 +245,10 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public boolean isForStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ForStmt asForStmt() {
+        return this;
+    }
 }

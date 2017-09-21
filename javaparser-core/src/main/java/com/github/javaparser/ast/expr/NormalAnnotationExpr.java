@@ -154,4 +154,10 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     public boolean isNormalAnnotationExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public NormalAnnotationExpr asNormalAnnotationExpr() {
+        return this;
+    }
 }

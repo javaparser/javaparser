@@ -202,4 +202,10 @@ public final class MethodReferenceExpr extends Expression implements NodeWithTyp
     public boolean isMethodReferenceExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public MethodReferenceExpr asMethodReferenceExpr() {
+        return this;
+    }
 }

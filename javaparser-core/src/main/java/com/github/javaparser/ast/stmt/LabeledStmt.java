@@ -155,4 +155,10 @@ public final class LabeledStmt extends Statement {
     public boolean isLabeledStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LabeledStmt asLabeledStmt() {
+        return this;
+    }
 }

@@ -102,4 +102,10 @@ public final class JavadocComment extends Comment {
     public boolean isJavadocComment() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JavadocComment asJavadocComment() {
+        return this;
+    }
 }

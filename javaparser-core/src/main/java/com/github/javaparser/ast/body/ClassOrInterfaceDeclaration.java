@@ -252,4 +252,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     public boolean isClassOrInterfaceDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ClassOrInterfaceDeclaration asClassOrInterfaceDeclaration() {
+        return this;
+    }
 }

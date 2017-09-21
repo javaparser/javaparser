@@ -294,4 +294,10 @@ public final class TryStmt extends Statement {
     public boolean isTryStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public TryStmt asTryStmt() {
+        return this;
+    }
 }

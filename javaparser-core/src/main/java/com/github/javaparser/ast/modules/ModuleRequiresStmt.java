@@ -135,4 +135,10 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     public boolean isModuleRequiresStmt() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleRequiresStmt asModuleRequiresStmt() {
+        return this;
+    }
 }

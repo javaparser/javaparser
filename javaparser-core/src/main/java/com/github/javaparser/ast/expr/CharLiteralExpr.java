@@ -137,4 +137,10 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     public boolean isCharLiteralExpr() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public CharLiteralExpr asCharLiteralExpr() {
+        return this;
+    }
 }

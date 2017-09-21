@@ -200,4 +200,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     public boolean isEnumDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public EnumDeclaration asEnumDeclaration() {
+        return this;
+    }
 }

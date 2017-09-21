@@ -242,4 +242,10 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     public boolean isAnnotationMemberDeclaration() {
         return true;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AnnotationMemberDeclaration asAnnotationMemberDeclaration() {
+        return this;
+    }
 }
