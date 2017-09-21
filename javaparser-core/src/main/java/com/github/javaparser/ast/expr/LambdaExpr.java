@@ -41,6 +41,7 @@ import com.github.javaparser.metamodel.LambdaExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A lambda expression. The parameters are on the left side of the ->.
@@ -206,5 +207,10 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LambdaExpr asLambdaExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLambdaExpr(Consumer<LambdaExpr> action) {
+        action.accept(this);
     }
 }

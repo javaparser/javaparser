@@ -239,78 +239,45 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
-        if (isAnnotationDeclaration()) {
-            action.accept(asAnnotationDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
-        if (isAnnotationMemberDeclaration()) {
-            action.accept(asAnnotationMemberDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCallableDeclaration(Consumer<CallableDeclaration> action) {
-        if (isCallableDeclaration()) {
-            action.accept(asCallableDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
-        if (isClassOrInterfaceDeclaration()) {
-            action.accept(asClassOrInterfaceDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConstructorDeclaration(Consumer<ConstructorDeclaration> action) {
-        if (isConstructorDeclaration()) {
-            action.accept(asConstructorDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumConstantDeclaration(Consumer<EnumConstantDeclaration> action) {
-        if (isEnumConstantDeclaration()) {
-            action.accept(asEnumConstantDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
-        if (isEnumDeclaration()) {
-            action.accept(asEnumDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
-        if (isFieldDeclaration()) {
-            action.accept(asFieldDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
-        if (isInitializerDeclaration()) {
-            action.accept(asInitializerDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodDeclaration(Consumer<MethodDeclaration> action) {
-        if (isMethodDeclaration()) {
-            action.accept(asMethodDeclaration());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
-        if (isTypeDeclaration()) {
-            action.accept(asTypeDeclaration());
-        }
     }
 }

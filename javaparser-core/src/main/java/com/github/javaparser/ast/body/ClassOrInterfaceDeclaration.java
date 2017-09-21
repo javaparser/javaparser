@@ -45,6 +45,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import java.util.EnumSet;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.function.Consumer;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -257,5 +258,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ClassOrInterfaceDeclaration asClassOrInterfaceDeclaration() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifClassOrInterfaceDeclaration(Consumer<ClassOrInterfaceDeclaration> action) {
+        action.accept(this);
     }
 }

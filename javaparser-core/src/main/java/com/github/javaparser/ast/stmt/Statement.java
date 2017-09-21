@@ -289,148 +289,85 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAssertStmt(Consumer<AssertStmt> action) {
-        if (isAssertStmt()) {
-            action.accept(asAssertStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBlockStmt(Consumer<BlockStmt> action) {
-        if (isBlockStmt()) {
-            action.accept(asBlockStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBreakStmt(Consumer<BreakStmt> action) {
-        if (isBreakStmt()) {
-            action.accept(asBreakStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifContinueStmt(Consumer<ContinueStmt> action) {
-        if (isContinueStmt()) {
-            action.accept(asContinueStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifDoStmt(Consumer<DoStmt> action) {
-        if (isDoStmt()) {
-            action.accept(asDoStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEmptyStmt(Consumer<EmptyStmt> action) {
-        if (isEmptyStmt()) {
-            action.accept(asEmptyStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
-        if (isExplicitConstructorInvocationStmt()) {
-            action.accept(asExplicitConstructorInvocationStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
-        if (isExpressionStmt()) {
-            action.accept(asExpressionStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForStmt(Consumer<ForStmt> action) {
-        if (isForStmt()) {
-            action.accept(asForStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForeachStmt(Consumer<ForeachStmt> action) {
-        if (isForeachStmt()) {
-            action.accept(asForeachStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIfStmt(Consumer<IfStmt> action) {
-        if (isIfStmt()) {
-            action.accept(asIfStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLabeledStmt(Consumer<LabeledStmt> action) {
-        if (isLabeledStmt()) {
-            action.accept(asLabeledStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
-        if (isLocalClassDeclarationStmt()) {
-            action.accept(asLocalClassDeclarationStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReturnStmt(Consumer<ReturnStmt> action) {
-        if (isReturnStmt()) {
-            action.accept(asReturnStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchEntryStmt(Consumer<SwitchEntryStmt> action) {
-        if (isSwitchEntryStmt()) {
-            action.accept(asSwitchEntryStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSwitchStmt(Consumer<SwitchStmt> action) {
-        if (isSwitchStmt()) {
-            action.accept(asSwitchStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
-        if (isSynchronizedStmt()) {
-            action.accept(asSynchronizedStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThrowStmt(Consumer<ThrowStmt> action) {
-        if (isThrowStmt()) {
-            action.accept(asThrowStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTryStmt(Consumer<TryStmt> action) {
-        if (isTryStmt()) {
-            action.accept(asTryStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
-        if (isUnparsableStmt()) {
-            action.accept(asUnparsableStmt());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWhileStmt(Consumer<WhileStmt> action) {
-        if (isWhileStmt()) {
-            action.accept(asWhileStmt());
-        }
     }
 }

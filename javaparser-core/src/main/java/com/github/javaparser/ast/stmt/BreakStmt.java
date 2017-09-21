@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.BreakStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A usage of the break keyword.
@@ -153,5 +154,10 @@ public final class BreakStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BreakStmt asBreakStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifBreakStmt(Consumer<BreakStmt> action) {
+        action.accept(this);
     }
 }

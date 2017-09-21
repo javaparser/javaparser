@@ -37,6 +37,7 @@ import java.util.EnumSet;
 import java.util.List;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An annotation type declaration.<br/><code>@interface X { ... }</code>
@@ -113,5 +114,10 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AnnotationDeclaration asAnnotationDeclaration() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
+        action.accept(this);
     }
 }

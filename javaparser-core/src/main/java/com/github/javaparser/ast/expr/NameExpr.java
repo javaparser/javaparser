@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -136,5 +137,10 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public NameExpr asNameExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifNameExpr(Consumer<NameExpr> action) {
+        action.accept(this);
     }
 }

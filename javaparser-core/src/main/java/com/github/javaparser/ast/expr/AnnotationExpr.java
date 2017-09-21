@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.AnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A base class for the different types of annotations.
@@ -118,5 +119,10 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AnnotationExpr asAnnotationExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifAnnotationExpr(Consumer<AnnotationExpr> action) {
+        action.accept(this);
     }
 }

@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.ForeachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A for-each statement.
@@ -190,5 +191,10 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ForeachStmt asForeachStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifForeachStmt(Consumer<ForeachStmt> action) {
+        action.accept(this);
     }
 }

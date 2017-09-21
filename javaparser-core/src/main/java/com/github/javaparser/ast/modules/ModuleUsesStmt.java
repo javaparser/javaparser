@@ -13,6 +13,7 @@ import com.github.javaparser.metamodel.ModuleUsesStmtMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
 
@@ -106,5 +107,10 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleUsesStmt asModuleUsesStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleUsesStmt(Consumer<ModuleUsesStmt> action) {
+        action.accept(this);
     }
 }

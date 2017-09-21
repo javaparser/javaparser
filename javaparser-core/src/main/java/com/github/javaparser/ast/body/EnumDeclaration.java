@@ -40,6 +40,7 @@ import javax.annotation.Generated;
 import java.util.EnumSet;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.function.Consumer;
 
 /**
  * The declaration of an enum.<br/><code>enum X { ... }</code>
@@ -205,5 +206,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public EnumDeclaration asEnumDeclaration() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
+        action.accept(this);
     }
 }

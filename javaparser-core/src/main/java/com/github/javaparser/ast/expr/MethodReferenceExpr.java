@@ -40,6 +40,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
@@ -207,5 +208,10 @@ public final class MethodReferenceExpr extends Expression implements NodeWithTyp
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public MethodReferenceExpr asMethodReferenceExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
+        action.accept(this);
     }
 }

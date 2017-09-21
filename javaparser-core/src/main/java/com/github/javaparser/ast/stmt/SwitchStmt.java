@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A switch statement.
@@ -185,5 +186,10 @@ public final class SwitchStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public SwitchStmt asSwitchStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSwitchStmt(Consumer<SwitchStmt> action) {
+        action.accept(this);
     }
 }

@@ -251,71 +251,41 @@ public abstract class Type extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayType(Consumer<ArrayType> action) {
-        if (isArrayType()) {
-            action.accept(asArrayType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
-        if (isClassOrInterfaceType()) {
-            action.accept(asClassOrInterfaceType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIntersectionType(Consumer<IntersectionType> action) {
-        if (isIntersectionType()) {
-            action.accept(asIntersectionType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPrimitiveType(Consumer<PrimitiveType> action) {
-        if (isPrimitiveType()) {
-            action.accept(asPrimitiveType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReferenceType(Consumer<ReferenceType> action) {
-        if (isReferenceType()) {
-            action.accept(asReferenceType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeParameter(Consumer<TypeParameter> action) {
-        if (isTypeParameter()) {
-            action.accept(asTypeParameter());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnionType(Consumer<UnionType> action) {
-        if (isUnionType()) {
-            action.accept(asUnionType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnknownType(Consumer<UnknownType> action) {
-        if (isUnknownType()) {
-            action.accept(asUnknownType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVoidType(Consumer<VoidType> action) {
-        if (isVoidType()) {
-            action.accept(asVoidType());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWildcardType(Consumer<WildcardType> action) {
-        if (isWildcardType()) {
-            action.accept(asWildcardType());
-        }
     }
 }

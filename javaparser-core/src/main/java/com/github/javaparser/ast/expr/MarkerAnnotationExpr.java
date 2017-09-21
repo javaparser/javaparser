@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.JavaParser.parseName;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An annotation that uses only the annotation type name.
@@ -107,5 +108,10 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public MarkerAnnotationExpr asMarkerAnnotationExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifMarkerAnnotationExpr(Consumer<MarkerAnnotationExpr> action) {
+        action.accept(this);
     }
 }

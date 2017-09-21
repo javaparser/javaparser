@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.BooleanLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * The boolean literals.
@@ -122,5 +123,10 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BooleanLiteralExpr asBooleanLiteralExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifBooleanLiteralExpr(Consumer<BooleanLiteralExpr> action) {
+        action.accept(this);
     }
 }

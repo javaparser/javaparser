@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A primitive type.
@@ -212,5 +213,10 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public PrimitiveType asPrimitiveType() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifPrimitiveType(Consumer<PrimitiveType> action) {
+        action.accept(this);
     }
 }

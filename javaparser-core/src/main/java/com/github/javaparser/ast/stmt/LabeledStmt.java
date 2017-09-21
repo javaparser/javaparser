@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.LabeledStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A statement that is labeled, like <code>label123: println("continuing");</code>
@@ -160,5 +161,10 @@ public final class LabeledStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LabeledStmt asLabeledStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLabeledStmt(Consumer<LabeledStmt> action) {
+        action.accept(this);
     }
 }

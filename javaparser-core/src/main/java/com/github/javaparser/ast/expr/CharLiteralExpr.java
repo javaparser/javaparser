@@ -31,6 +31,7 @@ import com.github.javaparser.utils.StringEscapeUtils;
 import com.github.javaparser.utils.Utils;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A literal character.
@@ -142,5 +143,10 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public CharLiteralExpr asCharLiteralExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifCharLiteralExpr(Consumer<CharLiteralExpr> action) {
+        action.accept(this);
     }
 }

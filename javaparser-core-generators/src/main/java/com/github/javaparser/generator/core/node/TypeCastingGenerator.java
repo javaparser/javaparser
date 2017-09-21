@@ -54,9 +54,9 @@ public class TypeCastingGenerator extends NodeGenerator {
         final ClassOrInterfaceDeclaration baseCoid = baseCode.b;
         final CompilationUnit baseCu = baseCode.a;
         
-        generateIsType(nodeCoid, baseCoid, typeName);
+        generateIsType(baseCu, nodeCoid, baseCoid, typeName);
         generateAsType(baseCu, nodeCoid, baseCoid, typeName);
-        generateIfType(baseCu, baseCoid, typeName);
+        generateIfType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
     }
 
     private void generateAsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
@@ -70,16 +70,19 @@ public class TypeCastingGenerator extends NodeGenerator {
 
     }
 
-    private void generateIfType(CompilationUnit baseCu, ClassOrInterfaceDeclaration baseCoid, String typeName) {
-        final MethodDeclaration ifTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { if (is%s()) { action.accept(as%s()); }}", typeName, typeName, typeName, typeName));
-
-        addOrReplaceWhenSameSignature(baseCoid, ifTypeMethod);
-        annotateGenerated(ifTypeMethod);
+    private void generateIfType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        final MethodDeclaration ifTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { }", typeName, typeName));
+        final MethodDeclaration ifTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("public void if%s(Consumer<%s> action) { action.accept(this); }", typeName, typeName));
+        addOrReplaceWhenSameSignature(baseCoid, ifTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, ifTypeNodeMethod);
+        annotateGenerated(ifTypeNodeMethod);
+        annotateGenerated(ifTypeBaseMethod);
 
         baseCu.addImport(Consumer.class);
+        nodeCu.addImport(Consumer.class);
     }
 
-    private void generateIsType(ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+    private void generateIsType(CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
         final MethodDeclaration baseIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("public boolean is%s() { return false; }", typeName));
         final MethodDeclaration overriddenIsTypeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public boolean is%s() { return true; }", typeName));
 

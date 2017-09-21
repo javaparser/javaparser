@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.UnknownTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -118,5 +119,10 @@ public final class UnknownType extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public UnknownType asUnknownType() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifUnknownType(Consumer<UnknownType> action) {
+        action.accept(this);
     }
 }

@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.ConditionalExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * The ternary conditional expression.
@@ -183,5 +184,10 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ConditionalExpr asConditionalExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
+        action.accept(this);
     }
 }

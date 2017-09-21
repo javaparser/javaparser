@@ -419,239 +419,137 @@ public abstract class Expression extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationExpr(Consumer<AnnotationExpr> action) {
-        if (isAnnotationExpr()) {
-            action.accept(asAnnotationExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayAccessExpr(Consumer<ArrayAccessExpr> action) {
-        if (isArrayAccessExpr()) {
-            action.accept(asArrayAccessExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayCreationExpr(Consumer<ArrayCreationExpr> action) {
-        if (isArrayCreationExpr()) {
-            action.accept(asArrayCreationExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayInitializerExpr(Consumer<ArrayInitializerExpr> action) {
-        if (isArrayInitializerExpr()) {
-            action.accept(asArrayInitializerExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAssignExpr(Consumer<AssignExpr> action) {
-        if (isAssignExpr()) {
-            action.accept(asAssignExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBinaryExpr(Consumer<BinaryExpr> action) {
-        if (isBinaryExpr()) {
-            action.accept(asBinaryExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBooleanLiteralExpr(Consumer<BooleanLiteralExpr> action) {
-        if (isBooleanLiteralExpr()) {
-            action.accept(asBooleanLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCastExpr(Consumer<CastExpr> action) {
-        if (isCastExpr()) {
-            action.accept(asCastExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCharLiteralExpr(Consumer<CharLiteralExpr> action) {
-        if (isCharLiteralExpr()) {
-            action.accept(asCharLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifClassExpr(Consumer<ClassExpr> action) {
-        if (isClassExpr()) {
-            action.accept(asClassExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
-        if (isConditionalExpr()) {
-            action.accept(asConditionalExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifDoubleLiteralExpr(Consumer<DoubleLiteralExpr> action) {
-        if (isDoubleLiteralExpr()) {
-            action.accept(asDoubleLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnclosedExpr(Consumer<EnclosedExpr> action) {
-        if (isEnclosedExpr()) {
-            action.accept(asEnclosedExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
-        if (isFieldAccessExpr()) {
-            action.accept(asFieldAccessExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
-        if (isInstanceOfExpr()) {
-            action.accept(asInstanceOfExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIntegerLiteralExpr(Consumer<IntegerLiteralExpr> action) {
-        if (isIntegerLiteralExpr()) {
-            action.accept(asIntegerLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLambdaExpr(Consumer<LambdaExpr> action) {
-        if (isLambdaExpr()) {
-            action.accept(asLambdaExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLiteralExpr(Consumer<LiteralExpr> action) {
-        if (isLiteralExpr()) {
-            action.accept(asLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
-        if (isLiteralStringValueExpr()) {
-            action.accept(asLiteralStringValueExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
-        if (isLongLiteralExpr()) {
-            action.accept(asLongLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMarkerAnnotationExpr(Consumer<MarkerAnnotationExpr> action) {
-        if (isMarkerAnnotationExpr()) {
-            action.accept(asMarkerAnnotationExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodCallExpr(Consumer<MethodCallExpr> action) {
-        if (isMethodCallExpr()) {
-            action.accept(asMethodCallExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
-        if (isMethodReferenceExpr()) {
-            action.accept(asMethodReferenceExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNameExpr(Consumer<NameExpr> action) {
-        if (isNameExpr()) {
-            action.accept(asNameExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNormalAnnotationExpr(Consumer<NormalAnnotationExpr> action) {
-        if (isNormalAnnotationExpr()) {
-            action.accept(asNormalAnnotationExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
-        if (isNullLiteralExpr()) {
-            action.accept(asNullLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
-        if (isObjectCreationExpr()) {
-            action.accept(asObjectCreationExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
-        if (isSingleMemberAnnotationExpr()) {
-            action.accept(asSingleMemberAnnotationExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifStringLiteralExpr(Consumer<StringLiteralExpr> action) {
-        if (isStringLiteralExpr()) {
-            action.accept(asStringLiteralExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSuperExpr(Consumer<SuperExpr> action) {
-        if (isSuperExpr()) {
-            action.accept(asSuperExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThisExpr(Consumer<ThisExpr> action) {
-        if (isThisExpr()) {
-            action.accept(asThisExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeExpr(Consumer<TypeExpr> action) {
-        if (isTypeExpr()) {
-            action.accept(asTypeExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnaryExpr(Consumer<UnaryExpr> action) {
-        if (isUnaryExpr()) {
-            action.accept(asUnaryExpr());
-        }
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
-        if (isVariableDeclarationExpr()) {
-            action.accept(asVariableDeclarationExpr());
-        }
     }
 }

@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.ReturnStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * The return statement, with an optional expression to return.
@@ -156,5 +157,10 @@ public final class ReturnStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ReturnStmt asReturnStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifReturnStmt(Consumer<ReturnStmt> action) {
+        action.accept(this);
     }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<ModuleProvidesStmt, Type> {
 
@@ -144,5 +145,10 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleProvidesStmt asModuleProvidesStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleProvidesStmt(Consumer<ModuleProvidesStmt> action) {
+        action.accept(this);
     }
 }

@@ -40,6 +40,7 @@ import com.github.javaparser.metamodel.EnumConstantDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
@@ -210,5 +211,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public EnumConstantDeclaration asEnumConstantDeclaration() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifEnumConstantDeclaration(Consumer<EnumConstantDeclaration> action) {
+        action.accept(this);
     }
 }

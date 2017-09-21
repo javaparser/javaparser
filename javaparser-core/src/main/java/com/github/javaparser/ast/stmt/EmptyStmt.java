@@ -29,6 +29,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.EmptyStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
+import java.util.function.Consumer;
 
 /**
  * An empty statement is a ";" where a statement is expected.
@@ -96,5 +97,10 @@ public final class EmptyStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public EmptyStmt asEmptyStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifEmptyStmt(Consumer<EmptyStmt> action) {
+        action.accept(this);
     }
 }

@@ -27,6 +27,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LiteralExprMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A base class for all literal expressions.
@@ -85,5 +86,10 @@ public abstract class LiteralExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LiteralExpr asLiteralExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLiteralExpr(Consumer<LiteralExpr> action) {
+        action.accept(this);
     }
 }

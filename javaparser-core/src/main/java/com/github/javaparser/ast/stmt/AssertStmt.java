@@ -34,6 +34,7 @@ import com.github.javaparser.metamodel.AssertStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A usage of the keyword "assert"
@@ -180,5 +181,10 @@ public final class AssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public AssertStmt asAssertStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifAssertStmt(Consumer<AssertStmt> action) {
+        action.accept(this);
     }
 }

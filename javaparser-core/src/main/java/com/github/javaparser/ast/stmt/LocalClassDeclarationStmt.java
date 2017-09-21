@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.LocalClassDeclarationStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A class declaration inside a method. 
@@ -133,5 +134,10 @@ public final class LocalClassDeclarationStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
+        action.accept(this);
     }
 }

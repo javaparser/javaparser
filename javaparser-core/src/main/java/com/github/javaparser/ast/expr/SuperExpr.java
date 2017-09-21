@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.SuperExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An occurrence of the "super" keyword. <br/><code>World.super.greet()</code> is a MethodCallExpr of method name greet,
@@ -151,5 +152,10 @@ public final class SuperExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public SuperExpr asSuperExpr() {
         return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSuperExpr(Consumer<SuperExpr> action) {
+        action.accept(this);
     }
 }
