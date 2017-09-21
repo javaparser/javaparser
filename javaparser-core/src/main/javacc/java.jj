@@ -2697,7 +2697,7 @@ Expression MemberValue():
 	Expression ret;
 }
 {
-  (
+  ( LOOKAHEAD("@")
 	   ret = Annotation()
 	 |
 	   ret = MemberValueArrayInitializer()
