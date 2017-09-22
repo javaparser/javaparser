@@ -50,6 +50,9 @@ import com.github.javaparser.TokenRange;
  * <br/>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
  * are different from arguments.</a> <br/>"String x" and "float y" are the parameters in <code>int abc(String x, float
  * y) {...}</code>
+ * 
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser
  */

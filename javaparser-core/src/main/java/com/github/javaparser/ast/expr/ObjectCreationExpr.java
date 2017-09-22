@@ -42,6 +42,7 @@ import com.github.javaparser.metamodel.ObjectCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A constructor call.
@@ -316,5 +317,22 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isObjectCreationExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ObjectCreationExpr asObjectCreationExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
+        action.accept(this);
     }
 }

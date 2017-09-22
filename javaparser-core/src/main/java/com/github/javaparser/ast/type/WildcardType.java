@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A wildcard type argument.
@@ -257,5 +258,22 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         setExtendedType(extendedType);
         setSuperType(superType);
         customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isWildcardType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public WildcardType asWildcardType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifWildcardType(Consumer<WildcardType> action) {
+        action.accept(this);
     }
 }

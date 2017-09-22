@@ -10,6 +10,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnparsableStmtMetaModel;
 import static com.github.javaparser.ast.Node.Parsedness.*;
+import java.util.function.Consumer;
 
 /**
  * A statement that had parse errors.
@@ -70,5 +71,22 @@ public final class UnparsableStmt extends Statement {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isUnparsableStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnparsableStmt asUnparsableStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
+        action.accept(this);
     }
 }

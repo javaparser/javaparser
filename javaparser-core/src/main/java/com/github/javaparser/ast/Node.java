@@ -45,6 +45,7 @@ import javax.annotation.Generated;
 import java.util.*;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -429,7 +430,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Gets data for this component using the given key.
+     * Gets data for this node using the given key.
      *
      * @param <M> The type of the data.
      * @param key The key for the data
@@ -445,7 +446,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Sets data for this component using the given key.
+     * Sets data for this node using the given key.
      * For information on creating DataKey, see {@link DataKey}.
      *
      * @param <M> The type of data
@@ -458,6 +459,16 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             data = new IdentityHashMap<>();
         }
         data.put(key, object);
+    }
+
+    /**
+     * @return does this node have data for this key?
+     */
+    public boolean containsData(DataKey<?> key) {
+        if (data == null) {
+            return false;
+        }
+        return data.get(key) != null;
     }
 
     /**

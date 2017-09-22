@@ -22,14 +22,13 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.nodeTypes.NodeWithScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
@@ -38,14 +37,15 @@ import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Access of a field of an object.
- * <br/><code>person.name</code>
+ * <br/>In <code>person.name</code> "name" is the name and "person" is the scope.
  *
  * @author Julio Vilmar Gesser
  */
-public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr> {
+public final class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithScope<FieldAccessExpr> {
 
     private Expression scope;
 
@@ -163,7 +163,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     /**
      * Sets the type arguments
      *
-     * @param types the type arguments, can be null
+     * @param typeArguments the type arguments, can be null
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -229,5 +229,22 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isFieldAccessExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public FieldAccessExpr asFieldAccessExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
+        action.accept(this);
     }
 }

@@ -44,12 +44,16 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A declaration of variables.
  * It is an expression, so it can be put in places like the initializer of a for loop,
  * or the resources part of the try statement.
  * <br/><code>final int x=3, y=55</code>
+ *
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser
  */
@@ -225,5 +229,22 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isVariableDeclarationExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public VariableDeclarationExpr asVariableDeclarationExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
+        action.accept(this);
     }
 }

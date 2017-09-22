@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.WhileStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A while statement.
@@ -148,5 +149,22 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isWhileStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public WhileStmt asWhileStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifWhileStmt(Consumer<WhileStmt> action) {
+        action.accept(this);
     }
 }

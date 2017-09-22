@@ -37,6 +37,7 @@ import com.github.javaparser.metamodel.SwitchEntryStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * One case in a switch statement.
@@ -190,5 +191,22 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isSwitchEntryStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SwitchEntryStmt asSwitchEntryStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSwitchEntryStmt(Consumer<SwitchEntryStmt> action) {
+        action.accept(this);
     }
 }

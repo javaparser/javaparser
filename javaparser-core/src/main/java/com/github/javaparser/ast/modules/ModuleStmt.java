@@ -7,6 +7,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleStmtMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public abstract class ModuleStmt extends Node {
 
@@ -48,5 +50,75 @@ public abstract class ModuleStmt extends Node {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleExportsStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleExportsStmt asModuleExportsStmt() {
+        throw new IllegalStateException(f("%s is not an ModuleExportsStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleOpensStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleOpensStmt asModuleOpensStmt() {
+        throw new IllegalStateException(f("%s is not an ModuleOpensStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleProvidesStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleProvidesStmt asModuleProvidesStmt() {
+        throw new IllegalStateException(f("%s is not an ModuleProvidesStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleRequiresStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleRequiresStmt asModuleRequiresStmt() {
+        throw new IllegalStateException(f("%s is not an ModuleRequiresStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleUsesStmt() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleUsesStmt asModuleUsesStmt() {
+        throw new IllegalStateException(f("%s is not an ModuleUsesStmt", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleExportsStmt(Consumer<ModuleExportsStmt> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleOpensStmt(Consumer<ModuleOpensStmt> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleProvidesStmt(Consumer<ModuleProvidesStmt> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleRequiresStmt(Consumer<ModuleRequiresStmt> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleUsesStmt(Consumer<ModuleUsesStmt> action) {
     }
 }

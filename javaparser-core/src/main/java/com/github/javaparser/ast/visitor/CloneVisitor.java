@@ -261,7 +261,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final PrimitiveType n, final Object arg) {
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        PrimitiveType r = new PrimitiveType(n.getTokenRange().orElse(null), n.getType());
+        PrimitiveType r = new PrimitiveType(n.getTokenRange().orElse(null), n.getType(), annotations);
         r.setComment(comment);
         return r;
     }
@@ -272,7 +272,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         Type componentType = cloneNode(n.getComponentType(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ArrayType r = new ArrayType(n.getTokenRange().orElse(null), componentType, annotations);
+        ArrayType r = new ArrayType(n.getTokenRange().orElse(null), componentType, n.getOrigin(), annotations);
         r.setComment(comment);
         return r;
     }

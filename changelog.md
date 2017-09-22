@@ -1,3 +1,17 @@
+Version 3.4.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/58?closed=1)
+* BREAKING: We missed a Java 9 feature which is now on board: try with resources can now refer to a resource declared outside of the statement.
+This means that the node type you get for those resources is now `Expression` instead of `VariableDeclarationExpr`.
+For Java 8 and below you can simply cast it to `VariableDeclarationExpr` again.
+See also the Javadoc for `TryStmt`.
+* You can now inspect the AST by exporting it to XML, JSON, YAML, or a Graphviz's dot diagram, thanks to Ryan Beckett!
+* `GenericVisitorWithDefaults` and `VoidVisitorWithDefaults` were added which function like empty visitors, 
+but all the visit methods call a default method by default.
+* Annotation support was cleaned up, adding some obscure locations where you can have annotations.
+* `EnumDeclaration` regained its constructor builder methods. They were accidentally lost around 3.2.2.
+* `ArrayType` now has an `origin` field which indicates in which position the array brackets were found.
+
 Version 3.3.5
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/57?closed=1)

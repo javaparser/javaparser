@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A primitive type.
@@ -114,18 +115,22 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     private Primitive type;
 
     public PrimitiveType() {
-        this(null, Primitive.INT);
+        this(null, Primitive.INT, new NodeList<>());
+    }
+
+    public PrimitiveType(final Primitive type) {
+        this(null, type, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public PrimitiveType(final Primitive type) {
-        this(null, type);
+    public PrimitiveType(final Primitive type, NodeList<AnnotationExpr> annotations) {
+        this(null, type, annotations);
     }
 
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PrimitiveType(TokenRange tokenRange, Primitive type) {
-        super(tokenRange);
+    public PrimitiveType(TokenRange tokenRange, Primitive type, NodeList<AnnotationExpr> annotations) {
+        super(tokenRange, annotations);
         setType(type);
         customInitialization();
     }
@@ -196,5 +201,22 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isPrimitiveType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public PrimitiveType asPrimitiveType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifPrimitiveType(Consumer<PrimitiveType> action) {
+        action.accept(this);
     }
 }

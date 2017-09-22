@@ -29,6 +29,7 @@ import com.github.javaparser.metamodel.NullLiteralExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A literal "null".
@@ -86,5 +87,22 @@ public final class NullLiteralExpr extends LiteralExpr {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isNullLiteralExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public NullLiteralExpr asNullLiteralExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
+        action.accept(this);
     }
 }

@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.SynchronizedStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Usage of the synchronized keyword.
@@ -148,5 +149,22 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isSynchronizedStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SynchronizedStmt asSynchronizedStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
+        action.accept(this);
     }
 }
