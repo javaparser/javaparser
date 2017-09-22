@@ -537,7 +537,7 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(NodeList n, Visitable arg) {
+    public Boolean visit(NodeList<?> n, Visitable arg) {
         return n == arg;
     }
 

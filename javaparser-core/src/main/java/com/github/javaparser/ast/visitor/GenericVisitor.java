@@ -280,7 +280,7 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(TypeExpr n, A arg);
 
-    R visit(NodeList n, A arg);
+    R visit(NodeList<?> n, A arg);
 
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(Name n, A arg);

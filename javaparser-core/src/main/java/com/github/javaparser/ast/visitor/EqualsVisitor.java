@@ -1265,7 +1265,7 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(NodeList n, Visitable arg) {
+    public Boolean visit(NodeList<?> n, Visitable arg) {
         return nodesEquals((NodeList<Node>) n, (NodeList<Node>) arg);
     }
 

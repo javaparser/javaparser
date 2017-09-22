@@ -1850,7 +1850,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(NodeList n, A arg) {
+    public R visit(NodeList<?> n, A arg) {
         for (final Object v : n) {
             R result = ((Node) v).accept(this, arg);
             if (result != null) {

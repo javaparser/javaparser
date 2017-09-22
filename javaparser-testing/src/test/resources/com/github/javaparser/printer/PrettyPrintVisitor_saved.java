@@ -1337,7 +1337,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(NodeList n, Void arg) {
+    public void visit(NodeList<?> n, Void arg) {
         for (Object node : n) {
             ((Node) node).accept(this, arg);
         }

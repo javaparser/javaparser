@@ -318,7 +318,7 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
         return n.hashCode();
     }
 
-    public Integer visit(NodeList n, Void arg) {
+    public Integer visit(NodeList<?> n, Void arg) {
         return n.hashCode();
     }
 
