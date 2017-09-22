@@ -27,6 +27,7 @@ public class CoreGenerator {
     }
 
     private void run(SourceRoot sourceRoot) throws Exception {
+        new TypeCastingGenerator(sourceRoot).generate();
         new GenericListVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorAdapterGenerator(sourceRoot).generate();
         new GenericVisitorWithDefaultsGenerator(sourceRoot).generate();

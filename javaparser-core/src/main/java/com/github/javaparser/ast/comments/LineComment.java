@@ -29,6 +29,7 @@ import com.github.javaparser.metamodel.LineCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -67,6 +68,7 @@ public final class LineComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLineComment() {
         return true;
     }
@@ -97,5 +99,16 @@ public final class LineComment extends Comment {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LineComment asLineComment() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLineComment(Consumer<LineComment> action) {
+        action.accept(this);
     }
 }

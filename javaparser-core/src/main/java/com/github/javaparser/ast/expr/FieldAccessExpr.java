@@ -37,6 +37,7 @@ import com.github.javaparser.metamodel.FieldAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Access of a field of an object.
@@ -228,5 +229,22 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isFieldAccessExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public FieldAccessExpr asFieldAccessExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
+        action.accept(this);
     }
 }

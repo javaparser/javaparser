@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaMode
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -259,5 +260,22 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isExplicitConstructorInvocationStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ExplicitConstructorInvocationStmt asExplicitConstructorInvocationStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
+        action.accept(this);
     }
 }

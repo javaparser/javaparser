@@ -44,6 +44,7 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A declaration of variables.
@@ -228,5 +229,22 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isVariableDeclarationExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public VariableDeclarationExpr asVariableDeclarationExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
+        action.accept(this);
     }
 }

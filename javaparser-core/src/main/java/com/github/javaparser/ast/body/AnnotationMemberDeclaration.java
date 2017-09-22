@@ -47,6 +47,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * The "int id();" in <code>@interface X { int id(); }</code>
@@ -235,5 +236,22 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isAnnotationMemberDeclaration() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AnnotationMemberDeclaration asAnnotationMemberDeclaration() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
+        action.accept(this);
     }
 }

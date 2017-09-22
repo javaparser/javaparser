@@ -34,6 +34,7 @@ import com.github.javaparser.metamodel.ClassExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Defines an expression that accesses the class of a type.
@@ -121,5 +122,22 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isClassExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ClassExpr asClassExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifClassExpr(Consumer<ClassExpr> action) {
+        action.accept(this);
     }
 }

@@ -17,6 +17,7 @@ import static com.github.javaparser.ast.Modifier.TRANSITIVE;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A require statement in module-info.java. <code>require a.b.C;</code>
@@ -128,5 +129,22 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleRequiresStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleRequiresStmt asModuleRequiresStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleRequiresStmt(Consumer<ModuleRequiresStmt> action) {
+        action.accept(this);
     }
 }
