@@ -37,6 +37,7 @@ public class ParserConfiguration {
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
     private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
+    private boolean lexicalPreservationEnabled = false;
     private int tabSize = 1;
     private Validator validator = new Java8Validator();
 
@@ -105,5 +106,19 @@ public class ParserConfiguration {
         assertNotNull(validator);
         this.validator = validator;
         return this;
+    }
+
+    /**
+     * Disabled by default.
+     * When this is enabled, LexicalPreservingPrinter.print can be used to reproduce
+     * the original formatting of the file.
+     */
+    public ParserConfiguration setLexicalPreservationEnabled(boolean lexicalPreservationEnabled) {
+        this.lexicalPreservationEnabled = lexicalPreservationEnabled;
+        return this;
+    }
+
+    public boolean isLexicalPreservationEnabled() {
+        return lexicalPreservationEnabled;
     }
 }
