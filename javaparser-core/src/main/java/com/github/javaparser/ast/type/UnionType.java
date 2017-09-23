@@ -41,9 +41,21 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
+ * <h1>The union type</h1>
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
- * As of Java 8 it is only used in catch clauses.
- * <br/><code>try { ... } catch(<b>IOException | NullPointerException ex</b>) { ... }</code>
+ * <h2>Java 1-7</h2>
+ * Does not exist.
+ * <h2>Java 8+</h2>
+ * As of Java 8 it is used in catch clauses.
+ * <pre><code>
+ *  try { 
+ *      ... 
+ *  } catch(<b>IOException | NullPointerException ex</b>) {
+ *      ... 
+ *  }
+ * </pre>
+ * 
+ * The types that make up the union type are its "elements"
  */
 public final class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
