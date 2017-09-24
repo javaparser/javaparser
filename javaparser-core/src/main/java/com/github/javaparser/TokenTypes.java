@@ -86,36 +86,9 @@ public class TokenTypes {
                 return JavaToken.Category.EOL;
             case EOF:
             case SPACE:
-            case TAB:
-            case FORM_FEED:
-            case NEXT_LINE:
-            case NON_BREAKING_SPACE:
-            case OGHAM_SPACE:
-            case MONGOLIAN_VOWEL_SEPARATOR:
-            case EN_QUAD:
-            case EM_QUAD:
-            case EN_SPACE:
-            case EM_SPACE:
-            case THREE_PER_EM_SPACE:
-            case FOUR_PER_EM_SPACE:
-            case SIX_PER_EM_SPACE:
-            case FIGURE_SPACE:
-            case PUNCTUATION_SPACE:
-            case THIN_SPACE:
-            case HAIR_SPACE:
-            case ZERO_WIDTH_SPACE:
-            case ZERO_WIDTH_NON_JOINER:
-            case ZERO_WIDTH_JOINER:
-            case LINE_SEPARATOR:
-            case PARAGRAPH_SEPARATOR:
-            case NARROW_NO_BREAK_SPACE:
-            case MEDIUM_MATHEMATICAL_SPACE:
-            case WORD_JOINER:
-            case IDEOGRAPHIC_SPACE:
-            case ZERO_WIDTH_NO_BREAK_SPACE:
                 return JavaToken.Category.WHITESPACE_NO_EOL;
             case SINGLE_LINE_COMMENT:
-            case JAVA_DOC_COMMENT:
+            case JAVADOC_COMMENT:
             case MULTI_LINE_COMMENT:
                 return JavaToken.Category.COMMENT;
             case ABSTRACT:

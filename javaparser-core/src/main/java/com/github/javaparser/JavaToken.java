@@ -178,8 +178,14 @@ public class JavaToken {
 
     @Override
     public String toString() {
-        return f("\"%s\" <%s> %s",
-                getText(),
+        String text = getText()
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\r\n", "\\r\\n")
+                .replace("\t", "\\t")
+                ;
+        return f("\"%s\"   <%s>   %s",
+                text,
                 getKind(),
                 getRange().map(Range::toString).orElse("(?)-(?)"));
     }
