@@ -204,17 +204,6 @@ public class JavaToken {
         return this == INVALID;
     }
 
-    /**
-     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
-     */
-    public JavaToken orIfInvalid(JavaToken anotherToken) {
-        assertNotNull(anotherToken);
-        if (valid() || anotherToken.invalid()) {
-            return this;
-        }
-        return anotherToken;
-    }
-
     public enum Category {
         WHITESPACE_NO_EOL, EOL, COMMENT, IDENTIFIER, KEYWORD, LITERAL, SEPARATOR, OPERATOR;
 

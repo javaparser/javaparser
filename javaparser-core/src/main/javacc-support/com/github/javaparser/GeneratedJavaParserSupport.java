@@ -111,13 +111,15 @@ class GeneratedJavaParserSupport {
      * when we "enlarge" the child we should enlarge also the parent.
      */
     private static void propagateRangeGrowthOnRight(GeneratedJavaParser generatedJavaParser, Node node, Node endNode) {
-        if (node.getParentNode().isPresent()) {
-            boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(node.getParentNode().get().getTokenRange().get().getEnd());
-            if (isChildOnTheRightBorderOfParent) {
-                propagateRangeGrowthOnRight(generatedJavaParser, node.getParentNode().get(), endNode);
-            }
+        if (generatedJavaParser.storeTokens) {
+            node.getParentNode().ifPresent(nodeParent -> {
+                boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(nodeParent.getTokenRange().get().getEnd());
+                if (isChildOnTheRightBorderOfParent) {
+                    propagateRangeGrowthOnRight(generatedJavaParser, nodeParent, endNode);
+                }
+            });
+            node.setTokenRange(range(generatedJavaParser, node, endNode));
         }
-        node.setTokenRange(range(generatedJavaParser, node, endNode));
     }
 
     /**
@@ -127,11 +129,11 @@ class GeneratedJavaParserSupport {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
             ret = new LambdaExpr(range(generatedJavaParser, ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
-            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().get(), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
+            NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
             ret = new LambdaExpr(range(generatedJavaParser, ret, lambdaBody), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
