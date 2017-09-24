@@ -39,6 +39,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -134,6 +135,9 @@ public final class JavaParser {
             if (configuration.isAttributeComments()) {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
+            }
+            if(configuration.isLexicalPreservationEnabled()){
+                LexicalPreservingPrinter.setup(resultNode);
             }
 
             configuration.getValidator().accept(resultNode, new ProblemReporter(parser.problems));

@@ -86,11 +86,21 @@ public class LexicalPreservingPrinter {
         return new Pair<>(parseResult, lexicalPreservingPrinter);
     }
 
-    public static void setup(Node node) {
+    /**
+     * Prepares the node so it can be used in the print methods.
+     * The correct order is:
+     * <ol>
+     *     <li>Parse some code</li>
+     *     <li>Call this setup method on the result</li>
+     *     <li>Make changes to the AST as desired</li>
+     *     <li>Use one of the print methods on this class to print out the original source code with your changes added</li>
+     * </ol>
+     * @return the node passed as a parameter for your convenience.
+     */
+    public static <N extends Node> N setup(N node) {
         assertNotNull(node);
 
         node.getTokenRange().ifPresent(r -> {
-            // Store initial text
             storeInitialText(node);
 
             // Setup observer
@@ -98,6 +108,7 @@ public class LexicalPreservingPrinter {
 
             node.registerForSubtree(observer);
         });
+        return node;
     }
     
     //
