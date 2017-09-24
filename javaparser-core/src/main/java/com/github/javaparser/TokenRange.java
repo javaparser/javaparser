@@ -44,20 +44,11 @@ public class TokenRange implements Iterable<JavaToken> {
 
     @Override
     public String toString() {
-        JavaToken t = begin;
         StringBuilder result = new StringBuilder();
-        while (true) {
+        for(JavaToken t: this) {
             result.append(t.getText());
-            if (t == end) {
-                return result.toString();
-            }
-            Optional<JavaToken> next = t.getNextToken();
-            if (next.isPresent()) {
-                t = next.get();
-            } else {
-                return result.toString();
-            }
         }
+        return result.toString();
     }
 
     @Override
