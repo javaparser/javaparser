@@ -20,12 +20,13 @@ public class CoreGenerator {
         }
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root)
-                .setPrinter(LexicalPreservingPrinter::print)
+//                .setPrinter(LexicalPreservingPrinter::print)
                 .setJavaParser(new JavaParser(
                         new ParserConfiguration()
-                                .setStoreTokens(false)
-                                .setAttributeComments(false)
-                                .setLexicalPreservationEnabled(true)));
+//                                .setStoreTokens(false)
+//                                .setAttributeComments(false)
+//                                .setLexicalPreservationEnabled(true)
+                ));
 
         new CoreGenerator().run(sourceRoot);
 
