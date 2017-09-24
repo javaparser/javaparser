@@ -267,6 +267,7 @@ TOKEN_MGR_DECLS :
     void reset() {
         tokens = new ArrayList<JavaToken>();
         commentsCollection = new CommentsCollection();
+        homeToken = null;
     }
 
     List<JavaToken> getTokens() {

@@ -209,7 +209,7 @@ public class LexicalPreservingPrinter {
             }
         }.visitLeavesFirst(root);
 
-        // We go over tokens and find to which nodes belong. Note that we start from the most specific nodes
+        // We go over tokens and find to which nodes they belong. Note that we start from the most specific nodes
         // and we move up to more general nodes
         for (JavaToken token : root.getTokenRange().get()) {
             Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
