@@ -1,3 +1,17 @@
+Version 3.4.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/59?closed=1)
+* Two visitors were added: `NoCommentEqualsVisitor` and `NoCommentHashCodeVisitor` - 
+as the name implies you can use these to compare nodes without considering comments.
+Thanks Ryan Beckett!
+* `isSomeType()` methods have been added for many types that help avoid `instanceof`.
+* `asSomeType()` methods have been added for many types that help avoid casting to that type.
+* `ifSomeType()` methods have been added for many types, giving a nice functional way of doing if-is-type-then-cast-to-type-then-use.
+* The `LexicalPreservingPrinter` had its API changed a little: setup and printing are now separate things,
+so you don't have to drag an instance of `LexicalPreservingPrinter` through your code anymore.  
+* `traverseScope` was added to all nodes with a scope, so you can travel through the scope without tripping over (non-)optionality.
+
+
 Version 3.4.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/58?closed=1)
