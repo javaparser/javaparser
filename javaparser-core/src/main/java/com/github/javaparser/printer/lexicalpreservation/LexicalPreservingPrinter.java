@@ -50,7 +50,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.JAVA_DOC_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
@@ -148,7 +148,7 @@ public class LexicalPreservingPrinter {
                     } else if (newValue == null) {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment javadocComment = (JavadocComment)oldValue;
-                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT)
+                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)
                             && ((TokenTextElement)e).getText().equals("/**"+javadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
                             if (matchingTokens.size() != 1) {
                                 throw new IllegalStateException();
@@ -164,13 +164,13 @@ public class LexicalPreservingPrinter {
                     } else {
                         if (oldValue instanceof JavadocComment) {
                             JavadocComment oldJavadocComment = (JavadocComment)oldValue;
-                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT)
+                            List<TokenTextElement> matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)
                                     && ((TokenTextElement)e).getText().equals("/**"+oldJavadocComment.getContent()+"*/")).map(e -> (TokenTextElement)e).collect(Collectors.toList());
                             if (matchingTokens.size() != 1) {
                                 throw new IllegalStateException();
                             }
                             JavadocComment newJavadocComment = (JavadocComment)newValue;
-                            nodeText.replace(matchingTokens.get(0), new TokenTextElement(JAVA_DOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
+                            nodeText.replace(matchingTokens.get(0), new TokenTextElement(JAVADOC_COMMENT, "/**" + newJavadocComment.getContent() + "*/"));
                         } else {
                             throw new UnsupportedOperationException();
                         }
@@ -220,7 +220,7 @@ public class LexicalPreservingPrinter {
             }
         }.visitLeavesFirst(root);
 
-        // We go over tokens and find to which nodes belong. Note that we start from the most specific nodes
+        // We go over tokens and find to which nodes they belong. Note that we start from the most specific nodes
         // and we move up to more general nodes
         for (JavaToken token : root.getTokenRange().get()) {
             Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
@@ -330,28 +330,28 @@ public class LexicalPreservingPrinter {
             PrimitiveType primitiveType = (PrimitiveType)node;
             switch (primitiveType.getType()) {
                 case BOOLEAN:
-                    nodeText.addToken(GeneratedJavaParserConstants.BOOLEAN, node.toString());
+                    nodeText.addToken(BOOLEAN, node.toString());
                     break;
                 case CHAR:
-                    nodeText.addToken(GeneratedJavaParserConstants.CHAR, node.toString());
+                    nodeText.addToken(CHAR, node.toString());
                     break;
                 case BYTE:
-                    nodeText.addToken(GeneratedJavaParserConstants.BYTE, node.toString());
+                    nodeText.addToken(BYTE, node.toString());
                     break;
                 case SHORT:
-                    nodeText.addToken(GeneratedJavaParserConstants.SHORT, node.toString());
+                    nodeText.addToken(SHORT, node.toString());
                     break;
                 case INT:
-                    nodeText.addToken(GeneratedJavaParserConstants.INT, node.toString());
+                    nodeText.addToken(INT, node.toString());
                     break;
                 case LONG:
-                    nodeText.addToken(GeneratedJavaParserConstants.LONG, node.toString());
+                    nodeText.addToken(LONG, node.toString());
                     break;
                 case FLOAT:
-                    nodeText.addToken(GeneratedJavaParserConstants.FLOAT, node.toString());
+                    nodeText.addToken(FLOAT, node.toString());
                     break;
                 case DOUBLE:
-                    nodeText.addToken(GeneratedJavaParserConstants.DOUBLE, node.toString());
+                    nodeText.addToken(DOUBLE, node.toString());
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -359,7 +359,7 @@ public class LexicalPreservingPrinter {
             return nodeText;
         }
         if (node instanceof JavadocComment) {
-            nodeText.addToken(GeneratedJavaParserConstants.JAVA_DOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
+            nodeText.addToken(JAVADOC_COMMENT, "/**"+((JavadocComment)node).getContent()+"*/");
             return nodeText;
         }
 
@@ -402,8 +402,8 @@ public class LexicalPreservingPrinter {
             NodeWithVariables<?> nodeWithVariables = (NodeWithVariables)variableDeclarator.getParentNode().get();
             int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - nodeWithVariables.getMaximumCommonType().getArrayLevel();
             for (int i=0; i<extraArrayLevels; i++) {
-                nodeText.addElement(new TokenTextElement(GeneratedJavaParserConstants.LBRACKET));
-                nodeText.addElement(new TokenTextElement(GeneratedJavaParserConstants.RBRACKET));
+                nodeText.addElement(new TokenTextElement(LBRACKET));
+                nodeText.addElement(new TokenTextElement(RBRACKET));
             }
         }
         return nodeText;
@@ -425,7 +425,7 @@ public class LexicalPreservingPrinter {
         Iterator<TokenTextElement> it = tokensPreceeding(node);
         while (it.hasNext()) {
             TokenTextElement tte = it.next();
-            if (tte.getTokenKind() == GeneratedJavaParserConstants.SINGLE_LINE_COMMENT
+            if (tte.getTokenKind() == SINGLE_LINE_COMMENT
                     || tte.isNewline()) {
                 break;
             } else {

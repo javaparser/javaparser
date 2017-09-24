@@ -178,8 +178,14 @@ public class JavaToken {
 
     @Override
     public String toString() {
-        return f("\"%s\" <%s> %s",
-                getText(),
+        String text = getText()
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\r\n", "\\r\\n")
+                .replace("\t", "\\t")
+                ;
+        return f("\"%s\"   <%s>   %s",
+                text,
                 getKind(),
                 getRange().map(Range::toString).orElse("(?)-(?)"));
     }
@@ -196,17 +202,6 @@ public class JavaToken {
      */
     public boolean invalid() {
         return this == INVALID;
-    }
-
-    /**
-     * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
-     */
-    public JavaToken orIfInvalid(JavaToken anotherToken) {
-        assertNotNull(anotherToken);
-        if (valid() || anotherToken.invalid()) {
-            return this;
-        }
-        return anotherToken;
     }
 
     public enum Category {

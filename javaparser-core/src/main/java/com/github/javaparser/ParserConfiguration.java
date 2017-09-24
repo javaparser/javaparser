@@ -74,6 +74,9 @@ public class ParserConfiguration {
 
     public ParserConfiguration setStoreTokens(boolean storeTokens) {
         this.storeTokens = storeTokens;
+        if (!storeTokens) {
+            setAttributeComments(false);
+        }
         return this;
     }
 
@@ -100,7 +103,7 @@ public class ParserConfiguration {
 
     /**
      * The validator to run directly after parsing.
-     * By default it is {@link Java1_0Validator}
+     * By default it is {@link Java8Validator}
      */
     public ParserConfiguration setValidator(Validator validator) {
         assertNotNull(validator);
