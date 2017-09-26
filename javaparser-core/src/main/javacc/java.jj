@@ -2890,7 +2890,7 @@ BlockStmt BlockParseStart():
 
 Statement BlockStatementParseStart():
 { Statement ret; }
-{ ret = BlockStatement() <EOF> { return ret; } }
+{ (LOOKAHEAD(3) ret = BlockStatement()|ret = ExplicitConstructorInvocation()) <EOF> { return ret; } }
 
 ImportDeclaration ImportDeclarationParseStart():
 { ImportDeclaration ret; }
