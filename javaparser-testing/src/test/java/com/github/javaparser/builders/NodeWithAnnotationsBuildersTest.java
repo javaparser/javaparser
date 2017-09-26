@@ -33,23 +33,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class NodeWithAnnotationsBuildersTest {
-    private CompilationUnit cu;
-    private ClassOrInterfaceDeclaration testClass;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-        testClass = cu.addClass("testClass");
-    }
+    private CompilationUnit cu = new CompilationUnit();
+    private ClassOrInterfaceDeclaration testClass = cu.addClass("testClass"); ;
 
     @interface hey {
 
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-        testClass = null;
     }
 
     @Test
@@ -71,7 +59,7 @@ public class NodeWithAnnotationsBuildersTest {
     public void testAddSingleMemberAnnotation() {
         testClass.addSingleMemberAnnotation("test", "value");
         assertEquals(1, testClass.getAnnotations().size());
-        assertEquals("value", ((SingleMemberAnnotationExpr) testClass.getAnnotation(0)).getMemberValue().toString());
+        assertEquals("value", testClass.getAnnotation(0).asSingleMemberAnnotationExpr().getMemberValue().toString());
     }
 
     @Test

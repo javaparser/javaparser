@@ -40,17 +40,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 
 public class CompilationUnitBuildersTest {
-    CompilationUnit cu;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-    }
+    private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     public void testAddImport() {

@@ -42,13 +42,13 @@ import static org.junit.Assert.assertEquals;
 public class ArrayTypeTest {
     @Test
     public void getFieldDeclarationWithArrays() {
-        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseBodyDeclaration("@C int @A[] @B[] a @X[] @Y[];");
+        FieldDeclaration fieldDeclaration = parseBodyDeclaration("@C int @A[] @B[] a @X[] @Y[];").asFieldDeclaration();
 
-        ArrayType arrayType1 = (ArrayType) fieldDeclaration.getVariable(0).getType();
-        ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
-        ArrayType arrayType3 = (ArrayType) arrayType2.getComponentType();
-        ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
-        PrimitiveType elementType = (PrimitiveType) arrayType4.getComponentType();
+        ArrayType arrayType1 = fieldDeclaration.getVariable(0).getType().asArrayType();
+        ArrayType arrayType2 = arrayType1.getComponentType().asArrayType();
+        ArrayType arrayType3 = arrayType2.getComponentType().asArrayType();
+        ArrayType arrayType4 = arrayType3.getComponentType().asArrayType();
+        PrimitiveType elementType = arrayType4.getComponentType().asPrimitiveType();
 
         assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
         assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
@@ -63,14 +63,14 @@ public class ArrayTypeTest {
 
     @Test
     public void getVariableDeclarationWithArrays() {
-        ExpressionStmt variableDeclarationStatement = (ExpressionStmt) parseStatement("@C int @A[] @B[] a @X[] @Y[];");
-        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
+        ExpressionStmt variableDeclarationStatement = parseStatement("@C int @A[] @B[] a @X[] @Y[];").asExpressionStmt();
+        VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
-        ArrayType arrayType1 = (ArrayType) variableDeclarationExpr.getVariable(0).getType();
-        ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
-        ArrayType arrayType3 = (ArrayType) arrayType2.getComponentType();
-        ArrayType arrayType4 = (ArrayType) arrayType3.getComponentType();
-        PrimitiveType elementType = (PrimitiveType) arrayType4.getComponentType();
+        ArrayType arrayType1 = variableDeclarationExpr.getVariable(0).getType().asArrayType();
+        ArrayType arrayType2 = arrayType1.getComponentType().asArrayType();
+        ArrayType arrayType3 = arrayType2.getComponentType().asArrayType();
+        ArrayType arrayType4 = arrayType3.getComponentType().asArrayType();
+        PrimitiveType elementType = arrayType4.getComponentType().asPrimitiveType();
 
         assertThat(arrayType1.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
         assertThat(arrayType2.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("B")));
@@ -85,10 +85,10 @@ public class ArrayTypeTest {
 
     @Test
     public void getMethodDeclarationWithArrays() {
-        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("@C int @A[] a() @B[] {}");
+        MethodDeclaration methodDeclaration = parseBodyDeclaration("@C int @A[] a() @B[] {}").asMethodDeclaration();
 
-        ArrayType arrayType1 = (ArrayType) methodDeclaration.getType();
-        ArrayType arrayType2 = (ArrayType) arrayType1.getComponentType();
+        ArrayType arrayType1 = methodDeclaration.getType().asArrayType();
+        ArrayType arrayType2 = arrayType1.getComponentType().asArrayType();
         Type elementType = arrayType2.getComponentType();
         assertThat(elementType).isInstanceOf(PrimitiveType.class);
 
@@ -101,14 +101,14 @@ public class ArrayTypeTest {
 
     @Test
     public void getParameterWithArrays() {
-        MethodDeclaration methodDeclaration = (MethodDeclaration) parseBodyDeclaration("void a(@C int @A[] a @B[]) {}");
+        MethodDeclaration methodDeclaration = parseBodyDeclaration("void a(@C int @A[] a @B[]) {}").asMethodDeclaration();
 
         Parameter parameter = methodDeclaration.getParameter(0);
 
-        ArrayType outerArrayType = (ArrayType) parameter.getType();
+        ArrayType outerArrayType = parameter.getType().asArrayType();
 
-        ArrayType innerArrayType = (ArrayType) outerArrayType.getComponentType();
-        PrimitiveType elementType = (PrimitiveType) innerArrayType.getComponentType();
+        ArrayType innerArrayType = outerArrayType.getComponentType().asArrayType();
+        PrimitiveType elementType = innerArrayType.getComponentType().asPrimitiveType();
 
         assertThat(elementType).isInstanceOf(PrimitiveType.class);
         assertThat(outerArrayType.getAnnotations()).containsExactly(new MarkerAnnotationExpr(parseName("A")));
@@ -120,8 +120,8 @@ public class ArrayTypeTest {
 
     @Test
     public void setVariableDeclarationWithArrays() {
-        ExpressionStmt variableDeclarationStatement = (ExpressionStmt) parseStatement("@C int @A[] @B[] a @X[] @Y[];");
-        VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) variableDeclarationStatement.getExpression();
+        ExpressionStmt variableDeclarationStatement = parseStatement("@C int @A[] @B[] a @X[] @Y[];").asExpressionStmt();
+        VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
         variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.intType())));
         assertEquals("@C int[][] a;", variableDeclarationStatement.toString());
@@ -129,7 +129,7 @@ public class ArrayTypeTest {
 
     @Test
     public void setFieldDeclarationWithArrays() {
-        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseBodyDeclaration("int[][] a[][];");
+        FieldDeclaration fieldDeclaration = parseBodyDeclaration("int[][] a[][];").asFieldDeclaration();
         fieldDeclaration.getVariable(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob[][] a;", fieldDeclaration.toString());
@@ -137,7 +137,7 @@ public class ArrayTypeTest {
 
     @Test
     public void setMethodDeclarationWithArrays() {
-        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("int[][] a()[][] {}");
+        MethodDeclaration method = parseBodyDeclaration("int[][] a()[][] {}").asMethodDeclaration();
         method.setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("Blob[][] a() {" + EOL + "}", method.toString());
@@ -145,11 +145,11 @@ public class ArrayTypeTest {
 
     @Test
     public void fieldDeclarationWithArraysHasCorrectOrigins() {
-        FieldDeclaration fieldDeclaration = (FieldDeclaration) parseBodyDeclaration("int[] a[];");
+        FieldDeclaration fieldDeclaration = parseBodyDeclaration("int[] a[];").asFieldDeclaration();
 
         Type outerType = fieldDeclaration.getVariables().get(0).getType();
-        assertEquals(ArrayType.Origin.TYPE, ((ArrayType)outerType).getOrigin());
-        assertEquals(ArrayType.Origin.NAME, ((ArrayType) ((ArrayType) outerType).getComponentType()).getOrigin());
+        assertEquals(ArrayType.Origin.TYPE, outerType.asArrayType().getOrigin());
+        assertEquals(ArrayType.Origin.NAME, outerType.asArrayType().getComponentType().asArrayType().getOrigin());
     }
 
     @Test
@@ -157,13 +157,13 @@ public class ArrayTypeTest {
         MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("int[] a()[] {}");
 
         Type outerType = method.getType();
-        assertEquals(ArrayType.Origin.TYPE, ((ArrayType)outerType).getOrigin());
-        assertEquals(ArrayType.Origin.NAME, ((ArrayType) ((ArrayType) outerType).getComponentType()).getOrigin());
+        assertEquals(ArrayType.Origin.TYPE, outerType.asArrayType().getOrigin());
+        assertEquals(ArrayType.Origin.NAME, outerType.asArrayType().getComponentType().asArrayType().getOrigin());
     }
 
     @Test
     public void setParameterWithArrays() {
-        MethodDeclaration method = (MethodDeclaration) parseBodyDeclaration("void a(int[][] a[][]) {}");
+        MethodDeclaration method = parseBodyDeclaration("void a(int[][] a[][]) {}").asMethodDeclaration();
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
         assertEquals("void a(Blob[][] a) {" + EOL + "}", method.toString());
@@ -172,7 +172,7 @@ public class ArrayTypeTest {
     @Test
     public void getArrayCreationType() {
         ArrayCreationExpr expr = parseExpression("new int[]");
-        ArrayType outerType = (ArrayType) expr.createdType();
+        ArrayType outerType = expr.createdType().asArrayType();
         Type innerType = outerType.getComponentType();
         assertThat(innerType).isEqualTo(expr.getElementType());
     }

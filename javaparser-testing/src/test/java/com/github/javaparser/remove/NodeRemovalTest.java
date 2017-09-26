@@ -34,17 +34,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class NodeRemovalTest {
-    CompilationUnit cu;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-    }
+    private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     public void testRemoveClassFromCompilationUnit() {

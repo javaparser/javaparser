@@ -37,11 +37,6 @@ public abstract class AbstractLexicalPreservingTest {
     protected CompilationUnit cu;
     protected Expression expression;
 
-    @Before
-    public void setup() {
-        cu = null;
-    }
-
     protected void considerCode(String code) {
         cu = LexicalPreservingPrinter.setup(JavaParser.parse(code));
     }

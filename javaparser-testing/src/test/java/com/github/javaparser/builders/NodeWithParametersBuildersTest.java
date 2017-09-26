@@ -35,17 +35,7 @@ import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class NodeWithParametersBuildersTest {
-    CompilationUnit cu;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-    }
+    private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     public void testAddParameter() {

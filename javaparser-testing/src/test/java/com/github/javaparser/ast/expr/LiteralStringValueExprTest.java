@@ -24,6 +24,7 @@ import com.github.javaparser.JavaParser;
 import org.assertj.core.data.Percentage;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("OctalInteger")
@@ -73,13 +74,13 @@ public class LiteralStringValueExprTest {
 
     @Test
     public void lowerAndUpperBoundIntegersAreConverted() {
-        IntegerLiteralExpr dec = JavaParser.parseExpression("2147483647");
-        IntegerLiteralExpr posOct = JavaParser.parseExpression("0177_7777_7777");
-        IntegerLiteralExpr negOct = JavaParser.parseExpression("0377_7777_7777");
-        IntegerLiteralExpr posHex = JavaParser.parseExpression("0x7fff_ffff");
-        IntegerLiteralExpr negHex = JavaParser.parseExpression("0xffff_ffff");
-        IntegerLiteralExpr posBin = JavaParser.parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111");
-        IntegerLiteralExpr negBin = JavaParser.parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000");
+        IntegerLiteralExpr dec = parseExpression("2147483647");
+        IntegerLiteralExpr posOct = parseExpression("0177_7777_7777");
+        IntegerLiteralExpr negOct = parseExpression("0377_7777_7777");
+        IntegerLiteralExpr posHex = parseExpression("0x7fff_ffff");
+        IntegerLiteralExpr negHex = parseExpression("0xffff_ffff");
+        IntegerLiteralExpr posBin = parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111");
+        IntegerLiteralExpr negBin = parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000");
 
         assertThat(dec.asInt()).isEqualTo(2147483647);
         assertThat(posOct.asInt()).isEqualTo(2147483647); // 0177_7777_7777
@@ -92,13 +93,13 @@ public class LiteralStringValueExprTest {
 
     @Test
     public void lowerAndUpperBoundLongsAreConverted() {
-        LongLiteralExpr dec = JavaParser.parseExpression("9223372036854775807L");
-        LongLiteralExpr posOct = JavaParser.parseExpression("07_7777_7777_7777_7777_7777L");
-        LongLiteralExpr negOct = JavaParser.parseExpression("010_0000_0000_0000_0000_0000L");
-        LongLiteralExpr posHex = JavaParser.parseExpression("0x7fff_ffff_ffff_ffffL");
-        LongLiteralExpr negHex = JavaParser.parseExpression("0xffff_ffff_ffff_ffffL");
-        LongLiteralExpr posBin = JavaParser.parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L");
-        LongLiteralExpr negBin = JavaParser.parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L");
+        LongLiteralExpr dec = parseExpression("9223372036854775807L");
+        LongLiteralExpr posOct = parseExpression("07_7777_7777_7777_7777_7777L");
+        LongLiteralExpr negOct = parseExpression("010_0000_0000_0000_0000_0000L");
+        LongLiteralExpr posHex = parseExpression("0x7fff_ffff_ffff_ffffL");
+        LongLiteralExpr negHex = parseExpression("0xffff_ffff_ffff_ffffL");
+        LongLiteralExpr posBin = parseExpression("0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L");
+        LongLiteralExpr negBin = parseExpression("0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L");
 
         assertThat(dec.asLong()).isEqualTo(9223372036854775807L);
         assertThat(posOct.asLong()).isEqualTo(9223372036854775807L); // 07_7777_7777_7777_7777_7777L
@@ -111,16 +112,16 @@ public class LiteralStringValueExprTest {
 
     @Test
     public void charLiteralsAreConverted() {
-        CharLiteralExpr a = JavaParser.parseExpression("'a'");
-        CharLiteralExpr percent = JavaParser.parseExpression("'%'");
-        CharLiteralExpr tab = JavaParser.parseExpression("'\\t'");
-        CharLiteralExpr newLine = JavaParser.parseExpression("'\\n'");
-        CharLiteralExpr slash = JavaParser.parseExpression("'\\\\'");
-        CharLiteralExpr quote = JavaParser.parseExpression("'\\''");
-        CharLiteralExpr omega = JavaParser.parseExpression("'\\u03a9'");
-        CharLiteralExpr unicode = JavaParser.parseExpression("'\\uFFFF'");
-        CharLiteralExpr ascii = JavaParser.parseExpression("'\\177'");
-        CharLiteralExpr trademark = JavaParser.parseExpression("'™'");
+        CharLiteralExpr a = parseExpression("'a'");
+        CharLiteralExpr percent = parseExpression("'%'");
+        CharLiteralExpr tab = parseExpression("'\\t'");
+        CharLiteralExpr newLine = parseExpression("'\\n'");
+        CharLiteralExpr slash = parseExpression("'\\\\'");
+        CharLiteralExpr quote = parseExpression("'\\''");
+        CharLiteralExpr omega = parseExpression("'\\u03a9'");
+        CharLiteralExpr unicode = parseExpression("'\\uFFFF'");
+        CharLiteralExpr ascii = parseExpression("'\\177'");
+        CharLiteralExpr trademark = parseExpression("'™'");
 
         assertThat(a.asChar()).isEqualTo('a');
         assertThat(percent.asChar()).isEqualTo('%');
@@ -136,12 +137,12 @@ public class LiteralStringValueExprTest {
 
     @Test
     public void lowerAndUpperBoundDoublesAreConverted() {
-        DoubleLiteralExpr posFloat = JavaParser.parseExpression("3.4028235e38f");
-        DoubleLiteralExpr negFloat = JavaParser.parseExpression("1.40e-45f");
-        DoubleLiteralExpr posDouble = JavaParser.parseExpression("1.7976931348623157e308");
-        DoubleLiteralExpr negDouble = JavaParser.parseExpression("4.9e-324");
-        DoubleLiteralExpr posHexFloat = JavaParser.parseExpression("0x1.fffffffffffffp1023");
-        DoubleLiteralExpr negHexFloat = JavaParser.parseExpression("0x0.0000000000001P-1022");
+        DoubleLiteralExpr posFloat = parseExpression("3.4028235e38f");
+        DoubleLiteralExpr negFloat = parseExpression("1.40e-45f");
+        DoubleLiteralExpr posDouble = parseExpression("1.7976931348623157e308");
+        DoubleLiteralExpr negDouble = parseExpression("4.9e-324");
+        DoubleLiteralExpr posHexFloat = parseExpression("0x1.fffffffffffffp1023");
+        DoubleLiteralExpr negHexFloat = parseExpression("0x0.0000000000001P-1022");
 
         assertThat(posFloat.asDouble()).isCloseTo(3.4028235e38f, Percentage.withPercentage(1));
         assertThat(negFloat.asDouble()).isCloseTo(1.40e-45f, Percentage.withPercentage(1));
