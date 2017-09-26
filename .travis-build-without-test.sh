@@ -13,4 +13,4 @@ fi
 
 ## Compile
 echo "running \"mvn package\" for stubparser"
-mvn package -Dmaven.test.skip=true
+mvn -q package -Dmaven.test.skip=true
