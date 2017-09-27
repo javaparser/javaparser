@@ -301,10 +301,5 @@ public abstract class Type<RT> extends Node implements Resolvable<RT> {
         return symbolResolver;
     }
 
-    private static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
-        @Override
-        public int hashCode() {
-            return super.hashCode();
-        }
-    };
+    private static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() { };
 }
