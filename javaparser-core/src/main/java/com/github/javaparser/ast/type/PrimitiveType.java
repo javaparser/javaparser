@@ -51,7 +51,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class PrimitiveType extends Type<ResolvedPrimitiveType> implements NodeWithAnnotations<PrimitiveType> {
+public final class PrimitiveType extends Type implements NodeWithAnnotations<PrimitiveType> {
 
     public static PrimitiveType booleanType() {
         return new PrimitiveType(Primitive.BOOLEAN);

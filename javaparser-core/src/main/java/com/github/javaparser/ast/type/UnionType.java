@@ -60,7 +60,7 @@ import java.util.function.Consumer;
  * 
  * The types that make up the union type are its "elements"
  */
-public final class UnionType extends Type<ResolvedUnionType> implements NodeWithAnnotations<UnionType> {
+public final class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @NonEmptyProperty
     private NodeList<ReferenceType> elements;

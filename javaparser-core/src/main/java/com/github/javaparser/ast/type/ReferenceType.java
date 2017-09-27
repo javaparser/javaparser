@@ -38,7 +38,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class ReferenceType<RT> extends Type<RT> {
+public abstract class ReferenceType extends Type {
 
     public ReferenceType() {
         this(null, new NodeList<>());

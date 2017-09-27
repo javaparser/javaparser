@@ -54,7 +54,7 @@ import java.util.function.Consumer;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType<ResolvedTypeParameterDeclaration>
+public final class TypeParameter extends ReferenceType
         implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;

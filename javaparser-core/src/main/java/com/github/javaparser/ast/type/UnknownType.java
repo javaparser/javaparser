@@ -47,7 +47,7 @@ import java.util.function.Consumer;
  *
  * @author Didier Villevalois
  */
-public final class UnknownType extends Type<ResolvedType> {
+public final class UnknownType extends Type {
 
     @AllFieldsConstructor
     public UnknownType() {

@@ -34,6 +34,7 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -43,7 +44,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type<RT> extends Node implements Resolvable<RT> {
+public abstract class Type extends Node implements Resolvable<Object> {
 
     private NodeList<AnnotationExpr> annotations;
 

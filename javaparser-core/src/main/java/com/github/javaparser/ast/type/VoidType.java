@@ -46,7 +46,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class VoidType extends Type<ResolvedVoidType> implements NodeWithAnnotations<VoidType> {
+public final class VoidType extends Type implements NodeWithAnnotations<VoidType> {
 
     @AllFieldsConstructor
     public VoidType() {

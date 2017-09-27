@@ -58,7 +58,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class ClassOrInterfaceType extends ReferenceType<ResolvedReferenceType> implements NodeWithSimpleName<ClassOrInterfaceType>,
+public final class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpleName<ClassOrInterfaceType>,
         NodeWithAnnotations<ClassOrInterfaceType>, NodeWithTypeArguments<ClassOrInterfaceType> {
 
     private ClassOrInterfaceType scope;

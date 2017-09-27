@@ -49,7 +49,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class WildcardType extends Type<ResolvedWildcard> implements NodeWithAnnotations<WildcardType> {
+public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
 
     private ReferenceType extendedType;
 
