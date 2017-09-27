@@ -53,7 +53,7 @@ public class TypeTest {
         assertTrue(type.isArrayType());
         ArrayType arrayType = type.asArrayType();
         final ArrayType[] s = new ArrayType[1];
-        type.ifArrayType(t -> s[0] = t);
+        type.ifArrayType(t -> s[0] = (ArrayType)t);
         assertNotNull(s[0]);
     }
 }
