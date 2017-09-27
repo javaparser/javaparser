@@ -27,7 +27,7 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public interface ResolvedInterfaceDeclaration extends ResolvedReferenceTypeDeclaration,
-        ResolvedTypeParametrizable, HasAccessLevel {
+        ResolvedTypeParametrizable, HasAccessSpecifier {
 
     @Override
     default boolean isInterface() {

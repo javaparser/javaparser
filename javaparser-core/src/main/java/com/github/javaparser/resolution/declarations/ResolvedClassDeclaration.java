@@ -26,7 +26,7 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration,
-        ResolvedTypeParametrizable, HasAccessLevel {
+        ResolvedTypeParametrizable, HasAccessSpecifier {
 
     /**
      * This method should always return true.

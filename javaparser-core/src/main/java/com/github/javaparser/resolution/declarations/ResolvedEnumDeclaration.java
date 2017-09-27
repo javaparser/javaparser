@@ -22,7 +22,7 @@ package com.github.javaparser.resolution.declarations;
  * @author Federico Tomassetti
  */
 public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration,
-        HasAccessLevel {
+        HasAccessSpecifier {
 
     @Override
     default boolean isEnum() {

@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
-        ResolvedTypeParametrizable, HasAccessLevel {
+        ResolvedTypeParametrizable, HasAccessSpecifier {
     /**
      * The package name of the declaring type.
      */

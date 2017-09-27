@@ -16,12 +16,18 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
+
 /**
+ * Anything which can have an AccessSpecifier.
+ *
  * @author Federico Tomassetti
  */
-public enum AccessLevel {
-    PUBLIC,
-    PRIVATE,
-    PROTECTED,
-    PACKAGE_PROTECTED
+public interface HasAccessSpecifier {
+
+    /**
+     * The access specifier of this element.
+     */
+    AccessSpecifier accessSpecifier();
+
 }
