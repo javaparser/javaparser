@@ -33,6 +33,9 @@ import com.github.javaparser.metamodel.UnknownTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+
 import java.util.function.Consumer;
 
 /**
@@ -44,7 +47,7 @@ import java.util.function.Consumer;
  *
  * @author Didier Villevalois
  */
-public final class UnknownType extends Type {
+public final class UnknownType extends Type<ResolvedType> {
 
     @AllFieldsConstructor
     public UnknownType() {
@@ -124,5 +127,10 @@ public final class UnknownType extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnknownType(Consumer<UnknownType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedType resolve() {
+        throw new UnsupportedOperationException();
     }
 }

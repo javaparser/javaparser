@@ -36,6 +36,9 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
+
 import java.util.function.Consumer;
 
 /**
@@ -46,7 +49,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
+public final class WildcardType extends Type<ResolvedWildcard> implements NodeWithAnnotations<WildcardType> {
 
     private ReferenceType extendedType;
 
@@ -275,5 +278,10 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWildcardType(Consumer<WildcardType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedWildcard resolve() {
+        return getSymbolResolver().resolve(this, ResolvedWildcard.class);
     }
 }

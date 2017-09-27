@@ -34,6 +34,9 @@ import com.github.javaparser.metamodel.VoidTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
+
 import java.util.function.Consumer;
 
 /**
@@ -43,7 +46,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class VoidType extends Type implements NodeWithAnnotations<VoidType> {
+public final class VoidType extends Type<ResolvedVoidType> implements NodeWithAnnotations<VoidType> {
 
     @AllFieldsConstructor
     public VoidType() {
@@ -120,5 +123,10 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVoidType(Consumer<VoidType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedVoidType resolve() {
+        return getSymbolResolver().resolve(this, ResolvedVoidType.class);
     }
 }

@@ -38,6 +38,9 @@ import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+
 import java.util.function.Consumer;
 
 /**
@@ -48,7 +51,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class PrimitiveType extends Type implements NodeWithAnnotations<PrimitiveType> {
+public final class PrimitiveType extends Type<ResolvedPrimitiveType> implements NodeWithAnnotations<PrimitiveType> {
 
     public static PrimitiveType booleanType() {
         return new PrimitiveType(Primitive.BOOLEAN);
@@ -218,5 +221,10 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPrimitiveType(Consumer<PrimitiveType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedPrimitiveType resolve() {
+        return getSymbolResolver().resolve(this, ResolvedPrimitiveType.class);
     }
 }
