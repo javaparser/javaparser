@@ -17,7 +17,6 @@
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 
 import java.util.List;
 import java.util.Map;

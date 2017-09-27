@@ -38,7 +38,8 @@ public class ResolvedTypeParametersMap {
             nameToDeclaration = new HashMap<>();
         }
 
-        private Builder(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+        private Builder(Map<String, ResolvedType> nameToValue,
+                        Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
             this.nameToValue = new HashMap<>();
             this.nameToValue.putAll(nameToValue);
             this.nameToDeclaration = new HashMap<>();
@@ -49,7 +50,8 @@ public class ResolvedTypeParametersMap {
             return new ResolvedTypeParametersMap(nameToValue, nameToDeclaration);
         }
 
-        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter, ResolvedType value) {
+        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter,
+                                ResolvedType value) {
             // TODO: we shouldn't just silently overwrite existing types!
             String qualifiedName = typeParameter.getQualifiedName();
             nameToValue.put(qualifiedName, value);
@@ -88,7 +90,8 @@ public class ResolvedTypeParametersMap {
         return new Builder().build();
     }
 
-    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue,
+                                      Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
         this.nameToValue = new HashMap<>();
         this.nameToValue.putAll(nameToValue);
         this.nameToDeclaration = new HashMap<>();
