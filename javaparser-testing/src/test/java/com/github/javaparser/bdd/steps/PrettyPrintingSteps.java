@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.Assert.assertEquals;
 
@@ -57,47 +58,47 @@ public class PrettyPrintingSteps {
 
     @When("the {class|compilation unit} is parsed by the Java parser")
     public void whenTheClassIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parse(sourceUnderTest);
+        resultNode = parse(sourceUnderTest);
     }
 
     @When("the expression is parsed by the Java parser")
     public void whenTheExpressionIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseExpression(sourceUnderTest);
+        resultNode = parseExpression(sourceUnderTest);
     }
 
     @When("the block is parsed by the Java parser")
     public void whenTheBlockIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseBlock(sourceUnderTest);
+        resultNode = parseBlock(sourceUnderTest);
     }
 
     @When("the statement is parsed by the Java parser")
     public void whenTheStatementIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseStatement(sourceUnderTest);
+        resultNode = parseStatement(sourceUnderTest);
     }
 
     @When("the import is parsed by the Java parser")
     public void whenTheImportIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseImport(sourceUnderTest);
+        resultNode = parseImport(sourceUnderTest);
     }
 
     @When("the annotation is parsed by the Java parser")
     public void whenTheAnnotationIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseAnnotation(sourceUnderTest);
+        resultNode = parseAnnotation(sourceUnderTest);
     }
 
     @When("the annotation body declaration is parsed by the Java parser")
     public void whenTheBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseAnnotationBodyDeclaration(sourceUnderTest);
+        resultNode = parseAnnotationBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class body declaration is parsed by the Java parser")
     public void whenTheClassBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
+        resultNode = parseBodyDeclaration(sourceUnderTest);
     }
 
     @When("the interface body declaration is parsed by the Java parser")
     public void whenTheInterfaceBodyDeclarationIsParsedByTheJavaParser() {
-        resultNode = JavaParser.parseBodyDeclaration(sourceUnderTest);
+        resultNode = parseBodyDeclaration(sourceUnderTest);
     }
 
     @When("the class is visited by an empty ModifierVisitorAdapter")

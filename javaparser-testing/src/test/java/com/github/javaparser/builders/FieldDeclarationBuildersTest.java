@@ -35,23 +35,9 @@ import static com.github.javaparser.ast.type.PrimitiveType.intType;
 import static org.junit.Assert.assertEquals;
 
 public class FieldDeclarationBuildersTest {
-    CompilationUnit cu;
-    private ClassOrInterfaceDeclaration testClass;
-    private EnumDeclaration testEnum;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-        testClass = cu.addClass("testClass");
-        testEnum = cu.addEnum("testEnum");
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-        testClass = null;
-        testEnum = null;
-    }
+    private final CompilationUnit cu = new CompilationUnit();
+    private ClassOrInterfaceDeclaration testClass = cu.addClass("testClass");
+    private EnumDeclaration testEnum = cu.addEnum("testEnum");
 
     @Test(expected = IllegalStateException.class)
     public void testOrphanFieldGetter() {

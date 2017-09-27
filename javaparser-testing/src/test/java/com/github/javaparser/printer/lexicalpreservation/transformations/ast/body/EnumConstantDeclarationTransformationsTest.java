@@ -35,7 +35,7 @@ public class EnumConstantDeclarationTransformationsTest extends AbstractLexicalP
 
     protected EnumConstantDeclaration consider(String code) {
         considerCode("enum A { " + code + " }");
-        return ((EnumDeclaration)cu.getType(0)).getEntries().get(0);
+        return cu.getType(0).asEnumDeclaration().getEntries().get(0);
     }
 
     // Name
