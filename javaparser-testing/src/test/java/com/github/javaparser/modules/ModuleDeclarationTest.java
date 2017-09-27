@@ -73,22 +73,22 @@ public class ModuleDeclarationTest {
                 new SingleMemberAnnotationExpr(new Name("Foo"), new IntegerLiteralExpr("2")),
                 new MarkerAnnotationExpr(new Name("Bar")));
 
-        ModuleRequiresStmt moduleRequiresStmt = (ModuleRequiresStmt) module.getModuleStmts().get(0);
+        ModuleRequiresStmt moduleRequiresStmt = module.getModuleStmts().get(0).asModuleRequiresStmt();
         assertThat(moduleRequiresStmt.getNameAsString()).isEqualTo("A.B");
         assertThat(moduleRequiresStmt.getModifiers()).isEmpty();
 
-        ModuleExportsStmt moduleExportsStmt = (ModuleExportsStmt) module.getModuleStmts().get(5);
+        ModuleExportsStmt moduleExportsStmt = module.getModuleStmts().get(5).asModuleExportsStmt();
         assertThat(moduleExportsStmt.getNameAsString()).isEqualTo("R.S");
         assertThat(moduleExportsStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
-        ModuleOpensStmt moduleOpensStmt = (ModuleOpensStmt) module.getModuleStmts().get(7);
+        ModuleOpensStmt moduleOpensStmt = module.getModuleStmts().get(7).asModuleOpensStmt();
         assertThat(moduleOpensStmt.getNameAsString()).isEqualTo("R.S");
         assertThat(moduleOpensStmt.getModuleNames()).containsExactly(parseName("T1.U1"), parseName("T2.U2"));
 
-        ModuleUsesStmt moduleUsesStmt = (ModuleUsesStmt) module.getModuleStmts().get(8);
+        ModuleUsesStmt moduleUsesStmt = module.getModuleStmts().get(8).asModuleUsesStmt();
         assertThat(moduleUsesStmt.getType().toString()).isEqualTo("V.W");
 
-        ModuleProvidesStmt moduleProvidesStmt = (ModuleProvidesStmt) module.getModuleStmts().get(9);
+        ModuleProvidesStmt moduleProvidesStmt = module.getModuleStmts().get(9).asModuleProvidesStmt();
         assertThat(moduleProvidesStmt.getType().toString()).isEqualTo("X.Y");
         assertThat(moduleProvidesStmt.getWithTypes()).containsExactly(
                 new ClassOrInterfaceType(parseClassOrInterfaceType("Z1"), "Z2"),

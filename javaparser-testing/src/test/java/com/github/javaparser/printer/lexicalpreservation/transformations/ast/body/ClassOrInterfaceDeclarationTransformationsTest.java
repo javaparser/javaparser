@@ -44,7 +44,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
 
     protected ClassOrInterfaceDeclaration consider(String code) {
         considerCode(code);
-        return (ClassOrInterfaceDeclaration)cu.getType(0);
+        return cu.getType(0).asClassOrInterfaceDeclaration();
     }
 
     // Name

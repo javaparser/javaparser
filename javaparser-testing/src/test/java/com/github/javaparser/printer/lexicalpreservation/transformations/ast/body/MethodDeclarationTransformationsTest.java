@@ -40,7 +40,7 @@ public class MethodDeclarationTransformationsTest extends AbstractLexicalPreserv
 
     protected MethodDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
-        return (MethodDeclaration) cu.getType(0).getMembers().get(0);
+        return cu.getType(0).getMembers().get(0).asMethodDeclaration();
     }
 
     // Name
