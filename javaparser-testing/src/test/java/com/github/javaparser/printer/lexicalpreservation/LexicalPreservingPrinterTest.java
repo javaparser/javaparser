@@ -183,7 +183,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         considerCode(code);
 
         AnnotationDeclaration ad = cu.getAnnotationDeclarationByName("ClassPreamble").get();
-        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)ad.getMember(0);
+        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)ad.getMember(0).asAnnotationMemberDeclaration();
         Type type = md.getType();
         NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(type);
         assertEquals(Arrays.asList("String", "[", "]"),
@@ -194,7 +194,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     public void checkNodeTextCreatedAnnotationMemberDeclarationWithComment() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
 
-        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5);
+        AnnotationMemberDeclaration md = (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("ClassPreamble").get().getMember(5).asAnnotationMemberDeclaration();
         NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(md);
         assertEquals(Arrays.asList("String[]", " ", "reviewers", "(", ")", ";"),
                 nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
@@ -204,7 +204,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     public void checkNodeTextCreatedArrayCreationLevelWithoutExpression() throws IOException {
         considerExpression("new int[]");
 
-        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression;
+        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression.asArrayCreationExpr();
         ArrayCreationLevel arrayCreationLevel = arrayCreationExpr.getLevels().get(0);
         NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(arrayCreationLevel);
         assertEquals(Arrays.asList("[", "]"),
@@ -215,7 +215,7 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
     public void checkNodeTextCreatedArrayCreationLevelWith() throws IOException {
         considerExpression("new int[123]");
 
-        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression;
+        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression.asArrayCreationExpr();
         ArrayCreationLevel arrayCreationLevel = arrayCreationExpr.getLevels().get(0);
         NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(arrayCreationLevel);
         assertEquals(Arrays.asList("[", "123", "]"),

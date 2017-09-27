@@ -36,7 +36,7 @@ public class FieldDeclarationTransformationsTest extends AbstractLexicalPreservi
 
     protected FieldDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
-        return (FieldDeclaration) cu.getType(0).getMembers().get(0);
+        return cu.getType(0).getMembers().get(0).asFieldDeclaration();
     }
 
     // JavaDoc
