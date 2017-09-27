@@ -1993,7 +1993,7 @@ Expression PrimaryPrefix():
 	  	[ args = Arguments() { hasArgs=true; } ]
 	  	{
 	  		if (hasArgs) {
-	  			ret = new MethodCallExpr(range(begin, token()), null, emptyList(), name, args);
+	  			ret = new MethodCallExpr(range(begin, token()), null, null, name, args);
 			} else {
 	  			ret = new NameExpr(name);
 			}
@@ -2890,7 +2890,7 @@ BlockStmt BlockParseStart():
 
 Statement BlockStatementParseStart():
 { Statement ret; }
-{ ret = BlockStatement() <EOF> { return ret; } }
+{ (LOOKAHEAD(3) ret = BlockStatement()|ret = ExplicitConstructorInvocation()) <EOF> { return ret; } }
 
 ImportDeclaration ImportDeclarationParseStart():
 { ImportDeclaration ret; }
