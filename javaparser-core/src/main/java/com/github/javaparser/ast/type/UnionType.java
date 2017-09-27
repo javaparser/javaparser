@@ -43,10 +43,10 @@ import java.util.function.Consumer;
 /**
  * <h1>The union type</h1>
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
- * <h2>Java 1-7</h2>
+ * <h2>Java 1-6</h2>
  * Does not exist.
- * <h2>Java 8+</h2>
- * As of Java 8 it is used in catch clauses.
+ * <h2>Java 7+</h2>
+ * As of Java 7 it is used in catch clauses.
  * <pre><code>
  *  try { 
  *      ... 

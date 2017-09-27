@@ -11,10 +11,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -127,7 +124,11 @@ public class TestUtils {
     }
 
     public static void assertProblems(ParseResult<?> result, String... expectedArg) {
-        Set<String> actual = result.getProblems().stream().map(Problem::toString).collect(Collectors.toSet());
+        assertProblems(result.getProblems(), expectedArg);
+    }
+
+    public static void assertProblems(List<Problem> result, String... expectedArg) {
+        Set<String> actual = result.stream().map(Problem::toString).collect(Collectors.toSet());
         Set<String> expected = new HashSet<>();
         expected.addAll(Arrays.asList(expectedArg));
         assertCollections(expected, actual);
