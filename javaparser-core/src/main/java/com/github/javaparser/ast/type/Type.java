@@ -31,6 +31,8 @@ import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -39,7 +41,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type extends Node {
+public abstract class Type<RT> extends Node, Resolvable<RT> {
 
     private NodeList<AnnotationExpr> annotations;
 

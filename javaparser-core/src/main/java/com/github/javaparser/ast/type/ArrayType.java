@@ -45,7 +45,7 @@ import java.util.function.Consumer;
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
  * So, int[][] becomes ArrayType(ArrayType(int)).
  */
-public final class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
+public final class ArrayType extends ReferenceType<> implements NodeWithAnnotations<ArrayType> {
 
     /**
      * The origin of a pair of array brackets [].
