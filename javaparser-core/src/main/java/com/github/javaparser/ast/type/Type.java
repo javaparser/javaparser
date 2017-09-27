@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -32,6 +33,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.SymbolResolver;
 
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
@@ -41,7 +43,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class Type<RT> extends Node, Resolvable<RT> {
+public abstract class Type<RT> extends Node implements Resolvable<RT> {
 
     private NodeList<AnnotationExpr> annotations;
 
@@ -290,4 +292,19 @@ public abstract class Type<RT> extends Node, Resolvable<RT> {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWildcardType(Consumer<WildcardType> action) {
     }
+
+    protected SymbolResolver getSymbolResolver() {
+        SymbolResolver symbolResolver = this.getData(SYMBOL_RESOLVER_KEY);
+        if (symbolResolver == null) {
+            throw new IllegalStateException("Symbol resolution not configured");
+        }
+        return symbolResolver;
+    }
+
+    private static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+    };
 }

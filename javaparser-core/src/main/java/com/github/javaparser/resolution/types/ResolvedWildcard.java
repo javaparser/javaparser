@@ -16,6 +16,8 @@
 
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +37,7 @@ public class ResolvedWildcard implements ResolvedType {
     private BoundType type;
     private ResolvedType boundedType;
 
-    private ResolvedWildcard(BoundType type, Type boundedType) {
+    private ResolvedWildcard(BoundType type, ResolvedType boundedType) {
         if (type == null && boundedType != null) {
             throw new IllegalArgumentException();
         }
@@ -137,7 +139,7 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(TypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<TypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
@@ -156,7 +158,7 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public boolean mention(List<TypeParameterDeclaration> typeParameters) {
+    public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return boundedType != null && boundedType.mention(typeParameters);
     }
 
