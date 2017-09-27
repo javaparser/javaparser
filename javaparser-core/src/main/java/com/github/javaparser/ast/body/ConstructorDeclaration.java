@@ -62,6 +62,10 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
 
+    public ConstructorDeclaration(String name) {
+        this(null, EnumSet.of(Modifier.PUBLIC), new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt());
+    }
+
     public ConstructorDeclaration(EnumSet<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt());
     }
