@@ -14,6 +14,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -95,7 +96,7 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         try {
             if (classpathElements.containsKey(name)) {
                 return SymbolReference.solved(
@@ -109,7 +110,7 @@ public class JarTypeSolver implements TypeSolver {
     }
 
     @Override
-    public ReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
+    public ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
         SymbolReference<ReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();

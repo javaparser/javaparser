@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -85,7 +86,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
@@ -123,7 +124,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
             com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
             Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.getAncestorOfType(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
             if (jpTypeDeclaration.isPresent()) {
-                ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
+                ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
                 if (typeDeclaration.isClass()) {
                     return new JavaParserConstructorDeclaration(typeDeclaration.asClass(), jpConstructorDeclaration, typeSolver);
                 }

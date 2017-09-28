@@ -1,5 +1,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -15,7 +17,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration implements AnnotationDeclaration {
+public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
 
     private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
     private TypeSolver typeSolver;
@@ -46,7 +48,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         throw new UnsupportedOperationException();
     }
 

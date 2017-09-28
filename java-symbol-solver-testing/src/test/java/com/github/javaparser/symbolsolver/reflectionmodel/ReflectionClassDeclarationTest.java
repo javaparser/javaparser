@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
@@ -152,8 +153,8 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ReferenceTypeDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        ReferenceTypeDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ResolvedReferenceTypeDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedReferenceTypeDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         FieldDeclaration fooField = foo.getField("field");
         assertEquals(true, fooField.getType().isTypeVariable());
@@ -167,7 +168,7 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<MethodDeclaration> methods = string.getDeclaredMethods().stream()
                 .filter(m -> m.accessLevel() != AccessSpecifier.PRIVATE && m.accessLevel() != AccessSpecifier.DEFAULT)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))

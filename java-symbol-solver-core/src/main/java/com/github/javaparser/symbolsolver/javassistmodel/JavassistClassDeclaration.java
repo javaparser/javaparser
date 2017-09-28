@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
@@ -81,7 +82,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
@@ -344,12 +345,12 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
 
     @Override
-    public Set<ReferenceTypeDeclaration> internalTypes() {
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         try {
             /*
             Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
@@ -362,7 +363,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public ReferenceTypeDeclaration getInternalType(String name) {
+    public ResolvedReferenceTypeDeclaration getInternalType(String name) {
         /*
         The name of the ReferenceTypeDeclaration could be composed of the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.

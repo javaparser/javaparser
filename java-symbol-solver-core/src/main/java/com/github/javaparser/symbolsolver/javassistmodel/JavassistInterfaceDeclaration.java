@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.*;
@@ -151,7 +152,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         throw new UnsupportedOperationException();
     }
 

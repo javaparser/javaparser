@@ -15,6 +15,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
@@ -134,7 +135,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
   }
 
   @Override
-  public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+  public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
     return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
   }
 

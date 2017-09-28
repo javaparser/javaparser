@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
@@ -139,7 +140,7 @@ class JavassistUtils {
                     classType.getDeclaringClass() != null ?
                             classType.getDeclaringClass().getName() + "." + classType.getName() :
                             classType.getName();
-            ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
+            ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
                     removeTypeArguments(internalNameToCanonicalName(typeName)));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {

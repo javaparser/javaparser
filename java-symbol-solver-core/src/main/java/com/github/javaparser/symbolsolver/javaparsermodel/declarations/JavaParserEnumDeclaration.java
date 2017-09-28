@@ -21,6 +21,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -104,7 +105,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
         // Enums cannot be extended
         if (other.getQualifiedName().equals(this.getQualifiedName())) {
             return true;
@@ -151,7 +152,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return javaParserTypeAdapter.isAssignableBy(other);
     }
 
@@ -249,7 +250,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
         }
 
         @Override
-        public ReferenceTypeDeclaration declaringType() {
+        public ResolvedReferenceTypeDeclaration declaringType() {
             return enumDeclaration;
         }
 

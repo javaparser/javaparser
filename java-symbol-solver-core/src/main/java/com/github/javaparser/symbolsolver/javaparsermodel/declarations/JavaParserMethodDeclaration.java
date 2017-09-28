@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -56,7 +57,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ReferenceTypeDeclaration declaringType() {
+    public ResolvedReferenceTypeDeclaration declaringType() {
         if (getParentNode(wrappedNode) instanceof ObjectCreationExpr) {
             ObjectCreationExpr parentNode = (ObjectCreationExpr) getParentNode(wrappedNode);
             return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);

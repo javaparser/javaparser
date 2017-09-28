@@ -20,6 +20,7 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodCallExprContext;
@@ -113,7 +114,7 @@ public class MethodCallExprContextResolutionTest extends AbstractResolutionTest 
 
         MethodCallExprContext context = new MethodCallExprContext(methodCallExpr, typeSolver);
 
-        ReferenceTypeDeclaration stringType = typeSolver.solveType("java.lang.String");
+        ResolvedReferenceTypeDeclaration stringType = typeSolver.solveType("java.lang.String");
 
         List<Type> argumentsTypes = new ArrayList<>();
         argumentsTypes.add(new ReferenceTypeImpl(stringType, typeSolver));

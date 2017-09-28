@@ -3,6 +3,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -27,10 +28,10 @@ public class JavaParserTypeDeclarationAdapter {
     private com.github.javaparser.ast.body.TypeDeclaration<?> wrappedNode;
     private TypeSolver typeSolver;
     private Context context;
-    private ReferenceTypeDeclaration typeDeclaration;
+    private ResolvedReferenceTypeDeclaration typeDeclaration;
 
     public JavaParserTypeDeclarationAdapter(com.github.javaparser.ast.body.TypeDeclaration<?> wrappedNode, TypeSolver typeSolver,
-                                            ReferenceTypeDeclaration typeDeclaration,
+                                            ResolvedReferenceTypeDeclaration typeDeclaration,
                                             Context context) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;

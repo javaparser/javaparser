@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import com.github.javaparser.symbolsolver.model.declarations.*;
@@ -102,7 +103,7 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
     /// Private methods
     ///
 
-    private ReferenceTypeDeclaration getDeclaration() {
+    private ResolvedReferenceTypeDeclaration getDeclaration() {
         return JavaParserFacade.get(typeSolver).getTypeDeclaration(this.wrappedNode);
     }
 }

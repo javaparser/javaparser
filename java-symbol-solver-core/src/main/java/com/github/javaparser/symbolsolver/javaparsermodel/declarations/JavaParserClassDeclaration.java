@@ -21,6 +21,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -230,7 +231,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return javaParserTypeAdapter.isAssignableBy(other);
     }
 
@@ -240,7 +241,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
         // TODO consider generic types
         if (this.getQualifiedName().equals(other.getQualifiedName())) {
             return true;
@@ -258,7 +259,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
 
         if (this.wrappedNode.getImplementedTypes() != null) {
             for (ClassOrInterfaceType type : wrappedNode.getImplementedTypes()) {
-                ReferenceTypeDeclaration ancestor = (ReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
+                ResolvedReferenceTypeDeclaration ancestor = (ResolvedReferenceTypeDeclaration) new SymbolSolver(typeSolver).solveType(type);
                 if (ancestor.canBeAssignedTo(other)) {
                     return true;
                 }

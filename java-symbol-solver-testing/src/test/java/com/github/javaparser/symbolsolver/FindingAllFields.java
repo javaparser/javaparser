@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.declarations.Declaration;
@@ -38,7 +39,7 @@ public class FindingAllFields extends AbstractResolutionTest {
     public void findAllInheritedFields() throws ParseException {
         CompilationUnit cu = parseSample("AClassWithFields");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
-        ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
+        ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
                 typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
@@ -48,7 +49,7 @@ public class FindingAllFields extends AbstractResolutionTest {
     public void findAllInheritedFieldsAndGenerics() throws ParseException {
         CompilationUnit cu = parseSample("AClassWithFieldsAndGenerics");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
-        ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
+        ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
                 typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));

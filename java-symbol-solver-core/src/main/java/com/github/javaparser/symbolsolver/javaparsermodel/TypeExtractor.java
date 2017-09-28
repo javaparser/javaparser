@@ -12,6 +12,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
@@ -162,7 +163,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
      * Java Parser can't differentiate between packages, internal types, and fields.
      * All three are lumped together into FieldAccessExpr. We need to differentiate them.
      */
-    private Type solveDotExpressionType(ReferenceTypeDeclaration parentType, FieldAccessExpr node) {
+    private Type solveDotExpressionType(ResolvedReferenceTypeDeclaration parentType, FieldAccessExpr node) {
         // Fields and internal type declarations cannot have the same name.
         // Thus, these checks will always be mutually exclusive.
         if (parentType.hasField(node.getName().getId())) {

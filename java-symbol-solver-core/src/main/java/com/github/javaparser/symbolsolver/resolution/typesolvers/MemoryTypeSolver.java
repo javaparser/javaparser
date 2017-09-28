@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -70,7 +71,7 @@ public class MemoryTypeSolver implements TypeSolver {
         this.parent = parent;
     }
 
-    public void addDeclaration(String name, ReferenceTypeDeclaration typeDeclaration) {
+    public void addDeclaration(String name, ResolvedReferenceTypeDeclaration typeDeclaration) {
         this.declarationMap.put(name, typeDeclaration);
     }
 

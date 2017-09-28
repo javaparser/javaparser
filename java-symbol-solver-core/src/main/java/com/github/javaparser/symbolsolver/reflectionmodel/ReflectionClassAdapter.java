@@ -1,5 +1,6 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
@@ -24,9 +25,9 @@ class ReflectionClassAdapter {
 
     private Class<?> clazz;
     private TypeSolver typeSolver;
-    private ReferenceTypeDeclaration typeDeclaration;
+    private ResolvedReferenceTypeDeclaration typeDeclaration;
 
-    public ReflectionClassAdapter(Class<?> clazz, TypeSolver typeSolver, ReferenceTypeDeclaration typeDeclaration) {
+    public ReflectionClassAdapter(Class<?> clazz, TypeSolver typeSolver, ResolvedReferenceTypeDeclaration typeDeclaration) {
         this.clazz = clazz;
         this.typeSolver = typeSolver;
         this.typeDeclaration = typeDeclaration;

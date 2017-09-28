@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
@@ -200,7 +201,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean canBeAssignedTo(ReferenceTypeDeclaration other) {
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
         if (other instanceof LambdaArgumentTypePlaceholder) {
             return isFunctionalInterface();
         }
@@ -261,7 +262,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 

@@ -26,10 +26,11 @@ import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.declarations.AnnotationDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
@@ -262,14 +263,14 @@ public class JavaParserFacade {
         return res;
     }
 
-    public SymbolReference<AnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
+    public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
         Context context = JavaParserFactory.getContext(annotationExpr, typeSolver);
         SymbolReference<TypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString(), typeSolver);
-        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
+        ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
         if (typeDeclarationSymbolReference.isSolved()) {
             return SymbolReference.solved(annotationDeclaration);
         } else {
-            return SymbolReference.unsolved(AnnotationDeclaration.class);
+            return SymbolReference.unsolved(ResolvedAnnotationDeclaration.class);
         }
     }
 
@@ -506,7 +507,7 @@ public class JavaParserFacade {
         return methodUsage.get();
     }
 
-    public ReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    public ResolvedReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
         return JavaParserFactory.toTypeDeclaration(classOrInterfaceDeclaration, typeSolver);
     }
 

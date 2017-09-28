@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.CompilationUnitContext;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -167,7 +168,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        ReferenceTypeDeclaration otherClass = EasyMock.createMock(ReferenceTypeDeclaration.class);
+        ResolvedReferenceTypeDeclaration otherClass = EasyMock.createMock(ReferenceTypeDeclaration.class);
         EasyMock.expect(otherClass.getQualifiedName()).andReturn("com.foo.OtherClassInSamePackage");
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);

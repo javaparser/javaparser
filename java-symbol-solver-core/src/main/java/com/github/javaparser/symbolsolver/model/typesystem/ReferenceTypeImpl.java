@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -38,27 +39,27 @@ import java.util.stream.Collectors;
 //      and to get the Object type declaration
 public class ReferenceTypeImpl extends ReferenceType {
 
-    public static ReferenceType undeterminedParameters(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public static ReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
                 tp -> new TypeVariable(tp)
         ).collect(Collectors.toList()), typeSolver);
     }
 
     @Override
-    protected ReferenceType create(ReferenceTypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver) {
+    protected ReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
     @Override
-    protected ReferenceType create(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    protected ReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeSolver);
     }
 
-    public ReferenceTypeImpl(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         super(typeDeclaration, typeSolver);
     }
 
-    public ReferenceTypeImpl(ReferenceTypeDeclaration typeDeclaration, List<Type> typeArguments, TypeSolver typeSolver) {
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<Type> typeArguments, TypeSolver typeSolver) {
         super(typeDeclaration, typeArguments, typeSolver);
     }
 

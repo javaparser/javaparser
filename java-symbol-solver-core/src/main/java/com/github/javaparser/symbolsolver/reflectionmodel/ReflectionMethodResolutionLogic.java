@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 class ReflectionMethodResolutionLogic {
 
     static SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly,
-                                                          TypeSolver typeSolver, ReferenceTypeDeclaration scopeType,
+                                                          TypeSolver typeSolver, ResolvedReferenceTypeDeclaration scopeType,
                                                           Class clazz){
         List<MethodDeclaration> methods = new ArrayList<>();
         Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
@@ -72,7 +73,7 @@ class ReflectionMethodResolutionLogic {
 
     static Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
                                                     Context invokationContext, List<Type> typeParameterValues,
-                                                    ReferenceTypeDeclaration scopeType, Class clazz) {
+                                                    ResolvedReferenceTypeDeclaration scopeType, Class clazz) {
         if (typeParameterValues.size() != scopeType.getTypeParameters().size()) {
             // if it is zero we are going to ignore them
             if (!scopeType.getTypeParameters().isEmpty()) {
@@ -123,7 +124,7 @@ class ReflectionMethodResolutionLogic {
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
     }
 
-    private static MethodUsage replaceParams(List<Type> typeParameterValues, ReferenceTypeDeclaration typeParametrizable, MethodDeclaration methodDeclaration) {
+    private static MethodUsage replaceParams(List<Type> typeParameterValues, ResolvedReferenceTypeDeclaration typeParametrizable, MethodDeclaration methodDeclaration) {
         MethodUsage methodUsage = new MethodUsage(methodDeclaration);
         int i = 0;
 

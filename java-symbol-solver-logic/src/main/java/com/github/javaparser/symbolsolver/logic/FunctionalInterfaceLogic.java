@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
@@ -51,7 +52,7 @@ public final class FunctionalInterfaceLogic {
     /**
      * Get the functional method defined by the type, if any.
      */
-    public static Optional<MethodUsage> getFunctionalMethod(ReferenceTypeDeclaration typeDeclaration) {
+    public static Optional<MethodUsage> getFunctionalMethod(ResolvedReferenceTypeDeclaration typeDeclaration) {
         //We need to find all abstract methods
         Set<MethodUsage> methods = typeDeclaration.getAllMethods().stream()
                 .filter(m -> m.getDeclaration().isAbstract())

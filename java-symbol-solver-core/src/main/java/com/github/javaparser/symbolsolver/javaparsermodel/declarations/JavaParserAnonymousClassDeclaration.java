@@ -5,6 +5,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -154,7 +155,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+  public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
     return false;
   }
 

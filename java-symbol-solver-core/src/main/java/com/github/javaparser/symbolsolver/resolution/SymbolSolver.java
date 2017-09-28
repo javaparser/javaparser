@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
@@ -112,7 +113,7 @@ public class SymbolSolver {
         if (genericType.isPresent()) {
             return genericType.get();
         }
-        ReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(name);
+        ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(name);
         ReferenceTypeImpl typeUsage = new ReferenceTypeImpl(typeDeclaration, typeSolver);
         return typeUsage;
     }

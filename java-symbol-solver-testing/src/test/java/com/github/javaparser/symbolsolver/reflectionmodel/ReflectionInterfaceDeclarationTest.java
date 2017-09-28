@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
@@ -40,7 +41,7 @@ public class ReflectionInterfaceDeclarationTest {
     @Test
     public void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ReferenceTypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        ResolvedReferenceTypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
         List<MethodDeclaration> methods = list.getDeclaredMethods().stream()
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());

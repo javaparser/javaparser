@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
@@ -55,7 +56,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         }
     }
 
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         List<ReferenceType> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
         for (ReferenceType ancestorOfOther : ancestorsOfOther) {
@@ -71,7 +72,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
             return true;
         }
         if (type.isReferenceType()) {
-            ReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
+            ResolvedReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
             return isAssignableBy(other);
         } else {
             throw new UnsupportedOperationException();
