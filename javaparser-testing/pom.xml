@@ -23,10 +23,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <junit.version>4.12</junit.version>
-        <jbehave.version>4.1</jbehave.version>
-    </properties>
     <build>
         <plugins>
             <plugin>
@@ -90,15 +86,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jbehave</groupId>
             <artifactId>jbehave-core</artifactId>
-            <version>${jbehave.version}</version>
+            <version>4.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
