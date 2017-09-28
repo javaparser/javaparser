@@ -17,17 +17,17 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
+public class JavaParserEnumConstantDeclaration implements ResolvedValueDeclaration {
 
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode;
@@ -38,7 +38,7 @@ public class JavaParserEnumConstantDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public Type getType() {
+    public ResolvedType getType() {
         return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver), typeSolver);
     }
 

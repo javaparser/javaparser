@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.resolution.MethodAmbiguityException;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -240,10 +241,10 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    public static Type replaceTypeParam(Type type, TypeParameterDeclaration tp, TypeSolver typeSolver) {
+    public static ResolvedType replaceTypeParam(ResolvedType type, ResolvedTypeParameterDeclaration tp, TypeSolver typeSolver) {
         if (type.isTypeVariable()) {
             if (type.describe().equals(tp.getName())) {
-                List<TypeParameterDeclaration.Bound> bounds = tp.getBounds(typeSolver);
+                List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.getBounds(typeSolver);
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
                 } else if (bounds.size() == 1) {
@@ -256,14 +257,14 @@ public class MethodResolutionLogic {
         } else if (type.isPrimitive()) {
             return type;
         } else if (type.isArray()) {
-            return new ArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
+            return new ResolvedArrayType(replaceTypeParam(type.asArrayType().getComponentType(), tp, typeSolver));
         } else if (type.isReferenceType()) {
-            ReferenceType result = type.asReferenceType();
+            ResolvedReferenceType result = type.asReferenceType();
             result = result.transformTypeParameters(typeParam -> replaceTypeParam(typeParam, tp, typeSolver)).asReferenceType();
             return result;
         } else if (type.isWildcard()) {
             if (type.describe().equals(tp.getName())) {
-                List<TypeParameterDeclaration.Bound> bounds = tp.getBounds(typeSolver);
+                List<ResolvedTypeParameterDeclaration.Bound> bounds = tp.getBounds(typeSolver);
                 if (bounds.size() > 1) {
                     throw new UnsupportedOperationException();
                 } else if (bounds.size() == 1) {
@@ -278,7 +279,7 @@ public class MethodResolutionLogic {
         }
     }
 
-    public static boolean isApplicable(MethodUsage method, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+    public static boolean isApplicable(MethodUsage method, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         if (!method.getName().equals(name)) {
             return false;
         }

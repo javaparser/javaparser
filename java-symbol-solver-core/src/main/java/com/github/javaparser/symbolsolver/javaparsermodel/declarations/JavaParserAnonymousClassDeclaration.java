@@ -91,7 +91,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public AccessSpecifier accessLevel() {
+  public AccessSpecifier accessSpecifier() {
     return AccessSpecifier.PRIVATE;
   }
 

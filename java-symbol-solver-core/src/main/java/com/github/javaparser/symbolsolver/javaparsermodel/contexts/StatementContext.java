@@ -20,15 +20,15 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         super(wrappedNode, typeSolver);
     }
 
-    public static SymbolReference<? extends ValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
+    public static SymbolReference<? extends ResolvedValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
         if (!(getParentNode(stmt) instanceof NodeWithStatements)) {
             throw new IllegalArgumentException();
         }
@@ -61,7 +61,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         for (int i = position - 1; i >= 0; i--) {
             SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver);
-            SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
+            SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
             }
@@ -87,7 +87,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         }
         for (int i = position - 1; i >= 0; i--) {
             SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(blockStmt.getStatements().get(i), typeSolver);
-            SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
+            SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
             if (symbolReference.isSolved()) {
                 return Optional.of(Value.from(symbolReference.getCorrespondingDeclaration()));
             }
@@ -144,11 +144,11 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
 
         // if we're in a multiple Variable declaration line (for ex: double a=0, b=a;)
         SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(wrappedNode, typeSolver);
-        SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
+        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
         if (symbolReference.isSolved()) {
             return symbolReference;
         }
@@ -189,12 +189,12 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
     }
 
     @Override
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         return getParent().solveType(name, typeSolver);
     }
 }

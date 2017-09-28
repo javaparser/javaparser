@@ -18,7 +18,10 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
@@ -122,13 +125,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         return ctClass.getName().replace('$', '.');
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver,
-                                                    Context invokationContext, List<Type> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.getMethodUsage(ctClass, name, argumentsTypes, typeSolver, invokationContext);
     }
 
     @Deprecated
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new JavassistFieldDeclaration(field, typeSolver));
@@ -138,7 +141,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         try {
             CtClass superClass = ctClass.getSuperclass();
             if (superClass != null) {
-                SymbolReference<? extends ValueDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveSymbol(name, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> ref = new JavassistClassDeclaration(superClass, typeSolver).solveSymbol(name, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -149,7 +152,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<? extends ValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }

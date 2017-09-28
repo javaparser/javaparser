@@ -19,14 +19,14 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.List;
@@ -43,9 +43,9 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         SwitchStmt switchStmt = (SwitchStmt) getParentNode(wrappedNode);
-        Type type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
+        ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isEnum()) {
             if (type instanceof ReferenceTypeImpl) {
                 ReferenceTypeImpl typeUsageOfTypeDeclaration = (ReferenceTypeImpl) type;
@@ -62,7 +62,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
             if (!seStmt.equals(wrappedNode)) {
                 for (Statement stmt : seStmt.getStatements()) {
                     SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
-                    SymbolReference<? extends ValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
+                    SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);
                     if (symbolReference.isSolved()) {
                         return symbolReference;
                     }
@@ -74,7 +74,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntryStm
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
     }
 }

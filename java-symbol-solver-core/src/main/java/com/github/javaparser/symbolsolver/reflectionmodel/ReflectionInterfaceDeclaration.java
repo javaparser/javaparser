@@ -132,7 +132,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         return clazz.hashCode();
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes, TypeSolver typeSolver,
+                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
                 typeParameterValues, this, clazz);
         if (res.isPresent()) {

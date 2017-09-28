@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
@@ -32,7 +33,7 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserParameterDeclaration implements ParameterDeclaration {
+public class JavaParserParameterDeclaration implements ResolvedParameterDeclaration {
 
     private Parameter wrappedNode;
     private TypeSolver typeSolver;

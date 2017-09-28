@@ -1,19 +1,21 @@
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Map;
 import java.util.function.Function;
 
-public class LazyType implements Type {
-    private Type concrete;
-    private Function<Void, Type> provider;
+public class LazyType implements ResolvedType {
+    private ResolvedType concrete;
+    private Function<Void, ResolvedType> provider;
 
-    public LazyType(Function<Void, Type> provider) {
+    public LazyType(Function<Void, ResolvedType> provider) {
         this.provider = provider;
     }
 
-    private Type getType() {
+    private ResolvedType getType() {
         if (concrete == null) {
             concrete = provider.apply(null);
         }
@@ -66,32 +68,32 @@ public class LazyType implements Type {
     }
 
     @Override
-    public ArrayType asArrayType() {
+    public ResolvedArrayType asArrayType() {
         return getType().asArrayType();
     }
 
     @Override
-    public ReferenceType asReferenceType() {
+    public ResolvedReferenceType asReferenceType() {
         return getType().asReferenceType();
     }
 
     @Override
-    public TypeParameterDeclaration asTypeParameter() {
+    public ResolvedTypeParameterDeclaration asTypeParameter() {
         return getType().asTypeParameter();
     }
 
     @Override
-    public TypeVariable asTypeVariable() {
+    public ResolvedTypeVariable asTypeVariable() {
         return getType().asTypeVariable();
     }
 
     @Override
-    public PrimitiveType asPrimitive() {
+    public ResolvedPrimitiveType asPrimitive() {
         return getType().asPrimitive();
     }
 
     @Override
-    public Wildcard asWildcard() {
+    public ResolvedWildcard asWildcard() {
         return getType().asWildcard();
     }
 
@@ -101,17 +103,18 @@ public class LazyType implements Type {
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced,
+                                             Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         return getType().replaceTypeVariables(tp, replaced, inferredTypes);
     }
 
     @Override
-    public Type replaceTypeVariables(TypeParameterDeclaration tp, Type replaced) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced) {
         return getType().replaceTypeVariables(tp, replaced);
     }
 
     @Override
-    public boolean isAssignableBy(Type other) {
+    public boolean isAssignableBy(ResolvedType other) {
         return getType().isAssignableBy(other);
     }
 }

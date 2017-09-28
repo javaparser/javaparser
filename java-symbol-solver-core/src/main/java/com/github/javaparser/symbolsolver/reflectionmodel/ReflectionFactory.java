@@ -17,6 +17,10 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -35,7 +39,7 @@ import java.util.List;
  */
 public class ReflectionFactory {
 
-    public static ReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
+    public static ResolvedReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
             throw new IllegalArgumentException("No type declaration available for an Array");
         } else if (clazz.isPrimitive()) {
@@ -49,15 +53,15 @@ public class ReflectionFactory {
         }
     }
 
-    public static Type typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
+    public static ResolvedType typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
         if (type instanceof java.lang.reflect.TypeVariable) {
             java.lang.reflect.TypeVariable<?> tv = (java.lang.reflect.TypeVariable<?>) type;
             boolean declaredOnClass = tv.getGenericDeclaration() instanceof java.lang.reflect.Type;
-            TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
-            return new com.github.javaparser.symbolsolver.model.typesystem.TypeVariable(typeParameter);
+            ResolvedTypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
+            return new ResolvedTypeVariable(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
-            ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
+            ResolvedReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
             List<java.lang.reflect.Type> actualTypes = new ArrayList<>();
             actualTypes.addAll(Arrays.asList(pt.getActualTypeArguments()));
             // we consume the actual types
