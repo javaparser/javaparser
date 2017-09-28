@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
@@ -129,7 +130,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessLevel() {
         return ReflectionFactory.modifiersToAccessLevel(this.method.getModifiers());
     }
 

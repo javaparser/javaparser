@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
@@ -144,7 +145,7 @@ public class JavaParserMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessLevel() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 

@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
@@ -83,7 +83,7 @@ public class JavassistFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessLevel() {
         return JavassistFactory.modifiersToAccessLevel(ctField.getModifiers());
     }
 

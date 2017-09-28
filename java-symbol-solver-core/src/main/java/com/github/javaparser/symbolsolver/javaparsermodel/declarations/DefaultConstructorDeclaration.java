@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
@@ -57,8 +58,8 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
-        return AccessLevel.PUBLIC;
+    public AccessSpecifier accessLevel() {
+        return AccessSpecifier.PUBLIC;
     }
 
     @Override

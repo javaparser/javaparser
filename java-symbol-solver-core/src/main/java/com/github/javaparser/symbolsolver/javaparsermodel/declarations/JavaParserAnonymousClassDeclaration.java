@@ -1,13 +1,14 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
 import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
@@ -95,8 +96,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public AccessLevel accessLevel() {
-    return AccessLevel.PRIVATE;
+  public AccessSpecifier accessLevel() {
+    return AccessSpecifier.PRIVATE;
   }
 
   @Override

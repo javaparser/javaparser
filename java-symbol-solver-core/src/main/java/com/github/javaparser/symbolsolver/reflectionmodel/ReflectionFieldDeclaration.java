@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -91,7 +91,7 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessLevel() {
         return ReflectionFactory.modifiersToAccessLevel(field.getModifiers());
     }
 }

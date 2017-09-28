@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
@@ -168,7 +169,7 @@ public class ReflectionClassDeclarationTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         List<MethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessLevel() != AccessLevel.PRIVATE && m.accessLevel() != AccessLevel.PACKAGE_PROTECTED)
+                .filter(m -> m.accessLevel() != AccessSpecifier.PRIVATE && m.accessLevel() != AccessSpecifier.DEFAULT)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         assertEquals(67, methods.size());

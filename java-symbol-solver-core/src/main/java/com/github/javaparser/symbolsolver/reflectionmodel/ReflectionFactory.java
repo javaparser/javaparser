@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -104,15 +104,15 @@ public class ReflectionFactory {
         }
     }
 
-    static AccessLevel modifiersToAccessLevel(final int modifiers) {
+    static AccessSpecifier modifiersToAccessLevel(final int modifiers) {
         if (Modifier.isPublic(modifiers)) {
-            return AccessLevel.PUBLIC;
+            return AccessSpecifier.PUBLIC;
         } else if (Modifier.isProtected(modifiers)) {
-            return AccessLevel.PROTECTED;
+            return AccessSpecifier.PROTECTED;
         } else if (Modifier.isPrivate(modifiers)) {
-            return AccessLevel.PRIVATE;
+            return AccessSpecifier.PRIVATE;
         } else {
-            return AccessLevel.PACKAGE_PROTECTED;
+            return AccessSpecifier.DEFAULT;
         }
     }
 }

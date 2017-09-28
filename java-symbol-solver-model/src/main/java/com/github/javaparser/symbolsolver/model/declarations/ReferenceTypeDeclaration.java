@@ -1,5 +1,6 @@
 package com.github.javaparser.symbolsolver.model.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
@@ -115,7 +116,7 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
      */
     default List<FieldDeclaration> getVisibleFields() {
         return getAllFields().stream()
-                .filter(f -> f.declaringType().equals(this) || f.accessLevel() != AccessLevel.PRIVATE)
+                .filter(f -> f.declaringType().equals(this) || f.accessLevel() != AccessSpecifier.PRIVATE)
                 .collect(Collectors.toList());
     }
 

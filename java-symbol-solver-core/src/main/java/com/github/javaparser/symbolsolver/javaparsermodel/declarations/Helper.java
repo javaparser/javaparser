@@ -16,11 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
+import com.github.javaparser.ast.*;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -32,15 +28,15 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
  */
 class Helper {
 
-    public static AccessLevel toAccessLevel(EnumSet<Modifier> modifiers) {
+    public static AccessSpecifier toAccessLevel(EnumSet<Modifier> modifiers) {
         if (modifiers.contains(Modifier.PRIVATE)) {
-            return AccessLevel.PRIVATE;
+            return AccessSpecifier.PRIVATE;
         } else if (modifiers.contains(Modifier.PROTECTED)) {
-            return AccessLevel.PROTECTED;
+            return AccessSpecifier.PROTECTED;
         } else if (modifiers.contains(Modifier.PUBLIC)) {
-            return AccessLevel.PUBLIC;
+            return AccessSpecifier.PUBLIC;
         } else {
-            return AccessLevel.PACKAGE_PROTECTED;
+            return AccessSpecifier.DEFAULT;
         }
     }
 

@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -193,7 +194,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
             fields.add(new FieldDeclaration() {
                 
                 @Override
-                public AccessLevel accessLevel() {
+                public AccessSpecifier accessLevel() {
                     return f.accessLevel();
                 }
                 
@@ -285,7 +286,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessLevel() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 

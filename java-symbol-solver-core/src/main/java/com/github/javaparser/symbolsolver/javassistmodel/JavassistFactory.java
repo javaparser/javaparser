@@ -14,7 +14,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
@@ -69,15 +69,15 @@ public class JavassistFactory {
     }
   }
 
-  static AccessLevel modifiersToAccessLevel(final int modifiers) {
+  static AccessSpecifier modifiersToAccessLevel(final int modifiers) {
     if (Modifier.isPublic(modifiers)) {
-      return AccessLevel.PUBLIC;
+      return AccessSpecifier.PUBLIC;
     } else if (Modifier.isProtected(modifiers)) {
-      return AccessLevel.PROTECTED;
+      return AccessSpecifier.PROTECTED;
     } else if (Modifier.isPrivate(modifiers)) {
-      return AccessLevel.PRIVATE;
+      return AccessSpecifier.PRIVATE;
     } else {
-      return AccessLevel.PACKAGE_PROTECTED;
+      return AccessSpecifier.DEFAULT;
     }
   }
 

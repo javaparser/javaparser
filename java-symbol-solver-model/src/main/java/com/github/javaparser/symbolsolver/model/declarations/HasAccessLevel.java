@@ -16,6 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
+
 /**
  * Anything which can have an AccessLevel.
  *
@@ -26,6 +28,6 @@ public interface HasAccessLevel {
     /**
      * The AccessLevel of this element.
      */
-    AccessLevel accessLevel();
+    AccessSpecifier accessLevel();
 
 }

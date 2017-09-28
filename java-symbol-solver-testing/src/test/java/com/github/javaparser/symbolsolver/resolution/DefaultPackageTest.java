@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
@@ -33,7 +34,7 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public AccessLevel accessLevel() {
+        public AccessSpecifier accessLevel() {
             throw new UnsupportedOperationException();
         }
 
