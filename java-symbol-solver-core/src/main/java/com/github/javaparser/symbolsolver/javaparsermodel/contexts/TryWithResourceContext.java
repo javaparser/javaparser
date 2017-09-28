@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.TryStmt;
@@ -27,7 +28,6 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,11 +42,13 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        for (VariableDeclarationExpr expr : wrappedNode.getResources()) {
-            for (VariableDeclarator v : expr.getVariables()) {
-                if (v.getName().getIdentifier().equals(name)) {
-                    JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
-                    return Optional.of(Value.from(decl));
+        for (Expression expr : wrappedNode.getResources()) {
+            if (expr instanceof VariableDeclarationExpr) {
+                for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
+                    if (v.getName().getIdentifier().equals(name)) {
+                        JavaParserSymbolDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
+                        return Optional.of(Value.from(decl));
+                    }
                 }
             }
         }
@@ -60,10 +62,12 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
     @Override
     public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        for (VariableDeclarationExpr expr : wrappedNode.getResources()) {
-            for (VariableDeclarator v : expr.getVariables()) {
-                if (v.getName().getIdentifier().equals(name)) {
-                    return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(v, typeSolver));
+        for (Expression expr : wrappedNode.getResources()) {
+            if (expr instanceof VariableDeclarationExpr) {
+                for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
+                    if (v.getName().getIdentifier().equals(name)) {
+                        return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(v, typeSolver));
+                    }
                 }
             }
         }

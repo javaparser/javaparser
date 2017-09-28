@@ -343,6 +343,7 @@ public class ReflectionClassDeclarationTest {
 
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
+                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters"),
@@ -419,7 +420,8 @@ public class ReflectionClassDeclarationTest {
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+                "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange",
+                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
