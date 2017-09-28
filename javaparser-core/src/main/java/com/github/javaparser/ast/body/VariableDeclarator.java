@@ -30,6 +30,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.NodeWithVariables;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -61,7 +62,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     private Type type;
 
     public VariableDeclarator() {
-        this(null, new SimpleName(), null);
+        this(null, new ClassOrInterfaceType(), new SimpleName(), null);
     }
 
     public VariableDeclarator(Type type, String variableName) {
