@@ -17,6 +17,10 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.symbolsolver.model.declarations.*;
@@ -97,7 +101,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ParameterDeclaration getParam(int i) {
+    public ResolvedParameterDeclaration getParam(int i) {
         boolean variadic = false;
         if (method.isVarArgs()) {
             variadic = i == (method.getParameterCount() - 1);
@@ -106,11 +110,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 
-    public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
         return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
     }
 
@@ -140,7 +144,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public Type getSpecifiedException(int index) {
+    public ResolvedType getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException();
         }

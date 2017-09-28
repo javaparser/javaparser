@@ -18,7 +18,12 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
@@ -55,11 +60,11 @@ public class SymbolSolver {
         this.typeSolver = typeSolver;
     }
 
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, Context context) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Context context) {
         return context.solveSymbol(name, typeSolver);
     }
 
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, Node node) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Node node) {
         return solveSymbol(name, JavaParserFactory.getContext(node, typeSolver));
     }
 
@@ -72,33 +77,33 @@ public class SymbolSolver {
         return solveSymbolAsValue(name, context);
     }
 
-    public SymbolReference<? extends TypeDeclaration> solveType(String name, Context context) {
+    public SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Context context) {
         return context.solveType(name, typeSolver);
     }
 
-    public SymbolReference<? extends TypeDeclaration> solveType(String name, Node node) {
+    public SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Node node) {
         return solveType(name, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public MethodUsage solveMethod(String methodName, List<Type> argumentsTypes, Context context) {
-        SymbolReference<MethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false, typeSolver);
+    public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
+        SymbolReference<ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false, typeSolver);
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context, methodName);
         }
         return new MethodUsage(decl.getCorrespondingDeclaration());
     }
 
-    public MethodUsage solveMethod(String methodName, List<Type> argumentsTypes, Node node) {
+    public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node) {
         return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
-    public TypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
+    public ResolvedTypeDeclaration solveType(com.github.javaparser.ast.type.Type type) {
         if (type instanceof ClassOrInterfaceType) {
 
             // FIXME should call typesolver here!
 
             String name = ((ClassOrInterfaceType) type).getName().getId();
-            SymbolReference<TypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver);
+            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver);
             if (!ref.isSolved()) {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver), name);
             }
@@ -124,7 +129,7 @@ public class SymbolSolver {
      * <p>
      * It should contain its own private fields but not inherited private fields.
      */
-    public SymbolReference<? extends ValueDeclaration> solveSymbolInType(TypeDeclaration typeDeclaration, String name) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
             return ctx.solveSymbol(name, typeSolver);
@@ -146,20 +151,20 @@ public class SymbolSolver {
         if (typeDeclaration instanceof JavassistClassDeclaration) {
             return ((JavassistClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
         }
-        return SymbolReference.unsolved(ValueDeclaration.class);
+        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
      */
     @Deprecated
-    public SymbolReference<TypeDeclaration> solveTypeInType(TypeDeclaration typeDeclaration, String name) {
+    public SymbolReference<ResolvedTypeDeclaration> solveTypeInType(ResolvedTypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             return ((JavaParserClassDeclaration) typeDeclaration).solveType(name, typeSolver);
         }
         if (typeDeclaration instanceof JavaParserInterfaceDeclaration) {
             return ((JavaParserInterfaceDeclaration) typeDeclaration).solveType(name, typeSolver);
         }
-        return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
     }
 }

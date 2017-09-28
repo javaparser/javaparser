@@ -16,6 +16,13 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import com.github.javaparser.resolution.MethodAmbiguityException;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
@@ -380,16 +387,18 @@ public class MethodResolutionLogic {
      * @param typeSolver
      * @return
      */
-    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        SymbolReference<MethodDeclaration> res = findMostApplicable(methods, name, argumentsTypes, typeSolver, false);
+    public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods,
+                                                                                String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+        SymbolReference<ResolvedMethodDeclaration> res = findMostApplicable(methods, name, argumentsTypes, typeSolver, false);
         if (res.isSolved()) {
             return res;
         }
         return findMostApplicable(methods, name, argumentsTypes, typeSolver, true);
     }
 
-    public static SymbolReference<MethodDeclaration> findMostApplicable(List<MethodDeclaration> methods, String name, List<Type> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        List<MethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+    public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods,
+                                                                                String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
+        List<ResolvedMethodDeclaration> applicableMethods = getMethodsWithoutDuplicates(methods).stream().filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved(MethodDeclaration.class);
         }
@@ -403,9 +412,9 @@ public class MethodResolutionLogic {
           }
           if (!nullParamIndexes.isEmpty()) {
             // remove method with array param if a non array exists and arg is null
-            Set<MethodDeclaration> removeCandidates = new HashSet<>();
+            Set<ResolvedMethodDeclaration> removeCandidates = new HashSet<>();
             for (Integer nullParamIndex: nullParamIndexes) {
-              for (MethodDeclaration methDecl: applicableMethods) {
+              for (ResolvedMethodDeclaration methDecl: applicableMethods) {
                 if (methDecl.getParam(nullParamIndex.intValue()).getType().isArray()) {
                   removeCandidates.add(methDecl);
                 }
@@ -419,8 +428,8 @@ public class MethodResolutionLogic {
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         } else {
-            MethodDeclaration winningCandidate = applicableMethods.get(0);
-            MethodDeclaration other = null;
+            ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
+            ResolvedMethodDeclaration other = null;
             boolean possibleAmbiguity = false;
             for (int i = 1; i < applicableMethods.size(); i++) {
                 other = applicableMethods.get(i);
@@ -451,7 +460,7 @@ public class MethodResolutionLogic {
         }
     }
 
-    protected static boolean isExactMatch(MethodLikeDeclaration method, List<Type> argumentsTypes) {
+    protected static boolean isExactMatch(ResolvedMethodLikeDeclaration method, List<ResolvedType> argumentsTypes) {
       for (int i = 0; i < method.getNumberOfParams(); i++) {
         if (!method.getParam(i).getType().equals(argumentsTypes.get(i))) {
           return false;
@@ -460,7 +469,8 @@ public class MethodResolutionLogic {
       return true;
     }
 
-    private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, List<Type> argumentTypes, TypeSolver typeSolver) {
+    private static boolean isMoreSpecific(ResolvedMethodDeclaration methodA, ResolvedMethodDeclaration methodB,
+                                          List<ResolvedType> argumentTypes, TypeSolver typeSolver) {
         boolean oneMoreSpecificFound = false;
         if (methodA.getNumberOfParams() < methodB.getNumberOfParams()) {
             return true;
@@ -469,8 +479,8 @@ public class MethodResolutionLogic {
             return false;
         }
         for (int i = 0; i < methodA.getNumberOfParams(); i++) {
-            Type tdA = methodA.getParam(i).getType();
-            Type tdB = methodB.getParam(i).getType();
+            ResolvedType tdA = methodA.getParam(i).getType();
+            ResolvedType tdB = methodB.getParam(i).getType();
             // B is more specific
             if (tdB.isAssignableBy(tdA) && !tdA.isAssignableBy(tdB)) {
                 oneMoreSpecificFound = true;
@@ -577,7 +587,8 @@ public class MethodResolutionLogic {
         return true;
     }
 
-    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration, String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+    public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(ResolvedTypeDeclaration typeDeclaration,
+                                                                               String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         return solveMethodInType(typeDeclaration, name, argumentsTypes, false, typeSolver);
     }
 
@@ -590,9 +601,9 @@ public class MethodResolutionLogic {
          * @param staticOnly
          * @return
          */
-    public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration,
-                                                                       String name, List<Type> argumentsTypes, boolean staticOnly,
-                                                                       TypeSolver typeSolver) {
+    public static SymbolReference<ResolvedMethodDeclaration> solveMethodInType(ResolvedTypeDeclaration typeDeclaration,
+                                                                               String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
+                                                                               TypeSolver typeSolver) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             Context ctx = ((JavaParserClassDeclaration) typeDeclaration).getContext();
             return ctx.solveMethod(name, argumentsTypes, staticOnly, typeSolver);
@@ -633,15 +644,15 @@ public class MethodResolutionLogic {
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
-    private static void inferTypes(Type source, Type target, Map<TypeParameterDeclaration, Type> mappings) {
+    private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
 
 
         if (source.equals(target)) {
             return;
         }
         if (source.isReferenceType() && target.isReferenceType()) {
-            ReferenceType sourceRefType = source.asReferenceType();
-            ReferenceType targetRefType = target.asReferenceType();
+            ResolvedReferenceType sourceRefType = source.asReferenceType();
+            ResolvedReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
                 if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
                     for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {

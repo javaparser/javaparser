@@ -4,18 +4,18 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations
     .JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.google.common.base.Preconditions;
@@ -39,11 +39,11 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   }
 
   @Override
-  public SymbolReference<MethodDeclaration> solveMethod(String name,
-                                                        List<Type> argumentsTypes,
-                                                        boolean staticOnly,
-                                                        TypeSolver typeSolver) {
-    List<MethodDeclaration> candidateMethods =
+  public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name,
+                                                                List<ResolvedType> argumentsTypes,
+                                                                boolean staticOnly,
+                                                                TypeSolver typeSolver) {
+    List<ResolvedMethodDeclaration> candidateMethods =
         myDeclaration
             .getDeclaredMethods()
             .stream()
@@ -51,8 +51,8 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
             .collect(Collectors.toList());
 
     if (!Object.class.getCanonicalName().equals(myDeclaration.getQualifiedName())) {
-      for (ReferenceType ancestor : myDeclaration.getAncestors()) {
-        SymbolReference<MethodDeclaration> res =
+      for (ResolvedReferenceType ancestor : myDeclaration.getAncestors()) {
+        SymbolReference<ResolvedMethodDeclaration> res =
             MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(),
                                                     name,
                                                     argumentsTypes,
@@ -70,7 +70,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
     // We want to avoid infinite recursion when a class is using its own method
     // see issue #75
     if (candidateMethods.isEmpty()) {
-      SymbolReference<MethodDeclaration> parentSolution =
+      SymbolReference<ResolvedMethodDeclaration> parentSolution =
           getParent().solveMethod(name, argumentsTypes, staticOnly, typeSolver);
       if (parentSolution.isSolved()) {
         candidateMethods.add(parentSolution.getCorrespondingDeclaration());
@@ -79,7 +79,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
 
     // if is interface and candidate method list is empty, we should check the Object Methods
     if (candidateMethods.isEmpty() && myDeclaration.getSuperTypeDeclaration().isInterface()) {
-      SymbolReference<MethodDeclaration> res =
+      SymbolReference<ResolvedMethodDeclaration> res =
           MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class,
                                                                                  typeSolver),
                                                   name,
@@ -98,12 +98,12 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   }
 
   @Override
-  public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+  public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
     List<com.github.javaparser.ast.body.TypeDeclaration> typeDeclarations =
         myDeclaration
             .findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class);
 
-    Optional<SymbolReference<TypeDeclaration>> exactMatch =
+    Optional<SymbolReference<ResolvedTypeDeclaration>> exactMatch =
         typeDeclarations
             .stream()
             .filter(internalType -> internalType.getName().getId().equals(name))
@@ -116,7 +116,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       return exactMatch.get();
     }
 
-    Optional<SymbolReference<TypeDeclaration>> recursiveMatch =
+    Optional<SymbolReference<ResolvedTypeDeclaration>> recursiveMatch =
         typeDeclarations
             .stream()
             .filter(internalType -> name.startsWith(String.format("%s.", internalType.getName())))
@@ -131,7 +131,7 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
       return recursiveMatch.get();
     }
 
-    Optional<SymbolReference<TypeDeclaration>> typeArgumentsMatch =
+    Optional<SymbolReference<ResolvedTypeDeclaration>> typeArgumentsMatch =
         wrappedNode
             .getTypeArguments()
             .map(nodes ->
@@ -151,14 +151,14 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
     }
 
     // Look into extended classes and implemented interfaces
-    for (ReferenceType ancestor : myDeclaration.getAncestors()) {
+    for (ResolvedReferenceType ancestor : myDeclaration.getAncestors()) {
       // look at names of extended classes and implemented interfaces (this may not be important because they are checked in CompilationUnitContext)
       if (ancestor.getTypeDeclaration().getName().equals(name)) {
         return SymbolReference.solved(ancestor.getTypeDeclaration());
       } 
       // look into internal types of extended classes and implemented interfaces
       try {
-        for (TypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
+        for (ResolvedTypeDeclaration internalTypeDeclaration : ancestor.getTypeDeclaration().internalTypes()) {
           if (internalTypeDeclaration.getName().equals(name)) {
             return SymbolReference.solved(internalTypeDeclaration);
           }
@@ -172,8 +172,8 @@ public class AnonymousClassDeclarationContext extends AbstractJavaParserContext<
   }
 
   @Override
-  public SymbolReference<? extends ValueDeclaration> solveSymbol(String name,
-                                                                 TypeSolver typeSolver) {
+  public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name,
+                                                                         TypeSolver typeSolver) {
     Preconditions.checkArgument(typeSolver != null);
 
     if (myDeclaration.hasVisibleField(name)) {

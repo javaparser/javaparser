@@ -19,7 +19,9 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -42,7 +44,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
+public class JavaParserTypeParameter extends AbstractTypeDeclaration implements ResolvedTypeParameterDeclaration {
 
     private com.github.javaparser.ast.type.TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -53,11 +55,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Collections.emptySet();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
         return getContext().solveMethod(name, parameterTypes, false, typeSolver);
     }
 

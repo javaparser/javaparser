@@ -18,20 +18,19 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
+public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration implements ResolvedInterfaceDeclaration {
 
     ///
     /// Fields
@@ -141,16 +140,16 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
             MethodUsage methodUsage = res.get();
             int i = 0;
-            List<Type> parameters = new LinkedList<>();
-            for (Type actualType : parameterTypes) {
-                Type formalType = methodUsage.getParamType(i);
+            List<ResolvedType> parameters = new LinkedList<>();
+            for (ResolvedType actualType : parameterTypes) {
+                ResolvedType formalType = methodUsage.getParamType(i);
                 // We need to replace the class type typeParametersValues (while we derive the method ones)
 
                 parameters.add(inferenceContext.addPair(formalType, actualType));
                 i++;
             }
             try {
-                Type returnType = inferenceContext.addSingle(methodUsage.returnType());
+                ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
                 for (int j=0;j<parameters.size();j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
@@ -190,7 +189,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         if (type instanceof NullType) {
             return true;
         }
@@ -220,17 +219,17 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
+    public ResolvedFieldDeclaration getField(String name) {
         return reflectionClassAdapter.getField(name);
     }
 
     @Override
-    public List<FieldDeclaration> getAllFields() {
+    public List<ResolvedFieldDeclaration> getAllFields() {
         return reflectionClassAdapter.getAllFields();
     }
 
     @Deprecated
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
@@ -240,12 +239,12 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<ReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors() {
         return reflectionClassAdapter.getAncestors();
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return reflectionClassAdapter.getDeclaredMethods();
     }
 
@@ -265,8 +264,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<ReferenceType> getInterfacesExtended() {
-        List<ReferenceType> res = new ArrayList<>();
+    public List<ResolvedReferenceType> getInterfacesExtended() {
+        List<ResolvedReferenceType> res = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
             res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
         }
@@ -274,19 +273,19 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
     
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();
     }
 
     @Override
-    public Set<ReferenceTypeDeclaration> internalTypes() {
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         return Arrays.stream(this.clazz.getDeclaredClasses())
                 .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public InterfaceDeclaration asInterface() {
+    public ResolvedInterfaceDeclaration asInterface() {
         return this;
     }
 
@@ -296,7 +295,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return reflectionClassAdapter.getTypeParameters();
     }
 

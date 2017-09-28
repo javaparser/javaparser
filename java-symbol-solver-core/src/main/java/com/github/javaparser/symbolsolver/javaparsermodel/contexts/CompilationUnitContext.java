@@ -24,13 +24,15 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
@@ -62,14 +64,14 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     ///
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
 
         // solve absolute references
         String itName = name;
         while (itName.contains(".")) {
             String typeName = getType(itName);
             String memberName = getMember(itName);
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> type = this.solveType(typeName, typeSolver);
+            SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName, typeSolver);
             if (type.isSolved()) {
                 return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
             } else {
@@ -83,8 +85,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 if(importDecl.isStatic()){
                     if(importDecl.isAsterisk()) {
                         String qName = importDecl.getNameAsString();
-                        com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(qName);
-                        SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
+                        ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
+                        SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
                         if (ref.isSolved()) {
                             return ref;
                         }
@@ -96,7 +98,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         String typeName = getType(whole);
 
                         if (memberName.equals(name)) {
-                            com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(typeName);
+                            ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
                             return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
                         }
                     }
@@ -104,11 +106,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
-        return SymbolReference.unsolved(ValueDeclaration.class);
+        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
     @Override
-    public SymbolReference<com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypes() != null) {
             for (TypeDeclaration<?> type : wrappedNode.getTypes()) {
                 if (type.getName().getId().equals(name)) {
@@ -144,9 +146,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         }
                     }
                     if (found) {
-                        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                         if (ref.isSolved()) {
-                            return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+                            return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                         }
                     }
                 }
@@ -155,9 +157,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString() + "." + name;
-                    SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+                    SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
                     if (ref.isSolved()) {
-                        return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+                        return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
                     }
                 }
             }
@@ -166,30 +168,30 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look in current package
         if (this.wrappedNode.getPackageDeclaration().isPresent()) {
             String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
-                return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+                return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
             }
         } else {
             // look for classes in the default package
             String qName = name;
-            SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
+            SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref.isSolved()) {
-                return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+                return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
             }
         }
 
         // Look in the java.lang package
-        SymbolReference<com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
         if (ref.isSolved()) {
-            return SymbolReference.adapt(ref, com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+            return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
         }
 
         // DO NOT look for absolute name if this name is not qualified: you cannot import classes from the default package
         if (isQualifiedName(name)) {
-            return SymbolReference.adapt(typeSolver.tryToSolveType(name), com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration.class);
+            return SymbolReference.adapt(typeSolver.tryToSolveType(name), ResolvedTypeDeclaration.class);
         } else {
-            return SymbolReference.unsolved(com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         }
     }
 
@@ -224,7 +226,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
             if(importDecl.isStatic()){
                 if(importDecl.isAsterisk()){
@@ -235,11 +237,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                             && this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString)))) {
                         // We are using a static import on a type defined in this file. It means the value was not found at
                         // a lower level so this will fail
-                        return SymbolReference.unsolved(MethodDeclaration.class);
+                        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
                     }
 
-                    com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(importString);
-                    SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver);
+                    ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
+                    SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver);
 
                     if (method.isSolved()) {
                         return method;
@@ -249,8 +251,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     if (qName.equals(name) || qName.endsWith("." + name)) {
                         String typeName = getType(qName);
-                        com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration ref = typeSolver.solveType(typeName);
-                        SymbolReference<MethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver);
+                        ResolvedTypeDeclaration ref = typeSolver.solveType(typeName);
+                        SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true, typeSolver);
                         if (method.isSolved()) {
                             return method;
                         }
@@ -258,7 +260,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                 }
             }
         }
-        return SymbolReference.unsolved(MethodDeclaration.class);
+        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
     }
 
     ///

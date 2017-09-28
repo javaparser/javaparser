@@ -16,12 +16,12 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistMethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionMethodDeclaration;
 
 import java.util.List;
@@ -35,7 +35,7 @@ class ContextHelper {
         // prevent instantiation
     }
 
-    static MethodUsage resolveTypeVariables(Context context, MethodDeclaration methodDeclaration, List<Type> parameterTypes) {
+    static MethodUsage resolveTypeVariables(Context context, ResolvedMethodDeclaration methodDeclaration, List<ResolvedType> parameterTypes) {
         if (methodDeclaration instanceof JavaParserMethodDeclaration) {
             return ((JavaParserMethodDeclaration) methodDeclaration).resolveTypeVariables(context, parameterTypes);
         } else if (methodDeclaration instanceof JavassistMethodDeclaration) {

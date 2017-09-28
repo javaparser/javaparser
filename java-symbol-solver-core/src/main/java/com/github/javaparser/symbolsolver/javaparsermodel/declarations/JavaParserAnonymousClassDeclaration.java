@@ -5,21 +5,15 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -36,7 +30,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   private final TypeSolver typeSolver;
   private final ObjectCreationExpr wrappedNode;
-  private final TypeDeclaration superTypeDeclaration;
+  private final ResolvedTypeDeclaration superTypeDeclaration;
   private final String name = "Anonymous-" + UUID.randomUUID();
 
   public JavaParserAnonymousClassDeclaration(ObjectCreationExpr wrappedNode,
@@ -49,7 +43,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
                          .getCorrespondingDeclaration();
   }
 
-  public TypeDeclaration getSuperTypeDeclaration() {
+  public ResolvedTypeDeclaration getSuperTypeDeclaration() {
     return superTypeDeclaration;
   }
 
@@ -68,17 +62,17 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  protected ReferenceType object() {
+  protected ResolvedReferenceType object() {
     return new ReferenceTypeImpl(typeSolver.solveType(Object.class.getCanonicalName()), typeSolver);
   }
 
   @Override
-  public ReferenceType getSuperClass() {
+  public ResolvedReferenceType getSuperClass() {
     return new ReferenceTypeImpl(superTypeDeclaration.asReferenceType(), typeSolver);
   }
 
   @Override
-  public List<ReferenceType> getInterfaces() {
+  public List<ResolvedReferenceType> getInterfaces() {
     return
         superTypeDeclaration
             .asReferenceType().getAncestors()
@@ -88,7 +82,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public List<ConstructorDeclaration> getConstructors() {
+  public List<ResolvedConstructorDeclaration> getConstructors() {
     return
         findMembersOfKind(com.github.javaparser.ast.body.ConstructorDeclaration.class)
             .stream()
@@ -102,17 +96,17 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public List<ReferenceType> getAncestors() {
+  public List<ResolvedReferenceType> getAncestors() {
     return
         ImmutableList.
-            <ReferenceType>builder()
+            <ResolvedReferenceType>builder()
             .add(getSuperClass())
             .addAll(superTypeDeclaration.asReferenceType().getAncestors())
             .build();
   }
 
   @Override
-  public List<FieldDeclaration> getAllFields() {
+  public List<ResolvedFieldDeclaration> getAllFields() {
 
     List<JavaParserFieldDeclaration> myFields =
         findMembersOfKind(com.github.javaparser.ast.body.FieldDeclaration.class)
@@ -123,17 +117,17 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
                                                                               typeSolver)))
             .collect(Collectors.toList());
 
-    List<FieldDeclaration> superClassFields =
+    List<ResolvedFieldDeclaration> superClassFields =
         getSuperClass().getTypeDeclaration().getAllFields();
 
-    List<FieldDeclaration> interfaceFields =
+    List<ResolvedFieldDeclaration> interfaceFields =
         getInterfaces().stream()
                        .flatMap(inteface -> inteface.getTypeDeclaration().getAllFields().stream())
                        .collect(Collectors.toList());
 
     return
         ImmutableList
-        .<FieldDeclaration>builder()
+        .<ResolvedFieldDeclaration>builder()
         .addAll(myFields)
         .addAll(superClassFields)
         .addAll(interfaceFields)
@@ -141,7 +135,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public Set<MethodDeclaration> getDeclaredMethods() {
+  public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
     return
         findMembersOfKind(com.github.javaparser.ast.body.MethodDeclaration.class)
             .stream()
@@ -150,7 +144,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public boolean isAssignableBy(Type type) {
+  public boolean isAssignableBy(ResolvedType type) {
     return false;
   }
 
@@ -185,7 +179,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public Set<ReferenceTypeDeclaration> internalTypes() {
+  public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
     return
         findMembersOfKind(com.github.javaparser.ast.body.TypeDeclaration.class)
             .stream()
@@ -199,12 +193,12 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   @Override
-  public List<TypeParameterDeclaration> getTypeParameters() {
+  public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
     return Lists.newArrayList();
   }
 
   @Override
-  public Optional<ReferenceTypeDeclaration> containerType() {
+  public Optional<ResolvedReferenceTypeDeclaration> containerType() {
     throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
   }
 }

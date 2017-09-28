@@ -16,6 +16,7 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 
@@ -54,14 +55,14 @@ public class InferenceContext {
      *
      * @return the actual with the inference variable inserted
      */
-    public Type addPair(Type target, Type actual) {
+    public ResolvedType addPair(ResolvedType target, ResolvedType actual) {
         target = placeInferenceVariables(target);
         actual = placeInferenceVariables(actual);
         registerCorrespondance(target, actual);
         return target;
     }
 
-    public Type addSingle(Type actual) {
+    public ResolvedType addSingle(ResolvedType actual) {
         return placeInferenceVariables(actual);
     }
 
@@ -184,7 +185,7 @@ public class InferenceContext {
         }
     }
 
-    public Type resolve(Type type) {
+    public ResolvedType resolve(ResolvedType type) {
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
             return inferenceVariableType.equivalentType();

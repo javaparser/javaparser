@@ -14,12 +14,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
@@ -102,7 +101,7 @@ public class JarTypeSolver implements TypeSolver {
                 return SymbolReference.solved(
                         JavassistFactory.toTypeDeclaration(classpathElements.get(name).toCtClass(), getRoot()));
             } else {
-                return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+                return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -111,7 +110,7 @@ public class JarTypeSolver implements TypeSolver {
 
     @Override
     public ResolvedReferenceTypeDeclaration solveType(String name) throws UnsolvedSymbolException {
-        SymbolReference<ReferenceTypeDeclaration> ref = tryToSolveType(name);
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
         } else {

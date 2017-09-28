@@ -16,14 +16,14 @@
 
 package com.github.javaparser.symbolsolver.declarations.common;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 
 import java.util.ArrayList;
@@ -35,19 +35,19 @@ import java.util.Optional;
  */
 public class MethodDeclarationCommonLogic {
 
-    private MethodDeclaration methodDeclaration;
+    private ResolvedMethodDeclaration methodDeclaration;
     private TypeSolver typeSolver;
 
-    public MethodDeclarationCommonLogic(MethodDeclaration methodDeclaration, TypeSolver typeSolver) {
+    public MethodDeclarationCommonLogic(ResolvedMethodDeclaration methodDeclaration, TypeSolver typeSolver) {
         this.methodDeclaration = methodDeclaration;
         this.typeSolver = typeSolver;
     }
 
-    public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
-        Type returnType = replaceTypeParams(methodDeclaration.getReturnType(), typeSolver, context);
-        List<Type> params = new ArrayList<>();
+    public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
+        ResolvedType returnType = replaceTypeParams(methodDeclaration.getReturnType(), typeSolver, context);
+        List<ResolvedType> params = new ArrayList<>();
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
-            Type replaced = replaceTypeParams(methodDeclaration.getParam(i).getType(), typeSolver, context);
+            ResolvedType replaced = replaceTypeParams(methodDeclaration.getParam(i).getType(), typeSolver, context);
             params.add(replaced);
         }
 
@@ -56,8 +56,8 @@ public class MethodDeclarationCommonLogic {
         // Map<TypeParameterDeclaration, Type> determinedTypeParameters = new HashMap<>();
         InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
         for (int i = 0; i < methodDeclaration.getNumberOfParams() - (methodDeclaration.hasVariadicParameter() ? 1 : 0); i++) {
-            Type formalParamType = methodDeclaration.getParam(i).getType();
-            Type actualParamType = parameterTypes.get(i);
+            ResolvedType formalParamType = methodDeclaration.getParam(i).getType();
+            ResolvedType actualParamType = parameterTypes.get(i);
             inferenceContext.addPair(formalParamType, actualParamType);
         }
 
@@ -66,11 +66,11 @@ public class MethodDeclarationCommonLogic {
         return new MethodUsage(methodDeclaration, params, returnType);
     }
 
-    private Type replaceTypeParams(Type type, TypeSolver typeSolver, Context context) {
+    private ResolvedType replaceTypeParams(ResolvedType type, TypeSolver typeSolver, Context context) {
         if (type.isTypeVariable()) {
-            TypeParameterDeclaration typeParameter = type.asTypeParameter();
+            ResolvedTypeParameterDeclaration typeParameter = type.asTypeParameter();
             if (typeParameter.declaredOnType()) {
-                Optional<Type> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
+                Optional<ResolvedType> typeParam = typeParamByName(typeParameter.getName(), typeSolver, context);
                 if (typeParam.isPresent()) {
                     type = typeParam.get();
                 }
@@ -84,11 +84,11 @@ public class MethodDeclarationCommonLogic {
         return type;
     }
 
-    protected Optional<Type> typeParamByName(String name, TypeSolver typeSolver, Context context) {
+    protected Optional<ResolvedType> typeParamByName(String name, TypeSolver typeSolver, Context context) {
         return methodDeclaration.getTypeParameters().stream().filter(tp -> tp.getName().equals(name)).map(tp -> toType(tp)).findFirst();
     }
 
-    protected Type toType(TypeParameterDeclaration typeParameterDeclaration) {
-        return new TypeVariable(typeParameterDeclaration);
+    protected ResolvedType toType(ResolvedTypeParameterDeclaration typeParameterDeclaration) {
+        return new ResolvedTypeVariable(typeParameterDeclaration);
     }
 }

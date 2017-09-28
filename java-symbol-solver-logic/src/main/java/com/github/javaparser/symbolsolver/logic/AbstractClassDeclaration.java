@@ -16,9 +16,8 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ClassDeclaration {
+public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration implements ResolvedClassDeclaration {
 
     ///
     /// Public
@@ -40,9 +39,9 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final List<ReferenceType> getAllSuperClasses() {
-        List<ReferenceType> superclasses = new ArrayList<>();
-        ReferenceType superClass = getSuperClass();
+    public final List<ResolvedReferenceType> getAllSuperClasses() {
+        List<ResolvedReferenceType> superclasses = new ArrayList<>();
+        ResolvedReferenceType superClass = getSuperClass();
         if (superClass != null) {
             superclasses.add(superClass);
             superclasses.addAll(superClass.getAllClassesAncestors());
@@ -55,13 +54,13 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final List<ReferenceType> getAllInterfaces() {
-        List<ReferenceType> interfaces = new ArrayList<>();
-        for (ReferenceType interfaceDeclaration : getInterfaces()) {
+    public final List<ResolvedReferenceType> getAllInterfaces() {
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
             interfaces.add(interfaceDeclaration);
             interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
         }
-        ReferenceType superClass = this.getSuperClass();
+        ResolvedReferenceType superClass = this.getSuperClass();
         if (superClass != null) {
             interfaces.addAll(superClass.getAllInterfacesAncestors());
         }
@@ -69,7 +68,7 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public final ClassDeclaration asClass() {
+    public final ResolvedClassDeclaration asClass() {
         return this;
     }
 
@@ -80,6 +79,6 @@ public abstract class AbstractClassDeclaration extends AbstractTypeDeclaration i
     /**
      * An implementation of the Object class.
      */
-    protected abstract ReferenceType object();
+    protected abstract ResolvedReferenceType object();
 
 }
