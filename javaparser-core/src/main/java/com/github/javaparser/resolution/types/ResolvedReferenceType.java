@@ -325,15 +325,15 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     // Protected methods
     //
 
-    protected abstract ReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParameters);
+    protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParameters);
 
-    protected ReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, ResolvedTypeParametersMap typeParametersMap) {
+    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, ResolvedTypeParametersMap typeParametersMap) {
         return create(typeDeclaration, typeDeclaration.getTypeParameters().stream()
                 .map(typeParametersMap::getValue)
                 .collect(Collectors.toList()));
     }
 
-    protected abstract ReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
+    protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
 
     protected boolean isCorrespondingBoxingType(String typeName) {
         switch (typeName) {
