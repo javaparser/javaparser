@@ -17,11 +17,11 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtField;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -32,7 +32,7 @@ import java.lang.reflect.Modifier;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistFieldDeclaration implements FieldDeclaration {
+public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     private CtField ctField;
     private TypeSolver typeSolver;
 
@@ -42,11 +42,11 @@ public class JavassistFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public Type getType() {
+    public ResolvedType getType() {
         try {
-            if (ctField.getGenericSignature() != null && declaringType() instanceof TypeParametrizable) {
+            if (ctField.getGenericSignature() != null && declaringType() instanceof ResolvedTypeParametrizable) {
                 javassist.bytecode.SignatureAttribute.Type genericSignatureType = SignatureAttribute.toFieldSignature(ctField.getGenericSignature());
-                return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (TypeParametrizable) declaringType());
+                return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
             } else {
                 return JavassistFactory.typeUsageFor(ctField.getType(), typeSolver);
             }
@@ -83,12 +83,12 @@ public class JavassistFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctField.getModifiers());
     }
 
     @Override
-    public TypeDeclaration declaringType() {
+    public ResolvedTypeDeclaration declaringType() {
         return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
     }
 }

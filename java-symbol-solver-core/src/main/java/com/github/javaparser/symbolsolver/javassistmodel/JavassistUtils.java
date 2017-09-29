@@ -16,14 +16,14 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 class JavassistUtils {
 
-    static Optional<MethodUsage> getMethodUsage(CtClass ctClass, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
+    static Optional<MethodUsage> getMethodUsage(CtClass ctClass, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
         // TODO avoid bridge and synthetic methods
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getName().equals(name)) {
@@ -53,8 +53,8 @@ class JavassistUtils {
                 try {
                     if (method.getGenericSignature() != null) {
                         SignatureAttribute.MethodSignature methodSignature = SignatureAttribute.toMethodSignature(method.getGenericSignature());
-                        List<Type> parametersOfReturnType = parseTypeParameters(methodSignature.getReturnType().toString(), typeSolver, invokationContext);
-                        Type newReturnType = methodUsage.returnType();
+                        List<ResolvedType> parametersOfReturnType = parseTypeParameters(methodSignature.getReturnType().toString(), typeSolver, invokationContext);
+                        ResolvedType newReturnType = methodUsage.returnType();
                         // consume one parametersOfReturnType at the time
                         if (newReturnType.isReferenceType() && parametersOfReturnType.size() > 0) {
                             newReturnType = newReturnType.asReferenceType().transformTypeParameters(tp -> parametersOfReturnType.remove(0));
@@ -94,7 +94,7 @@ class JavassistUtils {
         return Optional.empty();
     }
 
-    private static List<Type> parseTypeParameters(String signature, TypeSolver typeSolver, Context invokationContext) {
+    private static List<ResolvedType> parseTypeParameters(String signature, TypeSolver typeSolver, Context invokationContext) {
         String originalSignature = signature;
         if (signature.contains("<")) {
             signature = signature.substring(signature.indexOf('<') + 1);
@@ -107,24 +107,24 @@ class JavassistUtils {
             }
             if (signature.startsWith("?")) {
                 // TODO: check bounds
-                List<Type> types = new ArrayList<>();
-                types.add(Wildcard.UNBOUNDED);
+                List<ResolvedType> types = new ArrayList<>();
+                types.add(ResolvedWildcard.UNBOUNDED);
                 return types;
             }
-            List<Type> typeParameters = parseTypeParameters(signature, typeSolver, invokationContext);
+            List<ResolvedType> typeParameters = parseTypeParameters(signature, typeSolver, invokationContext);
             if (signature.contains("<")) {
                 signature = signature.substring(0, signature.indexOf('<'));
             }
             if (signature.contains(">")) {
                 throw new UnsupportedOperationException();
             }
-            
-            Type type = new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext);
+
+            ResolvedType type = new SymbolSolver(typeSolver).solveTypeUsage(signature, invokationContext);
 
             if (type.isReferenceType() && typeParameters.size() > 0) {
                 type = type.asReferenceType().transformTypeParameters(tp -> typeParameters.remove(0));
             }
-            List<Type> types = new ArrayList<>();
+            List<ResolvedType> types = new ArrayList<>();
             types.add(type);
             return types;
         } else {
@@ -132,10 +132,10 @@ class JavassistUtils {
         }
     }
 
-    static Type signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
+    static ResolvedType signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
         if (signatureType instanceof SignatureAttribute.ClassType) {
             SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
-            List<Type> typeArguments = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
+            List<ResolvedType> typeArguments = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
             final String typeName =
                     classType.getDeclaringClass() != null ?
                             classType.getDeclaringClass().getName() + "." + classType.getName() :
@@ -145,21 +145,21 @@ class JavassistUtils {
             return new ReferenceTypeImpl(typeDeclaration, typeArguments, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable)signatureType;
-            Optional<TypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
+            Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
             if (!typeParameterDeclarationOpt.isPresent()) {
                 throw new UnsolvedSymbolException("Unable to solve TypeVariable " + typeVariableSignature);
             }
-            TypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
-            return new TypeVariable(typeParameterDeclaration);
+            ResolvedTypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
+            return new ResolvedTypeVariable(typeParameterDeclaration);
         } else if (signatureType instanceof SignatureAttribute.ArrayType) {
             SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
-            return new ArrayType(signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable));
+            return new ResolvedArrayType(signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable));
         } else if (signatureType instanceof SignatureAttribute.BaseType) {
             SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
             if (baseType.toString().equals("void")) {
-                return VoidType.INSTANCE;
+                return ResolvedVoidType.INSTANCE;
             } else {
-                return PrimitiveType.byName(baseType.toString());
+                return ResolvedPrimitiveType.byName(baseType.toString());
             }
         } else {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
@@ -178,27 +178,27 @@ class JavassistUtils {
         return typeName.replaceAll("\\$", ".");
     }
 
-    private static Type objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
+    private static ResolvedType objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
         String typeName = typeArgument.jvmTypeName();
-        Optional<Type> type = getGenericParameterByName(typeName, typeParametrizable);
+        Optional<ResolvedType> type = getGenericParameterByName(typeName, typeParametrizable);
         return type.orElseGet(() -> new ReferenceTypeImpl(
             typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName))),
             typeSolver));
     }
 
-    private static Optional<Type> getGenericParameterByName(String typeName, TypeParametrizable typeParametrizable) {
-        Optional<TypeParameterDeclaration> tp = typeParametrizable.findTypeParameter(typeName);
-        return tp.map(TypeVariable::new);
+    private static Optional<ResolvedType> getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable) {
+        Optional<ResolvedTypeParameterDeclaration> tp = typeParametrizable.findTypeParameter(typeName);
+        return tp.map(ResolvedTypeVariable::new);
     }
 
-    private static Type typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, TypeParametrizable typeParametrizable) {
+    private static ResolvedType typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
         if (typeArgument.isWildcard()) {
             if (typeArgument.getType() == null) {
-                return Wildcard.UNBOUNDED;
+                return ResolvedWildcard.UNBOUNDED;
             } else if (typeArgument.getKind() == '+') {
-                return Wildcard.extendsBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
+                return ResolvedWildcard.extendsBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
             } else if (typeArgument.getKind() == '-') {
-                return Wildcard.superBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
+                return ResolvedWildcard.superBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
             } else {
                 throw new UnsupportedOperationException();
             }

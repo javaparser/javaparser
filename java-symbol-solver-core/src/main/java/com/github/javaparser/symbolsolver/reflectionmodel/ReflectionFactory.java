@@ -19,10 +19,9 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 
@@ -71,18 +70,18 @@ public class ReflectionFactory {
             Class<?> c = (Class<?>) type;
             if (c.isPrimitive()) {
                 if (c.getName().equals(Void.TYPE.getName())) {
-                    return VoidType.INSTANCE;
+                    return ResolvedVoidType.INSTANCE;
                 } else {
-                    return PrimitiveType.byName(c.getName());
+                    return ResolvedPrimitiveType.byName(c.getName());
                 }
             } else if (c.isArray()) {
-                return new ArrayType(typeUsageFor(c.getComponentType(), typeSolver));
+                return new ResolvedArrayType(typeUsageFor(c.getComponentType(), typeSolver));
             } else {
                 return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver), typeSolver);
             }
         } else if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;
-            return new ArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
+            return new ResolvedArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
@@ -94,15 +93,15 @@ public class ReflectionFactory {
                 if (wildcardType.getLowerBounds().length > 1) {
                     throw new UnsupportedOperationException();
                 }
-                return Wildcard.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
+                return ResolvedWildcard.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
             }
             if (wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length > 1) {
                     throw new UnsupportedOperationException();
                 }
-                return Wildcard.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
+                return ResolvedWildcard.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
             }
-            return Wildcard.UNBOUNDED;
+            return ResolvedWildcard.UNBOUNDED;
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
         }

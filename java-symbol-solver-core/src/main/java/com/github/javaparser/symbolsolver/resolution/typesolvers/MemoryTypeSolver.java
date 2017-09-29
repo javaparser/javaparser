@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -32,7 +31,7 @@ import java.util.Map;
 public class MemoryTypeSolver implements TypeSolver {
 
     private TypeSolver parent;
-    private Map<String, ReferenceTypeDeclaration> declarationMap = new HashMap<>();
+    private Map<String, ResolvedReferenceTypeDeclaration> declarationMap = new HashMap<>();
 
     @Override
     public String toString() {
@@ -76,11 +75,11 @@ public class MemoryTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         if (declarationMap.containsKey(name)) {
             return SymbolReference.solved(declarationMap.get(name));
         } else {
-            return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         }
     }
 

@@ -18,19 +18,15 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import javassist.CtClass;
 import javassist.CtField;
@@ -47,7 +43,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration implements InterfaceDeclaration {
+public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration implements ResolvedInterfaceDeclaration {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -71,7 +67,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public List<ReferenceType> getInterfacesExtended() {
+    public List<ResolvedReferenceType> getInterfacesExtended() {
         try {
             return Arrays.stream(ctClass.getInterfaces()).map(i -> new JavassistInterfaceDeclaration(i, typeSolver))
                     .map(i -> new ReferenceTypeImpl(i, typeSolver)).collect(Collectors.toList());
@@ -132,7 +128,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<MethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
+                SymbolReference<ResolvedMethodDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveMethod(name, argumentsTypes, staticOnly);
                 if (ref.isSolved()) {
                     candidates.add(ref.getCorrespondingDeclaration());
                 }
@@ -145,12 +141,12 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<FieldDeclaration> getAllFields() {
+    public List<ResolvedFieldDeclaration> getAllFields() {
       return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
@@ -160,11 +156,11 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public List<ReferenceType> getAncestors() {
-        List<ReferenceType> ancestors = new ArrayList<>();
+    public List<ResolvedReferenceType> getAncestors() {
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                ReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver).asReferenceType();
+                ResolvedReferenceType superInterfaze = JavassistFactory.typeUsageFor(interfaze, typeSolver).asReferenceType();
                 ancestors.add(superInterfaze);
             }
         } catch (NotFoundException e) {
@@ -177,7 +173,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(ctClass.getDeclaredMethods())
                 .map(m -> new JavassistMethodDeclaration(m, typeSolver))
                 .collect(Collectors.toSet());
@@ -207,23 +203,23 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return javassistTypeDeclarationAdapter.getTypeParameters();
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 
     @Override
-    public InterfaceDeclaration asInterface() {
+    public ResolvedInterfaceDeclaration asInterface() {
         return this;
     }
 
 
     @Deprecated
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new JavassistFieldDeclaration(field, typeSolver));
@@ -232,7 +228,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
         try {
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<? extends ValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
+                SymbolReference<? extends ResolvedValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
                 if (ref.isSolved()) {
                     return ref;
                 }
@@ -241,16 +237,16 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
             throw new RuntimeException(e);
         }
 
-        return SymbolReference.unsolved(ValueDeclaration.class);
+        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
 
     @Override
-    public Set<ReferenceTypeDeclaration> internalTypes() {
+    public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         try {
             /*
             Get all internal types of the current class and get their corresponding ReferenceTypeDeclaration.
@@ -263,12 +259,12 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
     }
 
     @Override
-    public ReferenceTypeDeclaration getInternalType(String name) {
+    public ResolvedReferenceTypeDeclaration getInternalType(String name) {
         /*
         The name of the ReferenceTypeDeclaration could be composed on the internal class and the outer class, e.g. A$B. That's why we search the internal type in the ending part.
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
-        Optional<ReferenceTypeDeclaration> type =
+        Optional<ResolvedReferenceTypeDeclaration> type =
                 this.internalTypes().stream().filter(f -> f.getName().endsWith(name)).findFirst();
         return type.orElseThrow(() ->
                 new UnsolvedSymbolException("Internal type not found: " + name));

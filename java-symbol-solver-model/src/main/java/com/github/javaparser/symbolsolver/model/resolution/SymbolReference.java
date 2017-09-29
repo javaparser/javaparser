@@ -17,7 +17,6 @@
 package com.github.javaparser.symbolsolver.model.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.Declaration;
 
 import java.util.Optional;
 

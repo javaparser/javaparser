@@ -95,7 +95,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Deprecated
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
                 typeSolver,this, clazz);
     }
@@ -107,7 +107,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 '}';
     }
 
-    public Type getUsage(Node node) {
+    public ResolvedType getUsage(Node node) {
         return new ReferenceTypeImpl(this, typeSolver);
     }
 
@@ -236,7 +236,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
-        return SymbolReference.unsolved(ValueDeclaration.class);
+        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
     @Override
@@ -301,7 +301,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
     }
 }

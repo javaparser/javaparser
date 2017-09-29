@@ -19,13 +19,8 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.declarations.ConstructorDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodAmbiguityException;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,8 +137,7 @@ public class ConstructorResolutionLogic {
     }
 
     /**
-     * @param methods        we expect the methods to be ordered such that inherited methods are later in the list
-     * @param name
+     * @param constructors        we expect the methods to be ordered such that inherited methods are later in the list
      * @param argumentsTypes
      * @param typeSolver
      * @return
@@ -162,7 +156,7 @@ public class ConstructorResolutionLogic {
             List<ResolvedConstructorDeclaration> constructors, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
         List<ResolvedConstructorDeclaration> applicableConstructors = constructors.stream().filter((m) -> isApplicable(m, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         if (applicableConstructors.isEmpty()) {
-            return SymbolReference.unsolved(ConstructorDeclaration.class);
+            return SymbolReference.unsolved(ResolvedConstructorDeclaration.class);
         }
         if (applicableConstructors.size() == 1) {
             return SymbolReference.solved(applicableConstructors.get(0));

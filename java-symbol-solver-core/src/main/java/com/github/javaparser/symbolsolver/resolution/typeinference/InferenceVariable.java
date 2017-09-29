@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,25 +14,25 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public class InferenceVariable implements Type {
+public class InferenceVariable implements ResolvedType {
     private static int unnamedInstantiated = 0;
 
     private String name;
-    private TypeParameterDeclaration typeParameterDeclaration;
+    private ResolvedTypeParameterDeclaration typeParameterDeclaration;
 
-    public static List<InferenceVariable> instantiate(List<TypeParameterDeclaration> typeParameterDeclarations) {
+    public static List<InferenceVariable> instantiate(List<ResolvedTypeParameterDeclaration> typeParameterDeclarations) {
         List<InferenceVariable> inferenceVariables = new LinkedList<>();
-        for (TypeParameterDeclaration tp : typeParameterDeclarations) {
+        for (ResolvedTypeParameterDeclaration tp : typeParameterDeclarations) {
             inferenceVariables.add(InferenceVariable.unnamed(tp));
         }
         return inferenceVariables;
     }
 
-    public static InferenceVariable unnamed(TypeParameterDeclaration typeParameterDeclaration) {
+    public static InferenceVariable unnamed(ResolvedTypeParameterDeclaration typeParameterDeclaration) {
         return new InferenceVariable("__unnamed__" + (unnamedInstantiated++), typeParameterDeclaration);
     }
 
-    public InferenceVariable(String name, TypeParameterDeclaration typeParameterDeclaration) {
+    public InferenceVariable(String name, ResolvedTypeParameterDeclaration typeParameterDeclaration) {
         this.name = name;
         this.typeParameterDeclaration = typeParameterDeclaration;
     }
@@ -62,7 +62,7 @@ public class InferenceVariable implements Type {
     }
 
     @Override
-    public boolean isAssignableBy(Type other) {
+    public boolean isAssignableBy(ResolvedType other) {
         if (other.equals(this)) {
             return true;
         }
@@ -71,7 +71,7 @@ public class InferenceVariable implements Type {
                         + " constraints");
     }
 
-    public TypeParameterDeclaration getTypeParameterDeclaration() {
+    public ResolvedTypeParameterDeclaration getTypeParameterDeclaration() {
         if (typeParameterDeclaration == null) {
             throw new IllegalStateException("The type parameter declaration was not specified");
         }
@@ -87,7 +87,7 @@ public class InferenceVariable implements Type {
     }
 
     @Override
-    public boolean mention(List<TypeParameterDeclaration> typeParameters) {
+    public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return false;
     }
 }

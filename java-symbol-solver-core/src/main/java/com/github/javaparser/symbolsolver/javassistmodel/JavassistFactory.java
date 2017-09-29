@@ -16,7 +16,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 import javassist.CtClass;
@@ -29,15 +29,15 @@ import java.lang.reflect.Modifier;
  */
 public class JavassistFactory {
 
-  public static Type typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
+  public static ResolvedType typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
     try {
       if (ctClazz.isArray()) {
-        return new ArrayType(typeUsageFor(ctClazz.getComponentType(), typeSolver));
+        return new ResolvedArrayType(typeUsageFor(ctClazz.getComponentType(), typeSolver));
       } else if (ctClazz.isPrimitive()) {
         if (ctClazz.getName().equals("void")) {
-          return VoidType.INSTANCE;
+          return ResolvedVoidType.INSTANCE;
         } else {
-          return PrimitiveType.byName(ctClazz.getName());
+          return ResolvedPrimitiveType.byName(ctClazz.getName());
         }
       } else {
         if (ctClazz.isInterface()) {

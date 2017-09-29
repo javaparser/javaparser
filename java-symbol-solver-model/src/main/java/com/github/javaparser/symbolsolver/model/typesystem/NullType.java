@@ -16,12 +16,14 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.resolution.types.ResolvedType;
+
 /**
  * This is a virtual type used to represent null values.
  *
  * @author Federico Tomassetti
  */
-public class NullType implements Type {
+public class NullType implements ResolvedType {
 
     public static final NullType INSTANCE = new NullType();
 
@@ -59,7 +61,7 @@ public class NullType implements Type {
     }
 
     @Override
-    public boolean isAssignableBy(Type other) {
+    public boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException("It does not make sense to assign a value to null, it can only be assigned");
     }
 

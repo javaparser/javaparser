@@ -23,13 +23,9 @@ import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
 import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.*;
 
@@ -76,7 +72,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
   ///
 
   @Override
-  public AccessSpecifier accessLevel() {
+  public AccessSpecifier accessSpecifier() {
     return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
   }
   

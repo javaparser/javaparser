@@ -18,16 +18,14 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -38,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionMethodDeclaration implements MethodDeclaration {
+public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration {
 
     private Method method;
     private TypeSolver typeSolver;
@@ -79,7 +77,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ReferenceTypeDeclaration declaringType() {
+    public ResolvedReferenceTypeDeclaration declaringType() {
         if (method.getDeclaringClass().isInterface()) {
             return new ReflectionInterfaceDeclaration(method.getDeclaringClass(), typeSolver);
         }
@@ -91,7 +89,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public Type getReturnType() {
+    public ResolvedType getReturnType() {
         return ReflectionFactory.typeUsageFor(method.getGenericReturnType(), typeSolver);
     }
 
@@ -134,7 +132,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.method.getModifiers());
     }
 

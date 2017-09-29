@@ -20,18 +20,13 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -47,7 +42,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
+public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements ResolvedEnumDeclaration {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -66,7 +61,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctClass.getModifiers());
     }
 
@@ -90,15 +85,15 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public List<ReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors() {
         // Direct ancestors of an enum are java.lang.Enum and interfaces
-        List<ReferenceType> ancestors = new LinkedList<>();
+        List<ResolvedReferenceType> ancestors = new LinkedList<>();
 
         try {
             CtClass superClass = ctClass.getSuperclass();
 
             if (superClass != null) {
-                Type superClassTypeUsage = JavassistFactory.typeUsageFor(superClass, typeSolver);
+                ResolvedType superClassTypeUsage = JavassistFactory.typeUsageFor(superClass, typeSolver);
 
                 if (superClassTypeUsage.isReferenceType()) {
                     ancestors.add(superClassTypeUsage.asReferenceType());
@@ -106,7 +101,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
             }
 
             for (CtClass interfaze : ctClass.getInterfaces()) {
-                Type interfazeTypeUsage = JavassistFactory.typeUsageFor(interfaze, typeSolver);
+                ResolvedType interfazeTypeUsage = JavassistFactory.typeUsageFor(interfaze, typeSolver);
 
                 if (interfazeTypeUsage.isReferenceType()) {
                     ancestors.add(interfazeTypeUsage.asReferenceType());
@@ -120,8 +115,8 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
-        Optional<FieldDeclaration> field = javassistTypeDeclarationAdapter.getDeclaredFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+    public ResolvedFieldDeclaration getField(String name) {
+        Optional<ResolvedFieldDeclaration> field = javassistTypeDeclarationAdapter.getDeclaredFields().stream().filter(f -> f.getName().equals(name)).findFirst();
 
         return field.orElseThrow(() -> new RuntimeException("Field " + name + " does not exist in " + ctClass.getName() + "."));
     }
@@ -132,17 +127,17 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public List<FieldDeclaration> getAllFields() {
+    public List<ResolvedFieldDeclaration> getAllFields() {
         return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         throw new UnsupportedOperationException();
     }
 
@@ -163,17 +158,17 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return javassistTypeDeclarationAdapter.getTypeParameters();
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return javassistTypeDeclarationAdapter.containerType();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly) {
-        List<MethodDeclaration> candidates = new ArrayList<>();
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+        List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;

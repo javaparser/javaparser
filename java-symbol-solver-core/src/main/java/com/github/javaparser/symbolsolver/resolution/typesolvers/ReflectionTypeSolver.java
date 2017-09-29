@@ -16,7 +16,7 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
@@ -51,7 +51,7 @@ public class ReflectionTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         if (!jreOnly || (name.startsWith("java.") || name.startsWith("javax."))) {
             try {
                 ClassLoader classLoader = ReflectionTypeSolver.class.getClassLoader();
@@ -68,26 +68,26 @@ public class ReflectionTypeSolver implements TypeSolver {
                 // it could be an inner class
                 int lastDot = name.lastIndexOf('.');
                 if (lastDot == -1) {
-                    return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+                    return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
                 } else {
                     String parentName = name.substring(0, lastDot);
                     String childName = name.substring(lastDot + 1);
-                    SymbolReference<ReferenceTypeDeclaration> parent = tryToSolveType(parentName);
+                    SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
                     if (parent.isSolved()) {
-                        Optional<ReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration().internalTypes()
+                        Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration().internalTypes()
                                 .stream().filter(it -> it.getName().equals(childName)).findFirst();
                         if (innerClass.isPresent()) {
                             return SymbolReference.solved(innerClass.get());
                         } else {
-                            return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+                            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
                         }
                     } else {
-                        return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+                        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
                     }
                 }
             }
         } else {
-            return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         }
     }
 

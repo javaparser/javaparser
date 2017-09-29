@@ -16,12 +16,12 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 /**
  * @author Federico Tomassetti
  */
 public interface ObjectProvider {
-    ReferenceType object();
-    ReferenceType byName(String qname);
+    ResolvedReferenceType object();
+    ResolvedReferenceType byName(String qname);
 }
