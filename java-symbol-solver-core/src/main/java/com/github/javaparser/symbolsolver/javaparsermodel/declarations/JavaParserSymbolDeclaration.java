@@ -30,12 +30,7 @@ import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 

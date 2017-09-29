@@ -25,14 +25,10 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +41,8 @@ import java.util.stream.Collectors;
 //      and to get the Object type declaration
 public class ReferenceTypeImpl extends ResolvedReferenceType {
 
+    private TypeSolver typeSolver;
+
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
                 tp -> new ResolvedTypeVariable(tp)
@@ -52,21 +50,23 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     @Override
-    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected, TypeSolver typeSolver) {
+    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected) {
         return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
     @Override
-    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration) {
         return new ReferenceTypeImpl(typeDeclaration, typeSolver);
     }
 
     public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
-        super(typeDeclaration, typeSolver);
+        super(typeDeclaration, Collections.emptyList());
+        this.typeSolver = typeSolver;
     }
 
     public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments, TypeSolver typeSolver) {
-        super(typeDeclaration, typeArguments, typeSolver);
+        super(typeDeclaration, typeArguments);
+        this.typeSolver = typeSolver;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             }
             return false;
         } else if (other.isTypeVariable()) {
-            for (ResolvedTypeParameterDeclaration.Bound bound : other.asTypeVariable().asTypeParameter().getBounds(typeSolver)) {
+            for (ResolvedTypeParameterDeclaration.Bound bound : other.asTypeVariable().asTypeParameter().getBounds()) {
                 if (bound.isExtends()) {
                     if (this.isAssignableBy(bound.getType())) {
                         return true;

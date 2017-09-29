@@ -30,13 +30,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.LazyType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
@@ -153,7 +150,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         return javaParserTypeAdapter.isAssignableBy(type);
     }
 
@@ -198,7 +195,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
                 
                 @Override
                 public AccessSpecifier accessSpecifier() {
-                    return f.accessLevel();
+                    return f.accessSpecifier();
                 }
                 
                 @Override
@@ -269,7 +266,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (this.wrappedNode.getTypeParameters() == null) {
             return Collections.emptyList();
         } else {
@@ -289,7 +286,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 

@@ -10,456 +10,456 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.GenericVisitor;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 
-public class DefaultVisitorAdapter implements GenericVisitor<Type, Boolean> {
+public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boolean> {
     @Override
-    public Type visit(CompilationUnit node, Boolean aBoolean) {
+    public ResolvedType visit(CompilationUnit node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(PackageDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(PackageDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(TypeParameter node, Boolean aBoolean) {
+    public ResolvedType visit(TypeParameter node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(LineComment node, Boolean aBoolean) {
+    public ResolvedType visit(LineComment node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(BlockComment node, Boolean aBoolean) {
+    public ResolvedType visit(BlockComment node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ClassOrInterfaceDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(ClassOrInterfaceDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(EnumDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(EnumDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(EnumConstantDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(EnumConstantDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(AnnotationDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(AnnotationDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(AnnotationMemberDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(AnnotationMemberDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(FieldDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(FieldDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(VariableDeclarator node, Boolean aBoolean) {
+    public ResolvedType visit(VariableDeclarator node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ConstructorDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(ConstructorDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(MethodDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(MethodDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(Parameter node, Boolean aBoolean) {
+    public ResolvedType visit(Parameter node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(InitializerDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(InitializerDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(JavadocComment node, Boolean aBoolean) {
+    public ResolvedType visit(JavadocComment node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ClassOrInterfaceType node, Boolean aBoolean) {
+    public ResolvedType visit(ClassOrInterfaceType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(PrimitiveType node, Boolean aBoolean) {
+    public ResolvedType visit(PrimitiveType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ArrayType node, Boolean aBoolean) {
+    public ResolvedType visit(ArrayType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ArrayCreationLevel node, Boolean aBoolean) {
+    public ResolvedType visit(ArrayCreationLevel node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(IntersectionType node, Boolean aBoolean) {
+    public ResolvedType visit(IntersectionType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(UnionType node, Boolean aBoolean) {
+    public ResolvedType visit(UnionType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(VoidType node, Boolean aBoolean) {
+    public ResolvedType visit(VoidType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(WildcardType node, Boolean aBoolean) {
+    public ResolvedType visit(WildcardType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(UnknownType node, Boolean aBoolean) {
+    public ResolvedType visit(UnknownType node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ArrayAccessExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ArrayAccessExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ArrayCreationExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ArrayCreationExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ArrayInitializerExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ArrayInitializerExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(AssignExpr node, Boolean aBoolean) {
+    public ResolvedType visit(AssignExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(BinaryExpr node, Boolean aBoolean) {
+    public ResolvedType visit(BinaryExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(CastExpr node, Boolean aBoolean) {
+    public ResolvedType visit(CastExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ClassExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ClassExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ConditionalExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ConditionalExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(EnclosedExpr node, Boolean aBoolean) {
+    public ResolvedType visit(EnclosedExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(FieldAccessExpr node, Boolean aBoolean) {
+    public ResolvedType visit(FieldAccessExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(InstanceOfExpr node, Boolean aBoolean) {
+    public ResolvedType visit(InstanceOfExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(StringLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(StringLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(IntegerLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(IntegerLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(LongLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(LongLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(CharLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(CharLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(DoubleLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(DoubleLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(BooleanLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(BooleanLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(NullLiteralExpr node, Boolean aBoolean) {
+    public ResolvedType visit(NullLiteralExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(MethodCallExpr node, Boolean aBoolean) {
+    public ResolvedType visit(MethodCallExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(NameExpr node, Boolean aBoolean) {
+    public ResolvedType visit(NameExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ObjectCreationExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ObjectCreationExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ThisExpr node, Boolean aBoolean) {
+    public ResolvedType visit(ThisExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(SuperExpr node, Boolean aBoolean) {
+    public ResolvedType visit(SuperExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(UnaryExpr node, Boolean aBoolean) {
+    public ResolvedType visit(UnaryExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(VariableDeclarationExpr node, Boolean aBoolean) {
+    public ResolvedType visit(VariableDeclarationExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(MarkerAnnotationExpr node, Boolean aBoolean) {
+    public ResolvedType visit(MarkerAnnotationExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(SingleMemberAnnotationExpr node, Boolean aBoolean) {
+    public ResolvedType visit(SingleMemberAnnotationExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(NormalAnnotationExpr node, Boolean aBoolean) {
+    public ResolvedType visit(NormalAnnotationExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(MemberValuePair node, Boolean aBoolean) {
+    public ResolvedType visit(MemberValuePair node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ExplicitConstructorInvocationStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ExplicitConstructorInvocationStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(LocalClassDeclarationStmt node, Boolean aBoolean) {
+    public ResolvedType visit(LocalClassDeclarationStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(AssertStmt node, Boolean aBoolean) {
+    public ResolvedType visit(AssertStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(BlockStmt node, Boolean aBoolean) {
+    public ResolvedType visit(BlockStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(LabeledStmt node, Boolean aBoolean) {
+    public ResolvedType visit(LabeledStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(EmptyStmt node, Boolean aBoolean) {
+    public ResolvedType visit(EmptyStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ExpressionStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ExpressionStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(SwitchStmt node, Boolean aBoolean) {
+    public ResolvedType visit(SwitchStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(SwitchEntryStmt node, Boolean aBoolean) {
+    public ResolvedType visit(SwitchEntryStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(BreakStmt node, Boolean aBoolean) {
+    public ResolvedType visit(BreakStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ReturnStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ReturnStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(IfStmt node, Boolean aBoolean) {
+    public ResolvedType visit(IfStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(WhileStmt node, Boolean aBoolean) {
+    public ResolvedType visit(WhileStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ContinueStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ContinueStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(DoStmt node, Boolean aBoolean) {
+    public ResolvedType visit(DoStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ForeachStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ForeachStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ForStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ForStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ThrowStmt node, Boolean aBoolean) {
+    public ResolvedType visit(ThrowStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(SynchronizedStmt node, Boolean aBoolean) {
+    public ResolvedType visit(SynchronizedStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(TryStmt node, Boolean aBoolean) {
+    public ResolvedType visit(TryStmt node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(CatchClause node, Boolean aBoolean) {
+    public ResolvedType visit(CatchClause node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(LambdaExpr node, Boolean aBoolean) {
+    public ResolvedType visit(LambdaExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(MethodReferenceExpr node, Boolean aBoolean) {
+    public ResolvedType visit(MethodReferenceExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(TypeExpr node, Boolean aBoolean) {
+    public ResolvedType visit(TypeExpr node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(NodeList node, Boolean aBoolean) {
+    public ResolvedType visit(NodeList node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(Name node, Boolean aBoolean) {
+    public ResolvedType visit(Name node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(SimpleName node, Boolean aBoolean) {
+    public ResolvedType visit(SimpleName node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ImportDeclaration node, Boolean aBoolean) {
+    public ResolvedType visit(ImportDeclaration node, Boolean aBoolean) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ModuleDeclaration node, Boolean arg) {
+    public ResolvedType visit(ModuleDeclaration node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ModuleRequiresStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleRequiresStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ModuleExportsStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleExportsStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ModuleProvidesStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleProvidesStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ModuleUsesStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleUsesStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(ModuleOpensStmt node, Boolean arg) {
+    public ResolvedType visit(ModuleOpensStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
-    public Type visit(UnparsableStmt node, Boolean arg) {
+    public ResolvedType visit(UnparsableStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 }

@@ -18,18 +18,17 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,16 +80,16 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
                 '}';
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
         throw new UnsupportedOperationException();
     }
 
-    public Type getUsage(Node node) {
+    public ResolvedType getUsage(Node node) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         if (type.isTypeVariable()) {
             throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type.describe());
         } else {
@@ -104,7 +103,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
+    public ResolvedFieldDeclaration getField(String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -114,17 +113,17 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public List<FieldDeclaration> getAllFields() {
+    public List<ResolvedFieldDeclaration> getAllFields() {
         return new ArrayList<>();
     }
 
     @Override
-    public List<ReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Collections.emptySet();
     }
 
@@ -164,11 +163,11 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
     }
 
-    public TypeParameterDeclaration asTypeParameter() {
+    public ResolvedTypeParameterDeclaration asTypeParameter() {
         return new JavaParserTypeParameter(this.wrappedNode, typeSolver);
     }
 
@@ -182,7 +181,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return asTypeParameter().containerType();
     }
 }

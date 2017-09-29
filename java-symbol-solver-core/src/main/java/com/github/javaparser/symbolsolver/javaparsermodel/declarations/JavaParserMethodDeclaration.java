@@ -68,7 +68,7 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
     }
 
     @Override
-    public Type getReturnType() {
+    public ResolvedType getReturnType() {
         return JavaParserFacade.get(typeSolver).convert(wrappedNode.getType(), getContext());
     }
 
@@ -147,7 +147,7 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
     }
 
     @Override
-    public AccessSpecifier accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 

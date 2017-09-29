@@ -17,8 +17,8 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.LinkedList;
@@ -34,8 +34,8 @@ public class ParameterSymbolDeclarator extends AbstractSymbolDeclarator<Paramete
     }
 
     @Override
-    public List<ValueDeclaration> getSymbolDeclarations() {
-        List<ValueDeclaration> symbols = new LinkedList<>();
+    public List<ResolvedValueDeclaration> getSymbolDeclarations() {
+        List<ResolvedValueDeclaration> symbols = new LinkedList<>();
         symbols.add(JavaParserSymbolDeclaration.parameter(wrappedNode, typeSolver));
         return symbols;
     }
