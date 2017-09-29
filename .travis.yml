@@ -4,6 +4,7 @@ install: mvn install -DskipTests=true
 script: mvn test
 jdk:
   - oraclejdk8
+  - oraclejdk9
 notifications:
   webhooks:
     urls:
