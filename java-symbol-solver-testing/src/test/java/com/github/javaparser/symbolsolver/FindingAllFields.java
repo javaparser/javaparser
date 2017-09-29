@@ -19,11 +19,10 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.Declaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
@@ -42,7 +41,7 @@ public class FindingAllFields extends AbstractResolutionTest {
         ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
-                typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
+                typeDeclaration.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
     }
 
     @Test
@@ -52,7 +51,7 @@ public class FindingAllFields extends AbstractResolutionTest {
         ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
         assertEquals(ImmutableSet.of("a", "b", "c"),
-                typeDeclaration.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
+                typeDeclaration.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
         assertEquals("java.util.List<java.lang.String>", typeDeclaration.getField("b").getType().describe());
     }
 }

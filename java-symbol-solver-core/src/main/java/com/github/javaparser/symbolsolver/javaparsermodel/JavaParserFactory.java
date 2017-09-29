@@ -34,7 +34,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbo
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 

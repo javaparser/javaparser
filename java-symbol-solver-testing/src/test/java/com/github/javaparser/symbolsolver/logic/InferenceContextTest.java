@@ -16,12 +16,12 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -41,11 +41,11 @@ import static org.junit.Assert.assertEquals;
 public class InferenceContextTest {
 
     private TypeSolver typeSolver;
-    private ReferenceType string;
-    private ReferenceType object;
-    private ReferenceType listOfString;
-    private ReferenceType listOfE;
-    private TypeParameterDeclaration tpE;
+    private ResolvedReferenceType string;
+    private ResolvedReferenceType object;
+    private ResolvedReferenceType listOfString;
+    private ResolvedReferenceType listOfE;
+    private ResolvedTypeParameterDeclaration tpE;
 
     @Before
     public void setup() {
@@ -53,31 +53,31 @@ public class InferenceContextTest {
         string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         listOfString = listOf(string);
-        tpE = EasyMock.createMock(TypeParameterDeclaration.class);
+        tpE = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
         EasyMock.expect(tpE.getName()).andReturn("T").anyTimes();
         EasyMock.replay(tpE);
-        listOfE = listOf(new TypeVariable(tpE));
+        listOfE = listOf(new ResolvedTypeVariable(tpE));
     }
 
-    private ReferenceType listOf(Type elementType) {
+    private ResolvedReferenceType listOf(ResolvedType elementType) {
         return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType), typeSolver);
     }
 
     @Test
     public void noVariablesArePlacedWhenNotNeeded() {
-        Type result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(object, string);
+        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(object, string);
         assertEquals(object, result);
     }
 
     @Test
     public void placingASingleVariableTopLevel() {
-        Type result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(new TypeVariable(tpE), listOfString);
+        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(new ResolvedTypeVariable(tpE), listOfString);
         assertEquals(new InferenceVariableType(0, MyObjectProvider.INSTANCE), result);
     }
 
     @Test
     public void placingASingleVariableInside() {
-        Type result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(listOfE, listOfString);
+        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(listOfE, listOfString);
         assertEquals(listOf(new InferenceVariableType(0, MyObjectProvider.INSTANCE)), result);
     }
 

@@ -28,8 +28,6 @@ public class ConvertToUsageTest extends AbstractResolutionTest {
         assertEquals("java.lang.Class<? extends java.lang.Integer>", usageDescribe(n, "e"));
         assertEquals("java.lang.Class<? extends java.lang.Class<? super java.lang.Class<? extends java.lang.Integer>>>", usageDescribe(n, "f"));
         assertEquals("java.lang.Class<? super java.lang.Class<? extends java.lang.Class<? super java.lang.Integer>>>", usageDescribe(n, "g"));
-
-
     }
 
     private String usageDescribe(List<NameExpr> n, String name){

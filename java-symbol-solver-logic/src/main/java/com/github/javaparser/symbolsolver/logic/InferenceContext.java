@@ -16,8 +16,8 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class InferenceContext {
 
     private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
-    private InferenceVariableType inferenceVariableTypeForTp(TypeParameterDeclaration tp) {
+    private InferenceVariableType inferenceVariableTypeForTp(ResolvedTypeParameterDeclaration tp) {
         if (!inferenceVariableTypeMap.containsKey(tp.getName())) {
             InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, objectProvider);
             inferenceVariableTypes.add(inferenceVariableType);
@@ -66,19 +66,19 @@ public class InferenceContext {
         return placeInferenceVariables(actual);
     }
 
-    private void registerCorrespondance(Type formalType, Type actualType) {
+    private void registerCorrespondance(ResolvedType formalType, ResolvedType actualType) {
         if (formalType.isReferenceType() && actualType.isReferenceType()) {
-            ReferenceType formalTypeAsReference = formalType.asReferenceType();
-            ReferenceType actualTypeAsReference = actualType.asReferenceType();
+            ResolvedReferenceType formalTypeAsReference = formalType.asReferenceType();
+            ResolvedReferenceType actualTypeAsReference = actualType.asReferenceType();
 
             if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
-                List<ReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
+                List<ResolvedReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
-                List<Type> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                List<ResolvedType> correspondingFormalType = ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
-                    List<Type> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
+                    List<ResolvedType> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
                     if (correspondingActualType.isEmpty()){
                         throw new ConfilictingGenericTypesException(formalType, actualType);
                     }
@@ -94,7 +94,7 @@ public class InferenceContext {
                         // nothing to do
                     } else {
                         int i = 0;
-                        for (Type formalTypeParameter : formalTypeAsReference.typeParametersValues()) {
+                        for (ResolvedType formalTypeParameter : formalTypeAsReference.typeParametersValues()) {
                             registerCorrespondance(formalTypeParameter, actualTypeAsReference.typeParametersValues().get(i));
                             i++;
                         }
@@ -121,8 +121,8 @@ public class InferenceContext {
                 }
             }
             if (actualType.isWildcard()) {
-                Wildcard formalWildcard = formalType.asWildcard();
-                Wildcard actualWildcard = actualType.asWildcard();
+                ResolvedWildcard formalWildcard = formalType.asWildcard();
+                ResolvedWildcard actualWildcard = actualType.asWildcard();
                 if (formalWildcard.isBounded() && formalWildcard.getBoundedType() instanceof InferenceVariableType) {
                     if (formalWildcard.isSuper() && actualWildcard.isSuper()) {
                         ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
@@ -138,13 +138,13 @@ public class InferenceContext {
                 }
             }
         } else if (actualType instanceof InferenceVariableType){
-            if (formalType instanceof ReferenceType){
+            if (formalType instanceof ResolvedReferenceType){
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             } else if (formalType instanceof InferenceVariableType){
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             }
         } else if (actualType.isConstraint()){
-            LambdaConstraintType constraintType = actualType.asConstraintType();
+            ResolvedLambdaConstraintType constraintType = actualType.asConstraintType();
             if (constraintType.getBound() instanceof InferenceVariableType){
                 ((InferenceVariableType) constraintType.getBound()).registerEquivalentType(formalType);
             }
@@ -159,12 +159,12 @@ public class InferenceContext {
         }
     }
 
-    private Type placeInferenceVariables(Type type) {
+    private ResolvedType placeInferenceVariables(ResolvedType type) {
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
-                return Wildcard.extendsBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.extendsBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
             } else if (type.asWildcard().isSuper()) {
-                return Wildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
             } else {
                 return type;
             }
@@ -173,11 +173,11 @@ public class InferenceContext {
         } else if (type.isReferenceType()) {
             return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
         } else if (type.isArray()) {
-            return new ArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
+            return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
         } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
         } else if (type.isConstraint()){
-            return LambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
+            return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
         } else if (type instanceof InferenceVariableType) {
             return type;
         } else {
@@ -194,12 +194,12 @@ public class InferenceContext {
         } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
         } else if (type.isArray()) {
-            return new ArrayType(resolve(type.asArrayType().getComponentType()));
+            return new ResolvedArrayType(resolve(type.asArrayType().getComponentType()));
         } else if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
-                return Wildcard.extendsBound(resolve(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.extendsBound(resolve(type.asWildcard().getBoundedType()));
             } else if (type.asWildcard().isSuper()) {
-                return Wildcard.superBound(resolve(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.superBound(resolve(type.asWildcard().getBoundedType()));
             } else {
                 return type;
             }

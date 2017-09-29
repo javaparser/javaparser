@@ -22,7 +22,9 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
@@ -163,6 +165,47 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     @Override
     public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return typeParametersValues().stream().anyMatch(tp -> tp.mention(typeParameters));
+    }
+
+    /**
+     * Execute a transformation on all the type parameters of this element.
+     */
+    @Override
+    public ResolvedType transformTypeParameters(ResolvedTypeTransformer transformer) {
+        ResolvedType result = this;
+        int i = 0;
+        for (ResolvedType tp : this.typeParametersValues()) {
+            ResolvedType transformedTp = transformer.transform(tp);
+            // Identity comparison on purpose
+            if (transformedTp != tp) {
+                List<ResolvedType> typeParametersCorrected = result.asReferenceType().typeParametersValues();
+                typeParametersCorrected.set(i, transformedTp);
+                result = create(typeDeclaration, typeParametersCorrected);
+            }
+            i++;
+        }
+        return result;
+    }
+
+    public List<ResolvedReferenceType> getAllAncestors() {
+        // We need to go through the inheritance line and propagate the type parametes
+
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors();
+
+        ancestors = ancestors.stream()
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
+                .collect(Collectors.toList());
+
+        // Avoid repetitions of Object
+        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
+        ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ResolvedReferenceType objectRef = create(objectType);
+        ancestors.add(objectRef);
+        return ancestors;
+    }
+
+    public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
+        return create(typeDeclaration, typeParametersMap);
     }
 
 }

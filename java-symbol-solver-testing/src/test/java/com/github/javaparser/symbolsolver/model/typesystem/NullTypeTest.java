@@ -16,7 +16,11 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -32,8 +36,8 @@ import static org.junit.Assert.*;
 
 public class NullTypeTest {
 
-    private ArrayType arrayOfBooleans;
-    private ArrayType arrayOfListOfA;
+    private ResolvedArrayType arrayOfBooleans;
+    private ResolvedArrayType arrayOfListOfA;
     private ReferenceTypeImpl OBJECT;
     private ReferenceTypeImpl STRING;
     private TypeSolver typeSolver;
@@ -43,10 +47,10 @@ public class NullTypeTest {
         typeSolver = new ReflectionTypeSolver();
         OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        arrayOfBooleans = new ArrayType(PrimitiveType.BOOLEAN);
-        arrayOfListOfA = new ArrayType(new ReferenceTypeImpl(
+        arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
+        arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
+                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver));
     }
 
     @Test
@@ -125,13 +129,13 @@ public class NullTypeTest {
 
         }
         try {
-            assertEquals(false, NullType.INSTANCE.isAssignableBy(PrimitiveType.BOOLEAN));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
             fail();
         } catch (UnsupportedOperationException e) {
 
         }
         try {
-            assertEquals(false, NullType.INSTANCE.isAssignableBy(VoidType.INSTANCE));
+            assertEquals(false, NullType.INSTANCE.isAssignableBy(ResolvedVoidType.INSTANCE));
             fail();
         } catch (UnsupportedOperationException e) {
 
