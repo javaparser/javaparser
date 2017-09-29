@@ -409,5 +409,5 @@ public abstract class ResolvedReferenceType implements ResolvedType,
         return typeDeclaration.getTypeParameters().stream().map((tp) -> new ResolvedTypeVariable(tp)).collect(Collectors.toList());
     }
 
-    public abstract ReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);
+    public abstract ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap);
 }
