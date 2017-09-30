@@ -37,6 +37,8 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -294,13 +296,4 @@ public abstract class Type extends Node implements Resolvable<Object> {
     public void ifWildcardType(Consumer<WildcardType> action) {
     }
 
-    protected SymbolResolver getSymbolResolver() {
-        SymbolResolver symbolResolver = this.getData(SYMBOL_RESOLVER_KEY);
-        if (symbolResolver == null) {
-            throw new IllegalStateException("Symbol resolution not configured");
-        }
-        return symbolResolver;
-    }
-
-    private static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() { };
 }
