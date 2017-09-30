@@ -62,7 +62,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
-        super(typeDeclaration, Collections.emptyList());
+        super(typeDeclaration);
         this.typeSolver = typeSolver;
     }
 
