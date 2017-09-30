@@ -53,6 +53,10 @@ public abstract class ResolvedReferenceType implements ResolvedType,
     // Constructors
     //
 
+    public ResolvedReferenceType(ResolvedReferenceTypeDeclaration typeDeclaration) {
+        this(typeDeclaration, deriveParams(typeDeclaration));
+    }
+
     public ResolvedReferenceType(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments) {
         if (typeDeclaration.isTypeParameter()) {
             throw new IllegalArgumentException("You should use only Classes, Interfaces and enums");
