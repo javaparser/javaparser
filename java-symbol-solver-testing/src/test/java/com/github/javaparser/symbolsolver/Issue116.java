@@ -22,10 +22,10 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class Issue116 extends AbstractResolutionTest {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         com.github.javaparser.ast.type.Type typeNode = methodDeclaration.getParameters().get(0).getType();
-        Type type = javaParserFacade.convert(typeNode, typeNode);
+        ResolvedType type = javaParserFacade.convert(typeNode, typeNode);
         assertEquals("java.lang.String[]", type.describe());
 
         ExpressionStmt expressionStmt = (ExpressionStmt) methodDeclaration.getBody().get().getStatements().get(0);

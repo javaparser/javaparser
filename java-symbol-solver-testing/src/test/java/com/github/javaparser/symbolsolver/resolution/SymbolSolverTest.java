@@ -20,12 +20,11 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -64,7 +63,7 @@ public class SymbolSolverTest extends AbstractTest {
     public void testSolveSymbolUnexisting() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        SymbolReference<? extends ValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "unexisting");
+        SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "unexisting");
         assertEquals(false, res.isSolved());
     }
 
@@ -72,7 +71,7 @@ public class SymbolSolverTest extends AbstractTest {
     public void testSolveSymbolToDeclaredField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        SymbolReference<? extends ValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "name");
+        SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "name");
         assertEquals(true, res.isSolved());
         assertEquals(true, res.getCorrespondingDeclaration().isField());
     }
@@ -81,7 +80,7 @@ public class SymbolSolverTest extends AbstractTest {
     public void testSolveSymbolToInheritedPublicField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        SymbolReference<? extends ValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "NODE_BY_BEGIN_POSITION");
+        SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "NODE_BY_BEGIN_POSITION");
         assertEquals(true, res.isSolved());
         assertEquals(true, res.getCorrespondingDeclaration().isField());
     }
@@ -90,7 +89,7 @@ public class SymbolSolverTest extends AbstractTest {
     public void testSolveSymbolToInheritedPrivateField() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        SymbolReference<? extends ValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "parentNode");
+        SymbolReference<? extends ResolvedValueDeclaration> res = symbolSolver.solveSymbolInType(constructorDeclaration, "parentNode");
         assertEquals(false, res.isSolved());
     }
 

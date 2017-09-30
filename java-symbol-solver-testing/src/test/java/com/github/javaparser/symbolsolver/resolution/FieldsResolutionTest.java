@@ -22,11 +22,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -47,7 +47,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
-        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+        ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -63,7 +63,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         File src = adaptPath(new File("src/test/resources"));
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(src), new ReflectionTypeSolver());
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<? extends ValueDeclaration> ref = symbolSolver.solveSymbol(fieldAccessExpr.getField().getId(), fieldAccessExpr);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = symbolSolver.solveSymbol(fieldAccessExpr.getField().getId(), fieldAccessExpr);
 
         assertTrue(ref.isSolved());
         assertTrue(ref.getCorrespondingDeclaration().isField());
@@ -89,7 +89,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
-        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+        ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -101,7 +101,7 @@ public class FieldsResolutionTest extends AbstractResolutionTest {
         ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
-        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
+        ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 }

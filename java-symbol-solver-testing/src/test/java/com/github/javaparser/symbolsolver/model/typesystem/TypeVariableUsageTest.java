@@ -16,7 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -29,13 +30,13 @@ import static org.junit.Assert.*;
 
 public class TypeVariableUsageTest {
 
-    private TypeVariable tpA;
+    private ResolvedTypeVariable tpA;
     private ReferenceTypeImpl tpString;
     private TypeSolver typeSolver;
 
     @Before
     public void setup() {
-        tpA = new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
+        tpA = new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
         
         typeSolver = new ReflectionTypeSolver();
         tpString = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
