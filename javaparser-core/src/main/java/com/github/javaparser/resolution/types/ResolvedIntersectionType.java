@@ -21,6 +21,8 @@
 
 package com.github.javaparser.resolution.types;
 
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,4 +65,17 @@ public class ResolvedIntersectionType implements ResolvedType {
     public boolean isAssignableBy(ResolvedType other) {
         return elements.stream().allMatch(e -> e.isAssignableBy(other));
     }
+
+    @Override
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+        List<ResolvedType> elementsReplaced = elements.stream()
+                .map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes))
+                .collect(Collectors.toList());
+        if (elementsReplaced.equals(elements)) {
+            return this;
+        } else {
+            return new ResolvedIntersectionType(elementsReplaced);
+        }
+    }
+
 }

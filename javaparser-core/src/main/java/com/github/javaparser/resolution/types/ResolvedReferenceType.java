@@ -21,7 +21,6 @@
 
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -153,6 +152,41 @@ public abstract class ResolvedReferenceType implements ResolvedType,
      * Execute a transformation on all the type parameters of this element.
      */
     public abstract ResolvedType transformTypeParameters(ResolvedTypeTransformer transformer);
+
+    @Override
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced,
+                                     Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+        if (replaced == null) {
+            throw new IllegalArgumentException();
+        }
+
+        ResolvedReferenceType result = this;
+        int i = 0;
+        for (ResolvedType tp : this.typeParametersValues()) {
+            ResolvedType transformedTp = tp.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
+            // Identity comparison on purpose
+            if (tp.isTypeVariable() && tp.asTypeVariable().describe().equals(tpToReplace.getName())) {
+                inferredTypes.put(tp.asTypeParameter(), replaced);
+            }
+            // FIXME
+            if (true) {
+                List<ResolvedType> typeParametersCorrected = result.asReferenceType().typeParametersValues();
+                typeParametersCorrected.set(i, transformedTp);
+                result = create(typeDeclaration, typeParametersCorrected);
+            }
+            i++;
+        }
+
+        List<ResolvedType> values = result.typeParametersValues();
+        // FIXME
+        if(values.contains(tpToReplace)){
+            int index = values.indexOf(tpToReplace);
+            values.set(index, replaced);
+            return create(result.getTypeDeclaration(), values);
+        }
+
+        return result;
+    }
 
     ///
     /// Assignability
