@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Modifier;
@@ -47,6 +46,10 @@ import static java.util.stream.Collectors.toList;
  * method.
  */
 public interface NodeWithMembers<N extends Node> {
+    /**
+     * @return all members inside the braces of this node,
+     * like fields, methods, nested types, etc.
+     */
     NodeList<BodyDeclaration<?>> getMembers();
 
     void tryAddImportToParentCompilationUnit(Class<?> clazz);
@@ -83,7 +86,7 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Add a field to this
+     * Add a field to this.
      *
      * @param type the type of the field
      * @param name the name of the field
@@ -95,7 +98,7 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Add a field to this
+     * Add a field to this.
      *
      * @param type the type of the field
      * @param name the name of the field
@@ -113,7 +116,7 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Add a field to this
+     * Add a field to this.
      *
      * @param type the type of the field
      * @param name the name of the field
@@ -121,14 +124,14 @@ public interface NodeWithMembers<N extends Node> {
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
-    default FieldDeclaration addField(Type type, String name, Expression initializer, Modifier... modifiers) {
+    default FieldDeclaration addFieldWithInitializer(Type type, String name, Expression initializer, Modifier... modifiers) {
         FieldDeclaration declaration = addField(type, name, modifiers);
         declaration.getVariables().iterator().next().setInitializer(initializer);
         return declaration;
     }
 
     /**
-     * Add a private field to this
+     * Add a private field to this.
      *
      * @param typeClass the type of the field
      * @param name the name of the field
@@ -140,7 +143,7 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Add a private field to this and automatically add the import of the type if
-     * needed
+     * needed.
      *
      * @param type the type of the field
      * @param name the name of the field
@@ -151,7 +154,7 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Add a public field to this
+     * Add a public field to this.
      *
      * @param typeClass the type of the field
      * @param name the name of the field
@@ -163,7 +166,7 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Add a public field to this and automatically add the import of the type if
-     * needed
+     * needed.
      *
      * @param type the type of the field
      * @param name the name of the field
@@ -174,7 +177,7 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Add a protected field to this
+     * Add a protected field to this.
      *
      * @param typeClass the type of the field
      * @param name the name of the field
@@ -186,7 +189,7 @@ public interface NodeWithMembers<N extends Node> {
 
     /**
      * Add a protected field to this and automatically add the import of the type
-     * if needed
+     * if needed.
      *
      * @param type the type of the field
      * @param name the name of the field
@@ -197,7 +200,7 @@ public interface NodeWithMembers<N extends Node> {
     }
 
     /**
-     * Adds a methods with void return by default to this
+     * Adds a methods with void return by default to this.
      *
      * @param methodName the method name
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
@@ -213,6 +216,9 @@ public interface NodeWithMembers<N extends Node> {
         return methodDeclaration;
     }
 
+    /**
+     * Add an initializer block ({@link InitializerDeclaration}) to this.
+     */
     default BlockStmt addInitializer() {
         BlockStmt block = new BlockStmt();
         InitializerDeclaration initializerDeclaration = new InitializerDeclaration(false, block);
@@ -220,6 +226,9 @@ public interface NodeWithMembers<N extends Node> {
         return block;
     }
 
+    /**
+     * Add a static initializer block ({@link InitializerDeclaration}) to this.
+     */
     default BlockStmt addStaticInitializer() {
         BlockStmt block = new BlockStmt();
         InitializerDeclaration initializerDeclaration = new InitializerDeclaration(true, block);
