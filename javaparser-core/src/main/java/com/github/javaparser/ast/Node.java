@@ -667,7 +667,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     protected SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
-            SymbolResolver symbolResolver = this.getData(SYMBOL_RESOLVER_KEY);
+            SymbolResolver symbolResolver = cu.getData(SYMBOL_RESOLVER_KEY);
             if (symbolResolver == null) {
                 throw new IllegalStateException("Symbol resolution not configured");
             }
