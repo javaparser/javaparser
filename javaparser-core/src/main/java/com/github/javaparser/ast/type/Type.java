@@ -296,4 +296,6 @@ public abstract class Type extends Node implements Resolvable<Object> {
     public void ifWildcardType(Consumer<WildcardType> action) {
     }
 
+    @Override
+    public abstract ResolvedType resolve();
 }
