@@ -30,8 +30,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import com.github.javaparser.ast.Node;
@@ -40,6 +38,9 @@ import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+
 import java.util.function.Consumer;
 
 /**
@@ -54,7 +55,8 @@ import java.util.function.Consumer;
  * @author Julio Vilmar Gesser
  * @see com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters
  */
-public final class TypeParameter extends ReferenceType implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
+public final class TypeParameter extends ReferenceType
+        implements NodeWithSimpleName<TypeParameter>, NodeWithAnnotations<TypeParameter> {
 
     private SimpleName name;
 
@@ -226,5 +228,10 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeParameter(Consumer<TypeParameter> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedTypeVariable resolve() {
+        return getSymbolResolver().resolve(this, ResolvedTypeVariable.class);
     }
 }
