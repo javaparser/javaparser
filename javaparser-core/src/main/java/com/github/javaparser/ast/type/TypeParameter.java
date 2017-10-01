@@ -39,6 +39,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 
 import java.util.function.Consumer;
 
@@ -230,7 +231,7 @@ public final class TypeParameter extends ReferenceType
     }
 
     @Override
-    public ResolvedTypeParameterDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedTypeParameterDeclaration.class);
+    public ResolvedTypeVariable resolve() {
+        return getSymbolResolver().resolve(this, ResolvedTypeVariable.class);
     }
 }
