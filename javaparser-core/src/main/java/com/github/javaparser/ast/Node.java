@@ -41,11 +41,12 @@ import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+
 import javax.annotation.Generated;
 import java.util.*;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
-import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -297,8 +298,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * Contains all nodes that have this node set as their parent.
-     * You can add nodes to it by setting a node's parent to this node.
-     * You can remove nodes from it by setting a child node's parent to something other than this node.
+     * You can add and remove nodes from this list by adding or removing nodes from the fields of this node.
      *
      * @return all nodes that have this node as their parent.
      */
@@ -640,5 +640,27 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             }
         }
         return false;
+    }
+
+    /**
+     * Finds the root node of this AST by finding the topmost parent.
+     */
+    public Node findRootNode() {
+        Node n = this;
+        while (n.getParentNode().isPresent()) {
+            n = n.getParentNode().get();
+        }
+        return n;
+    }
+
+    /**
+     * @return the containing CompilationUnit, or empty if this node is not inside a compilation unit.
+     */
+    public Optional<CompilationUnit> findCompilationUnit() {
+        Node rootNode = findRootNode();
+        if (rootNode instanceof CompilationUnit) {
+            return Optional.of((CompilationUnit) rootNode);
+        }
+        return Optional.empty();
     }
 }

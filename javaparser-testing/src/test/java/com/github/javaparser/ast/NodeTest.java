@@ -327,4 +327,17 @@ public class NodeTest {
         // This will throw an exception if the parents are bad.
         System.out.println(unit.toString());
     }
+    
+    @Test
+    public void findCompilationUnit() {
+        CompilationUnit cu = JavaParser.parse("class X{int x;}");
+        VariableDeclarator x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0);
+        assertEquals(cu, x.findCompilationUnit().get());
+    }
+    
+    @Test
+    public void cantFindCompilationUnit() {
+        VariableDeclarator x = new VariableDeclarator();
+        assertFalse(x.findCompilationUnit().isPresent());
+    }
 }
