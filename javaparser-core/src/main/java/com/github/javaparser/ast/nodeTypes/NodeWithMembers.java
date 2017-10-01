@@ -25,6 +25,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.VoidType;
@@ -109,6 +110,21 @@ public interface NodeWithMembers<N extends Node> {
                 .collect(toCollection(() -> EnumSet.noneOf(Modifier.class))));
         getMembers().add(fieldDeclaration);
         return fieldDeclaration;
+    }
+
+    /**
+     * Add a field to this
+     *
+     * @param type the type of the field
+     * @param name the name of the field
+     * @param initializer the initializer of the field
+     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @return the {@link FieldDeclaration} created
+     */
+    default FieldDeclaration addField(Type type, String name, Expression initializer, Modifier... modifiers) {
+        FieldDeclaration declaration = addField(type, name, modifiers);
+        declaration.getVariables().iterator().next().setInitializer(initializer);
+        return declaration;
     }
 
     /**
