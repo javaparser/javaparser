@@ -38,6 +38,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedIntersectionType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+
 import java.util.function.Consumer;
 
 /**
@@ -164,5 +167,10 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIntersectionType(Consumer<IntersectionType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedIntersectionType resolve() {
+        return getSymbolResolver().resolve(this, ResolvedIntersectionType.class);
     }
 }

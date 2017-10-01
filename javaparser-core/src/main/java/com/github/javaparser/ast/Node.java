@@ -41,6 +41,7 @@ import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.resolution.SymbolResolver;
 
 import javax.annotation.Generated;
 import java.util.*;
@@ -663,4 +664,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         }
         return Optional.empty();
     }
+
+    protected SymbolResolver getSymbolResolver() {
+        return findCompilationUnit().map(cu -> {
+            SymbolResolver symbolResolver = cu.getData(SYMBOL_RESOLVER_KEY);
+            if (symbolResolver == null) {
+                throw new IllegalStateException("Symbol resolution not configured");
+            }
+            return symbolResolver;
+        }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
+    }
+
+    // We need to expose it because we will need to use it to inject the SymbolSolver
+    public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() { };
 }
