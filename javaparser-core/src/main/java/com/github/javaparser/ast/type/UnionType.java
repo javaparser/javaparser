@@ -38,6 +38,9 @@ import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+
 import java.util.function.Consumer;
 
 /**
@@ -173,5 +176,10 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnionType(Consumer<UnionType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedUnionType resolve() {
+        return getSymbolResolver().resolve(this, ResolvedUnionType.class);
     }
 }

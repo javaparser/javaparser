@@ -33,6 +33,10 @@ import com.github.javaparser.metamodel.UnknownTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+
 import java.util.function.Consumer;
 
 /**
@@ -124,5 +128,10 @@ public final class UnknownType extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnknownType(Consumer<UnknownType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedType resolve() {
+        return getSymbolResolver().resolve(this, ResolvedReferenceType.class);
     }
 }
