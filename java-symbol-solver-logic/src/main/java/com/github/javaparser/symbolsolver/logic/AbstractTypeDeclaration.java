@@ -16,11 +16,10 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.Set;
  *
  * @author Federico Tomassetti
  */
-public abstract class AbstractTypeDeclaration implements ReferenceTypeDeclaration {
+public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDeclaration {
 
     @Override
     public final Set<MethodUsage> getAllMethods() {
@@ -39,12 +38,12 @@ public abstract class AbstractTypeDeclaration implements ReferenceTypeDeclaratio
 
         Set<String> methodsSignatures = new HashSet<>();
 
-        for (MethodDeclaration methodDeclaration : getDeclaredMethods()) {
+        for (ResolvedMethodDeclaration methodDeclaration : getDeclaredMethods()) {
             methods.add(new MethodUsage(methodDeclaration));
             methodsSignatures.add(methodDeclaration.getSignature());
         }
 
-        for (ReferenceType ancestor : getAllAncestors()) {
+        for (ResolvedReferenceType ancestor : getAllAncestors()) {
             for (MethodUsage mu : ancestor.getDeclaredMethods()) {
                 String signature = mu.getDeclaration().getSignature();
                 if (!methodsSignatures.contains(signature)) {

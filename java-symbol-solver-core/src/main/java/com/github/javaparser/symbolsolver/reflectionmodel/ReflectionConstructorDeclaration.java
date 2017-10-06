@@ -16,9 +16,13 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -28,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * @author Fred Lefévère-Laoide
  */
-public class ReflectionConstructorDeclaration implements ConstructorDeclaration {
+public class ReflectionConstructorDeclaration implements ResolvedConstructorDeclaration {
 
     private Constructor<?> constructor;
     private TypeSolver typeSolver;
@@ -40,7 +44,7 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public ClassDeclaration declaringType() {
+    public ResolvedClassDeclaration declaringType() {
         return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
     }
 
@@ -50,7 +54,7 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public ParameterDeclaration getParam(int i) {
+    public ResolvedParameterDeclaration getParam(int i) {
         if (i < 0 || i >= getNumberOfParams()) {
             throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
@@ -67,12 +71,12 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(constructor.getModifiers());
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 
@@ -82,7 +86,7 @@ public class ReflectionConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public Type getSpecifiedException(int index) {
+    public ResolvedType getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException();
         }

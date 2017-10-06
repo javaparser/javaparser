@@ -14,7 +14,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import javassist.CtClass;
 import javassist.NotFoundException;
@@ -37,23 +37,23 @@ public class JavassistTypeDeclarationAdapter {
     this.typeSolver = typeSolver;
   }
 
-  public Set<MethodDeclaration> getDeclaredMethods() {
+  public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
     return Arrays.stream(ctClass.getDeclaredMethods())
         .map(m -> new JavassistMethodDeclaration(m, typeSolver)).collect(Collectors.toSet());
   }
 
-  public List<ConstructorDeclaration> getConstructors() {
+  public List<ResolvedConstructorDeclaration> getConstructors() {
     return Arrays.stream(ctClass.getConstructors())
         .map(m -> new JavassistConstructorDeclaration(m, typeSolver)).collect(Collectors.toList());
   }
 
-  public List<FieldDeclaration> getDeclaredFields() {
-    List<FieldDeclaration> fieldDecls = new ArrayList<>();
+  public List<ResolvedFieldDeclaration> getDeclaredFields() {
+    List<ResolvedFieldDeclaration> fieldDecls = new ArrayList<>();
     collectDeclaredFields(ctClass, fieldDecls);
     return fieldDecls;
   }
 
-  private void collectDeclaredFields(CtClass ctClass, List<FieldDeclaration> fieldDecls) {
+  private void collectDeclaredFields(CtClass ctClass, List<ResolvedFieldDeclaration> fieldDecls) {
     if (ctClass != null) {
       Arrays.stream(ctClass.getDeclaredFields())
           .forEach(f -> fieldDecls.add(new JavassistFieldDeclaration(f, typeSolver)));
@@ -65,7 +65,7 @@ public class JavassistTypeDeclarationAdapter {
     }
   }
 
-  public List<TypeParameterDeclaration> getTypeParameters() {
+  public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
     if (null == ctClass.getGenericSignature()) {
       return Collections.emptyList();
     } else {
@@ -81,7 +81,7 @@ public class JavassistTypeDeclarationAdapter {
     }
   }
 
-  public Optional<ReferenceTypeDeclaration> containerType() {
+  public Optional<ResolvedReferenceTypeDeclaration> containerType() {
     try {
       return ctClass.getDeclaringClass() == null ?
           Optional.empty() :

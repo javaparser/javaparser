@@ -16,11 +16,14 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,13 +31,13 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserConstructorDeclaration implements ConstructorDeclaration {
+public class JavaParserConstructorDeclaration implements ResolvedConstructorDeclaration {
 
-    private ClassDeclaration classDeclaration;
+    private ResolvedClassDeclaration classDeclaration;
     private com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
-    JavaParserConstructorDeclaration(ClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
+    JavaParserConstructorDeclaration(ResolvedClassDeclaration classDeclaration, com.github.javaparser.ast.body.ConstructorDeclaration wrappedNode,
                                      TypeSolver typeSolver) {
         this.classDeclaration = classDeclaration;
         this.wrappedNode = wrappedNode;
@@ -42,7 +45,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public ClassDeclaration declaringType() {
+    public ResolvedClassDeclaration declaringType() {
         return classDeclaration;
     }
 
@@ -52,7 +55,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public ParameterDeclaration getParam(int i) {
+    public ResolvedParameterDeclaration getParam(int i) {
         if (i < 0 || i >= getNumberOfParams()) {
             throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
@@ -74,12 +77,12 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     }
     
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList());
     }
 
@@ -89,7 +92,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     }
 
     @Override
-    public Type getSpecifiedException(int index) {
+    public ResolvedType getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
                     index, getNumberOfSpecifiedExceptions()));

@@ -24,10 +24,10 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type ref = JavaParserFacade.get(typeSolver).getType(field);
+        ResolvedType ref = JavaParserFacade.get(typeSolver).getType(field);
         assertEquals("int", ref.describe());
     }
 
@@ -54,7 +54,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type ref = JavaParserFacade.get(typeSolver).getType(field.getInitializer().get());
+        ResolvedType ref = JavaParserFacade.get(typeSolver).getType(field.getInitializer().get());
         assertEquals("int", ref.describe());
     }
 
@@ -67,7 +67,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpression().get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type ref = JavaParserFacade.get(typeSolver).getType(expression);
+        ResolvedType ref = JavaParserFacade.get(typeSolver).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 
@@ -79,7 +79,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         MethodCallExpr expression = Navigator.findMethodCall(method, "next");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type ref = JavaParserFacade.get(typeSolver).getType(expression);
+        ResolvedType ref = JavaParserFacade.get(typeSolver).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
 

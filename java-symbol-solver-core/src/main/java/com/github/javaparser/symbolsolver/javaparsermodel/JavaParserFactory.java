@@ -22,6 +22,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -33,7 +34,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.FieldSymbo
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
@@ -115,7 +115,7 @@ public class JavaParserFactory {
         }
     }
     
-    public static ReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
+    public static ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             if (((ClassOrInterfaceDeclaration) node).isInterface()) {
                 return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);

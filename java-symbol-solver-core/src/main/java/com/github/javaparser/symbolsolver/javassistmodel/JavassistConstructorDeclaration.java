@@ -16,9 +16,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtConstructor;
 import javassist.NotFoundException;
 import javassist.bytecode.BadBytecode;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * @author Fred Lefévère-Laoide
  */
-public class JavassistConstructorDeclaration implements ConstructorDeclaration {
+public class JavassistConstructorDeclaration implements ResolvedConstructorDeclaration {
     private CtConstructor ctConstructor;
     private TypeSolver typeSolver;
 
@@ -69,7 +70,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public ClassDeclaration declaringType() {
+    public ResolvedClassDeclaration declaringType() {
         return new JavassistClassDeclaration(ctConstructor.getDeclaringClass(), typeSolver);
     }
 
@@ -83,7 +84,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public ParameterDeclaration getParam(int i) {
+    public ResolvedParameterDeclaration getParam(int i) {
         try {
             boolean variadic = false;
             if ((ctConstructor.getModifiers() & javassist.Modifier.VARARGS) > 0) {
@@ -104,7 +105,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         try {
             if (ctConstructor.getGenericSignature() == null) {
                 return Collections.emptyList();
@@ -117,7 +118,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return JavassistFactory.modifiersToAccessLevel(ctConstructor.getModifiers());
     }
 
@@ -131,7 +132,7 @@ public class JavassistConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public Type getSpecifiedException(int index) {
+    public ResolvedType getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException(String.format("No exception with index %d. Number of exceptions: %d",
                     index, getNumberOfSpecifiedExceptions()));

@@ -3,11 +3,11 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
@@ -22,6 +22,6 @@ public class Issue232 extends AbstractResolutionTest {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         Context context = JavaParserFactory.getContext(cls, typeSolver);
-        SymbolReference<TypeDeclaration> reference = context.solveType("OfPrimitive<Double, DoubleConsumer, OfDouble>", typeSolver);
+        SymbolReference<ResolvedTypeDeclaration> reference = context.solveType("OfPrimitive<Double, DoubleConsumer, OfDouble>", typeSolver);
     }
 }

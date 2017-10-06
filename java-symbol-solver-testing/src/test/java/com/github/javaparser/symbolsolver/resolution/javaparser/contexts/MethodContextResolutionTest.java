@@ -20,10 +20,10 @@ import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.MethodContext;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
@@ -53,7 +53,7 @@ public class MethodContextResolutionTest extends AbstractResolutionTest {
         MethodDeclaration md = Navigator.demandMethod(cd, "methodWithLocalTypes");
         Context context = new MethodContext(md, typeSolver);
 
-        SymbolReference<TypeDeclaration> ref = context.solveType("LocalClass", new MemoryTypeSolver());
+        SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("LocalClass", new MemoryTypeSolver());
         assertEquals(true, ref.isSolved());
     }
 }

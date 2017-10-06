@@ -1,10 +1,10 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration implements AnnotationDeclaration {
+public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration {
 
     private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
     private TypeSolver typeSolver;
@@ -26,27 +26,27 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public List<ReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<FieldDeclaration> getAllFields() {
+    public List<ResolvedFieldDeclaration> getAllFields() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         throw new UnsupportedOperationException();
     }
 
@@ -81,12 +81,12 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
     }
 }

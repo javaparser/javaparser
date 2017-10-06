@@ -16,6 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
@@ -23,10 +26,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionEnumDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -43,9 +43,9 @@ public class ContextHelper {
         // prevent instantiation
     }
 
-    public static Optional<MethodUsage> solveMethodAsUsage(TypeDeclaration typeDeclaration, String name,
-                                                           List<Type> argumentsTypes, TypeSolver typeSolver,
-                                                           Context invokationContext, List<Type> typeParameters) {
+    public static Optional<MethodUsage> solveMethodAsUsage(ResolvedTypeDeclaration typeDeclaration, String name,
+                                                           List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
+                                                           Context invokationContext, List<ResolvedType> typeParameters) {
         if (typeDeclaration instanceof JavassistClassDeclaration) {
             return ((JavassistClassDeclaration) typeDeclaration).solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameters);
         } else if (typeDeclaration instanceof JavassistInterfaceDeclaration) {

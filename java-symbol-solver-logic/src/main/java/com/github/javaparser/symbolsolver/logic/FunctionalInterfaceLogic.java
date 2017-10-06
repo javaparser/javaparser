@@ -16,9 +16,9 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -40,7 +40,7 @@ public final class FunctionalInterfaceLogic {
     /**
      * Get the functional method defined by the type, if any.
      */
-    public static Optional<MethodUsage> getFunctionalMethod(Type type) {
+    public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isInterface()) {
             return getFunctionalMethod(type.asReferenceType().getTypeDeclaration());
         } else {
@@ -51,7 +51,7 @@ public final class FunctionalInterfaceLogic {
     /**
      * Get the functional method defined by the type, if any.
      */
-    public static Optional<MethodUsage> getFunctionalMethod(ReferenceTypeDeclaration typeDeclaration) {
+    public static Optional<MethodUsage> getFunctionalMethod(ResolvedReferenceTypeDeclaration typeDeclaration) {
         //We need to find all abstract methods
         Set<MethodUsage> methods = typeDeclaration.getAllMethods().stream()
                 .filter(m -> m.getDeclaration().isAbstract())
@@ -67,7 +67,7 @@ public final class FunctionalInterfaceLogic {
         }
     }
 
-    public static boolean isFunctionalInterfaceType(Type type) {
+    public static boolean isFunctionalInterfaceType(ResolvedType type) {
         return getFunctionalMethod(type).isPresent();
     }
 

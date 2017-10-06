@@ -16,11 +16,11 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
-import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
-public class InferenceVariableType implements Type {
+public class InferenceVariableType implements ResolvedType {
     @Override
     public String toString() {
         return "InferenceVariableType{" +
@@ -40,16 +40,16 @@ public class InferenceVariableType implements Type {
     }
 
     private int id;
-    private TypeParameterDeclaration correspondingTp;
+    private ResolvedTypeParameterDeclaration correspondingTp;
 
-    public void setCorrespondingTp(TypeParameterDeclaration correspondingTp) {
+    public void setCorrespondingTp(ResolvedTypeParameterDeclaration correspondingTp) {
         this.correspondingTp = correspondingTp;
     }
 
-    private Set<Type> equivalentTypes = new HashSet<>();
+    private Set<ResolvedType> equivalentTypes = new HashSet<>();
     private ObjectProvider objectProvider;
 
-    public void registerEquivalentType(Type type) {
+    public void registerEquivalentType(ResolvedType type) {
         this.equivalentTypes.add(type);
     }
 
@@ -69,14 +69,14 @@ public class InferenceVariableType implements Type {
         return id;
     }
 
-    private Set<Type> superTypes = new HashSet<>();
+    private Set<ResolvedType> superTypes = new HashSet<>();
 
     public InferenceVariableType(int id, ObjectProvider objectProvider) {
         this.id = id;
         this.objectProvider = objectProvider;
     }
 
-    public static InferenceVariableType fromWildcard(Wildcard wildcard, int id, ObjectProvider objectProvider) {
+    public static InferenceVariableType fromWildcard(ResolvedWildcard wildcard, int id, ObjectProvider objectProvider) {
         InferenceVariableType inferenceVariableType = new InferenceVariableType(id, objectProvider);
         if (wildcard.isExtends()) {
             inferenceVariableType.superTypes.add(wildcard.getBoundedType());
@@ -94,13 +94,13 @@ public class InferenceVariableType implements Type {
     }
 
     @Override
-    public boolean isAssignableBy(Type other) {
+    public boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException();
     }
 
-    private Set<Type> concreteEquivalentTypesAlsoIndirectly(Set<InferenceVariableType> considered, InferenceVariableType inferenceVariableType) {
+    private Set<ResolvedType> concreteEquivalentTypesAlsoIndirectly(Set<InferenceVariableType> considered, InferenceVariableType inferenceVariableType) {
         considered.add(inferenceVariableType);
-        Set<Type> result = new HashSet<>();
+        Set<ResolvedType> result = new HashSet<>();
         result.addAll(inferenceVariableType.equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !(t instanceof InferenceVariableType)).collect(Collectors.toSet()));
         inferenceVariableType.equivalentTypes.stream().filter(t -> t instanceof InferenceVariableType).forEach(t -> {
             InferenceVariableType ivt = (InferenceVariableType)t;
@@ -111,19 +111,19 @@ public class InferenceVariableType implements Type {
         return result;
     }
 
-    public Type equivalentType() {
-        Set<Type> concreteEquivalent = concreteEquivalentTypesAlsoIndirectly(new HashSet<>(), this);
+    public ResolvedType equivalentType() {
+        Set<ResolvedType> concreteEquivalent = concreteEquivalentTypesAlsoIndirectly(new HashSet<>(), this);
         if (concreteEquivalent.isEmpty()) {
             if (correspondingTp == null) {
                 return objectProvider.object();
             } else {
-                return new TypeVariable(correspondingTp);
+                return new ResolvedTypeVariable(correspondingTp);
             }
         }
         if (concreteEquivalent.size() == 1) {
             return concreteEquivalent.iterator().next();
         }
-        Set<Type> notTypeVariables = equivalentTypes.stream()
+        Set<ResolvedType> notTypeVariables = equivalentTypes.stream()
                                                     .filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t))
                                                     .collect(Collectors.toSet());
         if (notTypeVariables.size() == 1) {
@@ -139,14 +139,14 @@ public class InferenceVariableType implements Type {
         }
     }
 
-    private boolean hasInferenceVariables(Type type){
+    private boolean hasInferenceVariables(ResolvedType type){
         if (type instanceof InferenceVariableType){
             return true;
         }
 
         if (type.isReferenceType()){
-            ReferenceType refType = type.asReferenceType();
-            for (Type t : refType.typeParametersValues()){
+            ResolvedReferenceType refType = type.asReferenceType();
+            for (ResolvedType t : refType.typeParametersValues()){
                 if (hasInferenceVariables(t)){
                     return true;
                 }
@@ -155,7 +155,7 @@ public class InferenceVariableType implements Type {
         }
 
         if (type.isWildcard()){
-            Wildcard wildcardType = type.asWildcard();
+            ResolvedWildcard wildcardType = type.asWildcard();
             return hasInferenceVariables(wildcardType.getBoundedType());
         }
 

@@ -28,12 +28,13 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -97,13 +98,13 @@ public class SourceFileInfoExtractor {
     }
 
     private void solveTypeDecl(ClassOrInterfaceDeclaration node) {
-        TypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
+        ResolvedTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(node);
         if (typeDeclaration.isClass()) {
             out.println("\n[ Class " + typeDeclaration.getQualifiedName() + " ]");
-            for (ReferenceType sc : typeDeclaration.asClass().getAllSuperClasses()) {
+            for (ResolvedReferenceType sc : typeDeclaration.asClass().getAllSuperClasses()) {
                 out.println("  superclass: " + sc.getQualifiedName());
             }
-            for (ReferenceType sc : typeDeclaration.asClass().getAllInterfaces()) {
+            for (ResolvedReferenceType sc : typeDeclaration.asClass().getAllInterfaces()) {
                 out.println("  interface: " + sc.getQualifiedName());
             }
         }
@@ -119,7 +120,7 @@ public class SourceFileInfoExtractor {
                 // skip
             } else if ((getParentNode(node) instanceof Statement) || (getParentNode(node) instanceof VariableDeclarator)) {
                 try {
-                    Type ref = JavaParserFacade.get(typeSolver).getType(node);
+                    ResolvedType ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getRange().get().begin.line + ") " + node + " ==> " + ref.describe());
                     ok++;
                 } catch (UnsupportedOperationException upe) {
@@ -156,7 +157,7 @@ public class SourceFileInfoExtractor {
         }
     }
 
-    private String toString(SymbolReference<com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration> methodDeclarationSymbolReference) {
+    private String toString(SymbolReference<ResolvedMethodDeclaration> methodDeclarationSymbolReference) {
         if (methodDeclarationSymbolReference.isSolved()) {
             return methodDeclarationSymbolReference.getCorrespondingDeclaration().getQualifiedSignature();
         } else {

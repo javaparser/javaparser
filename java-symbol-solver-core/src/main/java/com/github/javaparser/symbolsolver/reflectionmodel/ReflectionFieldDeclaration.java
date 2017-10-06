@@ -16,11 +16,11 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,11 +28,11 @@ import java.lang.reflect.Modifier;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionFieldDeclaration implements FieldDeclaration {
+public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
 
     private Field field;
     private TypeSolver typeSolver;
-    private Type type;
+    private ResolvedType type;
 
     public ReflectionFieldDeclaration(Field field, TypeSolver typeSolver) {
         this.field = field;
@@ -40,18 +40,18 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
         this.type = calcType();
     }
 
-    private ReflectionFieldDeclaration(Field field, TypeSolver typeSolver, Type type) {
+    private ReflectionFieldDeclaration(Field field, TypeSolver typeSolver, ResolvedType type) {
         this.field = field;
         this.typeSolver = typeSolver;
         this.type = type;
     }
 
     @Override
-    public Type getType() {
+    public ResolvedType getType() {
         return type;
     }
 
-    private Type calcType() {
+    private ResolvedType calcType() {
         // TODO consider interfaces, enums, primitive types, arrays
         return ReflectionFactory.typeUsageFor(field.getGenericType(), typeSolver);
     }
@@ -72,11 +72,11 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public TypeDeclaration declaringType() {
+    public ResolvedTypeDeclaration declaringType() {
         return ReflectionFactory.typeDeclarationFor(field.getDeclaringClass(), typeSolver);
     }
 
-    public FieldDeclaration replaceType(Type fieldType) {
+    public ResolvedFieldDeclaration replaceType(ResolvedType fieldType) {
         return new ReflectionFieldDeclaration(field, typeSolver, fieldType);
     }
 
@@ -91,7 +91,7 @@ public class ReflectionFieldDeclaration implements FieldDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(field.getModifiers());
     }
 }

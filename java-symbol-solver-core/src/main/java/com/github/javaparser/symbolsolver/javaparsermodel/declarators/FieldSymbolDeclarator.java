@@ -18,8 +18,8 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarators;
 
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.LinkedList;
@@ -35,8 +35,8 @@ public class FieldSymbolDeclarator extends AbstractSymbolDeclarator<FieldDeclara
     }
 
     @Override
-    public List<ValueDeclaration> getSymbolDeclarations() {
-        List<ValueDeclaration> symbols = new LinkedList<>();
+    public List<ResolvedValueDeclaration> getSymbolDeclarations() {
+        List<ResolvedValueDeclaration> symbols = new LinkedList<>();
         for (VariableDeclarator v : wrappedNode.getVariables()) {
             symbols.add(JavaParserSymbolDeclaration.field(v, typeSolver));
         }

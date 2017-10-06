@@ -16,8 +16,8 @@
 
 package com.github.javaparser.symbolsolver.model.resolution;
 
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * Any type of value.
@@ -25,10 +25,10 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
  * @author Federico Tomassetti
  */
 public class Value {
-    private Type type;
+    private ResolvedType type;
     private String name;
 
-    public Value(Type type, String name) {
+    public Value(ResolvedType type, String name) {
         this.type = type;
         this.name = name;
     }
@@ -36,8 +36,8 @@ public class Value {
     /**
      * Create a Value from a ValueDeclaration.
      */
-    public static Value from(ValueDeclaration decl) {
-        Type type = decl.getType();
+    public static Value from(ResolvedValueDeclaration decl) {
+        ResolvedType type = decl.getType();
         return new Value(type, decl.getName());
     }
 
@@ -53,7 +53,7 @@ public class Value {
         return name;
     }
 
-    public Type getType() {
+    public ResolvedType getType() {
         return type;
     }
 

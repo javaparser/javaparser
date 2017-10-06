@@ -16,9 +16,12 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.AccessLevel;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
 
@@ -35,7 +38,7 @@ import java.util.List;
  */
 public class ReflectionFactory {
 
-    public static ReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
+    public static ResolvedReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
             throw new IllegalArgumentException("No type declaration available for an Array");
         } else if (clazz.isPrimitive()) {
@@ -49,15 +52,15 @@ public class ReflectionFactory {
         }
     }
 
-    public static Type typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
+    public static ResolvedType typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
         if (type instanceof java.lang.reflect.TypeVariable) {
             java.lang.reflect.TypeVariable<?> tv = (java.lang.reflect.TypeVariable<?>) type;
             boolean declaredOnClass = tv.getGenericDeclaration() instanceof java.lang.reflect.Type;
-            TypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
-            return new com.github.javaparser.symbolsolver.model.typesystem.TypeVariable(typeParameter);
+            ResolvedTypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
+            return new ResolvedTypeVariable(typeParameter);
         } else if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
-            ReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
+            ResolvedReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
             List<java.lang.reflect.Type> actualTypes = new ArrayList<>();
             actualTypes.addAll(Arrays.asList(pt.getActualTypeArguments()));
             // we consume the actual types
@@ -67,18 +70,18 @@ public class ReflectionFactory {
             Class<?> c = (Class<?>) type;
             if (c.isPrimitive()) {
                 if (c.getName().equals(Void.TYPE.getName())) {
-                    return VoidType.INSTANCE;
+                    return ResolvedVoidType.INSTANCE;
                 } else {
-                    return PrimitiveType.byName(c.getName());
+                    return ResolvedPrimitiveType.byName(c.getName());
                 }
             } else if (c.isArray()) {
-                return new ArrayType(typeUsageFor(c.getComponentType(), typeSolver));
+                return new ResolvedArrayType(typeUsageFor(c.getComponentType(), typeSolver));
             } else {
                 return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver), typeSolver);
             }
         } else if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;
-            return new ArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
+            return new ResolvedArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
         } else if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
@@ -90,29 +93,29 @@ public class ReflectionFactory {
                 if (wildcardType.getLowerBounds().length > 1) {
                     throw new UnsupportedOperationException();
                 }
-                return Wildcard.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
+                return ResolvedWildcard.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
             }
             if (wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length > 1) {
                     throw new UnsupportedOperationException();
                 }
-                return Wildcard.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
+                return ResolvedWildcard.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
             }
-            return Wildcard.UNBOUNDED;
+            return ResolvedWildcard.UNBOUNDED;
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
         }
     }
 
-    static AccessLevel modifiersToAccessLevel(final int modifiers) {
+    static AccessSpecifier modifiersToAccessLevel(final int modifiers) {
         if (Modifier.isPublic(modifiers)) {
-            return AccessLevel.PUBLIC;
+            return AccessSpecifier.PUBLIC;
         } else if (Modifier.isProtected(modifiers)) {
-            return AccessLevel.PROTECTED;
+            return AccessSpecifier.PROTECTED;
         } else if (Modifier.isPrivate(modifiers)) {
-            return AccessLevel.PRIVATE;
+            return AccessSpecifier.PRIVATE;
         } else {
-            return AccessLevel.PACKAGE_PROTECTED;
+            return AccessSpecifier.DEFAULT;
         }
     }
 }

@@ -21,10 +21,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class Issue18 extends AbstractResolutionTest {
         ExpressionStmt expr = (ExpressionStmt) methodDeclaration.getBody().get().getStatements().get(1);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        Type type = javaParserFacade.getType(expr.getExpression());
+        ResolvedType type = javaParserFacade.getType(expr.getExpression());
         assertEquals("java.lang.Object", type.describe());
     }
 }

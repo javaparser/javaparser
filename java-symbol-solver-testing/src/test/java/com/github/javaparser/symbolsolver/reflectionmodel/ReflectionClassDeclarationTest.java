@@ -16,11 +16,12 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.*;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -47,8 +48,8 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        ClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         assertEquals(true, foo.isClass());
         assertEquals(true, bar.isClass());
@@ -62,7 +63,7 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
         assertEquals(Object.class.getCanonicalName(), foo.getSuperClass().getQualifiedName());
         assertEquals(Collections.emptyList(), foo.getSuperClass().typeParametersValues());
@@ -78,7 +79,7 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
 
         assertEquals("Bar", foo.getSuperClass().getTypeDeclaration().getName());
         assertEquals(Collections.emptyList(), foo.getSuperClass().typeParametersValues());
@@ -94,8 +95,8 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        ClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
         assertEquals(1, bar.getSuperClass().typeParametersValues().size());
@@ -112,8 +113,8 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        ClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         assertEquals("Foo", bar.getSuperClass().getTypeDeclaration().getName());
         assertEquals(1, bar.getSuperClass().typeParametersValues().size());
@@ -134,8 +135,8 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        ClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ResolvedClassDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedClassDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
         assertEquals(true, foo.isClass());
         assertEquals(true, bar.isClass());
@@ -151,14 +152,14 @@ public class ReflectionClassDeclarationTest {
 
         TypeSolver typeResolver = new ReflectionTypeSolver();
 
-        ReferenceTypeDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
-        ReferenceTypeDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
+        ResolvedReferenceTypeDeclaration foo = new ReflectionClassDeclaration(Foo.class, typeResolver);
+        ResolvedReferenceTypeDeclaration bar = new ReflectionClassDeclaration(Bar.class, typeResolver);
 
-        FieldDeclaration fooField = foo.getField("field");
+        ResolvedFieldDeclaration fooField = foo.getField("field");
         assertEquals(true, fooField.getType().isTypeVariable());
         assertEquals("E", fooField.getType().asTypeParameter().getName());
 
-        FieldDeclaration barField = bar.getField("field");
+        ResolvedFieldDeclaration barField = bar.getField("field");
         assertEquals(true, barField.getType().isReferenceType());
         assertEquals(String.class.getCanonicalName(), barField.getType().asReferenceType().getQualifiedName());
     }
@@ -166,9 +167,9 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
-        List<MethodDeclaration> methods = string.getDeclaredMethods().stream()
-                .filter(m -> m.accessLevel() != AccessLevel.PRIVATE && m.accessLevel() != AccessLevel.PACKAGE_PROTECTED)
+        ResolvedReferenceTypeDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        List<ResolvedMethodDeclaration> methods = string.getDeclaredMethods().stream()
+                .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         assertEquals(67, methods.size());
@@ -185,7 +186,7 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetInterfaces() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, List<E>, RandomAccess
         assertEquals(ImmutableSet.of(Serializable.class.getCanonicalName(),
                 Cloneable.class.getCanonicalName(),
@@ -197,7 +198,7 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetAllInterfaces() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
         assertEquals(ImmutableSet.of(Serializable.class.getCanonicalName(),
                 Cloneable.class.getCanonicalName(),
@@ -211,12 +212,12 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetAllSuperclasses() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals(ImmutableSet.of(Object.class.getCanonicalName(),
                 AbstractCollection.class.getCanonicalName(),
                 AbstractList.class.getCanonicalName()),
                 arraylist.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
-        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        ResolvedClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         assertEquals(ImmutableSet.of(Object.class.getCanonicalName()),
                 string.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
@@ -224,27 +225,27 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetPackageName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals("java.util", arraylist.getPackageName());
-        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        ResolvedClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         assertEquals("java.lang", string.getPackageName());
     }
 
     @Test
     public void testGetClassName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals("ArrayList", arraylist.getClassName());
-        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        ResolvedClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         assertEquals("String", string.getClassName());
     }
 
     @Test
     public void testGetQualifiedName() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals("java.util.ArrayList", arraylist.getQualifiedName());
-        ClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
+        ResolvedClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         assertEquals("java.lang.String", string.getQualifiedName());
     }
 
@@ -260,9 +261,9 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetAllFields() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals(ImmutableSet.of("modCount", "serialVersionUID", "MAX_ARRAY_SIZE", "size", "elementData", "EMPTY_ELEMENTDATA", "DEFAULTCAPACITY_EMPTY_ELEMENTDATA", "DEFAULT_CAPACITY"),
-                arraylist.getAllFields().stream().map(Declaration::getName).collect(Collectors.toSet()));
+                arraylist.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
     }
 
     ///
@@ -272,12 +273,12 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testAllAncestors() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arraylist.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(9, ancestors.size());
 
-        TypeVariable typeVariable = new TypeVariable(arraylist.getTypeParameters().get(0));
+        ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver), typeResolver), ancestors.get("java.util.RandomAccess"));
         assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(AbstractCollection.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.util.AbstractCollection"));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.util.List"));
@@ -317,7 +318,7 @@ public class ReflectionClassDeclarationTest {
         assertEquals(true, constructorDeclaration.getAllSuperClasses().stream().anyMatch(s -> s.getQualifiedName().equals("com.github.javaparser.ast.Node")));
         assertEquals(true, constructorDeclaration.getAllSuperClasses().stream().anyMatch(s -> s.getQualifiedName().equals("java.lang.Object")));
 
-        ReferenceType ancestor = null;
+        ResolvedReferenceType ancestor = null;
 
         ancestor = constructorDeclaration.getAllSuperClasses().get(0);
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", ancestor.getQualifiedName());
@@ -343,6 +344,7 @@ public class ReflectionClassDeclarationTest {
 
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
+                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters"),
@@ -355,7 +357,7 @@ public class ReflectionClassDeclarationTest {
         System.out.println(constructorDeclaration.getInterfaces().stream().map(t -> t.getQualifiedName()).collect(Collectors.toList()));
         assertEquals(8, constructorDeclaration.getInterfaces().size());
 
-        ReferenceType interfaze = null;
+        ResolvedReferenceType interfaze = null;
 
         interfaze = constructorDeclaration.getInterfaces().get(0);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", interfaze.getQualifiedName());
@@ -419,16 +421,17 @@ public class ReflectionClassDeclarationTest {
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+                "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange",
+                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
     public void testGetAllInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        List<ReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
+        List<ResolvedReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
         assertEquals(34, interfaces.size());
 
-        ReferenceType interfaze = null;
+        ResolvedReferenceType interfaze = null;
         int i = 0;
 
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
@@ -568,9 +571,9 @@ public class ReflectionClassDeclarationTest {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         assertEquals(9, constructorDeclaration.getAncestors().size());
 
-        ReferenceType ancestor = null;
-        List<ReferenceType> ancestors = constructorDeclaration.getAncestors();
-        ancestors.sort(Comparator.comparing(ReferenceType::getQualifiedName));
+        ResolvedReferenceType ancestor = null;
+        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
+        ancestors.sort(Comparator.comparing(ResolvedReferenceType::getQualifiedName));
 
         ancestor = ancestors.get(0);
         assertEquals("com.github.javaparser.ast.body.CallableDeclaration", ancestor.getQualifiedName());
@@ -622,9 +625,9 @@ public class ReflectionClassDeclarationTest {
     public void testGetAllAncestorsWithTypeParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        ReferenceType ancestor = null;
-        List<ReferenceType> ancestors = constructorDeclaration.getAllAncestors();
-        ancestors.sort(Comparator.comparing(ReferenceType::getQualifiedName));
+        ResolvedReferenceType ancestor = null;
+        List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
+        ancestors.sort(Comparator.comparing(ResolvedReferenceType::getQualifiedName));
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.HasParentNode", ancestor.getQualifiedName());

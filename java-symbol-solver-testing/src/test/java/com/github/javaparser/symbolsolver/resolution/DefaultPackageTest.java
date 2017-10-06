@@ -1,13 +1,14 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import org.junit.Test;
 
@@ -33,18 +34,18 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public AccessLevel accessLevel() {
+        public AccessSpecifier accessSpecifier() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public List<TypeParameterDeclaration> getTypeParameters() {
+        public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
             return new LinkedList<>();
         }
 
         @Override
-        public Set<ReferenceTypeDeclaration> internalTypes() {
-            return new HashSet<ReferenceTypeDeclaration>();
+        public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
+            return new HashSet<ResolvedReferenceTypeDeclaration>();
         }
 
         @Override
@@ -53,27 +54,27 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public List<ReferenceType> getAncestors() {
+        public List<ResolvedReferenceType> getAncestors() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public List<FieldDeclaration> getAllFields() {
+        public List<ResolvedFieldDeclaration> getAllFields() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public Set<MethodDeclaration> getDeclaredMethods() {
+        public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public boolean isAssignableBy(Type type) {
+        public boolean isAssignableBy(ResolvedType type) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+        public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
             throw new UnsupportedOperationException();
         }
 
@@ -83,22 +84,22 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public ReferenceType getSuperClass() {
+        public ResolvedReferenceType getSuperClass() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public List<ReferenceType> getInterfaces() {
+        public List<ResolvedReferenceType> getInterfaces() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public List<ConstructorDeclaration> getConstructors() {
+        public List<ResolvedConstructorDeclaration> getConstructors() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        protected ReferenceType object() {
+        protected ResolvedReferenceType object() {
             throw new UnsupportedOperationException();
         }
 
@@ -118,7 +119,7 @@ public class DefaultPackageTest {
         }
 
         @Override
-        public Optional<ReferenceTypeDeclaration> containerType() {
+        public Optional<ResolvedReferenceTypeDeclaration> containerType() {
             throw new UnsupportedOperationException();
         }
     }
@@ -130,7 +131,7 @@ public class DefaultPackageTest {
         memoryTypeSolver.addDeclaration("B", new MyClassDeclaration("B"));
 
         ClassOrInterfaceType jpType = JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0);
-        Type resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(jpType);
+        ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(jpType);
         assertEquals("B", resolvedType.asReferenceType().getQualifiedName());
     }
 
@@ -141,7 +142,7 @@ public class DefaultPackageTest {
         memoryTypeSolver.addDeclaration("B", new MyClassDeclaration("B"));
 
         ClassOrInterfaceType jpType = JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0);
-        Type resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(jpType);
+        ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(jpType);
         assertEquals("B", resolvedType.asReferenceType().getQualifiedName());
     }
 
@@ -151,7 +152,7 @@ public class DefaultPackageTest {
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("B", new MyClassDeclaration("B"));
 
-        Type resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0));
+        ResolvedType resolvedType = JavaParserFacade.get(memoryTypeSolver).convertToUsage(JavaParser.parse(code).getClassByName("A").get().getExtendedTypes(0));
         assertEquals("B", resolvedType.asReferenceType().getQualifiedName());
     }
 }

@@ -16,7 +16,9 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -41,16 +43,16 @@ public class WildcardUsageTest {
     private ReferenceTypeImpl bar;
     private ReferenceTypeImpl object;
     private ReferenceTypeImpl string;
-    private Wildcard unbounded = Wildcard.UNBOUNDED;
-    private Wildcard superFoo;
-    private Wildcard superBar;
-    private Wildcard extendsFoo;
-    private Wildcard extendsBar;
-    private Wildcard superA;
-    private Wildcard extendsA;
-    private Wildcard superString;
-    private Wildcard extendsString;
-    private TypeVariable a;
+    private ResolvedWildcard unbounded = ResolvedWildcard.UNBOUNDED;
+    private ResolvedWildcard superFoo;
+    private ResolvedWildcard superBar;
+    private ResolvedWildcard extendsFoo;
+    private ResolvedWildcard extendsBar;
+    private ResolvedWildcard superA;
+    private ResolvedWildcard extendsA;
+    private ResolvedWildcard superString;
+    private ResolvedWildcard extendsString;
+    private ResolvedTypeVariable a;
 
     @Before
     public void setup() {
@@ -59,15 +61,15 @@ public class WildcardUsageTest {
         bar = new ReferenceTypeImpl(new ReflectionClassDeclaration(Bar.class, typeSolver), typeSolver);
         object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        superFoo = Wildcard.superBound(foo);
-        superBar = Wildcard.superBound(bar);
-        extendsFoo = Wildcard.extendsBound(foo);
-        extendsBar = Wildcard.extendsBound(bar);
-        a = new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
-        superA = Wildcard.superBound(a);
-        extendsA = Wildcard.extendsBound(a);
-        superString = Wildcard.superBound(string);
-        extendsString = Wildcard.extendsBound(string);
+        superFoo = ResolvedWildcard.superBound(foo);
+        superBar = ResolvedWildcard.superBound(bar);
+        extendsFoo = ResolvedWildcard.extendsBound(foo);
+        extendsBar = ResolvedWildcard.extendsBound(bar);
+        a = new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()));
+        superA = ResolvedWildcard.superBound(a);
+        extendsA = ResolvedWildcard.extendsBound(a);
+        superString = ResolvedWildcard.superBound(string);
+        extendsString = ResolvedWildcard.extendsBound(string);
     }
 
     @Test
@@ -182,8 +184,8 @@ public class WildcardUsageTest {
 
     @Test
     public void testReplaceParam() {
-        TypeParameterDeclaration tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
-        TypeParameterDeclaration tpB = TypeParameterDeclaration.onType("B", "foo.Bar", Collections.emptyList());
+        ResolvedTypeParameterDeclaration tpA = ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
+        ResolvedTypeParameterDeclaration tpB = ResolvedTypeParameterDeclaration.onType("B", "foo.Bar", Collections.emptyList());
         assertTrue(unbounded == unbounded.replaceTypeVariables(tpA, string));
         assertTrue(superFoo == superFoo.replaceTypeVariables(tpA, string));
         assertTrue(extendsFoo == extendsFoo.replaceTypeVariables(tpA, string));

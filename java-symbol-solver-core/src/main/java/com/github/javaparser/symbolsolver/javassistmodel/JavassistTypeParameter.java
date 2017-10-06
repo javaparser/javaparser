@@ -16,10 +16,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import javassist.bytecode.SignatureAttribute;
@@ -31,13 +28,13 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistTypeParameter implements TypeParameterDeclaration {
+public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration {
 
     private SignatureAttribute.TypeParameter wrapped;
     private TypeSolver typeSolver;
-    private TypeParametrizable container;
+    private ResolvedTypeParametrizable container;
 
-    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, TypeParametrizable container, TypeSolver typeSolver) {
+    public JavassistTypeParameter(SignatureAttribute.TypeParameter wrapped, ResolvedTypeParametrizable container, TypeSolver typeSolver) {
         this.wrapped = wrapped;
         this.typeSolver = typeSolver;
         this.container = container;
@@ -46,9 +43,9 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TypeParameterDeclaration)) return false;
+        if (!(o instanceof ResolvedTypeParameterDeclaration)) return false;
 
-        TypeParameterDeclaration that = (TypeParameterDeclaration) o;
+        ResolvedTypeParameterDeclaration that = (ResolvedTypeParameterDeclaration) o;
 
         if (!getQualifiedName().equals(that.getQualifiedName())) {
             return false;
@@ -77,10 +74,10 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public String getContainerQualifiedName() {
-        if (this.container instanceof ReferenceTypeDeclaration) {
-            return ((ReferenceTypeDeclaration) this.container).getQualifiedName();
-        } else if (this.container instanceof MethodLikeDeclaration) {
-            return ((MethodLikeDeclaration) this.container).getQualifiedName();
+        if (this.container instanceof ResolvedReferenceTypeDeclaration) {
+            return ((ResolvedReferenceTypeDeclaration) this.container).getQualifiedName();
+        } else if (this.container instanceof ResolvedMethodLikeDeclaration) {
+            return ((ResolvedMethodLikeDeclaration) this.container).getQualifiedName();
         }
         throw new UnsupportedOperationException();
     }
@@ -91,12 +88,12 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public TypeParametrizable getContainer() {
+    public ResolvedTypeParametrizable getContainer() {
         return this.container;
     }
 
     @Override
-    public List<TypeParameterDeclaration.Bound> getBounds(TypeSolver typeSolver) {
+    public List<ResolvedTypeParameterDeclaration.Bound> getBounds() {
         List<Bound> bounds = new ArrayList<>();
         if (wrapped.getClassBound() != null && !wrapped.getClassBound().toString().equals(Object.class.getCanonicalName())) {
             throw new UnsupportedOperationException(wrapped.getClassBound().toString());
@@ -108,9 +105,9 @@ public class JavassistTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
-        if (container instanceof ReferenceTypeDeclaration) {
-            return Optional.of((ReferenceTypeDeclaration) container);
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return Optional.of((ResolvedReferenceTypeDeclaration) container);
         }
         return Optional.empty();
     }

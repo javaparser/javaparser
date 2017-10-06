@@ -23,9 +23,9 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
+        ResolvedType type = javaParserFacade.getType(expression);
         assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
     }
 
@@ -57,7 +57,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         expression = Navigator.findMethodCall(expression, "stream");
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
+        ResolvedType type = javaParserFacade.getType(expression);
         assertEquals("java.util.stream.Stream<java.lang.String>", type.describe());
     }
 
@@ -73,8 +73,8 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression e2 = returnStmt2.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type1 = javaParserFacade.getType(e1);
-        Type type2 = javaParserFacade.getType(e2);
+        ResolvedType type1 = javaParserFacade.getType(e1);
+        ResolvedType type2 = javaParserFacade.getType(e2);
         assertEquals("java.util.stream.Stream<java.lang.String>", type1.describe());
         assertEquals("java.util.stream.Stream<java.util.stream.IntStream>", type2.describe());
     }
@@ -88,7 +88,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expr = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type1 = javaParserFacade.getType(expr);
+        ResolvedType type1 = javaParserFacade.getType(expr);
         assertEquals("java.util.Optional<java.lang.Integer>", type1.describe());
     }
 
@@ -101,7 +101,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expr = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type1 = javaParserFacade.getType(expr);
+        ResolvedType type1 = javaParserFacade.getType(expr);
         assertEquals("double", type1.describe());
     }
 
@@ -116,7 +116,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
+        ResolvedType type = javaParserFacade.getType(expression);
         assertEquals("java.util.stream.Collector<T, ? extends java.lang.Object, java.util.List<T>>", type.describe());
     }
 
@@ -129,7 +129,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
+        ResolvedType type = javaParserFacade.getType(expression);
         assertEquals("java.util.List<java.lang.String>", type.describe());
     }
 
@@ -142,7 +142,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
+        ResolvedType type = javaParserFacade.getType(expression);
         assertEquals("java.lang.String", type.describe());
     }
 
@@ -155,7 +155,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         Expression expression = returnStmt.getExpression().get();
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(expression);
+        ResolvedType type = javaParserFacade.getType(expression);
         assertEquals("java.lang.String", type.describe());
     }
 
@@ -169,7 +169,7 @@ public class LambdaResolutionTest extends AbstractResolutionTest {
         LambdaExpr lambdaExpr = Navigator.findNodeOfGivenClass(expression, LambdaExpr.class);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        Type type = javaParserFacade.getType(lambdaExpr);
+        ResolvedType type = javaParserFacade.getType(lambdaExpr);
         assertEquals("void", type.describe());
     }
 

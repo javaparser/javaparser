@@ -16,7 +16,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
