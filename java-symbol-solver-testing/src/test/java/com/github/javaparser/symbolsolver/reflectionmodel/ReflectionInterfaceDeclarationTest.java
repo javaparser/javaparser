@@ -16,13 +16,13 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
@@ -40,8 +40,8 @@ public class ReflectionInterfaceDeclarationTest {
     @Test
     public void testGetDeclaredMethods() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ReferenceTypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
-        List<MethodDeclaration> methods = list.getDeclaredMethods().stream()
+        ResolvedReferenceTypeDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        List<ResolvedMethodDeclaration> methods = list.getDeclaredMethods().stream()
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
         assertEquals(28, methods.size());
@@ -58,12 +58,12 @@ public class ReflectionInterfaceDeclarationTest {
     @Test
     public void testAllAncestors() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         list.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(3, ancestors.size());
 
-        TypeVariable typeVariable = new TypeVariable(list.getTypeParameters().get(0));
+        ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(list.getTypeParameters().get(0));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Collection.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.util.Collection"));
         assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeResolver), typeResolver), ancestors.get("java.lang.Object"));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Iterable.class, typeResolver), ImmutableList.of(typeVariable), typeResolver), ancestors.get("java.lang.Iterable"));

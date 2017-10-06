@@ -8,15 +8,15 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.declarations.FieldDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.ArrayList;
@@ -55,10 +55,10 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         }
     }
 
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
-        List<ReferenceType> ancestorsOfOther = other.getAllAncestors();
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
+        List<ResolvedReferenceType> ancestorsOfOther = other.getAllAncestors();
         ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
-        for (ReferenceType ancestorOfOther : ancestorsOfOther) {
+        for (ResolvedReferenceType ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
             }
@@ -66,19 +66,19 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         return false;
     }
 
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         if (type.isNull()) {
             return true;
         }
         if (type.isReferenceType()) {
-            ReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
+            ResolvedReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
             return isAssignableBy(other);
         } else {
             throw new UnsupportedOperationException();
         }
     }
 
-    public SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (this.wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
                 if (typeParameter.getName().getId().equals(name)) {
@@ -111,18 +111,18 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                 }
             }
         }
-        return SymbolReference.unsolved(TypeDeclaration.class);
+        return SymbolReference.unsolved(ResolvedTypeDeclaration.class);
     }
 
-    public Optional<ReferenceTypeDeclaration> containerType() {
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         Optional<Node> parent = wrappedNode.getParentNode();
         return parent.isPresent() ? 
                 Optional.of(JavaParserFactory.toTypeDeclaration(parent.get(), typeSolver)) :
                 Optional.empty();
     }
     
-    public List<FieldDeclaration> getFieldsForDeclaredVariables() {
-        ArrayList<FieldDeclaration> fields = new ArrayList<>();
+    public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
+        ArrayList<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {
             for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
                 if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {

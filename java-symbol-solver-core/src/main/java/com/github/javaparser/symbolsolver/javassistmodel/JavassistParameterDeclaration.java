@@ -16,16 +16,16 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import javassist.CtClass;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavassistParameterDeclaration implements ParameterDeclaration {
-    private Type type;
+public class JavassistParameterDeclaration implements ResolvedParameterDeclaration {
+    private ResolvedType type;
     private TypeSolver typeSolver;
     private boolean variadic;
 
@@ -33,7 +33,7 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
         this(JavassistFactory.typeUsageFor(type, typeSolver), typeSolver, variadic);
     }
 
-    public JavassistParameterDeclaration(Type type, TypeSolver typeSolver, boolean variadic) {
+    public JavassistParameterDeclaration(ResolvedType type, TypeSolver typeSolver, boolean variadic) {
         this.type = type;
         this.typeSolver = typeSolver;
         this.variadic = variadic;
@@ -74,7 +74,7 @@ public class JavassistParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public Type getType() {
+    public ResolvedType getType() {
         return type;
     }
 }

@@ -18,9 +18,9 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.google.common.cache.Cache;
@@ -47,7 +47,7 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private Cache<String, Optional<CompilationUnit>> parsedFiles = CacheBuilder.newBuilder().softValues().build();
     private Cache<String, List<CompilationUnit>> parsedDirectories = CacheBuilder.newBuilder().softValues().build();
-    private Cache<String, SymbolReference<ReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
+    private Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> foundTypes = CacheBuilder.newBuilder().softValues().build();
 
     public JavaParserTypeSolver(File srcDir) {
         if (!srcDir.exists() || !srcDir.isDirectory()) {
@@ -114,12 +114,12 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     @Override
-    public SymbolReference<ReferenceTypeDeclaration> tryToSolveType(String name) {
+    public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         // TODO support enums
         // TODO support interfaces
         try {
             return foundTypes.get(name, () -> {
-                SymbolReference<ReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
+                SymbolReference<ResolvedReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
                 if (result.isSolved()) {
                     return SymbolReference.solved(result.getCorrespondingDeclaration());
                 }
@@ -130,7 +130,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         }
     }
 
-    private SymbolReference<ReferenceTypeDeclaration> tryToSolveTypeUncached(String name) {
+    private SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveTypeUncached(String name) {
         String[] nameElements = name.split("\\.");
 
         for (int i = nameElements.length; i > 0; i--) {
@@ -170,7 +170,7 @@ public class JavaParserTypeSolver implements TypeSolver {
             }
         }
 
-        return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
     }
 
 }

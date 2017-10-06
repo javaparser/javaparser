@@ -19,25 +19,19 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
-import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
-import javaslang.Tuple2;
+import com.github.javaparser.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,10 +54,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     ///
 
     @Override
-    public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
+    public Optional<ResolvedType> solveGenericType(String name, TypeSolver typeSolver) {
         if(wrappedNode.getScope().isPresent()){
-            Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
-            Optional<Type> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
+            ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
+            Optional<ResolvedType> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
             return res;
         } else{
             return Optional.empty();
@@ -76,15 +70,15 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         if (wrappedNode.getScope().isPresent()) {
             Expression scope = wrappedNode.getScope().get();
             // Consider static method calls
             if (scope instanceof NameExpr) {
                 String className = ((NameExpr) scope).getName().getId();
-                SymbolReference<TypeDeclaration> ref = solveType(className, typeSolver);
+                SymbolReference<ResolvedTypeDeclaration> ref = solveType(className, typeSolver);
                 if (ref.isSolved()) {
-                    SymbolReference<MethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
+                    SymbolReference<ResolvedMethodDeclaration> m = MethodResolutionLogic.solveMethodInType(ref.getCorrespondingDeclaration(), name, argumentsTypes, typeSolver);
                     if (m.isSolved()) {
                         MethodUsage methodUsage = new MethodUsage(m.getCorrespondingDeclaration());
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
@@ -97,19 +91,19 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 }
             }
 
-            Type typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
+            ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             // we can replace the parameter types from the scope into the typeParametersValues
 
-            Map<TypeParameterDeclaration, Type> inferredTypes = new HashMap<>();
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
             for (int i = 0; i < argumentsTypes.size(); i++) {
                 // by replacing types I can also find new equivalences
                 // for example if I replace T=U with String because I know that T=String I can derive that also U equal String
-                Type originalArgumentType = argumentsTypes.get(i);
-                Type updatedArgumentType = usingParameterTypesFromScope(typeOfScope, originalArgumentType, inferredTypes);
+                ResolvedType originalArgumentType = argumentsTypes.get(i);
+                ResolvedType updatedArgumentType = usingParameterTypesFromScope(typeOfScope, originalArgumentType, inferredTypes);
                 argumentsTypes.set(i, updatedArgumentType);
             }
             for (int i = 0; i < argumentsTypes.size(); i++) {
-                Type updatedArgumentType = applyInferredTypes(argumentsTypes.get(i), inferredTypes);
+                ResolvedType updatedArgumentType = applyInferredTypes(argumentsTypes.get(i), inferredTypes);
                 argumentsTypes.set(i, updatedArgumentType);
             }
 
@@ -125,12 +119,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     private MethodUsage resolveMethodTypeParametersFromExplicitList(TypeSolver typeSolver, MethodUsage methodUsage) {
         if (wrappedNode.getTypeArguments().isPresent()) {
-            final List<Type> typeArguments = new ArrayList<>();
+            final List<ResolvedType> typeArguments = new ArrayList<>();
             for (com.github.javaparser.ast.type.Type ty : wrappedNode.getTypeArguments().get()) {
                 typeArguments.add(JavaParserFacade.get(typeSolver).convertToUsage(ty));
             }
 
-            List<TypeParameterDeclaration> tyParamDecls = methodUsage.getDeclaration().getTypeParameters();
+            List<ResolvedTypeParameterDeclaration> tyParamDecls = methodUsage.getDeclaration().getTypeParameters();
             if (tyParamDecls.size() == typeArguments.size()) {
                 for (int i = 0; i < tyParamDecls.size(); i++) {
                     methodUsage = methodUsage.replaceTypeParameter(tyParamDecls.get(i), typeArguments.get(i));
@@ -142,7 +136,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return getParent().solveSymbol(name, typeSolver);
     }
 
@@ -153,21 +147,21 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     }
 
     @Override
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         if (wrappedNode.getScope().isPresent()) {
             Expression scope = wrappedNode.getScope().get();
 
             // consider static methods
             if (scope instanceof NameExpr) {
                 NameExpr scopeAsName = (NameExpr) scope;
-                SymbolReference<TypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
+                SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
-                    TypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
+                    ResolvedTypeDeclaration typeDeclaration = symbolReference.getCorrespondingDeclaration().asType();
                     return MethodResolutionLogic.solveMethodInType(typeDeclaration, name, argumentsTypes, false, typeSolver);
                 }
             }
 
-            Type typeOfScope = null;
+            ResolvedType typeOfScope = null;
             try {
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             } catch (Exception e) {
@@ -183,20 +177,20 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 // method call on array are Object methods
                 return MethodResolutionLogic.solveMethodInType(new ReflectionClassDeclaration(Object.class, typeSolver), name, argumentsTypes, false, typeSolver);
             } else if (typeOfScope.isTypeVariable()) {
-                for (TypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds(typeSolver)) {
-                    SymbolReference<MethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, false, typeSolver);
+                for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
+                    SymbolReference<ResolvedMethodDeclaration> res = MethodResolutionLogic.solveMethodInType(bound.getType().asReferenceType().getTypeDeclaration(), name, argumentsTypes, false, typeSolver);
                     if (res.isSolved()) {
                         return res;
                     }
                 }
-                return SymbolReference.unsolved(MethodDeclaration.class);
+                return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
             } else if (typeOfScope.isConstraint()){
                 return MethodResolutionLogic.solveMethodInType(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
             } else {
                 return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, false, typeSolver);
             }
         } else {
-            Type typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+            ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
             return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, false, typeSolver);
         }
     }
@@ -205,8 +199,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     /// Private methods
     ///
 
-    private Optional<MethodUsage> solveMethodAsUsage(ReferenceType refType, String name,
-                                                     List<Type> argumentsTypes, TypeSolver typeSolver,
+    private Optional<MethodUsage> solveMethodAsUsage(ResolvedReferenceType refType, String name,
+                                                     List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
                                                      Context invokationContext) {
         Optional<MethodUsage> ref = ContextHelper.solveMethodAsUsage(refType.getTypeDeclaration(), name, argumentsTypes, typeSolver, invokationContext, refType.typeParametersValues());
         if (ref.isPresent()) {
@@ -232,26 +226,26 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // In our example Stream.T equal to String, so the R (and the result of the call to collect) is
             // List<? super String>
 
-            Map<TypeParameterDeclaration, Type> derivedValues = new HashMap<>();
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> derivedValues = new HashMap<>();
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
-                ParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
-                Type parameterType = parameter.getType();
+                ResolvedParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
+                ResolvedType parameterType = parameter.getType();
                 if (parameter.isVariadic()) {
                 	parameterType = parameterType.asArrayType().getComponentType();
                 }
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
 
-            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()){
+            for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()){
                 methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
             }
 
-            Type returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
+            ResolvedType returnType = refType.useThisTypeParametersOnTheGivenType(methodUsage.returnType());
             if (returnType != methodUsage.returnType()) {
                 methodUsage = methodUsage.replaceReturnType(returnType);
             }
             for (int i = 0; i < methodUsage.getParamTypes().size(); i++) {
-                Type replaced = refType.useThisTypeParametersOnTheGivenType(methodUsage.getParamTypes().get(i));
+                ResolvedType replaced = refType.useThisTypeParametersOnTheGivenType(methodUsage.getParamTypes().get(i));
                 methodUsage = methodUsage.replaceParamType(i, replaced);
             }
             return Optional.of(methodUsage);
@@ -260,13 +254,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
-    private void inferTypes(Type source, Type target, Map<TypeParameterDeclaration, Type> mappings) {
+    private void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
         if (source.equals(target)) {
             return;
         }
         if (source.isReferenceType() && target.isReferenceType()) {
-        	ReferenceType sourceRefType = source.asReferenceType();
-        	ReferenceType targetRefType = target.asReferenceType();
+            ResolvedReferenceType sourceRefType = source.asReferenceType();
+            ResolvedReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
             	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
 	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
@@ -337,21 +331,21 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         throw new RuntimeException(source.describe() + " " + target.describe());
     }
 
-    private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<Type> actualParamTypes) {
-        Map<TypeParameterDeclaration, Type> matchedTypeParameters = new HashMap<>();
+    private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
+        Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters = new HashMap<>();
 
         if (methodUsage.getDeclaration().hasVariadicParameter()) {
             if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
                 // the varargs parameter is an Array, so extract the inner type
-                Type expectedType =
+                ResolvedType expectedType =
                     methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
                 // the varargs corresponding type can be either T or Array<T>
-                Type actualType =
+                ResolvedType actualType =
                     actualParamTypes.get(actualParamTypes.size() - 1).isArray() ?
                         actualParamTypes.get(actualParamTypes.size() - 1).asArrayType().getComponentType() :
                         actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
-                    for (TypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
+                    for (ResolvedTypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
                     }
                 }
@@ -376,17 +370,17 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             actualParamTypes.size();
 
         for (int i = 0; i < until; i++) {
-            Type expectedType = methodUsage.getParamType(i);
-            Type actualType = actualParamTypes.get(i);
+            ResolvedType expectedType = methodUsage.getParamType(i);
+            ResolvedType actualType = actualParamTypes.get(i);
             matchTypeParameters(expectedType, actualType, matchedTypeParameters);
         }
-        for (TypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
             methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
         }
         return methodUsage;
     }
 
-    private void matchTypeParameters(Type expectedType, Type actualType, Map<TypeParameterDeclaration, Type> matchedTypeParameters) {
+    private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
             if (!actualType.isTypeVariable() && !actualType.isReferenceType()) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
@@ -404,7 +398,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             // avoid cases where the actual type has no type parameters but the expected one has. Such as: "classX extends classY<Integer>"
             if (actualType.isReferenceType() && actualType.asReferenceType().typeParametersValues().size() > 0) {
                 int i = 0;
-                for (Type tp : expectedType.asReferenceType().typeParametersValues()) {
+                for (ResolvedType tp : expectedType.asReferenceType().typeParametersValues()) {
                     matchTypeParameters(tp, actualType.asReferenceType().typeParametersValues().get(i), matchedTypeParameters);
                     i++;
                 }
@@ -418,8 +412,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
-    private Optional<MethodUsage> solveMethodAsUsage(TypeVariable tp, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
-        for (TypeParameterDeclaration.Bound bound : tp.asTypeParameter().getBounds(typeSolver)) {
+    private Optional<MethodUsage> solveMethodAsUsage(ResolvedTypeVariable tp, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
+        for (ResolvedTypeParameterDeclaration.Bound bound : tp.asTypeParameter().getBounds()) {
             Optional<MethodUsage> methodUsage = solveMethodAsUsage(bound.getType(), name, argumentsTypes, typeSolver, invokationContext);
             if (methodUsage.isPresent()) {
                 return methodUsage;
@@ -428,13 +422,13 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         return Optional.empty();
     }
 
-    private Optional<MethodUsage> solveMethodAsUsage(Type type, String name, List<Type> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
-        if (type instanceof ReferenceType) {
-            return solveMethodAsUsage((ReferenceType) type, name, argumentsTypes, typeSolver, invokationContext);
-        } else if (type instanceof TypeVariable) {
-            return solveMethodAsUsage((TypeVariable) type, name, argumentsTypes, typeSolver, invokationContext);
-        } else if (type instanceof Wildcard) {
-            Wildcard wildcardUsage = (Wildcard) type;
+    private Optional<MethodUsage> solveMethodAsUsage(ResolvedType type, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, Context invokationContext) {
+        if (type instanceof ResolvedReferenceType) {
+            return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, typeSolver, invokationContext);
+        } else if (type instanceof ResolvedTypeVariable) {
+            return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, typeSolver, invokationContext);
+        } else if (type instanceof ResolvedWildcard) {
+            ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
             if (wildcardUsage.isSuper()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, typeSolver, invokationContext);
             } else if (wildcardUsage.isExtends()) {
@@ -442,10 +436,10 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else {
                 throw new UnsupportedOperationException("unbounded wildcard");
             }
-        } else if (type instanceof LambdaConstraintType){
-            LambdaConstraintType constraintType = (LambdaConstraintType) type;
+        } else if (type instanceof ResolvedLambdaConstraintType){
+            ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, typeSolver, invokationContext);
-        } else if (type instanceof ArrayType) {
+        } else if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
             return solveMethodAsUsage(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver), name, argumentsTypes, typeSolver, invokationContext);
         } else {
@@ -453,11 +447,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
-    private Type usingParameterTypesFromScope(Type scope, Type type, Map<TypeParameterDeclaration, Type> inferredTypes) {
+    private ResolvedType usingParameterTypesFromScope(ResolvedType scope, ResolvedType type, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (type.isReferenceType()) {
-            for (Tuple2<TypeParameterDeclaration, Type> entry : type.asReferenceType().getTypeParametersMap()) {
-                if (entry._1.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry._1.getName()).isPresent()) {
-                    type = type.replaceTypeVariables(entry._1, scope.asReferenceType().getGenericParameterByName(entry._1.getName()).get(), inferredTypes);
+            for (Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : type.asReferenceType().getTypeParametersMap()) {
+                if (entry.a.declaredOnType() && scope.asReferenceType().getGenericParameterByName(entry.a.getName()).isPresent()) {
+                    type = type.replaceTypeVariables(entry.a, scope.asReferenceType().getGenericParameterByName(entry.a.getName()).get(), inferredTypes);
                 }
             }
             return type;
@@ -466,8 +460,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
     }
 
-    private Type applyInferredTypes(Type type, Map<TypeParameterDeclaration, Type> inferredTypes) {
-        for (TypeParameterDeclaration tp : inferredTypes.keySet()) {
+    private ResolvedType applyInferredTypes(ResolvedType type, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+        for (ResolvedTypeParameterDeclaration tp : inferredTypes.keySet()) {
             type = type.replaceTypeVariables(tp, inferredTypes.get(tp), inferredTypes);
         }
         return type;

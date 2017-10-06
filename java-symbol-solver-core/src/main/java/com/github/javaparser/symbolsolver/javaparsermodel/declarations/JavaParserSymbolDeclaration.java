@@ -23,21 +23,21 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ArrayType;
-import com.github.javaparser.symbolsolver.model.typesystem.PrimitiveType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserSymbolDeclaration implements ValueDeclaration {
+public class JavaParserSymbolDeclaration implements ResolvedValueDeclaration {
 
     private String name;
     private Node wrappedNode;
@@ -120,26 +120,26 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public Type getType() {
+    public ResolvedType getType() {
         if (wrappedNode instanceof Parameter) {
             Parameter parameter = (Parameter) wrappedNode;
             if (getParentNode(wrappedNode) instanceof LambdaExpr) {
                 int pos = getParamPos(parameter);
-                Type lambdaType = JavaParserFacade.get(typeSolver).getType(getParentNode(wrappedNode));
+                ResolvedType lambdaType = JavaParserFacade.get(typeSolver).getType(getParentNode(wrappedNode));
 
                 // TODO understand from the context to which method this corresponds
                 //MethodDeclaration methodDeclaration = JavaParserFacade.get(typeSolver).getMethodCalled
                 //MethodDeclaration methodCalled = JavaParserFacade.get(typeSolver).solve()
                 throw new UnsupportedOperationException(wrappedNode.getClass().getCanonicalName());
             } else {
-                Type rawType = null;
+                ResolvedType rawType = null;
                 if (parameter.getType() instanceof com.github.javaparser.ast.type.PrimitiveType) {
-                    rawType = PrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name());
+                    rawType = ResolvedPrimitiveType.byName(((com.github.javaparser.ast.type.PrimitiveType) parameter.getType()).getType().name());
                 } else {
                     rawType = JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType(), wrappedNode);
                 }
                 if (parameter.isVarArgs()) {
-                    return new ArrayType(rawType);
+                    return new ResolvedArrayType(rawType);
                 } else {
                     return rawType;
                 }
@@ -147,7 +147,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
         } else if (wrappedNode instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) wrappedNode;
             if (getParentNode(wrappedNode) instanceof VariableDeclarationExpr) {
-                Type type = JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
+                ResolvedType type = JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
                 return type;
             } else if (getParentNode(wrappedNode) instanceof FieldDeclaration) {
                 return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), JavaParserFactory.getContext(wrappedNode, typeSolver));
@@ -160,7 +160,7 @@ public class JavaParserSymbolDeclaration implements ValueDeclaration {
     }
 
     @Override
-    public TypeDeclaration asType() {
+    public ResolvedTypeDeclaration asType() {
         throw new UnsupportedOperationException(this.getClass().getCanonicalName() + ": wrapping " + this.getWrappedNode().getClass().getCanonicalName());
     }
 

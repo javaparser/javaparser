@@ -16,13 +16,16 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -33,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionMethodDeclaration implements MethodDeclaration {
+public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration {
 
     private Method method;
     private TypeSolver typeSolver;
@@ -74,7 +77,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ReferenceTypeDeclaration declaringType() {
+    public ResolvedReferenceTypeDeclaration declaringType() {
         if (method.getDeclaringClass().isInterface()) {
             return new ReflectionInterfaceDeclaration(method.getDeclaringClass(), typeSolver);
         }
@@ -86,7 +89,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public Type getReturnType() {
+    public ResolvedType getReturnType() {
         return ReflectionFactory.typeUsageFor(method.getGenericReturnType(), typeSolver);
     }
 
@@ -96,7 +99,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public ParameterDeclaration getParam(int i) {
+    public ResolvedParameterDeclaration getParam(int i) {
         boolean variadic = false;
         if (method.isVarArgs()) {
             variadic = i == (method.getParameterCount() - 1);
@@ -105,11 +108,11 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
     }
 
-    public MethodUsage resolveTypeVariables(Context context, List<Type> parameterTypes) {
+    public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
         return new MethodDeclarationCommonLogic(this, typeSolver).resolveTypeVariables(context, parameterTypes);
     }
 
@@ -129,7 +132,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
+    public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(this.method.getModifiers());
     }
 
@@ -139,7 +142,7 @@ public class ReflectionMethodDeclaration implements MethodDeclaration {
     }
 
     @Override
-    public Type getSpecifiedException(int index) {
+    public ResolvedType getSpecifiedException(int index) {
         if (index < 0 || index >= getNumberOfSpecifiedExceptions()) {
             throw new IllegalArgumentException();
         }

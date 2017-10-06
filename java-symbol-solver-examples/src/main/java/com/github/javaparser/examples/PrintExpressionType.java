@@ -22,9 +22,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -48,7 +48,7 @@ public class PrintExpressionType {
             super.visit(n, javaParserFacade);
             System.out.println(n.toString() + " has type " + javaParserFacade.getType(n).describe());
             if (javaParserFacade.getType(n).isReferenceType()) {
-                for (ReferenceType ancestor : javaParserFacade.getType(n).asReferenceType().getAllAncestors()) {
+                for (ResolvedReferenceType ancestor : javaParserFacade.getType(n).asReferenceType().getAllAncestors()) {
                     //System.out.println("Ancestor " + ancestor.describe());
                 }
             }

@@ -22,11 +22,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -43,7 +43,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
         SwitchStmt switchStmt = Navigator.findSwitch(method);
         Expression expression = switchStmt.getEntries().get(0).getLabel().get();
 
-        SymbolReference<? extends ValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
         assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
     }
@@ -54,7 +54,7 @@ public class EnumResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodCallExpr call = Navigator.findMethodCall(clazz, "put");
 
-        Type ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
+        ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
         assertEquals("MyClass.Primitive", ref.describe());
     }
 

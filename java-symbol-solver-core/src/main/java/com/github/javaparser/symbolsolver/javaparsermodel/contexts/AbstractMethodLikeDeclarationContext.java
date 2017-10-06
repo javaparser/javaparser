@@ -4,17 +4,17 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.List;
@@ -30,10 +30,10 @@ public abstract class AbstractMethodLikeDeclarationContext
         super(wrappedNode, typeSolver);
     }
 
-    public final SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+    public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            SymbolReference<? extends ValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
+            SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
             }
@@ -44,10 +44,10 @@ public abstract class AbstractMethodLikeDeclarationContext
     }
 
     @Override
-    public final Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
+    public final Optional<ResolvedType> solveGenericType(String name, TypeSolver typeSolver) {
         for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
             if (tp.getName().getId().equals(name)) {
-                return Optional.of(new TypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
+                return Optional.of(new ResolvedTypeVariable(new JavaParserTypeParameter(tp, typeSolver)));
             }
         }
         return super.solveGenericType(name, typeSolver);
@@ -69,7 +69,7 @@ public abstract class AbstractMethodLikeDeclarationContext
     }
 
     @Override
-    public final SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    public final SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         if (wrappedNode.getTypeParameters() != null) {
             for (com.github.javaparser.ast.type.TypeParameter tp : wrappedNode.getTypeParameters()) {
                 if (tp.getName().getId().equals(name)) {
@@ -94,8 +94,8 @@ public abstract class AbstractMethodLikeDeclarationContext
     }
 
     @Override
-    public final SymbolReference<MethodDeclaration> solveMethod(
-            String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
+    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         return getParent().solveMethod(name, argumentsTypes, false, typeSolver);
     }
 }

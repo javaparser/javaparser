@@ -16,9 +16,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 /**
  * Placeholder used to represent a lambda argument type while it is being
@@ -26,10 +26,10 @@ import com.github.javaparser.symbolsolver.model.typesystem.Type;
  *
  * @author Federico Tomassetti
  */
-public class LambdaArgumentTypePlaceholder implements Type {
+public class LambdaArgumentTypePlaceholder implements ResolvedType {
 
     private int pos;
-    private SymbolReference<? extends MethodLikeDeclaration> method;
+    private SymbolReference<? extends ResolvedMethodLikeDeclaration> method;
 
     public LambdaArgumentTypePlaceholder(int pos) {
         this.pos = pos;
@@ -60,12 +60,12 @@ public class LambdaArgumentTypePlaceholder implements Type {
         return false;
     }
 
-    public void setMethod(SymbolReference<? extends MethodLikeDeclaration> method) {
+    public void setMethod(SymbolReference<? extends ResolvedMethodLikeDeclaration> method) {
         this.method = method;
     }
 
     @Override
-    public boolean isAssignableBy(Type other) {
+    public boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException();
     }
 

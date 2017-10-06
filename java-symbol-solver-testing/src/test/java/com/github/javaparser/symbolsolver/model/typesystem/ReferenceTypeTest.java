@@ -16,9 +16,11 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -52,7 +54,7 @@ public class ReferenceTypeTest {
         string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         listOfA = new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeVariable(TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver);
+                ImmutableList.of(new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList()))), typeSolver);
         listOfStrings = new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
@@ -64,10 +66,10 @@ public class ReferenceTypeTest {
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver);
         listOfWildcardExtendsString = new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(Wildcard.extendsBound(string)), typeSolver);
+                ImmutableList.of(ResolvedWildcard.extendsBound(string)), typeSolver);
         listOfWildcardSuperString = new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(Wildcard.superBound(string)), typeSolver);
+                ImmutableList.of(ResolvedWildcard.superBound(string)), typeSolver);
     }
 
     @Test
@@ -163,7 +165,7 @@ public class ReferenceTypeTest {
 
     @Test
     public void testReplaceParam() {
-        TypeParameterDeclaration tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
+        ResolvedTypeParameterDeclaration tpA = ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
         assertTrue(object == object.replaceTypeVariables(tpA, object));
         assertTrue(string == string.replaceTypeVariables(tpA, object));
         assertEquals(listOfStrings, listOfStrings.replaceTypeVariables(tpA, object));
@@ -177,10 +179,10 @@ public class ReferenceTypeTest {
         assertEquals(false, listOfStrings.isAssignableBy(listOfA));
         assertEquals(false, listOfA.isAssignableBy(listOfStrings));
 
-        assertEquals(false, object.isAssignableBy(VoidType.INSTANCE));
-        assertEquals(false, string.isAssignableBy(VoidType.INSTANCE));
-        assertEquals(false, listOfStrings.isAssignableBy(VoidType.INSTANCE));
-        assertEquals(false, listOfA.isAssignableBy(VoidType.INSTANCE));
+        assertEquals(false, object.isAssignableBy(ResolvedVoidType.INSTANCE));
+        assertEquals(false, string.isAssignableBy(ResolvedVoidType.INSTANCE));
+        assertEquals(false, listOfStrings.isAssignableBy(ResolvedVoidType.INSTANCE));
+        assertEquals(false, listOfA.isAssignableBy(ResolvedVoidType.INSTANCE));
 
         assertEquals(true, object.isAssignableBy(NullType.INSTANCE));
         assertEquals(true, string.isAssignableBy(NullType.INSTANCE));
@@ -190,18 +192,18 @@ public class ReferenceTypeTest {
 
     @Test
     public void testIsAssignableByBoxedPrimitive(){
-        ReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver),typeSolver);
-        ReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver),typeSolver);
-        ReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver),typeSolver);
+        ResolvedReferenceType numberType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Number.class, typeSolver),typeSolver);
+        ResolvedReferenceType intType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Integer.class, typeSolver),typeSolver);
+        ResolvedReferenceType doubleType = new ReferenceTypeImpl(new ReflectionClassDeclaration(Double.class, typeSolver),typeSolver);
 
-        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.INT));
-        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.DOUBLE));
-        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.SHORT));
-        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.LONG));
-        assertEquals(true,  numberType.isAssignableBy(PrimitiveType.FLOAT));
-        assertEquals(false, numberType.isAssignableBy(PrimitiveType.BOOLEAN));
-        assertEquals(true,  intType.isAssignableBy(PrimitiveType.INT));
-        assertEquals(true,  doubleType.isAssignableBy(PrimitiveType.DOUBLE));
+        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.INT));
+        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
+        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.SHORT));
+        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.LONG));
+        assertEquals(true,  numberType.isAssignableBy(ResolvedPrimitiveType.FLOAT));
+        assertEquals(false, numberType.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+        assertEquals(true,  intType.isAssignableBy(ResolvedPrimitiveType.INT));
+        assertEquals(true,  doubleType.isAssignableBy(ResolvedPrimitiveType.DOUBLE));
     }
 
     @Test
@@ -273,7 +275,7 @@ public class ReferenceTypeTest {
         assertEquals(true,
                 new ReferenceTypeImpl(
                         new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                        ImmutableList.of(Wildcard.extendsBound(foo), bar), typeSolver)
+                        ImmutableList.of(ResolvedWildcard.extendsBound(foo), bar), typeSolver)
                         .isAssignableBy(new ReferenceTypeImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
@@ -283,7 +285,7 @@ public class ReferenceTypeTest {
         assertEquals(true,
                 new ReferenceTypeImpl(
                         new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                        ImmutableList.of(foo, Wildcard.extendsBound(bar)), typeSolver)
+                        ImmutableList.of(foo, ResolvedWildcard.extendsBound(bar)), typeSolver)
                         .isAssignableBy(new ReferenceTypeImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
@@ -293,7 +295,7 @@ public class ReferenceTypeTest {
         assertEquals(true,
                 new ReferenceTypeImpl(
                         new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                        ImmutableList.of(Wildcard.extendsBound(foo), Wildcard.extendsBound(foo)), typeSolver)
+                        ImmutableList.of(ResolvedWildcard.extendsBound(foo), ResolvedWildcard.extendsBound(foo)), typeSolver)
                         .isAssignableBy(new ReferenceTypeImpl(
                                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                                 ImmutableList.of(foo, bar), typeSolver))
@@ -302,7 +304,7 @@ public class ReferenceTypeTest {
         //YES MoreBazzing<? extends Foo, ? extends Foo> e5 = new MoreBazzing<Bar, Bar>();
         left = new ReferenceTypeImpl(
                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
-                ImmutableList.of(Wildcard.extendsBound(foo), Wildcard.extendsBound(foo)), typeSolver);
+                ImmutableList.of(ResolvedWildcard.extendsBound(foo), ResolvedWildcard.extendsBound(foo)), typeSolver);
         right = new ReferenceTypeImpl(
                 new ReflectionClassDeclaration(MoreBazzing.class, typeSolver),
                 ImmutableList.of(bar, bar), typeSolver);
@@ -317,8 +319,8 @@ public class ReferenceTypeTest {
                 ImmutableList.of(string, object), typeSolver);
 
         // To debug the following
-        List<ReferenceType> ancestors = right.getAllAncestors();
-        ReferenceType moreBazzingAncestor = ancestors.stream().filter(a -> a.getQualifiedName().endsWith("Bazzer")).findFirst().get();
+        List<ResolvedReferenceType> ancestors = right.getAllAncestors();
+        ResolvedReferenceType moreBazzingAncestor = ancestors.stream().filter(a -> a.getQualifiedName().endsWith("Bazzer")).findFirst().get();
 
         assertEquals(true, left.isAssignableBy(right));
 
@@ -441,14 +443,14 @@ public class ReferenceTypeTest {
     @Test
     public void testTypeParamValue() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
-        ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
-        ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
-        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
-        InterfaceDeclaration collection = new ReflectionInterfaceDeclaration(Collection.class, typeResolver);
-        InterfaceDeclaration iterable = new ReflectionInterfaceDeclaration(Iterable.class, typeResolver);
-        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
-        ReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
+        ResolvedClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
+        ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        ResolvedInterfaceDeclaration collection = new ReflectionInterfaceDeclaration(Collection.class, typeResolver);
+        ResolvedInterfaceDeclaration iterable = new ReflectionInterfaceDeclaration(Iterable.class, typeResolver);
+        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
         assertEquals(Optional.of(string), arrayListOfString.typeParamValue(arraylist.getTypeParameters().get(0)));
         assertEquals(Optional.of(string), arrayListOfString.typeParamValue(abstractList.getTypeParameters().get(0)));
         assertEquals(Optional.of(string), arrayListOfString.typeParamValue(abstractCollection.getTypeParameters().get(0)));
@@ -460,14 +462,14 @@ public class ReferenceTypeTest {
     @Test
     public void testGetAllAncestorsOnRawType() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
-        ReferenceType rawArrayList = new ReferenceTypeImpl(arraylist, typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedReferenceType rawArrayList = new ReferenceTypeImpl(arraylist, typeResolver);
 
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         rawArrayList.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(9, ancestors.size());
 
-        TypeVariable tv = new TypeVariable(arraylist.getTypeParameters().get(0));
+        ResolvedTypeVariable tv = new ResolvedTypeVariable(arraylist.getTypeParameters().get(0));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(RandomAccess.class, typeResolver), typeResolver), ancestors.get("java.util.RandomAccess"));
         assertEquals(new ReferenceTypeImpl(new ReflectionClassDeclaration(AbstractCollection.class, typeResolver), ImmutableList.of(tv), typeResolver), ancestors.get("java.util.AbstractCollection"));
         assertEquals(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeResolver), ImmutableList.of(tv), typeResolver), ancestors.get("java.util.List"));
@@ -482,11 +484,11 @@ public class ReferenceTypeTest {
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForInterface() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        InterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
-        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
-        ReferenceType listOfString = new ReferenceTypeImpl(list, ImmutableList.of(string), typeResolver);
+        ResolvedInterfaceDeclaration list = new ReflectionInterfaceDeclaration(List.class, typeResolver);
+        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedReferenceType listOfString = new ReferenceTypeImpl(list, ImmutableList.of(string), typeResolver);
 
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         listOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(3, ancestors.size());
 
@@ -498,11 +500,11 @@ public class ReferenceTypeTest {
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassAbstractCollection() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
-        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
-        ReferenceType abstractCollectionOfString = new ReferenceTypeImpl(abstractCollection, ImmutableList.of(string), typeResolver);
+        ResolvedClassDeclaration abstractCollection = new ReflectionClassDeclaration(AbstractCollection.class, typeResolver);
+        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedReferenceType abstractCollectionOfString = new ReferenceTypeImpl(abstractCollection, ImmutableList.of(string), typeResolver);
 
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         abstractCollectionOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(3, ancestors.size());
 
@@ -514,11 +516,11 @@ public class ReferenceTypeTest {
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassAbstractList() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
-        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
-        ReferenceType abstractListOfString = new ReferenceTypeImpl(abstractList, ImmutableList.of(string), typeResolver);
+        ResolvedClassDeclaration abstractList = new ReflectionClassDeclaration(AbstractList.class, typeResolver);
+        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedReferenceType abstractListOfString = new ReferenceTypeImpl(abstractList, ImmutableList.of(string), typeResolver);
 
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         abstractListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(5, ancestors.size());
 
@@ -532,11 +534,11 @@ public class ReferenceTypeTest {
     @Test
     public void testGetAllAncestorsOnTypeWithSpecifiedTypeParametersForClassArrayList() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
-        Type string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
-        ReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
+        ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
+        ResolvedType string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedReferenceType arrayListOfString = new ReferenceTypeImpl(arraylist, ImmutableList.of(string), typeResolver);
 
-        Map<String, ReferenceType> ancestors = new HashMap<>();
+        Map<String, ResolvedReferenceType> ancestors = new HashMap<>();
         arrayListOfString.getAllAncestors().forEach(a -> ancestors.put(a.getQualifiedName(), a));
         assertEquals(9, ancestors.size());
 
@@ -554,44 +556,44 @@ public class ReferenceTypeTest {
     @Test
     public void testTypeParametersValues() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        ReferenceType stream = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Stream.class, typeResolver), typeResolver);
+        ResolvedReferenceType stream = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Stream.class, typeResolver), typeResolver);
         assertEquals(1, stream.typeParametersValues().size());
-        assertEquals(new TypeVariable(new ReflectionInterfaceDeclaration(Stream.class, typeResolver).getTypeParameters().get(0)), stream.typeParametersValues().get(0));
+        assertEquals(new ResolvedTypeVariable(new ReflectionInterfaceDeclaration(Stream.class, typeResolver).getTypeParameters().get(0)), stream.typeParametersValues().get(0));
     }
 
     @Test
     public void testReplaceTypeVariables() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        InterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
-        ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
+        ResolvedInterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
+        ResolvedReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
 
-        com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
-        TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
-        TypeVariable typeVariable = new TypeVariable(streamMapR);
-        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable).build());
+        ResolvedMethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
+        ResolvedTypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
+        ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(streamMapR);
+        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.getTypeDeclaration().getTypeParameters().get(0), typeVariable).build());
 
-        TypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
-        Type replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedTypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
+        ResolvedType replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
 
-        Type streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
+        ResolvedType streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
         assertEquals("java.util.stream.Stream<java.lang.String>", streamReplaced.describe());
     }
 
     @Test
     public void testReplaceTypeVariablesWithLambdaInBetween() {
         TypeSolver typeResolver = new ReflectionTypeSolver();
-        InterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
-        ReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
+        ResolvedInterfaceDeclaration streamInterface = new ReflectionInterfaceDeclaration(Stream.class, typeResolver);
+        ResolvedReferenceType stream = new ReferenceTypeImpl(streamInterface, typeResolver);
 
-        com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
-        TypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
-        TypeVariable typeVariable = new TypeVariable(streamMapR);
-        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.typeDeclaration.getTypeParameters().get(0), typeVariable).build());
+        ResolvedMethodDeclaration streamMap = streamInterface.getDeclaredMethods().stream().filter(m -> m.getName().equals("map")).findFirst().get();
+        ResolvedTypeParameterDeclaration streamMapR = streamMap.findTypeParameter("T").get();
+        ResolvedTypeVariable typeVariable = new ResolvedTypeVariable(streamMapR);
+        stream = stream.deriveTypeParameters(stream.typeParametersMap().toBuilder().setValue(stream.getTypeDeclaration().getTypeParameters().get(0), typeVariable).build());
 
-        TypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
-        Type replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
+        ResolvedTypeParameterDeclaration tpToReplace = streamInterface.getTypeParameters().get(0);
+        ResolvedType replaced = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeResolver), typeResolver);
 
-        Type streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
+        ResolvedType streamReplaced = stream.replaceTypeVariables(tpToReplace, replaced);
         assertEquals("java.util.stream.Stream<java.lang.String>", streamReplaced.describe());
     }
 

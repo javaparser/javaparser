@@ -16,16 +16,21 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeVariableDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.MethodDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration.Bound;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,34 +41,38 @@ import java.util.stream.Collectors;
  */
 // TODO Remove references to typeSolver: it is needed to instantiate other instances of ReferenceTypeUsage
 //      and to get the Object type declaration
-public class ReferenceTypeImpl extends ReferenceType {
+public class ReferenceTypeImpl extends ResolvedReferenceType {
 
-    public static ReferenceType undeterminedParameters(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    private TypeSolver typeSolver;
+
+    public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
-                tp -> new TypeVariable(tp)
+                tp -> new ResolvedTypeVariable(tp)
         ).collect(Collectors.toList()), typeSolver);
     }
 
     @Override
-    protected ReferenceType create(ReferenceTypeDeclaration typeDeclaration, List<Type> typeParametersCorrected, TypeSolver typeSolver) {
+    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParametersCorrected) {
         return new ReferenceTypeImpl(typeDeclaration, typeParametersCorrected, typeSolver);
     }
 
     @Override
-    protected ReferenceType create(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+    protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration) {
         return new ReferenceTypeImpl(typeDeclaration, typeSolver);
     }
 
-    public ReferenceTypeImpl(ReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
-        super(typeDeclaration, typeSolver);
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, TypeSolver typeSolver) {
+        super(typeDeclaration);
+        this.typeSolver = typeSolver;
     }
 
-    public ReferenceTypeImpl(ReferenceTypeDeclaration typeDeclaration, List<Type> typeArguments, TypeSolver typeSolver) {
-        super(typeDeclaration, typeArguments, typeSolver);
+    public ReferenceTypeImpl(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeArguments, TypeSolver typeSolver) {
+        super(typeDeclaration, typeArguments);
+        this.typeSolver = typeSolver;
     }
 
     @Override
-    public TypeParameterDeclaration asTypeParameter() {
+    public ResolvedTypeParameterDeclaration asTypeParameter() {
         if (this.typeDeclaration instanceof JavaParserTypeVariableDeclaration) {
             JavaParserTypeVariableDeclaration javaParserTypeVariableDeclaration = (JavaParserTypeVariableDeclaration) this.typeDeclaration;
             return javaParserTypeVariableDeclaration.asTypeParameter();
@@ -75,7 +84,7 @@ public class ReferenceTypeImpl extends ReferenceType {
      * This method checks if ThisType t = new OtherType() would compile.
      */
     @Override
-    public boolean isAssignableBy(Type other) {
+    public boolean isAssignableBy(ResolvedType other) {
         if (other instanceof NullType) {
             return !this.isPrimitive();
         }
@@ -92,7 +101,7 @@ public class ReferenceTypeImpl extends ReferenceType {
                 if (isCorrespondingBoxingType(other.describe())) return true;
 
                 // Resolve the boxed type and check if it can be assigned via widening reference conversion
-                SymbolReference<ReferenceTypeDeclaration> type = typeSolver.tryToSolveType(other.asPrimitive().getBoxTypeQName());
+                SymbolReference<ResolvedReferenceTypeDeclaration> type = typeSolver.tryToSolveType(other.asPrimitive().getBoxTypeQName());
                 return type.getCorrespondingDeclaration().canBeAssignedTo(super.typeDeclaration);
             }
         }
@@ -103,14 +112,14 @@ public class ReferenceTypeImpl extends ReferenceType {
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }
-            for (ReferenceType otherAncestor : otherRef.getAllAncestors()) {
+            for (ResolvedReferenceType otherAncestor : otherRef.getAllAncestors()) {
                 if (compareConsideringTypeParameters(otherAncestor)) {
                     return true;
                 }
             }
             return false;
         } else if (other.isTypeVariable()) {
-            for (Bound bound : other.asTypeVariable().asTypeParameter().getBounds(typeSolver)) {
+            for (ResolvedTypeParameterDeclaration.Bound bound : other.asTypeVariable().asTypeParameter().getBounds()) {
                 if (bound.isExtends()) {
                     if (this.isAssignableBy(bound.getType())) {
                         return true;
@@ -137,7 +146,7 @@ public class ReferenceTypeImpl extends ReferenceType {
     public Set<MethodUsage> getDeclaredMethods() {
         // TODO replace variables
         Set<MethodUsage> methods = new HashSet<>();
-        for (MethodDeclaration methodDeclaration : getTypeDeclaration().getDeclaredMethods()) {
+        for (ResolvedMethodDeclaration methodDeclaration : getTypeDeclaration().getDeclaredMethods()) {
             MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             methods.add(methodUsage);
         }
@@ -145,7 +154,7 @@ public class ReferenceTypeImpl extends ReferenceType {
     }
 
     @Override
-    public Type toRawType() {
+    public ResolvedType toRawType() {
         if (this.isRawType()) {
                 return this;
         } else {
@@ -154,8 +163,49 @@ public class ReferenceTypeImpl extends ReferenceType {
     }
 
     @Override
-    public boolean mention(List<TypeParameterDeclaration> typeParameters) {
+    public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return typeParametersValues().stream().anyMatch(tp -> tp.mention(typeParameters));
+    }
+
+    /**
+     * Execute a transformation on all the type parameters of this element.
+     */
+    @Override
+    public ResolvedType transformTypeParameters(ResolvedTypeTransformer transformer) {
+        ResolvedType result = this;
+        int i = 0;
+        for (ResolvedType tp : this.typeParametersValues()) {
+            ResolvedType transformedTp = transformer.transform(tp);
+            // Identity comparison on purpose
+            if (transformedTp != tp) {
+                List<ResolvedType> typeParametersCorrected = result.asReferenceType().typeParametersValues();
+                typeParametersCorrected.set(i, transformedTp);
+                result = create(typeDeclaration, typeParametersCorrected);
+            }
+            i++;
+        }
+        return result;
+    }
+
+    public List<ResolvedReferenceType> getAllAncestors() {
+        // We need to go through the inheritance line and propagate the type parametes
+
+        List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors();
+
+        ancestors = ancestors.stream()
+                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
+                .collect(Collectors.toList());
+
+        // Avoid repetitions of Object
+        ancestors.removeIf(a -> a.getQualifiedName().equals(Object.class.getCanonicalName()));
+        ResolvedReferenceTypeDeclaration objectType = typeSolver.solveType(Object.class.getCanonicalName());
+        ResolvedReferenceType objectRef = create(objectType);
+        ancestors.add(objectRef);
+        return ancestors;
+    }
+
+    public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
+        return create(typeDeclaration, typeParametersMap);
     }
 
 }

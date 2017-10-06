@@ -25,13 +25,14 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -44,8 +45,8 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     public void typeDeclarationSuperClassImplicitlyIncludeObject() throws ParseException {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
-        TypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(clazz);
-        ReferenceType superclass = typeDeclaration.asClass().getSuperClass();
+        ResolvedTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(clazz);
+        ResolvedReferenceType superclass = typeDeclaration.asClass().getSuperClass();
         assertEquals(Object.class.getCanonicalName(), superclass.getQualifiedName());
     }
 
@@ -90,7 +91,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "}";
         MethodCallExpr methodCallExpr = Navigator.findNodeOfGivenClass(JavaParser.parse(code), MethodCallExpr.class);
         NameExpr nameE = (NameExpr)methodCallExpr.getScope().get();
-        SymbolReference<? extends ValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
+        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
         assertEquals(true, symbolReference.isSolved());
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isParameter());
         assertEquals("e", symbolReference.getCorrespondingDeclaration().asParameter().getName());
@@ -112,7 +113,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "}";
         FieldDeclaration fieldDeclaration = Navigator.findNodeOfGivenClass(JavaParser.parse(code), FieldDeclaration.class);
         Type jpType = fieldDeclaration.getCommonType();
-        com.github.javaparser.symbolsolver.model.typesystem.Type jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
+        ResolvedType jssType = JavaParserFacade.get(new ReflectionTypeSolver()).convertToUsage(jpType);
         assertEquals("Foo.Base.X", jssType.asReferenceType().getQualifiedName());
     }
 
@@ -125,7 +126,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = JavaParser.parse(code);
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine");
         Expression scope = methodCallExpr.getScope().get();
-        com.github.javaparser.symbolsolver.model.typesystem.Type type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);
         assertEquals(true, type.isReferenceType());
         assertEquals("java.util.Scanner", type.asReferenceType().getQualifiedName());
     }

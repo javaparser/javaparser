@@ -16,12 +16,12 @@
 
 package com.github.javaparser.symbolsolver.core.resolution;
 
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,14 +38,14 @@ public interface Context {
 
     /* Type resolution */
 
-    default Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
+    default Optional<ResolvedType> solveGenericType(String name, TypeSolver typeSolver) {
         return Optional.empty();
     }
 
-    default SymbolReference<TypeDeclaration> solveType(String name, TypeSolver typeSolver) {
+    default SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
         Context parent = getParent();
         if (parent == null) {
-            return SymbolReference.unsolved(ReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
         } else {
             return parent.solveType(name, typeSolver);
         }
@@ -53,10 +53,10 @@ public interface Context {
 
     /* Symbol resolution */
 
-    SymbolReference<? extends ValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+    SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
 
     default Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
-        SymbolReference<? extends ValueDeclaration> ref = solveSymbol(name, typeSolver);
+        SymbolReference<? extends ResolvedValueDeclaration> ref = solveSymbol(name, typeSolver);
         if (ref.isSolved()) {
             Value value = Value.from(ref.getCorrespondingDeclaration());
             return Optional.of(value);
@@ -70,7 +70,7 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    default SymbolReference<ConstructorDeclaration> solveConstructor(List<Type> argumentsTypes, TypeSolver typeSolver) {
+    default SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
         throw new IllegalArgumentException("Constructor resolution is available only on Class Context");
     }
 
@@ -79,16 +79,16 @@ public interface Context {
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
-    SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
+    SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly, TypeSolver typeSolver);
 
     /**
      * Similar to solveMethod but we return a MethodUsage. A MethodUsage corresponds to a MethodDeclaration plus the
      * resolved type variables.
      */
-    default Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> argumentsTypes, TypeSolver typeSolver) {
-        SymbolReference<MethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false, typeSolver);
+    default Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
+        SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false, typeSolver);
         if (methodSolved.isSolved()) {
-            MethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
+            ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
             MethodUsage methodUsage = ContextHelper.resolveTypeVariables(this, methodDeclaration, argumentsTypes);//methodDeclaration.resolveTypeVariables(this, argumentsTypes);
             return Optional.of(methodUsage);
         } else {

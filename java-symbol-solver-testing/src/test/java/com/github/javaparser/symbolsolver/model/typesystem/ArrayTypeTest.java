@@ -16,7 +16,11 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
@@ -33,27 +37,27 @@ import static org.junit.Assert.assertTrue;
 
 public class ArrayTypeTest {
 
-    private ArrayType arrayOfBooleans;
-    private ArrayType arrayOfStrings;
-    private ArrayType arrayOfListOfA;
-    private ArrayType arrayOfListOfStrings;
+    private ResolvedArrayType arrayOfBooleans;
+    private ResolvedArrayType arrayOfStrings;
+    private ResolvedArrayType arrayOfListOfA;
+    private ResolvedArrayType arrayOfListOfStrings;
     private ReferenceTypeImpl OBJECT;
     private ReferenceTypeImpl STRING;
     private TypeSolver typeSolver;
-    private TypeParameterDeclaration tpA;
+    private ResolvedTypeParameterDeclaration tpA;
 
     @Before
     public void setup() {
         typeSolver = new ReflectionTypeSolver();
         OBJECT = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         STRING = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        arrayOfBooleans = new ArrayType(PrimitiveType.BOOLEAN);
-        arrayOfStrings = new ArrayType(STRING);
-        tpA = TypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
-        arrayOfListOfA = new ArrayType(new ReferenceTypeImpl(
+        arrayOfBooleans = new ResolvedArrayType(ResolvedPrimitiveType.BOOLEAN);
+        arrayOfStrings = new ResolvedArrayType(STRING);
+        tpA = ResolvedTypeParameterDeclaration.onType("A", "foo.Bar", Collections.emptyList());
+        arrayOfListOfA = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(new TypeVariable(tpA)), typeSolver));
-        arrayOfListOfStrings = new ArrayType(new ReferenceTypeImpl(
+                ImmutableList.of(new ResolvedTypeVariable(tpA)), typeSolver));
+        arrayOfListOfStrings = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver)), typeSolver));
     }
@@ -133,7 +137,7 @@ public class ArrayTypeTest {
         assertTrue(arrayOfBooleans == arrayOfBooleans.replaceTypeVariables(tpA, OBJECT));
         assertTrue(arrayOfStrings == arrayOfStrings.replaceTypeVariables(tpA, OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
-        ArrayType arrayOfListOfObjects = new ArrayType(new ReferenceTypeImpl(
+        ResolvedArrayType arrayOfListOfObjects = new ResolvedArrayType(new ReferenceTypeImpl(
                 new ReflectionInterfaceDeclaration(List.class, typeSolver),
                 ImmutableList.of(OBJECT), typeSolver));
         assertEquals(true, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).isArray());
@@ -156,8 +160,8 @@ public class ArrayTypeTest {
     public void testIsAssignableBy() {
         assertEquals(false, arrayOfBooleans.isAssignableBy(OBJECT));
         assertEquals(false, arrayOfBooleans.isAssignableBy(STRING));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(PrimitiveType.BOOLEAN));
-        assertEquals(false, arrayOfBooleans.isAssignableBy(VoidType.INSTANCE));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(ResolvedPrimitiveType.BOOLEAN));
+        assertEquals(false, arrayOfBooleans.isAssignableBy(ResolvedVoidType.INSTANCE));
 
         assertEquals(true, arrayOfBooleans.isAssignableBy(arrayOfBooleans));
         assertEquals(false, arrayOfBooleans.isAssignableBy(arrayOfStrings));

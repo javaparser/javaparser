@@ -19,15 +19,15 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +41,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeParameter extends AbstractTypeDeclaration implements TypeParameterDeclaration {
+public class JavaParserTypeParameter extends AbstractTypeDeclaration implements ResolvedTypeParameterDeclaration {
 
     private com.github.javaparser.ast.type.TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -52,11 +52,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public Set<MethodDeclaration> getDeclaredMethods() {
+    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Collections.emptySet();
     }
 
-    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes) {
         return getContext().solveMethod(name, parameterTypes, false, typeSolver);
     }
 
@@ -85,15 +85,15 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+    public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
     }
 
     @Override
     public String getContainerQualifiedName() {
-        TypeParametrizable container = getContainer();
-        if (container instanceof ReferenceTypeDeclaration) {
-            return ((ReferenceTypeDeclaration) container).getQualifiedName();
+        ResolvedTypeParametrizable container = getContainer();
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return ((ResolvedReferenceTypeDeclaration) container).getQualifiedName();
         } else if (container instanceof JavaParserConstructorDeclaration) {
             return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
         } else {
@@ -103,9 +103,9 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public String getContainerId() {
-        TypeParametrizable container = getContainer();
-        if (container instanceof ReferenceTypeDeclaration) {
-            return ((ReferenceTypeDeclaration) container).getId();
+        ResolvedTypeParametrizable container = getContainer();
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return ((ResolvedReferenceTypeDeclaration) container).getId();
         } else if (container instanceof JavaParserConstructorDeclaration) {
             return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
         } else {
@@ -114,7 +114,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public TypeParametrizable getContainer() {
+    public ResolvedTypeParametrizable getContainer() {
         Node parentNode = getParentNode(wrappedNode);
         if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
@@ -123,7 +123,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
             com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
             Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.getAncestorOfType(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
             if (jpTypeDeclaration.isPresent()) {
-                ReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
+                ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
                 if (typeDeclaration.isClass()) {
                     return new JavaParserConstructorDeclaration(typeDeclaration.asClass(), jpConstructorDeclaration, typeSolver);
                 }
@@ -141,12 +141,12 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<Bound> getBounds(TypeSolver typeSolver) {
+    public List<Bound> getBounds() {
         return wrappedNode.getTypeBound().stream().map((astB) -> toBound(astB, typeSolver)).collect(Collectors.toList());
     }
 
     private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
-        Type type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
+        ResolvedType type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
         Bound bound = Bound.extendsBound(type);
         return bound;
     }
@@ -155,17 +155,17 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         throw new UnsupportedOperationException();
     }
 
-    public Type getUsage(Node node) {
+    public ResolvedType getUsage(Node node) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAssignableBy(Type type) {
+    public boolean isAssignableBy(ResolvedType type) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public FieldDeclaration getField(String name) {
+    public ResolvedFieldDeclaration getField(String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -175,12 +175,12 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<FieldDeclaration> getAllFields() {
+    public List<ResolvedFieldDeclaration> getAllFields() {
         return new ArrayList<>();
     }
 
     @Override
-    public List<ReferenceType> getAncestors() {
+    public List<ResolvedReferenceType> getAncestors() {
         throw new UnsupportedOperationException();
     }
 
@@ -195,7 +195,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
     }
 
@@ -214,10 +214,10 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
-        TypeParametrizable container = getContainer();
-        if (container instanceof ReferenceTypeDeclaration) {
-            return Optional.of((ReferenceTypeDeclaration) container);
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+        ResolvedTypeParametrizable container = getContainer();
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return Optional.of((ResolvedReferenceTypeDeclaration) container);
         }
         return Optional.empty();
     }

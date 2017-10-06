@@ -16,10 +16,10 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.MethodLikeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable;
+import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.lang.reflect.Constructor;
@@ -34,11 +34,11 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionTypeParameter implements TypeParameterDeclaration {
+public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration {
 
     private TypeVariable typeVariable;
     private TypeSolver typeSolver;
-    private TypeParametrizable container;
+    private ResolvedTypeParametrizable container;
 
     public ReflectionTypeParameter(TypeVariable typeVariable, boolean declaredOnClass, TypeSolver typeSolver) {
         GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
@@ -56,9 +56,9 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TypeParameterDeclaration)) return false;
+        if (!(o instanceof ResolvedTypeParameterDeclaration)) return false;
 
-        TypeParameterDeclaration that = (TypeParameterDeclaration) o;
+        ResolvedTypeParameterDeclaration that = (ResolvedTypeParameterDeclaration) o;
 
         if (!getQualifiedName().equals(that.getQualifiedName())) {
             return false;
@@ -87,29 +87,29 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
 
     @Override
     public String getContainerQualifiedName() {
-        if (container instanceof ReferenceTypeDeclaration) {
-            return ((ReferenceTypeDeclaration) container).getQualifiedName();
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return ((ResolvedReferenceTypeDeclaration) container).getQualifiedName();
         } else {
-            return ((MethodLikeDeclaration) container).getQualifiedSignature();
+            return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
         }
     }
 
     @Override
     public String getContainerId() {
-        if (container instanceof ReferenceTypeDeclaration) {
-            return ((ReferenceTypeDeclaration) container).getId();
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return ((ResolvedReferenceTypeDeclaration) container).getId();
         } else {
-            return ((MethodLikeDeclaration) container).getQualifiedSignature();
+            return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
         }
     }
     
     @Override
-    public TypeParametrizable getContainer() {
+    public ResolvedTypeParametrizable getContainer() {
         return this.container;
     }
 
     @Override
-    public List<Bound> getBounds(TypeSolver typeSolver) {
+    public List<Bound> getBounds() {
         return Arrays.stream(typeVariable.getBounds()).map((refB) -> Bound.extendsBound(ReflectionFactory.typeUsageFor(refB, typeSolver))).collect(Collectors.toList());
     }
 
@@ -121,9 +121,9 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
     }
 
     @Override
-    public Optional<ReferenceTypeDeclaration> containerType() {
-        if (container instanceof ReferenceTypeDeclaration) {
-            return Optional.of((ReferenceTypeDeclaration) container);
+    public Optional<ResolvedReferenceTypeDeclaration> containerType() {
+        if (container instanceof ResolvedReferenceTypeDeclaration) {
+            return Optional.of((ResolvedReferenceTypeDeclaration) container);
         }
         return Optional.empty();
     }

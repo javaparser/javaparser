@@ -1,15 +1,10 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A MethodType is an ordered 4-tuple consisting of:
@@ -23,37 +18,38 @@ import java.util.Map;
  * @author Federico Tomassetti
  */
 public class MethodType {
-    private List<TypeParameterDeclaration> typeParameters;
-    private List<Type> formalArgumentTypes;
-    private Type returnType;
-    private List<Type> exceptionTypes;
+    private List<ResolvedTypeParameterDeclaration> typeParameters;
+    private List<ResolvedType> formalArgumentTypes;
+    private ResolvedType returnType;
+    private List<ResolvedType> exceptionTypes;
 
     public static MethodType fromMethodUsage(MethodUsage methodUsage) {
         return new MethodType(methodUsage.getDeclaration().getTypeParameters(), methodUsage.getParamTypes(),
                 methodUsage.returnType(), methodUsage.exceptionTypes());
     }
 
-    public MethodType(List<TypeParameterDeclaration> typeParameters, List<Type> formalArgumentTypes, Type returnType,
-                      List<Type> exceptionTypes) {
+    public MethodType(List<ResolvedTypeParameterDeclaration> typeParameters, List<ResolvedType> formalArgumentTypes,
+                      ResolvedType returnType,
+                      List<ResolvedType> exceptionTypes) {
         this.typeParameters = typeParameters;
         this.formalArgumentTypes = formalArgumentTypes;
         this.returnType = returnType;
         this.exceptionTypes = exceptionTypes;
     }
 
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return typeParameters;
     }
 
-    public List<Type> getFormalArgumentTypes() {
+    public List<ResolvedType> getFormalArgumentTypes() {
         return formalArgumentTypes;
     }
 
-    public Type getReturnType() {
+    public ResolvedType getReturnType() {
         return returnType;
     }
 
-    public List<Type> getExceptionTypes() {
+    public List<ResolvedType> getExceptionTypes() {
         return exceptionTypes;
     }
 }

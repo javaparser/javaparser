@@ -26,16 +26,16 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.declarations.ClassDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.methods.MethodUsage;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
 import org.junit.Test;
@@ -111,7 +111,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
+        ResolvedClassDeclaration compilationUnitDecl = createMock(ResolvedClassDeclaration.class);
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
@@ -120,7 +120,7 @@ public class ContextTest extends AbstractTest {
         expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
-        SymbolReference<? extends TypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
+        SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
@@ -136,7 +136,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
+        ResolvedClassDeclaration compilationUnitDecl = createMock(ResolvedClassDeclaration.class);
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
@@ -146,7 +146,7 @@ public class ContextTest extends AbstractTest {
         expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
-        SymbolReference<? extends TypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
+        SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
@@ -162,7 +162,7 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ClassDeclaration compilationUnitDecl = createMock(ClassDeclaration.class);
+        ResolvedClassDeclaration compilationUnitDecl = createMock(ResolvedClassDeclaration.class);
         expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
         expect(compilationUnitDecl.getQualifiedName()).andReturn("my.packagez.CompilationUnit");
         TypeSolver typeSolver = createMock(TypeSolver.class);
@@ -171,7 +171,7 @@ public class ContextTest extends AbstractTest {
         expect(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, compilationUnitDecl);
-        SymbolReference<? extends TypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
+        SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
@@ -187,17 +187,17 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(1);
 
-        ClassDeclaration stringDecl = createMock(ClassDeclaration.class);
+        ResolvedClassDeclaration stringDecl = createMock(ResolvedClassDeclaration.class);
         expect(stringDecl.getName()).andReturn("String");
         expect(stringDecl.getQualifiedName()).andReturn("java.lang.String");
         TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).andReturn(SymbolReference.unsolved(ReferenceTypeDeclaration.class));
+        expect(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).andReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
         expect(typeSolver.getRoot()).andReturn(typeSolver);
         expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
         expect(typeSolver.tryToSolveType("java.lang.String")).andReturn(SymbolReference.solved(stringDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         replay(typeSolver, stringDecl);
-        SymbolReference<? extends TypeDeclaration> ref = symbolSolver.solveType("String", param);
+        SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("String", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("String", ref.getCorrespondingDeclaration().getName());
@@ -265,7 +265,7 @@ public class ContextTest extends AbstractTest {
         com.github.javaparser.ast.type.Type streamJavaParserType = method.getParameters().get(0).getType();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
+        ResolvedType streamType = JavaParserFacade.get(typeSolver).convert(streamJavaParserType, method);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", streamType.describe());
     }
@@ -278,7 +278,7 @@ public class ContextTest extends AbstractTest {
         MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        Type ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
+        ResolvedType ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
 
         assertEquals("java.util.stream.Stream<java.lang.String>", ref.describe());
         assertEquals(1, ref.asReferenceType().typeParametersValues().size());
@@ -294,7 +294,7 @@ public class ContextTest extends AbstractTest {
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        Type ref = javaParserFacade.getType(refToT);
+        ResolvedType ref = javaParserFacade.getType(refToT);
 
         assertEquals("? super java.lang.String", ref.describe());
     }
@@ -385,7 +385,7 @@ public class ContextTest extends AbstractTest {
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
-        Type typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
+        ResolvedType typeOfLambdaExpr = JavaParserFacade.get(typeSolver).getType(lambdaExpr);
 
         assertEquals("java.util.function.Predicate<? super com.github.javaparser.ast.body.TypeDeclaration>", typeOfLambdaExpr.describe());
     }
@@ -400,7 +400,7 @@ public class ContextTest extends AbstractTest {
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
-        Type typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
+        ResolvedType typeOfT = JavaParserFacade.get(typeSolver).getType(referenceToT);
 
         assertEquals("? super com.github.javaparser.ast.body.TypeDeclaration", typeOfT.describe());
     }
@@ -459,7 +459,7 @@ public class ContextTest extends AbstractTest {
 
         File src = adaptPath(new File("src/test/resources"));
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
-        Type type = JavaParserFacade.get(typeSolver).getType(call);
+        ResolvedType type = JavaParserFacade.get(typeSolver).getType(call);
 
         assertEquals("double", type.describe());
     }

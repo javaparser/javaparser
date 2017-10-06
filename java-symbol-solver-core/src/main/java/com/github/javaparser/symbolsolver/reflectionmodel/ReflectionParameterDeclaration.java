@@ -16,14 +16,14 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionParameterDeclaration implements ParameterDeclaration {
+public class ReflectionParameterDeclaration implements ResolvedParameterDeclaration {
     private Class<?> type;
     private java.lang.reflect.Type genericType;
     private TypeSolver typeSolver;
@@ -69,7 +69,7 @@ public class ReflectionParameterDeclaration implements ParameterDeclaration {
     }
 
     @Override
-    public Type getType() {
+    public ResolvedType getType() {
         return ReflectionFactory.typeUsageFor(genericType, typeSolver);
     }
 }

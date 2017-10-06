@@ -23,10 +23,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class Issue84 extends AbstractResolutionTest {
         final MethodCallExpr methodCall = Navigator.findMethodCall(cu, "variadicMethod");
 
         final JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
-        final Type type = javaParserFacade.getType(methodCall);
+        final ResolvedType type = javaParserFacade.getType(methodCall);
         assertEquals(String.class.getCanonicalName(), type.asReferenceType().getQualifiedName());
     }
 }

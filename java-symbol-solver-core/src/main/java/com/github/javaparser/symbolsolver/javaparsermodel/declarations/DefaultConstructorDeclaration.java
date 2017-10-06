@@ -16,8 +16,12 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.symbolsolver.model.declarations.*;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,16 +32,16 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-class DefaultConstructorDeclaration implements ConstructorDeclaration {
+class DefaultConstructorDeclaration implements ResolvedConstructorDeclaration {
 
-    private ClassDeclaration classDeclaration;
+    private ResolvedClassDeclaration classDeclaration;
 
-    DefaultConstructorDeclaration(ClassDeclaration classDeclaration) {
+    DefaultConstructorDeclaration(ResolvedClassDeclaration classDeclaration) {
         this.classDeclaration = classDeclaration;
     }
 
     @Override
-    public ClassDeclaration declaringType() {
+    public ResolvedClassDeclaration declaringType() {
         return classDeclaration;
     }
 
@@ -47,7 +51,7 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public ParameterDeclaration getParam(int i) {
+    public ResolvedParameterDeclaration getParam(int i) {
         throw new UnsupportedOperationException("The default constructor has not parameters");
     }
 
@@ -57,12 +61,12 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public AccessLevel accessLevel() {
-        return AccessLevel.PUBLIC;
+    public AccessSpecifier accessSpecifier() {
+        return AccessSpecifier.PUBLIC;
     }
 
     @Override
-    public List<TypeParameterDeclaration> getTypeParameters() {
+    public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         return Collections.emptyList();
     }
 
@@ -72,7 +76,7 @@ class DefaultConstructorDeclaration implements ConstructorDeclaration {
     }
 
     @Override
-    public Type getSpecifiedException(int index) {
+    public ResolvedType getSpecifiedException(int index) {
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
     }
 }
