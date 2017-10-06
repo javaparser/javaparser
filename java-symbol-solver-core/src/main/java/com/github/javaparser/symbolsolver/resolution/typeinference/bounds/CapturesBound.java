@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariableSubstitution;
@@ -16,9 +16,9 @@ import java.util.Set;
  */
 public class CapturesBound extends Bound {
     private List<InferenceVariable> inferenceVariables;
-    private List<Type> typesOrWildcards;
+    private List<ResolvedType> typesOrWildcards;
 
-    public CapturesBound(List<InferenceVariable> inferenceVariables, List<Type> typesOrWildcards) {
+    public CapturesBound(List<InferenceVariable> inferenceVariables, List<ResolvedType> typesOrWildcards) {
         this.inferenceVariables = inferenceVariables;
         this.typesOrWildcards = typesOrWildcards;
     }
@@ -37,7 +37,7 @@ public class CapturesBound extends Bound {
         return inferenceVariables;
     }
 
-    public List<Type> getTypesOrWildcards() {
+    public List<ResolvedType> getTypesOrWildcards() {
         return typesOrWildcards;
     }
 

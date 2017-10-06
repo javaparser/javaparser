@@ -3,12 +3,12 @@ package com.github.javaparser.symbolsolver.resolution.typeinference.constraintfo
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.TypeVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.utils.Pair;
 
@@ -31,9 +31,9 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
 public class ExpressionCompatibleWithType extends ConstraintFormula {
     private TypeSolver typeSolver;
     private Expression expression;
-    private Type T;
+    private ResolvedType T;
 
-    public ExpressionCompatibleWithType(TypeSolver typeSolver, Expression expression, Type T) {
+    public ExpressionCompatibleWithType(TypeSolver typeSolver, Expression expression, ResolvedType T) {
         this.typeSolver = typeSolver;
         this.expression = expression;
         this.T = T;
@@ -56,7 +56,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
         // to ‹S → T›.
 
         if (isStandaloneExpression(expression)) {
-            Type s = JavaParserFacade.get(typeSolver).getType(expression, false);
+            ResolvedType s = JavaParserFacade.get(typeSolver).getType(expression, false);
             return ReductionResult.empty().withConstraint(new TypeCompatibleWithType(typeSolver, s, T));
         }
 
@@ -119,8 +119,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //   constraint formula below). Let the target function type for the lambda expression be the
                 //   function type of T'. Then:
 
-                Pair<Type, Boolean> result = TypeHelper.groundTargetTypeOfLambda(lambdaExpr, T, typeSolver);
-                Type TFirst = result.a;
+                Pair<ResolvedType, Boolean> result = TypeHelper.groundTargetTypeOfLambda(lambdaExpr, T, typeSolver);
+                ResolvedType TFirst = result.a;
                 MethodType targetFunctionType = TypeHelper.getFunctionType(TFirst);
                 targetFunctionType = replaceTypeVariablesWithInferenceVariables(targetFunctionType);
                 if (result.b) {
@@ -178,7 +178,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
 
                 if (!targetFunctionType.getReturnType().isVoid()) {
 
-                    Type R = targetFunctionType.getReturnType();
+                    ResolvedType R = targetFunctionType.getReturnType();
 
                     if (TypeHelper.isProperType(R)) {
 
@@ -208,7 +208,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                         } else {
                             // FEDERICO: Added - Start
                             for (int i=0;i<lambdaExpr.getParameters().size();i++) {
-                                Type paramType = targetFunctionType.getFormalArgumentTypes().get(i);
+                                ResolvedType paramType = targetFunctionType.getFormalArgumentTypes().get(i);
                                 TypeInferenceCache.record(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
                             }
                             // FEDERICO: Added - End
@@ -314,16 +314,16 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
 
     private MethodType replaceTypeVariablesWithInferenceVariables(MethodType methodType) {
         // Find all type variable
-        Map<TypeVariable, InferenceVariable> correspondences = new HashMap<>();
-        List<Type> newFormalArgumentTypes = new LinkedList<>();
-        for (Type formalArg : methodType.getFormalArgumentTypes()) {
+        Map<ResolvedTypeVariable, InferenceVariable> correspondences = new HashMap<>();
+        List<ResolvedType> newFormalArgumentTypes = new LinkedList<>();
+        for (ResolvedType formalArg : methodType.getFormalArgumentTypes()) {
             newFormalArgumentTypes.add(replaceTypeVariablesWithInferenceVariables(formalArg, correspondences));
         }
-        Type newReturnType = replaceTypeVariablesWithInferenceVariables(methodType.getReturnType(), correspondences);
+        ResolvedType newReturnType = replaceTypeVariablesWithInferenceVariables(methodType.getReturnType(), correspondences);
         return new MethodType(methodType.getTypeParameters(), newFormalArgumentTypes, newReturnType, methodType.getExceptionTypes());
     }
 
-    private Type replaceTypeVariablesWithInferenceVariables(Type originalType, Map<TypeVariable, InferenceVariable> correspondences) {
+    private ResolvedType replaceTypeVariablesWithInferenceVariables(ResolvedType originalType, Map<ResolvedTypeVariable, InferenceVariable> correspondences) {
         if (originalType.isTypeVariable()) {
             if (!correspondences.containsKey(originalType.asTypeVariable())) {
                 correspondences.put(originalType.asTypeVariable(), InferenceVariable.unnamed(originalType.asTypeVariable().asTypeParameter()));

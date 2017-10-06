@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class Substitution {
 
-    private List<TypeParameterDeclaration> typeParameterDeclarations;
-    private List<Type> types;
+    private List<ResolvedTypeParameterDeclaration> typeParameterDeclarations;
+    private List<ResolvedType> types;
 
     private final static Substitution EMPTY = new Substitution();
 
@@ -20,7 +20,7 @@ public class Substitution {
         return EMPTY;
     }
 
-    public Substitution withPair(TypeParameterDeclaration typeParameterDeclaration, Type type) {
+    public Substitution withPair(ResolvedTypeParameterDeclaration typeParameterDeclaration, ResolvedType type) {
         Substitution newInstance = new Substitution();
         newInstance.typeParameterDeclarations.addAll(this.typeParameterDeclarations);
         newInstance.types.addAll(this.types);
@@ -35,8 +35,8 @@ public class Substitution {
         this.types = new LinkedList<>();
     }
 
-    public Type apply(Type originalType) {
-        Type result = originalType;
+    public ResolvedType apply(ResolvedType originalType) {
+        ResolvedType result = originalType;
         for (int i=0;i<typeParameterDeclarations.size();i++) {
             result = result.replaceTypeVariables(typeParameterDeclarations.get(i), types.get(i));
         }

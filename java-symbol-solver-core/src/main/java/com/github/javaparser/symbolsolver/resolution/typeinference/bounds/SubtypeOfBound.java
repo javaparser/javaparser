@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.utils.Pair;
 
@@ -17,10 +17,10 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
  * @author Federico Tomassetti
  */
 public class SubtypeOfBound extends Bound {
-    private Type s;
-    private Type t;
+    private ResolvedType s;
+    private ResolvedType t;
 
-    public SubtypeOfBound(Type s, Type t) {
+    public SubtypeOfBound(ResolvedType s, ResolvedType t) {
         if (!isInferenceVariable(s) && !isInferenceVariable(t)) {
             throw new IllegalArgumentException("One of S or T should be an inference variable");
         }
@@ -54,7 +54,7 @@ public class SubtypeOfBound extends Bound {
         return result;
     }
 
-    public Type getS() {
+    public ResolvedType getS() {
         return s;
     }
 
@@ -66,7 +66,7 @@ public class SubtypeOfBound extends Bound {
         return variables;
     }
 
-    public Type getT() {
+    public ResolvedType getT() {
         return t;
     }
 

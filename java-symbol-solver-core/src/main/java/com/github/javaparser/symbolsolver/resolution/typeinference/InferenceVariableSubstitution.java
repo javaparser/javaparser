@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class InferenceVariableSubstitution {
     private final static InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
 
     private List<InferenceVariable> inferenceVariables;
-    private List<Type> types;
+    private List<ResolvedType> types;
 
     public static InferenceVariableSubstitution empty() {
         return EMPTY;
@@ -24,7 +24,7 @@ public class InferenceVariableSubstitution {
         this.types = new LinkedList<>();
     }
 
-    public InferenceVariableSubstitution withPair(InferenceVariable inferenceVariable, Type type) {
+    public InferenceVariableSubstitution withPair(InferenceVariable inferenceVariable, ResolvedType type) {
         InferenceVariableSubstitution newInstance = new InferenceVariableSubstitution();
         newInstance.inferenceVariables.addAll(this.inferenceVariables);
         newInstance.types.addAll(this.types);

@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 
@@ -12,8 +12,8 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
  * @author Federico Tomassetti
  */
 public class TypeContainedByType extends ConstraintFormula {
-    private Type S;
-    private Type T;
+    private ResolvedType S;
+    private ResolvedType T;
 
     @Override
     public ReductionResult reduce(BoundSet currentBoundSet) {

@@ -1,8 +1,8 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import com.github.javaparser.ast.expr.LambdaExpr;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.*;
 
@@ -11,10 +11,10 @@ import java.util.*;
  */
 public class TypeInferenceCache {
 
-    private static Map<TypeSolver, IdentityHashMap<LambdaExpr, Map<String, Type>>> typeForLambdaParameters = new HashMap<>();
+    private static Map<TypeSolver, IdentityHashMap<LambdaExpr, Map<String, ResolvedType>>> typeForLambdaParameters = new HashMap<>();
     private static Map<TypeSolver, IdentityHashMap<LambdaExpr, List<InferenceVariable>>> inferenceVariables = new HashMap<>();
 
-    public static void record(TypeSolver typeSolver, LambdaExpr lambdaExpr, String paramName, Type type) {
+    public static void record(TypeSolver typeSolver, LambdaExpr lambdaExpr, String paramName, ResolvedType type) {
         if (!typeForLambdaParameters.containsKey(typeSolver)) {
             typeForLambdaParameters.put(typeSolver, new IdentityHashMap<>());
         }
@@ -24,7 +24,7 @@ public class TypeInferenceCache {
         typeForLambdaParameters.get(typeSolver).get(lambdaExpr).put(paramName, type);
     }
 
-    public static Optional<Type> retrieve(TypeSolver typeSolver, LambdaExpr lambdaExpr, String paramName) {
+    public static Optional<ResolvedType> retrieve(TypeSolver typeSolver, LambdaExpr lambdaExpr, String paramName) {
         if (!typeForLambdaParameters.containsKey(typeSolver)) {
             return Optional.empty();
         }

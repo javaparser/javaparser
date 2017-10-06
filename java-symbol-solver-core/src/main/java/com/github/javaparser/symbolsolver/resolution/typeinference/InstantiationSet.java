@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +59,7 @@ public class InstantiationSet {
                 '}';
     }
 
-    public Type apply(Type type) {
+    public ResolvedType apply(ResolvedType type) {
         for (Instantiation instantiation : instantiations) {
             type = type.replaceTypeVariables(instantiation.getInferenceVariable().getTypeParameterDeclaration(), instantiation.getProperType());
         }

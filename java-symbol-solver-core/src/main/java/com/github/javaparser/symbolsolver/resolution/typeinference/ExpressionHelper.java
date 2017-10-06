@@ -6,9 +6,9 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.UnknownType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 
 import java.util.List;
 
@@ -131,7 +131,7 @@ public class ExpressionHelper {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean isCompatibleInAssignmentContext(Expression expression, Type type, TypeSolver typeSolver) {
+    public static boolean isCompatibleInAssignmentContext(Expression expression, ResolvedType type, TypeSolver typeSolver) {
         return type.isAssignableBy(JavaParserFacade.get(typeSolver).getType(expression, false));
     }
 }

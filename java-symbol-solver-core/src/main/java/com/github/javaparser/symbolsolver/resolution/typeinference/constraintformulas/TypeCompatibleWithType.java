@@ -1,11 +1,10 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
@@ -17,11 +16,11 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
  * @author Federico Tomassetti
  */
 public class TypeCompatibleWithType extends ConstraintFormula {
-    private Type s;
-    private Type t;
+    private ResolvedType s;
+    private ResolvedType t;
     private TypeSolver typeSolver;
 
-    public TypeCompatibleWithType(TypeSolver typeSolver, Type s, Type t) {
+    public TypeCompatibleWithType(TypeSolver typeSolver, ResolvedType s, ResolvedType t) {
         this.typeSolver = typeSolver;
         this.s = s;
         this.t = t;
@@ -45,7 +44,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
         if (s.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            Type sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()), typeSolver);
+            ResolvedType sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()), typeSolver);
             return ReductionResult.oneConstraint(new TypeCompatibleWithType(typeSolver, sFirst, t));
         }
 
@@ -53,7 +52,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
         if (t.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            Type tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()), typeSolver);
+            ResolvedType tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()), typeSolver);
             return ReductionResult.oneConstraint(new TypeSameAsType(s, tFirst));
         }
 
@@ -72,7 +71,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
             boolean condition1 = t.isAssignableBy(s);
 
             // the raw type G is a supertype of S
-            Type G = t.asReferenceType().toRawType();
+            ResolvedType G = t.asReferenceType().toRawType();
             boolean condition2 = G.isAssignableBy(s);
 
             if (!condition1 && condition2) {

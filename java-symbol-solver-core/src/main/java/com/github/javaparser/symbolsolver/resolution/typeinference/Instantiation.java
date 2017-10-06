@@ -1,15 +1,16 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * @author Federico Tomassetti
  */
 public class Instantiation {
     private InferenceVariable inferenceVariable;
-    private Type properType;
+    private ResolvedType properType;
 
-    public Instantiation(InferenceVariable inferenceVariable, Type properType) {
+    public Instantiation(InferenceVariable inferenceVariable, ResolvedType properType) {
         this.inferenceVariable = inferenceVariable;
         this.properType = properType;
     }
@@ -18,7 +19,7 @@ public class Instantiation {
         return inferenceVariable;
     }
 
-    public Type getProperType() {
+    public ResolvedType getProperType() {
         return properType;
     }
 

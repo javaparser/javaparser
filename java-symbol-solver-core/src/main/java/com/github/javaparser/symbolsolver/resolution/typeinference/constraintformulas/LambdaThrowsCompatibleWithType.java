@@ -1,7 +1,7 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
 import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 
@@ -13,7 +13,7 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFor
  */
 public class LambdaThrowsCompatibleWithType extends ConstraintFormula {
     private LambdaExpr lambdaExpression;
-    private Type T;
+    private ResolvedType T;
 
     @Override
     public ReductionResult reduce(BoundSet currentBoundSet) {

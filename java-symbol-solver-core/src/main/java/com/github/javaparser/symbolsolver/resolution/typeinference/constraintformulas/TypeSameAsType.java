@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SameAsBound;
@@ -16,10 +16,10 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
  * @author Federico Tomassetti
  */
 public class TypeSameAsType extends ConstraintFormula {
-    private Type S;
-    private Type T;
+    private ResolvedType S;
+    private ResolvedType T;
 
-    public TypeSameAsType(Type s, Type t) {
+    public TypeSameAsType(ResolvedType s, ResolvedType t) {
         S = s;
         T = t;
     }
@@ -68,8 +68,8 @@ public class TypeSameAsType extends ConstraintFormula {
             if (S.isReferenceType() && T.isReferenceType()
                     && S.asReferenceType().toRawType().equals(T.asReferenceType().toRawType())) {
                 ReductionResult res = ReductionResult.empty();
-                List<Type> Bs = S.asReferenceType().typeParametersValues();
-                List<Type> As = T.asReferenceType().typeParametersValues();
+                List<ResolvedType> Bs = S.asReferenceType().typeParametersValues();
+                List<ResolvedType> As = T.asReferenceType().typeParametersValues();
                 for (int i = 0; i < Bs.size(); i++) {
                     res = res.withConstraint(new TypeSameAsType(Bs.get(i), As.get(i)));
                 }

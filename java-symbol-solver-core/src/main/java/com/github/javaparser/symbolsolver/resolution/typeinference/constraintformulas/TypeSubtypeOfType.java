@@ -1,12 +1,11 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
+import com.github.javaparser.resolution.types.ResolvedIntersectionType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.IntersectionType;
 import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
-import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isInferenceVariable;
@@ -18,11 +17,11 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
  * @author Federico Tomassetti
  */
 public class TypeSubtypeOfType extends ConstraintFormula {
-    private Type S;
-    private Type T;
+    private ResolvedType S;
+    private ResolvedType T;
     private TypeSolver typeSolver;
 
-    public TypeSubtypeOfType(TypeSolver typeSolver, Type S, Type T) {
+    public TypeSubtypeOfType(TypeSolver typeSolver, ResolvedType S, ResolvedType T) {
         this.typeSolver = typeSolver;
         this.S = S;
         this.T = T;
@@ -90,14 +89,14 @@ public class TypeSubtypeOfType extends ConstraintFormula {
 
             //     - If S is an intersection type of which T is an element, the constraint reduces to true.
 
-            if (S instanceof IntersectionType) {
+            if (S instanceof ResolvedIntersectionType) {
                 throw new UnsupportedOperationException();
             }
 
             //     - Otherwise, if T has a lower bound, B, the constraint reduces to ‹S <: B›.
 
-            if (T.asTypeVariable().asTypeParameter().hasLowerBound(typeSolver)) {
-                return ReductionResult.oneConstraint(new TypeSubtypeOfType(typeSolver, S, T.asTypeVariable().asTypeParameter().getLowerBound(typeSolver)));
+            if (T.asTypeVariable().asTypeParameter().hasLowerBound()) {
+                return ReductionResult.oneConstraint(new TypeSubtypeOfType(typeSolver, S, T.asTypeVariable().asTypeParameter().getLowerBound()));
             }
 
             //     - Otherwise, the constraint reduces to false.
