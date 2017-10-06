@@ -1,8 +1,8 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Instantiation;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class SameAsBoundTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
-    private Type stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
+    private ResolvedType stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()), typeSolver);
 
     @Test
     public void recognizeInstantiation() {

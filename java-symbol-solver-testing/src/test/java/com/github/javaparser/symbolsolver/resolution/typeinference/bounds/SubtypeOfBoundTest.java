@@ -1,12 +1,11 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
-import com.github.javaparser.symbolsolver.model.declarations.ReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.declarations.TypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceType;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.model.typesystem.Type;
-import com.github.javaparser.symbolsolver.model.typesystem.Wildcard;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.easymock.EasyMock;
@@ -22,15 +21,15 @@ import static org.junit.Assert.assertEquals;
 public class SubtypeOfBoundTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
-    private ReferenceType iterableType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Iterable.class.getCanonicalName()), typeSolver);
-    private ReferenceType listType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(List.class.getCanonicalName()), typeSolver);
-    private Type integerType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Integer.class.getCanonicalName()), typeSolver);
-    private Type doubleType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Double.class.getCanonicalName()), typeSolver);
-    private Type objectType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Object.class.getCanonicalName()), typeSolver);
+    private ResolvedReferenceType iterableType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Iterable.class.getCanonicalName()), typeSolver);
+    private ResolvedReferenceType listType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(List.class.getCanonicalName()), typeSolver);
+    private ResolvedType integerType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Integer.class.getCanonicalName()), typeSolver);
+    private ResolvedType doubleType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Double.class.getCanonicalName()), typeSolver);
+    private ResolvedType objectType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Object.class.getCanonicalName()), typeSolver);
 
     @Test
     public void recognizeProperLowerBound1() {
-        TypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(TypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
 
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
@@ -42,7 +41,7 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperLowerBound2() {
-        TypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(TypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
 
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
@@ -54,7 +53,7 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperUpperBound1() {
-        TypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(TypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
 
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
@@ -66,14 +65,14 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperUpperBound2() {
-        TypeParameterDeclaration typeParameterDeclaration1 = EasyMock.createMock(TypeParameterDeclaration.class);
-        TypeParameterDeclaration typeParameterDeclaration2 = EasyMock.createMock(TypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration1 = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration2 = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
         // { α <: Iterable<?>, β <: Object, α <: List<β> } describes a proper upper bound for each of α and β, along with a dependency between them.
 
         InferenceVariable alpha = new InferenceVariable("α", typeParameterDeclaration1);
         InferenceVariable beta = new InferenceVariable("β", typeParameterDeclaration2);
-        Type iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration(), Arrays.asList(Wildcard.UNBOUNDED), typeSolver);
-        Type listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration(), Arrays.asList(beta), typeSolver);
+        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration(), Arrays.asList(ResolvedWildcard.UNBOUNDED), typeSolver);
+        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration(), Arrays.asList(beta), typeSolver);
 
         Bound bound1 = new SubtypeOfBound(alpha, iterableOfWildcard);
         Bound bound2 = new SubtypeOfBound(beta, objectType);
