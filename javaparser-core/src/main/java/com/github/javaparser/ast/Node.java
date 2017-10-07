@@ -669,7 +669,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return findCompilationUnit().map(cu -> {
             SymbolResolver symbolResolver = cu.getData(SYMBOL_RESOLVER_KEY);
             if (symbolResolver == null) {
-                throw new IllegalStateException("Symbol resolution not configured");
+                throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
             }
             return symbolResolver;
         }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));

@@ -21,9 +21,11 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.validator.Java1_0Validator;
 import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.resolution.SymbolResolver;
+
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -38,6 +40,7 @@ public class ParserConfiguration {
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
     private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
     private boolean lexicalPreservationEnabled = false;
+    private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
     private Validator validator = new Java8Validator();
 
@@ -123,5 +126,20 @@ public class ParserConfiguration {
 
     public boolean isLexicalPreservationEnabled() {
         return lexicalPreservationEnabled;
+    }
+
+    /**
+     * Retrieve the SymbolResolver to be used while parsing, if any.
+     */
+    public Optional<SymbolResolver> getSymbolResolver() {
+        return Optional.ofNullable(symbolResolver);
+    }
+
+    /**
+     * Set the SymbolResolver to be injected while parsing.
+     */
+    public ParserConfiguration setSymbolResolver(SymbolResolver symbolResolver) {
+        this.symbolResolver = symbolResolver;
+        return this;
     }
 }
