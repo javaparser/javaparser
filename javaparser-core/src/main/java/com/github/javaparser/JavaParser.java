@@ -40,6 +40,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.resolution.SymbolResolver;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -143,8 +144,11 @@ public final class JavaParser {
             configuration.getValidator().accept(resultNode, new ProblemReporter(parser.problems));
             parser.problems.sort(PROBLEM_BY_BEGIN_POSITION);
 
-            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
+            ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
+            considerInjectingSymbolResolver(result, configuration);
+
+            return result;
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
             parser.problems.add(new Problem(message, null, e));
@@ -336,6 +340,7 @@ public final class JavaParser {
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
         ParseResult<T> result = new JavaParser(staticConfiguration).parse(context, provider);
         if (result.isSuccessful()) {
+            considerInjectingSymbolResolver(result, staticConfiguration);
             return result.getResult().get();
         }
         throw new ParseProblemException(result.getProblems());
@@ -521,4 +526,11 @@ public final class JavaParser {
         return simplifiedParse(PACKAGE_DECLARATION, provider(packageDeclaration));
     }
 
+    private static void considerInjectingSymbolResolver(ParseResult<?> parseResult, ParserConfiguration parserConfiguration) {
+        SymbolResolver symbolResolver = parserConfiguration.getSymbolResolver();
+        if (symbolResolver != null && parseResult.getResult().get() instanceof CompilationUnit) {
+            CompilationUnit compilationUnit = (CompilationUnit)parseResult.getResult().get();
+            compilationUnit.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+        }
+    }
 }
