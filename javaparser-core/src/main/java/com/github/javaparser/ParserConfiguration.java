@@ -25,6 +25,8 @@ import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Validator;
 import com.github.javaparser.resolution.SymbolResolver;
 
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -129,14 +131,15 @@ public class ParserConfiguration {
     /**
      * Retrieve the SymbolResolver to be used while parsing, if any.
      */
-    public SymbolResolver getSymbolResolver() {
-        return symbolResolver;
+    public Optional<SymbolResolver> getSymbolResolver() {
+        return Optional.ofNullable(symbolResolver);
     }
 
     /**
      * Set the SymbolResolver to be injected while parsing.
      */
-    public void setSymbolResolver(SymbolResolver symbolResolver) {
+    public ParserConfiguration setSymbolResolver(SymbolResolver symbolResolver) {
         this.symbolResolver = symbolResolver;
+        return this;
     }
 }

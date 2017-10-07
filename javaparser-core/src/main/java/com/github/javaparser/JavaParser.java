@@ -45,6 +45,7 @@ import com.github.javaparser.resolution.SymbolResolver;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
@@ -340,7 +341,6 @@ public final class JavaParser {
     private static <T extends Node> T simplifiedParse(ParseStart<T> context, Provider provider) {
         ParseResult<T> result = new JavaParser(staticConfiguration).parse(context, provider);
         if (result.isSuccessful()) {
-            considerInjectingSymbolResolver(result, staticConfiguration);
             return result.getResult().get();
         }
         throw new ParseProblemException(result.getProblems());
@@ -527,10 +527,10 @@ public final class JavaParser {
     }
 
     private static void considerInjectingSymbolResolver(ParseResult<?> parseResult, ParserConfiguration parserConfiguration) {
-        SymbolResolver symbolResolver = parserConfiguration.getSymbolResolver();
-        if (symbolResolver != null && parseResult.getResult().get() instanceof CompilationUnit) {
+        Optional<SymbolResolver> symbolResolver = parserConfiguration.getSymbolResolver();
+        if (symbolResolver.isPresent() && parseResult.getResult().get() instanceof CompilationUnit) {
             CompilationUnit compilationUnit = (CompilationUnit)parseResult.getResult().get();
-            compilationUnit.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+            compilationUnit.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver.get());
         }
     }
 }
