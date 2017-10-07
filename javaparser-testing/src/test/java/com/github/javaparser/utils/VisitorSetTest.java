@@ -67,26 +67,28 @@ public class VisitorSetTest {
 
     @Test
     public void visitorSetContainsAll() {
-        List<CompilationUnit> lst = new ArrayList<>();
-        lst.add(JavaParser.parse("class X{}"));
-        lst.add(JavaParser.parse("class X{}"));
+        List<CompilationUnit> list = new ArrayList<>();
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        set.addAll(lst);
-        assertTrue(set.size() == 2 && set.containsAll(lst));
+        set.addAll(list);
+        assertTrue(set.size() == 2 && set.containsAll(list));
     }
 
     @Test
     public void visitorSetIterator() {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        set.add(JavaParser.parse("class X{}"));
-        set.add(JavaParser.parse("class X{}"));
+        CompilationUnit x1 = JavaParser.parse("class X{}");
+        set.add(x1);
+        CompilationUnit x2 = JavaParser.parse("class X{}");
+        set.add(x2);
         Iterator<CompilationUnit> itr = set.iterator();
-        itr.next();
+        assertEquals(x1, itr.next());
         itr.remove();
         assertTrue(set.size() == 1);
-        itr.next();
+        assertEquals(x2, itr.next());
         itr.remove();
         assertTrue(set.size() == 0);
     }
@@ -102,27 +104,38 @@ public class VisitorSetTest {
 
     @Test
     public void visitorSetRemoveAll() {
-        List<CompilationUnit> lst = new ArrayList<>();
-        lst.add(JavaParser.parse("class X{}"));
-        lst.add(JavaParser.parse("class X{}"));
+        List<CompilationUnit> list = new ArrayList<>();
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        set.addAll(lst);
-        set.removeAll(lst);
+        set.addAll(list);
+        set.removeAll(list);
         assertTrue(set.size() == 0);
     }
 
     @Test
     public void visitorSetRetainAll() {
-        List<CompilationUnit> lst = new ArrayList<>();
-        lst.add(JavaParser.parse("class X{}"));
-        lst.add(JavaParser.parse("class X{}"));
+        List<CompilationUnit> list = new ArrayList<>();
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
-        set.addAll(lst);
+        set.addAll(list);
         set.add(JavaParser.parse("class X{}"));
-        set.retainAll(lst);
+        set.retainAll(list);
         assertTrue(set.size() == 2);
     }
 
+    @Test
+    public void visitorSetToArray() {
+        List<CompilationUnit> list = new ArrayList<>();
+        list.add(JavaParser.parse("class X{}"));
+        list.add(JavaParser.parse("class X{}"));
+        Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
+                new ObjectIdentityEqualsVisitor());
+        set.addAll(list);
+        for (CompilationUnit u : set.toArray(new CompilationUnit[2]))
+            assertTrue(set.contains(u));
+    }
 }

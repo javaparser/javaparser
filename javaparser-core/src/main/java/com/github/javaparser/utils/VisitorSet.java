@@ -125,10 +125,10 @@ public class VisitorSet<N extends Node> implements Set<N> {
 
     @Override
     public boolean retainAll(Collection<?> col) {
-        int oldSetSize = innerSet.size();
-        innerSet.clear();
+        int oldSize = size();
+        clear();
         addAll((Collection<? extends N>) col);
-        return innerSet.size() != oldSetSize;
+        return size() != oldSize;
     }
 
     @Override
@@ -144,6 +144,17 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public <T> T[] toArray(T[] arr) {
         return innerSet.stream().map(facade -> facade.overridden).collect(Collectors.toList()).toArray(arr);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        if (size() == 0)
+            return sb.append("]").toString();
+        for (EqualsHashcodeOverridingFacade facade : innerSet) {
+            sb.append(facade.overridden.toString() + ",");
+        }
+        return sb.replace(sb.length() - 2, sb.length(), "]").toString();
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
