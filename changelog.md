@@ -1,3 +1,10 @@
+Version 3.4.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/60?closed=1)
+* BETA: we're doing work to integrate parts of [Java Symbol Solver](https://github.com/javaparser/javasymbolsolver) to simplify its API.
+* JDK 9 will compile JavaParser now.
+* [An official sample Maven setup](https://github.com/javaparser/javaparser-maven-sample) was added.
+
 Version 3.4.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/59?closed=1)
