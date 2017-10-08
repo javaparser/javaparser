@@ -1,3 +1,10 @@
+Version 3.4.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/61?closed=1)
+* BETA: we're still doing work to integrate parts of [Java Symbol Solver](https://github.com/javaparser/javasymbolsolver) to simplify its API.
+* `VisitorMap` is joined by `VisitorSet` and `VisitorList`, 
+for when you want to store `Node`s in collection but don't want its default equals/hascode behaviour
+
 Version 3.4.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/60?closed=1)
