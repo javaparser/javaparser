@@ -25,6 +25,7 @@ import com.github.javaparser.ast.comments.CommentsCollection;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.github.javaparser.utils.Utils.EOL;
 import static java.util.Collections.singletonList;
@@ -76,6 +77,15 @@ public class ParseResult<T> {
     }
 
     /**
+     * Calls the consumer with the result if parsing was succesful.
+     */
+    public void ifSuccessful(Consumer<T> consumer) {
+        if (isSuccessful()) {
+            consumer.accept(result);
+        }
+    }
+
+    /**
      * @return the list of encountered parsing problems. Empty when no problems were encountered.
      */
     public List<Problem> getProblems() {
@@ -91,7 +101,10 @@ public class ParseResult<T> {
 
     /**
      * @return the complete list of tokens that were parsed, or empty if parsing failed completely.
+     * @deprecated lists of tokens are now kept in every node.
+     * Calling this method is comparable to calling getResult().get().getTokenRange().get() 
      */
+    @Deprecated
     public Optional<List<JavaToken>> getTokens() {
         return Optional.ofNullable(tokens);
     }
