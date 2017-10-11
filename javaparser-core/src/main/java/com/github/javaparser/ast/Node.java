@@ -42,12 +42,11 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
-
 import javax.annotation.Generated;
 import java.util.*;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -676,5 +675,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     // We need to expose it because we will need to use it to inject the SymbolSolver
-    public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() { };
+    public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
+    };
 }

@@ -40,7 +40,6 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
-
 import java.util.function.Consumer;
 
 /**

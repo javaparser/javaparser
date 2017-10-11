@@ -30,7 +30,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-
 import java.util.function.Consumer;
 
 /**

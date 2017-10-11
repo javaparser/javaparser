@@ -42,7 +42,6 @@ import static java.util.stream.Collectors.joining;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-
 import java.util.function.Consumer;
 
 /**
@@ -287,5 +286,4 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     public ResolvedReferenceType resolve() {
         return getSymbolResolver().resolve(this, ResolvedReferenceType.class);
     }
-
 }

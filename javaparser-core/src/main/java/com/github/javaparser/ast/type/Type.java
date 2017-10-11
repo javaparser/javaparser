@@ -35,10 +35,8 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
