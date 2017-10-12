@@ -84,7 +84,7 @@ public class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void addingTypeParameterAsFirstWhenThereAreSome() throws IOException {
         ClassOrInterfaceDeclaration cid = consider("class A<U> {}");
-        cid.getTypeParameters().addToTop(new TypeParameter("T", new NodeList<>()));
+        cid.getTypeParameters().addFirst(new TypeParameter("T", new NodeList<>()));
         assertTransformedToString("class A<T, U> {}", cid);
     }
 

@@ -228,19 +228,19 @@ public class NodeListTest {
     }
     
     @Test
-    public void addToTop() {
+    public void addFirst() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
-        list.addToTop(new Name("xxx"));
+        list.addFirst(new Name("xxx"));
         
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
     
     @Test
-    public void addToBottom() {
+    public void addLast() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
-        list.addToBottom(new Name("xxx"));
+        list.addLast(new Name("xxx"));
         
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
