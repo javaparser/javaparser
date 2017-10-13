@@ -60,7 +60,7 @@ class GeneratedJavaParserSupport {
         if (list == null) {
             list = new NodeList<>();
         }
-        list.add(0, obj);
+        list.addFirst(obj);
         return list;
     }
 

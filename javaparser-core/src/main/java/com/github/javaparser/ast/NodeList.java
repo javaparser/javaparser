@@ -165,6 +165,51 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         innerList.add(index, node);
     }
 
+    /**
+     * Inserts the node before all other nodes.
+     */
+    public NodeList<N> addFirst(N node) {
+        add(0, node);
+        return this;
+    }
+
+    /**
+     * Inserts the node after all other nodes. (This is simply an alias for add.)
+     */
+    public NodeList<N> addLast(N node) {
+        add(node);
+        return this;
+    }
+
+    /**
+     * Inserts the node after afterThisNode.
+     *
+     * @throws IllegalArgumentException when afterThisNode is not in this list.
+     */
+    public NodeList<N> addAfter(N node, N afterThisNode) {
+        int i = indexOf(afterThisNode);
+        if (i == -1) {
+            throw new IllegalArgumentException("Can't find node to insert after.");
+        }
+        add(i + 1, node);
+        return this;
+    }
+
+    /**
+     * Inserts the node before beforeThisNode.
+     *
+     * @throws IllegalArgumentException when beforeThisNode is not in this list.
+     */
+    public NodeList<N> addBefore(N node, N beforeThisNode) {
+        int i = indexOf(beforeThisNode);
+        if (i == -1) {
+            throw new IllegalArgumentException("Can't find node to insert before.");
+        }
+        add(i, node);
+        return this;
+    }
+
+
     @Override
     public Optional<Node> getParentNode() {
         return Optional.ofNullable(parentNode);

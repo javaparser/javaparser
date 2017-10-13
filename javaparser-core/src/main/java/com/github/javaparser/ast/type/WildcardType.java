@@ -38,7 +38,6 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-
 import java.util.function.Consumer;
 
 /**
