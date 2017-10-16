@@ -47,9 +47,17 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * A constructor declaration: <code>class X { X() { } }</code> where X(){} is the constructor declaration.
+ * A constructor declaration: 
+ * ```java
+ * class X { 
+ *     X() {
+ *         // ...
+ *     } 
+ * }
+ * ```
+ * where "`X(){}`" is the constructor declaration.
  *
- * <br/>All annotations preceding the name will be set on this object, not on the class.
+ * All annotations preceding the name will be set on this object, not on the class.
  * JavaParser doesn't know if it they are applicable to the method or the class.
  * 
  * @author Julio Vilmar Gesser

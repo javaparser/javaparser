@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
- * Any declaration that can appear between the { and } of a class, interface, or enum.
+ * Any declaration that can appear between the `{` and `}` of a class, interface, or enum.
  *
  * @author Julio Vilmar Gesser
  */

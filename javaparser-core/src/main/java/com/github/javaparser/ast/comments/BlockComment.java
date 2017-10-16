@@ -32,10 +32,9 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * <p>
  * AST node that represent block comments.
- * </p>
- * Block comments can has multi lines and are delimited by "/&#42;" and
+ * 
+ * Block comments can have multiple lines and are delimited by "/&#42;" and
  * "&#42;/".
  *
  * @author Julio Vilmar Gesser

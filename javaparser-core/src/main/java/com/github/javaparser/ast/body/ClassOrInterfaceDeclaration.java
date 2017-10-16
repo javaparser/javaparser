@@ -48,7 +48,13 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
 
 /**
- * A definition of a class or interface.<br/><code>class X { ... }</code>
+ * A definition of a class or interface.
+ * 
+ * ```java
+ * class X {
+ *     // ...
+ * }
+ * ```
  *
  * @author Julio Vilmar Gesser
  */

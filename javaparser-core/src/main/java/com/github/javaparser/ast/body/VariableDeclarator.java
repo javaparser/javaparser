@@ -47,9 +47,14 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 
 /**
- * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are
- * VariableDeclarators.
+ * The declaration of a variable.
+ * 
+ * "`x = 14`" and "`y = 3`" are VariableDeclarators with type "`int`" in:
  *
+ * ```java
+ * int x = 14, y = 3;
+ * ```
+ * 
  * @author Julio Vilmar Gesser
  */
 public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator> {

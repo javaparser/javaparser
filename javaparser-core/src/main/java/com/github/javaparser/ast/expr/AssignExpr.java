@@ -35,9 +35,12 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
- * <br/><code>a=5</code>
- * <br/><code>time+=500</code>
+ * An assignment expression. It supports the operators that are found the the {@link Operator} enum.
+ * ```java
+ * a=5
+ * 
+ * time+=500
+ * ```
  *
  * @author Julio Vilmar Gesser
  */

@@ -53,10 +53,17 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
 
 /**
- * A method declaration. "public int abc() {return 1;}" in this example: <code>class X { public int abc() {return 1;}
- * }</code>
+ * A method declaration. "`public int abc() {return 1;}`" in this example:
+ * 
+ * ```java
+ * class X { 
+ *     public int abc() {
+ *         return 1;
+ *     }
+ * }
+ * ```
  *
- * <br/>All annotations preceding the return type will be set on this object, not on the return type.
+ * All annotations preceding the return type will be set on this object, not on the return type.
  * JavaParser doesn't know if it they are applicable to the method or the type.
  * 
  * @author Julio Vilmar Gesser

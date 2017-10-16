@@ -40,7 +40,13 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * An annotation type declaration.<br/><code>@interface X { ... }</code>
+ * An annotation type declaration.
+ * 
+ * ```java
+ * .@interface X {
+ *     // ...
+ * }
+ * ```
  *
  * @author Julio Vilmar Gesser
  */
