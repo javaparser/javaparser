@@ -1,0 +1,176 @@
+/*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+package com.github.javaparser.ast.body;
+
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.ParameterMetaModel;
+
+import javax.annotation.Generated;
+import java.util.EnumSet;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+/**
+ * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
+ * 
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the receiver parameter or the type.
+ *
+ * @author Julio Vilmar Gesser
+ */
+public final class ReceiverParameter extends Node implements NodeWithType<ReceiverParameter, Type>, NodeWithAnnotations<ReceiverParameter>, NodeWithName<ReceiverParameter> {
+
+    private Type type;
+
+    private NodeList<AnnotationExpr> annotations;
+
+    private Name name;
+    
+    public ReceiverParameter() {
+        this(null, new NodeList<>(), new ClassOrInterfaceType(), new Name());
+    }
+
+    public ReceiverParameter(Type type, Name name) {
+        this(null, new NodeList<>(), type, name);
+    }
+
+    /**
+     * Creates a new {@link ReceiverParameter}.
+     *
+     * @param type type of the parameter
+     * @param name name of the parameter
+     */
+    public ReceiverParameter(Type type, String name) {
+        this(null, new NodeList<>(), type, new Name(name));
+    }
+
+    @AllFieldsConstructor
+    public ReceiverParameter(NodeList<AnnotationExpr> annotations, Type type, Name name) {
+        this(null, annotations, type, name);
+    }
+
+    /**This constructor is used by the parser and is considered private.*/
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
+    public ReceiverParameter(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Type type, Name name) {
+        super(tokenRange);
+        setAnnotations(annotations);
+        setType(type);
+        setName(name);
+        customInitialization();
+    }
+
+    @Override
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+        return null;
+    }
+
+    @Override
+    public <A> void accept(VoidVisitor<A> v, A arg) {
+        
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type getType() {
+        return type;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter setType(final Type type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return (ReceiverParameter) this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
+        this.type = type;
+        setAsParentNodeOf(type);
+        return this;
+    }
+
+    /**
+     * @return the list returned could be immutable (in that case it will be empty)
+     */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> getAnnotations() {
+        return annotations;
+    }
+
+    /**
+     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
+     * so please avoid passing null
+     */
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
+        assertNotNull(annotations);
+        if (annotations == this.annotations) {
+            return (ReceiverParameter) this;
+        }
+        notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
+        this.annotations = annotations;
+        setAsParentNodeOf(annotations);
+        return this;
+    }
+    
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public ReceiverParameter clone() {
+        return (ReceiverParameter) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.parameterMetaModel;
+    }
+
+    @Override
+    public Name getName() {
+        return name;
+    }
+
+    @Override
+    public ReceiverParameter setName(Name name) {
+        this.name=name;
+        return this;
+    }
+}

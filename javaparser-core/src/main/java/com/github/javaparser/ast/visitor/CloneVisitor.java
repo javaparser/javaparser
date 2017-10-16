@@ -189,7 +189,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body);
+        ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body, null);
         r.setComment(comment);
         return r;
     }
@@ -205,7 +205,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        MethodDeclaration r = new MethodDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, type, name, parameters, thrownExceptions, body);
+        MethodDeclaration r = new MethodDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
         r.setComment(comment);
         return r;
     }

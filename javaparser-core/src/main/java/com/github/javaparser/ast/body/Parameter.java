@@ -52,7 +52,7 @@ import com.github.javaparser.TokenRange;
  * y) {...}</code>
  * 
  * <br/>All annotations preceding the type will be set on this object, not on the type.
- * JavaParser doesn't know if it they are applicable to the method or the type.
+ * JavaParser doesn't know if it they are applicable to the parameter or the type.
  *
  * @author Julio Vilmar Gesser
  */
@@ -69,7 +69,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     private NodeList<AnnotationExpr> annotations;
 
     private SimpleName name;
-
+    
     public Parameter() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new NodeList<>(), new SimpleName());
     }
