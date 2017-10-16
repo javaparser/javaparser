@@ -338,6 +338,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
             return false;
         if (!nodesEquals(n.getParameters(), n2.getParameters()))
             return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
+            return false;
         if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions()))
             return false;
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
@@ -362,6 +364,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         if (!nodesEquals(n.getParameters(), n2.getParameters()))
+            return false;
+        if (!nodeEquals(n.getReceiverParameter(), n2.getReceiverParameter()))
             return false;
         if (!nodesEquals(n.getThrownExceptions(), n2.getThrownExceptions()))
             return false;
@@ -1353,6 +1357,21 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
     public Boolean visit(final UnparsableStmt n, final Visitable arg) {
         final UnparsableStmt n2 = (UnparsableStmt) arg;
+        if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.EqualsVisitorGenerator")
+    public Boolean visit(final ReceiverParameter n, final Visitable arg) {
+        final ReceiverParameter n2 = (ReceiverParameter) arg;
+        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getType(), n2.getType()))
+            return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
         return true;

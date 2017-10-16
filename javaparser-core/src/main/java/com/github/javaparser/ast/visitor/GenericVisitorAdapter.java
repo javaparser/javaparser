@@ -502,6 +502,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getReceiverParameter().isPresent()) {
+            result = n.getReceiverParameter().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getThrownExceptions().accept(this, arg);
             if (result != null)
@@ -1047,6 +1052,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getParameters().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getReceiverParameter().isPresent()) {
+            result = n.getReceiverParameter().get().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -1991,6 +2001,33 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
     public R visit(final UnparsableStmt n, final A arg) {
         R result;
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorAdapterGenerator")
+    public R visit(final ReceiverParameter n, final A arg) {
+        R result;
+        {
+            result = n.getAnnotations().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getType().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)

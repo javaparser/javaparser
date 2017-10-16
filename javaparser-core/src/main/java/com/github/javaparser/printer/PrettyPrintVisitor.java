@@ -747,6 +747,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
 
         printer.print("(");
+        n.getReceiverParameter().ifPresent(rp -> {
+            rp.accept(this, arg);
+            printer.print(", ");
+        });
         if (!n.getParameters().isEmpty()) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
                 final Parameter p = i.next();
@@ -789,6 +793,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
 
         printer.print("(");
+        n.getReceiverParameter().ifPresent(rp -> {
+            rp.accept(this, arg);
+            printer.print(", ");
+        });
         if (!isNullOrEmpty(n.getParameters())) {
             for (final Iterator<Parameter> i = n.getParameters().iterator(); i.hasNext(); ) {
                 final Parameter p = i.next();
@@ -831,6 +839,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (!(n.getType() instanceof UnknownType)) {
             printer.print(" ");
         }
+        n.getName().accept(this, arg);
+    }
+
+    @Override
+    public void visit(ReceiverParameter n, Void arg) {
+        printJavaComment(n.getComment(), arg);
+        printAnnotations(n.getAnnotations(), false, arg);
+        n.getType().accept(this, arg);
+        printer.print(" ");
         n.getName().accept(this, arg);
     }
 

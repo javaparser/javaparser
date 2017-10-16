@@ -69,7 +69,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     private NodeList<AnnotationExpr> annotations;
 
     private SimpleName name;
-    
+
     public Parameter() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new NodeList<>(), new SimpleName());
     }

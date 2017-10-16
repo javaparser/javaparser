@@ -41,11 +41,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ParameterMetaModel;
-
 import javax.annotation.Generated;
 import java.util.EnumSet;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 
 /**
  * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
@@ -62,7 +61,7 @@ public final class ReceiverParameter extends Node implements NodeWithType<Receiv
     private NodeList<AnnotationExpr> annotations;
 
     private Name name;
-    
+
     public ReceiverParameter() {
         this(null, new NodeList<>(), new ClassOrInterfaceType(), new Name());
     }
@@ -103,7 +102,6 @@ public final class ReceiverParameter extends Node implements NodeWithType<Receiv
 
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
-        
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -150,7 +148,7 @@ public final class ReceiverParameter extends Node implements NodeWithType<Receiv
         setAsParentNodeOf(annotations);
         return this;
     }
-    
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ReceiverParameter clone() {
@@ -159,18 +157,62 @@ public final class ReceiverParameter extends Node implements NodeWithType<Receiv
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ParameterMetaModel getMetaModel() {
-        return JavaParserMetaModel.parameterMetaModel;
+    public ReceiverParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.receiverParameterMetaModel;
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
 
-    @Override
-    public ReceiverParameter setName(Name name) {
-        this.name=name;
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter setName(final Name name) {
+        assertNotNull(name);
+        if (name == this.name) {
+            return (ReceiverParameter) this;
+        }
+        notifyPropertyChange(ObservableProperty.NAME, this.name, name);
+        if (this.name != null)
+            this.name.setParentNode(null);
+        this.name = name;
+        setAsParentNodeOf(name);
         return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public boolean remove(Node node) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null)
+            return false;
+        for (int i = 0; i < annotations.size(); i++) {
+            if (annotations.get(i) == node) {
+                annotations.set(i, (AnnotationExpr) replacementNode);
+                return true;
+            }
+        }
+        if (node == name) {
+            setName((Name) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
+            return true;
+        }
+        return super.replace(node, replacementNode);
     }
 }

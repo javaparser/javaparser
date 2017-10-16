@@ -93,6 +93,7 @@ public final class JavaParserMetaModel {
         methodDeclarationMetaModel.getConstructorParameters().add(callableDeclarationMetaModel.parametersPropertyMetaModel);
         methodDeclarationMetaModel.getConstructorParameters().add(callableDeclarationMetaModel.thrownExceptionsPropertyMetaModel);
         methodDeclarationMetaModel.getConstructorParameters().add(methodDeclarationMetaModel.bodyPropertyMetaModel);
+        methodDeclarationMetaModel.getConstructorParameters().add(callableDeclarationMetaModel.receiverParameterPropertyMetaModel);
         parameterMetaModel.getConstructorParameters().add(parameterMetaModel.modifiersPropertyMetaModel);
         parameterMetaModel.getConstructorParameters().add(parameterMetaModel.annotationsPropertyMetaModel);
         parameterMetaModel.getConstructorParameters().add(parameterMetaModel.typePropertyMetaModel);

@@ -43,7 +43,6 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -223,6 +222,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                removeReceiverParameter();
+                return true;
+            }
+        }
         for (int i = 0; i < thrownExceptions.size(); i++) {
             if (thrownExceptions.get(i) == node) {
                 thrownExceptions.remove(i);
@@ -349,6 +354,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                setReceiverParameter((ReceiverParameter) replacementNode);
+                return true;
+            }
+        }
         for (int i = 0; i < thrownExceptions.size(); i++) {
             if (thrownExceptions.get(i) == node) {
                 thrownExceptions.set(i, (ReferenceType) replacementNode);
@@ -381,11 +392,27 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         action.accept(this);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<ReceiverParameter> getReceiverParameter() {
         return Optional.ofNullable(receiverParameter);
     }
 
-    public void setReceiverParameter(ReceiverParameter receiverParameter) {
+    @SuppressWarnings("unchecked")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public T setReceiverParameter(final ReceiverParameter receiverParameter) {
+        if (receiverParameter == this.receiverParameter) {
+            return (T) this;
+        }
+        notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
+        if (this.receiverParameter != null)
+            this.receiverParameter.setParentNode(null);
         this.receiverParameter = receiverParameter;
+        setAsParentNodeOf(receiverParameter);
+        return (T) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public CallableDeclaration removeReceiverParameter() {
+        return setReceiverParameter((ReceiverParameter) null);
     }
 }
