@@ -23,14 +23,20 @@ package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 public interface SymbolResolver {
     /**
-     * Perform the resolution. For a reference it would find the corresponding
-     * declaration while for types it would find the corresponding resolved types.
+     * For a reference it would find the corresponding
+     * declaration.
      */
-    <T> T resolve(Node node, Class<T> resultClass);
+    <T> T resolveDeclaration(Node node, Class<T> resultClass);
+
+    /**
+     * For types it would find the corresponding resolved types.
+     */
+    <T> T toResolvedType(Type javaparserType, Class<T> resultClass);
 
     ResolvedType calculateType(Expression expression);
 }

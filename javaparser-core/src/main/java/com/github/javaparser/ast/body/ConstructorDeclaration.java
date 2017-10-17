@@ -232,6 +232,6 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
 
     @Override
     public ResolvedConstructorDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedConstructorDeclaration.class);
+        return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
 }

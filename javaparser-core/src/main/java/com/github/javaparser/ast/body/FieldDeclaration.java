@@ -293,6 +293,6 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
 
     @Override
     public ResolvedFieldDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedFieldDeclaration.class);
+        return getSymbolResolver().resolveDeclaration(this, ResolvedFieldDeclaration.class);
     }
 }

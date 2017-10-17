@@ -127,6 +127,6 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
 
     @Override
     public ResolvedAnnotationDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedAnnotationDeclaration.class);
+        return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationDeclaration.class);
     }
 }

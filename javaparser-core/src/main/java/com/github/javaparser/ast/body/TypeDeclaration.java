@@ -50,7 +50,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Julio Vilmar Gesser
  */
-public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends BodyDeclaration<T> implements NodeWithSimpleName<T>, NodeWithJavadoc<T>, NodeWithMembers<T>, NodeWithAccessModifiers<T>, NodeWithStaticModifier<T>, NodeWithStrictfpModifier<T>, Resolvable<ResolvedTypeDeclaration> {
+public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends BodyDeclaration<T> implements NodeWithSimpleName<T>, NodeWithJavadoc<T>, NodeWithMembers<T>, NodeWithAccessModifiers<T>, NodeWithStaticModifier<T>, NodeWithStrictfpModifier<T> {
 
     private SimpleName name;
 
@@ -238,8 +238,4 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
         action.accept(this);
     }
 
-    @Override
-    public ResolvedTypeDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedTypeDeclaration.class);
-    }
 }

@@ -218,6 +218,6 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
 
     @Override
     public ResolvedEnumDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedEnumDeclaration.class);
+        return getSymbolResolver().resolveDeclaration(this, ResolvedEnumDeclaration.class);
     }
 }
