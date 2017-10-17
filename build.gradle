@@ -59,6 +59,14 @@ subprojects {
     from sourceSets.main.allSource
   }
 
+  compileJava.options.encoding = 'UTF-8'
+
+  tasks.withType(Javadoc) {
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('docencoding', 'UTF-8')
+    options.addStringOption('charset', 'UTF-8')
+  }
+
   if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
       tasks.withType(Javadoc) {
