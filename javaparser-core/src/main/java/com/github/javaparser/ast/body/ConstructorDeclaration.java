@@ -44,6 +44,10 @@ import com.github.javaparser.metamodel.ConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -54,7 +58,7 @@ import java.util.function.Consumer;
  * 
  * @author Julio Vilmar Gesser
  */
-public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration> {
+public final class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithDeclaration, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
 
     private BlockStmt body;
 
@@ -224,5 +228,10 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConstructorDeclaration(Consumer<ConstructorDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedConstructorDeclaration resolve() {
+        return getSymbolResolver().resolve(this, ResolvedConstructorDeclaration.class);
     }
 }
