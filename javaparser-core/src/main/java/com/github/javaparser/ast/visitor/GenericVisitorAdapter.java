@@ -502,11 +502,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getReceiverParameter().isPresent()) {
-            result = n.getReceiverParameter().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
         {
             result = n.getThrownExceptions().accept(this, arg);
             if (result != null)
@@ -1040,6 +1035,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
+        if (n.getReceiverParameter().isPresent()) {
+            result = n.getReceiverParameter().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getType().accept(this, arg);
             if (result != null)
@@ -1052,11 +1052,6 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getParameters().accept(this, arg);
-            if (result != null)
-                return result;
-        }
-        if (n.getReceiverParameter().isPresent()) {
-            result = n.getReceiverParameter().get().accept(this, arg);
             if (result != null)
                 return result;
         }

@@ -1304,7 +1304,10 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = prepend(stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
+  	if (parameters.b != null) {
+  	    addProblem("The receiver cannot be used in a static context.");
+  	}
+  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts));
   }
 }
 

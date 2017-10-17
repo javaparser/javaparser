@@ -67,6 +67,8 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     private BlockStmt body;
 
+    private ReceiverParameter receiverParameter;
+
     public MethodDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
     }
@@ -94,9 +96,10 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     /**This constructor is used by the parser and is considered private.*/
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
-        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
+        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
         setBody(body);
+        setReceiverParameter(receiverParameter);
         customInitialization();
     }
 
@@ -271,6 +274,12 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                removeReceiverParameter();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -302,6 +311,12 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                setReceiverParameter((ReceiverParameter) replacementNode);
+                return true;
+            }
+        }
         if (node == type) {
             setType((Type) replacementNode);
             return true;
@@ -329,5 +344,28 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Override
     public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolve(this, ResolvedMethodDeclaration.class);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<ReceiverParameter> getReceiverParameter() {
+        return Optional.ofNullable(receiverParameter);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public MethodDeclaration setReceiverParameter(final ReceiverParameter receiverParameter) {
+        if (receiverParameter == this.receiverParameter) {
+            return (MethodDeclaration) this;
+        }
+        notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
+        if (this.receiverParameter != null)
+            this.receiverParameter.setParentNode(null);
+        this.receiverParameter = receiverParameter;
+        setAsParentNodeOf(receiverParameter);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public MethodDeclaration removeReceiverParameter() {
+        return setReceiverParameter((ReceiverParameter) null);
     }
 }

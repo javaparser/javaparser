@@ -19,8 +19,6 @@ public class CallableDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     public PropertyMetaModel parametersPropertyMetaModel;
 
-    public PropertyMetaModel receiverParameterPropertyMetaModel;
-
     public PropertyMetaModel thrownExceptionsPropertyMetaModel;
 
     public PropertyMetaModel typeParametersPropertyMetaModel;

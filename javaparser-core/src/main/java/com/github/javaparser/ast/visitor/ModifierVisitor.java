@@ -321,7 +321,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
-        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
@@ -331,7 +330,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setBody(body);
         n.setName(name);
         n.setParameters(parameters);
-        n.setReceiverParameter(receiverParameter);
         n.setThrownExceptions(thrownExceptions);
         n.setTypeParameters(typeParameters);
         n.setAnnotations(annotations);
@@ -649,10 +647,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final MethodDeclaration n, final A arg) {
         BlockStmt body = n.getBody().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         Type type = (Type) n.getType().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
-        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
@@ -660,10 +658,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         if (type == null || name == null)
             return null;
         n.setBody(body);
+        n.setReceiverParameter(receiverParameter);
         n.setType(type);
         n.setName(name);
         n.setParameters(parameters);
-        n.setReceiverParameter(receiverParameter);
         n.setThrownExceptions(thrownExceptions);
         n.setTypeParameters(typeParameters);
         n.setAnnotations(annotations);
