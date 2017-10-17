@@ -31,10 +31,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.ast.visitor.EqualsVisitor;
-import com.github.javaparser.ast.visitor.HashCodeVisitor;
-import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.*;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
@@ -42,11 +39,14 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
+
 import javax.annotation.Generated;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
-import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -409,6 +409,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Recursively finds all nodes of a certain type.
      *
      * @param clazz the type of node to find.
+     * @deprecated use find(Class)
      */
     public <N extends Node> List<N> getChildNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
@@ -422,7 +423,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * @deprecated use getChildNodesByType
+     * @deprecated use find(Class)
      */
     @Deprecated
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
@@ -677,4 +678,50 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // We need to expose it because we will need to use it to inject the SymbolSolver
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
     };
+
+    /**
+     * Walks the AST, calling the consumer for every node.
+     */
+    public void walk(Consumer<Node> consumer) {
+        new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                consumer.accept(node);
+            }
+        }.visitPreOrder(this);
+    }
+
+    /**
+     * Walks the AST, calling the consumer for every node of type "nodeType".
+     */
+    public <T extends Node> void walk(Class<T> nodeType, Consumer<T> consumer) {
+        new TreeVisitor() {
+            @Override
+            public void process(Node node) {
+                if (nodeType.isInstance(node)) {
+                    consumer.accept(nodeType.cast(node));
+                }
+            }
+        }.visitPreOrder(this);
+    }
+
+    /**
+     * Walks the AST, returning the all nodes of type "nodeType".
+     */
+    public <T extends Node> List<T> find(Class<T> nodeType) {
+        final List<T> found = new ArrayList<>();
+        walk(nodeType, found::add);
+        return found;
+    }
+
+    /**
+     * Walks the AST, returning the all nodes of type "nodeType" that match the predicate.
+     */
+    public <T extends Node> List<T> find(Class<T> nodeType, Predicate<T> predicate) {
+        final List<T> found = new ArrayList<>();
+        walk(nodeType, n -> {
+            if (predicate.test(n)) found.add(n);
+        });
+        return found;
+    }
 }

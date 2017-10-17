@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -30,6 +29,8 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -42,6 +43,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseExpression;
 import static org.junit.Assert.*;
 
 public class NodeTest {
@@ -302,7 +304,7 @@ public class NodeTest {
         decl.setComment(new BlockComment("foo"));
         assertEquals(false, decl.hasJavaDocComment());
     }
-    
+
     @Test
     public void removeAllOnRequiredProperty() {
         CompilationUnit cu = parse("class X{ void x(){}}");
@@ -314,7 +316,7 @@ public class NodeTest {
 
     @Test
     public void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
-        CompilationUnit unit = JavaParser.parse("public class Example {\n" +
+        CompilationUnit unit = parse("public class Example {\n" +
                 "  public static void example() {\n" +
                 "    boolean swapped;\n" +
                 "    swapped=false;\n" +
@@ -327,17 +329,47 @@ public class NodeTest {
         // This will throw an exception if the parents are bad.
         System.out.println(unit.toString());
     }
-    
+
     @Test
     public void findCompilationUnit() {
-        CompilationUnit cu = JavaParser.parse("class X{int x;}");
+        CompilationUnit cu = parse("class X{int x;}");
         VariableDeclarator x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0);
         assertEquals(cu, x.findCompilationUnit().get());
     }
-    
+
     @Test
     public void cantFindCompilationUnit() {
         VariableDeclarator x = new VariableDeclarator();
         assertFalse(x.findCompilationUnit().isPresent());
+    }
+
+    @Test
+    public void walk1() {
+        Expression e = parseExpression("1+1");
+        StringBuilder b = new StringBuilder();
+        e.walk(n -> b.append(n.toString()));
+        assertEquals("1 + 111", b.toString());
+    }
+
+    @Test
+    public void walk2() {
+        Expression e = parseExpression("1+1");
+        StringBuilder b = new StringBuilder();
+        e.walk(IntegerLiteralExpr.class, n -> b.append(n.toString()));
+        assertEquals("11", b.toString());
+    }
+
+    @Test
+    public void find1() {
+        Expression e = parseExpression("1+2+3");
+        List<IntegerLiteralExpr> ints = e.find(IntegerLiteralExpr.class, n -> n.asInt() > 1);
+        assertEquals("[2, 3]", ints.toString());
+    }
+
+    @Test
+    public void find2() {
+        Expression e = parseExpression("1+2+3");
+        List<IntegerLiteralExpr> ints = e.find(IntegerLiteralExpr.class);
+        assertEquals("[1, 2, 3]", ints.toString());
     }
 }
