@@ -107,7 +107,7 @@ A more detailed description of the architecture of the project is available in [
 
 ### Gradle usage
 
-You should always use the local gradle wrapper within java-symbol-solver to execute gradle tasks. If you're working on a Linux or Mac system, this is `.\gradlew` in the root directory of java-symbol-solver. On Windows, it's `.\gradlew.bat`. When executing gradle tasks via your IDE, make sure to configure your IDE to also use this wrapper. If you use intelliJ, you need the "Use default Gradle wrapper" option in the [IntelliJ Gradle settings](https://www.jetbrains.com/help/idea/gradle-2.html).
+We suggest that you use the local gradle wrapper within java-symbol-solver to execute gradle tasks. If you're working on a Linux or Mac system, this is `.\gradlew` in the root directory of java-symbol-solver. On Windows, it's `.\gradlew.bat`. When executing gradle tasks via your IDE, make sure to configure your IDE to also use this wrapper. If you use intelliJ, you need the "Use default Gradle wrapper" option in the [IntelliJ Gradle settings](https://www.jetbrains.com/help/idea/gradle-2.html).
 
 The following tasks are most relevant:
 
