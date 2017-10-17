@@ -16,8 +16,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.AbstractTest;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavassistClassDeclarationTest extends AbstractTest {
 
@@ -399,6 +402,18 @@ public class JavassistClassDeclarationTest extends AbstractTest {
         ancestor = constructorDeclaration.getAllAncestors().get(11);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.T").get().asReferenceType().getQualifiedName());
+    }
+
+    @Test
+    public void testSolveSymbolCanSolveStaticConcreteImport() throws IOException {
+        final String pathToJar = adaptPath("src/test/resources/javassist_symbols/main_jar/main_jar.jar");
+        final TypeSolver mainJarTypeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
+
+        JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) mainJarTypeSolver.solveType("com.github.javaparser.javasymbolsolver.javassist_symbols.main_jar.ConcreteClass");
+        SymbolReference<? extends ResolvedValueDeclaration> solvedSymbol = compilationUnit.solveSymbol("STATIC_STRING", mainJarTypeSolver);
+
+        assertTrue(solvedSymbol.isSolved());
+        assertEquals("STATIC_STRING", solvedSymbol.getCorrespondingDeclaration().asField().getName());
     }
     
 }
