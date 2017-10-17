@@ -839,7 +839,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(ReceiverParameter n, Void arg) {
+    public void visit(final ReceiverParameter n, final Void arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), false, arg);
         n.getType().accept(this, arg);
