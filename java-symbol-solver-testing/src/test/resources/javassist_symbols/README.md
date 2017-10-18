@@ -3,6 +3,7 @@ For the tests regarding resolving symbols in Jar files, we need some jar files. 
 `main_jar` contains most of the necessary classes, while `extra_jar` (TODO) is used for main_jar to refer to with the goal that it would not be included in the SymbolSolver and thus trigger an error.
 
 If you need to make changes to either jar, run the following commands to generate the new jars (assuming that a JDK bin directory is in your path).
+When you need to rebuild the jar, it is important to make sure you actually update the jar in git. Jar-files are in the git-ignore, so you'll have to force-add them using `git -f main_jar.jar`.
 
 ## Main jar
 
