@@ -105,6 +105,19 @@ The project is structured in this way:
 
 A more detailed description of the architecture of the project is available in [Design.MD](https://github.com/javaparser/javasymbolsolver/blob/master/Design.MD)
 
+### Gradle usage
+
+We suggest that you use the local gradle wrapper within java-symbol-solver to execute gradle tasks. If you're working on a Linux or Mac system, this is `./gradlew` in the root directory of java-symbol-solver. On Windows, it's `gradlew.bat`. When executing gradle tasks via your IDE, make sure to configure your IDE to also use this wrapper. If you use intelliJ, you need the "Use default Gradle wrapper" option in the [IntelliJ Gradle settings](https://www.jetbrains.com/help/idea/gradle-2.html).
+
+The following tasks are most relevant:
+
+* `assemble`: If you need to build the source code (the full command thus becomes `.\gradlew assemble` or `.\gradlew.bat assemble` depending on your Operating System).
+* `check`: To run the tests
+* `check jacocoTestReport`: To run the tests (if still necessary) and generate a test coverage report. This coverage report is then located at `./java-symbol-solver-testing/build/jacocoHtml/index.html` relative to your project root.
+* `install`: To install the snapshot version of the project to your local maven repository, which can be useful to test changes you're working on against external projects.
+
+In case you haven't worked with Gradle before, one thing of note is that Gradle will only perform tasks that are still relevant. Let's say you have subprojects `foo` and `bar` and you had previously compiled those. If you then make changes in `foo` and compile both again, only `foo` will be compiled. You'll see in the Gradle output that the compile task of `bar` is marked as `UP-TO-DATE`.
+
 ## Contributing
 
 I would absolutely love every possible kind of contributions: if you have questions, ideas, need help or want to propose a change just open an issue. Pull-requests are greatly appreciated.

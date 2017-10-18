@@ -16,3 +16,8 @@ idea {
     }
 }
 
+jacocoTestReport {
+    sourceSets project(":java-symbol-solver-model").sourceSets.main
+    sourceSets project(":java-symbol-solver-logic").sourceSets.main
+    sourceSets project(":java-symbol-solver-core").sourceSets.main
+}
