@@ -31,6 +31,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistClassDeclaration;
+import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
@@ -144,6 +145,9 @@ public class SymbolSolver {
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
             return ((JavassistClassDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
+        }
+        if (typeDeclaration instanceof JavassistEnumDeclaration) {
+            return ((JavassistEnumDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
         }
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }

@@ -72,7 +72,7 @@ public class SymbolSolverWithJavassistClassTest extends AbstractTest {
     }
 
     @Test
-    public void testSolveSymbolInTypeCantResolveNonExistantField() {
+    public void testSolveSymbolInTypeCantResolveNonExistentField() {
         SymbolReference<? extends ResolvedValueDeclaration> solvedSymbol = symbolSolver.solveSymbolInType(classDeclarationConcreteClass, "FIELD_THAT_DOES_NOT_EXIST");
 
         assertFalse(solvedSymbol.isSolved());
