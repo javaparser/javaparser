@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 import com.github.javaparser.Position;
+import com.github.javaparser.utils.Utils;
 
 public class SourcePrinter {
 
@@ -142,5 +143,9 @@ public class SourcePrinter {
     @Override
     public String toString() {
         return getSource();
+    }
+
+    public String normalizeEolInTextBlock(String content) {
+        return Utils.normalizeEolInTextBlock(content, endOfLineCharacter);
     }
 }
