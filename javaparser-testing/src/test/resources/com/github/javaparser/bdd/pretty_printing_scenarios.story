@@ -472,7 +472,7 @@ public class Abc<@C A, @C X extends @C String & @C Serializable> {
 Scenario: we can parse a package-info file.
 Given the class in the file "package-info.java"
 When the class is parsed by the Java parser
-Then it is printed as:
+Then it is printed with normalized EOL in comments as:
 /**
  * This package contains class for doing some stuff.
  */

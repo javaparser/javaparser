@@ -36,6 +36,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -304,7 +305,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final JavadocComment n, final Void arg) {
         printer.print("/**");
-        printer.print(n.getContent());
+        String commentContent = n.getContent();
+        if (configuration.isNormalizeEolInComment()) {
+            commentContent = Utils.normalizeEolInTextBlock(commentContent, configuration.getEndOfLineCharacter());
+        }
+        printer.print(commentContent);
         printer.println("*/");
     }
 
