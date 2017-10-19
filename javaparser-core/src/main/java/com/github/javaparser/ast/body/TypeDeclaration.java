@@ -34,14 +34,16 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeDeclarationMetaModel;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+
 import javax.annotation.Generated;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
-import com.github.javaparser.ast.Node;
-import java.util.function.Consumer;
 
 /**
  * A base class for all types of type declarations.
@@ -235,4 +237,5 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
         action.accept(this);
     }
+
 }
