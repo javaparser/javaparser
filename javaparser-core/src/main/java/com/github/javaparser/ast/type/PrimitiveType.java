@@ -226,6 +226,6 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
 
     @Override
     public ResolvedPrimitiveType resolve() {
-        return getSymbolResolver().resolve(this, ResolvedPrimitiveType.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedPrimitiveType.class);
     }
 }

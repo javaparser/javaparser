@@ -181,6 +181,6 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
 
     @Override
     public ResolvedUnionType resolve() {
-        return getSymbolResolver().resolve(this, ResolvedUnionType.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedUnionType.class);
     }
 }

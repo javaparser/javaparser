@@ -128,6 +128,6 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
 
     @Override
     public ResolvedVoidType resolve() {
-        return getSymbolResolver().resolve(this, ResolvedVoidType.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedVoidType.class);
     }
 }

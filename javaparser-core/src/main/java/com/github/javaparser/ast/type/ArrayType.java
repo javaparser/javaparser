@@ -50,7 +50,7 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
 
     @Override
     public ResolvedArrayType resolve() {
-        return getSymbolResolver().resolve(this, ResolvedArrayType.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedArrayType.class);
     }
 
     /**

@@ -133,6 +133,6 @@ public final class UnknownType extends Type {
 
     @Override
     public ResolvedType resolve() {
-        return getSymbolResolver().resolve(this, ResolvedReferenceType.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
     }
 }

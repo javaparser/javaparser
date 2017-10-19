@@ -232,6 +232,6 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
 
     @Override
     public ResolvedTypeVariable resolve() {
-        return getSymbolResolver().resolve(this, ResolvedTypeVariable.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedTypeVariable.class);
     }
 }

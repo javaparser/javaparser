@@ -345,7 +345,7 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     @Override
     public ResolvedMethodDeclaration resolve() {
-        return getSymbolResolver().resolve(this, ResolvedMethodDeclaration.class);
+        return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
