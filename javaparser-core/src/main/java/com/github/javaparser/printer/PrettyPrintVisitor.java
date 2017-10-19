@@ -306,7 +306,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final JavadocComment n, final Void arg) {
         printer.print("/**");
         String commentContent = n.getContent();
-        if (configuration.isNormalizeEolInComments()) {
+        if (configuration.isNormalizeEolInComment()) {
             commentContent = Utils.normalizeEolInTextBlock(commentContent, configuration.getEndOfLineCharacter());
         }
         printer.print(commentContent);

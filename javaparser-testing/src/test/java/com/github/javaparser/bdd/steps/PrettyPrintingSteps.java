@@ -21,7 +21,6 @@
 
 package com.github.javaparser.bdd.steps;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -38,7 +37,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.github.javaparser.JavaParser.*;
-import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.Assert.assertEquals;
 
@@ -116,7 +114,7 @@ public class PrettyPrintingSteps {
 
     @Then("it is printed with normalized EOL in comments as:$src")
     public void isPrintedWithEolAs(String src) {
-        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setNormalizeEolInComments(true);
+        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setNormalizeEolInComment(true);
         assertEquals(src.trim(), resultNode.toString(conf).trim());
     }
 }
