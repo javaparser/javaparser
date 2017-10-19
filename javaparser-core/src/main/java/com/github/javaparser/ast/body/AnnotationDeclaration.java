@@ -37,6 +37,10 @@ import java.util.EnumSet;
 import java.util.List;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -44,7 +48,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> implements NodeWithAbstractModifier<AnnotationDeclaration> {
+public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> implements NodeWithAbstractModifier<AnnotationDeclaration>, Resolvable<ResolvedAnnotationDeclaration> {
 
     public AnnotationDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new SimpleName(), new NodeList<>());
@@ -119,5 +123,10 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedAnnotationDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationDeclaration.class);
     }
 }

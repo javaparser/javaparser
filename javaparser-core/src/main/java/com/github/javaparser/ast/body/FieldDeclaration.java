@@ -53,6 +53,10 @@ import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -64,7 +68,7 @@ import java.util.function.Consumer;
  * 
  * @author Julio Vilmar Gesser
  */
-public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements NodeWithJavadoc<FieldDeclaration>, NodeWithVariables<FieldDeclaration>, NodeWithAccessModifiers<FieldDeclaration>, NodeWithStaticModifier<FieldDeclaration>, NodeWithFinalModifier<FieldDeclaration> {
+public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements NodeWithJavadoc<FieldDeclaration>, NodeWithVariables<FieldDeclaration>, NodeWithAccessModifiers<FieldDeclaration>, NodeWithStaticModifier<FieldDeclaration>, NodeWithFinalModifier<FieldDeclaration>, Resolvable<ResolvedFieldDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -285,5 +289,10 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedFieldDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedFieldDeclaration.class);
     }
 }
