@@ -344,7 +344,7 @@ public class NodeTest {
     }
 
     @Test
-    public void walk1() {
+    public void genericWalk() {
         Expression e = parseExpression("1+1");
         StringBuilder b = new StringBuilder();
         e.walk(n -> b.append(n.toString()));
@@ -352,7 +352,7 @@ public class NodeTest {
     }
 
     @Test
-    public void walk2() {
+    public void classSpecificWalk() {
         Expression e = parseExpression("1+1");
         StringBuilder b = new StringBuilder();
         e.walk(IntegerLiteralExpr.class, n -> b.append(n.toString()));
@@ -360,16 +360,16 @@ public class NodeTest {
     }
 
     @Test
-    public void find1() {
+    public void conditionalFindAll() {
         Expression e = parseExpression("1+2+3");
-        List<IntegerLiteralExpr> ints = e.find(IntegerLiteralExpr.class, n -> n.asInt() > 1);
+        List<IntegerLiteralExpr> ints = e.findAll(IntegerLiteralExpr.class, n -> n.asInt() > 1);
         assertEquals("[2, 3]", ints.toString());
     }
 
     @Test
-    public void find2() {
+    public void typeOnlyFindAll() {
         Expression e = parseExpression("1+2+3");
-        List<IntegerLiteralExpr> ints = e.find(IntegerLiteralExpr.class);
+        List<IntegerLiteralExpr> ints = e.findAll(IntegerLiteralExpr.class);
         assertEquals("[1, 2, 3]", ints.toString());
     }
 }

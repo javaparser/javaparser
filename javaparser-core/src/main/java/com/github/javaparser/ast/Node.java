@@ -43,10 +43,15 @@ import com.github.javaparser.resolution.SymbolResolver;
 import javax.annotation.Generated;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -679,49 +684,90 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
     };
 
+
+    public enum TreeTraversal {
+        PREORDER, BREADTHFIRST, POSTORDER
+    }
+
+    public Iterator<Node> treeIterator(TreeTraversal traversal) {
+        switch (traversal) {
+            case BREADTHFIRST:
+                return new TreeVisitor.BreadthFirstIterator(this);
+            case POSTORDER:
+                return new TreeVisitor.PostOrderIterator(this);
+            case PREORDER:
+                return new TreeVisitor.PreOrderIterator(this);
+            default:
+                throw new IllegalArgumentException("Unknown traversal choice.");
+        }
+    }
+    
+    public Iterable<Node> treeIterable(TreeTraversal traversal) {
+        return () -> treeIterator(traversal);
+    }
+    
+    public Stream<Node> treeStream(TreeTraversal traversal) {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(traversal), NONNULL | DISTINCT), false);
+    }
+    
     /**
      * Walks the AST, calling the consumer for every node.
      */
     public void walk(Consumer<Node> consumer) {
-        new TreeVisitor() {
-            @Override
-            public void process(Node node) {
-                consumer.accept(node);
-            }
-        }.visitPreOrder(this);
+        treeIterable(TreeTraversal.PREORDER).forEach(consumer);
     }
 
     /**
      * Walks the AST, calling the consumer for every node of type "nodeType".
      */
     public <T extends Node> void walk(Class<T> nodeType, Consumer<T> consumer) {
-        new TreeVisitor() {
-            @Override
-            public void process(Node node) {
-                if (nodeType.isInstance(node)) {
-                    consumer.accept(nodeType.cast(node));
-                }
+        for (Node node : treeIterable(TreeTraversal.PREORDER)) {
+            if (nodeType.isInstance(node)) {
+                consumer.accept(nodeType.cast(node));
             }
-        }.visitPreOrder(this);
+        }
     }
 
     /**
-     * Walks the AST, returning the all nodes of type "nodeType".
+     * Walks the AST, returning all nodes of type "nodeType".
      */
-    public <T extends Node> List<T> find(Class<T> nodeType) {
+    public <T extends Node> List<T> findAll(Class<T> nodeType) {
         final List<T> found = new ArrayList<>();
         walk(nodeType, found::add);
         return found;
     }
 
     /**
-     * Walks the AST, returning the all nodes of type "nodeType" that match the predicate.
+     * Walks the AST, returning all nodes of type "nodeType" that match the predicate.
      */
-    public <T extends Node> List<T> find(Class<T> nodeType, Predicate<T> predicate) {
+    public <T extends Node> List<T> findAll(Class<T> nodeType, Predicate<T> predicate) {
         final List<T> found = new ArrayList<>();
         walk(nodeType, n -> {
             if (predicate.test(n)) found.add(n);
         });
         return found;
+    }
+
+    private <T> Optional<T> visitPreOrder(Function<Node, Optional<T>> visitor) {
+        Optional<T> result = visitor.apply(this);
+
+        if(result.isPresent()){
+            return result;
+        }
+
+        for(Node n: new ArrayList<>(getChildNodes())) {
+            result = n.visitPreOrder(visitor);
+
+            if(result.isPresent()){
+                return result;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private void visitPreOrder(Consumer<Node> visitor) {
+        visitor.accept(this);
+
+        new ArrayList<>(getChildNodes()).forEach(n -> n.visitPreOrder(visitor));
     }
 }
