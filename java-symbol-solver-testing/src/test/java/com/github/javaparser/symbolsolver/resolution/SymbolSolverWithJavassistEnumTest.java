@@ -82,7 +82,7 @@ public class SymbolSolverWithJavassistEnumTest extends AbstractTest {
     }
 
     @Test
-    @Ignore // TODO This fails at the moment, I think it might be an issue -- discussion ongoing on Gitter
+    @Ignore // TODO This fails at the moment due to issue #326
     public void testSolveSymbolInTypeCanResolveFieldInInterfaceIncludedJar() {
         assertCanSolveSymbol("INTERFACE_FIELD", enumDeclarationInterfaceUserIncludedJar);
     }
