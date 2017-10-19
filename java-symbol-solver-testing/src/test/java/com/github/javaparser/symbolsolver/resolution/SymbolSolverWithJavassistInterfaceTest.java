@@ -10,7 +10,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import javassist.NotFoundException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -71,7 +70,6 @@ public class SymbolSolverWithJavassistInterfaceTest extends AbstractTest {
     }
 
     @Test
-    @Ignore // TODO This fails at the moment due to issue #326
     public void testSolveSymbolInTypeCanResolveFieldInExtendedInterfaceIncludedJar() {
         assertCanSolveSymbol("INTERFACE_FIELD", interfaceDeclarationSubInterfaceIncludedJar);
     }

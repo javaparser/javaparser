@@ -28,6 +28,7 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
@@ -233,6 +234,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
 
+    @Deprecated
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
@@ -240,17 +242,32 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
             }
         }
 
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<? extends ResolvedValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
-                if (ref.isSolved()) {
-                    return ref;
-                }
+        String[] interfaceFQNs = getInterfaceFQNs();
+        for (String interfaceFQN : interfaceFQNs) {
+            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, typeSolver, interfaceFQN);
+            if (interfaceRef.isSolved()) {
+                return interfaceRef;
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
         }
 
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+    }
+
+    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, TypeSolver typeSolver, String fqn) {
+        try {
+            if (fqn == null) {
+                return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            }
+
+            ResolvedReferenceTypeDeclaration superClass = typeSolver.solveType(fqn);
+            return new SymbolSolver(typeSolver).solveSymbolInType(superClass, symbolName);
+        } catch (UnsolvedSymbolException | com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException e) {
+            // TODO, API-breaking discussion ongoing, this is currently option 3
+            throw new RuntimeException(new NotFoundException(fqn));
+        }
+    }
+
+    private String[] getInterfaceFQNs() {
+        return ctClass.getClassFile().getInterfaces();
     }
 }

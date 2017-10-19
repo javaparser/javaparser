@@ -93,7 +93,6 @@ public class SymbolSolverWithJavassistClassTest extends AbstractTest {
     }
 
     @Test
-    @Ignore // TODO This fails at the moment due to issue #326
     public void testSolveSymbolInTypeCanResolveFieldInSuperIncludedJar() {
         assertCanSolveSymbol("SUPER_FIELD", classDeclarationSubClassIncludedJar);
     }
@@ -116,7 +115,6 @@ public class SymbolSolverWithJavassistClassTest extends AbstractTest {
     }
 
     @Test
-    @Ignore // TODO This fails at the moment due to issue #326
     public void testSolveSymbolInTypeCanResolveFieldInInterfaceIncludedJar() {
         assertCanSolveSymbol("INTERFACE_FIELD", classDeclarationInterfaceUserIncludedJar);
     }
