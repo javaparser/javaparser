@@ -170,6 +170,6 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
 
     @Override
     public ResolvedIntersectionType resolve() {
-        return getSymbolResolver().resolve(this, ResolvedIntersectionType.class);
+        return getSymbolResolver().toResolvedType(this, ResolvedIntersectionType.class);
     }
 }
