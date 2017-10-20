@@ -44,6 +44,7 @@ import java.util.List;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.*;
 
 public class NodeTest {
@@ -311,18 +312,18 @@ public class NodeTest {
         MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
         methodDeclaration.getName().removeForced();
         // Name is required, so to remove it the whole method is removed.
-        assertEquals("class X {\n}\n", cu.toString());
+        assertEquals(String.format("class X {%1$s}%1$s", EOL), cu.toString());
     }
 
     @Test
     public void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
-        CompilationUnit unit = parse("public class Example {\n" +
-                "  public static void example() {\n" +
-                "    boolean swapped;\n" +
-                "    swapped=false;\n" +
-                "    swapped=false;\n" +
-                "  }\n" +
-                "}\n");
+        CompilationUnit unit = parse(String.format("public class Example {%1$s" +
+                "  public static void example() {%1$s" +
+                "    boolean swapped;%1$s" +
+                "    swapped=false;%1$s" +
+                "    swapped=false;%1$s" +
+                "  }%1$s" +
+                "}%1$s", EOL));
         // remove the second swapped=false
         Node target = unit.getChildNodes().get(0).getChildNodes().get(1).getChildNodes().get(2).getChildNodes().get(2);
         target.remove();

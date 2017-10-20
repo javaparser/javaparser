@@ -27,6 +27,7 @@ import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 public class PrettyPrinterConfiguration {
+    private boolean normalizeEolInComment = false;
     private boolean printComments = true;
     private boolean printJavaDoc = true;
     private boolean columnAlignParameters = false;
@@ -44,6 +45,15 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
+    public boolean isNormalizeEolInComment() {
+        return normalizeEolInComment;
+    }
+
+    public PrettyPrinterConfiguration setNormalizeEolInComment(boolean normalizeEolInComment) {
+        this.normalizeEolInComment = normalizeEolInComment;
+        return this;
+    }
+
     public boolean isPrintComments() {
         return printComments;
     }
@@ -55,7 +65,7 @@ public class PrettyPrinterConfiguration {
     public boolean isPrintJavaDoc() {
         return printJavaDoc;
     }
-    
+
     public boolean isColumnAlignParameters() {
         return columnAlignParameters;
     }
@@ -73,12 +83,12 @@ public class PrettyPrinterConfiguration {
         this.printJavaDoc = printJavaDoc;
         return this;
     }
-    
+
     public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
         this.columnAlignParameters = columnAlignParameters;
         return this;
     }
-    
+
     public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
         this.columnAlignFirstMethodChain = columnAlignFirstMethodChain;
         return this;
