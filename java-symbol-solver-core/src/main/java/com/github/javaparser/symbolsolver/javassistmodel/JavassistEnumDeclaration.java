@@ -254,17 +254,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     }
 
     private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, TypeSolver typeSolver, String fqn) {
-        try {
-            if (fqn == null) {
-                return SymbolReference.unsolved(ResolvedValueDeclaration.class);
-            }
-
-            ResolvedReferenceTypeDeclaration superClass = typeSolver.solveType(fqn);
-            return new SymbolSolver(typeSolver).solveSymbolInType(superClass, symbolName);
-        } catch (UnsolvedSymbolException | com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException e) {
-            // TODO, API-breaking discussion ongoing, this is currently option 3
-            throw new RuntimeException(new NotFoundException(fqn));
+        if (fqn == null) {
+            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }
+
+        ResolvedReferenceTypeDeclaration superClass = typeSolver.solveType(fqn);
+        return new SymbolSolver(typeSolver).solveSymbolInType(superClass, symbolName);
     }
 
     private String[] getInterfaceFQNs() {
