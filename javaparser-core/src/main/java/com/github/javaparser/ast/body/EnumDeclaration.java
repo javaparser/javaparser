@@ -36,6 +36,9 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.EnumDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
+
 import javax.annotation.Generated;
 import java.util.EnumSet;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
@@ -53,7 +56,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, NodeWithConstructors<EnumDeclaration> {
+public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, NodeWithConstructors<EnumDeclaration>, Resolvable<ResolvedEnumDeclaration> {
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
@@ -217,5 +220,10 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedEnumDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedEnumDeclaration.class);
     }
 }
