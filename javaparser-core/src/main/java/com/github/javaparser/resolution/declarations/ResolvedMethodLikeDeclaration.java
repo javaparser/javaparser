@@ -61,7 +61,7 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration,
      * The signature of the method.
      */
     default String getSignature() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(getName());
         sb.append("(");
         for (int i = 0; i < getNumberOfParams(); i++) {

@@ -18,58 +18,81 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.ast;
+package com.github.javaparser.ast.body;
 
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.ParameterMetaModel;
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
+import java.util.EnumSet;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 
 /**
- * A package declaration.
- * <br/><code>package com.github.javaparser.ast;</code>
- * <br/><code>@Wonderful package anything.can.be.annotated.nowadays;</code>
+ * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
+ * 
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the receiver parameter or the type.
  *
  * @author Julio Vilmar Gesser
  */
-public final class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration>, NodeWithName<PackageDeclaration> {
+public final class ReceiverParameter extends Node implements NodeWithType<ReceiverParameter, Type>, NodeWithAnnotations<ReceiverParameter>, NodeWithName<ReceiverParameter> {
 
-    private NodeList<AnnotationExpr> annotations = new NodeList<>();
+    private Type type;
+
+    private NodeList<AnnotationExpr> annotations;
 
     private Name name;
 
-    public PackageDeclaration() {
-        this(null, new NodeList<>(), new Name());
+    public ReceiverParameter() {
+        this(null, new NodeList<>(), new ClassOrInterfaceType(), new Name());
     }
 
-    public PackageDeclaration(Name name) {
-        this(null, new NodeList<>(), name);
+    public ReceiverParameter(Type type, Name name) {
+        this(null, new NodeList<>(), type, name);
+    }
+
+    /**
+     * Creates a new {@link ReceiverParameter}.
+     *
+     * @param type type of the parameter
+     * @param name name of the parameter
+     */
+    public ReceiverParameter(Type type, String name) {
+        this(null, new NodeList<>(), type, new Name(name));
     }
 
     @AllFieldsConstructor
-    public PackageDeclaration(NodeList<AnnotationExpr> annotations, Name name) {
-        this(null, annotations, name);
+    public ReceiverParameter(NodeList<AnnotationExpr> annotations, Type type, Name name) {
+        this(null, annotations, type, name);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PackageDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name) {
+    public ReceiverParameter(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Type type, Name name) {
         super(tokenRange);
         setAnnotations(annotations);
+        setType(type);
         setName(name);
         customInitialization();
     }
@@ -86,11 +109,27 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         v.visit(this, arg);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type getType() {
+        return type;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter setType(final Type type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return (ReceiverParameter) this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
+        this.type = type;
+        setAsParentNodeOf(type);
+        return this;
+    }
+
     /**
-     * Retrieves the list of annotations declared before the package
-     * declaration. Return <code>null</code> if there are no annotations.
-     *
-     * @return list of annotations or <code>null</code>
+     * @return the list returned could be immutable (in that case it will be empty)
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<AnnotationExpr> getAnnotations() {
@@ -98,23 +137,14 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     }
 
     /**
-     * Return the name expression of the package.
-     *
-     * @return the name of the package
+     * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
+     * so please avoid passing null
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name getName() {
-        return name;
-    }
-
-    /**
-     * @param annotations the annotations to set
-     */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (PackageDeclaration) this;
+            return (ReceiverParameter) this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -124,16 +154,28 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         return this;
     }
 
-    /**
-     * Sets the name of this package declaration.
-     *
-     * @param name the name to set
-     */
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public ReceiverParameter clone() {
+        return (ReceiverParameter) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ReceiverParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.receiverParameterMetaModel;
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration setName(final Name name) {
+    public Name getName() {
+        return name;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (PackageDeclaration) this;
+            return (ReceiverParameter) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
@@ -158,18 +200,6 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public PackageDeclaration clone() {
-        return (PackageDeclaration) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public PackageDeclarationMetaModel getMetaModel() {
-        return JavaParserMetaModel.packageDeclarationMetaModel;
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null)
@@ -182,6 +212,10 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         }
         if (node == name) {
             setName((Name) replacementNode);
+            return true;
+        }
+        if (node == type) {
+            setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

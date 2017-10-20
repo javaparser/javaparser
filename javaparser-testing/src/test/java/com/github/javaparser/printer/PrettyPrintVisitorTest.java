@@ -97,6 +97,12 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
+    public void printAReceiverParameter() {
+        Node node = JavaParser.parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
+        assertEquals("int x(@O X A.B.this, int y) {" + EOL + "}", print(node));
+    }
+
+    @Test
     public void printLambdaIntersectionTypeAssignment() {
         String code = "class A {" + EOL +
                 "  void f() {" + EOL +

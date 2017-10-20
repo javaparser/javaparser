@@ -54,7 +54,9 @@ public abstract class Comment extends Node {
         this(null, content);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Comment(TokenRange tokenRange, String content) {
         super(tokenRange);
