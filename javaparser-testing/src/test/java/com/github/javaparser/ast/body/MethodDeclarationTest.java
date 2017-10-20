@@ -1,9 +1,11 @@
 package com.github.javaparser.ast.body;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseBodyDeclaration;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 
 public class MethodDeclarationTest {
@@ -20,13 +22,19 @@ public class MethodDeclarationTest {
     @Test
     public void explicitReceiverParameters1() {
         MethodDeclaration method = parseBodyDeclaration("void InnerInner(@mypackage.Anno Source.@mypackage.Anno Inner Source.Inner.this) { }").asMethodDeclaration();
-        assertEquals("Source.Inner.this", method.getParameter(0).getNameAsString());
+        assertEquals("Source.Inner.this", method.getReceiverParameter().get().getNameAsString());
     }
 
     @Test
     public void explicitReceiverParameters2() {
         MethodDeclaration method = parseBodyDeclaration("void x(A this) { }").asMethodDeclaration();
-        assertEquals("this", method.getParameter(0).getNameAsString());
+        assertEquals("this", method.getReceiverParameter().get().getNameAsString());
+    }
+
+    @Test
+    public void explicitReceiverParameters3() {
+        MethodDeclaration method = parseBodyDeclaration("void x(A that) { }").asMethodDeclaration();
+        assertFalse(method.getReceiverParameter().isPresent());
     }
 
     @Test

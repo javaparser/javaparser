@@ -214,6 +214,7 @@ public class ConcreteSyntaxModel {
                 space(),
                 child(ObservableProperty.NAME),
                 token(GeneratedJavaParserConstants.LPAREN),
+                conditional(ObservableProperty.RECEIVER_PARAMETER, IS_PRESENT, sequence(child(ObservableProperty.RECEIVER_PARAMETER), comma(), space())),
                 list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()),
                 token(GeneratedJavaParserConstants.RPAREN),
                 list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()),
@@ -228,6 +229,13 @@ public class ConcreteSyntaxModel {
                 conditional(ObservableProperty.VAR_ARGS, FLAG, CsmElement.sequence(
                         list(ObservableProperty.VAR_ARGS_ANNOTATIONS, CsmElement.space(), CsmElement.none(), CsmElement.none()),
                         token(GeneratedJavaParserConstants.ELLIPSIS))),
+                space(),
+                child(ObservableProperty.NAME)));
+
+        concreteSyntaxModelByClass.put(ReceiverParameter.class, sequence(
+                comment(),
+                list(ObservableProperty.ANNOTATIONS, CsmElement.space(), CsmElement.none(), CsmElement.space()),
+                child(ObservableProperty.TYPE),
                 space(),
                 child(ObservableProperty.NAME)));
 

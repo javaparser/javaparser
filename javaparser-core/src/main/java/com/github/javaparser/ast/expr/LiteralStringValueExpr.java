@@ -43,7 +43,9 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         this(null, value);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LiteralStringValueExpr(TokenRange tokenRange, String value) {
         super(tokenRange);

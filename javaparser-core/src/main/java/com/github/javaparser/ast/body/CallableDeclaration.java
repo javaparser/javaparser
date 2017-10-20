@@ -65,7 +65,9 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CallableDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
         super(tokenRange, annotations);

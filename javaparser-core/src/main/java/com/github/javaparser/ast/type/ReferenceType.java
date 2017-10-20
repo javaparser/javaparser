@@ -48,7 +48,9 @@ public abstract class ReferenceType extends Type {
         this(null, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReferenceType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
