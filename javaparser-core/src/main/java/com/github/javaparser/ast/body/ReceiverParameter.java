@@ -20,13 +20,16 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
@@ -38,84 +41,58 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ParameterMetaModel;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
+import java.util.EnumSet;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 
 /**
- * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is {@link com.github.javaparser.ast.type.UnknownType}.
+ * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
  * 
- * Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
- * are different from arguments.</a> 
- * 
- * "`String x`" and "`float y`" are the parameters in:
- * 
- * ```java
- * int abc(String x, float y) {
- *     // ...
- * }
- * ```
- * 
- * All annotations preceding the type will be set on this object, not on the type.
- * JavaParser doesn't know if it they are applicable to the parameter or the type.
+ * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the receiver parameter or the type.
  *
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithFinalModifier<Parameter> {
+public final class ReceiverParameter extends Node implements NodeWithType<ReceiverParameter, Type>, NodeWithAnnotations<ReceiverParameter>, NodeWithName<ReceiverParameter> {
 
     private Type type;
 
-    private boolean isVarArgs;
-
-    private NodeList<AnnotationExpr> varArgsAnnotations;
-
-    private EnumSet<Modifier> modifiers;
-
     private NodeList<AnnotationExpr> annotations;
 
-    private SimpleName name;
+    private Name name;
 
-    public Parameter() {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new ClassOrInterfaceType(), false, new NodeList<>(), new SimpleName());
+    public ReceiverParameter() {
+        this(null, new NodeList<>(), new ClassOrInterfaceType(), new Name());
     }
 
-    public Parameter(Type type, SimpleName name) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new NodeList<>(), name);
+    public ReceiverParameter(Type type, Name name) {
+        this(null, new NodeList<>(), type, name);
     }
 
     /**
-     * Creates a new {@link Parameter}.
+     * Creates a new {@link ReceiverParameter}.
      *
      * @param type type of the parameter
      * @param name name of the parameter
      */
-    public Parameter(Type type, String name) {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), type, false, new NodeList<>(), new SimpleName(name));
-    }
-
-    public Parameter(EnumSet<Modifier> modifiers, Type type, SimpleName name) {
-        this(null, modifiers, new NodeList<>(), type, false, new NodeList<>(), name);
+    public ReceiverParameter(Type type, String name) {
+        this(null, new NodeList<>(), type, new Name(name));
     }
 
     @AllFieldsConstructor
-    public Parameter(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
-        this(null, modifiers, annotations, type, isVarArgs, varArgsAnnotations, name);
+    public ReceiverParameter(NodeList<AnnotationExpr> annotations, Type type, Name name) {
+        this(null, annotations, type, name);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public Parameter(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
+    public ReceiverParameter(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Type type, Name name) {
         super(tokenRange);
-        setModifiers(modifiers);
         setAnnotations(annotations);
         setType(type);
-        setVarArgs(isVarArgs);
-        setVarArgsAnnotations(varArgsAnnotations);
         setName(name);
         customInitialization();
     }
@@ -138,31 +115,16 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public boolean isVarArgs() {
-        return isVarArgs;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setType(final Type type) {
+    public ReceiverParameter setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
-            return (Parameter) this;
+            return (ReceiverParameter) this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
         if (this.type != null)
             this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setVarArgs(final boolean isVarArgs) {
-        if (isVarArgs == this.isVarArgs) {
-            return (Parameter) this;
-        }
-        notifyPropertyChange(ObservableProperty.VAR_ARGS, this.isVarArgs, isVarArgs);
-        this.isVarArgs = isVarArgs;
         return this;
     }
 
@@ -174,31 +136,15 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return annotations;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getName() {
-        return name;
-    }
-
-    /**
-     * Return the modifiers of this parameter declaration.
-     *
-     * @return modifiers
-     * @see Modifier
-     */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public EnumSet<Modifier> getModifiers() {
-        return modifiers;
-    }
-
     /**
      * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
      * so please avoid passing null
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
-            return (Parameter) this;
+            return (ReceiverParameter) this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
         if (this.annotations != null)
@@ -208,28 +154,34 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         return this;
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
+    public ReceiverParameter clone() {
+        return (ReceiverParameter) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
+    public ReceiverParameterMetaModel getMetaModel() {
+        return JavaParserMetaModel.receiverParameterMetaModel;
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setName(final SimpleName name) {
+    public Name getName() {
+        return name;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return (Parameter) this;
+            return (ReceiverParameter) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
         if (this.name != null)
             this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setModifiers(final EnumSet<Modifier> modifiers) {
-        assertNotNull(modifiers);
-        if (modifiers == this.modifiers) {
-            return (Parameter) this;
-        }
-        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        this.modifiers = modifiers;
         return this;
     }
 
@@ -244,44 +196,7 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
                 return true;
             }
         }
-        for (int i = 0; i < varArgsAnnotations.size(); i++) {
-            if (varArgsAnnotations.get(i) == node) {
-                varArgsAnnotations.remove(i);
-                return true;
-            }
-        }
         return super.remove(node);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> getVarArgsAnnotations() {
-        return varArgsAnnotations;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Parameter setVarArgsAnnotations(final NodeList<AnnotationExpr> varArgsAnnotations) {
-        assertNotNull(varArgsAnnotations);
-        if (varArgsAnnotations == this.varArgsAnnotations) {
-            return (Parameter) this;
-        }
-        notifyPropertyChange(ObservableProperty.VAR_ARGS_ANNOTATIONS, this.varArgsAnnotations, varArgsAnnotations);
-        if (this.varArgsAnnotations != null)
-            this.varArgsAnnotations.setParentNode(null);
-        this.varArgsAnnotations = varArgsAnnotations;
-        setAsParentNodeOf(varArgsAnnotations);
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public Parameter clone() {
-        return (Parameter) accept(new CloneVisitor(), null);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ParameterMetaModel getMetaModel() {
-        return JavaParserMetaModel.parameterMetaModel;
     }
 
     @Override
@@ -296,18 +211,12 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
             }
         }
         if (node == name) {
-            setName((SimpleName) replacementNode);
+            setName((Name) replacementNode);
             return true;
         }
         if (node == type) {
             setType((Type) replacementNode);
             return true;
-        }
-        for (int i = 0; i < varArgsAnnotations.size(); i++) {
-            if (varArgsAnnotations.get(i) == node) {
-                varArgsAnnotations.set(i, (AnnotationExpr) replacementNode);
-                return true;
-            }
         }
         return super.replace(node, replacementNode);
     }

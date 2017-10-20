@@ -94,7 +94,9 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         this(null, type, name, initializer);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VariableDeclarator(TokenRange tokenRange, Type type, SimpleName name, Expression initializer) {
         super(tokenRange);
@@ -136,12 +138,14 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 

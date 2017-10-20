@@ -74,45 +74,56 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
 
     private BlockStmt body;
 
+    private ReceiverParameter receiverParameter;
+
     public MethodDeclaration() {
-        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt());
+        this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final Type type, final String name) {
-        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
     }
 
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final String name, final Type type, final NodeList<Parameter> parameters) {
-        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), parameters, new NodeList<>(), new BlockStmt());
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), type, new SimpleName(name), parameters, new NodeList<>(), new BlockStmt(), null);
+    }
+
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
     }
 
     @AllFieldsConstructor
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
-        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
+    public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body, ReceiverParameter receiverParameter) {
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
     }
 
     /** @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set. */
     @Deprecated
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
-        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body);
+        this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
         setDefault(isDefault);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MethodDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public MethodDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
         setType(type);
         setBody(body);
+        setReceiverParameter(receiverParameter);
         customInitialization();
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -278,6 +289,12 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                removeReceiverParameter();
+                return true;
+            }
+        }
         return super.remove(node);
     }
 
@@ -309,6 +326,12 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                setReceiverParameter((ReceiverParameter) replacementNode);
+                return true;
+            }
+        }
         if (node == type) {
             setType((Type) replacementNode);
             return true;
@@ -336,5 +359,28 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Override
     public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<ReceiverParameter> getReceiverParameter() {
+        return Optional.ofNullable(receiverParameter);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public MethodDeclaration setReceiverParameter(final ReceiverParameter receiverParameter) {
+        if (receiverParameter == this.receiverParameter) {
+            return (MethodDeclaration) this;
+        }
+        notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
+        if (this.receiverParameter != null)
+            this.receiverParameter.setParentNode(null);
+        this.receiverParameter = receiverParameter;
+        setAsParentNodeOf(receiverParameter);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public MethodDeclaration removeReceiverParameter() {
+        return setReceiverParameter((ReceiverParameter) null);
     }
 }

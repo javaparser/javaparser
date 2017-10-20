@@ -647,6 +647,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final MethodDeclaration n, final A arg) {
         BlockStmt body = n.getBody().map(s -> (BlockStmt) s.accept(this, arg)).orElse(null);
+        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         Type type = (Type) n.getType().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
@@ -657,6 +658,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         if (type == null || name == null)
             return null;
         n.setBody(body);
+        n.setReceiverParameter(receiverParameter);
         n.setType(type);
         n.setName(name);
         n.setParameters(parameters);
@@ -1262,6 +1264,22 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final UnparsableStmt n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
+    public Visitable visit(final ReceiverParameter n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || type == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setName(name);
+        n.setType(type);
         n.setComment(comment);
         return n;
     }
