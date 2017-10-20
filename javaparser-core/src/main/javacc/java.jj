@@ -1147,7 +1147,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	Type type;
 	SimpleName name;
-	NodeList<Parameter> parameters = emptyList();
+	Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 	NodeList<ReferenceType> throws_ = emptyList();
@@ -1167,7 +1167,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
+        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
     }
 }
 
@@ -1193,14 +1193,24 @@ Type AnnotatedType():
     { return type; }
 }
 
-NodeList<Parameter> Parameters():
+Pair<NodeList<Parameter>, ReceiverParameter> Parameters():
 {
 	NodeList<Parameter> ret = emptyList();
 	Parameter par;
+	ReceiverParameter rp = null;
 }
 {
-  "(" [ par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )* ] ")"
-  { return ret; }
+    "("
+    [ 
+        ( LOOKAHEAD(ReceiverParameter())
+            rp = ReceiverParameter()
+            |
+            par = Parameter() { ret = add(ret, par); }
+        ) 
+        ( "," par = Parameter() { ret = add(ret, par); } )* 
+    ]
+    ")"
+    { return new Pair(ret, rp); }
 }
 
 NodeList<Parameter> LambdaParameters():
@@ -1232,46 +1242,47 @@ Parameter Parameter():
 	Type partialType;
 	boolean isVarArg = false;
 	Pair<SimpleName, List<ArrayBracketPair>> id;
-	SimpleName receiverId;
 	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
-	Parameter ret;
 }
 {
-  modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
-  ( LOOKAHEAD(ReceiverParameterId())
-    receiverId = ReceiverParameterId()
-    {
-        JavaToken begin = orIfInvalid(modifier.begin, partialType);
-        ret = new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, partialType, isVarArg, varArgAnnotations, receiverId);
-    }
-  |
+    modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
     id = VariableDeclaratorId()
     {
         JavaToken begin = orIfInvalid(modifier.begin, partialType);
-        ret = new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
+        return new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
     }
-  )
-  { return ret; }
 }
 
-SimpleName ReceiverParameterId():
+ReceiverParameter ReceiverParameter():
 {
-    String id;
-	String ret ="";
-    JavaToken begin = INVALID;
+	Type partialType;
+	Name id;
+	NodeList<AnnotationExpr> annotations = emptyList();
 }
 {
-  ( id = Identifier() "." { ret = ret + id + "."; begin = orIfInvalid(begin, token()); } )*
-  "this" { begin = orIfInvalid(begin, token()); }
-  { return new SimpleName(range(begin, token()), ret + "this"); }
+    annotations = Annotations()
+    partialType = Type(emptyList()) 
+    id = ReceiverParameterId()
+    {
+        return new ReceiverParameter(range(partialType, token()), annotations, partialType, id);
+    }
 }
 
+Name ReceiverParameterId():
+{
+	Name ret = null;
+	NodeList<AnnotationExpr> annotations;
+}
+{
+    [ LOOKAHEAD(Name()) ret = Name() "."] annotations=Annotations() "this" 
+    { return new Name(tokenRange(), ret, token.image, annotations); }
+}
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	SimpleName name;
-	NodeList<Parameter> parameters = emptyList();
+	Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
 	NodeList<ReferenceType> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
@@ -1293,7 +1304,10 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = prepend(stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+  	if (parameters.b != null) {
+  	    addProblem("The receiver cannot be used in a static context.");
+  	}
+  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts));
   }
 }
 
