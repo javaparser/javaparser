@@ -52,7 +52,9 @@ public final class BooleanLiteralExpr extends LiteralExpr {
         this(null, value);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BooleanLiteralExpr(TokenRange tokenRange, boolean value) {
         super(tokenRange);

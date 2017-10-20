@@ -54,7 +54,9 @@ public final class SimpleName extends Node implements NodeWithIdentifier<SimpleN
         this(null, identifier);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SimpleName(TokenRange tokenRange, String identifier) {
         super(tokenRange);

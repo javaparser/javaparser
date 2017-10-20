@@ -71,7 +71,9 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
         this(null, parameters, body, isEnclosingParameters);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LambdaExpr(TokenRange tokenRange, NodeList<Parameter> parameters, Statement body, boolean isEnclosingParameters) {
         super(tokenRange);

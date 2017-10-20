@@ -89,7 +89,9 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
         this(null, type, name, initializer);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VariableDeclarator(TokenRange tokenRange, Type type, SimpleName name, Expression initializer) {
         super(tokenRange);

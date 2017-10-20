@@ -61,7 +61,9 @@ public final class ImportDeclaration extends Node implements NodeWithName<Import
         this(null, name, isStatic, isAsterisk);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ImportDeclaration(TokenRange tokenRange, Name name, boolean isStatic, boolean isAsterisk) {
         super(tokenRange);

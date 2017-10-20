@@ -88,7 +88,9 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         this(null, scope, name, typeArguments, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);

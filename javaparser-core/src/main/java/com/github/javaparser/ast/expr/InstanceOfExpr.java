@@ -58,7 +58,9 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         this(null, expression, type);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type) {
         super(tokenRange);

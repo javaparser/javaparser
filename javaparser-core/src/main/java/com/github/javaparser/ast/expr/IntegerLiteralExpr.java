@@ -52,7 +52,9 @@ public final class IntegerLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntegerLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);

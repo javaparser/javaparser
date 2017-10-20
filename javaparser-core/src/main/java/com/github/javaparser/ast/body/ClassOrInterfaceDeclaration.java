@@ -76,7 +76,9 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
         this(null, modifiers, annotations, isInterface, name, typeParameters, extendedTypes, implementedTypes, members);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, boolean isInterface, SimpleName name, NodeList<TypeParameter> typeParameters, NodeList<ClassOrInterfaceType> extendedTypes, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);

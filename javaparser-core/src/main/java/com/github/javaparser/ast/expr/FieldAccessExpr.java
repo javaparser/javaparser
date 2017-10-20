@@ -66,7 +66,9 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
         this(null, scope, typeArguments, name);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public FieldAccessExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name) {
         super(tokenRange);

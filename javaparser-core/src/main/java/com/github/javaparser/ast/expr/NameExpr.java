@@ -58,7 +58,9 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
         setRange(name.getRange().orElse(null));
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NameExpr(TokenRange tokenRange, SimpleName name) {
         super(tokenRange);

@@ -63,7 +63,9 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
         this(null, StringEscapeUtils.escapeJava(String.valueOf(value)));
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CharLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);

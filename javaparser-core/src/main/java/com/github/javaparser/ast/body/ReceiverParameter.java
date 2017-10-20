@@ -85,7 +85,9 @@ public final class ReceiverParameter extends Node implements NodeWithType<Receiv
         this(null, annotations, type, name);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReceiverParameter(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Type type, Name name) {
         super(tokenRange);

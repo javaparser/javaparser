@@ -45,7 +45,9 @@ public final class ModuleDeclaration extends Node implements NodeWithName<Module
         this(null, annotations, name, isOpen, moduleStmts);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleStmt> moduleStmts) {
         super(tokenRange);

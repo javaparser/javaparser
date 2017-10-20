@@ -68,7 +68,9 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
         return new StringLiteralExpr(Utils.escapeEndOfLines(string));
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public StringLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);

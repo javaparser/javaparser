@@ -58,7 +58,9 @@ public final class LabeledStmt extends Statement {
         this(null, label, statement);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LabeledStmt(TokenRange tokenRange, SimpleName label, Statement statement) {
         super(tokenRange);

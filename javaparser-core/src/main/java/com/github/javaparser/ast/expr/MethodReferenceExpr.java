@@ -71,7 +71,9 @@ public final class MethodReferenceExpr extends Expression implements NodeWithTyp
         this(null, scope, typeArguments, identifier);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodReferenceExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, String identifier) {
         super(tokenRange);

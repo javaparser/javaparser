@@ -64,7 +64,9 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
         this(null, elements);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntersectionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);

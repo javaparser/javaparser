@@ -66,7 +66,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
         this(null, initialization, compare, update, body);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForStmt(TokenRange tokenRange, NodeList<Expression> initialization, Expression compare, NodeList<Expression> update, Statement body) {
         super(tokenRange);

@@ -58,7 +58,9 @@ public final class MemberValuePair extends Node implements NodeWithSimpleName<Me
         this(null, name, value);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MemberValuePair(TokenRange tokenRange, SimpleName name, Expression value) {
         super(tokenRange);

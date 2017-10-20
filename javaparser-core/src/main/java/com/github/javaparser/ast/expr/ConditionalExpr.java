@@ -57,7 +57,9 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
         this(null, condition, thenExpr, elseExpr);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ConditionalExpr(TokenRange tokenRange, Expression condition, Expression thenExpr, Expression elseExpr) {
         super(tokenRange);

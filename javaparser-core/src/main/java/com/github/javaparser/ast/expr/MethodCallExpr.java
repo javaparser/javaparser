@@ -83,7 +83,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         this(null, scope, typeArguments, name, arguments);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodCallExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name, NodeList<Expression> arguments) {
         super(tokenRange);

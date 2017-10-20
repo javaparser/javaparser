@@ -55,7 +55,9 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         this(null, statements);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
         super(tokenRange);

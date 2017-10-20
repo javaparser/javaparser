@@ -129,7 +129,9 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         this(null, type, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PrimitiveType(TokenRange tokenRange, Primitive type, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);

@@ -79,7 +79,9 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
         this(null, qualifier, identifier, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Name(TokenRange tokenRange, Name qualifier, String identifier, NodeList<AnnotationExpr> annotations) {
         super(tokenRange);

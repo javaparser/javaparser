@@ -57,7 +57,9 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
         this(null, type, expression);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public CastExpr(TokenRange tokenRange, Type type, Expression expression) {
         super(tokenRange);

@@ -54,7 +54,9 @@ public final class ArrayAccessExpr extends Expression {
         this(null, name, index);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayAccessExpr(TokenRange tokenRange, Expression name, Expression index) {
         super(tokenRange);

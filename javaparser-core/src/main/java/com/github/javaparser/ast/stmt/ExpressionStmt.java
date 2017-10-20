@@ -54,7 +54,9 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
         this(null, expression);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ExpressionStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);

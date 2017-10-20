@@ -29,7 +29,7 @@ public class MainConstructorGenerator extends NodeGenerator {
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
                 .addParameter(TokenRange.class, "tokenRange")
-                .setJavadocComment("This constructor is used by the parser and is considered private.");
+                .setJavadocComment("\n     * This constructor is used by the parser and is considered private.\n     ");
 
         BlockStmt body = constructor.getBody();
 

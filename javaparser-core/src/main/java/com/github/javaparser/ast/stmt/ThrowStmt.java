@@ -55,7 +55,9 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
         this(null, expression);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ThrowStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);

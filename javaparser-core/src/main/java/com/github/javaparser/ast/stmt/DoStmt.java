@@ -58,7 +58,9 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
         this(null, body, condition);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
         super(tokenRange);

@@ -59,7 +59,9 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         this(null, isStatic, body);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
         super(tokenRange);

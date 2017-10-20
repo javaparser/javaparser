@@ -63,7 +63,9 @@ public final class PackageDeclaration extends Node implements NodeWithAnnotation
         this(null, annotations, name);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PackageDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name) {
         super(tokenRange);

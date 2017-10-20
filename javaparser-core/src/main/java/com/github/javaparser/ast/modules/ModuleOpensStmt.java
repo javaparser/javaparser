@@ -33,7 +33,9 @@ public final class ModuleOpensStmt extends ModuleStmt implements NodeWithName<Mo
         this(null, name, moduleNames);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleOpensStmt(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
         super(tokenRange);

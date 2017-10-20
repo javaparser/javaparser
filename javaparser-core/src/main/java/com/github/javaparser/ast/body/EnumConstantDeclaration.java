@@ -68,7 +68,9 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
         this(null, annotations, name, arguments, classBody);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public EnumConstantDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> classBody) {
         super(tokenRange, annotations);

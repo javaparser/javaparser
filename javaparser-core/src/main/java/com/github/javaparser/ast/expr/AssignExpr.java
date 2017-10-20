@@ -73,7 +73,9 @@ public final class AssignExpr extends Expression {
         this(null, target, value, operator);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AssignExpr(TokenRange tokenRange, Expression target, Expression value, Operator operator) {
         super(tokenRange);

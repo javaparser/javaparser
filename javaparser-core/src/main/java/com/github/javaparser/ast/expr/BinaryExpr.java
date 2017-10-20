@@ -74,7 +74,9 @@ public final class BinaryExpr extends Expression {
         this(null, left, right, operator);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BinaryExpr(TokenRange tokenRange, Expression left, Expression right, Operator operator) {
         super(tokenRange);

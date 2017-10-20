@@ -60,7 +60,9 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
         this(null, variable, iterable, body);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ForeachStmt(TokenRange tokenRange, VariableDeclarationExpr variable, Expression iterable, Statement body) {
         super(tokenRange);

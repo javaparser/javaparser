@@ -58,7 +58,9 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
         this(null, condition, body);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
         super(tokenRange);

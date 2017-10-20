@@ -55,7 +55,9 @@ public final class SuperExpr extends Expression {
         this(null, classExpr);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SuperExpr(TokenRange tokenRange, Expression classExpr) {
         super(tokenRange);

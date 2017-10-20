@@ -28,7 +28,9 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
         this(null, type);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleUsesStmt(TokenRange tokenRange, Type type) {
         super(tokenRange);

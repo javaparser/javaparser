@@ -37,7 +37,9 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
         this(null, modifiers, name);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleRequiresStmt(TokenRange tokenRange, EnumSet<Modifier> modifiers, Name name) {
         super(tokenRange);

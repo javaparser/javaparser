@@ -52,7 +52,9 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
         this(null);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public VoidType(TokenRange tokenRange) {
         super(tokenRange);

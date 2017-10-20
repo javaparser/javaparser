@@ -54,7 +54,9 @@ public final class UnknownType extends Type {
         this(null);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnknownType(TokenRange tokenRange) {
         super(tokenRange);

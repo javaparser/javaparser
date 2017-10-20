@@ -57,7 +57,9 @@ public final class BreakStmt extends Statement {
         this(null, label);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BreakStmt(TokenRange tokenRange, SimpleName label) {
         super(tokenRange);

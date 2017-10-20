@@ -76,7 +76,9 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
         this(type, Origin.TYPE, nodeList(annotations));
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayType(TokenRange tokenRange, Type componentType, Origin origin, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);

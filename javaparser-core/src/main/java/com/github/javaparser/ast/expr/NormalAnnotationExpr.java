@@ -53,7 +53,9 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
         this(null, name, pairs);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public NormalAnnotationExpr(TokenRange tokenRange, Name name, NodeList<MemberValuePair> pairs) {
         super(tokenRange, name);

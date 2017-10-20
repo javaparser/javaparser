@@ -68,7 +68,9 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
         this(null, new NodeList<>());
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);

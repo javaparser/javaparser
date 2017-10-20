@@ -53,7 +53,9 @@ public final class ReturnStmt extends Statement {
         this(null, expression);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ReturnStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);

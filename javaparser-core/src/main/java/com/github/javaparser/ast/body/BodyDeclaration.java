@@ -55,7 +55,9 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         this(null, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BodyDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange);

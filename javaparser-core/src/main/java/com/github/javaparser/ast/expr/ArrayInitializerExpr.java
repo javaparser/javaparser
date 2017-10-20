@@ -57,7 +57,9 @@ public final class ArrayInitializerExpr extends Expression {
         this(null, values);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayInitializerExpr(TokenRange tokenRange, NodeList<Expression> values) {
         super(tokenRange);

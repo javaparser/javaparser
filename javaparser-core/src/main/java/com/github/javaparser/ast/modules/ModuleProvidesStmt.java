@@ -34,7 +34,9 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
         this(null, type, withTypes);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleProvidesStmt(TokenRange tokenRange, Type type, NodeList<Type> withTypes) {
         super(tokenRange);

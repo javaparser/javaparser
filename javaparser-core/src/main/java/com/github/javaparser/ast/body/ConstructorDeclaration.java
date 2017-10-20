@@ -47,7 +47,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-
 import java.util.function.Consumer;
 
 /**
@@ -79,7 +78,9 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ConstructorDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);

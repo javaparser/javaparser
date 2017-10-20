@@ -86,7 +86,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
         this(null, scope, type, typeArguments, arguments, anonymousClassBody);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ObjectCreationExpr(TokenRange tokenRange, Expression scope, ClassOrInterfaceType type, NodeList<Type> typeArguments, NodeList<Expression> arguments, NodeList<BodyDeclaration<?>> anonymousClassBody) {
         super(tokenRange);

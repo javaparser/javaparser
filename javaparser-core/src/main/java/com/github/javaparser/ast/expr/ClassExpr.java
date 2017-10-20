@@ -55,7 +55,9 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
         this(null, type);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);

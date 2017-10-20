@@ -72,7 +72,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
         this(null, typeArguments, isThis, expression, arguments);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ExplicitConstructorInvocationStmt(TokenRange tokenRange, NodeList<Type> typeArguments, boolean isThis, Expression expression, NodeList<Expression> arguments) {
         super(tokenRange);

@@ -40,7 +40,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
 import java.util.function.Consumer;
 
 /**
@@ -63,7 +62,9 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
         this(null, modifiers, annotations, name, members);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);

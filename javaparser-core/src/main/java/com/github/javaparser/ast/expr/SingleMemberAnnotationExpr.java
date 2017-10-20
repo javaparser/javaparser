@@ -51,7 +51,9 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         this(null, name, memberValue);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
         super(tokenRange, name);

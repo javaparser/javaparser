@@ -87,7 +87,9 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         this(null, expression, operator);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
         super(tokenRange);

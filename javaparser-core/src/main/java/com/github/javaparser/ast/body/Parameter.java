@@ -97,7 +97,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         this(null, modifiers, annotations, type, isVarArgs, varArgsAnnotations, name);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Parameter(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
         super(tokenRange);
