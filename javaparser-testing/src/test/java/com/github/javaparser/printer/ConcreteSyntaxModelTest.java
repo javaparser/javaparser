@@ -70,6 +70,18 @@ public class ConcreteSyntaxModelTest {
     }
 
     @Test
+    public void printParameters() {
+        Node node = JavaParser.parseBodyDeclaration("int x(int y, int z) {}");
+        assertEquals("int x(int y, int z) {" + EOL + "}", print(node));
+    }
+
+    @Test
+    public void printReceiverParameter() {
+        Node node = JavaParser.parseBodyDeclaration("int x(X A.B.this, int y, int z) {}");
+        assertEquals("int x(X A.B.this, int y, int z) {" + EOL + "}", print(node));
+    }
+
+    @Test
     public void printAnEmptyInterface() {
         Node node = JavaParser.parse("interface A {}");
         assertEquals("interface A {" + EOL +

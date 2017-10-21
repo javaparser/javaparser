@@ -61,7 +61,9 @@ public abstract class Type extends Node implements Resolvable<Object> {
         this(null, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Type(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange);

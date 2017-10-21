@@ -64,6 +64,7 @@ public class MetaModelGenerator {
         add(InitializerDeclaration.class);
         add(MethodDeclaration.class);
         add(Parameter.class);
+        add(ReceiverParameter.class);
         add(VariableDeclarator.class);
 
         add(Comment.class);

@@ -58,7 +58,9 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
         this(null, expression, type);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type) {
         super(tokenRange);
@@ -68,11 +70,13 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
