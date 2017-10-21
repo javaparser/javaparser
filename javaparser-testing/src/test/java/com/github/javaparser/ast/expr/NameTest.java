@@ -25,12 +25,13 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NameTest {
     @Test
@@ -45,9 +46,9 @@ public class NameTest {
         assertEquals("a.b.c", name.asString());
     }
 
-    @Test(expected = ParseProblemException.class)
+    @Test
     public void parsingEmptyNameThrowsException() {
-        parseName("");
+        assertThrows(ParseProblemException.class, () -> parseName(""));
     }
 
     @Test

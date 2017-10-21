@@ -1,9 +1,9 @@
 package com.github.javaparser.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CodeGenerationUtilsTest {
     @Test

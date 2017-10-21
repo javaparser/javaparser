@@ -23,7 +23,7 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -32,8 +32,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class SourceZipTest {
 
@@ -51,7 +52,7 @@ public class SourceZipTest {
         for (Pair<Path, ParseResult<CompilationUnit>> pr : results) {
             units.add(pr.b.getResult().get());
         }
-        assertTrue(units.stream().noneMatch(unit -> unit.getTypes().isEmpty()));
+        assertEquals(true, units.stream().noneMatch(unit -> unit.getTypes().isEmpty()));
     }
 
     @Test
@@ -66,16 +67,16 @@ public class SourceZipTest {
         for (Pair<Path, ParseResult<CompilationUnit>> pr : results) {
             units.add(pr.b.getResult().get());
         }
-        assertTrue(units.stream().noneMatch(unit -> unit.getTypes().isEmpty()));
+        assertEquals(true, units.stream().noneMatch(unit -> unit.getTypes().isEmpty()));
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void dirAsZipIsNotAllowed() throws IOException {
-        new SourceZip(testDir.resolve("test")).parse();
+        assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test")).parse());
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void fileAsZipIsNotAllowed() throws IOException {
-        new SourceZip(testDir.resolve("test.txt")).parse();
+        assertThrows(IOException.class, () -> new SourceZip(testDir.resolve("test.txt")).parse());
     }
 }

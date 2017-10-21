@@ -21,7 +21,7 @@
 
 package com.github.javaparser.wiki_samples;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ChangingMethodsFromAClassWithoutAVisitorTest {
     @Test

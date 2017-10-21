@@ -24,11 +24,11 @@ package com.github.javaparser.ast.body;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 
 public class AnnotationMemberDeclarationTest {
 
@@ -37,8 +37,8 @@ public class AnnotationMemberDeclarationTest {
         AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
         SimpleName name = new SimpleName("foo");
         decl.setName(name);
-        assertTrue(name.getParentNode().isPresent());
-        assertTrue(decl == name.getParentNode().get());
+        assertEquals(true, name.getParentNode().isPresent());
+        assertEquals(true, decl == name.getParentNode().get());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class AnnotationMemberDeclarationTest {
 
         decl.removeDefaultValue();
 
-        assertFalse(decl.getDefaultValue().isPresent());
+        assertEquals(false, decl.getDefaultValue().isPresent());
     }
 
     @Test
@@ -62,6 +62,6 @@ public class AnnotationMemberDeclarationTest {
 
         decl.removeDefaultValue();
 
-        assertFalse(defaultValue.getParentNode().isPresent());
+        assertEquals(false, defaultValue.getParentNode().isPresent());
     }
 }

@@ -24,12 +24,11 @@ package com.github.javaparser.javadoc;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavadocTest {
 
@@ -88,7 +87,7 @@ public class JavadocTest {
                         "@return the filenames\n" +
                         "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID.\n";
         String javadoc = JavaParser.parseJavadoc(docText).toText();
-        assertTrue(javadoc.contains("{@link TOVersion}"));
+        assertEquals(true, javadoc.contains("{@link TOVersion}"));
     }
 
     @Test

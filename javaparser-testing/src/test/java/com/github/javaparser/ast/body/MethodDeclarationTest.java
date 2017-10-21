@@ -1,12 +1,11 @@
 package com.github.javaparser.ast.body;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseBodyDeclaration;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class MethodDeclarationTest {
     @Test
@@ -34,7 +33,7 @@ public class MethodDeclarationTest {
     @Test
     public void explicitReceiverParameters3() {
         MethodDeclaration method = parseBodyDeclaration("void x(A that) { }").asMethodDeclaration();
-        assertFalse(method.getReceiverParameter().isPresent());
+        assertEquals(false, method.getReceiverParameter().isPresent());
     }
 
     @Test

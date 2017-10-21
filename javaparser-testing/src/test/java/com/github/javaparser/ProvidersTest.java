@@ -22,12 +22,13 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProvidersTest {
 
@@ -37,7 +38,7 @@ public class ProvidersTest {
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
-        assertTrue(parse.isSuccessful());
+        assertEquals(true, parse.isSuccessful());
     }
 
     @Test
@@ -46,7 +47,7 @@ public class ProvidersTest {
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
-        assertFalse(parse.isSuccessful());
+        assertEquals(false, parse.isSuccessful());
     }
 
     @Test
@@ -58,6 +59,6 @@ public class ProvidersTest {
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
-        assertTrue(parse.isSuccessful());
+        assertEquals(true, parse.isSuccessful());
     }
 }

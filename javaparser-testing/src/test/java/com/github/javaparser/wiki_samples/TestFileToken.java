@@ -21,14 +21,12 @@
 
 package com.github.javaparser.wiki_samples;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Creates a temporary test file that a sample can use. This way we don't have to rewrite the samples to fit them into
@@ -40,10 +38,7 @@ public class TestFileToken implements AutoCloseable {
     public TestFileToken(String filename) {
         this.filename = filename;
         try {
-            try (InputStream i = getClass().getResourceAsStream("TestFile.java"); OutputStream o = new FileOutputStream(filename)) {
-                assertNotNull(i);
-                IOUtils.copy(i, o);
-            }
+            Files.copy(new File(getClass().getResource("TestFile.java").getFile()).toPath(), Paths.get(filename));
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -53,6 +48,6 @@ public class TestFileToken implements AutoCloseable {
     @Override
     public void close() {
         boolean deleted = new File(filename).delete();
-        assertTrue(deleted);
+        assertEquals(true, deleted);
     }
 }

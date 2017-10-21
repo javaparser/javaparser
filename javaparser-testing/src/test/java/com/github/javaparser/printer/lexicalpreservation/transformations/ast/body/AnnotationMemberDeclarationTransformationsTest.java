@@ -28,14 +28,13 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.EnumSet;
 
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Transforming AnnotationMemberDeclaration and verifying the LexicalPreservation works as expected.
@@ -154,7 +153,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     @Test
     public void removingJavadoc() throws IOException {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
-        assertTrue(it.getJavadocComment().get().remove());
+        assertEquals(true, it.getJavadocComment().get().remove());
         assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
     }
 

@@ -22,7 +22,7 @@
 package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.expr.SimpleName;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;

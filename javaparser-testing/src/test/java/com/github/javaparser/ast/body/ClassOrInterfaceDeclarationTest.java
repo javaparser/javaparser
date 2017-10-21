@@ -2,10 +2,9 @@ package com.github.javaparser.ast.body;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClassOrInterfaceDeclarationTest {
     @Test
@@ -13,9 +12,9 @@ public class ClassOrInterfaceDeclarationTest {
         CompilationUnit cu = JavaParser.parse("class X{static class Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
-        assertFalse(y.isInnerClass());
-        assertTrue(y.isNestedType());
-        assertFalse(y.isLocalClassDeclaration());
+        assertEquals(false, y.isInnerClass());
+        assertEquals(true, y.isNestedType());
+        assertEquals(false, y.isLocalClassDeclaration());
     }
 
     @Test
@@ -23,9 +22,9 @@ public class ClassOrInterfaceDeclarationTest {
         CompilationUnit cu = JavaParser.parse("class X{interface Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
-        assertFalse(y.isInnerClass());
-        assertTrue(y.isNestedType());
-        assertFalse(y.isLocalClassDeclaration());
+        assertEquals(false, y.isInnerClass());
+        assertEquals(true, y.isNestedType());
+        assertEquals(false, y.isLocalClassDeclaration());
     }
 
     @Test
@@ -33,9 +32,9 @@ public class ClassOrInterfaceDeclarationTest {
         CompilationUnit cu = JavaParser.parse("class X{class Y{}}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
-        assertTrue(y.isInnerClass());
-        assertTrue(y.isNestedType());
-        assertFalse(y.isLocalClassDeclaration());
+        assertEquals(true, y.isInnerClass());
+        assertEquals(true, y.isNestedType());
+        assertEquals(false, y.isLocalClassDeclaration());
     }
 
     @Test
@@ -43,9 +42,9 @@ public class ClassOrInterfaceDeclarationTest {
         CompilationUnit cu = JavaParser.parse("class X{}");
         ClassOrInterfaceDeclaration y = cu.getClassByName("X").get();
 
-        assertFalse(y.isInnerClass());
-        assertFalse(y.isNestedType());
-        assertFalse(y.isLocalClassDeclaration());
+        assertEquals(false, y.isInnerClass());
+        assertEquals(false, y.isNestedType());
+        assertEquals(false, y.isLocalClassDeclaration());
     }
 
     @Test
@@ -53,8 +52,8 @@ public class ClassOrInterfaceDeclarationTest {
         MethodDeclaration method= (MethodDeclaration)JavaParser.parseBodyDeclaration("void x(){class X{};}");
         ClassOrInterfaceDeclaration x = method.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0);
 
-        assertFalse(x.isInnerClass());
-        assertFalse(x.isNestedType());
-        assertTrue(x.isLocalClassDeclaration());
+        assertEquals(false, x.isInnerClass());
+        assertEquals(false, x.isNestedType());
+        assertEquals(true, x.isLocalClassDeclaration());
     }
 }

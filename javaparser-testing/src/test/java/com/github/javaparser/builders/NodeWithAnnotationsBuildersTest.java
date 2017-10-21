@@ -24,13 +24,10 @@ package com.github.javaparser.builders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class NodeWithAnnotationsBuildersTest {
     private CompilationUnit cu = new CompilationUnit();
@@ -65,7 +62,7 @@ public class NodeWithAnnotationsBuildersTest {
     @Test
     public void testIsAnnotationPresent() {
         testClass.addMarkerAnnotation(hey.class);
-        assertTrue(testClass.isAnnotationPresent(hey.class));
+        assertEquals(true, testClass.isAnnotationPresent(hey.class));
     }
 
     @Test
