@@ -686,7 +686,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
 
     public enum TreeTraversal {
-        PREORDER, BREADTHFIRST, POSTORDER
+        PREORDER, BREADTHFIRST, POSTORDER, PARENTS, DIRECT_CHILDREN
     }
 
     public Iterator<Node> treeIterator(TreeTraversal traversal) {
@@ -697,6 +697,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 return new TreeVisitor.PostOrderIterator(this);
             case PREORDER:
                 return new TreeVisitor.PreOrderIterator(this);
+            case DIRECT_CHILDREN:
+                return new TreeVisitor.DirectChildrenIterator(this);
+            case PARENTS:
+                return new TreeVisitor.ParentsVisitor(this);
             default:
                 throw new IllegalArgumentException("Unknown traversal choice.");
         }

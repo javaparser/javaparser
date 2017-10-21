@@ -65,6 +65,47 @@ public abstract class TreeVisitor {
         }
     }
 
+    public static class DirectChildrenIterator implements Iterator<Node> {
+        private final Iterator<Node> childrenIterator;
+
+        public DirectChildrenIterator(Node node) {
+            childrenIterator = new ArrayList<>(node.getChildNodes()).iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return childrenIterator.hasNext();
+        }
+
+        @Override
+        public Node next() {
+            return childrenIterator.next();
+        }
+    }
+
+    /**
+     * Iterates over the parent of the node, then the parent's parent, then the parent's parent's parent, until running
+     * out of parents.
+     */
+    public static class ParentsVisitor implements Iterator<Node> {
+        private Node node;
+
+        public ParentsVisitor(Node node) {
+            this.node = node;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node.getParentNode().isPresent();
+        }
+
+        @Override
+        public Node next() {
+            node = node.getParentNode().orElse(null);
+            return node;
+        }
+    }
+
     public static class PreOrderIterator implements Iterator<Node> {
         private final Stack<Node> stack = new Stack<>();
 
@@ -175,6 +216,25 @@ public abstract class TreeVisitor {
      */
     public void visitBreadthFirst(Node node) {
         new BreadthFirstIterator(node).forEachRemaining(this::process);
+    }
+
+    /**
+     * Calls "process" for each direct child node of "node"
+     *
+     * @param node the parent node.
+     */
+    public void visitDirectChildren(Node node) {
+        new DirectChildrenIterator(node).forEachRemaining(this::process);
+    }
+
+    /**
+     * Calls "process" for the parent of "node", then the parent's parent, then the parent's parent's parent, until
+     * running out of parents. <br/>Note that "node" itself is not processed.
+     *
+     * @param node the start node.
+     */
+    public void visitParents(Node node) {
+        new ParentsVisitor(node).forEachRemaining(this::process);
     }
 
     /**
