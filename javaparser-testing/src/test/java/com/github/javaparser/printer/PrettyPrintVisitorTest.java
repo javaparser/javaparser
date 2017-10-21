@@ -145,4 +145,31 @@ public class PrettyPrintVisitorTest {
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
     }
+
+    @Test
+    public void printImportsDefaultOrder() {
+        String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
+        CompilationUnit cu = JavaParser.parse(code);
+        String content = cu.toString();
+        assertEquals(String.format("import x.y.z;%1$s" +
+                "import a.b.c;%1$s" +
+                "import static b.c.d;%1$s" +
+                "%1$s" +
+                "class c {%1$s" +
+                "}%1$s", EOL), content);
+    }
+
+    @Test
+    public void printImportsOrdered() {
+        String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
+        CompilationUnit cu = JavaParser.parse(code);
+        PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
+        String content = cu.toString(orderImports);
+        assertEquals(String.format("import static b.c.d;%1$s" +
+                "import a.b.c;%1$s" +
+                "import x.y.z;%1$s" +
+                "%1$s" +
+                "class c {%1$s" +
+                "}%1$s", EOL), content);
+    }
 }

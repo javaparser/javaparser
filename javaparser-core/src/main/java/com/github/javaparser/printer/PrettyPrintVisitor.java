@@ -1393,8 +1393,23 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(NodeList n, Void arg) {
-        for (Object node : n) {
-            ((Node) node).accept(this, arg);
+        if (configuration.isOrderImports() && n.size() > 0 && n.get(0) instanceof ImportDeclaration) {
+            //noinspection unchecked
+            NodeList<ImportDeclaration> modifiableList = new NodeList<>(n);
+            modifiableList.sort((left, right) -> {
+                int sort = Integer.compare(left.isStatic() ? 0 : 1, right.isStatic() ? 0 : 1);
+                if (sort == 0) {
+                    sort = left.getNameAsString().compareTo(right.getNameAsString());
+                }
+                return sort;
+            });
+            for (Object node : modifiableList) {
+                ((Node) node).accept(this, arg);
+            }
+        } else {
+            for (Object node : n) {
+                ((Node) node).accept(this, arg);
+            }
         }
     }
 

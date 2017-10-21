@@ -27,6 +27,7 @@ import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 public class PrettyPrinterConfiguration {
+    private boolean orderImports = false;
     private boolean normalizeEolInComment = false;
     private boolean printComments = true;
     private boolean printJavaDoc = true;
@@ -45,6 +46,10 @@ public class PrettyPrinterConfiguration {
         return this;
     }
 
+    public boolean isOrderImports() {
+        return orderImports;
+    }
+  
     public boolean isNormalizeEolInComment() {
         return normalizeEolInComment;
     }
@@ -109,6 +114,11 @@ public class PrettyPrinterConfiguration {
 
     public PrettyPrinterConfiguration setEndOfLineCharacter(String endOfLineCharacter) {
         this.endOfLineCharacter = assertNotNull(endOfLineCharacter);
+        return this;
+    }
+
+    public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
+        this.orderImports = orderImports;
         return this;
     }
 }
