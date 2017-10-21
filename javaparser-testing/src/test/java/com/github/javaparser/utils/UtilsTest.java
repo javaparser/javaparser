@@ -72,4 +72,10 @@ public class UtilsTest {
     public void decapitalizeOnStringOfTwoCharacters() {
         assertEquals("fo", decapitalize("Fo"));
     }
+    
+    @Test
+    public void normalizeEolInTextBlock() {
+        String result = Utils.normalizeEolInTextBlock("\r\n \r \n", "Q");
+        assertEquals("Q Q Q", result);
+    }
 }
