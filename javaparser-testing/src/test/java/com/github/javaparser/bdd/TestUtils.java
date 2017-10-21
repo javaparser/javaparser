@@ -23,6 +23,8 @@ package com.github.javaparser.bdd;
 
 import java.io.InputStream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestUtils {
 
     public static InputStream getSampleStream(String sampleName) {
@@ -33,5 +35,12 @@ public class TestUtils {
         }
         return is;
     }
+    
+    public static void assertEqualsNoWhitespace(String expected, String actual) {
+        assertEquals(stripWhitespace(expected), stripWhitespace(actual));
+    }
 
+    public static String stripWhitespace(String string) {
+        return string.replaceAll("\\s","");
+    }
 }

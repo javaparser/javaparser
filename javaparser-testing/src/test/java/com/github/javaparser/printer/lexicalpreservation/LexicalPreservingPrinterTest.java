@@ -9,7 +9,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     private NodeText getTextForNode(Node node) {
@@ -660,43 +659,43 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = getTextForNode(setter);
         int index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
         assertEquals(index, nodeText.getElements().size());
 
         nodeText = getTextForNode(setter.getBody().get());
         index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
-        assertTrue(nodeText.getElements().get(index++).isNewline());
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
-        assertTrue(nodeText.getElements().get(index++).isNewline());
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
+        assertEquals(true, nodeText.getElements().get(index++).isNewline());
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
+        assertEquals(true, nodeText.getElements().get(index++).isNewline());
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
         assertEquals(index, nodeText.getElements().size());
 
         nodeText = getTextForNode(setter.getBody().get().getStatement(0));
         index = 0;
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
         assertEquals(index, nodeText.getElements().size());
     }
 
@@ -716,43 +715,43 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         nodeText = getTextForNode(setter);
         int index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.PUBLIC));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(VoidType.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(SimpleName.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LPAREN));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(Parameter.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RPAREN));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(BlockStmt.class));
         assertEquals(index, nodeText.getElements().size());
 
         nodeText = getTextForNode(setter.getBody().get());
         index = 0;
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
-        assertTrue(nodeText.getElements().get(index++).isNewline());
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
-        assertTrue(nodeText.getElements().get(index++).isNewline());
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.LBRACE));
+        assertEquals(true, nodeText.getElements().get(index++).isNewline());
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(ExpressionStmt.class));
+        assertEquals(true, nodeText.getElements().get(index++).isNewline());
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SPACE));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.RBRACE));
         assertEquals(index, nodeText.getElements().size());
 
         nodeText = LexicalPreservingPrinter.getOrCreateNodeText(setter.getBody().get().getStatement(0));
         index = 0;
-        assertTrue(nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
-        assertTrue(nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
+        assertEquals(true, nodeText.getElements().get(index++).isChildOfClass(AssignExpr.class));
+        assertEquals(true, nodeText.getElements().get(index++).isToken(GeneratedJavaParserConstants.SEMICOLON));
         assertEquals(index, nodeText.getElements().size());
     }
 

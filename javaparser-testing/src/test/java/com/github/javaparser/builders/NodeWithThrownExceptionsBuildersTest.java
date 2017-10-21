@@ -24,13 +24,10 @@ package com.github.javaparser.builders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NodeWithThrownExceptionsBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();

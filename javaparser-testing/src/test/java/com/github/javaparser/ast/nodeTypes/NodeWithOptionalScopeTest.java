@@ -1,10 +1,9 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.expr.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NodeWithOptionalScopeTest {
 
@@ -13,8 +12,8 @@ public class NodeWithOptionalScopeTest {
         NodeWithOptionalScope methodCallExpr = new MethodCallExpr(new NameExpr("A"), "call");
         NodeWithOptionalScope objectCreationExpr = new ObjectCreationExpr();
 
-        assertTrue(methodCallExpr.getScope().isPresent());
-        assertFalse(objectCreationExpr.getScope().isPresent());
+        assertEquals(true, methodCallExpr.getScope().isPresent());
+        assertEquals(false, objectCreationExpr.getScope().isPresent());
     }
 
     @Test
@@ -23,6 +22,6 @@ public class NodeWithOptionalScopeTest {
 
         methodCallExpr.removeScope();
 
-        assertFalse(methodCallExpr.getScope().isPresent());
+        assertEquals(false, methodCallExpr.getScope().isPresent());
     }
 }

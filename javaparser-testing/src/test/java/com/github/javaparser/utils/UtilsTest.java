@@ -21,10 +21,11 @@
 
 package com.github.javaparser.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UtilsTest {
 
@@ -43,9 +44,9 @@ public class UtilsTest {
         assertEquals("APE_TAIL", camelCaseToScreaming("apeTail"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void capitalizeOnEmptyString() {
-        capitalize("");
+        assertThrows(IllegalArgumentException.class,() -> capitalize(""));
     }
 
     @Test
@@ -58,9 +59,9 @@ public class UtilsTest {
         assertEquals("Fo", capitalize("fo"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void decapitalizeOnEmptyString() {
-        decapitalize("");
+        assertThrows(IllegalArgumentException.class,() -> decapitalize(""));
     }
 
     @Test

@@ -34,7 +34,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
@@ -43,8 +43,8 @@ import static com.github.javaparser.Providers.*;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JavaParserTest {
 
@@ -112,12 +112,12 @@ public class JavaParserTest {
         Expression expression = JavaParser.parseExpression(code);
         Type type = expression.asCastExpr().getType();
 
-        assertTrue(type instanceof IntersectionType);
+        assertEquals(true, type instanceof IntersectionType);
         IntersectionType intersectionType = type.asIntersectionType();
         assertEquals(2, intersectionType.getElements().size());
-        assertTrue(intersectionType.getElements().get(0) instanceof ClassOrInterfaceType);
+        assertEquals(true, intersectionType.getElements().get(0) instanceof ClassOrInterfaceType);
         assertEquals("Runnable", intersectionType.getElements().get(0).asClassOrInterfaceType().getNameAsString());
-        assertTrue(intersectionType.getElements().get(1) instanceof ClassOrInterfaceType);
+        assertEquals(true, intersectionType.getElements().get(1) instanceof ClassOrInterfaceType);
         assertEquals("Serializable", intersectionType.getElements().get(1).asClassOrInterfaceType().getNameAsString());
     }
 
@@ -199,9 +199,9 @@ public class JavaParserTest {
         assertEquals(false, result.getTokens().isPresent());
     }
 
-    @Test(expected = ParseProblemException.class)
+    @Test
     public void trailingCodeIsAnError() {
-        JavaParser.parseBlock("{} efijqoifjqefj");
+        assertThrows(ParseProblemException.class, () -> JavaParser.parseBlock("{} efijqoifjqefj"));
     }
 
     @Test

@@ -2,10 +2,10 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseExpression;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LambdaExprTest {
     @Test

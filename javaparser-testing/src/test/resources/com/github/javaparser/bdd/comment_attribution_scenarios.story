@@ -69,7 +69,7 @@ class /*Comment1*/ A {
 }
 When the class is parsed by the Java parser
 Then class 1 is not commented
-Then class 1 orphan comment 1 is "Comment2"
+Then class 1 orphan comment 1 is "comment2"
 
 
 Scenario: A Class With Line Comments in Multiple Methods is parsed by the Java Parser

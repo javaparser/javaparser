@@ -1,15 +1,16 @@
 package com.github.javaparser.ast.expr;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestUtils.assertExpressionValid;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class MethodReferenceExprTest {
 
     @Test
     public void methodReferenceExprHasAlwaysAScope() {
-        assertTrue(new MethodReferenceExpr().getScope() != null);
+        assertEquals(true, new MethodReferenceExpr().getScope() != null);
     }
 
     @Test

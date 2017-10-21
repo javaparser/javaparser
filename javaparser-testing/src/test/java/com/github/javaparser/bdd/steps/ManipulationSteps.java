@@ -34,7 +34,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import org.jbehave.core.annotations.Alias;
@@ -45,14 +44,12 @@ import org.jbehave.core.annotations.When;
 import java.util.EnumSet;
 import java.util.Map;
 
-import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.ast.type.PrimitiveType.*;
 import static com.github.javaparser.bdd.steps.SharedSteps.getMethodByPositionAndClassPosition;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ManipulationSteps {
 
@@ -226,29 +223,29 @@ public class ManipulationSteps {
     @Then("Statement $position in BlockStmt toString is \"$expectedContent\"")
     public void thenTheBlockStmtContentIs(int position, String expectedContent) {
         Statement statementUnderTest = blockStmt.getStatement(position - 1);
-        assertThat(statementUnderTest.toString(), is(expectedContent));
+        assertEquals(expectedContent, statementUnderTest.toString());
     }
 
     @Then("Statement toString is \"$expectedContent\"")
     public void thenStatementToStringIsxXy(String expectedContent) {
-        assertThat(statement.toString(), is(expectedContent));
+        assertEquals(expectedContent, statement.toString());
     }
 
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
-        variableDeclarationExprList.forEach(expr -> assertThat(expr.getParentNode().get(), is(tryStmt)));
+        variableDeclarationExprList.forEach(expr -> assertEquals(tryStmt, expr.getParentNode().get()));
     }
 
     @Then("the TryStmt has no child nodes")
     public void thenTheTryStmtHasNotChildNodes() {
-        assertThat(tryStmt.getChildNodes().size(), is(0));
+        assertEquals(0, tryStmt.getChildNodes().size());
     }
 
     @Then("method $methodPosition in class $classPosition has the name \"$expectedName\"")
     public void thenMethodInClassHasTheName(int methodPosition, int classPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
-        assertThat(method.getNameAsString(), is(expectedName));
+        assertEquals(expectedName, method.getNameAsString());
     }
 
     @Then("method $methodPosition in class $classPosition has $expectedCount parameters")
@@ -257,7 +254,7 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
 
-        assertThat(method.getParameters().size(), is(expectedCount));
+        assertEquals(expectedCount, method.getParameters().size());
     }
 
     @Then("method $methodPosition in class $classPosition parameter $parameterPosition is type int called \"$expectedName\"")
@@ -265,8 +262,8 @@ public class ManipulationSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameter(parameterPosition - 1);
-        assertThat(parameter.getType(), is(intType()));
-        assertThat(parameter.getNameAsString(), is(expectedName));
+        assertEquals(intType(), parameter.getType());
+        assertEquals(expectedName, parameter.getNameAsString());
     }
 
     private static class ChangeMethodNameToUpperCaseVisitor extends VoidVisitorAdapter<Void> {

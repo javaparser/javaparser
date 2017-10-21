@@ -32,22 +32,20 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The <code>ExistenceOfParentNodeVerifier</code> verifies that each node of the compilation unit has a parent set.
  */
 class ExistenceOfParentNodeVerifier {
 
-    public void verify(CompilationUnit compilationUnit) throws AssertionError {
+    void verify(CompilationUnit compilationUnit) throws AssertionError {
         new Verifier().visit(compilationUnit, null);
     }
 
     private static class Verifier extends VoidVisitorAdapter<Void> {
         private static void assertParentIsSet(HasParentNode<?> n) {
-            assertThat(n + " has no parent set!", n.getParentNode().orElse(null), is(notNullValue()));
+            assertEquals(true, n.getParentNode().isPresent(), n + " has no parent set!");
         }
 
         @Override

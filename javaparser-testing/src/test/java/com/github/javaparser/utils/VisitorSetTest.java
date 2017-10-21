@@ -21,8 +21,8 @@
 
 package com.github.javaparser.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -62,7 +62,7 @@ public class VisitorSetTest {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         set.add(x1);
-        assertTrue(set.contains(x1));
+        assertEquals(true, set.contains(x1));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class VisitorSetTest {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         set.addAll(list);
-        assertTrue(set.size() == 2 && set.containsAll(list));
+        assertEquals(true, set.size() == 2 && set.containsAll(list));
     }
 
     @Test
@@ -87,10 +87,10 @@ public class VisitorSetTest {
         Iterator<CompilationUnit> itr = set.iterator();
         assertEquals(x1, itr.next());
         itr.remove();
-        assertTrue(set.size() == 1);
+        assertEquals(true, set.size() == 1);
         assertEquals(x2, itr.next());
         itr.remove();
-        assertTrue(set.size() == 0);
+        assertEquals(true, set.size() == 0);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class VisitorSetTest {
         Set<CompilationUnit> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         set.add(x1);
-        assertTrue(set.remove(x1));
+        assertEquals(true, set.remove(x1));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class VisitorSetTest {
                 new ObjectIdentityEqualsVisitor());
         set.addAll(list);
         set.removeAll(list);
-        assertTrue(set.size() == 0);
+        assertEquals(true, set.size() == 0);
     }
 
     @Test
@@ -124,7 +124,7 @@ public class VisitorSetTest {
         set.addAll(list);
         set.add(JavaParser.parse("class X{}"));
         set.retainAll(list);
-        assertTrue(set.size() == 2);
+        assertEquals(true, set.size() == 2);
     }
 
     @Test
@@ -136,6 +136,6 @@ public class VisitorSetTest {
                 new ObjectIdentityEqualsVisitor());
         set.addAll(list);
         for (CompilationUnit u : set.toArray(new CompilationUnit[2]))
-            assertTrue(set.contains(u));
+            assertEquals(true, set.contains(u));
     }
 }

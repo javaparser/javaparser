@@ -22,16 +22,13 @@
 package com.github.javaparser.builders;
 
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -66,12 +63,12 @@ public class CompilationUnitBuildersTest {
                 cu.getImport(0).toString());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testAddImportInnerClass() {
         Object anonymous = new Object() {
 
         };
-        cu.addImport(anonymous.getClass());
+        assertThrows(RuntimeException.class, ()-> cu.addImport(anonymous.getClass()));
     }
 
     @Test
@@ -80,8 +77,8 @@ public class CompilationUnitBuildersTest {
         assertEquals(1, cu.getTypes().size());
         assertEquals("testClass", cu.getType(0).getNameAsString());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());
-        assertTrue(myClassDeclaration.isPrivate());
-        assertFalse(myClassDeclaration.isInterface());
+        assertEquals(true, myClassDeclaration.isPrivate());
+        assertEquals(false, myClassDeclaration.isInterface());
     }
 
     @Test
@@ -89,9 +86,9 @@ public class CompilationUnitBuildersTest {
         ClassOrInterfaceDeclaration myInterfaceDeclaration = cu.addInterface("testInterface");
         assertEquals(1, cu.getTypes().size());
         assertEquals("testInterface", cu.getType(0).getNameAsString());
-        assertTrue(myInterfaceDeclaration.isPublic());
+        assertEquals(true, myInterfaceDeclaration.isPublic());
         assertEquals(ClassOrInterfaceDeclaration.class, cu.getType(0).getClass());
-        assertTrue(myInterfaceDeclaration.isInterface());
+        assertEquals(true, myInterfaceDeclaration.isInterface());
     }
 
     @Test
@@ -99,7 +96,7 @@ public class CompilationUnitBuildersTest {
         EnumDeclaration myEnumDeclaration = cu.addEnum("test");
         assertEquals(1, cu.getTypes().size());
         assertEquals("test", cu.getType(0).getNameAsString());
-        assertTrue(myEnumDeclaration.isPublic());
+        assertEquals(true, myEnumDeclaration.isPublic());
         assertEquals(EnumDeclaration.class, cu.getType(0).getClass());
     }
 
@@ -108,7 +105,7 @@ public class CompilationUnitBuildersTest {
         AnnotationDeclaration myAnnotationDeclaration = cu.addAnnotationDeclaration("test");
         assertEquals(1, cu.getTypes().size());
         assertEquals("test", cu.getType(0).getNameAsString());
-        assertTrue(myAnnotationDeclaration.isPublic());
+        assertEquals(true, myAnnotationDeclaration.isPublic());
         assertEquals(AnnotationDeclaration.class, cu.getType(0).getClass());
     }
 

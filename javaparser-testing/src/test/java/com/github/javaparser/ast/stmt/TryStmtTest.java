@@ -8,11 +8,11 @@ import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java9Validator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TryStmtTest {
     @Test
@@ -74,7 +74,7 @@ public class TryStmtTest {
     private <T> T parse9(String code) {
         JavaParser parser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
         ParseResult<Statement> result = parser.parse(ParseStart.STATEMENT, provider(code));
-        assertTrue(result.toString(), result.isSuccessful());
+        assertEquals(true, result.isSuccessful(), result.toString());
         return (T) result.getResult().get();
     }
 }

@@ -2,7 +2,7 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class SourceRootTest {
     private final Path root = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/");
@@ -25,14 +26,14 @@ public class SourceRootTest {
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
 
         assertEquals(2, units.size());
-        assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
-        assertTrue(parseResults.stream().anyMatch(cu -> cu.getResult().get().getStorage().get().getPath().toString().contains("source" + File.separator + "root")));
+        assertEquals(true, units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
+        assertEquals(true, parseResults.stream().anyMatch(cu -> cu.getResult().get().getStorage().get().getPath().toString().contains("source" + File.separator + "root")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fileAsRootIsNotAllowed() {
         Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("/com/github/javaparser/utils/Bla.java");
-        new SourceRoot(path);
+        assertThrows(IllegalArgumentException.class,() -> new SourceRoot(path));
     }
     
     

@@ -30,8 +30,8 @@ import org.jbehave.core.annotations.When;
 
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.Range.range;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class PositionRangeSteps {
 
@@ -81,49 +81,49 @@ public class PositionRangeSteps {
 
     @Then("the positions are equal")
     public void thenThePositionsAreEqual() {
-        assertTrue(position.equals(secondPosition));
+        assertEquals(true, position.equals(secondPosition));
     }
 
     @Then("it is after the {first|} position")
     public void thenItIsAfterTheFirstPosition() {
         if (secondPosition != null) {
-            assertTrue(secondPosition.isAfter(position));
+            assertEquals(true, secondPosition.isAfter(position));
         } else {
-            assertTrue(secondRange.isAfter(position));
+            assertEquals(true, secondRange.isAfter(position));
         }
     }
 
     @Then("it is before the {first|} position")
     public void thenItIsBeforeTheFirstPosition() {
         if (secondPosition != null) {
-            assertTrue(secondPosition.isBefore(position));
+            assertEquals(true, secondPosition.isBefore(position));
         } else {
-            assertTrue(secondRange.isBefore(position));
+            assertEquals(true, secondRange.isBefore(position));
         }
     }
 
     @Then("the positions are not equal")
     public void thenThePositionsAreNotEqual() {
-        assertFalse(position.equals(secondPosition));
+        assertEquals(false, position.equals(secondPosition));
     }
 
     @Then("it is not after the {first|} position")
     public void thenItIsNotAfterTheFirstPosition() {
-        assertFalse(secondPosition.isAfter(position));
+        assertEquals(false, secondPosition.isAfter(position));
     }
 
     @Then("it is not before the {first|} position")
     public void thenItIsNotBeforeTheFirstPosition() {
-        assertFalse(secondPosition.isBefore(position));
+        assertEquals(false, secondPosition.isBefore(position));
     }
 
     @Then("the ranges are equal")
     public void theRangesAreEqual() {
-        assertTrue(range.equals(secondRange));
+        assertEquals(true, range.equals(secondRange));
     }
 
     @Then("it is contained in the first range")
     public void itIsContainedInTheFirstRange() {
-        assertTrue(range.contains(secondRange));
+        assertEquals(true, range.contains(secondRange));
     }
 }

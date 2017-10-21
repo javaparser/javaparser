@@ -22,7 +22,7 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.expr.Expression;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,8 +31,7 @@ import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.JavaToken.Category.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavaTokenTest {
 
@@ -58,7 +57,7 @@ public class JavaTokenTest {
         assertEquals(category, token.getCategory());
         token.getNextToken().ifPresent(nt -> assertEquals(token, nt.getPreviousToken().get()));
         token.getPreviousToken().ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
-        assertTrue(token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
+        assertEquals(true, token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
     }
     
     @Test

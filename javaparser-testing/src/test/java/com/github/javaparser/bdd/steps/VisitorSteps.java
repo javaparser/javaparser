@@ -38,8 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VisitorSteps {
 
@@ -151,21 +150,21 @@ public class VisitorSteps {
 
     @Then("the collected variable name is \"$nameUnderTest\"")
     public void thenTheCollectedVariableNameIs(String nameUnderTest) {
-        assertThat(collectedVariableName.get(), is(nameUnderTest));
+        assertEquals(nameUnderTest, collectedVariableName.get());
     }
 
     @Then("the return variable name is \"$nameUnderTest\"")
     public void thenTheReturnVariableNameIs(String nameUnderTest) {
-        assertThat(returnedVariableName, is(nameUnderTest));
+        assertEquals(nameUnderTest, returnedVariableName);
     }
 
     @Then("the first return variable name is \"$nameUnderTest\"")
     public void thenTheFirstReturnVariableNameIs(String nameUnderTest) {
-        assertThat(returnedVariableNames.get(0), is(nameUnderTest));
+        assertEquals(nameUnderTest, returnedVariableNames.get(0));
     }
 
     @Then("the total number of nodes visited is $expectedCount")
     public void thenTheTotalNumberOfNodesVisitedIs(int expectedCount) {
-        assertThat(positionTestVisitor.getNumberOfNodesVisited(), is(expectedCount));
+        assertEquals(expectedCount, positionTestVisitor.getNumberOfNodesVisited());
     }
 }

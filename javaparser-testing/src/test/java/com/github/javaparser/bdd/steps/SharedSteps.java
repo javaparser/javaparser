@@ -26,7 +26,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import org.hamcrest.CoreMatchers;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -37,11 +36,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
-import static org.junit.Assert.assertThat;
+import static com.github.javaparser.bdd.TestUtils.assertEqualsNoWhitespace;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SharedSteps {
 
@@ -97,7 +94,7 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit, is(equalTo(compilationUnit2)));
+        assertEquals(compilationUnit2, compilationUnit);
     }
 
     @Then("the CompilationUnit has the same hashcode to the second CompilationUnit")
@@ -105,7 +102,7 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit.hashCode(), is(equalTo(compilationUnit2.hashCode())));
+        assertEquals(compilationUnit2.hashCode(), compilationUnit.hashCode());
     }
 
     @Then("the CompilationUnit is not equal to the second CompilationUnit")
@@ -113,7 +110,7 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit, not(equalTo(compilationUnit2)));
+        assertNotEquals(compilationUnit2, compilationUnit);
     }
 
     @Then("the CompilationUnit has a different hashcode to the second CompilationUnit")
@@ -121,21 +118,21 @@ public class SharedSteps {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         CompilationUnit compilationUnit2 = (CompilationUnit) state.get("cu2");
 
-        assertThat(compilationUnit.hashCode(), not(equalTo(compilationUnit2.hashCode())));
+        assertNotEquals(compilationUnit2.hashCode(), compilationUnit.hashCode());
     }
 
     @Then("the expected source should be:$classSrc")
     public void thenTheExpectedSourcesShouldBe(String classSrc) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
-        assertThat(compilationUnit.toString(), CoreMatchers.is(equalToIgnoringWhiteSpace(classSrc)));
+        assertEqualsNoWhitespace(classSrc, compilationUnit.toString());
     }
 
-    public static <T extends BodyDeclaration<?>> T getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<T> typeClass) {
+    static <T extends BodyDeclaration<?>> T getMemberByTypeAndPosition(TypeDeclaration<?> typeDeclaration, int position, Class<T> typeClass) {
         int typeCount = 0;
         for (BodyDeclaration<?> declaration : typeDeclaration.getMembers()) {
             if (declaration.getClass().equals(typeClass)) {
                 if (typeCount == position) {
-                    return (T) declaration;
+                    return typeClass.cast(declaration);
                 }
                 typeCount++;
             }
@@ -143,8 +140,8 @@ public class SharedSteps {
         throw new IllegalArgumentException("No member " + typeClass + " at position: " + position);
     }
 
-    public static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
-                                                                        int methodPosition, int classPosition) {
+    static MethodDeclaration getMethodByPositionAndClassPosition(CompilationUnit compilationUnit,
+                                                                 int methodPosition, int classPosition) {
         TypeDeclaration<?> type = compilationUnit.getType(classPosition - 1);
 
         int memberCount = 0;

@@ -22,7 +22,10 @@
 package com.github.javaparser.bdd.visitors;
 
 import com.github.javaparser.Position;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.ArrayCreationLevel;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
@@ -32,10 +35,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
 
@@ -534,15 +534,15 @@ public class PositionTestVisitor extends VoidVisitorAdapter<Object> {
     private void doTest(final Node node) {
         Position begin = node.getRange().get().begin;
         Position end = node.getRange().get().end;
-        assertThat(begin.line, is(greaterThanOrEqualTo(0)));
-        assertThat(begin.column, is(greaterThanOrEqualTo(0)));
-        assertThat(end.line, is(greaterThanOrEqualTo(0)));
-        assertThat(end.column, is(greaterThanOrEqualTo(0)));
+        assertEquals(true, begin.line >= 0);
+        assertEquals(true, begin.column >= 0);
+        assertEquals(true, end.line >= 0);
+        assertEquals(true, end.column >= 0);
 
         if (begin.line == end.line) {
-            assertThat(begin.column, is(lessThanOrEqualTo(end.column)));
+            assertEquals(true, begin.column <= end.column);
         } else {
-            assertThat(begin.line, is(lessThanOrEqualTo(end.line)));
+            assertEquals(true, begin.line <= end.line);
         }
         numberOfNodesVisited++;
     }

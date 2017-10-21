@@ -7,7 +7,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;

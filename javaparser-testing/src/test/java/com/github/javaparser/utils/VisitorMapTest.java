@@ -4,14 +4,14 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 
 public class VisitorMapTest {
     @Test
@@ -51,7 +51,7 @@ public class VisitorMapTest {
 
         Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         map.put(x1, 1);
-        assertTrue(map.containsKey(x1));
+        assertEquals(true, map.containsKey(x1));
     }
     
     @Test
@@ -71,10 +71,10 @@ public class VisitorMapTest {
         CompilationUnit x1 = JavaParser.parse("class X{}");
         VisitorMap<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         map.put(x1, 1);
-        assertTrue(map.containsKey(x1));
+        assertEquals(true, map.containsKey(x1));
         
         map.remove(x1);
         
-        assertFalse(map.containsKey(x1));
+        assertEquals(false, map.containsKey(x1));
     }
 }

@@ -139,7 +139,7 @@ Scenario: A class with a colon in the annoation value is parsed by the Java Pars
 Given a CompilationUnit
 When the following source is parsed:
 package japa.parser.ast;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 public class Issue37 {
     public static @interface SomeAnnotation {
         String value();

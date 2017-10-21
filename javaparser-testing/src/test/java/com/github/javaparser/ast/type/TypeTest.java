@@ -6,13 +6,15 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.JavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.Providers.provider;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TypeTest {
     @Test
@@ -23,9 +25,9 @@ public class TypeTest {
         assertEquals("List<? extends Object>", typeAsString("List<? extends Object> x"));
     }
 
-    @Test(expected = ParseProblemException.class)
+    @Test
     public void primitiveTypeArgumentDefaultValidator() {
-        typeAsString("List<long> x;");
+        assertThrows(ParseProblemException.class, ()-> typeAsString("List<long> x;"));
     }
 
     @Test
@@ -37,7 +39,7 @@ public class TypeTest {
 
         ParseResult<VariableDeclarationExpr> result = new JavaParser(config).parse(
                 VARIABLE_DECLARATION_EXPR, provider("List<long> x"));
-        assertTrue(result.isSuccessful());
+        assertEquals(true, result.isSuccessful());
 
         VariableDeclarationExpr decl = result.getResult().get();
         assertEquals("List<long>", decl.getVariable(0).getType().asString());
@@ -50,7 +52,7 @@ public class TypeTest {
     @Test
     public void arrayType() {
         Type type = parseType("int[]");
-        assertTrue(type.isArrayType());
+        assertEquals(true, type.isArrayType());
         ArrayType arrayType = type.asArrayType();
         final ArrayType[] s = new ArrayType[1];
         type.ifArrayType(t -> s[0] = t);
