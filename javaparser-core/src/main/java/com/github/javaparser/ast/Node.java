@@ -31,7 +31,10 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.observer.PropagatingAstObserver;
-import com.github.javaparser.ast.visitor.*;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.ast.visitor.EqualsVisitor;
+import com.github.javaparser.ast.visitor.HashCodeVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NodeMetaModel;
@@ -49,6 +52,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
@@ -709,31 +713,67 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private Iterable<Node> treeIterable(TreeTraversal traversal) {
         return () -> treeIterator(traversal);
     }
-    
-    public Stream<Node> treeStream(TreeTraversal traversal) {
+
+    /**
+     * Make a stream of nodes using traversal algorithm "traversal".
+     */
+    public Stream<Node> stream(TreeTraversal traversal) {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(traversal), NONNULL | DISTINCT), false);
     }
-    
+
     /**
-     * Walks the AST, calling the consumer for every node.
+     * Make a stream of nodes using pre-order traversal.
      */
-    public void walk(Consumer<Node> consumer) {
-        treeIterable(TreeTraversal.PREORDER).forEach(consumer);
+    public Stream<Node> stream() {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(PREORDER), NONNULL | DISTINCT), false);
     }
 
     /**
-     * Walks the AST, calling the consumer for every node of type "nodeType".
+     * Walks the AST, applying the function for every node, with traversal algorithm "traversal".
+     * If the function returns something else than null, the traversal is stopped and the function result is returned.
+     * <br/>This is the most general walk method. All other walk and find methods are based on this.
      */
-    public <T extends Node> void walk(Class<T> nodeType, Consumer<T> consumer) {
-        for (Node node : treeIterable(TreeTraversal.PREORDER)) {
-            if (nodeType.isInstance(node)) {
-                consumer.accept(nodeType.cast(node));
+    public <T> Optional<T> walk(TreeTraversal traversal, Function<Node, T> consumer) {
+        for (Node node : treeIterable(traversal)) {
+            T result = consumer.apply(node);
+            if (result != null) {
+                return Optional.of(result);
             }
         }
+        return Optional.empty();
+    }
+
+
+    /**
+     * Walks the AST, calling the consumer for every node, with traversal algorithm "traversal".
+     */
+    public void walk(TreeTraversal traversal, Consumer<Node> consumer) {
+        // Could be implemented as a call to the above walk method, but this is a little more efficient.
+        for (Node node : treeIterable(traversal)) {
+            consumer.accept(node);
+        }
+    }
+    
+    /**
+     * Walks the AST, calling the consumer for every node with pre-order traversal.
+     */
+    public void walk(Consumer<Node> consumer) {
+        walk(PREORDER, consumer);
     }
 
     /**
-     * Walks the AST, returning all nodes of type "nodeType".
+     * Walks the AST with pre-order traversal, calling the consumer for every node of type "nodeType".
+     */
+    public <T extends Node> void walk(Class<T> nodeType, Consumer<T> consumer) {
+        walk(TreeTraversal.PREORDER, node -> {
+            if (nodeType.isAssignableFrom(node.getClass())) {
+                consumer.accept(nodeType.cast(node));
+            }
+        });
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, returning all nodes of type "nodeType".
      */
     public <T extends Node> List<T> findAll(Class<T> nodeType) {
         final List<T> found = new ArrayList<>();
@@ -742,7 +782,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Walks the AST, returning all nodes of type "nodeType" that match the predicate.
+     * Walks the AST with pre-order traversal, returning all nodes of type "nodeType" that match the predicate.
      */
     public <T extends Node> List<T> findAll(Class<T> nodeType, Predicate<T> predicate) {
         final List<T> found = new ArrayList<>();
@@ -750,6 +790,18 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             if (predicate.test(n)) found.add(n);
         });
         return found;
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, returning the first node of type "nodeType" or empty() if none is found.
+     */
+    public <N extends Node> Optional<N> findFirst(Class<N> nodeType) {
+        return walk(TreeTraversal.PREORDER, node -> {
+            if(nodeType.isAssignableFrom(node.getClass())){
+                return nodeType.cast(node);
+            }
+            return null;
+        });
     }
 
     /**

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.JavaParser.parseExpression;
@@ -372,5 +373,23 @@ public class NodeTest {
         Expression e = parseExpression("1+2+3");
         List<IntegerLiteralExpr> ints = e.findAll(IntegerLiteralExpr.class);
         assertEquals("[1, 2, 3]", ints.toString());
+    }
+
+    @Test
+    public void typeOnlyFindAllMatchesSubclasses() {
+        Expression e = parseExpression("1+2+3");
+        List<Node> ints = e.findAll(Node.class);
+        assertEquals("[1 + 2 + 3, 1 + 2, 1, 2, 3]", ints.toString());
+    }
+
+    @Test
+    public void stream() {
+        Expression e = parseExpression("1+2+3");
+        List<IntegerLiteralExpr> ints = e.stream()
+                .filter(n -> n instanceof IntegerLiteralExpr)
+                .map(IntegerLiteralExpr.class::cast)
+                .filter(i -> i.asInt() > 1)
+                .collect(Collectors.toList());
+        assertEquals("[2, 3]", ints.toString());
     }
 }

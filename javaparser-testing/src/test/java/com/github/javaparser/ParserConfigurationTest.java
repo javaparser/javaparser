@@ -14,6 +14,6 @@ public class ParserConfigurationTest {
         ParseResult<CompilationUnit> result = new JavaParser(new ParserConfiguration().setStoreTokens(false)).parse(ParseStart.COMPILATION_UNIT, provider("class X{}"));
         
         assertFalse(result.getTokens().isPresent());
-        assertTrue(result.getResult().get().getChildNodesByType(Node.class).stream().noneMatch(node -> node.getTokenRange().isPresent()));
+        assertTrue(result.getResult().get().findAll(Node.class).stream().noneMatch(node -> node.getTokenRange().isPresent()));
     }
 }
