@@ -222,8 +222,9 @@ public class Utils {
     }
 
     public static String normalizeEolInTextBlock(String content, String endOfLineCharacter) {
-        content.replaceAll("\\r\\n", "\n");
-        content = content.replaceAll("\\r", "\n");
-        return content.replaceAll("\\n", endOfLineCharacter);
+        return content
+                .replaceAll("\\r\\n", endOfLineCharacter)
+                .replaceAll("\\r", endOfLineCharacter)
+                .replaceAll("\\n", endOfLineCharacter);
     }
 }
