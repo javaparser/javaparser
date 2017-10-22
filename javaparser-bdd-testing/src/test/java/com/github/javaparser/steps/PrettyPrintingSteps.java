@@ -38,7 +38,7 @@ import java.net.URL;
 
 import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.Utils.readerToString;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrettyPrintingSteps {
 
