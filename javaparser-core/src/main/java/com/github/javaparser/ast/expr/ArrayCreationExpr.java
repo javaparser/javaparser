@@ -43,10 +43,18 @@ import com.github.javaparser.ast.Node;
 import java.util.function.Consumer;
 
 /**
- * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
+ * In:
+ * ```java
+ * new int[5][4][][]
+ * ```
+ * or 
+ * ```java
+ * new int[][]{{1},{2,3}}
+ * ```
  * 
- * <br/>"int" is the element type.
- * <br/>All the brackets are stored in the levels field, from left to right.
+ * "`int`" is the element type.
+ * 
+ * All the brackets are stored in the "levels" field, from left to right.
  *
  * @author Julio Vilmar Gesser
  */

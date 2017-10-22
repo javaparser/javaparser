@@ -50,10 +50,16 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * The "int id();" in <code>@interface X { int id(); }</code>
- * <p>
- * <br/>All annotations preceding the type will be set on this object, not on the type. JavaParser doesn't know if it
- * they are applicable to the method or the type.
+ * The "`int id();`" in 
+ * 
+ * ```java
+ * .@interface X {
+ *     int id();
+ * }
+ * ```
+ * 
+ * All annotations preceding the type will be set on this object, not on the type.
+ * JavaParser doesn't know if it they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser
  */

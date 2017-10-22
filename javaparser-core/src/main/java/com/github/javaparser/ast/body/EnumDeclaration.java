@@ -45,7 +45,13 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
 
 /**
- * The declaration of an enum.<br/><code>enum X { ... }</code>
+ * The declaration of an enum.
+ * 
+ * ```java
+ * enum X {
+ *     // ...
+ * }
+ * ```
  *
  * @author Julio Vilmar Gesser
  */

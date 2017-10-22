@@ -34,8 +34,13 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * Array brackets [] being used to get a value from an array.
- * In <br/><code>getNames()[15*15]</code> the name expression is getNames() and the index expression is 15*15.
+ * Array brackets "`[]`" being used to get a value from an array.
+ * In 
+ * 
+ * ```java
+ * getNames()[15*15]
+ * ```
+ * the "name" expression is "`getNames()`" and the "index" expression is "`15*15`".
  *
  * @author Julio Vilmar Gesser
  */

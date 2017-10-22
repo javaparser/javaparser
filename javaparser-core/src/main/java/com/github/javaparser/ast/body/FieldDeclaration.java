@@ -59,10 +59,15 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import java.util.function.Consumer;
 
 /**
- * The declaration of a field in a class. "private static int a=15*15;" in this example: <code>class X { private static
- * int a=15*15; }</code>
- *
- * <br/>All annotations preceding the type will be set on this object, not on the type.
+ * The declaration of a field in a class. "`private static int a=15*15;`" in this example:
+ * 
+ * ```java
+ * class X {
+ *     private static int a=15*15; 
+ * }
+ * ```
+ * 
+ * All annotations preceding the type will be set on this object, not on the type.
  * JavaParser doesn't know if it they are applicable to the method or the type.
  * 
  * @author Julio Vilmar Gesser

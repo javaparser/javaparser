@@ -43,7 +43,14 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
+ * One of the values an enum can take. `A(1)` and `B(2)` in this example: 
+ * 
+ * ```java
+ * enum X {
+ *     A(1), 
+ *     B(2) 
+ * }
+ * ```
  *
  * @author Julio Vilmar Gesser
  */

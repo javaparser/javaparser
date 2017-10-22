@@ -40,7 +40,15 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
+ * A (possibly static) initializer body. "`static { a=3; }`" in this example:
+ * 
+ * ```java
+ * class X { 
+ *     static { 
+ *         a=3; 
+ *     }  
+ * }
+ * ```
  *
  * @author Julio Vilmar Gesser
  */
