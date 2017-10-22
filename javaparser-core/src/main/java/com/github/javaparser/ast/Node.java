@@ -42,11 +42,20 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
+
 import javax.annotation.Generated;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.unmodifiableList;
-import com.github.javaparser.ast.Node;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -409,6 +418,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Recursively finds all nodes of a certain type.
      *
      * @param clazz the type of node to find.
+     * @deprecated use find(Class)
      */
     public <N extends Node> List<N> getChildNodesByType(Class<N> clazz) {
         List<N> nodes = new ArrayList<>();
@@ -422,7 +432,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * @deprecated use getChildNodesByType
+     * @deprecated use find(Class)
      */
     @Deprecated
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {
@@ -677,4 +687,280 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // We need to expose it because we will need to use it to inject the SymbolSolver
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
     };
+
+
+    public enum TreeTraversal {
+        PREORDER, BREADTHFIRST, POSTORDER, PARENTS, DIRECT_CHILDREN
+    }
+
+    private Iterator<Node> treeIterator(TreeTraversal traversal) {
+        switch (traversal) {
+            case BREADTHFIRST:
+                return new BreadthFirstIterator(this);
+            case POSTORDER:
+                return new PostOrderIterator(this);
+            case PREORDER:
+                return new PreOrderIterator(this);
+            case DIRECT_CHILDREN:
+                return new DirectChildrenIterator(this);
+            case PARENTS:
+                return new ParentsVisitor(this);
+            default:
+                throw new IllegalArgumentException("Unknown traversal choice.");
+        }
+    }
+    
+    private Iterable<Node> treeIterable(TreeTraversal traversal) {
+        return () -> treeIterator(traversal);
+    }
+
+    /**
+     * Make a stream of nodes using traversal algorithm "traversal".
+     */
+    public Stream<Node> stream(TreeTraversal traversal) {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(traversal), NONNULL | DISTINCT), false);
+    }
+
+    /**
+     * Make a stream of nodes using pre-order traversal.
+     */
+    public Stream<Node> stream() {
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(treeIterator(PREORDER), NONNULL | DISTINCT), false);
+    }
+
+    /**
+     * Walks the AST, applying the function for every node, with traversal algorithm "traversal".
+     * If the function returns something else than null, the traversal is stopped and the function result is returned.
+     * <br/>This is the most general walk method. All other walk and find methods are based on this.
+     */
+    public <T> Optional<T> walk(TreeTraversal traversal, Function<Node, T> consumer) {
+        for (Node node : treeIterable(traversal)) {
+            T result = consumer.apply(node);
+            if (result != null) {
+                return Optional.of(result);
+            }
+        }
+        return Optional.empty();
+    }
+
+
+    /**
+     * Walks the AST, calling the consumer for every node, with traversal algorithm "traversal".
+     */
+    public void walk(TreeTraversal traversal, Consumer<Node> consumer) {
+        // Could be implemented as a call to the above walk method, but this is a little more efficient.
+        for (Node node : treeIterable(traversal)) {
+            consumer.accept(node);
+        }
+    }
+    
+    /**
+     * Walks the AST, calling the consumer for every node with pre-order traversal.
+     */
+    public void walk(Consumer<Node> consumer) {
+        walk(PREORDER, consumer);
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, calling the consumer for every node of type "nodeType".
+     */
+    public <T extends Node> void walk(Class<T> nodeType, Consumer<T> consumer) {
+        walk(TreeTraversal.PREORDER, node -> {
+            if (nodeType.isAssignableFrom(node.getClass())) {
+                consumer.accept(nodeType.cast(node));
+            }
+        });
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, returning all nodes of type "nodeType".
+     */
+    public <T extends Node> List<T> findAll(Class<T> nodeType) {
+        final List<T> found = new ArrayList<>();
+        walk(nodeType, found::add);
+        return found;
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, returning all nodes of type "nodeType" that match the predicate.
+     */
+    public <T extends Node> List<T> findAll(Class<T> nodeType, Predicate<T> predicate) {
+        final List<T> found = new ArrayList<>();
+        walk(nodeType, n -> {
+            if (predicate.test(n)) found.add(n);
+        });
+        return found;
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, returning the first node of type "nodeType" or empty() if none is found.
+     */
+    public <N extends Node> Optional<N> findFirst(Class<N> nodeType) {
+        return walk(TreeTraversal.PREORDER, node -> {
+            if(nodeType.isAssignableFrom(node.getClass())){
+                return nodeType.cast(node);
+            }
+            return null;
+        });
+    }
+
+    /**
+     * Performs a breadth-first node traversal starting with a given node.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Breadth-first traversal</a>
+     */
+    public static class BreadthFirstIterator implements Iterator<Node> {
+        private final Queue<Node> queue = new LinkedList<>();
+
+        public BreadthFirstIterator(Node node) {
+            queue.add(node);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !queue.isEmpty();
+        }
+
+        @Override
+        public Node next() {
+            Node next = queue.remove();
+            queue.addAll(next.getChildNodes());
+            return next;
+        }
+    }
+
+    /**
+     * Performs a simple traversal over all nodes that have the passed node as their parent.
+     */
+    public static class DirectChildrenIterator implements Iterator<Node> {
+        private final Iterator<Node> childrenIterator;
+
+        public DirectChildrenIterator(Node node) {
+            childrenIterator = new ArrayList<>(node.getChildNodes()).iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return childrenIterator.hasNext();
+        }
+
+        @Override
+        public Node next() {
+            return childrenIterator.next();
+        }
+    }
+
+    /**
+     * Iterates over the parent of the node, then the parent's parent, then the parent's parent's parent, until running
+     * out of parents.
+     */
+    public static class ParentsVisitor implements Iterator<Node> {
+        private Node node;
+
+        public ParentsVisitor(Node node) {
+            this.node = node;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node.getParentNode().isPresent();
+        }
+
+        @Override
+        public Node next() {
+            node = node.getParentNode().orElse(null);
+            return node;
+        }
+    }
+
+    /**
+     * Performs a pre-order (or depth-first) node traversal starting with a given node.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
+     */
+    public static class PreOrderIterator implements Iterator<Node> {
+        private final Stack<Node> stack = new Stack<>();
+
+        public PreOrderIterator(Node node) {
+            stack.add(node);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public Node next() {
+            Node next = stack.pop();
+            List<Node> children = next.getChildNodes();
+            for (int i = children.size() - 1; i >= 0; i--) {
+                stack.add(children.get(i));
+            }
+            return next;
+        }
+    }
+
+    /**
+     * Performs a post-order (or leaves-first) node traversal starting with a given node.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
+     */
+    public static class PostOrderIterator implements Iterator<Node> {
+        private final Stack<List<Node>> nodesStack = new Stack<>();
+        private final Stack<Integer> cursorStack = new Stack<>();
+        private final Node root;
+        private boolean hasNext = true;
+
+        public PostOrderIterator(Node root) {
+            this.root = root;
+            fillStackToLeaf(root);
+        }
+
+        private void fillStackToLeaf(Node node) {
+            while (true) {
+                List<Node> childNodes = new ArrayList<>(node.getChildNodes());
+                if (childNodes.isEmpty()) {
+                    break;
+                }
+                nodesStack.push(childNodes);
+                cursorStack.push(0);
+                node = childNodes.get(0);
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return hasNext;
+        }
+
+        @Override
+        public Node next() {
+            final List<Node> nodes = nodesStack.peek();
+            final int cursor = cursorStack.peek();
+            final boolean levelHasNext = cursor < nodes.size();
+            if (levelHasNext) {
+                Node node = nodes.get(cursor);
+                fillStackToLeaf(node);
+                return nextFromLevel();
+            } else {
+                nodesStack.pop();
+                cursorStack.pop();
+                hasNext = !nodesStack.empty();
+                if (hasNext) {
+                    return nextFromLevel();
+                }
+                return root;
+            }
+        }
+
+        private Node nextFromLevel() {
+            final List<Node> nodes = nodesStack.peek();
+            final int cursor = cursorStack.pop();
+            cursorStack.push(cursor + 1);
+            return nodes.get(cursor);
+        }
+    }
+
+
 }

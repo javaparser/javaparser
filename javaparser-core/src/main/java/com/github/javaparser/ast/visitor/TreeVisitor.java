@@ -28,7 +28,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Iterate over all the nodes in (a part of) the AST.
+ * Iterate over all the nodes in (a part of) the AST. In contrast to the visit methods in Node, these methods are
+ * implemented in a simple recursive way which should be more efficient. A disadvantage is that they cannot be quit in
+ * the middle of their traversal.
  */
 public abstract class TreeVisitor {
 
@@ -40,11 +42,10 @@ public abstract class TreeVisitor {
     }
 
     /**
-     * Performs a pre-order node traversal starting with a given node. When each node is visited,
-     * {@link #process(Node)} is called for further processing.
+     * Performs a pre-order node traversal starting with a given node. When each node is visited, {@link #process(Node)}
+     * is called for further processing.
      *
      * @param node The node at which the traversal begins.
-     *
      * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
      */
     public void visitPreOrder(Node node) {
@@ -53,11 +54,10 @@ public abstract class TreeVisitor {
     }
 
     /**
-     * Performs a post-order node traversal starting with a given node. When each node is visited,
-     * {@link #process(Node)} is called for further processing.
+     * Performs a post-order node traversal starting with a given node. When each node is visited, {@link
+     * #process(Node)} is called for further processing.
      *
      * @param node The node at which the traversal begins.
-     *
      * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
      */
     public void visitPostOrder(Node node) {
@@ -66,14 +66,12 @@ public abstract class TreeVisitor {
     }
 
     /**
-     * Performs a pre-order node traversal starting with a given node. When each node is visited,
-     * {@link #process(Node)} is called for further processing.
-     *
-     * @deprecated As of release 3.1.0, replaced by {@link #visitPreOrder(Node)}
+     * Performs a pre-order node traversal starting with a given node. When each node is visited, {@link #process(Node)}
+     * is called for further processing.
      *
      * @param node The node at which the traversal begins.
-     *
      * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
+     * @deprecated As of release 3.1.0, replaced by {@link #visitPreOrder(Node)}
      */
     @Deprecated
     public void visitDepthFirst(Node node) {
@@ -103,4 +101,11 @@ public abstract class TreeVisitor {
      * @param node The current node to process.
      */
     public abstract void process(Node node);
+
+    /**
+     * Performs a simple traversal over all nodes that have the passed node as their parent.
+     */
+    public void visitDirectChildren(Node node) {
+        new ArrayList<>(node.getChildNodes()).forEach(this::process);
+    }
 }

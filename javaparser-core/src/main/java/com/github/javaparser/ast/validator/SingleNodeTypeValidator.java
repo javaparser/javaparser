@@ -19,6 +19,6 @@ public class SingleNodeTypeValidator<N extends Node> implements Validator {
         if (type.isInstance(node)) {
             validator.accept(type.cast(node), problemReporter);
         }
-        node.getChildNodesByType(type).forEach(n -> validator.accept(n, problemReporter));
+        node.findAll(type).forEach(n -> validator.accept(n, problemReporter));
     }
 }
