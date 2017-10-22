@@ -13,7 +13,7 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
@@ -21,7 +21,7 @@ import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ModuleDeclarationTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));

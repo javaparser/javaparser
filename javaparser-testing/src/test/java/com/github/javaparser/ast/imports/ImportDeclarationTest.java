@@ -23,9 +23,9 @@ package com.github.javaparser.ast.imports;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ImportDeclarationTest {
     @Test

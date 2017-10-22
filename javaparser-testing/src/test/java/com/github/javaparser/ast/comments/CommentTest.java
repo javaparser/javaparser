@@ -23,13 +23,11 @@ package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.EnumSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CommentTest {
 
@@ -39,7 +37,7 @@ public class CommentTest {
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
         assertEquals(1, decl.getOrphanComments().size());
-        assertTrue(c.remove());
+        assertEquals(true, c.remove());
         assertEquals(0, decl.getOrphanComments().size());
     }
 
@@ -49,13 +47,13 @@ public class CommentTest {
         Comment c = new LineComment("A comment");
         decl.setComment(c);
         assertEquals(true, decl.getComment().isPresent());
-        assertTrue(c.remove());
+        assertEquals(true, c.remove());
         assertEquals(false, decl.getComment().isPresent());
     }
 
     @Test
     public void cannotRemoveCommentNotUsedAnywhere() {
         Comment c = new LineComment("A comment");
-        assertFalse(c.remove());
+        assertEquals(false, c.remove());
     }
 }

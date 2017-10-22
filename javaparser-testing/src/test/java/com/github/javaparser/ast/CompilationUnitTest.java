@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -29,7 +29,8 @@ import java.nio.file.Paths;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CompilationUnitTest {
     @Test
@@ -52,13 +53,13 @@ public class CompilationUnitTest {
         assertEquals(sourceRoot, sourceRoot1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetSourceRootWithBadPackageDeclaration() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
 
         CompilationUnit cu = parse(testFile);
-        Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
+        assertThrows(RuntimeException.class, () -> cu.getStorage().get().getSourceRoot());
     }
 
     @Test

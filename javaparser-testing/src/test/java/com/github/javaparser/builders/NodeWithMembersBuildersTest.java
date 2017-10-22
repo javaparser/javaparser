@@ -25,13 +25,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class NodeWithMembersBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -78,8 +78,8 @@ public class NodeWithMembersBuildersTest {
         MethodDeclaration addMethod2 = classDeclaration.addMethod("foo", Modifier.PUBLIC).addParameter(int.class, "overload");
         List<MethodDeclaration> methodsByName = classDeclaration.getMethodsByName("foo");
         assertEquals(2, methodsByName.size());
-        assertTrue(methodsByName.contains(addMethod));
-        assertTrue(methodsByName.contains(addMethod2));
+        assertEquals(true, methodsByName.contains(addMethod));
+        assertEquals(true, methodsByName.contains(addMethod2));
     }
 
     @Test
@@ -90,8 +90,8 @@ public class NodeWithMembersBuildersTest {
         List<MethodDeclaration> methods = classDeclaration.getMethods();
 
         assertEquals(2, methods.size());
-        assertTrue(methods.contains(addMethod));
-        assertTrue(methods.contains(addMethod2));
+        assertEquals(true, methods.contains(addMethod));
+        assertEquals(true, methods.contains(addMethod2));
     }
 
     @Test
@@ -105,11 +105,11 @@ public class NodeWithMembersBuildersTest {
 
         List<MethodDeclaration> methodsByParam = classDeclaration.getMethodsByParameterTypes(int.class);
         assertEquals(2, methodsByParam.size());
-        assertTrue(methodsByParam.contains(addMethod2));
-        assertTrue(methodsByParam.contains(addMethod3));
+        assertEquals(true, methodsByParam.contains(addMethod2));
+        assertEquals(true, methodsByParam.contains(addMethod3));
         List<MethodDeclaration> methodsByParam2 = classDeclaration.getMethodsByParameterTypes("List<String>");
         assertEquals(1, methodsByParam2.size());
-        assertTrue(methodsByParam2.contains(methodWithListParam));
+        assertEquals(true, methodsByParam2.contains(methodWithListParam));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class NodeWithMembersBuildersTest {
 
         List<FieldDeclaration> fields = classDeclaration.getFields();
 
-        assertTrue(fields.contains(firstField));
-        assertTrue(fields.contains(secondField));
+        assertEquals(true, fields.contains(firstField));
+        assertEquals(true, fields.contains(secondField));
     }
 }

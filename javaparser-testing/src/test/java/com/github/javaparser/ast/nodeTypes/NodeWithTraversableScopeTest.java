@@ -2,11 +2,11 @@ package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.JavaParser.parseExpression;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NodeWithTraversableScopeTest {
     @Test
@@ -18,6 +18,6 @@ public class NodeWithTraversableScopeTest {
         assertInstanceOf(FieldAccessExpr.class, expression);
         expression = (NodeWithTraversableScope) expression.traverseScope().get();
         assertInstanceOf(MethodCallExpr.class, expression);
-        assertFalse(expression.traverseScope().isPresent());
+        assertEquals(false, expression.traverseScope().isPresent());
     }
 }

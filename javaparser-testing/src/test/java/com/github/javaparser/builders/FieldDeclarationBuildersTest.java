@@ -25,28 +25,27 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.github.javaparser.ast.type.PrimitiveType.intType;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FieldDeclarationBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
     private ClassOrInterfaceDeclaration testClass = cu.addClass("testClass");
     private EnumDeclaration testEnum = cu.addEnum("testEnum");
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testOrphanFieldGetter() {
-        new FieldDeclaration().createGetter();
+        assertThrows(IllegalStateException.class,() -> new FieldDeclaration().createGetter());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testOrphanFieldSetter() {
-        new FieldDeclaration().createSetter();
+        assertThrows(IllegalStateException.class,() -> new FieldDeclaration().createSetter());
     }
 
     @Test
@@ -103,18 +102,18 @@ public class FieldDeclarationBuildersTest {
         assertEquals("this.myField = myField;", setter.getBody().get().getStatement(0).toString());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testCreateGetterWithANonValidField() {
         FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
         myPrivateField.getVariables().add(new VariableDeclarator(intType(), "secondField"));
-        myPrivateField.createGetter();
+        assertThrows(IllegalStateException.class, myPrivateField::createGetter);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testCreateSetterWithANonValidField() {
         FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
         myPrivateField.getVariables().add(new VariableDeclarator(intType(), "secondField"));
-        myPrivateField.createSetter();
+        assertThrows(IllegalStateException.class, myPrivateField::createSetter);
     }
 
 }

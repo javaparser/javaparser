@@ -24,16 +24,16 @@ package com.github.javaparser;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assert;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JavadocParserTest {
 
     @Test
     public void parseSimplestContent() {
-        Assert.assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
+        assertEquals(new Javadoc(JavadocDescription.parseText("A simple line of text")),
                 JavadocParser.parse("A simple line of text"));
     }
 

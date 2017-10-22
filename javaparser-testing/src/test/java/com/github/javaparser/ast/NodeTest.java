@@ -34,7 +34,7 @@ import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ import java.util.List;
 
 import static com.github.javaparser.JavaParser.parse;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NodeTest {
 
@@ -246,10 +246,10 @@ public class NodeTest {
         Comment c = new LineComment("A comment");
         decl.addOrphanComment(c);
         assertEquals(1, decl.getOrphanComments().size());
-        assertTrue(decl == c.getParentNode().get());
-        assertTrue(decl.removeOrphanComment(c));
+        assertEquals(true, decl == c.getParentNode().get());
+        assertEquals(true, decl.removeOrphanComment(c));
         assertEquals(0, decl.getOrphanComments().size());
-        assertFalse(c.getParentNode().isPresent());
+        assertEquals(false, c.getParentNode().isPresent());
     }
 
     @Test
@@ -260,9 +260,9 @@ public class NodeTest {
         Comment c = new LineComment("A comment");
         aField.addOrphanComment(c);
         // the comment is an orphan comment of the field, so trying to remove it on the class should not work
-        assertFalse(aClass.removeOrphanComment(c));
+        assertEquals(false, aClass.removeOrphanComment(c));
         assertEquals(1, aField.getOrphanComments().size());
-        assertTrue(c.getParentNode().isPresent());
+        assertEquals(true, c.getParentNode().isPresent());
     }
 
     @Test
@@ -339,6 +339,6 @@ public class NodeTest {
     @Test
     public void cantFindCompilationUnit() {
         VariableDeclarator x = new VariableDeclarator();
-        assertFalse(x.findCompilationUnit().isPresent());
+        assertEquals(false, x.findCompilationUnit().isPresent());
     }
 }

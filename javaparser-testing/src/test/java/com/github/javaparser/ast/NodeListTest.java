@@ -29,7 +29,7 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -37,7 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NodeListTest {
 

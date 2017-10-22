@@ -21,9 +21,10 @@
 
 package com.github.javaparser.ast.expr;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SimpleNameTest {
 
@@ -32,14 +33,14 @@ public class SimpleNameTest {
         assertEquals("empty", new SimpleName().getIdentifier());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void identifierMustNotBeEmpty() {
-        new SimpleName("");
+        assertThrows(AssertionError.class,() -> new SimpleName(""));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void identifierMustNotBeNull() {
-        new SimpleName(null);
+        assertThrows(AssertionError.class,() -> new SimpleName(null));
     }
 
 }

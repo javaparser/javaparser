@@ -21,15 +21,15 @@
 
 package com.github.javaparser.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -71,7 +71,7 @@ public class VisitorListTest {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         list.add(x1);
-        assertTrue(list.contains(x1));
+        assertEquals(true, list.contains(x1));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class VisitorListTest {
         VisitorList<CompilationUnit> vList = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
-        assertTrue(vList.size() == 2 && vList.containsAll(list));
+        assertEquals(true, vList.size() == 2 && vList.containsAll(list));
     }
 
     @Test
@@ -96,10 +96,10 @@ public class VisitorListTest {
         Iterator<CompilationUnit> itr = list.iterator();
         assertEquals(x1, itr.next());
         itr.remove();
-        assertTrue(list.size() == 1);
+        assertEquals(true, list.size() == 1);
         assertEquals(x2, itr.next());
         itr.remove();
-        assertTrue(list.size() == 0);
+        assertEquals(true, list.size() == 0);
     }
 
     @Test
@@ -115,10 +115,10 @@ public class VisitorListTest {
         Iterator<CompilationUnit> itr = list.listIterator(2);
         assertEquals(x1, itr.next());
         itr.remove();
-        assertTrue(list.size() == 3);
+        assertEquals(true, list.size() == 3);
         assertEquals(x2, itr.next());
         itr.remove();
-        assertTrue(list.size() == 2);
+        assertEquals(true, list.size() == 2);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class VisitorListTest {
         VisitorList<CompilationUnit> list = new VisitorList<>(new ObjectIdentityHashCodeVisitor(),
                 new ObjectIdentityEqualsVisitor());
         list.add(x1);
-        assertTrue(list.remove(x1));
+        assertEquals(true, list.remove(x1));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class VisitorListTest {
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
         vList.removeAll(list);
-        assertTrue(vList.size() == 0);
+        assertEquals(true, vList.size() == 0);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class VisitorListTest {
         vList.addAll(list);
         vList.add(JavaParser.parse("class X{}"));
         vList.retainAll(list);
-        assertTrue(vList.size() == 2);
+        assertEquals(true, vList.size() == 2);
     }
 
     @Test
@@ -163,12 +163,12 @@ public class VisitorListTest {
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
         list.add(JavaParser.parse("class X{}"));
-        assertTrue(list.size() == 4);
+        assertEquals(true, list.size() == 4);
         List<CompilationUnit> subLst = list.subList(1, 3);
-        assertTrue(subLst.size() == 2);
+        assertEquals(true, subLst.size() == 2);
         subLst.add(JavaParser.parse("class X{}"));
-        assertTrue(subLst.size() == 3);
-        assertTrue(list.size() == 5);
+        assertEquals(true, subLst.size() == 3);
+        assertEquals(true, list.size() == 5);
 
     }
 
@@ -181,7 +181,7 @@ public class VisitorListTest {
                 new ObjectIdentityEqualsVisitor());
         vList.addAll(list);
         for (CompilationUnit u : vList.toArray(new CompilationUnit[2]))
-            assertTrue(vList.contains(u));
+            assertEquals(true, vList.contains(u));
     }
 
 }

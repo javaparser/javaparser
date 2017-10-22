@@ -22,7 +22,7 @@
 package com.github.javaparser.wiki_samples.removenode;
 
 import com.github.javaparser.wiki_samples.TestFileToken;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RemoveDeleteNodeFromAst {
     @Test
