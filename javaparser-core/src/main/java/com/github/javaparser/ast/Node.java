@@ -689,24 +689,24 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         PREORDER, BREADTHFIRST, POSTORDER, PARENTS, DIRECT_CHILDREN
     }
 
-    public Iterator<Node> treeIterator(TreeTraversal traversal) {
+    private Iterator<Node> treeIterator(TreeTraversal traversal) {
         switch (traversal) {
             case BREADTHFIRST:
-                return new TreeVisitor.BreadthFirstIterator(this);
+                return new BreadthFirstIterator(this);
             case POSTORDER:
-                return new TreeVisitor.PostOrderIterator(this);
+                return new PostOrderIterator(this);
             case PREORDER:
-                return new TreeVisitor.PreOrderIterator(this);
+                return new PreOrderIterator(this);
             case DIRECT_CHILDREN:
-                return new TreeVisitor.DirectChildrenIterator(this);
+                return new DirectChildrenIterator(this);
             case PARENTS:
-                return new TreeVisitor.ParentsVisitor(this);
+                return new ParentsVisitor(this);
             default:
                 throw new IllegalArgumentException("Unknown traversal choice.");
         }
     }
     
-    public Iterable<Node> treeIterable(TreeTraversal traversal) {
+    private Iterable<Node> treeIterable(TreeTraversal traversal) {
         return () -> treeIterator(traversal);
     }
     
@@ -752,26 +752,163 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return found;
     }
 
-    private <T> Optional<T> visitPreOrder(Function<Node, Optional<T>> visitor) {
-        Optional<T> result = visitor.apply(this);
+    /**
+     * Performs a breadth-first node traversal starting with a given node.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Breadth-first traversal</a>
+     */
+    public static class BreadthFirstIterator implements Iterator<Node> {
+        private final Queue<Node> queue = new LinkedList<>();
 
-        if(result.isPresent()){
-            return result;
+        public BreadthFirstIterator(Node node) {
+            queue.add(node);
         }
 
-        for(Node n: new ArrayList<>(getChildNodes())) {
-            result = n.visitPreOrder(visitor);
+        @Override
+        public boolean hasNext() {
+            return !queue.isEmpty();
+        }
 
-            if(result.isPresent()){
-                return result;
+        @Override
+        public Node next() {
+            Node next = queue.remove();
+            queue.addAll(next.getChildNodes());
+            return next;
+        }
+    }
+
+    /**
+     * Performs a simple traversal over all nodes that have the passed node as their parent.
+     */
+    public static class DirectChildrenIterator implements Iterator<Node> {
+        private final Iterator<Node> childrenIterator;
+
+        public DirectChildrenIterator(Node node) {
+            childrenIterator = new ArrayList<>(node.getChildNodes()).iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return childrenIterator.hasNext();
+        }
+
+        @Override
+        public Node next() {
+            return childrenIterator.next();
+        }
+    }
+
+    /**
+     * Iterates over the parent of the node, then the parent's parent, then the parent's parent's parent, until running
+     * out of parents.
+     */
+    public static class ParentsVisitor implements Iterator<Node> {
+        private Node node;
+
+        public ParentsVisitor(Node node) {
+            this.node = node;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return node.getParentNode().isPresent();
+        }
+
+        @Override
+        public Node next() {
+            node = node.getParentNode().orElse(null);
+            return node;
+        }
+    }
+
+    /**
+     * Performs a pre-order (or depth-first) node traversal starting with a given node.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
+     */
+    public static class PreOrderIterator implements Iterator<Node> {
+        private final Stack<Node> stack = new Stack<>();
+
+        public PreOrderIterator(Node node) {
+            stack.add(node);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public Node next() {
+            Node next = stack.pop();
+            List<Node> children = next.getChildNodes();
+            for (int i = children.size() - 1; i >= 0; i--) {
+                stack.add(children.get(i));
+            }
+            return next;
+        }
+    }
+
+    /**
+     * Performs a post-order (or leaves-first) node traversal starting with a given node.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
+     */
+    public static class PostOrderIterator implements Iterator<Node> {
+        private final Stack<List<Node>> nodesStack = new Stack<>();
+        private final Stack<Integer> cursorStack = new Stack<>();
+        private final Node root;
+        private boolean hasNext = true;
+
+        public PostOrderIterator(Node root) {
+            this.root = root;
+            fillStackToLeaf(root);
+        }
+
+        private void fillStackToLeaf(Node node) {
+            while (true) {
+                List<Node> childNodes = new ArrayList<>(node.getChildNodes());
+                if (childNodes.isEmpty()) {
+                    break;
+                }
+                nodesStack.push(childNodes);
+                cursorStack.push(0);
+                node = childNodes.get(0);
             }
         }
-        return Optional.empty();
+
+        @Override
+        public boolean hasNext() {
+            return hasNext;
+        }
+
+        @Override
+        public Node next() {
+            final List<Node> nodes = nodesStack.peek();
+            final int cursor = cursorStack.peek();
+            final boolean levelHasNext = cursor < nodes.size();
+            if (levelHasNext) {
+                Node node = nodes.get(cursor);
+                fillStackToLeaf(node);
+                return nextFromLevel();
+            } else {
+                nodesStack.pop();
+                cursorStack.pop();
+                hasNext = !nodesStack.empty();
+                if (hasNext) {
+                    return nextFromLevel();
+                }
+                return root;
+            }
+        }
+
+        private Node nextFromLevel() {
+            final List<Node> nodes = nodesStack.peek();
+            final int cursor = cursorStack.pop();
+            cursorStack.push(cursor + 1);
+            return nodes.get(cursor);
+        }
     }
 
-    private void visitPreOrder(Consumer<Node> visitor) {
-        visitor.accept(this);
 
-        new ArrayList<>(getChildNodes()).forEach(n -> n.visitPreOrder(visitor));
-    }
 }

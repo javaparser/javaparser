@@ -30,6 +30,7 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
 public class TreeVisitorTest {
@@ -124,14 +125,14 @@ public class TreeVisitorTest {
         CompilationUnit cu = JavaParser.parse("class X{int x=1;}");
         SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariable(0).getName();
 
-        TreeVisitor.ParentsVisitor visitor = new TreeVisitor.ParentsVisitor(x);
+        Node.ParentsVisitor visitor = new Node.ParentsVisitor(x);
         assertEquals("x = 1", visitor.next().toString());
         assertEquals("int x = 1;", visitor.next().toString());
-        assertEquals("class X {\n" +
+        assertEqualsNoEol("class X {\n" +
                 "\n" +
                 "    int x = 1;\n" +
                 "}", visitor.next().toString());
-        assertEquals("class X {\n" +
+        assertEqualsNoEol("class X {\n" +
                 "\n" +
                 "    int x = 1;\n" +
                 "}\n", visitor.next().toString());
