@@ -16,9 +16,10 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.EOL;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -142,5 +143,12 @@ public class TestUtils {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
         ParseResult<Expression> result = javaParser.parse(ParseStart.EXPRESSION, provider(expression));
         assertEquals(true, result.isSuccessful(), result.getProblems().toString());
+    }
+
+    /**
+     * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
+     */
+    public static void assertEqualsNoEol(String expected, String actual) {
+        assertEquals(normalizeEolInTextBlock(expected, "\n"), actual);
     }
 }
