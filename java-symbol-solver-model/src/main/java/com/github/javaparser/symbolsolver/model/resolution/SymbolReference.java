@@ -58,7 +58,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      */
     public S getCorrespondingDeclaration() {
         if (!isSolved()) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("CorrespondingDeclaration not available for unsolved symbol.");
         }
         return correspondingDeclaration.get();
     }
