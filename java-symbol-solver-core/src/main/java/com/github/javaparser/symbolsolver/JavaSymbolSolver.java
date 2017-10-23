@@ -2,13 +2,16 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -42,14 +45,21 @@ public class JavaSymbolSolver implements SymbolResolver {
         if (node instanceof MethodDeclaration) {
             return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration)node, typeSolver));
         }
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            if (resultClass.isInstance(resolvedReferenceTypeDeclaration)) {
+                return resultClass.cast(resolvedReferenceTypeDeclaration);
+            }
+        }
         throw new UnsupportedOperationException("Unable to find the declaration of type " + resultClass.getSimpleName()
                 + " from " + node.getClass().getSimpleName());
     }
 
     @Override
     public <T> T toResolvedType(Type javaparserType, Class<T> resultClass) {
-        if (javaparserType instanceof ArrayType) {
-            return resultClass.cast(JavaParserFacade.get(typeSolver).convert((ArrayType)javaparserType, javaparserType));
+        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(javaparserType, javaparserType);
+        if (resultClass.isInstance(resolvedType)) {
+            return resultClass.cast(resolvedType);
         }
         throw new UnsupportedOperationException("Unable to get the resolved type of class "
                 + resultClass.getSimpleName() + " from " + javaparserType);
@@ -57,6 +67,6 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     @Override
     public ResolvedType calculateType(Expression expression) {
-        throw new UnsupportedOperationException("Unable to calculate type of " + expression);
+        return JavaParserFacade.get(typeSolver).getType(expression);
     }
 }
