@@ -31,16 +31,14 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.JavaParser.parse;
@@ -340,6 +338,13 @@ public class NodeTest {
     }
 
     @Test
+    public void findParent() {
+        CompilationUnit cu = parse("class X{int x;}");
+        SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0).getName();
+        assertEquals("int x;", x.findParent(FieldDeclaration.class).get().toString());
+    }
+
+    @Test
     public void cantFindCompilationUnit() {
         VariableDeclarator x = new VariableDeclarator();
         assertFalse(x.findCompilationUnit().isPresent());
@@ -382,6 +387,20 @@ public class NodeTest {
         assertEquals("[1 + 2 + 3, 1 + 2, 1, 2, 3]", ints.toString());
     }
 
+    @Test
+    public void conditionalTypedFindFirst() {
+        Expression e = parseExpression("1+2+3");
+        Optional<IntegerLiteralExpr> ints = e.findFirst(IntegerLiteralExpr.class, n -> n.asInt() > 1);
+        assertEquals("Optional[2]", ints.toString());
+    }
+
+    @Test
+    public void typeOnlyFindFirst() {
+        Expression e = parseExpression("1+2+3");
+        Optional<IntegerLiteralExpr> ints = e.findFirst(IntegerLiteralExpr.class);
+        assertEquals("Optional[1]", ints.toString());
+    }
+    
     @Test
     public void stream() {
         Expression e = parseExpression("1+2+3");
