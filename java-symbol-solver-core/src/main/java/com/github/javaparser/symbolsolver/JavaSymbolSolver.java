@@ -3,15 +3,19 @@ package com.github.javaparser.symbolsolver;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -46,9 +50,18 @@ public class JavaSymbolSolver implements SymbolResolver {
             return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration)node, typeSolver));
         }
         if (node instanceof ClassOrInterfaceDeclaration) {
-            ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = JavaParserFactory.toTypeDeclaration(node, typeSolver);
-            if (resultClass.isInstance(resolvedReferenceTypeDeclaration)) {
-                return resultClass.cast(resolvedReferenceTypeDeclaration);
+            ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
+            }
+        }
+        if (node instanceof ConstructorDeclaration) {
+            ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration)node;
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)node.getParentNode().get();
+            ResolvedClassDeclaration resolvedClass = resolveDeclaration(classOrInterfaceDeclaration, ResolvedClassDeclaration.class).asClass();
+            ResolvedConstructorDeclaration resolved =  resolvedClass.getConstructors().stream().filter(c -> ((JavaParserConstructorDeclaration)c).getWrappedNode() == constructorDeclaration).findFirst().get();
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
             }
         }
         throw new UnsupportedOperationException("Unable to find the declaration of type " + resultClass.getSimpleName()
