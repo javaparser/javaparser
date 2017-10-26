@@ -729,23 +729,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * Walks the AST, applying the function for every node, with traversal algorithm "traversal".
-     * If the function returns something else than null, the traversal is stopped and the function result is returned.
-     * <br/>This is the most general walk method. All other walk and find methods are based on this.
-     */
-    public <T> Optional<T> walk(TreeTraversal traversal, Function<Node, T> consumer) {
-        for (Node node : treeIterable(traversal)) {
-            T result = consumer.apply(node);
-            if (result != null) {
-                return Optional.of(result);
-            }
-        }
-        return Optional.empty();
-    }
-
-
-    /**
      * Walks the AST, calling the consumer for every node, with traversal algorithm "traversal".
+     * <br/>This is the most general walk method. All other walk and findAll methods are based on this.
      */
     public void walk(TreeTraversal traversal, Consumer<Node> consumer) {
         // Could be implemented as a call to the above walk method, but this is a little more efficient.
@@ -793,15 +778,60 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Walks the AST, applying the function for every node, with traversal algorithm "traversal". If the function
+     * returns something else than null, the traversal is stopped and the function result is returned. <br/>This is the
+     * most general findFirst method. All other findFirst methods are based on this.
+     */
+    public <T> Optional<T> findFirst(TreeTraversal traversal, Function<Node, Optional<T>> consumer) {
+        for (Node node : treeIterable(traversal)) {
+            final Optional<T> result = consumer.apply(node);
+            if (result.isPresent()) {
+                return result;
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Walks the AST with pre-order traversal, returning the first node of type "nodeType" or empty() if none is found.
      */
     public <N extends Node> Optional<N> findFirst(Class<N> nodeType) {
-        return walk(TreeTraversal.PREORDER, node -> {
-            if(nodeType.isAssignableFrom(node.getClass())){
-                return nodeType.cast(node);
+        return findFirst(TreeTraversal.PREORDER, node -> {
+            if (nodeType.isAssignableFrom(node.getClass())) {
+                return Optional.of(nodeType.cast(node));
             }
-            return null;
+            return Optional.empty();
         });
+    }
+
+    /**
+     * Walks the AST with pre-order traversal, returning the first node of type "nodeType" that matches "predicate" or empty() if none is
+     * found.
+     */
+    public <N extends Node> Optional<N> findFirst(Class<N> nodeType, Predicate<N> predicate) {
+        return findFirst(TreeTraversal.PREORDER, node -> {
+            if (nodeType.isAssignableFrom(node.getClass())) {
+                final N castNode = nodeType.cast(node);
+                if (predicate.test(castNode)) {
+                    return Optional.of(castNode);
+                }
+            }
+            return Optional.empty();
+        });
+    }
+
+    /**
+     * Walks the parents of this node, returning the first node of type "nodeType" or empty() if none is found.
+     */
+    public <N extends Node> Optional<N> findParent(Class<N> nodeType) {
+        Node n = this;
+        while (n.getParentNode().isPresent()) {
+            n = n.getParentNode().get();
+            if (nodeType.isAssignableFrom(n.getClass())) {
+                return Optional.of(nodeType.cast(n));
+            }
+        }
+        return Optional.empty();
     }
 
     /**
