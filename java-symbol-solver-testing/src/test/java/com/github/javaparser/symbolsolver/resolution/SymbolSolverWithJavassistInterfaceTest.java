@@ -58,7 +58,7 @@ public class SymbolSolverWithJavassistInterfaceTest extends AbstractTest {
             solvedSymbol.getCorrespondingDeclaration();
         } catch (Exception e) {
             assertTrue(e instanceof UnsupportedOperationException);
-            assertNull(e.getMessage());
+            assertEquals("CorrespondingDeclaration not available for unsolved symbol.", e.getMessage());
             return;
         }
         fail("Expected UnsupportedOperationException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
