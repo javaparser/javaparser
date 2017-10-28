@@ -1,6 +1,6 @@
 description = ''
 dependencies {
-    compile group: 'com.github.javaparser', name: 'javaparser-core', version: '3.4.2'
+    compile group: 'com.github.javaparser', name: 'javaparser-core', version: '3.5.0'
     compile group: 'org.javassist', name: 'javassist', version: '3.19.0-GA'
     compile group: 'com.google.guava', name: 'guava', version: '21.0'
     compile group: 'io.javaslang', name: 'javaslang', version: '2.0.3'

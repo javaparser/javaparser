@@ -462,4 +462,9 @@ public class DefaultVisitorAdapter implements GenericVisitor<ResolvedType, Boole
     public ResolvedType visit(UnparsableStmt node, Boolean arg) {
         throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
+
+    @Override
+    public ResolvedType visit(ReceiverParameter node, Boolean arg) {
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
+    }
 }

@@ -355,7 +355,7 @@ public class ReflectionClassDeclarationTest {
     public void testGetInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         System.out.println(constructorDeclaration.getInterfaces().stream().map(t -> t.getQualifiedName()).collect(Collectors.toList()));
-        assertEquals(8, constructorDeclaration.getInterfaces().size());
+        assertEquals(9, constructorDeclaration.getInterfaces().size());
 
         ResolvedReferenceType interfaze = null;
 
@@ -389,6 +389,9 @@ public class ReflectionClassDeclarationTest {
         interfaze = constructorDeclaration.getInterfaces().get(7);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getInterfaces().get(8);
+        assertEquals("com.github.javaparser.resolution.Resolvable", interfaze.getQualifiedName());
     }
 
     @Test
@@ -429,7 +432,7 @@ public class ReflectionClassDeclarationTest {
     public void testGetAllInterfacesWithParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
         List<ResolvedReferenceType> interfaces = constructorDeclaration.getAllInterfaces();
-        assertEquals(34, interfaces.size());
+        assertEquals(35, interfaces.size());
 
         ResolvedReferenceType interfaze = null;
         int i = 0;
@@ -480,6 +483,9 @@ public class ReflectionClassDeclarationTest {
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters", interfaze.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", interfaze.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters.N").get().asReferenceType().getQualifiedName());
+
+        interfaze = constructorDeclaration.getAllInterfaces().get(i++);
+        assertEquals("com.github.javaparser.resolution.Resolvable", interfaze.getQualifiedName());
 
         interfaze = constructorDeclaration.getAllInterfaces().get(i++);
         assertEquals("java.lang.Cloneable", interfaze.getQualifiedName());
@@ -569,7 +575,7 @@ public class ReflectionClassDeclarationTest {
     @Test
     public void testGetAncestorsWithTypeParameters() {
         ReflectionClassDeclaration constructorDeclaration = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        assertEquals(9, constructorDeclaration.getAncestors().size());
+        assertEquals(10, constructorDeclaration.getAncestors().size());
 
         ResolvedReferenceType ancestor = null;
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
@@ -610,6 +616,8 @@ public class ReflectionClassDeclarationTest {
         assertEquals("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers", ancestor.getQualifiedName());
         assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers.N").get().asReferenceType().getQualifiedName());
 
+        ancestor = ancestors.get(9);
+        assertEquals("com.github.javaparser.resolution.Resolvable", ancestor.getQualifiedName());
     }
 
     @Test
@@ -751,6 +759,9 @@ public class ReflectionClassDeclarationTest {
 
         ancestor = ancestors.remove(0);
         assertEquals("com.github.javaparser.ast.visitor.Visitable", ancestor.getQualifiedName());
+
+        ancestor = ancestors.remove(0);
+        assertEquals("com.github.javaparser.resolution.Resolvable", ancestor.getQualifiedName());
 
         ancestor = ancestors.remove(0);
         assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
