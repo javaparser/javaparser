@@ -153,7 +153,6 @@ public class SymbolSolver {
         if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
             return ((JavassistInterfaceDeclaration) typeDeclaration).solveSymbol(name, typeSolver);
         }
-        //TODO Need JavassistInterfaceDeclaration
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
