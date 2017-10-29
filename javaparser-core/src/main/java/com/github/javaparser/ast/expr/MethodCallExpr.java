@@ -30,8 +30,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
@@ -62,6 +60,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         this(null, null, new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
+    public MethodCallExpr(String name, Expression... arguments) {
+        this(null, null, new NodeList<>(), new SimpleName(name), new NodeList<>(arguments));
+    }
+    
     public MethodCallExpr(final Expression scope, final String name) {
         this(null, scope, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
