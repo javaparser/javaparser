@@ -234,7 +234,6 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
 
-    @Deprecated
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
@@ -258,8 +257,8 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }
 
-        ResolvedReferenceTypeDeclaration superClass = typeSolver.solveType(fqn);
-        return new SymbolSolver(typeSolver).solveSymbolInType(superClass, symbolName);
+        ResolvedReferenceTypeDeclaration fqnTypeDeclaration = typeSolver.solveType(fqn);
+        return new SymbolSolver(typeSolver).solveSymbolInType(fqnTypeDeclaration, symbolName);
     }
 
     private String[] getInterfaceFQNs() {

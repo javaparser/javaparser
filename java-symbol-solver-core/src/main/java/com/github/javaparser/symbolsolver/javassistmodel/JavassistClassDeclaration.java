@@ -157,8 +157,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
         }
 
-        ResolvedReferenceTypeDeclaration superClass = typeSolver.solveType(fqn);
-        return new SymbolSolver(typeSolver).solveSymbolInType(superClass, symbolName);
+        ResolvedReferenceTypeDeclaration fqnTypeDeclaration = typeSolver.solveType(fqn);
+        return new SymbolSolver(typeSolver).solveSymbolInType(fqnTypeDeclaration, symbolName);
     }
 
     private String[] getInterfaceFQNs() {
