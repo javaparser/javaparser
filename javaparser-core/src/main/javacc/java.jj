@@ -27,7 +27,6 @@ options {
   JDK_VERSION = "1.8";
   TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
   JAVA_TEMPLATE_TYPE = "modern";
-  TOKEN_MANAGER_CODE_GENERATOR="org.javacc.parser.TableDrivenJavaCodeGenerator";
 }
 
 PARSER_BEGIN(GeneratedJavaParser)
@@ -69,7 +68,7 @@ import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 
 @Generated("JavaCC")
-final class GeneratedJavaParser {
+final class GeneratedJavaParser extends GeneratedJavaParserSupport {
     /* The problems encountered while parsing */
     List<Problem> problems = new ArrayList<Problem>();
     boolean storeTokens;

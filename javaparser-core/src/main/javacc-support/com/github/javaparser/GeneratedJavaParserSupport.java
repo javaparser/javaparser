@@ -24,18 +24,18 @@ import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
 /**
  * Support class for {@link GeneratedJavaParser}
  */
-class GeneratedJavaParserSupport {
+abstract class GeneratedJavaParserSupport {
     /**
      * Quickly create a new NodeList
      */
-    static <X extends Node> NodeList<X> emptyList() {
+    <X extends Node> NodeList<X> emptyList() {
         return new NodeList<>();
     }
 
     /**
      * Add obj to list and return it. Create a new list if list is null
      */
-    static <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
+    <T extends Node> NodeList<T> add(NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<>();
         }
@@ -46,7 +46,7 @@ class GeneratedJavaParserSupport {
     /**
      * Add obj to list only when list is not null
      */
-    static <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
+    <T extends Node> NodeList<T> addWhenNotNull(NodeList<T> list, T obj) {
         if (obj == null) {
             return list;
         }
@@ -56,7 +56,7 @@ class GeneratedJavaParserSupport {
     /**
      * Add obj to list at position pos
      */
-    static <T extends Node> NodeList<T> prepend(NodeList<T> list, T obj) {
+    <T extends Node> NodeList<T> prepend(NodeList<T> list, T obj) {
         if (list == null) {
             list = new NodeList<>();
         }
@@ -67,7 +67,7 @@ class GeneratedJavaParserSupport {
     /**
      * Add obj to list
      */
-    static <T> List<T> add(List<T> list, T obj) {
+    <T> List<T> add(List<T> list, T obj) {
         if (list == null) {
             list = new LinkedList<>();
         }
@@ -78,7 +78,7 @@ class GeneratedJavaParserSupport {
     /**
      * Add modifier mod to modifiers
      */
-    static void addModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, Modifier mod) {
+    void addModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
             generatedJavaParser.addProblem("Duplicated modifier");
         }
@@ -88,7 +88,7 @@ class GeneratedJavaParserSupport {
     /**
      * Return a TokenRange spanning from begin to end
      */
-    static TokenRange range(GeneratedJavaParser generatedJavaParser, JavaToken begin, JavaToken end) {
+    TokenRange range(GeneratedJavaParser generatedJavaParser, JavaToken begin, JavaToken end) {
         if (generatedJavaParser.storeTokens) {
             return new TokenRange(begin, end);
         }
@@ -98,7 +98,7 @@ class GeneratedJavaParserSupport {
     /**
      * Return a TokenRange spanning from begin to end
      */
-    static TokenRange range(GeneratedJavaParser generatedJavaParser, Node begin, Node end) {
+    TokenRange range(GeneratedJavaParser generatedJavaParser, Node begin, Node end) {
         if (generatedJavaParser.storeTokens) {
             return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
         }
@@ -110,7 +110,7 @@ class GeneratedJavaParserSupport {
      * is determining the right border of the parent (i.e., the child is the last element of the parent). In this case
      * when we "enlarge" the child we should enlarge also the parent.
      */
-    private static void propagateRangeGrowthOnRight(GeneratedJavaParser generatedJavaParser, Node node, Node endNode) {
+    private void propagateRangeGrowthOnRight(GeneratedJavaParser generatedJavaParser, Node node, Node endNode) {
         if (generatedJavaParser.storeTokens) {
             node.getParentNode().ifPresent(nodeParent -> {
                 boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(nodeParent.getTokenRange().get().getEnd());
@@ -125,7 +125,7 @@ class GeneratedJavaParserSupport {
     /**
      * Workaround for rather complex ambiguity that lambda's create
      */
-    static Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
+    Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
@@ -151,7 +151,7 @@ class GeneratedJavaParserSupport {
     /**
      * Throws together an ArrayCreationExpr from a lot of pieces
      */
-    static ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
+    ArrayCreationExpr juggleArrayCreation(TokenRange range, List<TokenRange> levelRanges, Type type, NodeList<Expression> dimensions, List<NodeList<AnnotationExpr>> arrayAnnotations, ArrayInitializerExpr arrayInitializerExpr) {
         NodeList<ArrayCreationLevel> levels = new NodeList<>();
 
         for (int i = 0; i < arrayAnnotations.size(); i++) {
@@ -163,7 +163,7 @@ class GeneratedJavaParserSupport {
     /**
      * Throws together a Type, taking care of all the array brackets
      */
-    static Type juggleArrayType(Type partialType, List<ArrayType.ArrayBracketPair> additionalBrackets) {
+    Type juggleArrayType(Type partialType, List<ArrayType.ArrayBracketPair> additionalBrackets) {
         Pair<Type, List<ArrayType.ArrayBracketPair>> partialParts = unwrapArrayTypes(partialType);
         Type elementType = partialParts.a;
         List<ArrayType.ArrayBracketPair> leftMostBrackets = partialParts.b;
@@ -173,25 +173,15 @@ class GeneratedJavaParserSupport {
     /**
      * Create a TokenRange that spans exactly one token
      */
-    static TokenRange tokenRange(Token token) {
+    TokenRange tokenRange(Token token) {
         JavaToken javaToken = ((CustomToken) token).javaToken;
         return new TokenRange(javaToken, javaToken);
     }
 
     /**
-     * Get the token that starts the NodeList l
-     */
-    static JavaToken nodeListBegin(NodeList<?> l) {
-        if (l.isEmpty()) {
-            return JavaToken.INVALID;
-        }
-        return l.get(0).getTokenRange().get().getBegin();
-    }
-
-    /**
      * This is the code from ParseException.initialise, modified to be more horizontal.
      */
-    static String makeMessageForParseException(ParseException exception) {
+    String makeMessageForParseException(ParseException exception) {
         final StringBuilder sb = new StringBuilder("Parse error. Found ");
         final StringBuilder expected = new StringBuilder();
 
