@@ -28,7 +28,7 @@ public abstract class AbstractTest {
             if (underJavaParserCore.exists()) {
                 return underJavaParserCore;
             } else {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("I cannot adapt the path " + path.getAbsolutePath());
             }
         }
     }

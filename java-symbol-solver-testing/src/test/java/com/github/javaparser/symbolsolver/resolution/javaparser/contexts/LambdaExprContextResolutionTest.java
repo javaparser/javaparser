@@ -81,7 +81,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         File src = new File("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        combinedTypeSolver.add(new JavaParserTypeSolver(src));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(src)));
 
         Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
 
