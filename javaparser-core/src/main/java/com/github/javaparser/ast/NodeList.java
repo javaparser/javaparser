@@ -60,8 +60,12 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         setParentNode(parent);
     }
 
-    public NodeList(NodeList<N> n) {
+    public NodeList(Collection<N> n) {
         this.addAll(n);
+    }
+
+    public NodeList(N... n) {
+        this.addAll(Arrays.asList(n));
     }
 
     @Override
