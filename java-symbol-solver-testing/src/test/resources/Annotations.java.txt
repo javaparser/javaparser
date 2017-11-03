@@ -6,6 +6,10 @@ public @interface MyAnnotation {
 public @interface MyAnnotation2 {
 }
 
+public @interface MyAnnotationWithFields {
+    int field();
+}
+
 @MyAnnotation
 class CA {
 

@@ -6,6 +6,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
@@ -68,6 +69,18 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         assertEquals("MyAnnotation", declaration.getNameAsString());
         ResolvedAnnotationDeclaration resolvedDeclaration = declaration.resolve();
     }
+
+//    @Test
+//    public void annotationMemberDeclarationResolve() throws IOException {
+//        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
+//        ParserConfiguration parserConfiguration = new ParserConfiguration();
+//        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+//        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+//        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
+//        assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
+//        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
+//        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
+//    }
 
     @Test
     public void constructorDeclarationResolve() throws IOException {
