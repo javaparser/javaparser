@@ -65,6 +65,8 @@ import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+
 @Generated("JavaCC")
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
     /* Returns the JavaParser specific token type of the last matched token */
