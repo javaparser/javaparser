@@ -20,12 +20,11 @@
  */
 
 options {
-  LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
-  TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
+  TOKEN_EXTENDS ="TokenBase";
   JAVA_TEMPLATE_TYPE = "modern";
 }
 
@@ -70,7 +69,7 @@ import static com.github.javaparser.ast.type.ArrayType.*;
 final class GeneratedJavaParser extends GeneratedJavaParserBase {
     /* Returns the JavaParser specific token type of the last matched token */
     JavaToken token() {
-        return ((CustomToken)token).javaToken;
+        return token.javaToken;
     }
 
     /* Changes the amount by which the horizontal position is increased when a tab character is encountered.
@@ -103,7 +102,7 @@ TOKEN_MGR_DECLS :
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
-    private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
+    private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
 
     void reset() {
@@ -133,12 +132,11 @@ TOKEN_MGR_DECLS :
         this.storeTokens = storeTokens;
     }
 
-    private void CommonTokenAction(Token rawToken) {
+    private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
-        CustomToken token = (CustomToken) rawToken;
         do {
             tokenWorkStack.push(token);
-            token = (CustomToken) token.specialToken;
+            token = token.specialToken;
         } while (token != null);
 
         // The stack is now filled with tokens in left-to-right order. Process them.
@@ -576,13 +574,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     matchedToken.realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RSIGNEDSHIFT;
+     matchedToken.realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -2491,7 +2489,7 @@ void RUNSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((CustomToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
+                getToken(1).realKind == RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -2500,7 +2498,7 @@ void RSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((CustomToken)getToken(1)).realKind == RSIGNEDSHIFT} )
+                getToken(1).realKind == RSIGNEDSHIFT} )
   ">" ">"
   )
 }

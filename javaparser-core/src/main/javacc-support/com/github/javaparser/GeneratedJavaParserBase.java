@@ -67,22 +67,6 @@ abstract class GeneratedJavaParserBase {
         problems.add(new Problem(message, tokenRange(), null));
     }
 
-    /* Supports a case where >> should be two tokens instead of one,
-        and keeps track of the JavaParser specific token type for this token */
-    static final class CustomToken extends Token {
-        int realKind = GT;
-        JavaToken javaToken;
-
-        CustomToken(int kind, String image) {
-            this.kind = kind;
-            this.image = image;
-        }
-
-        public static Token newToken(int kind, String image) {
-            return new CustomToken(kind, image);
-        }
-    }
-
     /* Returns a tokenRange that spans the last matched token */
     TokenRange tokenRange() {
         if(storeTokens) {
@@ -182,9 +166,7 @@ abstract class GeneratedJavaParserBase {
     TokenRange recover(int recoveryTokenType, ParseException p) {
         JavaToken begin = null;
         if (p.currentToken != null) {
-            if (p.currentToken instanceof CustomToken) {
-                begin = token();
-            }
+            begin = token();
         }
         Token t;
         do {
@@ -390,11 +372,11 @@ abstract class GeneratedJavaParserBase {
      * Create a TokenRange that spans exactly one token
      */
     private static TokenRange tokenRange(Token token) {
-        JavaToken javaToken = ((CustomToken) token).javaToken;
+        JavaToken javaToken = token.javaToken;
         return new TokenRange(javaToken, javaToken);
     }
 
-    static Comment createCommentFromToken(CustomToken token) {
+    static Comment createCommentFromToken(Token token) {
         String commentText = token.image;
         if (token.kind == JAVADOC_COMMENT) {
             return new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
