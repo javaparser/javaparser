@@ -28,6 +28,7 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
+import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
@@ -240,17 +241,27 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
             }
         }
 
-        try {
-            for (CtClass interfaze : ctClass.getInterfaces()) {
-                SymbolReference<? extends ResolvedValueDeclaration> ref = new JavassistInterfaceDeclaration(interfaze, typeSolver).solveSymbol(name, typeSolver);
-                if (ref.isSolved()) {
-                    return ref;
-                }
+        String[] interfaceFQNs = getInterfaceFQNs();
+        for (String interfaceFQN : interfaceFQNs) {
+            SymbolReference<? extends ResolvedValueDeclaration> interfaceRef = solveSymbolForFQN(name, typeSolver, interfaceFQN);
+            if (interfaceRef.isSolved()) {
+                return interfaceRef;
             }
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
         }
 
         return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+    }
+
+    private SymbolReference<? extends ResolvedValueDeclaration> solveSymbolForFQN(String symbolName, TypeSolver typeSolver, String fqn) {
+        if (fqn == null) {
+            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        }
+
+        ResolvedReferenceTypeDeclaration fqnTypeDeclaration = typeSolver.solveType(fqn);
+        return new SymbolSolver(typeSolver).solveSymbolInType(fqnTypeDeclaration, symbolName);
+    }
+
+    private String[] getInterfaceFQNs() {
+        return ctClass.getClassFile().getInterfaces();
     }
 }
