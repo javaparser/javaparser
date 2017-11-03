@@ -5,10 +5,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.comments.BlockComment;
-import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.comments.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ArrayType;
@@ -16,23 +13,195 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.utils.Pair;
 
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
-import static com.github.javaparser.GeneratedJavaParser.CustomToken;
-import static com.github.javaparser.GeneratedJavaParserConstants.JAVADOC_COMMENT;
-import static com.github.javaparser.GeneratedJavaParserConstants.MULTI_LINE_COMMENT;
-import static com.github.javaparser.GeneratedJavaParserConstants.SINGLE_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.Position.pos;
 import static com.github.javaparser.ast.type.ArrayType.unwrapArrayTypes;
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
- * Support class for {@link GeneratedJavaParser}
+ * Base class for {@link GeneratedJavaParser}
  */
-abstract class GeneratedJavaParserSupport {
+abstract class GeneratedJavaParserBase {
+    //// Interface with the generated code
+    abstract GeneratedJavaParserTokenManager getTokenSource();
+    abstract void ReInit(Provider provider);
+    /* Returns the JavaParser specific token type of the last matched token */
+    abstract JavaToken token();
+    abstract Token getNextToken();
+
+    ////
+    
+    /* The problems encountered while parsing */
+    List<Problem> problems = new ArrayList<>();
+    /* Configuration flag whether we store tokens and tokenranges */
+    boolean storeTokens;
+
+    /* Resets the parser for reuse, gaining a little performance */
+    void reset(Provider provider) {
+        ReInit(provider);
+        problems = new ArrayList<>();
+        getTokenSource().reset();
+    }
+
+    /**
+     * Return the list of JavaParser specific tokens that have been encountered while 
+     * parsing code using this parser.
+     *
+     * @return a list of tokens
+     */
+    public List<JavaToken> getTokens() {
+        return getTokenSource().getTokens();
+    }
+
+    /* The collection of comments encountered */
+    CommentsCollection getCommentsCollection() {
+        return getTokenSource().getCommentsCollection();
+    }
+
+    /* Reports a problem to the user */
+    void addProblem(String message) {
+        // TODO tokenRange only takes the final token. Need all the tokens.
+        problems.add(new Problem(message, tokenRange(), null));
+    }
+
+    /* Supports a case where >> should be two tokens instead of one,
+        and keeps track of the JavaParser specific token type for this token */
+    static final class CustomToken extends Token {
+        int realKind = GT;
+        JavaToken javaToken;
+
+        CustomToken(int kind, String image) {
+            this.kind = kind;
+            this.image = image;
+        }
+
+        public static Token newToken(int kind, String image) {
+            return new CustomToken(kind, image);
+        }
+    }
+
+    /* Returns a tokenRange that spans the last matched token */
+    TokenRange tokenRange() {
+        if(storeTokens) {
+            return new TokenRange(token(), token());
+        }
+        return null;
+    }
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    TokenRange range(JavaToken begin, JavaToken end) {
+        if(storeTokens) {
+            return new TokenRange(begin, end);
+        }
+        return null;
+    }
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    TokenRange range(Node begin, JavaToken end) {
+        if(storeTokens) {
+            return new TokenRange(begin.getTokenRange().get().getBegin(), end);
+        }
+        return null;
+    }
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    TokenRange range(JavaToken begin, Node end) {
+        if(storeTokens) {
+            return new TokenRange(begin, end.getTokenRange().get().getEnd());
+        }
+        return null;
+    }
+
+    /**
+     * Return a TokenRange spanning from begin to end
+     */
+    TokenRange range(Node begin, Node end) {
+        if(storeTokens) {
+            return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
+        }
+        return null;
+    }
+
+    /**
+     * @return secondChoice if firstChoice is JavaToken.UNKNOWN, otherwise firstChoice
+     */
+    JavaToken orIfInvalid(JavaToken firstChoice, JavaToken secondChoice) {
+        if(storeTokens) {
+            assertNotNull(firstChoice);
+            assertNotNull(secondChoice);
+            if (firstChoice.valid() || secondChoice.invalid()) {
+                return firstChoice;
+            }
+            return secondChoice;
+        }
+        return null;
+    }
+
+    /**
+     * @return the begin-token secondChoice if firstChoice is JavaToken.UNKNOWN, otherwise firstChoice
+     */
+    JavaToken orIfInvalid(JavaToken firstChoice, Node secondChoice) {
+        if(storeTokens) {
+            return orIfInvalid(firstChoice, secondChoice.getTokenRange().get().getBegin());
+        }
+        return null;
+    }
+
+    /**
+     * Get the token that starts the NodeList l
+     */
+    JavaToken nodeListBegin(NodeList<?> l) {
+        if (!storeTokens || l.isEmpty()) {
+            return JavaToken.INVALID;
+        }
+        return l.get(0).getTokenRange().get().getBegin();
+    }
+
+    /* Sets the kind of the last matched token to newKind */
+    void setTokenKind(int newKind) {
+        token().setKind(newKind);
+    }
+
+    /* Makes the parser keep a list of tokens */
+    void setStoreTokens(boolean storeTokens) {
+        this.storeTokens=storeTokens;
+        getTokenSource().setStoreTokens(storeTokens);
+    }
+
+    /* Called from within a catch block to skip forward to a known token,
+        and report the occurred exception as a problem. */
+    TokenRange recover(int recoveryTokenType, ParseException p) {
+        JavaToken begin = null;
+        if (p.currentToken != null) {
+            if (p.currentToken instanceof CustomToken) {
+                begin = token();
+            }
+        }
+        Token t;
+        do {
+            t = getNextToken();
+        } while(t.kind != recoveryTokenType && t.kind!=EOF);
+
+        JavaToken end = token();
+
+        TokenRange tokenRange=null;
+        if(begin!=null && end!=null){
+            tokenRange=range(begin, end);
+        }
+
+        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
+        return tokenRange;
+    }
+
     /**
      * Quickly create a new NodeList
      */
@@ -86,31 +255,11 @@ abstract class GeneratedJavaParserSupport {
     /**
      * Add modifier mod to modifiers
      */
-    void addModifier(GeneratedJavaParser generatedJavaParser, EnumSet<Modifier> modifiers, Modifier mod) {
+    void addModifier(EnumSet<Modifier> modifiers, Modifier mod) {
         if (modifiers.contains(mod)) {
-            generatedJavaParser.addProblem("Duplicated modifier");
+            addProblem("Duplicated modifier");
         }
         modifiers.add(mod);
-    }
-
-    /**
-     * Return a TokenRange spanning from begin to end
-     */
-    TokenRange range(GeneratedJavaParser generatedJavaParser, JavaToken begin, JavaToken end) {
-        if (generatedJavaParser.storeTokens) {
-            return new TokenRange(begin, end);
-        }
-        return null;
-    }
-
-    /**
-     * Return a TokenRange spanning from begin to end
-     */
-    TokenRange range(GeneratedJavaParser generatedJavaParser, Node begin, Node end) {
-        if (generatedJavaParser.storeTokens) {
-            return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
-        }
-        return null;
     }
 
     /**
@@ -118,40 +267,40 @@ abstract class GeneratedJavaParserSupport {
      * is determining the right border of the parent (i.e., the child is the last element of the parent). In this case
      * when we "enlarge" the child we should enlarge also the parent.
      */
-    private void propagateRangeGrowthOnRight(GeneratedJavaParser generatedJavaParser, Node node, Node endNode) {
-        if (generatedJavaParser.storeTokens) {
+    private void propagateRangeGrowthOnRight(Node node, Node endNode) {
+        if (storeTokens) {
             node.getParentNode().ifPresent(nodeParent -> {
                 boolean isChildOnTheRightBorderOfParent = node.getTokenRange().get().getEnd().equals(nodeParent.getTokenRange().get().getEnd());
                 if (isChildOnTheRightBorderOfParent) {
-                    propagateRangeGrowthOnRight(generatedJavaParser, nodeParent, endNode);
+                    propagateRangeGrowthOnRight(nodeParent, endNode);
                 }
             });
-            node.setTokenRange(range(generatedJavaParser, node, endNode));
+            node.setTokenRange(range(node, endNode));
         }
     }
 
     /**
      * Workaround for rather complex ambiguity that lambda's create
      */
-    Expression generateLambda(GeneratedJavaParser generatedJavaParser, Expression ret, Statement lambdaBody) {
+    Expression generateLambda(Expression ret, Statement lambdaBody) {
         if (ret instanceof EnclosedExpr) {
             Expression inner = ((EnclosedExpr) ret).getInner();
             SimpleName id = ((NameExpr) inner).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-            ret = new LambdaExpr(range(generatedJavaParser, ret, lambdaBody), params, lambdaBody, true);
+            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, true);
         } else if (ret instanceof NameExpr) {
             SimpleName id = ((NameExpr) ret).getName();
             NodeList<Parameter> params = add(new NodeList<>(), new Parameter(ret.getTokenRange().orElse(null), EnumSet.noneOf(Modifier.class), new NodeList<>(), new UnknownType(), false, new NodeList<>(), id));
-            ret = new LambdaExpr(range(generatedJavaParser, ret, lambdaBody), params, lambdaBody, false);
+            ret = new LambdaExpr(range(ret, lambdaBody), params, lambdaBody, false);
         } else if (ret instanceof LambdaExpr) {
             ((LambdaExpr) ret).setBody(lambdaBody);
-            propagateRangeGrowthOnRight(generatedJavaParser, ret, lambdaBody);
+            propagateRangeGrowthOnRight(ret, lambdaBody);
         } else if (ret instanceof CastExpr) {
             CastExpr castExpr = (CastExpr) ret;
-            Expression inner = generateLambda(generatedJavaParser, castExpr.getExpression(), lambdaBody);
+            Expression inner = generateLambda(castExpr.getExpression(), lambdaBody);
             castExpr.setExpression(inner);
         } else {
-            generatedJavaParser.addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
+            addProblem("Failed to parse lambda expression! Please create an issue at https://github.com/javaparser/javaparser/issues");
         }
         return ret;
     }
@@ -181,7 +330,7 @@ abstract class GeneratedJavaParserSupport {
     /**
      * This is the code from ParseException.initialise, modified to be more horizontal.
      */
-    String makeMessageForParseException(ParseException exception) {
+    private String makeMessageForParseException(ParseException exception) {
         final StringBuilder sb = new StringBuilder("Parse error. Found ");
         final StringBuilder expected = new StringBuilder();
 
@@ -240,7 +389,7 @@ abstract class GeneratedJavaParserSupport {
     /**
      * Create a TokenRange that spans exactly one token
      */
-    static TokenRange tokenRange(Token token) {
+    private static TokenRange tokenRange(Token token) {
         JavaToken javaToken = ((CustomToken) token).javaToken;
         return new TokenRange(javaToken, javaToken);
     }
@@ -264,5 +413,4 @@ abstract class GeneratedJavaParserSupport {
         }
         throw new AssertionError("Unexpectedly got passed a non-comment token.");
     }
-
 }
