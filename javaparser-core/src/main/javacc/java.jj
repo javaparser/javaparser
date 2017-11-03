@@ -27,6 +27,7 @@ options {
   JDK_VERSION = "1.8";
   TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
   JAVA_TEMPLATE_TYPE = "modern";
+  TOKEN_MANAGER_CODE_GENERATOR="org.javacc.parser.TableDrivenJavaCodeGenerator";
 }
 
 PARSER_BEGIN(GeneratedJavaParser)
