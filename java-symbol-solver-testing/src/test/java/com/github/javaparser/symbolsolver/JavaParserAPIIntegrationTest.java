@@ -5,8 +5,10 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
@@ -57,7 +59,18 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 //    }
 
     @Test
-    public void classDeclarationResolve() throws IOException {
+    public void annotationDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(0);
+        assertEquals("MyAnnotation", declaration.getNameAsString());
+        ResolvedAnnotationDeclaration resolvedDeclaration = declaration.resolve();
+    }
+
+    @Test
+    public void constructorDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
