@@ -99,7 +99,7 @@ public class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a");
         LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInitializer().get();
 
-        File src = new File("src/test/resources");
+        File src = adaptPath(new File("src/test/resources"));
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
