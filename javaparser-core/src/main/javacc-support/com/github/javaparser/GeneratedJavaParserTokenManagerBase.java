@@ -5,12 +5,12 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.JAVADOC_COMMENT;
-import static com.github.javaparser.GeneratedJavaParserConstants.MULTI_LINE_COMMENT;
-import static com.github.javaparser.GeneratedJavaParserConstants.SINGLE_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.Position.pos;
 
-/** Base class for {@link com.github.javaparser.GeneratedJavaParserTokenManager} */
+/**
+ * Base class for {@link com.github.javaparser.GeneratedJavaParserTokenManager}
+ */
 public class GeneratedJavaParserTokenManagerBase {
     /**
      * Create a TokenRange that spans exactly one token
@@ -20,9 +20,9 @@ public class GeneratedJavaParserTokenManagerBase {
         return new TokenRange(javaToken, javaToken);
     }
 
-    /** 
-     * Since comments are completely captured in a single token, including their delimiters, 
-     * deconstruct them here so we can turn them into nodes later on.
+    /**
+     * Since comments are completely captured in a single token, including their delimiters, deconstruct them here so we
+     * can turn them into nodes later on.
      */
     static Comment createCommentFromToken(Token token) {
         String commentText = token.image;

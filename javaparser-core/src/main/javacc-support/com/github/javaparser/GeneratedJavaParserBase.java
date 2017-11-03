@@ -26,13 +26,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 abstract class GeneratedJavaParserBase {
     //// Interface with the generated code
     abstract GeneratedJavaParserTokenManager getTokenSource();
+
     abstract void ReInit(Provider provider);
+
     /* Returns the JavaParser specific token type of the last matched token */
     abstract JavaToken token();
+
     abstract Token getNextToken();
 
     ////
-    
+
     /* The problems encountered while parsing */
     List<Problem> problems = new ArrayList<>();
     /* Configuration flag whether we store tokens and tokenranges */
@@ -46,8 +49,7 @@ abstract class GeneratedJavaParserBase {
     }
 
     /**
-     * Return the list of JavaParser specific tokens that have been encountered while 
-     * parsing code using this parser.
+     * Return the list of JavaParser specific tokens that have been encountered while parsing code using this parser.
      *
      * @return a list of tokens
      */
@@ -68,7 +70,7 @@ abstract class GeneratedJavaParserBase {
 
     /* Returns a tokenRange that spans the last matched token */
     TokenRange tokenRange() {
-        if(storeTokens) {
+        if (storeTokens) {
             return new TokenRange(token(), token());
         }
         return null;
@@ -78,7 +80,7 @@ abstract class GeneratedJavaParserBase {
      * Return a TokenRange spanning from begin to end
      */
     TokenRange range(JavaToken begin, JavaToken end) {
-        if(storeTokens) {
+        if (storeTokens) {
             return new TokenRange(begin, end);
         }
         return null;
@@ -88,7 +90,7 @@ abstract class GeneratedJavaParserBase {
      * Return a TokenRange spanning from begin to end
      */
     TokenRange range(Node begin, JavaToken end) {
-        if(storeTokens) {
+        if (storeTokens) {
             return new TokenRange(begin.getTokenRange().get().getBegin(), end);
         }
         return null;
@@ -98,7 +100,7 @@ abstract class GeneratedJavaParserBase {
      * Return a TokenRange spanning from begin to end
      */
     TokenRange range(JavaToken begin, Node end) {
-        if(storeTokens) {
+        if (storeTokens) {
             return new TokenRange(begin, end.getTokenRange().get().getEnd());
         }
         return null;
@@ -108,7 +110,7 @@ abstract class GeneratedJavaParserBase {
      * Return a TokenRange spanning from begin to end
      */
     TokenRange range(Node begin, Node end) {
-        if(storeTokens) {
+        if (storeTokens) {
             return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
         }
         return null;
@@ -118,7 +120,7 @@ abstract class GeneratedJavaParserBase {
      * @return secondChoice if firstChoice is JavaToken.UNKNOWN, otherwise firstChoice
      */
     JavaToken orIfInvalid(JavaToken firstChoice, JavaToken secondChoice) {
-        if(storeTokens) {
+        if (storeTokens) {
             assertNotNull(firstChoice);
             assertNotNull(secondChoice);
             if (firstChoice.valid() || secondChoice.invalid()) {
@@ -133,7 +135,7 @@ abstract class GeneratedJavaParserBase {
      * @return the begin-token secondChoice if firstChoice is JavaToken.UNKNOWN, otherwise firstChoice
      */
     JavaToken orIfInvalid(JavaToken firstChoice, Node secondChoice) {
-        if(storeTokens) {
+        if (storeTokens) {
             return orIfInvalid(firstChoice, secondChoice.getTokenRange().get().getBegin());
         }
         return null;
@@ -156,7 +158,7 @@ abstract class GeneratedJavaParserBase {
 
     /* Makes the parser keep a list of tokens */
     void setStoreTokens(boolean storeTokens) {
-        this.storeTokens=storeTokens;
+        this.storeTokens = storeTokens;
         getTokenSource().setStoreTokens(storeTokens);
     }
 
@@ -170,13 +172,13 @@ abstract class GeneratedJavaParserBase {
         Token t;
         do {
             t = getNextToken();
-        } while(t.kind != recoveryTokenType && t.kind!=EOF);
+        } while (t.kind != recoveryTokenType && t.kind != EOF);
 
         JavaToken end = token();
 
-        TokenRange tokenRange=null;
-        if(begin!=null && end!=null){
-            tokenRange=range(begin, end);
+        TokenRange tokenRange = null;
+        if (begin != null && end != null) {
+            tokenRange = range(begin, end);
         }
 
         problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
@@ -186,7 +188,7 @@ abstract class GeneratedJavaParserBase {
     /**
      * Quickly create a new NodeList
      */
-    <X extends Node> NodeList<X> emptyList() {
+    <T extends Node> NodeList<T> emptyList() {
         return new NodeList<>();
     }
 
