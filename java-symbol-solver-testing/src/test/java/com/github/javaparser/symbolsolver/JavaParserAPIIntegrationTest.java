@@ -6,10 +6,7 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -120,4 +117,18 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
     }
 
     // TODO make VariableDeclarator resolvable
+
+    @Test
+    public void methodDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
+        assertEquals("CompilationUnit", classDeclaration.getNameAsString());
+        MethodDeclaration declaration = classDeclaration.getMethodsByName("getComments").get(0);
+        ResolvedMethodDeclaration resolvedDeclaration = declaration.resolve();
+        assertEquals("getComments", resolvedDeclaration.getName());
+        assertEquals(0, resolvedDeclaration.getNumberOfParams());
+    }
 }
