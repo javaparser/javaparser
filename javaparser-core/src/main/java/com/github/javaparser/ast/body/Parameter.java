@@ -44,6 +44,9 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -56,7 +59,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithFinalModifier<Parameter> {
+public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithFinalModifier<Parameter>, Resolvable<ResolvedParameterDeclaration> {
 
     private Type type;
 
@@ -302,5 +305,10 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public ResolvedParameterDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedParameterDeclaration.class);
     }
 }

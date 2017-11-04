@@ -40,6 +40,10 @@ import com.github.javaparser.metamodel.EnumConstantDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -47,7 +51,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements NodeWithJavadoc<EnumConstantDeclaration>, NodeWithSimpleName<EnumConstantDeclaration>, NodeWithArguments<EnumConstantDeclaration> {
+public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclaration> implements NodeWithJavadoc<EnumConstantDeclaration>, NodeWithSimpleName<EnumConstantDeclaration>, NodeWithArguments<EnumConstantDeclaration>, Resolvable<ResolvedEnumConstantDeclaration> {
 
     private SimpleName name;
 
@@ -220,5 +224,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEnumConstantDeclaration(Consumer<EnumConstantDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedEnumConstantDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedEnumConstantDeclaration.class);
     }
 }
