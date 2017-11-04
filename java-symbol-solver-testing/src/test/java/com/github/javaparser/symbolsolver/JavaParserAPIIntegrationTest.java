@@ -131,4 +131,18 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         assertEquals("getComments", resolvedDeclaration.getName());
         assertEquals(0, resolvedDeclaration.getNumberOfParams());
     }
+
+//    @Test
+//    public void parameterDeclarationResolve() throws IOException {
+//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+//        ParserConfiguration parserConfiguration = new ParserConfiguration();
+//        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+//        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+//        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
+//        assertEquals("CompilationUnit", classDeclaration.getNameAsString());
+//        MethodDeclaration methodDeclaration = classDeclaration.getMethodsByName("setComments").get(0);
+//        Parameter declaration = methodDeclaration.getParameter(0);
+//        ResolvedParameterDeclaration resolvedDeclaration = declaration.resolve();
+//    }
+
 }
