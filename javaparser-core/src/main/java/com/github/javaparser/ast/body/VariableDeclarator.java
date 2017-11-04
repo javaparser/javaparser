@@ -45,6 +45,8 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 
 /**
  * The declaration of a variable.<br/>In <code>int x = 14, y = 3;</code> "x = 14"  and " y = 3"  are
@@ -52,7 +54,7 @@ import com.github.javaparser.TokenRange;
  *
  * @author Julio Vilmar Gesser
  */
-public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator> {
+public final class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator>, Resolvable<ResolvedFieldDeclaration> {
 
     private SimpleName name;
 
@@ -267,5 +269,10 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public ResolvedFieldDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedFieldDeclaration.class);
     }
 }
