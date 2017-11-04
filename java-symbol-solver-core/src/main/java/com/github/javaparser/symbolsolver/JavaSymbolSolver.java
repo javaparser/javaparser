@@ -2,10 +2,7 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
@@ -51,6 +48,12 @@ public class JavaSymbolSolver implements SymbolResolver {
             return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration)node, typeSolver));
         }
         if (node instanceof ClassOrInterfaceDeclaration) {
+            ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
+            }
+        }
+        if (node instanceof EnumDeclaration) {
             ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);

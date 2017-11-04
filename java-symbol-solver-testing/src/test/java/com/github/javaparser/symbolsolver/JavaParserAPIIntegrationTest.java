@@ -5,12 +5,10 @@ import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StreamProvider;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -51,14 +49,6 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
     }
 
-//    @Test
-//    public void classDeclarationResolve() throws FileNotFoundException {
-//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
-//        CompilationUnit cu = JavaParser.parse(f);
-//        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)cu.getType(0);
-//        //classOrInterfaceDeclaration.resolve
-//    }
-
     @Test
     public void annotationDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
@@ -82,6 +72,16 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 //        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
 //    }
 
+//    @Test
+//    public void classDeclarationResolve() throws FileNotFoundException {
+//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+//        CompilationUnit cu = JavaParser.parse(f);
+//        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)cu.getType(0);
+//        //classOrInterfaceDeclaration.resolve
+//    }
+
+    // TODO test for interfaceDeclaration
+
     @Test
     public void constructorDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
@@ -91,5 +91,18 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)cu.getType(0);
         ConstructorDeclaration constructorDeclaration = classOrInterfaceDeclaration.getDefaultConstructor().get();
         ResolvedConstructorDeclaration resolvedConstructorDeclaration = constructorDeclaration.resolve();
+    }
+
+    // TODO test for enumConstantDeclaration
+
+    @Test
+    public void enumDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        EnumDeclaration declaration = (EnumDeclaration) cu.getType(0);
+        assertEquals("AccessSpecifier", declaration.getNameAsString());
+        ResolvedEnumDeclaration resolvedDeclaration = declaration.resolve();
     }
 }
