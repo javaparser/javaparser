@@ -9,6 +9,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -105,4 +106,18 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         assertEquals("AccessSpecifier", declaration.getNameAsString());
         ResolvedEnumDeclaration resolvedDeclaration = declaration.resolve();
     }
+
+    @Test
+    public void fieldDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
+        assertEquals("CompilationUnit", classDeclaration.getNameAsString());
+        FieldDeclaration declaration = classDeclaration.getFields().get(0);
+        ResolvedFieldDeclaration resolvedDeclaration = declaration.resolve();
+    }
+
+    // TODO make VariableDeclarator resolvable
 }

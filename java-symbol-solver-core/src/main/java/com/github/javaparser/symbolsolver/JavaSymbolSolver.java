@@ -9,11 +9,13 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserFieldDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
@@ -70,6 +72,22 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof AnnotationDeclaration) {
             ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
+            }
+        }
+        if (node instanceof FieldDeclaration) {
+            FieldDeclaration fieldDeclaration = (FieldDeclaration)node;
+            if (fieldDeclaration.getVariables().size() != 1) {
+                throw new RuntimeException("Cannot resolve a Field Declaration including multiple variable declarators. Resolve the single variable declarators");
+            }
+            ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration(fieldDeclaration.getVariable(0), typeSolver);
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
+            }
+        }
+        if (node instanceof VariableDeclarator) {
+            ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration((VariableDeclarator)node, typeSolver);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
