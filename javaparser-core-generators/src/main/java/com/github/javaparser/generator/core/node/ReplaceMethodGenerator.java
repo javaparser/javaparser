@@ -51,7 +51,6 @@ public class ReplaceMethodGenerator extends NodeGenerator {
         }
         
         addOrReplaceWhenSameSignature(nodeCoid, replaceNodeMethod);
-        annotateGenerated(replaceNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String attributeSetterName) {

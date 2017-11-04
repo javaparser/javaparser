@@ -23,15 +23,15 @@ public abstract class Generator {
 
     public abstract void generate() throws Exception;
 
-    protected <T extends Node & NodeWithAnnotations<T>> void annotateGenerated(T node) {
+    protected <T extends Node & NodeWithAnnotations<? extends T>> void annotateGenerated(T node) {
         annotate(node, Generated.class, new StringLiteralExpr(getClass().getName()));
     }
 
-    protected <T extends Node & NodeWithAnnotations<T>> void annotateSuppressWarnings(T node) {
+    protected <T extends Node & NodeWithAnnotations<? extends T>> void annotateSuppressWarnings(T node) {
         annotate(node, SuppressWarnings.class, new StringLiteralExpr("unchecked"));
     }
 
-    private <T extends Node & NodeWithAnnotations<T>> void annotate(T node, Class<?> annotation, Expression content) {
+    private <T extends Node & NodeWithAnnotations<? extends T>> void annotate(T node, Class<?> annotation, Expression content) {
         node.setAnnotations(
                 node.getAnnotations().stream()
                         .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))

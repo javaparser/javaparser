@@ -37,7 +37,7 @@ public abstract class NodeGenerator extends Generator {
         ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new IOException("Can't find class"));
         return new Pair<>(nodeCu, nodeCoid);
     }
-    
+
     protected void after() throws Exception {
 
     }
@@ -54,7 +54,8 @@ public abstract class NodeGenerator extends Generator {
 
     /**
      * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
-     * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept.
+     * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept. The
+     * method or constructor is annotated with the generator class.
      */
     protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
         addMethod(containingClassOrInterface, callable,
@@ -77,11 +78,13 @@ public abstract class NodeGenerator extends Generator {
         }
         final CallableDeclaration<?> existingCallable = existingCallables.get(0);
         callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+        annotateGenerated(callable);
         containingClassOrInterface.getMembers().replace(existingCallable, callable);
     }
 
     /**
-     * Removes all methods from containingClassOrInterface that have the same signature as callable.
+     * Removes all methods from containingClassOrInterface that have the same signature as callable. This is not used by
+     * any code, but it is useful when changing a generator and you need to get rid of a set of outdated methods.
      */
     protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
         for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {

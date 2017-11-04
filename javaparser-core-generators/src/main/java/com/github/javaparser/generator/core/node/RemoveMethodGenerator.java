@@ -56,7 +56,6 @@ public class RemoveMethodGenerator extends NodeGenerator {
         }
         
         addOrReplaceWhenSameSignature(nodeCoid, removeNodeMethod);
-        annotateGenerated(removeNodeMethod);
     }
 
     private String attributeCheck(PropertyMetaModel property, String removeAttributeMethodName) {
@@ -83,7 +82,6 @@ public class RemoveMethodGenerator extends NodeGenerator {
         block.addStatement(f("return %s((%s) null);", property.getSetterMethodName(), property.getTypeNameForSetter()));
 
         addOrReplaceWhenSameSignature(nodeCoid, removeMethod);
-        annotateGenerated(removeMethod);
         return methodName;
     }
 }

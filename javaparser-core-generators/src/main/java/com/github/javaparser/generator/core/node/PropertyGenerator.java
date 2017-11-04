@@ -87,7 +87,6 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             annotateSuppressWarnings(setter);
         }
-        annotateGenerated(setter);
     }
 
     private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
@@ -100,7 +99,6 @@ public class PropertyGenerator extends NodeGenerator {
             body.addStatement(f("return %s;", property.getName()));
         }
         replaceWhenSameSignature(nodeCoid, getter);
-        annotateGenerated(getter);
     }
 
     private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
@@ -143,6 +141,5 @@ public class PropertyGenerator extends NodeGenerator {
         }
         observablePropertyEnum.addEnumConstant("RANGE");
         observablePropertyEnum.addEnumConstant("COMMENTED_NODE");
-        annotateGenerated(observablePropertyEnum);
     }
 }
