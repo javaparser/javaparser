@@ -11,7 +11,7 @@ import static com.github.javaparser.Position.pos;
 /**
  * Base class for {@link com.github.javaparser.GeneratedJavaParserTokenManager}
  */
-public class GeneratedJavaParserTokenManagerBase {
+abstract class GeneratedJavaParserTokenManagerBase {
     /**
      * Create a TokenRange that spans exactly one token
      */
