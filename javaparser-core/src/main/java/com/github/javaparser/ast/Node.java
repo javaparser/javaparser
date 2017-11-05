@@ -42,7 +42,6 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.printer.PrettyPrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
-
 import javax.annotation.Generated;
 import java.util.*;
 import java.util.function.Consumer;
@@ -50,12 +49,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Spliterator.DISTINCT;
 import static java.util.Spliterator.NONNULL;
+import com.github.javaparser.ast.Node;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -688,13 +687,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public static final DataKey<SymbolResolver> SYMBOL_RESOLVER_KEY = new DataKey<SymbolResolver>() {
     };
 
-
     public enum TreeTraversal {
+
         PREORDER, BREADTHFIRST, POSTORDER, PARENTS, DIRECT_CHILDREN
     }
 
     private Iterator<Node> treeIterator(TreeTraversal traversal) {
-        switch (traversal) {
+        switch(traversal) {
             case BREADTHFIRST:
                 return new BreadthFirstIterator(this);
             case POSTORDER:
@@ -709,7 +708,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 throw new IllegalArgumentException("Unknown traversal choice.");
         }
     }
-    
+
     private Iterable<Node> treeIterable(TreeTraversal traversal) {
         return () -> treeIterator(traversal);
     }
@@ -738,7 +737,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             consumer.accept(node);
         }
     }
-    
+
     /**
      * Walks the AST, calling the consumer for every node with pre-order traversal.
      */
@@ -772,7 +771,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     public <T extends Node> List<T> findAll(Class<T> nodeType, Predicate<T> predicate) {
         final List<T> found = new ArrayList<>();
         walk(nodeType, n -> {
-            if (predicate.test(n)) found.add(n);
+            if (predicate.test(n))
+                found.add(n);
         });
         return found;
     }
@@ -840,6 +840,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @see <a href="https://en.wikipedia.org/wiki/Breadth-first_search">Breadth-first traversal</a>
      */
     public static class BreadthFirstIterator implements Iterator<Node> {
+
         private final Queue<Node> queue = new LinkedList<>();
 
         public BreadthFirstIterator(Node node) {
@@ -863,6 +864,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Performs a simple traversal over all nodes that have the passed node as their parent.
      */
     public static class DirectChildrenIterator implements Iterator<Node> {
+
         private final Iterator<Node> childrenIterator;
 
         public DirectChildrenIterator(Node node) {
@@ -885,6 +887,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * out of parents.
      */
     public static class ParentsVisitor implements Iterator<Node> {
+
         private Node node;
 
         public ParentsVisitor(Node node) {
@@ -909,6 +912,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @see <a href="https://en.wikipedia.org/wiki/Pre-order">Pre-order traversal</a>
      */
     public static class PreOrderIterator implements Iterator<Node> {
+
         private final Stack<Node> stack = new Stack<>();
 
         public PreOrderIterator(Node node) {
@@ -937,9 +941,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
      */
     public static class PostOrderIterator implements Iterator<Node> {
+
         private final Stack<List<Node>> nodesStack = new Stack<>();
+
         private final Stack<Integer> cursorStack = new Stack<>();
+
         private final Node root;
+
         private boolean hasNext = true;
 
         public PostOrderIterator(Node root) {
@@ -991,6 +999,4 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             return nodes.get(cursor);
         }
     }
-
-
 }
