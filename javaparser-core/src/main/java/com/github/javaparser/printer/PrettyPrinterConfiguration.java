@@ -31,7 +31,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class PrettyPrinterConfiguration {
     private boolean orderImports = false;
-    private boolean normalizeEolInComment = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
@@ -56,12 +55,19 @@ public class PrettyPrinterConfiguration {
         return orderImports;
     }
 
+    /**
+     * @deprecated this is always on.
+     */
+    @Deprecated
     public boolean isNormalizeEolInComment() {
-        return normalizeEolInComment;
+        return true;
     }
 
+    /**
+     * @deprecated this is always on.
+     */
+    @Deprecated
     public PrettyPrinterConfiguration setNormalizeEolInComment(boolean normalizeEolInComment) {
-        this.normalizeEolInComment = normalizeEolInComment;
         return this;
     }
 

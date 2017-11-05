@@ -36,7 +36,6 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.utils.Utils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +43,7 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -303,13 +303,17 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final JavadocComment n, final Void arg) {
         if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
-            printer.print("/**");
-            String commentContent = n.getContent();
-            if (configuration.isNormalizeEolInComment()) {
-                commentContent = Utils.normalizeEolInTextBlock(commentContent, configuration.getEndOfLineCharacter());
+            printer.println("/**");
+            final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+            String[] lines = commentContent.split("\\R");
+            for (String line : lines) {
+                line = line.trim();
+                if (line.startsWith("*")) {
+                    line = line.substring(1).trim();
+                }
+                printer.println(" * " + line);
             }
-            printer.print(commentContent);
-            printer.println("*/");
+            printer.println(" */");
         }
     }
 
@@ -682,7 +686,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getScope().isPresent()) {
             n.getScope().get().accept(this, arg);
             if (configuration.isColumnAlignFirstMethodChain()) {
-                if (!(n.getScope().get() instanceof MethodCallExpr) || (!((MethodCallExpr)n.getScope().get()).getScope().isPresent())) {
+                if (!(n.getScope().get() instanceof MethodCallExpr) || (!((MethodCallExpr) n.getScope().get()).getScope().isPresent())) {
                     printer.resetMethodChainPosition(printer.getCursor());
                 } else {
                     printer.wrapToColumn(printer.peekMethodChainPosition().column);
@@ -1321,11 +1325,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        printer.print("//");
-        String tmp = n.getContent();
-        tmp = tmp.replace('\r', ' ');
-        tmp = tmp.replace('\n', ' ');
-        printer.println(tmp);
+        printer
+                .print("//")
+                .println(normalizeEolInTextBlock(n.getContent(), " "));
     }
 
     @Override
@@ -1333,11 +1335,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        String commentContent = n.getContent();
-        if (configuration.isNormalizeEolInComment()) {
-            commentContent = Utils.normalizeEolInTextBlock(commentContent, configuration.getEndOfLineCharacter());
-        }
-        printer.print("/*").print(commentContent).println("*/");
+        printer
+                .print("/*")
+                .print(normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter()))
+                .println("*/");
     }
 
     @Override

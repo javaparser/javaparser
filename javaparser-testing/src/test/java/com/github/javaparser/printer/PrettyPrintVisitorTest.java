@@ -177,13 +177,13 @@ public class PrettyPrintVisitorTest {
     @Test
     public void multilineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
-        cu.addClass("X").addMethod("abc").setJavadocComment("line1\nline2\nline3");
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
 
         assertEqualsNoEol("public class X {\n" +
                 "\n" +
                 "    /**\n" +
                 "     * line1\n" +
-                "     * line2\n" +
+                "     * line2 *\n" +
                 "     * line3\n" +
                 "     */\n" +
                 "    void abc() {\n" +
