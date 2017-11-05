@@ -58,8 +58,12 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
      */
     public enum Origin {
 
-        /** The [] were found on the name, like "int a[]" or "String abc()[][]" */
-        NAME, /** The [] were found on the type, like "int[] a" or "String[][] abc()" */
+        /**
+         * The [] were found on the name, like "int a[]" or "String abc()[][]"
+         */
+        NAME, /**
+         * The [] were found on the type, like "int[] a" or "String[][] abc()"
+         */
         TYPE
     }
 

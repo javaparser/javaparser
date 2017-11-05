@@ -399,8 +399,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return Optional.ofNullable(receiverParameter);
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setReceiverParameter(final ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
             return (T) this;

@@ -43,12 +43,12 @@ import java.util.function.Consumer;
  * One case in a switch statement.
  * <br/><pre>
  * switch (i) {
- *   case 1:
- *   case 2:
- *     System.out.println(444);
- *     break;
- *   default:
- *     System.out.println(0);
+ * case 1:
+ * case 2:
+ * System.out.println(444);
+ * break;
+ * default:
+ * System.out.println(0);
  * }
  * </pre>
  * This contains three SwitchEntryStmts.

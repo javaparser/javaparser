@@ -111,10 +111,4 @@ public class PrettyPrintingSteps {
     public void isPrintedAs(String src) {
         assertEquals(src.trim(), resultNode.toString().trim());
     }
-
-    @Then("it is printed with normalized EOL in comments as:$src")
-    public void isPrintedWithEolAs(String src) {
-        PrettyPrinterConfiguration conf = new PrettyPrinterConfiguration().setNormalizeEolInComment(true);
-        assertEquals(src.trim(), resultNode.toString(conf).trim());
-    }
 }

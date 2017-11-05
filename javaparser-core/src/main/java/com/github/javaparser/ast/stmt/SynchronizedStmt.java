@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 
 /**
  * Usage of the synchronized keyword.
- * <br/>In <code>synchronized (a123) { ... }</code> the expression is a123 and { ... } is the body 
+ * <br/>In <code>synchronized (a123) { ... }</code> the expression is a123 and { ... } is the body
  *
  * @author Julio Vilmar Gesser
  */

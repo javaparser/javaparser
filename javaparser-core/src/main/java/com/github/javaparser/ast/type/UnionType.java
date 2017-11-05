@@ -50,13 +50,13 @@ import java.util.function.Consumer;
  * <h2>Java 7+</h2>
  * As of Java 7 it is used in catch clauses.
  * <pre><code>
- *  try { 
- *      ... 
- *  } catch(<b>IOException | NullPointerException ex</b>) {
- *      ... 
- *  }
+ * try {
+ * ...
+ * } catch(<b>IOException | NullPointerException ex</b>) {
+ * ...
+ * }
  * </pre>
- * 
+ *
  * The types that make up the union type are its "elements"
  */
 public final class UnionType extends Type implements NodeWithAnnotations<UnionType> {

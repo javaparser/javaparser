@@ -35,7 +35,7 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * A class declaration inside a method. 
+ * A class declaration inside a method.
  * Note that JavaParser wil parse interface declarations too, but these are not valid Java code.
  * <p>
  * <br/><code>class X { void m() { <b>class Y { }</b> } }</code>
