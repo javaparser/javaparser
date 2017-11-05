@@ -1339,8 +1339,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             return;
         }
         printer
-                .print("//")
-                .println(normalizeEolInTextBlock(n.getContent(), " "));
+                .print("// ")
+                .println(normalizeEolInTextBlock(n.getContent(), "").trim());
     }
 
     @Override

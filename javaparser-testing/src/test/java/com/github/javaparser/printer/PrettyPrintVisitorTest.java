@@ -25,6 +25,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -233,6 +234,43 @@ public class PrettyPrintVisitorTest {
                 "     * line1\n" +
                 "     */\n" +
                 "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void singlelineCommentGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setComment(new LineComment("   line1  \n "));
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    // line1\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void blockcommentGetsNoFormatting() {
+        CompilationUnit cu = JavaParser.parse("class A {\n" +
+                "    public void helloWorld(String greeting, String name) {\n" +
+                "        //sdfsdfsdf\n" +
+                "            //sdfds\n" +
+                "        /*\n" +
+                "                            dgfdgfdgfdgfdgfd\n" +
+                "         */\n" +
+                "    }\n" +
+                "}\n");
+
+        assertEqualsNoEol("class A {\n" +
+                "\n" +
+                "    public void helloWorld(String greeting, String name) {\n" +
+                "    // sdfsdfsdf\n" +
+                "    // sdfds\n" +
+                "    /*\n" +
+                "                            dgfdgfdgfdgfdgfd\n" +
+                "         */\n" +
                 "    }\n" +
                 "}\n", cu.toString());
     }

@@ -48,8 +48,8 @@ Then it is printed as:
 class A {
 
     public void helloWorld(String greeting, String name) {
-    //sdfsdfsdf
-    //sdfds
+    // sdfsdfsdf
+    // sdfds
     /*
                             dgfdgfdgfdgfdgfd
          */
