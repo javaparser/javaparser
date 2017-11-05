@@ -29,8 +29,6 @@ public class AcceptGenerator extends NodeGenerator {
         nodeCu.addImport(GenericVisitor.class);
         nodeCu.addImport(VoidVisitor.class);
         addOrReplaceWhenSameSignature(nodeCoid, genericAccept);
-        annotateGenerated(genericAccept);
         addOrReplaceWhenSameSignature(nodeCoid, voidAccept);
-        annotateGenerated(voidAccept);
     }
 }

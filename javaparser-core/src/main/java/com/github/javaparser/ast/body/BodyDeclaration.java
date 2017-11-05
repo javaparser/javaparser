@@ -74,8 +74,8 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
         return annotations;
     }
 
-    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @SuppressWarnings("unchecked")
     public T setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
