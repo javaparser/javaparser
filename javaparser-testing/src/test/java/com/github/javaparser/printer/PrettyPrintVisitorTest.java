@@ -32,6 +32,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
@@ -141,7 +142,7 @@ public class PrettyPrintVisitorTest {
     public void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
         CompilationUnit cu = JavaParser.parse(code);
-        PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavaDoc(false);
+        PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavadoc(false);
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
     }
@@ -151,12 +152,12 @@ public class PrettyPrintVisitorTest {
         String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
         CompilationUnit cu = JavaParser.parse(code);
         String content = cu.toString();
-        assertEquals(String.format("import x.y.z;%1$s" +
-                "import a.b.c;%1$s" +
-                "import static b.c.d;%1$s" +
-                "%1$s" +
-                "class c {%1$s" +
-                "}%1$s", EOL), content);
+        assertEqualsNoEol("import x.y.z;\n" +
+                "import a.b.c;\n" +
+                "import static b.c.d;\n" +
+                "\n" +
+                "class c {\n" +
+                "}\n", content);
     }
 
     @Test
@@ -165,11 +166,43 @@ public class PrettyPrintVisitorTest {
         CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
         String content = cu.toString(orderImports);
-        assertEquals(String.format("import static b.c.d;%1$s" +
-                "import a.b.c;%1$s" +
-                "import x.y.z;%1$s" +
-                "%1$s" +
-                "class c {%1$s" +
-                "}%1$s", EOL), content);
+        assertEqualsNoEol("import static b.c.d;\n" +
+                "import a.b.c;\n" +
+                "import x.y.z;\n" +
+                "\n" +
+                "class c {\n" +
+                "}\n", content);
+    }
+
+    @Test
+    public void multilineJavadocGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1\nline2\nline3");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * line1\n" +
+                "     * line2\n" +
+                "     * line3\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void singlelineJavadocGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * line1\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
     }
 }
