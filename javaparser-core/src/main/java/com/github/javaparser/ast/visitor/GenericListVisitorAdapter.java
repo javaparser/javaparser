@@ -562,6 +562,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
+        if (n.getReceiverParameter().isPresent()) {
+            tmp = n.getReceiverParameter().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         {
             tmp = n.getThrownExceptions().accept(this, arg);
             if (tmp != null)
@@ -1185,11 +1190,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getReceiverParameter().isPresent()) {
-            tmp = n.getReceiverParameter().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
         {
             tmp = n.getType().accept(this, arg);
             if (tmp != null)
@@ -1202,6 +1202,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getParameters().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getReceiverParameter().isPresent()) {
+            tmp = n.getReceiverParameter().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

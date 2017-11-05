@@ -101,7 +101,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
         setType(type);
         setBody(body);
-        setReceiverParameter(receiverParameter);
         customInitialization();
     }
 

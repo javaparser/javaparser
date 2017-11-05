@@ -43,7 +43,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
-
 import java.util.function.Consumer;
 
 /**

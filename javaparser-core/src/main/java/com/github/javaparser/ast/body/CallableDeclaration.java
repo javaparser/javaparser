@@ -43,7 +43,6 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -73,7 +72,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    CallableDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
+    public CallableDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -225,6 +224,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                removeReceiverParameter();
+                return true;
+            }
+        }
         for (int i = 0; i < thrownExceptions.size(); i++) {
             if (thrownExceptions.get(i) == node) {
                 thrownExceptions.remove(i);
@@ -351,6 +356,12 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
                 return true;
             }
         }
+        if (receiverParameter != null) {
+            if (node == receiverParameter) {
+                setReceiverParameter((ReceiverParameter) replacementNode);
+                return true;
+            }
+        }
         for (int i = 0; i < thrownExceptions.size(); i++) {
             if (thrownExceptions.get(i) == node) {
                 thrownExceptions.set(i, (ReferenceType) replacementNode);
@@ -388,16 +399,22 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         return Optional.ofNullable(receiverParameter);
     }
 
+    @SuppressWarnings("unchecked")
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public CallableDeclaration<T> setReceiverParameter(final ReceiverParameter receiverParameter) {
+    public T setReceiverParameter(final ReceiverParameter receiverParameter) {
         if (receiverParameter == this.receiverParameter) {
-            return (CallableDeclaration<T>) this;
+            return (T) this;
         }
         notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
         if (this.receiverParameter != null)
             this.receiverParameter.setParentNode(null);
         this.receiverParameter = receiverParameter;
         setAsParentNodeOf(receiverParameter);
-        return this;
+        return (T) this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    public CallableDeclaration removeReceiverParameter() {
+        return setReceiverParameter((ReceiverParameter) null);
     }
 }
