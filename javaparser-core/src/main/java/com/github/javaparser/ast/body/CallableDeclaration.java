@@ -43,6 +43,8 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -60,22 +62,25 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     private NodeList<ReferenceType> thrownExceptions;
 
+    private ReceiverParameter receiverParameter;
+
     @AllFieldsConstructor
-    public CallableDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
-        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+    CallableDeclaration(EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
+        this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions) {
+    CallableDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
         setName(name);
         setParameters(parameters);
         setThrownExceptions(thrownExceptions);
+        setReceiverParameter(receiverParameter);
         customInitialization();
     }
 
@@ -376,5 +381,23 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCallableDeclaration(Consumer<CallableDeclaration> action) {
         action.accept(this);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<ReceiverParameter> getReceiverParameter() {
+        return Optional.ofNullable(receiverParameter);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public CallableDeclaration<T> setReceiverParameter(final ReceiverParameter receiverParameter) {
+        if (receiverParameter == this.receiverParameter) {
+            return (CallableDeclaration<T>) this;
+        }
+        notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
+        if (this.receiverParameter != null)
+            this.receiverParameter.setParentNode(null);
+        this.receiverParameter = receiverParameter;
+        setAsParentNodeOf(receiverParameter);
+        return this;
     }
 }

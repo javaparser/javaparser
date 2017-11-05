@@ -10,7 +10,5 @@ public class MethodDeclarationMetaModel extends CallableDeclarationMetaModel {
 
     public PropertyMetaModel bodyPropertyMetaModel;
 
-    public PropertyMetaModel receiverParameterPropertyMetaModel;
-
     public PropertyMetaModel typePropertyMetaModel;
 }
