@@ -1,3 +1,9 @@
+Version 3.5.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/65?closed=1)
+* The pretty printer now cleans up Javadoc comments.
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
 Version 3.5.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/64?closed=1)
