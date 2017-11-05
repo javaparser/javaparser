@@ -9,6 +9,10 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.metamodel, \
     com.github.javaparser.printer, \
     com.github.javaparser.printer.concretesyntaxmodel, \
+    com.github.javaparser.resolution, \
+    com.github.javaparser.resolution.declarations, \
+    com.github.javaparser.resolution.types, \
+    com.github.javaparser.resolution.types.parametrization, \
     com.github.javaparser.utils, \
     com.github.javaparser.ast, \
     com.github.javaparser.ast.body, \
