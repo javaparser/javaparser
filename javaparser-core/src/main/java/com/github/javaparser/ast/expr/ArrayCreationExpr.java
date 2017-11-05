@@ -44,7 +44,7 @@ import java.util.function.Consumer;
 
 /**
  * <code>new int[5][4][][]</code> or <code>new int[][]{{1},{2,3}}</code>.
- * 
+ *
  * <br/>"int" is the element type.
  * <br/>All the brackets are stored in the levels field, from left to right.
  *

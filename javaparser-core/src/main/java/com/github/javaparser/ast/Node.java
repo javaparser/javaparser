@@ -624,7 +624,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
 
     /**
      * @return whether this node was successfully parsed or not.
-     * If it was not, only the range and tokenRange fields will be valid. 
+     * If it was not, only the range and tokenRange fields will be valid.
      */
     public Parsedness getParsed() {
         return parsed;

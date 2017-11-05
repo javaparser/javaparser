@@ -34,7 +34,7 @@ import javax.annotation.Generated;
 /**
  * A visitor that returns nothing, and has a default implementation for all its visit
  * methods that simply visit their children in an unspecified order.
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {

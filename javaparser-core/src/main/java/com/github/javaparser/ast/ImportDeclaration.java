@@ -38,9 +38,9 @@ import com.github.javaparser.TokenRange;
  * <br/><code>import com.github.javaparser.JavaParser;</code>
  * <br/><code>import com.github.javaparser.*;</code>
  * <br/><code>import com.github.javaparser.JavaParser.*; </code>
- * <br/><code>import static com.github.javaparser.JavaParser.*;</code> 
- * <br/><code>import static com.github.javaparser.JavaParser.parse;</code> 
- * 
+ * <br/><code>import static com.github.javaparser.JavaParser.*;</code>
+ * <br/><code>import static com.github.javaparser.JavaParser.parse;</code>
+ *
  * <p>The name does not include the asterisk or the static keyword.</p>
  * @author Julio Vilmar Gesser
  */

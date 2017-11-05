@@ -48,7 +48,7 @@ import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 
 /**
  * The rather obscure <a href="http://blog.joda.org/2015/12/explicit-receiver-parameters.html">"receiver parameter" feature of Java</a>.
- * 
+ *
  * <br/>All annotations preceding the type will be set on this object, not on the type.
  * JavaParser doesn't know if it they are applicable to the receiver parameter or the type.
  *

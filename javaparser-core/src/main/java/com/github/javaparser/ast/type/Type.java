@@ -51,7 +51,7 @@ public abstract class Type extends Node implements Resolvable<Object> {
     /**
      * Several sub classes do not support annotations.
      * This is a support constructor for them.
-      */
+     */
     protected Type(TokenRange range) {
         this(range, new NodeList<>());
     }

@@ -43,11 +43,11 @@ import java.util.function.Consumer;
  * <h2>Java 1-6</h2>
  * <pre>
  * try {
- *   // ...
+ * // ...
  * } catch (IOException e) {
- *   // ...
+ * // ...
  * } finally {
- *   // ...
+ * // ...
  * }
  * </pre>
  * In this code, "// do things" is the content of the tryBlock, there is one catch clause that catches IOException e,
@@ -57,34 +57,34 @@ import java.util.function.Consumer;
  * <h2>Java 7-8</h2>
  * <pre>
  * try (InputStream i = new FileInputStream("file")) {
- *   // ...
+ * // ...
  * } catch (IOException|NullPointerException e) {
- *   // ...
+ * // ...
  * } finally {
- *   // ...
+ * // ...
  * }
  * </pre>
  * Java 7 introduced two things:
  * <ul>
- *     <li>Resources can be specified after "try", but only variable declarations (VariableDeclarationExpr.)</li>
- *     <li>A single catch can catch multiple exception types. This uses the IntersectionType.</li>
+ * <li>Resources can be specified after "try", but only variable declarations (VariableDeclarationExpr.)</li>
+ * <li>A single catch can catch multiple exception types. This uses the IntersectionType.</li>
  * </ul>
  * <h2>Java 9+</h2>
  * <pre>
  * try (r) {
- *   // ...
+ * // ...
  * } catch (IOException|NullPointerException e) {
- *   // ...
+ * // ...
  * } finally {
- *   // ...
+ * // ...
  * }
  * </pre>
  * Java 9 finishes resources: you can now refer to a resource that was declared somewhere else.
  * The following types are allowed:
  * <ul>
- *     <li>VariableDeclarationExpr: "X x = new X()" like in Java 7-8.</li>
- *     <li>NameExpr: "a".</li>
- *     <li>FieldAccessExpr: "x.y.z", "super.test" etc.</li>
+ * <li>VariableDeclarationExpr: "X x = new X()" like in Java 7-8.</li>
+ * <li>NameExpr: "a".</li>
+ * <li>FieldAccessExpr: "x.y.z", "super.test" etc.</li>
  * </ul>
  *
  * @author Julio Vilmar Gesser
