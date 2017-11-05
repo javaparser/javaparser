@@ -20,12 +20,11 @@
  */
 
 options {
-  LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
-  TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
+  TOKEN_EXTENDS ="TokenBase";
   JAVA_TEMPLATE_TYPE = "modern";
 }
 
@@ -62,184 +61,28 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.GeneratedJavaParser.*;
-import static com.github.javaparser.GeneratedJavaParserSupport.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+
 @Generated("JavaCC")
-final class GeneratedJavaParser {
-    /* The problems encountered while parsing */
-    List<Problem> problems = new ArrayList<Problem>();
-    boolean storeTokens;
-
-    /* Resets the parser for reuse, gaining a little performance */
-    void reset(Provider provider) {
-        ReInit(provider);
-        problems = new ArrayList<Problem>();
-        token_source.reset();
-    }
-
-    /* Called from within a catch block to skip forward to a known token,
-        and report the occurred exception as a problem. */
-    TokenRange recover(int recoveryTokenType, ParseException p) {
-        JavaToken begin = null;
-        if (p.currentToken != null) {
-            if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
-                begin = token();
-            }
-        }
-        Token t;
-        boolean done = false;
-        do {
-            t = getNextToken();
-        } while(t.kind != recoveryTokenType && t.kind!=EOF);
-
-        JavaToken end = token();
-
-        TokenRange tokenRange=null;
-        if(begin!=null && end!=null){
-            tokenRange=range(begin, end);
-        }
-
-        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
-        return tokenRange;
-    }
-
-    /**
-     * Return the list of JavaParser specific tokens that have been encountered while 
-     * parsing code using this parser.
-     *
-     * @return a list of tokens
-     */
-    public List<JavaToken> getTokens() {
-        return token_source.getTokens();
-    }
-
-    /* The collection of comments encountered */
-    public CommentsCollection getCommentsCollection() {
-        return token_source.getCommentsCollection();
-    }
-
-    /* Reports a problem to the user */
-    void addProblem(String message) {
-        // TODO tokenRange only takes the final token. Need all the tokens.
-        problems.add(new Problem(message, tokenRange(), null));
-    }
-
-    /* Supports a case where >> should be two tokens instead of one,
-        and keeps track of the JavaParser specific token type for this token */
-    static final class CustomToken extends Token {
-        int realKind = GeneratedJavaParserConstants.GT;
-        JavaToken javaToken;
-
-        CustomToken(int kind, String image) {
-            this.kind = kind;
-            this.image = image;
-        }
-
-        public static Token newToken(int kind, String image) {
-            return new CustomToken(kind, image);
-        }
-    }
-
+final class GeneratedJavaParser extends GeneratedJavaParserBase {
     /* Returns the JavaParser specific token type of the last matched token */
-    private JavaToken token() {
-        return ((CustomToken)token).javaToken;
-    }
-
-    /* Returns a tokenRange that spans the last matched token */
-    private TokenRange tokenRange() {
-        if(storeTokens) {
-            return new TokenRange(token(), token());
-        } 
-        return null;
-    }
-
-    /**
-     * Return a TokenRange spanning from begin to end
-     */
-    private TokenRange range(JavaToken begin, JavaToken end) {
-        if(storeTokens) {
-            return new TokenRange(begin, end);
-        } 
-        return null;
-    }
-
-    /**
-     * Return a TokenRange spanning from begin to end
-     */
-    private TokenRange range(Node begin, JavaToken end) {
-        if(storeTokens) {
-            return new TokenRange(begin.getTokenRange().get().getBegin(), end);
-        }
-        return null;
-    }
-
-    /**
-     * Return a TokenRange spanning from begin to end
-     */
-    private TokenRange range(JavaToken begin, Node end) {
-        if(storeTokens) {
-            return new TokenRange(begin, end.getTokenRange().get().getEnd());
-        }
-        return null;
-    }
-
-    /**
-     * Return a TokenRange spanning from begin to end
-     */
-    private TokenRange range(Node begin, Node end) {
-        if(storeTokens) {
-            return new TokenRange(begin.getTokenRange().get().getBegin(), end.getTokenRange().get().getEnd());
-        } 
-        return null;
-    }
-
-    private JavaToken orIfInvalid(JavaToken firstChoice, JavaToken secondChoice) {
-        if(storeTokens) {
-            assertNotNull(firstChoice);
-            assertNotNull(secondChoice);
-            if (firstChoice.valid() || secondChoice.invalid()) {
-                return firstChoice;
-            }
-            return secondChoice;
-        }
-        return null;
-    }
-
-    private JavaToken orIfInvalid(JavaToken firstChoice, Node secondChoice) {
-        if(storeTokens) {
-            return orIfInvalid(firstChoice, secondChoice.getTokenRange().get().getBegin());
-        }
-        return null;
-    }
-
-    /**
-     * Get the token that starts the NodeList l
-     */
-    private JavaToken nodeListBegin(NodeList<?> l) {
-        if (!storeTokens || l.isEmpty()) {
-            return JavaToken.INVALID;
-        }
-        return l.get(0).getTokenRange().get().getBegin();
-    }
-
-    /* Sets the kind of the last matched token to newKind */
-    private void setTokenKind(int newKind) {
-        token().setKind(newKind);
+    JavaToken token() {
+        return token.javaToken;
     }
 
     /* Changes the amount by which the horizontal position is increased when a tab character is encountered.
         One by default.*/
-    public void setTabSize(int size) {
+    void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
 
-    /* Makes the parser keep a list of tokens */
-    public void setStoreTokens(boolean storeTokens) {
-        this.storeTokens=storeTokens; 
-        token_source.setStoreTokens(storeTokens);
+    @Override
+    GeneratedJavaParserTokenManager getTokenSource() {
+        return token_source;
     }
 }
 
@@ -261,7 +104,7 @@ TOKEN_MGR_DECLS :
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
-    private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
+    private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
 
     void reset() {
@@ -291,41 +134,28 @@ TOKEN_MGR_DECLS :
         this.storeTokens = storeTokens;
     }
 
-    private void CommonTokenAction(Token rawToken) {
+    private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
-        CustomToken token = (CustomToken) rawToken;
         do {
             tokenWorkStack.push(token);
-            token = (CustomToken) token.specialToken;
+            token = token.specialToken;
         } while (token != null);
 
         // The stack is now filled with tokens in left-to-right order. Process them.
         while(!tokenWorkStack.empty()) {
             token = tokenWorkStack.pop();
             token.javaToken = new JavaToken(token, tokens);
+
             if(storeTokens) {
                 tokens.add(token.javaToken);
             }
+
             if (homeToken == null) {
                 homeToken = token.javaToken;
             }
 
-            String commentText = token.image;
-            if (token.kind == JAVADOC_COMMENT) {
-                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == MULTI_LINE_COMMENT) {
-                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == SINGLE_LINE_COMMENT) {
-                // line comments have their end of line character(s) included, and we don't want that.
-                Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
-                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                    commentText = commentText.substring(0, commentText.length() - 1);
-                }
-                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
-                comment.setRange(range);
+            if(TokenTypes.isComment(token.kind)) {
+                Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
             }
         }
@@ -746,13 +576,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     matchedToken.realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RSIGNEDSHIFT;
+     matchedToken.realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -854,31 +684,31 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { addModifier(this, modifiers, Modifier.PUBLIC); begin = orIfInvalid(begin, token()); }
+   "public" { addModifier(modifiers, Modifier.PUBLIC); begin = orIfInvalid(begin, token()); }
   |
-   "static" { addModifier(this, modifiers, Modifier.STATIC); begin = orIfInvalid(begin, token()); }
+   "static" { addModifier(modifiers, Modifier.STATIC); begin = orIfInvalid(begin, token()); }
   |
-   "protected" {  addModifier(this, modifiers, Modifier.PROTECTED); begin = orIfInvalid(begin, token()); }
+   "protected" {  addModifier(modifiers, Modifier.PROTECTED); begin = orIfInvalid(begin, token()); }
   |
-   "private" { addModifier(this, modifiers, Modifier.PRIVATE); begin = orIfInvalid(begin, token()); }
+   "private" { addModifier(modifiers, Modifier.PRIVATE); begin = orIfInvalid(begin, token()); }
   |
-   "final" { addModifier(this, modifiers, Modifier.FINAL); begin = orIfInvalid(begin, token()); }
+   "final" { addModifier(modifiers, Modifier.FINAL); begin = orIfInvalid(begin, token()); }
   |
-   "abstract" { addModifier(this, modifiers, Modifier.ABSTRACT); begin = orIfInvalid(begin, token()); }
+   "abstract" { addModifier(modifiers, Modifier.ABSTRACT); begin = orIfInvalid(begin, token()); }
   |
-   "synchronized" { addModifier(this, modifiers, Modifier.SYNCHRONIZED); begin = orIfInvalid(begin, token()); }
+   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED); begin = orIfInvalid(begin, token()); }
   |
-   "native" { addModifier(this, modifiers, Modifier.NATIVE); begin = orIfInvalid(begin, token()); }
+   "native" { addModifier(modifiers, Modifier.NATIVE); begin = orIfInvalid(begin, token()); }
   |
-   "transient" { addModifier(this, modifiers, Modifier.TRANSIENT); begin = orIfInvalid(begin, token()); }
+   "transient" { addModifier(modifiers, Modifier.TRANSIENT); begin = orIfInvalid(begin, token()); }
   |
-   "volatile" { addModifier(this, modifiers, Modifier.VOLATILE); begin = orIfInvalid(begin, token()); }
+   "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = orIfInvalid(begin, token()); }
   |
-   "strictfp" { addModifier(this, modifiers, Modifier.STRICTFP);  begin = orIfInvalid(begin, token()); }
+   "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = orIfInvalid(begin, token()); }
   |
-   "transitive" { addModifier(this, modifiers, Modifier.TRANSITIVE);  begin = orIfInvalid(begin, token()); }
+   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = orIfInvalid(begin, token()); }
   |
-   "default" { addModifier(this, modifiers, Modifier.DEFAULT);  begin = orIfInvalid(begin, token()); }
+   "default" { addModifier(modifiers, Modifier.DEFAULT);  begin = orIfInvalid(begin, token()); }
   |
    ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
   )
@@ -1607,14 +1437,14 @@ Expression Expression():
             "->" lambdaBody = LambdaBody()
             {
                 if (ret instanceof CastExpr) {
-                    ret = generateLambda(this, ret, lambdaBody);
+                    ret = generateLambda(ret, lambdaBody);
                 } else if (ret instanceof ConditionalExpr) {
                     ConditionalExpr ce = (ConditionalExpr) ret;
                     if(ce.getElseExpr() != null) {
-                        ce.setElseExpr(generateLambda(this, ce.getElseExpr(), lambdaBody));
+                        ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
                     }
                 } else {
-                    ret = generateLambda(this, ret, lambdaBody);
+                    ret = generateLambda(ret, lambdaBody);
                 }
             }
         |
@@ -2661,7 +2491,7 @@ void RUNSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((CustomToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
+                getToken(1).realKind == RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -2670,7 +2500,7 @@ void RSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((CustomToken)getToken(1)).realKind == RSIGNEDSHIFT} )
+                getToken(1).realKind == RSIGNEDSHIFT} )
   ">" ">"
   )
 }
