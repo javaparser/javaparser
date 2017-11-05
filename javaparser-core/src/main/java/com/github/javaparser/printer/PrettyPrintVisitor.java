@@ -306,12 +306,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printer.println("/**");
             final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
             String[] lines = commentContent.split("\\R");
+            boolean skippingLeadingEmptyLines = true;
+            boolean prependEmptyLine = false;
             for (String line : lines) {
                 line = line.trim();
                 if (line.startsWith("*")) {
                     line = line.substring(1).trim();
                 }
-                printer.println(" * " + line);
+                if (line.isEmpty()) {
+                    if (!skippingLeadingEmptyLines) {
+                        prependEmptyLine = true;
+                    }
+                } else {
+                    skippingLeadingEmptyLines = false;
+                    if (prependEmptyLine) {
+                        printer.println(" *");
+                        prependEmptyLine = false;
+                    }
+                    printer.println(" * " + line);
+                }
             }
             printer.println(" */");
         }

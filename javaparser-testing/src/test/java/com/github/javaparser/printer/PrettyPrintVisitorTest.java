@@ -192,6 +192,37 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
+    public void emptyJavadocGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void multilineJavadocWithLotsOfEmptyLinesGetsFormattedNeatly() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\nab\n\n\ncd\n\n\n");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * ab\n" +
+                "     *\n" +
+                "     * cd\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
     public void singlelineJavadocGetsFormatted() {
         CompilationUnit cu = new CompilationUnit();
         cu.addClass("X").addMethod("abc").setJavadocComment("line1");

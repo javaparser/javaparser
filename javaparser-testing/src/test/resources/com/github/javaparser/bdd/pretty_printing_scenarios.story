@@ -301,11 +301,12 @@ When the class is parsed by the Java parser
 Then it is printed as:
 public class Foo {
 
-    /** This line gets duplicated */
+    /**
+     * This line gets duplicated
+     */
     public void foo() {
     }
 }
-
 
 Scenario: various lamba casts (issue 418)
 Given the class:
