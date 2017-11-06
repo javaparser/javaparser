@@ -74,13 +74,21 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         declaration.resolve();
     }
 
+    @Test
+    public void interfaceDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/MethodTypeParams.java.txt"));
+        CompilationUnit cu = parseWithSymbolResolution(f);
+        ClassOrInterfaceDeclaration declaration = (ClassOrInterfaceDeclaration)cu.getType(1);
+        assertEquals("VoidVisitor", declaration.getNameAsString());
+        assertEquals(true, declaration.isInterface());
+        declaration.resolve();
+    }
+
     private CompilationUnit parseWithSymbolResolution(File f) throws IOException {
         ParserConfiguration parserConfiguration = new ParserConfiguration();
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         return new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
     }
-
-    // TODO test for interfaceDeclaration
 
     @Test
     public void constructorDeclarationResolve() throws IOException {
