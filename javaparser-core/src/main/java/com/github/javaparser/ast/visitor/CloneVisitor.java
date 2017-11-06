@@ -185,11 +185,12 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         BlockStmt body = cloneNode(n.getBody(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
         NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body);
+        ConstructorDeclaration r = new ConstructorDeclaration(n.getTokenRange().orElse(null), n.getModifiers(), annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter);
         r.setComment(comment);
         return r;
     }
@@ -198,10 +199,10 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Generated("com.github.javaparser.generator.core.visitor.CloneVisitorGenerator")
     public Visitable visit(final MethodDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
-        ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
         Type type = cloneNode(n.getType(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<Parameter> parameters = cloneList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = cloneNode(n.getReceiverParameter(), arg);
         NodeList<ReferenceType> thrownExceptions = cloneList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);

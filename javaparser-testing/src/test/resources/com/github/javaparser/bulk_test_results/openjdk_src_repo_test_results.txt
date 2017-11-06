@@ -22,9 +22,6 @@ Lexical error at line 33, column 1.  Encountered: "\\" (92), after : ""
 langtools-5ecbed313125/test/jdk/javadoc/doclet/testSourceTab/SingleTab/C.java
 Lexical error at line 33, column 1.  Encountered: "\\" (92), after : ""
 
-langtools-5ecbed313125/test/jdk/javadoc/doclet/testTypeAnnotations/typeannos/RepeatedAnnotations.java
-(line 62,col 9) The receiver cannot be used in a static context.
-
 langtools-5ecbed313125/test/jdk/javadoc/doclet/testUnnamedPackage/BadSource.java
 Parse error. Found  "Just" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
@@ -72,9 +69,6 @@ langtools-5ecbed313125/test/tools/javac/annotations/FinalReceiverTest.java
 (line 11,col 43) Parse error. Found ".", expected one of  ")" "," "@" "["
 (line 14,col 2) Parse error. Found <EOF>, expected "}"
 (line 14,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
-
-langtools-5ecbed313125/test/tools/javac/annotations/LocalInnerReceiverTest.java
-(line 34,col 72) The receiver cannot be used in a static context.
 
 langtools-5ecbed313125/test/tools/javac/annotations/neg/AnnComma.java
 (line 12,col 35) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -272,12 +266,6 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalUnderscore.java
 langtools-5ecbed313125/test/tools/javac/diags/examples/IllegalUnicodeEscape.java
 (line 27,col 11) Parse error. Found <EOF>, expected one of  "!" "(" "+" "++" "-" "--" "@" "boolean" "byte" "char" "double" "enum" "exports" "false" "float" "int" "long" "module" "new" "null" "open" "opens" "provides" "requires" "short" "strictfp" "super" "this" "to" "transitive" "true" "uses" "void" "with" "{" "~" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
 
-langtools-5ecbed313125/test/tools/javac/diags/examples/IncorrectConstructorReceiverName.java
-(line 28,col 56) The receiver cannot be used in a static context.
-
-langtools-5ecbed313125/test/tools/javac/diags/examples/IncorrectConstructorReceiverType.java
-(line 28,col 63) The receiver cannot be used in a static context.
-
 langtools-5ecbed313125/test/tools/javac/diags/examples/InitializerNotAllowed.java
 (line 27,col 5) An interface cannot have initializers.
 
@@ -333,9 +321,6 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/PrematureEOF.java
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/ProcessorWrongType/ProcessorWrongType.java
 Parse error. Found  "clas" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
-
-langtools-5ecbed313125/test/tools/javac/diags/examples/ReceiverParameterNotApplicableConstructor.java
-(line 27,col 97) The receiver cannot be used in a static context.
 
 langtools-5ecbed313125/test/tools/javac/diags/examples/RepeatedModifier.java
 (line 27,col 12) Duplicated modifier
@@ -588,9 +573,6 @@ langtools-5ecbed313125/test/tools/javac/policy/test3/A.java
 langtools-5ecbed313125/test/tools/javac/processing/6994946/SyntaxErrorTest.java
 (line 14,col 9) Parse error. Found "}", expected "("
 
-langtools-5ecbed313125/test/tools/javac/processing/errors/CrashOnNonExistingAnnotation/Source.java
-(line 54,col 13) The receiver cannot be used in a static context.
-
 langtools-5ecbed313125/test/tools/javac/processing/errors/TestParseErrors/ParseErrors.java
 (line 37,col 36) Parse error. Found ",", expected one of  "..." "@" "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
 
@@ -660,4 +642,4 @@ langtools-5ecbed313125/test/tools/javadoc/enum/docComments/pkg1/Operation.java
 langtools-5ecbed313125/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-302 problems in 180 files
+296 problems in 174 files

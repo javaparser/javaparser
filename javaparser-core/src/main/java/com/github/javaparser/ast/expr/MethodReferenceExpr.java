@@ -48,8 +48,8 @@ import java.util.function.Consumer;
  * it can be "new".
  * <br/>In <code>System.out::println;</code> the scope is System.out and the identifier is "println"
  * <br/><code>(test ? stream.map(String::trim) : stream)::toArray;</code>
- * <br/>In <code>Bar&lt;String>::&lt;Integer>new</code> the String type argument is on the scope, 
- * and the Integer type argument is on this MethodReferenceExpr. 
+ * <br/>In <code>Bar&lt;String>::&lt;Integer>new</code> the String type argument is on the scope,
+ * and the Integer type argument is on this MethodReferenceExpr.
  *
  * @author Raquel Pau
  */

@@ -26,6 +26,5 @@ public class GetMetaModelGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(nodeCoid, getMetaModelMethod);
         nodeCu.addImport(nodeMetaModel.getClass().getName());
         nodeCu.addImport(JavaParserMetaModel.class);
-        annotateGenerated(getMetaModelMethod);
     }
 }

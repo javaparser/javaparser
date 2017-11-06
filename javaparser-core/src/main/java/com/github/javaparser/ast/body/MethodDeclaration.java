@@ -36,9 +36,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.Modifier.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -58,7 +56,7 @@ import java.util.function.Consumer;
  *
  * <br/>All annotations preceding the return type will be set on this object, not on the return type.
  * JavaParser doesn't know if it they are applicable to the method or the type.
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public final class MethodDeclaration extends CallableDeclaration<MethodDeclaration> implements NodeWithType<MethodDeclaration, Type>, NodeWithOptionalBlockStmt<MethodDeclaration>, NodeWithJavadoc<MethodDeclaration>, NodeWithDeclaration, NodeWithSimpleName<MethodDeclaration>, NodeWithParameters<MethodDeclaration>, NodeWithThrownExceptions<MethodDeclaration>, NodeWithTypeParameters<MethodDeclaration>, NodeWithAccessModifiers<MethodDeclaration>, NodeWithAbstractModifier<MethodDeclaration>, NodeWithStaticModifier<MethodDeclaration>, NodeWithFinalModifier<MethodDeclaration>, NodeWithStrictfpModifier<MethodDeclaration>, Resolvable<ResolvedMethodDeclaration> {
@@ -66,8 +64,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     private Type type;
 
     private BlockStmt body;
-
-    private ReceiverParameter receiverParameter;
 
     public MethodDeclaration() {
         this(null, EnumSet.noneOf(Modifier.class), new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null);
@@ -90,7 +86,9 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, receiverParameter);
     }
 
-    /** @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set. */
+    /**
+     * @deprecated this constructor allows you to set "isDefault", but this is no longer a field of this node, but simply one of the modifiers. Use setDefault(boolean) or add DEFAULT to the modifiers set.
+     */
     @Deprecated
     public MethodDeclaration(final EnumSet<Modifier> modifiers, final NodeList<AnnotationExpr> annotations, final NodeList<TypeParameter> typeParameters, final Type type, final SimpleName name, final boolean isDefault, final NodeList<Parameter> parameters, final NodeList<ReferenceType> thrownExceptions, final BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, type, name, parameters, thrownExceptions, body, null);
@@ -102,10 +100,9 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, Type type, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
-        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions);
+        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter);
         setType(type);
         setBody(body);
-        setReceiverParameter(receiverParameter);
         customInitialization();
     }
 
@@ -282,12 +279,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 return true;
             }
         }
-        if (receiverParameter != null) {
-            if (node == receiverParameter) {
-                removeReceiverParameter();
-                return true;
-            }
-        }
         return super.remove(node);
     }
 
@@ -319,12 +310,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 return true;
             }
         }
-        if (receiverParameter != null) {
-            if (node == receiverParameter) {
-                setReceiverParameter((ReceiverParameter) replacementNode);
-                return true;
-            }
-        }
         if (node == type) {
             setType((Type) replacementNode);
             return true;
@@ -352,28 +337,5 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     @Override
     public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<ReceiverParameter> getReceiverParameter() {
-        return Optional.ofNullable(receiverParameter);
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public MethodDeclaration setReceiverParameter(final ReceiverParameter receiverParameter) {
-        if (receiverParameter == this.receiverParameter) {
-            return (MethodDeclaration) this;
-        }
-        notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
-        if (this.receiverParameter != null)
-            this.receiverParameter.setParentNode(null);
-        this.receiverParameter = receiverParameter;
-        setAsParentNodeOf(receiverParameter);
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public MethodDeclaration removeReceiverParameter() {
-        return setReceiverParameter((ReceiverParameter) null);
     }
 }

@@ -50,6 +50,5 @@ public class MainConstructorGenerator extends NodeGenerator {
 
         addOrReplaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(TokenRange.class);
-        annotateGenerated(constructor);
     }
 }
