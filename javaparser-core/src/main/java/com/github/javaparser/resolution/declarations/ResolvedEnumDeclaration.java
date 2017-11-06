@@ -21,6 +21,8 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import java.util.List;
+
 /**
  * Declaration of an Enum.
  *
@@ -38,4 +40,6 @@ public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaratio
     default ResolvedEnumDeclaration asEnum() {
         return this;
     }
+
+    List<ResolvedEnumConstantDeclaration> getEnumConstants();
 }
