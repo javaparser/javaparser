@@ -30,7 +30,6 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
@@ -39,8 +38,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
-import java.util.List;
 
 /**
  * Base class for types.

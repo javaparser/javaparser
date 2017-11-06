@@ -135,12 +135,6 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @SuppressWarnings("unchecked")
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
-        if (parameters.size() > 0 && parameters.get(0).getNameAsString().equals("this")) {
-            setReceiverAnnotations(parameters.get(0).getAnnotations());
-            parameters.remove(0);
-        } else {
-            setReceiverAnnotations(new NodeList<>());
-        }
         if (parameters == this.parameters) {
             return (T) this;
         }
@@ -150,15 +144,6 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
         return (T) this;
-    }
-
-    public CallableDeclaration<T> setReceiverAnnotations(NodeList<AnnotationExpr> receiverAnnotations) {
-        this.receiverAnnotations = receiverAnnotations;
-        return this;
-    }
-
-    public NodeList<AnnotationExpr> getReceiverAnnotations() {
-        return receiverAnnotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

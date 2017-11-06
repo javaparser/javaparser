@@ -1143,4 +1143,10 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         return true;
     }
+
+    @Override
+    public Boolean visit(StubUnit n, Visitable arg) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

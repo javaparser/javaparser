@@ -129,11 +129,9 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
      */
     @SafeVarargs
     public static Type wrapInArrayTypes(Type type, List<ArrayBracketPair>... arrayBracketPairLists) {
-        List<ArrayBracketPair> arrayAnnotations = new ArrayList<>();
         for (int i = arrayBracketPairLists.length - 1; i >= 0; i--) {
             final List<ArrayBracketPair> arrayBracketPairList = arrayBracketPairLists[i];
             if (arrayBracketPairList != null) {
-                arrayAnnotations.addAll(arrayBracketPairList);
                 for (int j = arrayBracketPairList.size() - 1; j >= 0; j--) {
                     ArrayBracketPair pair = arrayBracketPairList.get(j);
                     TokenRange tokenRange = null;
@@ -147,10 +145,6 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
                 }
             }
         }
-        // The above code concatenates the arrayBracketPairLists, because they represent different
-        // parts of the array rather than two sources of information about the same parts of the
-        // array.
-        type.setArrayBracketPairs(arrayAnnotations);
         return type;
     }
 
