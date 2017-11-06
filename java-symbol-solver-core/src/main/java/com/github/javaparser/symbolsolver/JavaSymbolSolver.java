@@ -59,6 +59,11 @@ public class JavaSymbolSolver implements SymbolResolver {
                 return resultClass.cast(resolved);
             }
         }
+        if (node instanceof EnumConstantDeclaration) {
+            ResolvedEnumDeclaration enumDeclaration = Navigator.findAncestor(node, EnumDeclaration.class).get().resolve().asEnum();
+            // TODO look among the members
+            throw new UnsupportedOperationException();
+        }
         if (node instanceof ConstructorDeclaration) {
             ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration)node;
             ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)node.getParentNode().get();
@@ -93,6 +98,23 @@ public class JavaSymbolSolver implements SymbolResolver {
             ResolvedFieldDeclaration resolved = new JavaParserFieldDeclaration((VariableDeclarator)node, typeSolver);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
+            }
+        }
+        if (node instanceof Parameter) {
+            if (ResolvedParameterDeclaration.class.equals(resultClass)) {
+                Parameter parameter = (Parameter)node;
+                CallableDeclaration callableDeclaration = Navigator.findAncestor(node, CallableDeclaration.class).get();
+                ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration;
+                if (callableDeclaration.isConstructorDeclaration()) {
+                    resolvedMethodLikeDeclaration = callableDeclaration.asConstructorDeclaration().resolve();
+                } else {
+                    resolvedMethodLikeDeclaration = callableDeclaration.asMethodDeclaration().resolve();
+                }
+                for (int i=0;i<resolvedMethodLikeDeclaration.getNumberOfParams();i++) {
+                    if (resolvedMethodLikeDeclaration.getParam(i).getName().equals(parameter.getNameAsString())) {
+                        return resultClass.cast(resolvedMethodLikeDeclaration.getParam(i));
+                    }
+                }
             }
         }
         throw new UnsupportedOperationException("Unable to find the declaration of type " + resultClass.getSimpleName()

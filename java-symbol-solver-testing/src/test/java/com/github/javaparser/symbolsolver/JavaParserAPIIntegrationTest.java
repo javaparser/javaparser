@@ -98,9 +98,6 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         ConstructorDeclaration constructorDeclaration = classOrInterfaceDeclaration.getDefaultConstructor().get();
         ResolvedConstructorDeclaration resolvedConstructorDeclaration = constructorDeclaration.resolve();
     }
-
-    // TODO test for enumConstantDeclaration
-
     @Test
     public void enumDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
@@ -109,6 +106,17 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         assertEquals("AccessSpecifier", declaration.getNameAsString());
         ResolvedEnumDeclaration resolvedDeclaration = declaration.resolve();
     }
+
+//    @Test
+//    public void enumConstantDeclarationResolve() throws IOException {
+//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
+//        CompilationUnit cu = parseWithSymbolResolution(f);
+//        EnumDeclaration enumDeclaration = (EnumDeclaration) cu.getType(0);
+//        assertEquals("AccessSpecifier", enumDeclaration.getNameAsString());
+//        EnumConstantDeclaration declaration = enumDeclaration.getEntry(0);
+//        assertEquals("PUBLIC", declaration.getNameAsString());
+//        ResolvedEnumConstantDeclaration resolvedDeclaration = declaration.resolve();
+//    }
 
     @Test
     public void fieldDeclarationResolve() throws IOException {
@@ -134,17 +142,17 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         assertEquals(0, resolvedDeclaration.getNumberOfParams());
     }
 
-//    @Test
-//    public void parameterDeclarationResolve() throws IOException {
-//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
-//        ParserConfiguration parserConfiguration = new ParserConfiguration();
-//        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-//        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
-//        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
-//        assertEquals("CompilationUnit", classDeclaration.getNameAsString());
-//        MethodDeclaration methodDeclaration = classDeclaration.getMethodsByName("setComments").get(0);
-//        Parameter declaration = methodDeclaration.getParameter(0);
-//        ResolvedParameterDeclaration resolvedDeclaration = declaration.resolve();
-//    }
+    @Test
+    public void parameterDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
+        assertEquals("CompilationUnit", classDeclaration.getNameAsString());
+        MethodDeclaration methodDeclaration = classDeclaration.getMethodsByName("setComments").get(0);
+        Parameter declaration = methodDeclaration.getParameter(0);
+        ResolvedParameterDeclaration resolvedDeclaration = declaration.resolve();
+    }
 
 }
