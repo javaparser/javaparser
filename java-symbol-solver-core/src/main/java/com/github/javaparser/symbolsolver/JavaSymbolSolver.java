@@ -7,11 +7,9 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
@@ -75,6 +73,11 @@ public class JavaSymbolSolver implements SymbolResolver {
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
+        }
+        if (node instanceof AnnotationMemberDeclaration) {
+            ResolvedAnnotationDeclaration annotationDeclaration = Navigator.findAncestor(node, AnnotationDeclaration.class).get().resolve();
+            // TODO look among the members
+            throw new UnsupportedOperationException();
         }
         if (node instanceof FieldDeclaration) {
             FieldDeclaration fieldDeclaration = (FieldDeclaration)node;

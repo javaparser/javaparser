@@ -8,7 +8,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -20,7 +19,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -50,9 +48,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
     @Test
     public void annotationDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
-        ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = parseWithSymbolResolution(f);
         AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(0);
         assertEquals("MyAnnotation", declaration.getNameAsString());
         ResolvedAnnotationDeclaration resolvedDeclaration = declaration.resolve();
@@ -70,22 +66,26 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
 //        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
 //    }
 
-//    @Test
-//    public void classDeclarationResolve() throws FileNotFoundException {
-//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
-//        CompilationUnit cu = JavaParser.parse(f);
-//        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)cu.getType(0);
-//        //classOrInterfaceDeclaration.resolve
-//    }
+    @Test
+    public void classDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
+        CompilationUnit cu = parseWithSymbolResolution(f);
+        ClassOrInterfaceDeclaration declaration = (ClassOrInterfaceDeclaration)cu.getType(0);
+        declaration.resolve();
+    }
+
+    private CompilationUnit parseWithSymbolResolution(File f) throws IOException {
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        return new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+    }
 
     // TODO test for interfaceDeclaration
 
     @Test
     public void constructorDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
-        ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)cu.getType(0);
         ConstructorDeclaration constructorDeclaration = classOrInterfaceDeclaration.getDefaultConstructor().get();
         ResolvedConstructorDeclaration resolvedConstructorDeclaration = constructorDeclaration.resolve();
@@ -96,9 +96,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
     @Test
     public void enumDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
-        ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = parseWithSymbolResolution(f);
         EnumDeclaration declaration = (EnumDeclaration) cu.getType(0);
         assertEquals("AccessSpecifier", declaration.getNameAsString());
         ResolvedEnumDeclaration resolvedDeclaration = declaration.resolve();
@@ -107,9 +105,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
     @Test
     public void fieldDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
-        ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
         assertEquals("CompilationUnit", classDeclaration.getNameAsString());
         FieldDeclaration declaration = classDeclaration.getFields().get(0);
@@ -121,9 +117,7 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
     @Test
     public void methodDeclarationResolve() throws IOException {
         File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/CompilationUnit.java"));
-        ParserConfiguration parserConfiguration = new ParserConfiguration();
-        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        CompilationUnit cu = parseWithSymbolResolution(f);
         ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) cu.getType(0);
         assertEquals("CompilationUnit", classDeclaration.getNameAsString());
         MethodDeclaration declaration = classDeclaration.getMethodsByName("getComments").get(0);
