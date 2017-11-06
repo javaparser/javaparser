@@ -347,7 +347,8 @@ public class ReflectionClassDeclarationTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
                 "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
-                "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters"),
+                "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
+                "com.github.javaparser.resolution.Resolvable"),
                 coid.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
@@ -425,7 +426,8 @@ public class ReflectionClassDeclarationTest {
                 "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithStrictfpModifier",
                 "com.github.javaparser.ast.nodeTypes.NodeWithRange",
                 "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
+                "com.github.javaparser.ast.nodeTypes.NodeWithConstructors",
+                "com.github.javaparser.resolution.Resolvable"), coid.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
     @Test
