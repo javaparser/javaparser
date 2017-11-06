@@ -7,6 +7,9 @@ Lexical error at line 33, column 1.  Encountered: "\\" (92), after : ""
 langtools-5ecbed313125/test/com/sun/javadoc/testSourceTab/SingleTab/C.java
 Lexical error at line 33, column 1.  Encountered: "\\" (92), after : ""
 
+langtools-5ecbed313125/test/com/sun/javadoc/testTypeAnnotations/typeannos/Receivers.java
+(line 56,col 34) Parse error. Found "this", expected one of  "..." "@" "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
+
 langtools-5ecbed313125/test/com/sun/javadoc/testUnnamedPackage/BadSource.java
 Parse error. Found  "Just" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
@@ -61,6 +64,11 @@ langtools-5ecbed313125/test/tools/javac/annotations/AnnotationTypeElementModifie
 (line 42,col 5) 'strictfp' is not allowed here.
 (line 44,col 5) 'default' is not allowed here.
 (line 45,col 5) 'default' is not allowed here.
+
+langtools-5ecbed313125/test/tools/javac/annotations/FinalReceiverTest.java
+(line 11,col 43) Parse error. Found ".", expected one of  ")" "," "@" "["
+(line 14,col 2) Parse error. Found <EOF>, expected "}"
+(line 14,col 2) Parse error. Found <EOF>, expected one of  ";" "<" "@" "abstract" "boolean" "byte" "char" "class" "default" "double" "enum" "exports" "final" "float" "int" "interface" "long" "module" "native" "open" "opens" "private" "protected" "provides" "public" "requires" "short" "static" "strictfp" "synchronized" "to" "transient" "transitive" "uses" "void" "volatile" "with" "{" "}" <IDENTIFIER>
 
 langtools-5ecbed313125/test/tools/javac/annotations/neg/AnnComma.java
 (line 12,col 35) Parse error. Found ")", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
@@ -353,6 +361,9 @@ langtools-5ecbed313125/test/tools/javac/diags/examples/UnderscoreInLambdaExpress
 langtools-5ecbed313125/test/tools/javac/diags/examples/UnexpectedTokenInModuleInfo/module-info.java
 Parse error. Found  "weak" <IDENTIFIER>, expected one of  ";" "@" "\u001a" "abstract" "class" "default" "enum" "final" "import" "interface" "module" "native" "open" "private" "protected" "public" "static" "strictfp" "synchronized" "transient" "transitive" "volatile" <EOF>
 
+langtools-5ecbed313125/test/tools/javac/diags/examples/VarargsAndReceiver.java
+(line 27,col 30) Parse error. Found "this", expected one of  "enum" "exports" "module" "open" "opens" "provides" "requires" "strictfp" "to" "transitive" "uses" "with" <IDENTIFIER>
+
 langtools-5ecbed313125/test/tools/javac/Digits.java
 Lexical error at line 11, column 43.  Encountered: "\u0663" (1635), after : ""
 
@@ -417,6 +428,9 @@ langtools-5ecbed313125/test/tools/javac/incompleteStatements/T8000484.java
 
 langtools-5ecbed313125/test/tools/javac/LabeledDeclaration.java
 (line 12,col 8) Parse error. Found "int", expected one of  "(" "enum" "exports" "false" "module" "new" "null" "open" "opens" "provides" "requires" "strictfp" "super" "this" "to" "transitive" "true" "uses" "with" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>
+
+langtools-5ecbed313125/test/tools/javac/lambda/8131742/T8131742.java
+(line 8,col 32) Parse error. Found ".", expected one of  ")" "," "@" "["
 
 langtools-5ecbed313125/test/tools/javac/lambda/BadLambdaPos.java
 (line 18,col 26) Parse error. Found "+", expected one of  ")" ","
@@ -628,4 +642,4 @@ langtools-5ecbed313125/test/tools/javadoc/enum/docComments/pkg1/Operation.java
 langtools-5ecbed313125/test/tools/javadoc/T4994049/FileWithTabs.java
 Lexical error at line 25, column 1.  Encountered: "\\" (92), after : ""
 
-290 problems in 170 files
+296 problems in 174 files

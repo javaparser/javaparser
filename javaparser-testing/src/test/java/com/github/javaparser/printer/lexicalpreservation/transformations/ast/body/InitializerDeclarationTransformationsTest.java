@@ -34,7 +34,7 @@ public class InitializerDeclarationTransformationsTest extends AbstractLexicalPr
 
     protected InitializerDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
-        return (InitializerDeclaration) cu.getType(0).getMembers().get(0);
+        return cu.getType(0).getMembers().get(0).asInitializerDeclaration();
     }
 
     // JavaDoc

@@ -21,7 +21,6 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -30,18 +29,21 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.IntegerLiteralExpr;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseExpression;
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.*;
 
 public class NodeTest {
@@ -302,29 +304,111 @@ public class NodeTest {
         decl.setComment(new BlockComment("foo"));
         assertEquals(false, decl.hasJavaDocComment());
     }
-    
+
     @Test
     public void removeAllOnRequiredProperty() {
         CompilationUnit cu = parse("class X{ void x(){}}");
         MethodDeclaration methodDeclaration = cu.getType(0).getMethods().get(0);
         methodDeclaration.getName().removeForced();
         // Name is required, so to remove it the whole method is removed.
-        assertEquals("class X {\n}\n", cu.toString());
+        assertEquals(String.format("class X {%1$s}%1$s", EOL), cu.toString());
     }
 
     @Test
     public void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
-        CompilationUnit unit = JavaParser.parse("public class Example {\n" +
-                "  public static void example() {\n" +
-                "    boolean swapped;\n" +
-                "    swapped=false;\n" +
-                "    swapped=false;\n" +
-                "  }\n" +
-                "}\n");
+        CompilationUnit unit = parse(String.format("public class Example {%1$s" +
+                "  public static void example() {%1$s" +
+                "    boolean swapped;%1$s" +
+                "    swapped=false;%1$s" +
+                "    swapped=false;%1$s" +
+                "  }%1$s" +
+                "}%1$s", EOL));
         // remove the second swapped=false
         Node target = unit.getChildNodes().get(0).getChildNodes().get(1).getChildNodes().get(2).getChildNodes().get(2);
         target.remove();
         // This will throw an exception if the parents are bad.
         System.out.println(unit.toString());
+    }
+
+    @Test
+    public void findCompilationUnit() {
+        CompilationUnit cu = parse("class X{int x;}");
+        VariableDeclarator x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0);
+        assertEquals(cu, x.findCompilationUnit().get());
+    }
+
+    @Test
+    public void findParent() {
+        CompilationUnit cu = parse("class X{int x;}");
+        SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0).getName();
+        assertEquals("int x;", x.findParent(FieldDeclaration.class).get().toString());
+    }
+
+    @Test
+    public void cantFindCompilationUnit() {
+        VariableDeclarator x = new VariableDeclarator();
+        assertFalse(x.findCompilationUnit().isPresent());
+    }
+
+    @Test
+    public void genericWalk() {
+        Expression e = parseExpression("1+1");
+        StringBuilder b = new StringBuilder();
+        e.walk(n -> b.append(n.toString()));
+        assertEquals("1 + 111", b.toString());
+    }
+
+    @Test
+    public void classSpecificWalk() {
+        Expression e = parseExpression("1+1");
+        StringBuilder b = new StringBuilder();
+        e.walk(IntegerLiteralExpr.class, n -> b.append(n.toString()));
+        assertEquals("11", b.toString());
+    }
+
+    @Test
+    public void conditionalFindAll() {
+        Expression e = parseExpression("1+2+3");
+        List<IntegerLiteralExpr> ints = e.findAll(IntegerLiteralExpr.class, n -> n.asInt() > 1);
+        assertEquals("[2, 3]", ints.toString());
+    }
+
+    @Test
+    public void typeOnlyFindAll() {
+        Expression e = parseExpression("1+2+3");
+        List<IntegerLiteralExpr> ints = e.findAll(IntegerLiteralExpr.class);
+        assertEquals("[1, 2, 3]", ints.toString());
+    }
+
+    @Test
+    public void typeOnlyFindAllMatchesSubclasses() {
+        Expression e = parseExpression("1+2+3");
+        List<Node> ints = e.findAll(Node.class);
+        assertEquals("[1 + 2 + 3, 1 + 2, 1, 2, 3]", ints.toString());
+    }
+
+    @Test
+    public void conditionalTypedFindFirst() {
+        Expression e = parseExpression("1+2+3");
+        Optional<IntegerLiteralExpr> ints = e.findFirst(IntegerLiteralExpr.class, n -> n.asInt() > 1);
+        assertEquals("Optional[2]", ints.toString());
+    }
+
+    @Test
+    public void typeOnlyFindFirst() {
+        Expression e = parseExpression("1+2+3");
+        Optional<IntegerLiteralExpr> ints = e.findFirst(IntegerLiteralExpr.class);
+        assertEquals("Optional[1]", ints.toString());
+    }
+    
+    @Test
+    public void stream() {
+        Expression e = parseExpression("1+2+3");
+        List<IntegerLiteralExpr> ints = e.stream()
+                .filter(n -> n instanceof IntegerLiteralExpr)
+                .map(IntegerLiteralExpr.class::cast)
+                .filter(i -> i.asInt() > 1)
+                .collect(Collectors.toList());
+        assertEquals("[2, 3]", ints.toString());
     }
 }

@@ -588,4 +588,10 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     public Boolean visit(final UnparsableStmt n, final Visitable arg) {
         return n == arg;
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityEqualsVisitorGenerator")
+    public Boolean visit(final ReceiverParameter n, final Visitable arg) {
+        return n == arg;
+    }
 }

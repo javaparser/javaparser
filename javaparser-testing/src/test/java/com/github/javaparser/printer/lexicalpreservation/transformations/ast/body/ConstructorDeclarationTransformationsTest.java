@@ -40,7 +40,7 @@ public class ConstructorDeclarationTransformationsTest extends AbstractLexicalPr
 
     protected ConstructorDeclaration consider(String code) {
         considerCode("class A { " + code + " }");
-        return (ConstructorDeclaration) cu.getType(0).getMembers().get(0);
+        return cu.getType(0).getMembers().get(0).asConstructorDeclaration();
     }
 
     // Name

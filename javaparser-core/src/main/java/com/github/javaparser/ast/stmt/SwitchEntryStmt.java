@@ -37,17 +37,18 @@ import com.github.javaparser.metamodel.SwitchEntryStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * One case in a switch statement.
  * <br/><pre>
  * switch (i) {
- *   case 1:
- *   case 2:
- *     System.out.println(444);
- *     break;
- *   default:
- *     System.out.println(0);
+ * case 1:
+ * case 2:
+ * System.out.println(444);
+ * break;
+ * default:
+ * System.out.println(0);
  * }
  * </pre>
  * This contains three SwitchEntryStmts.
@@ -73,7 +74,9 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
         this(null, label, statements);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SwitchEntryStmt(TokenRange tokenRange, Expression label, NodeList<Statement> statements) {
         super(tokenRange);
@@ -83,11 +86,13 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -190,5 +195,22 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isSwitchEntryStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SwitchEntryStmt asSwitchEntryStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSwitchEntryStmt(Consumer<SwitchEntryStmt> action) {
+        action.accept(this);
     }
 }

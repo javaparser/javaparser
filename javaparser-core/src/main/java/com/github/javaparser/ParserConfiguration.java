@@ -21,9 +21,11 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.validator.Java1_0Validator;
 import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.resolution.SymbolResolver;
+
+import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -37,6 +39,8 @@ public class ParserConfiguration {
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
     private boolean doNotConsiderAnnotationsAsNodeStartForCodeAttribution = false;
+    private boolean lexicalPreservationEnabled = false;
+    private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
     private Validator validator = new Java8Validator();
 
@@ -73,6 +77,9 @@ public class ParserConfiguration {
 
     public ParserConfiguration setStoreTokens(boolean storeTokens) {
         this.storeTokens = storeTokens;
+        if (!storeTokens) {
+            setAttributeComments(false);
+        }
         return this;
     }
 
@@ -99,11 +106,40 @@ public class ParserConfiguration {
 
     /**
      * The validator to run directly after parsing.
-     * By default it is {@link Java1_0Validator}
+     * By default it is {@link Java8Validator}
      */
     public ParserConfiguration setValidator(Validator validator) {
         assertNotNull(validator);
         this.validator = validator;
+        return this;
+    }
+
+    /**
+     * Disabled by default.
+     * When this is enabled, LexicalPreservingPrinter.print can be used to reproduce
+     * the original formatting of the file.
+     */
+    public ParserConfiguration setLexicalPreservationEnabled(boolean lexicalPreservationEnabled) {
+        this.lexicalPreservationEnabled = lexicalPreservationEnabled;
+        return this;
+    }
+
+    public boolean isLexicalPreservationEnabled() {
+        return lexicalPreservationEnabled;
+    }
+
+    /**
+     * Retrieve the SymbolResolver to be used while parsing, if any.
+     */
+    public Optional<SymbolResolver> getSymbolResolver() {
+        return Optional.ofNullable(symbolResolver);
+    }
+
+    /**
+     * Set the SymbolResolver to be injected while parsing.
+     */
+    public ParserConfiguration setSymbolResolver(SymbolResolver symbolResolver) {
+        this.symbolResolver = symbolResolver;
         return this;
     }
 }

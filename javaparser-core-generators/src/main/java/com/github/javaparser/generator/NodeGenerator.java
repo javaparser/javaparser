@@ -6,6 +6,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.IOException;
@@ -25,61 +26,21 @@ public abstract class NodeGenerator extends Generator {
     public final void generate() throws Exception {
         Log.info("Running %s", getClass().getSimpleName());
         for (BaseNodeMetaModel nodeMetaModel : JavaParserMetaModel.getNodeMetaModels()) {
-            CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
-            ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new IOException("Can't find class"));
-            generateNode(nodeMetaModel, nodeCu, nodeCoid);
+            Pair<CompilationUnit, ClassOrInterfaceDeclaration> result = parseNode(nodeMetaModel);
+            generateNode(nodeMetaModel, result.a, result.b);
         }
         after();
+    }
+
+    protected Pair<CompilationUnit, ClassOrInterfaceDeclaration> parseNode(BaseNodeMetaModel nodeMetaModel) throws IOException {
+        CompilationUnit nodeCu = sourceRoot.parse(nodeMetaModel.getPackageName(), nodeMetaModel.getTypeName() + ".java");
+        ClassOrInterfaceDeclaration nodeCoid = nodeCu.getClassByName(nodeMetaModel.getTypeName()).orElseThrow(() -> new IOException("Can't find class"));
+        return new Pair<>(nodeCu, nodeCoid);
     }
 
     protected void after() throws Exception {
 
     }
 
-    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid);
-
-    /**
-     * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
-     * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
-     */
-    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addMethod(containingClassOrInterface, callable, () -> containingClassOrInterface.addMember(callable));
-    }
-
-    /**
-     * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
-     * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept.
-     */
-    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addMethod(containingClassOrInterface, callable,
-                () -> {
-                    throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
-                });
-    }
-
-    private void addMethod(
-            ClassOrInterfaceDeclaration containingClassOrInterface,
-            CallableDeclaration<?> callable,
-            Runnable onNoExistingMethod) {
-        List<CallableDeclaration<?>> existingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
-        if (existingCallables.isEmpty()) {
-            onNoExistingMethod.run();
-            return;
-        }
-        if (existingCallables.size() > 1) {
-            throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
-        }
-        final CallableDeclaration<?> existingCallable = existingCallables.get(0);
-        callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
-        containingClassOrInterface.getMembers().replace(existingCallable, callable);
-    }
-
-    /**
-     * Removes all methods from containingClassOrInterface that have the same signature as callable.
-     */
-    protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
-            containingClassOrInterface.remove(existingCallable);
-        }
-    }
+    protected abstract void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) throws Exception;
 }

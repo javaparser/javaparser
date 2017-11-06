@@ -41,9 +41,9 @@ import java.util.Optional;
  * to be changed. To do that just extend this class and override the methods
  * from the nodes who needs to be changed, returning the changed node.
  * Returning null will remove the node.
- * 
- * If a node is removed that was required in its parent node, 
- * the parent node will be removed too. 
+ *
+ * If a node is removed that was required in its parent node,
+ * the parent node will be removed too.
  *
  * @author Julio Vilmar Gesser
  */
@@ -339,6 +339,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         BlockStmt body = (BlockStmt) n.getBody().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
@@ -348,6 +349,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setBody(body);
         n.setName(name);
         n.setParameters(parameters);
+        n.setReceiverParameter(receiverParameter);
         n.setThrownExceptions(thrownExceptions);
         n.setTypeParameters(typeParameters);
         n.setAnnotations(annotations);
@@ -668,6 +670,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         Type type = (Type) n.getType().accept(this, arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
+        ReceiverParameter receiverParameter = n.getReceiverParameter().map(s -> (ReceiverParameter) s.accept(this, arg)).orElse(null);
         NodeList<ReferenceType> thrownExceptions = modifyList(n.getThrownExceptions(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
@@ -678,6 +681,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setType(type);
         n.setName(name);
         n.setParameters(parameters);
+        n.setReceiverParameter(receiverParameter);
         n.setThrownExceptions(thrownExceptions);
         n.setTypeParameters(typeParameters);
         n.setAnnotations(annotations);
@@ -1280,6 +1284,22 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
     public Visitable visit(final UnparsableStmt n, final A arg) {
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ModifierVisitorGenerator")
+    public Visitable visit(final ReceiverParameter n, final A arg) {
+        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
+        Name name = (Name) n.getName().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null || type == null)
+            return null;
+        n.setAnnotations(annotations);
+        n.setName(name);
+        n.setType(type);
         n.setComment(comment);
         return n;
     }

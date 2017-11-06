@@ -27,6 +27,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Function;
 
+import static java.util.Arrays.*;
+
 /**
  * Any kind of utility.
  *
@@ -100,6 +102,7 @@ public class Utils {
      *
      * @deprecated This is no longer in use by JavaParser, please write your own replacement.
      */
+    @Deprecated
     public static <T> List<T> arrayToList(T[] array) {
         List<T> list = new LinkedList<>();
         Collections.addAll(list, array);
@@ -190,8 +193,6 @@ public class Utils {
     }
 
     /**
-     * Return true if the value is null, an empty Optional, or an empty String.
-     * @param value
      * @return true if the value is null, an empty Optional, or an empty String.
      */
     public static boolean valueIsNullOrEmpty(Object value) {
@@ -211,5 +212,17 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    /**
+     * @return a set of the items.
+     */
+    public static <T> Set<T> set(T... items) {
+        return new HashSet<>(asList(items));
+    }
+
+    public static String normalizeEolInTextBlock(String content, String endOfLineCharacter) {
+        return content
+                .replaceAll("\\R", endOfLineCharacter);
     }
 }

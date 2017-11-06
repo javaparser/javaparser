@@ -9,8 +9,7 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
- * Meta-data about all classes in the AST.
- * These are all Nodes, except NodeList.
+ * Meta-data about all classes in the AST. These are all Nodes, except NodeList.
  */
 public abstract class BaseNodeMetaModel {
     private final Optional<BaseNodeMetaModel> superNodeMetaModel;
@@ -86,6 +85,16 @@ public abstract class BaseNodeMetaModel {
             allPropertyMetaModels.addAll(walkNode.getDeclaredPropertyMetaModels());
         }
         return allPropertyMetaModels;
+    }
+
+    public boolean isInstanceOfMetaModel(BaseNodeMetaModel baseMetaModel) {
+        if (this == baseMetaModel) {
+            return true;
+        }
+        if (isRootNode()) {
+            return false;
+        }
+        return getSuperNodeMetaModel().get().isInstanceOfMetaModel(baseMetaModel);
     }
 
     /**

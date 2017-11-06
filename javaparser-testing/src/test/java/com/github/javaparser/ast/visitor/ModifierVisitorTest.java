@@ -48,7 +48,7 @@ public class ModifierVisitorTest {
             public Visitable visit(final StringLiteralExpr n, final Void arg) {
                 String v = n.getValue();
 
-                list.add(0, new StringLiteralExpr("extra " + v));
+                list.addFirst(new StringLiteralExpr("extra " + v));
                 list.remove(new StringLiteralExpr("t"));
 
                 if (v.equals("a")) {

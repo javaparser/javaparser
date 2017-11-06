@@ -52,7 +52,7 @@ public class JavaParserTest {
     public void rangeOfAnnotationMemberDeclarationIsCorrect() {
         String code = "@interface AD { String foo(); }";
         CompilationUnit cu = JavaParser.parse(code);
-        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration) cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
         assertEquals(true, memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
     }
@@ -61,7 +61,7 @@ public class JavaParserTest {
     public void rangeOfAnnotationMemberDeclarationWithArrayTypeIsCorrect() {
         String code = "@interface AD { String[] foo(); }";
         CompilationUnit cu = JavaParser.parse(code);
-        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration) cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
         assertEquals(true, memberDeclaration.getRange().isPresent());
         assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
     }
@@ -110,15 +110,15 @@ public class JavaParserTest {
     public void parseIntersectionType() {
         String code = "(Runnable & Serializable) (() -> {})";
         Expression expression = JavaParser.parseExpression(code);
-        Type type = ((CastExpr)expression).getType();
+        Type type = expression.asCastExpr().getType();
 
         assertTrue(type instanceof IntersectionType);
-        IntersectionType intersectionType = (IntersectionType)type;
+        IntersectionType intersectionType = type.asIntersectionType();
         assertEquals(2, intersectionType.getElements().size());
         assertTrue(intersectionType.getElements().get(0) instanceof ClassOrInterfaceType);
-        assertEquals("Runnable", ((ClassOrInterfaceType)intersectionType.getElements().get(0)).getNameAsString());
+        assertEquals("Runnable", intersectionType.getElements().get(0).asClassOrInterfaceType().getNameAsString());
         assertTrue(intersectionType.getElements().get(1) instanceof ClassOrInterfaceType);
-        assertEquals("Serializable", ((ClassOrInterfaceType)intersectionType.getElements().get(1)).getNameAsString());
+        assertEquals("Serializable", intersectionType.getElements().get(1).asClassOrInterfaceType().getNameAsString());
     }
 
     @Test
@@ -128,9 +128,9 @@ public class JavaParserTest {
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
-        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
-        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
+        ReturnStmt returnStmt = methodDeclaration.getBody().get().getStatement(0).asReturnStmt();
+        CastExpr castExpr = returnStmt.getExpression().get().asCastExpr();
         Type type = castExpr.getType();
         assertEquals(range(3, 13, 3, 54), type.getRange().get());
     }
@@ -142,9 +142,9 @@ public class JavaParserTest {
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
-        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
-        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
+        ReturnStmt returnStmt = methodDeclaration.getBody().get().getStatement(0).asReturnStmt();
+        CastExpr castExpr = returnStmt.getExpression().get().asCastExpr();
         assertEquals(range(3, 12, 3, 101), castExpr.getRange().get());
     }
 
@@ -155,9 +155,9 @@ public class JavaParserTest {
                 + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
-        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
-        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
+        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
+        ReturnStmt returnStmt = methodDeclaration.getBody().get().getStatement(0).asReturnStmt();
+        CastExpr castExpr = returnStmt.getExpression().get().asCastExpr();
         assertEquals(range(3, 12, 3, 101), castExpr.getRange().get());
     }
 
@@ -168,10 +168,10 @@ public class JavaParserTest {
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
-        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
-        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
-        LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
+        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
+        ReturnStmt returnStmt = methodDeclaration.getBody().get().getStatement(0).asReturnStmt();
+        CastExpr castExpr = returnStmt.getExpression().get().asCastExpr();
+        LambdaExpr lambdaExpr = castExpr.getExpression().asLambdaExpr();
         assertEquals(range(3, 56, 3, 101), lambdaExpr.getRange().get());
         assertEquals(GeneratedJavaParserConstants.LPAREN, lambdaExpr.getTokenRange().get().getBegin().getKind());
         assertEquals(GeneratedJavaParserConstants.RPAREN, lambdaExpr.getTokenRange().get().getEnd().getKind());
@@ -184,10 +184,10 @@ public class JavaParserTest {
                 + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + EOL
                 + "}}";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodDeclaration methodDeclaration = (MethodDeclaration)cu.getClassByName("A").get().getMember(0);
-        ReturnStmt returnStmt = (ReturnStmt)methodDeclaration.getBody().get().getStatement(0);
-        CastExpr castExpr = (CastExpr)returnStmt.getExpression().get();
-        LambdaExpr lambdaExpr = (LambdaExpr)castExpr.getExpression();
+        MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
+        ReturnStmt returnStmt = methodDeclaration.getBody().get().getStatement(0).asReturnStmt();
+        CastExpr castExpr = returnStmt.getExpression().get().asCastExpr();
+        LambdaExpr lambdaExpr = castExpr.getExpression().asLambdaExpr();
         Statement lambdaBody = lambdaExpr.getBody();
         assertEquals(range(3, 68, 3, 101), lambdaBody.getRange().get());
     }
@@ -207,6 +207,6 @@ public class JavaParserTest {
     @Test
     public void trailingWhitespaceIsIgnored() {
         BlockStmt blockStmt = JavaParser.parseBlock("{} // hello");
-        assertEquals("\"}\" <121> (line 1,col 2)-(line 1,col 2)", blockStmt.getTokenRange().get().getEnd().toString());
+        assertEquals("\"}\"   <94>   (line 1,col 2)-(line 1,col 2)", blockStmt.getTokenRange().get().getEnd().toString());
     }
 }

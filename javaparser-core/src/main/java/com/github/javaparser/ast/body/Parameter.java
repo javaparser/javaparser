@@ -44,19 +44,22 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
  * <br/>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
  * are different from arguments.</a> <br/>"String x" and "float y" are the parameters in <code>int abc(String x, float
  * y) {...}</code>
- * 
+ *
  * <br/>All annotations preceding the type will be set on this object, not on the type.
- * JavaParser doesn't know if it they are applicable to the method or the type.
+ * JavaParser doesn't know if it they are applicable to the parameter or the type.
  *
  * @author Julio Vilmar Gesser
  */
-public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithFinalModifier<Parameter> {
+public final class Parameter extends Node implements NodeWithType<Parameter, Type>, NodeWithAnnotations<Parameter>, NodeWithSimpleName<Parameter>, NodeWithFinalModifier<Parameter>, Resolvable<ResolvedParameterDeclaration> {
 
     private Type type;
 
@@ -97,7 +100,9 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
         this(null, modifiers, annotations, type, isVarArgs, varArgsAnnotations, name);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Parameter(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, boolean isVarArgs, NodeList<AnnotationExpr> varArgsAnnotations, SimpleName name) {
         super(tokenRange);
@@ -111,12 +116,14 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -298,5 +305,10 @@ public final class Parameter extends Node implements NodeWithType<Parameter, Typ
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public ResolvedParameterDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedParameterDeclaration.class);
     }
 }

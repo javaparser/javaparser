@@ -32,6 +32,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ArrayTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.utils.Pair;
 import javax.annotation.Generated;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.function.Consumer;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -46,13 +48,22 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public final class ArrayType extends ReferenceType implements NodeWithAnnotations<ArrayType> {
 
+    @Override
+    public ResolvedArrayType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedArrayType.class);
+    }
+
     /**
      * The origin of a pair of array brackets [].
      */
     public enum Origin {
 
-        /** The [] were found on the name, like "int a[]" or "String abc()[][]" */
-        NAME, /** The [] were found on the type, like "int[] a" or "String[][] abc()" */
+        /**
+         * The [] were found on the name, like "int a[]" or "String abc()[][]"
+         */
+        NAME, /**
+         * The [] were found on the type, like "int[] a" or "String[][] abc()"
+         */
         TYPE
     }
 
@@ -69,7 +80,9 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
         this(type, Origin.TYPE, nodeList(annotations));
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ArrayType(TokenRange tokenRange, Type componentType, Origin origin, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
@@ -79,11 +92,13 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -256,5 +271,22 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isArrayType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ArrayType asArrayType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifArrayType(Consumer<ArrayType> action) {
+        action.accept(this);
     }
 }

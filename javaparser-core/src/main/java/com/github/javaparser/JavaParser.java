@@ -40,10 +40,13 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.resolution.SymbolResolver;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
@@ -136,12 +139,18 @@ public final class JavaParser {
                 final CommentsCollection comments = parser.getCommentsCollection();
                 commentsInserter.insertComments(resultNode, comments.copy().getComments());
             }
+            if(configuration.isLexicalPreservationEnabled()){
+                LexicalPreservingPrinter.setup(resultNode);
+            }
 
             configuration.getValidator().accept(resultNode, new ProblemReporter(parser.problems));
             parser.problems.sort(PROBLEM_BY_BEGIN_POSITION);
 
-            return new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
+            ParseResult<N> result = new ParseResult<>(resultNode, parser.problems, parser.getTokens(),
                     parser.getCommentsCollection());
+            considerInjectingSymbolResolver(result, configuration);
+
+            return result;
         } catch (Exception e) {
             final String message = e.getMessage() == null ? "Unknown error" : e.getMessage();
             parser.problems.add(new Problem(message, null, e));
@@ -669,4 +678,11 @@ public final class JavaParser {
         return simplifiedParse(PACKAGE_DECLARATION, provider(packageDeclaration));
     }
 
+    private static void considerInjectingSymbolResolver(ParseResult<?> parseResult, ParserConfiguration parserConfiguration) {
+        Optional<SymbolResolver> symbolResolver = parserConfiguration.getSymbolResolver();
+        if (symbolResolver.isPresent() && parseResult.getResult().get() instanceof CompilationUnit) {
+            CompilationUnit compilationUnit = (CompilationUnit)parseResult.getResult().get();
+            compilationUnit.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver.get());
+        }
+    }
 }

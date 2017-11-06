@@ -36,7 +36,7 @@ public class EnumDeclarationTransformationsTest extends AbstractLexicalPreservin
 
     protected EnumDeclaration consider(String code) {
         considerCode(code);
-        return (EnumDeclaration)cu.getType(0);
+        return cu.getType(0).asEnumDeclaration();
     }
 
     // Name

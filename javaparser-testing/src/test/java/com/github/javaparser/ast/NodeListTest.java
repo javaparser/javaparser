@@ -226,4 +226,62 @@ public class NodeListTest {
 
         assertEquals("[abc, bcd, cde]", list.toString());
     }
+    
+    @Test
+    public void addFirst() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        list.addFirst(new Name("xxx"));
+        
+        assertEquals("[xxx, abc, bcd, cde]", list.toString());
+    }
+    
+    @Test
+    public void addLast() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        list.addLast(new Name("xxx"));
+        
+        assertEquals("[abc, bcd, cde, xxx]", list.toString());
+    }
+
+    @Test
+    public void addBefore() {
+        Name n = new Name("bcd");
+        final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
+
+        list.addBefore(new Name("xxx"), n);
+        
+        assertEquals("[abc, xxx, bcd, cde]", list.toString());
+    }
+
+    @Test
+    public void addAfter() {
+        Name n = new Name("bcd");
+        final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
+
+        list.addAfter(new Name("xxx"), n);
+        
+        assertEquals("[abc, bcd, xxx, cde]", list.toString());
+    }
+
+    @Test
+    public void addBeforeFirst() {
+        Name abc = new Name("abc");
+        final NodeList<Name> list = nodeList(abc, new Name("bcd"), new Name("cde"));
+
+        list.addBefore(new Name("xxx"), abc);
+        
+        assertEquals("[xxx, abc, bcd, cde]", list.toString());
+    }
+
+    @Test
+    public void addAfterLast() {
+        Name cde = new Name("cde");
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), cde);
+
+        list.addAfter(new Name("xxx"), cde);
+        
+        assertEquals("[abc, bcd, cde, xxx]", list.toString());
+    }
 }

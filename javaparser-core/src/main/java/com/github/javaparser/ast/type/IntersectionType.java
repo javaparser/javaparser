@@ -38,6 +38,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedIntersectionType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import java.util.function.Consumer;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -61,7 +64,9 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
         this(null, elements);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IntersectionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);
@@ -70,12 +75,14 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -146,5 +153,27 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isIntersectionType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public IntersectionType asIntersectionType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifIntersectionType(Consumer<IntersectionType> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public ResolvedIntersectionType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedIntersectionType.class);
     }
 }

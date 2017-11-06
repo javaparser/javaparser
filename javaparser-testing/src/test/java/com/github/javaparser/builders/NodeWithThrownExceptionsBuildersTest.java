@@ -33,17 +33,7 @@ import static com.github.javaparser.JavaParser.parseClassOrInterfaceType;
 import static org.junit.Assert.assertEquals;
 
 public class NodeWithThrownExceptionsBuildersTest {
-    CompilationUnit cu;
-
-    @Before
-    public void setup() {
-        cu = new CompilationUnit();
-    }
-
-    @After
-    public void teardown() {
-        cu = null;
-    }
+    private final CompilationUnit cu = new CompilationUnit();
 
     @Test
     public void testThrows() {

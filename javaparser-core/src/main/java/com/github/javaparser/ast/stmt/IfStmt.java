@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.IfStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An if-then-else statement. The else is optional.
@@ -61,7 +62,9 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
         this(null, condition, thenStmt, elseStmt);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public IfStmt(TokenRange tokenRange, Expression condition, Statement thenStmt, Statement elseStmt) {
         super(tokenRange);
@@ -72,11 +75,13 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -204,5 +209,22 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isIfStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public IfStmt asIfStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifIfStmt(Consumer<IfStmt> action) {
+        action.accept(this);
     }
 }

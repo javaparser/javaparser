@@ -66,6 +66,6 @@ public class JavaTokenTest {
         assertEquals("=", new JavaToken(ASSIGN).getText());
         // TODO this shouldn't be a space.
         assertEquals(" ", new JavaToken(EOF).getText());
-        assertEquals("*/", new JavaToken(JAVA_DOC_COMMENT).getText());
+        assertEquals("*/", new JavaToken(JAVADOC_COMMENT).getText());
     }
 }
