@@ -20,6 +20,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
@@ -64,6 +65,8 @@ public class ContextHelper {
             return ((JavaParserInterfaceDeclaration) typeDeclaration).getContext().solveMethodAsUsage(name, argumentsTypes, typeSolver);
         } else if (typeDeclaration instanceof JavaParserEnumDeclaration) {
             return ((JavaParserEnumDeclaration) typeDeclaration).getContext().solveMethodAsUsage(name, argumentsTypes, typeSolver);
+        } else if (typeDeclaration instanceof JavaParserAnonymousClassDeclaration) {
+            return ((JavaParserAnonymousClassDeclaration) typeDeclaration).getContext().solveMethodAsUsage(name, argumentsTypes, typeSolver);
         }
         throw new UnsupportedOperationException(typeDeclaration.toString());
     }
