@@ -23,8 +23,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +45,10 @@ public class JarTypeSolver implements TypeSolver {
         addPathToJar(pathToJar);
     }
 
+    public JarTypeSolver(InputStream jarInputStream) throws IOException {
+        addPathToJar(jarInputStream);
+    }
+
     public static JarTypeSolver getJarTypeSolver(String pathToJar) throws IOException {
         if (instance == null) {
             instance = new JarTypeSolver(pathToJar);
@@ -53,6 +56,32 @@ public class JarTypeSolver implements TypeSolver {
             instance.addPathToJar(pathToJar);
         }
         return instance;
+    }
+
+    private File dumpToTempFile(InputStream inputStream) throws IOException {
+        File tempFile = File.createTempFile("jar_file_from_input_stream", ".jar");
+        tempFile.deleteOnExit();
+
+        byte[] buffer = new byte[8 * 1024];
+
+        try {
+            OutputStream output = new FileOutputStream(tempFile);
+            try {
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    output.write(buffer, 0, bytesRead);
+                }
+            } finally {
+                output.close();
+            }
+        } finally {
+            inputStream.close();
+        }
+        return tempFile;
+    }
+
+    private void addPathToJar(InputStream jarInputStream) throws IOException {
+        addPathToJar(dumpToTempFile(jarInputStream).getAbsolutePath());
     }
 
     private void addPathToJar(String pathToJar) throws IOException {
