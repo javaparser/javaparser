@@ -200,7 +200,7 @@ public class JavaParserFacade {
                 }
             }
         }
-        return SymbolReference.solved(getTypeDeclaration(findContainingTypeDecl(node)));
+        return SymbolReference.solved(getTypeDeclaration(findContainingTypeDeclOrObjectCreationExpr(node)));
     }
 
     /**
@@ -402,6 +402,20 @@ public class JavaParserFacade {
         }
     }
 
+    protected com.github.javaparser.ast.Node findContainingTypeDeclOrObjectCreationExpr(Node node) {
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            return (ClassOrInterfaceDeclaration) node;
+        } else if (node instanceof EnumDeclaration) {
+            return (EnumDeclaration) node;
+        } else if (getParentNode(node) == null) {
+            throw new IllegalArgumentException();
+        } else if (getParentNode(node) instanceof ObjectCreationExpr && !((ObjectCreationExpr)getParentNode(node)).getArguments().contains(node)) {
+            return getParentNode(node);
+        } else {
+            return findContainingTypeDeclOrObjectCreationExpr(getParentNode(node));
+        }
+    }
+
     public ResolvedType convertToUsageVariableType(VariableDeclarator var) {
         ResolvedType type = JavaParserFacade.get(typeSolver).convertToUsage(var.getType(), var);
         return type;
@@ -503,6 +517,16 @@ public class JavaParserFacade {
                     + call + " (line: " + call.getRange().get().begin.line + ") " + context + ". Parameter types: " + params);
         }
         return methodUsage.get();
+    }
+
+    public ResolvedReferenceTypeDeclaration getTypeDeclaration(Node node) {
+        if (node instanceof TypeDeclaration) {
+            return getTypeDeclaration((TypeDeclaration)node);
+        } else if (node instanceof ObjectCreationExpr) {
+            return new JavaParserAnonymousClassDeclaration((ObjectCreationExpr)node, typeSolver);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {

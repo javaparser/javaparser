@@ -22,12 +22,14 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnonymousClassDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -333,5 +335,28 @@ public class MethodsResolutionTest extends AbstractResolutionTest {
             assertEquals(false, reference.isSolved());
         }
 
+    }
+
+    @Test
+    public void callOnThisInAnonymousClass() throws ParseException {
+        CompilationUnit cu = parseSample("ThisInAnonymousClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
+
+        MethodCallExpr fooCall = Navigator.findMethodCall(clazz, "foo");
+
+        SymbolReference<ResolvedMethodDeclaration> reference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(fooCall);
+        assertEquals(true, reference.isSolved());
+    }
+
+    @Test
+    public void thisInAnonymousClass() throws ParseException {
+        CompilationUnit cu = parseSample("ThisInAnonymousClass");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Bar");
+
+        ThisExpr thisExpression = Navigator.findNodeOfGivenClass(clazz, ThisExpr.class);
+
+        ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(thisExpression);
+        assertEquals(true, type.isReferenceType());
+        assertEquals(true, type.asReferenceType().getTypeDeclaration() instanceof JavaParserAnonymousClassDeclaration);
     }
 }

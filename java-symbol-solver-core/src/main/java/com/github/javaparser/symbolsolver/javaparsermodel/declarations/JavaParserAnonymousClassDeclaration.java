@@ -17,10 +17,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,13 +45,17 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
   }
 
   public <T extends Node> List<T> findMembersOfKind(final Class<T> memberClass) {
-    return wrappedNode
-        .getAnonymousClassBody()
-        .get()
-        .stream()
-        .filter(node -> memberClass.isAssignableFrom(node.getClass()))
-        .map(node -> (T) node)
-        .collect(Collectors.toList());
+    if (wrappedNode.getAnonymousClassBody().isPresent()) {
+      return wrappedNode
+              .getAnonymousClassBody()
+              .get()
+              .stream()
+              .filter(node -> memberClass.isAssignableFrom(node.getClass()))
+              .map(node -> (T) node)
+              .collect(Collectors.toList());
+    } else {
+      return Collections.emptyList();
+    }
   }
   
   public Context getContext() {

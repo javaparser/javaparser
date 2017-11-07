@@ -322,7 +322,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             }
 
         }
-        return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDecl(node)), typeSolver);
+        return new ReferenceTypeImpl(facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node)), typeSolver);
     }
 
     @Override
