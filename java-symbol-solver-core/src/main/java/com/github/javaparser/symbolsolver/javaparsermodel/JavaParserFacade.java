@@ -407,10 +407,10 @@ public class JavaParserFacade {
             return (ClassOrInterfaceDeclaration) node;
         } else if (node instanceof EnumDeclaration) {
             return (EnumDeclaration) node;
-        } else if (node instanceof ObjectCreationExpr) {
-            return (ObjectCreationExpr) node;
         } else if (getParentNode(node) == null) {
             throw new IllegalArgumentException();
+        } else if (getParentNode(node) instanceof ObjectCreationExpr && !((ObjectCreationExpr)getParentNode(node)).getArguments().contains(node)) {
+            return getParentNode(node);
         } else {
             return findContainingTypeDeclOrObjectCreationExpr(getParentNode(node));
         }
