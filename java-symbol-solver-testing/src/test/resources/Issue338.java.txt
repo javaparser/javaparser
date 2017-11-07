@@ -1,0 +1,46 @@
+class TypePromotions {
+
+        public void byteParam(byte p1) {
+
+        }
+
+        public void shortParam(short p1) {
+
+        }
+
+        public void intParam(int p1) {
+
+        }
+
+        public void longParam(long p1) {
+
+        }
+
+        public void callingLong() {
+            longParam((byte)1);
+            longParam((short)1);
+            longParam(1);
+            longParam(1L);
+        }
+
+        public void callingInt() {
+            intParam((byte)1);
+            intParam((short)1);
+            intParam(1);
+            intParam(1L); // fails
+        }
+
+        public void callingShort() {
+            shortParam((byte)1);
+            shortParam((short)1);
+            shortParam(1); // fails
+            shortParam(1L); // fails
+        }
+
+        public void callingByte() {
+            byteParam((byte)1);
+            byteParam((short)1); // fails
+            byteParam(1); // fails
+            byteParam(1L); // fails
+        }
+    }
