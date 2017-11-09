@@ -40,7 +40,7 @@ public class ArrayCreationLevelTransformationsTest extends AbstractLexicalPreser
 
     protected ArrayCreationLevel consider(String code) {
         considerExpression("new int" + code);
-        ArrayCreationExpr arrayCreationExpr = (ArrayCreationExpr)expression;
+        ArrayCreationExpr arrayCreationExpr = expression.asArrayCreationExpr();
         return arrayCreationExpr.getLevels().get(0);
     }
 

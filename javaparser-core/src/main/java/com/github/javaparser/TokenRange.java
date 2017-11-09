@@ -44,20 +44,11 @@ public class TokenRange implements Iterable<JavaToken> {
 
     @Override
     public String toString() {
-        JavaToken t = begin;
         StringBuilder result = new StringBuilder();
-        while (true) {
+        for(JavaToken t: this) {
             result.append(t.getText());
-            if (t == end) {
-                return result.toString();
-            }
-            Optional<JavaToken> next = t.getNextToken();
-            if (next.isPresent()) {
-                t = next.get();
-            } else {
-                return result.toString();
-            }
         }
+        return result.toString();
     }
 
     @Override
@@ -74,10 +65,16 @@ public class TokenRange implements Iterable<JavaToken> {
             @Override
             public JavaToken next() {
                 JavaToken retval = current;
+                if(current == null){
+                    throw new IllegalStateException("Attempting to move past end of range.");
+                }
                 if (current == end) {
                     hasNext = false;
                 }
                 current = current.getNextToken().orElse(null);
+                if(current == null && hasNext){
+                    throw new IllegalStateException("End token is not linked to begin token.");
+                }
                 return retval;
             }
         };

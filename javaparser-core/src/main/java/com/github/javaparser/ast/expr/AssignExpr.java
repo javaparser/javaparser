@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An assignment expression. It supports the operators that are found the the AssignExpr.Operator enum.
@@ -72,7 +73,9 @@ public final class AssignExpr extends Expression {
         this(null, target, value, operator);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AssignExpr(TokenRange tokenRange, Expression target, Expression value, Operator operator) {
         super(tokenRange);
@@ -83,12 +86,14 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -180,5 +185,22 @@ public final class AssignExpr extends Expression {
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isAssignExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AssignExpr asAssignExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifAssignExpr(Consumer<AssignExpr> action) {
+        action.accept(this);
     }
 }

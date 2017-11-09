@@ -8,11 +8,11 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.JavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
 import static com.github.javaparser.Providers.provider;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TypeTest {
     @Test
@@ -45,5 +45,15 @@ public class TypeTest {
 
     private String typeAsString(String s) {
         return parseVariableDeclarationExpr(s).getVariable(0).getType().asString();
+    }
+
+    @Test
+    public void arrayType() {
+        Type type = parseType("int[]");
+        assertTrue(type.isArrayType());
+        ArrayType arrayType = type.asArrayType();
+        final ArrayType[] s = new ArrayType[1];
+        type.ifArrayType(t -> s[0] = t);
+        assertNotNull(s[0]);
     }
 }

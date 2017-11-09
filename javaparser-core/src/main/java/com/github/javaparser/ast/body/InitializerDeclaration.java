@@ -37,6 +37,7 @@ import com.github.javaparser.metamodel.InitializerDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
@@ -58,7 +59,9 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
         this(null, isStatic, body);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
         super(tokenRange);
@@ -68,12 +71,14 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -141,5 +146,22 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isInitializerDeclaration() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public InitializerDeclaration asInitializerDeclaration() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
+        action.accept(this);
     }
 }

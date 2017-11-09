@@ -29,7 +29,7 @@ public class MainConstructorGenerator extends NodeGenerator {
                 .setPublic(true)
                 .setName(nodeCoid.getNameAsString())
                 .addParameter(TokenRange.class, "tokenRange")
-                .setJavadocComment("This constructor is used by the parser and is considered private.");
+                .setJavadocComment("\n     * This constructor is used by the parser and is considered private.\n     ");
 
         BlockStmt body = constructor.getBody();
 
@@ -44,12 +44,11 @@ public class MainConstructorGenerator extends NodeGenerator {
             }
         }
 
-        body.getStatements().add(0, parseExplicitConstructorInvocationStmt(superCall.toString()));
+        body.getStatements().addFirst(parseExplicitConstructorInvocationStmt(superCall.toString()));
 
         body.addStatement("customInitialization();");
 
         addOrReplaceWhenSameSignature(nodeCoid, constructor);
         nodeCu.addImport(TokenRange.class);
-        annotateGenerated(constructor);
     }
 }

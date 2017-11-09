@@ -38,6 +38,9 @@ import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import java.util.function.Consumer;
 
 /**
  * A primitive type.
@@ -126,7 +129,9 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         this(null, type, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PrimitiveType(TokenRange tokenRange, Primitive type, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
@@ -135,11 +140,13 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -200,5 +207,27 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isPrimitiveType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public PrimitiveType asPrimitiveType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifPrimitiveType(Consumer<PrimitiveType> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public ResolvedPrimitiveType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedPrimitiveType.class);
     }
 }

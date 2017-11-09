@@ -26,9 +26,13 @@ import java.util.function.Function;
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+/**
+ * Configuration options for the {@link PrettyPrinter}.
+ */
 public class PrettyPrinterConfiguration {
+    private boolean orderImports = false;
     private boolean printComments = true;
-    private boolean printJavaDoc = true;
+    private boolean printJavadoc = true;
     private boolean columnAlignParameters = false;
     private boolean columnAlignFirstMethodChain = false;
     private String indent = "    ";
@@ -39,8 +43,31 @@ public class PrettyPrinterConfiguration {
         return indent;
     }
 
+    /**
+     * Set the string to use for indenting. For example: "\t", "    ", "".
+     */
     public PrettyPrinterConfiguration setIndent(String indent) {
         this.indent = assertNotNull(indent);
+        return this;
+    }
+
+    public boolean isOrderImports() {
+        return orderImports;
+    }
+
+    /**
+     * @deprecated this is always on.
+     */
+    @Deprecated
+    public boolean isNormalizeEolInComment() {
+        return true;
+    }
+
+    /**
+     * @deprecated this is always on.
+     */
+    @Deprecated
+    public PrettyPrinterConfiguration setNormalizeEolInComment(boolean normalizeEolInComment) {
         return this;
     }
 
@@ -52,10 +79,10 @@ public class PrettyPrinterConfiguration {
         return !printComments;
     }
 
-    public boolean isPrintJavaDoc() {
-        return printJavaDoc;
+    public boolean isPrintJavadoc() {
+        return printJavadoc;
     }
-    
+
     public boolean isColumnAlignParameters() {
         return columnAlignParameters;
     }
@@ -64,21 +91,28 @@ public class PrettyPrinterConfiguration {
         return columnAlignFirstMethodChain;
     }
 
+    /**
+     * When true, all comments will be printed, unless printJavadoc is false, then only line and block comments will be
+     * printed.
+     */
     public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         this.printComments = printComments;
         return this;
     }
 
-    public PrettyPrinterConfiguration setPrintJavaDoc(boolean printJavaDoc) {
-        this.printJavaDoc = printJavaDoc;
+    /**
+     * When true, Javadoc will be printed.
+     */
+    public PrettyPrinterConfiguration setPrintJavadoc(boolean printJavadoc) {
+        this.printJavadoc = printJavadoc;
         return this;
     }
-    
+
     public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
         this.columnAlignParameters = columnAlignParameters;
         return this;
     }
-    
+
     public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
         this.columnAlignFirstMethodChain = columnAlignFirstMethodChain;
         return this;
@@ -88,6 +122,10 @@ public class PrettyPrinterConfiguration {
         return visitorFactory;
     }
 
+    /**
+     * Set the factory that creates the PrettyPrintVisitor. By changing this you can make the PrettyPrinter use a custom
+     * PrettyPrinterVisitor.
+     */
     public PrettyPrinterConfiguration setVisitorFactory(Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory) {
         this.visitorFactory = assertNotNull(visitorFactory);
         return this;
@@ -97,8 +135,19 @@ public class PrettyPrinterConfiguration {
         return endOfLineCharacter;
     }
 
+    /**
+     * Set the character to append when a line should end. Example values: "\n", "\r\n", "".
+     */
     public PrettyPrinterConfiguration setEndOfLineCharacter(String endOfLineCharacter) {
         this.endOfLineCharacter = assertNotNull(endOfLineCharacter);
+        return this;
+    }
+
+    /**
+     * When true, orders imports by alphabetically.
+     */
+    public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
+        this.orderImports = orderImports;
         return this;
     }
 }

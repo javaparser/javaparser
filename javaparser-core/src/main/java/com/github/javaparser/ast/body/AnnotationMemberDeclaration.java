@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -40,23 +41,24 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.AnnotationMemberDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
+import java.util.EnumSet;
+import java.util.Optional;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The "int id();" in <code>@interface X { int id(); }</code>
- *
- * <br/>All annotations preceding the type will be set on this object, not on the type.
- * JavaParser doesn't know if it they are applicable to the method or the type.
+ * <p>
+ * <br/>All annotations preceding the type will be set on this object, not on the type. JavaParser doesn't know if it
+ * they are applicable to the method or the type.
  *
  * @author Julio Vilmar Gesser
  */
-public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration> {
+public final class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration>, Resolvable<ResolvedAnnotationMemberDeclaration> {
 
     private EnumSet<Modifier> modifiers;
 
@@ -79,7 +81,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
         this(null, modifiers, annotations, type, name, defaultValue);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public AnnotationMemberDeclaration(TokenRange tokenRange, EnumSet<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         super(tokenRange, annotations);
@@ -91,12 +95,14 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -235,5 +241,27 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isAnnotationMemberDeclaration() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public AnnotationMemberDeclaration asAnnotationMemberDeclaration() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public ResolvedAnnotationMemberDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationMemberDeclaration.class);
     }
 }

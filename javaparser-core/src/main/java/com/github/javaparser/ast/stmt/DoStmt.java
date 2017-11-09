@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A do-while.
@@ -57,7 +58,9 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
         this(null, body, condition);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public DoStmt(TokenRange tokenRange, Statement body, Expression condition) {
         super(tokenRange);
@@ -67,11 +70,13 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -148,5 +153,22 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isDoStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public DoStmt asDoStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifDoStmt(Consumer<DoStmt> action) {
+        action.accept(this);
     }
 }

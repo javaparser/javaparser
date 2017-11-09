@@ -25,6 +25,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -32,6 +33,7 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
@@ -97,6 +99,12 @@ public class PrettyPrintVisitorTest {
     }
 
     @Test
+    public void printAReceiverParameter() {
+        Node node = JavaParser.parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
+        assertEquals("int x(@O X A.B.this, int y) {" + EOL + "}", print(node));
+    }
+
+    @Test
     public void printLambdaIntersectionTypeAssignment() {
         String code = "class A {" + EOL +
                 "  void f() {" + EOL +
@@ -135,8 +143,135 @@ public class PrettyPrintVisitorTest {
     public void printClassWithoutJavaDocButWithComment() {
         String code = String.format("/** javadoc */ public class A { %s// stuff%s}", EOL, EOL);
         CompilationUnit cu = JavaParser.parse(code);
-        PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavaDoc(false);
+        PrettyPrinterConfiguration ignoreJavaDoc = new PrettyPrinterConfiguration().setPrintJavadoc(false);
         String content = cu.toString(ignoreJavaDoc);
         assertEquals(String.format("public class A {%s    // stuff%s}%s", EOL, EOL, EOL), content);
+    }
+
+    @Test
+    public void printImportsDefaultOrder() {
+        String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
+        CompilationUnit cu = JavaParser.parse(code);
+        String content = cu.toString();
+        assertEqualsNoEol("import x.y.z;\n" +
+                "import a.b.c;\n" +
+                "import static b.c.d;\n" +
+                "\n" +
+                "class c {\n" +
+                "}\n", content);
+    }
+
+    @Test
+    public void printImportsOrdered() {
+        String code = "import x.y.z;import a.b.c;import static b.c.d;class c {}";
+        CompilationUnit cu = JavaParser.parse(code);
+        PrettyPrinterConfiguration orderImports = new PrettyPrinterConfiguration().setOrderImports(true);
+        String content = cu.toString(orderImports);
+        assertEqualsNoEol("import static b.c.d;\n" +
+                "import a.b.c;\n" +
+                "import x.y.z;\n" +
+                "\n" +
+                "class c {\n" +
+                "}\n", content);
+    }
+
+    @Test
+    public void multilineJavadocGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1\n   line2 *\n * line3");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * line1\n" +
+                "     * line2 *\n" +
+                "     * line3\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void emptyJavadocGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void multilineJavadocWithLotsOfEmptyLinesGetsFormattedNeatly() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("\n\n\nab\n\n\ncd\n\n\n");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * ab\n" +
+                "     *\n" +
+                "     * cd\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void singlelineJavadocGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setJavadocComment("line1");
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    /**\n" +
+                "     * line1\n" +
+                "     */\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void singlelineCommentGetsFormatted() {
+        CompilationUnit cu = new CompilationUnit();
+        cu.addClass("X").addMethod("abc").setComment(new LineComment("   line1  \n "));
+
+        assertEqualsNoEol("public class X {\n" +
+                "\n" +
+                "    // line1\n" +
+                "    void abc() {\n" +
+                "    }\n" +
+                "}\n", cu.toString());
+    }
+
+    @Test
+    public void blockcommentGetsNoFormatting() {
+        CompilationUnit cu = JavaParser.parse("class A {\n" +
+                "    public void helloWorld(String greeting, String name) {\n" +
+                "        //sdfsdfsdf\n" +
+                "            //sdfds\n" +
+                "        /*\n" +
+                "                            dgfdgfdgfdgfdgfd\n" +
+                "         */\n" +
+                "    }\n" +
+                "}\n");
+
+        assertEqualsNoEol("class A {\n" +
+                "\n" +
+                "    public void helloWorld(String greeting, String name) {\n" +
+                "    // sdfsdfsdf\n" +
+                "    // sdfds\n" +
+                "    /*\n" +
+                "                            dgfdgfdgfdgfdgfd\n" +
+                "         */\n" +
+                "    }\n" +
+                "}\n", cu.toString());
     }
 }

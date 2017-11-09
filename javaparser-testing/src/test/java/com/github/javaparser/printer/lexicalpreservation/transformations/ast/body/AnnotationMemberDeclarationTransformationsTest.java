@@ -44,7 +44,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
 
     protected AnnotationMemberDeclaration consider(String code) {
         considerCode("@interface AD { " + code + " }");
-        return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        return cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
     }
 
     // Name

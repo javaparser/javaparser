@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.SuperExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An occurrence of the "super" keyword. <br/><code>World.super.greet()</code> is a MethodCallExpr of method name greet,
@@ -54,7 +55,9 @@ public final class SuperExpr extends Expression {
         this(null, classExpr);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SuperExpr(TokenRange tokenRange, Expression classExpr) {
         super(tokenRange);
@@ -63,11 +66,13 @@ public final class SuperExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -139,5 +144,22 @@ public final class SuperExpr extends Expression {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isSuperExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SuperExpr asSuperExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSuperExpr(Consumer<SuperExpr> action) {
+        action.accept(this);
     }
 }

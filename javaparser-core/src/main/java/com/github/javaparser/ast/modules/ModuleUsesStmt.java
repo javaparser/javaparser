@@ -13,6 +13,7 @@ import com.github.javaparser.metamodel.ModuleUsesStmtMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<ModuleUsesStmt, Type> {
 
@@ -27,7 +28,9 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
         this(null, type);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleUsesStmt(TokenRange tokenRange, Type type) {
         super(tokenRange);
@@ -36,12 +39,14 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -94,5 +99,22 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleUsesStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleUsesStmt asModuleUsesStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleUsesStmt(Consumer<ModuleUsesStmt> action) {
+        action.accept(this);
     }
 }

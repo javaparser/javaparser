@@ -589,4 +589,10 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     public R visit(final UnparsableStmt n, final A arg) {
         return defaultAction(n, arg);
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorWithDefaultsGenerator")
+    public R visit(final ReceiverParameter n, final A arg) {
+        return defaultAction(n, arg);
+    }
 }

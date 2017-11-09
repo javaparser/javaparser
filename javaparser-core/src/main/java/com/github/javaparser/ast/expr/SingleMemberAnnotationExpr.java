@@ -31,6 +31,7 @@ import com.github.javaparser.metamodel.SingleMemberAnnotationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An annotation that has a single value. <br/><code>@Count(15)</code>
@@ -50,7 +51,9 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
         this(null, name, memberValue);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
         super(tokenRange, name);
@@ -59,11 +62,13 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -117,5 +122,22 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isSingleMemberAnnotationExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public SingleMemberAnnotationExpr asSingleMemberAnnotationExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
+        action.accept(this);
     }
 }

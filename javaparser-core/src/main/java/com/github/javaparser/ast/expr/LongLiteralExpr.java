@@ -29,6 +29,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * All ways to specify a long literal.
@@ -51,7 +52,9 @@ public final class LongLiteralExpr extends LiteralStringValueExpr {
         this(null, value);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LongLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
@@ -63,11 +66,13 @@ public final class LongLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -124,5 +129,22 @@ public final class LongLiteralExpr extends LiteralStringValueExpr {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLongLiteralExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LongLiteralExpr asLongLiteralExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
+        action.accept(this);
     }
 }

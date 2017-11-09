@@ -501,4 +501,10 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     public Integer visit(final UnparsableStmt n, final Void arg) {
         return n.hashCode();
     }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.visitor.ObjectIdentityHashCodeVisitorGenerator")
+    public Integer visit(final ReceiverParameter n, final Void arg) {
+        return n.hashCode();
+    }
 }

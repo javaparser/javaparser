@@ -14,7 +14,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
 
     public void defaultAction(Node n, A arg) { }
 
-    public void defaultAction(NodeList n, A arg) { }
+    public void defaultAction(NodeList<?> n, A arg) { }
 
     public void visit(Node n, A arg) {
         throw new IllegalStateException(n.getClass().getName());
@@ -39,9 +39,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(LineComment n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(LocalClassDeclarationStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(LocalClassDeclarationStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(BlockComment n, A arg) { defaultAction(n, arg); }
@@ -56,9 +54,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(EnumConstantDeclaration n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(NodeList n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(NodeList n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(AnnotationDeclaration n, A arg) { defaultAction(n, arg); }
@@ -79,9 +75,10 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(MethodDeclaration n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(MethodReferenceExpr n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(MethodReferenceExpr n, A arg) { defaultAction(n, arg); }
+
+    @Override
+    public void visit(ReceiverParameter n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(Parameter n, A arg) { defaultAction(n, arg); }
@@ -105,39 +102,25 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(WildcardType n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ModuleDeclaration n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ModuleDeclaration n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ModuleRequiresStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ModuleRequiresStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ModuleExportsStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ModuleExportsStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ModuleProvidesStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ModuleProvidesStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ModuleUsesStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ModuleUsesStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ModuleOpensStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ModuleOpensStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(UnparsableStmt n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(UnparsableStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(ArrayAccessExpr n, A arg) { defaultAction(n, arg); }
@@ -146,17 +129,13 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(ArrayCreationExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ArrayCreationLevel n, A arg) {
-
-    }
+    public void visit(ArrayCreationLevel n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(ArrayInitializerExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(ArrayType n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(ArrayType n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(AssignExpr n, A arg) { defaultAction(n, arg); }
@@ -189,9 +168,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(IntegerLiteralExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(IntersectionType n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(IntersectionType n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(LongLiteralExpr n, A arg) { defaultAction(n, arg); }
@@ -215,9 +192,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(NameExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(Name n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(Name n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(ObjectCreationExpr n, A arg) { defaultAction(n, arg); }
@@ -233,14 +208,10 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(UnaryExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(UnionType n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(UnionType n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(UnknownType n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(UnknownType n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(VariableDeclarationExpr n, A arg) { defaultAction(n, arg); }
@@ -270,9 +241,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(LabeledStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(LambdaExpr n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(LambdaExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(EmptyStmt n, A arg) { defaultAction(n, arg); }
@@ -293,9 +262,7 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(ReturnStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(SimpleName n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(SimpleName n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(IfStmt n, A arg) { defaultAction(n, arg); }
@@ -325,13 +292,8 @@ public class SimpleVoidVisitor<A> implements VoidVisitor<A> {
     public void visit(TryStmt n, A arg) { defaultAction(n, arg); }
 
     @Override
-    public void visit(TypeExpr n, A arg) {
-        defaultAction(n, arg);
-    }
+    public void visit(TypeExpr n, A arg) { defaultAction(n, arg); }
 
     @Override
     public void visit(CatchClause n, A arg) { defaultAction(n, arg); }
-
-    public void visit(ReferenceType n, A arg) { defaultAction(n, arg); }
-
 }

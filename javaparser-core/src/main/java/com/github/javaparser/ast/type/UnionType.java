@@ -38,11 +38,26 @@ import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import java.util.function.Consumer;
 
 /**
+ * <h1>The union type</h1>
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
- * As of Java 8 it is only used in catch clauses.
- * <br/><code>try { ... } catch(<b>IOException | NullPointerException ex</b>) { ... }</code>
+ * <h2>Java 1-6</h2>
+ * Does not exist.
+ * <h2>Java 7+</h2>
+ * As of Java 7 it is used in catch clauses.
+ * <pre><code>
+ * try {
+ * ...
+ * } catch(<b>IOException | NullPointerException ex</b>) {
+ * ...
+ * }
+ * </pre>
+ *
+ * The types that make up the union type are its "elements"
  */
 public final class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
@@ -53,7 +68,9 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
         this(null, new NodeList<>());
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);
@@ -91,12 +108,14 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -143,5 +162,27 @@ public final class UnionType extends Type implements NodeWithAnnotations<UnionTy
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isUnionType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnionType asUnionType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifUnionType(Consumer<UnionType> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public ResolvedUnionType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedUnionType.class);
     }
 }

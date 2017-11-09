@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Statements in between { and }.
@@ -54,7 +55,9 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
         this(null, statements);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
         super(tokenRange);
@@ -63,11 +66,13 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -129,5 +134,22 @@ public final class BlockStmt extends Statement implements NodeWithStatements<Blo
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isBlockStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BlockStmt asBlockStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifBlockStmt(Consumer<BlockStmt> action) {
+        action.accept(this);
     }
 }

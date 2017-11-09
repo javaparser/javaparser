@@ -26,24 +26,20 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.stream.IntStream;
 
 public class PrettyPrinterTest {
 
     private String prettyPrintField(String code) {
         CompilationUnit cu = JavaParser.parse(code);
-        return new PrettyPrinter().print(cu.getChildNodesByType(FieldDeclaration.class).get(0));
+        return new PrettyPrinter().print(cu.findFirst(FieldDeclaration.class).get());
     }
 
     private String prettyPrintVar(String code) {
         CompilationUnit cu = JavaParser.parse(code);
-        return new PrettyPrinter().print(cu.getChildNodesByType(VariableDeclarationExpr.class).get(0));
+        return new PrettyPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
 
     @Test
@@ -87,7 +83,7 @@ public class PrettyPrinterTest {
     private String prettyPrintConfigurable(String code) {
         CompilationUnit cu = JavaParser.parse(code);
         PrettyPrinter printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorFactory(TestVisitor::new));
-        return printer.print(cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0));
+        return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
 
     @Test

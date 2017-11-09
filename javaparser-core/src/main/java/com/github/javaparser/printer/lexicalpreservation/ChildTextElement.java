@@ -28,16 +28,14 @@ import com.github.javaparser.ast.comments.Comment;
  * Represent the position of a child node in the NodeText of its parent.
  */
 class ChildTextElement extends TextElement {
-    private final LexicalPreservingPrinter lexicalPreservingPrinter;
     private final Node child;
 
-    ChildTextElement(LexicalPreservingPrinter lexicalPreservingPrinter, Node child) {
-        this.lexicalPreservingPrinter = lexicalPreservingPrinter;
+    ChildTextElement(Node child) {
         this.child = child;
     }
 
     String expand() {
-        return lexicalPreservingPrinter.print(child);
+        return LexicalPreservingPrinter.print(child);
     }
 
     Node getChild() {
@@ -55,7 +53,7 @@ class ChildTextElement extends TextElement {
     }
 
     NodeText getNodeTextForWrappedNode() {
-        return lexicalPreservingPrinter.getOrCreateNodeText(child);
+        return LexicalPreservingPrinter.getOrCreateNodeText(child);
     }
 
     @Override
@@ -65,16 +63,13 @@ class ChildTextElement extends TextElement {
 
         ChildTextElement that = (ChildTextElement) o;
 
-        if (!lexicalPreservingPrinter.equals(that.lexicalPreservingPrinter)) return false;
         return child.equals(that.child);
 
     }
 
     @Override
     public int hashCode() {
-        int result = lexicalPreservingPrinter.hashCode();
-        result = 31 * result + child.hashCode();
-        return result;
+        return child.hashCode();
     }
 
     @Override

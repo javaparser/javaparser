@@ -11,19 +11,17 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.EOL;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestUtils {
     /**
@@ -50,7 +48,7 @@ public class TestUtils {
     }
 
     public static void assertInstanceOf(Class<?> expectedType, Object instance) {
-        assertTrue(f("%s is not an instance of %s.", instance.getClass(), expectedType), expectedType.isAssignableFrom(instance.getClass()));
+        assertEquals(true, expectedType.isAssignableFrom(instance.getClass()), f("%s is not an instance of %s.", instance.getClass(), expectedType));
     }
 
     /**
@@ -127,7 +125,11 @@ public class TestUtils {
     }
 
     public static void assertProblems(ParseResult<?> result, String... expectedArg) {
-        Set<String> actual = result.getProblems().stream().map(Problem::toString).collect(Collectors.toSet());
+        assertProblems(result.getProblems(), expectedArg);
+    }
+
+    public static void assertProblems(List<Problem> result, String... expectedArg) {
+        Set<String> actual = result.stream().map(Problem::toString).collect(Collectors.toSet());
         Set<String> expected = new HashSet<>();
         expected.addAll(Arrays.asList(expectedArg));
         assertCollections(expected, actual);
@@ -140,6 +142,13 @@ public class TestUtils {
     public static void assertExpressionValid(String expression) {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
         ParseResult<Expression> result = javaParser.parse(ParseStart.EXPRESSION, provider(expression));
-        assertTrue(result.getProblems().toString(), result.isSuccessful());
+        assertEquals(true, result.isSuccessful(), result.getProblems().toString());
+    }
+
+    /**
+     * Assert that "actual" equals "expected", and that any EOL characters in "actual" are correct for the platform.
+     */
+    public static void assertEqualsNoEol(String expected, String actual) {
+        assertEquals(normalizeEolInTextBlock(expected, EOL), actual);
     }
 }

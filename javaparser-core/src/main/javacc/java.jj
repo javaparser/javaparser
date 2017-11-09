@@ -20,12 +20,11 @@
  */
 
 options {
-  LOOKAHEAD=1;
   STATIC=false;
   JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
-  TOKEN_FACTORY = "GeneratedJavaParser.CustomToken";
+  TOKEN_EXTENDS ="TokenBase";
   JAVA_TEMPLATE_TYPE = "modern";
 }
 
@@ -62,110 +61,28 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.ast.NodeList.*;
 import static com.github.javaparser.GeneratedJavaParser.*;
-import static com.github.javaparser.GeneratedJavaParserSupport.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
 
+import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
+
 @Generated("JavaCC")
-final class GeneratedJavaParser {
-    /* The problems encountered while parsing */
-    List<Problem> problems = new ArrayList<Problem>();
-
-    /* Resets the parser for reuse, gaining a little performance */
-    void reset(Provider provider) {
-        ReInit(provider);
-        problems = new ArrayList<Problem>();
-        token_source.reset();
-    }
-
-    /* Called from within a catch block to skip forward to a known token,
-        and report the occurred exception as a problem. */
-    TokenRange recover(int recoveryTokenType, ParseException p) {
-        JavaToken begin = null;
-        if (p.currentToken != null) {
-            if (p.currentToken instanceof GeneratedJavaParser.CustomToken) {
-                begin = token();
-            }
-        }
-        Token t;
-        boolean done = false;
-        do {
-            t = getNextToken();
-        } while(t.kind != recoveryTokenType && t.kind!=EOF);
-
-        JavaToken end = token();
-
-        TokenRange tokenRange=null;
-        if(begin!=null && end!=null){
-            tokenRange=range(begin, end);
-        }
-
-        problems.add(new Problem(makeMessageForParseException(p), tokenRange, p));
-        return tokenRange;
-    }
-
-    /**
-     * Return the list of JavaParser specific tokens that have been encountered while 
-     * parsing code using this parser.
-     *
-     * @return a list of tokens
-     */
-    public List<JavaToken> getTokens() {
-        return token_source.getTokens();
-    }
-
-    /* The collection of comments encountered */
-    public CommentsCollection getCommentsCollection() {
-        return token_source.getCommentsCollection();
-    }
-
-    /* Reports a problem to the user */
-    void addProblem(String message) {
-        // TODO tokenRange only takes the final token. Need all the tokens.
-        problems.add(new Problem(message, tokenRange(), null));
-    }
-
-    /* Supports a case where >> should be two tokens instead of one,
-        and keeps track of the JavaParser specific token type for this token */
-    static final class CustomToken extends Token {
-        int realKind = GeneratedJavaParserConstants.GT;
-        JavaToken javaToken;
-
-        CustomToken(int kind, String image) {
-            this.kind = kind;
-            this.image = image;
-        }
-
-        public static Token newToken(int kind, String image) {
-            return new CustomToken(kind, image);
-        }
-    }
-
+final class GeneratedJavaParser extends GeneratedJavaParserBase {
     /* Returns the JavaParser specific token type of the last matched token */
-    private JavaToken token() {
-        return ((CustomToken)token).javaToken;
-    }
-
-    /* Returns a tokenRange that spans the last matched token */
-    private TokenRange tokenRange() {
-        return new TokenRange(token(), token());
-    }
-
-    /* Sets the kind of the last matched token to newKind */
-    private void setTokenKind(int newKind) {
-        token().setKind(newKind);
+    JavaToken token() {
+        return token.javaToken;
     }
 
     /* Changes the amount by which the horizontal position is increased when a tab character is encountered.
         One by default.*/
-    public void setTabSize(int size) {
+    void setTabSize(int size) {
         jj_input_stream.setTabSize(size);
     }
 
-    /* Makes the parser keep a list of tokens */
-    public void setStoreTokens(boolean storeTokens) {
-        token_source.setStoreTokens(storeTokens);
+    @Override
+    GeneratedJavaParserTokenManager getTokenSource() {
+        return token_source;
     }
 }
 
@@ -175,37 +92,11 @@ PARSER_END(GeneratedJavaParser)
 
 SPECIAL_TOKEN :
 {
-  <SPACE: " ">
+  <SPACE: [" ", "\t", "\f", "\u0085", "\u00A0", "\u1680", "\u180e", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005",
+      "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u200b", "\u200c", "\u200d", "\u2028", "\u2029", "\u202f", "\u205f", "\u2060", "\u3000", "\ufeff"]>
 | <WINDOWS_EOL : "\r\n">
-| <TAB: "\t">
 | <UNIX_EOL: "\n">
 | <OLD_MAC_EOL: "\r">
-| <FORM_FEED: "\f">
-| <NEXT_LINE: "\u0085">
-| <NON_BREAKING_SPACE: "\u00A0">
-| <OGHAM_SPACE: "\u1680">
-| <MONGOLIAN_VOWEL_SEPARATOR: "\u180e">
-| <EN_QUAD: "\u2000">
-| <EM_QUAD: "\u2001">
-| <EN_SPACE: "\u2002">
-| <EM_SPACE: "\u2003">
-| <THREE_PER_EM_SPACE: "\u2004">
-| <FOUR_PER_EM_SPACE: "\u2005">
-| <SIX_PER_EM_SPACE: "\u2006">
-| <FIGURE_SPACE: "\u2007">
-| <PUNCTUATION_SPACE: "\u2008">
-| <THIN_SPACE: "\u2009">
-| <HAIR_SPACE: "\u200a">
-| <ZERO_WIDTH_SPACE: "\u200b">
-| <ZERO_WIDTH_NON_JOINER: "\u200c">
-| <ZERO_WIDTH_JOINER: "\u200d">
-| <LINE_SEPARATOR: "\u2028">
-| <PARAGRAPH_SEPARATOR: "\u2029">
-| <NARROW_NO_BREAK_SPACE: "\u202f">
-| <MEDIUM_MATHEMATICAL_SPACE: "\u205f">
-| <WORD_JOINER: "\u2060">
-| <IDEOGRAPHIC_SPACE: "\u3000">
-| <ZERO_WIDTH_NO_BREAK_SPACE: "\ufeff">
 }
 
 TOKEN_MGR_DECLS :
@@ -213,12 +104,13 @@ TOKEN_MGR_DECLS :
     private List<JavaToken> tokens = new ArrayList<JavaToken>();
     private CommentsCollection commentsCollection = new CommentsCollection();
     private JavaToken homeToken;
-    private Stack<CustomToken> tokenWorkStack = new Stack<CustomToken>();
+    private Stack<Token> tokenWorkStack = new Stack<Token>();
     private boolean storeTokens;
 
     void reset() {
         tokens = new ArrayList<JavaToken>();
         commentsCollection = new CommentsCollection();
+        homeToken = null;
     }
 
     List<JavaToken> getTokens() {
@@ -242,41 +134,28 @@ TOKEN_MGR_DECLS :
         this.storeTokens = storeTokens;
     }
 
-    private void CommonTokenAction(Token rawToken) {
+    private void CommonTokenAction(Token token) {
         // Use an intermediary stack to avoid recursion, see issue 1003
-        CustomToken token = (CustomToken) rawToken;
         do {
             tokenWorkStack.push(token);
-            token = (CustomToken) token.specialToken;
+            token = token.specialToken;
         } while (token != null);
 
         // The stack is now filled with tokens in left-to-right order. Process them.
         while(!tokenWorkStack.empty()) {
             token = tokenWorkStack.pop();
             token.javaToken = new JavaToken(token, tokens);
+
             if(storeTokens) {
                 tokens.add(token.javaToken);
             }
+
             if (homeToken == null) {
                 homeToken = token.javaToken;
             }
 
-            String commentText = token.image;
-            if (token.kind == JAVA_DOC_COMMENT) {
-                JavadocComment comment = new JavadocComment(tokenRange(token), commentText.substring(3, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == MULTI_LINE_COMMENT) {
-                BlockComment comment = new BlockComment(tokenRange(token), commentText.substring(2, commentText.length() - 2));
-                commentsCollection.addComment(comment);
-            } else if (token.kind == SINGLE_LINE_COMMENT) {
-                // line comments have their end of line character(s) included, and we don't want that.
-                Range range = new Range(pos(token.beginLine, token.beginColumn), pos(token.endLine, token.endColumn));
-                while (commentText.endsWith("\r") || commentText.endsWith("\n")) {
-                    commentText = commentText.substring(0, commentText.length() - 1);
-                }
-                range = range.withEnd(pos(range.begin.line, range.begin.column + commentText.length()));
-                LineComment comment = new LineComment(tokenRange(token), commentText.substring(2));
-                comment.setRange(range);
+            if(TokenTypes.isComment(token.kind)) {
+                Comment comment = createCommentFromToken(token);
                 commentsCollection.addComment(comment);
             }
         }
@@ -292,15 +171,15 @@ SPECIAL_TOKEN :
 
 MORE :
 {
-  <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVA_DOC_COMMENT
+  <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVADOC_COMMENT
 |
   <"/*"> : IN_MULTI_LINE_COMMENT
 }
 
-<IN_JAVA_DOC_COMMENT>
+<IN_JAVADOC_COMMENT>
 SPECIAL_TOKEN :
 {
-  <JAVA_DOC_COMMENT: "*/" > : DEFAULT
+  <JAVADOC_COMMENT: "*/" > : DEFAULT
 }
 
 <IN_MULTI_LINE_COMMENT>
@@ -309,7 +188,7 @@ SPECIAL_TOKEN :
   <MULTI_LINE_COMMENT: "*/" > : DEFAULT
 }
 
-<IN_JAVA_DOC_COMMENT, IN_MULTI_LINE_COMMENT>
+<IN_JAVADOC_COMMENT, IN_MULTI_LINE_COMMENT>
 MORE :
 {
   <COMMENT_CONTENT: ~[] >
@@ -697,13 +576,13 @@ TOKEN :
   < RUNSIGNEDSHIFT: ">>>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RUNSIGNEDSHIFT;
+     matchedToken.realKind = RUNSIGNEDSHIFT;
      input_stream.backup(2);
   }
 | < RSIGNEDSHIFT: ">>" >
   {
      matchedToken.kind = GT;
-     ((GeneratedJavaParser.CustomToken)matchedToken).realKind = RSIGNEDSHIFT;
+     matchedToken.realKind = RSIGNEDSHIFT;
      input_stream.backup(1);
   }
 | < GT: ">" >
@@ -890,33 +769,33 @@ ModifierHolder Modifiers():
  (
   LOOKAHEAD(2)
   (
-   "public" { addModifier(this, modifiers, Modifier.PUBLIC); begin = begin.orIfInvalid(token()); }
+   "public" { addModifier(modifiers, Modifier.PUBLIC); begin = orIfInvalid(begin, token()); }
   |
-   "static" { addModifier(this, modifiers, Modifier.STATIC); begin = begin.orIfInvalid(token()); }
+   "static" { addModifier(modifiers, Modifier.STATIC); begin = orIfInvalid(begin, token()); }
   |
-   "protected" {  addModifier(this, modifiers, Modifier.PROTECTED); begin = begin.orIfInvalid(token()); }
+   "protected" {  addModifier(modifiers, Modifier.PROTECTED); begin = orIfInvalid(begin, token()); }
   |
-   "private" { addModifier(this, modifiers, Modifier.PRIVATE); begin = begin.orIfInvalid(token()); }
+   "private" { addModifier(modifiers, Modifier.PRIVATE); begin = orIfInvalid(begin, token()); }
   |
-   "final" { addModifier(this, modifiers, Modifier.FINAL); begin = begin.orIfInvalid(token()); }
+   "final" { addModifier(modifiers, Modifier.FINAL); begin = orIfInvalid(begin, token()); }
   |
-   "abstract" { addModifier(this, modifiers, Modifier.ABSTRACT); begin = begin.orIfInvalid(token()); }
+   "abstract" { addModifier(modifiers, Modifier.ABSTRACT); begin = orIfInvalid(begin, token()); }
   |
-   "synchronized" { addModifier(this, modifiers, Modifier.SYNCHRONIZED); begin = begin.orIfInvalid(token()); }
+   "synchronized" { addModifier(modifiers, Modifier.SYNCHRONIZED); begin = orIfInvalid(begin, token()); }
   |
-   "native" { addModifier(this, modifiers, Modifier.NATIVE); begin = begin.orIfInvalid(token()); }
+   "native" { addModifier(modifiers, Modifier.NATIVE); begin = orIfInvalid(begin, token()); }
   |
-   "transient" { addModifier(this, modifiers, Modifier.TRANSIENT); begin = begin.orIfInvalid(token()); }
+   "transient" { addModifier(modifiers, Modifier.TRANSIENT); begin = orIfInvalid(begin, token()); }
   |
-   "volatile" { addModifier(this, modifiers, Modifier.VOLATILE); begin = begin.orIfInvalid(token()); }
+   "volatile" { addModifier(modifiers, Modifier.VOLATILE); begin = orIfInvalid(begin, token()); }
   |
-   "strictfp" { addModifier(this, modifiers, Modifier.STRICTFP);  begin = begin.orIfInvalid(token()); }
+   "strictfp" { addModifier(modifiers, Modifier.STRICTFP);  begin = orIfInvalid(begin, token()); }
   |
-   "transitive" { addModifier(this, modifiers, Modifier.TRANSITIVE);  begin = begin.orIfInvalid(token()); }
+   "transitive" { addModifier(modifiers, Modifier.TRANSITIVE);  begin = orIfInvalid(begin, token()); }
   |
-   "default" { addModifier(this, modifiers, Modifier.DEFAULT);  begin = begin.orIfInvalid(token()); }
+   "default" { addModifier(modifiers, Modifier.DEFAULT);  begin = orIfInvalid(begin, token()); }
   |
-   ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getTokenRange().get().getBegin()); }
+   ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
   )
  )*
 
@@ -940,7 +819,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     JavaToken begin = modifier.begin;
 }
 {
-  ( "class" | "interface" { isInterface = true; } ) { begin = begin.orIfInvalid(token()); }
+  ( "class" | "interface" { isInterface = true; } ) { begin = orIfInvalid(begin, token()); }
   name = SimpleName()
   [ typePar = TypeParameters() ]
   [ extList = ExtendsList() ]
@@ -984,7 +863,7 @@ EnumDeclaration EnumDeclaration(ModifierHolder modifier):
 	JavaToken begin = modifier.begin;
 }
 {
-    "enum" { begin = begin.orIfInvalid(token()); }
+    "enum" { begin = orIfInvalid(begin, token()); }
     name = SimpleName()
     [ impList = ImplementsList() ]
     "{"
@@ -1016,8 +895,8 @@ EnumConstantDeclaration EnumConstantDeclaration():
 }
 {
   {  }
-  ( ann = Annotation() { annotations = add(annotations, ann); begin = begin.orIfInvalid(ann.getTokenRange().get().getBegin()); } )*
-  name = SimpleName() { begin = begin.orIfInvalid(token()); } 
+  ( ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); } )*
+  name = SimpleName() { begin = orIfInvalid(begin, token()); } 
   [ args = Arguments() ] [ classBody = ClassOrInterfaceBody() ]
   { 
       return new EnumConstantDeclaration(range(begin, token()), annotations, name, args, classBody);  
@@ -1096,7 +975,7 @@ BodyDeclaration<?> ClassOrInterfaceBodyDeclaration():
 	  modifier = Modifiers()
 	  (
 	      ret = ClassOrInterfaceDeclaration(modifier)
-	    |
+	    | LOOKAHEAD("enum")
 	      ret = EnumDeclaration(modifier)
 	    | LOOKAHEAD("@" "interface")
 	      ret = AnnotationTypeDeclaration(modifier)
@@ -1122,7 +1001,7 @@ FieldDeclaration FieldDeclaration(ModifierHolder modifier):
     partialType = Type(emptyList()) val = VariableDeclarator(partialType) { variables.add(val); }
         ( "," val = VariableDeclarator(partialType) { variables.add(val); } )* ";"
     {
-        JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
+        JavaToken begin = orIfInvalid(modifier.begin, partialType);
         return new FieldDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
     }
 }
@@ -1134,7 +1013,7 @@ VariableDeclarator VariableDeclarator(Type partialType):
 }
 {
     id = VariableDeclaratorId() [ "=" init = VariableInitializer() ]
-    { return new VariableDeclarator(range(id.a.getTokenRange().get().getBegin(), token()), juggleArrayType(partialType, id.b), id.a, init); }
+    { return new VariableDeclarator(range(id.a, token()), juggleArrayType(partialType, id.b), id.a, init); }
 }
 
 Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
@@ -1147,7 +1026,9 @@ Pair<SimpleName, List<ArrayBracketPair>> VariableDeclaratorId():
 {
     name = SimpleName() { begin=token();}  ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     {
-        name.setTokenRange(name.getTokenRange().get().withEnd(token()));    
+        if(storeTokens) {
+            name.setTokenRange(name.getTokenRange().get().withEnd(token()));
+        }    
         return new Pair(name, arrayBracketPairs);
     }
 }
@@ -1181,7 +1062,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	Type type;
 	SimpleName name;
-	NodeList<Parameter> parameters = emptyList();
+	Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
 	ArrayBracketPair arrayBracketPair;
 	List<ArrayBracketPair> arrayBracketPairs = new ArrayList(0);
 	NodeList<ReferenceType> throws_ = emptyList();
@@ -1192,9 +1073,9 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
 }
 {
     // Modifiers already matched in the caller!
-    [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
-    annotations = Annotations() { modifier.annotations.addAll(annotations); begin = begin.orIfInvalid(nodeListBegin(annotations)); }
-    type = ResultType(emptyList()) { begin = begin.orIfInvalid(type.getTokenRange().get().getBegin()); }
+    [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
+    annotations = Annotations() { modifier.annotations.addAll(annotations); begin = orIfInvalid(begin, nodeListBegin(annotations)); }
+    type = ResultType(emptyList()) { begin = orIfInvalid(begin, type); }
     name = SimpleName() parameters = Parameters() ( arrayBracketPair = ArrayBracketPair(Origin.NAME) { arrayBracketPairs=add(arrayBracketPairs, arrayBracketPair); } )*
     [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
       ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); } )* ]
@@ -1205,7 +1086,7 @@ MethodDeclaration MethodDeclaration(ModifierHolder modifier):
     ( body = Block() | ";" )
     { 
         type = juggleArrayType(type, arrayBracketPairs);
-        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters, throws_, body);
+        return new MethodDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, type, name, parameters.a, throws_, body, parameters.b);
     }
 }
 
@@ -1231,14 +1112,24 @@ Type AnnotatedType():
     { return type; }
 }
 
-NodeList<Parameter> Parameters():
+Pair<NodeList<Parameter>, ReceiverParameter> Parameters():
 {
 	NodeList<Parameter> ret = emptyList();
 	Parameter par;
+	ReceiverParameter rp = null;
 }
 {
-  "(" [ par = Parameter() { ret = add(ret, par); } ( "," par = Parameter() { ret = add(ret, par); } )* ] ")"
-  { return ret; }
+    "("
+    [ 
+        ( LOOKAHEAD(ReceiverParameter())
+            rp = ReceiverParameter()
+            |
+            par = Parameter() { ret = add(ret, par); }
+        ) 
+        ( "," par = Parameter() { ret = add(ret, par); } )* 
+    ]
+    ")"
+    { return new Pair(ret, rp); }
 }
 
 NodeList<Parameter> LambdaParameters():
@@ -1257,9 +1148,9 @@ NodeList<Parameter> InferredLambdaParameters():
     Pair<SimpleName, List<ArrayBracketPair>> id;
 }
 {
-    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
+    id = VariableDeclaratorId() 	{ ret = add(ret, new Parameter(range(id.a, id.a), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a));}
     (
-        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a.getTokenRange().get().getBegin(), id.a.getTokenRange().get().getEnd()), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
+        "," id = VariableDeclaratorId()  { ret = add(ret, new Parameter(range(id.a, id.a), EnumSet.noneOf(Modifier.class), emptyList(), new UnknownType(), false, emptyList(), id.a)); }
     )*
     { return ret;  }
 }
@@ -1270,46 +1161,47 @@ Parameter Parameter():
 	Type partialType;
 	boolean isVarArg = false;
 	Pair<SimpleName, List<ArrayBracketPair>> id;
-	SimpleName receiverId;
 	NodeList<AnnotationExpr> varArgAnnotations = emptyList();
-	Parameter ret;
 }
 {
-  modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
-  ( LOOKAHEAD(ReceiverParameterId())
-    receiverId = ReceiverParameterId()
-    {
-        JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
-        ret = new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, partialType, isVarArg, varArgAnnotations, receiverId);
-    }
-  |
+    modifier = Modifiers() partialType = Type(emptyList()) [ varArgAnnotations = Annotations() "..." { isVarArg = true;} ] 
     id = VariableDeclaratorId()
     {
-        JavaToken begin = modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
-        ret = new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
+        JavaToken begin = orIfInvalid(modifier.begin, partialType);
+        return new Parameter(range(begin, token()), modifier.modifiers, modifier.annotations, juggleArrayType(partialType, id.b), isVarArg, varArgAnnotations, id.a);
     }
-  )
-  { return ret; }
 }
 
-SimpleName ReceiverParameterId():
+ReceiverParameter ReceiverParameter():
 {
-    String id;
-	String ret ="";
-    JavaToken begin = INVALID;
+	Type partialType;
+	Name id;
+	NodeList<AnnotationExpr> annotations = emptyList();
 }
 {
-  ( id = Identifier() "." { ret = ret + id + "."; begin = begin.orIfInvalid(token()); } )*
-  "this" { begin = begin.orIfInvalid(token()); }
-  { return new SimpleName(range(begin, token()), ret + "this"); }
+    annotations = Annotations()
+    partialType = Type(emptyList()) 
+    id = ReceiverParameterId()
+    {
+        return new ReceiverParameter(range(partialType, token()), annotations, partialType, id);
+    }
 }
 
+Name ReceiverParameterId():
+{
+	Name ret = null;
+	NodeList<AnnotationExpr> annotations;
+}
+{
+    [ LOOKAHEAD(Name()) ret = Name() "."] annotations=Annotations() "this" 
+    { return new Name(tokenRange(), ret, token.image, annotations); }
+}
 
 ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 {
 	RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyList());
 	SimpleName name;
-	NodeList<Parameter> parameters = emptyList();
+	Pair<NodeList<Parameter>, ReceiverParameter> parameters = new Pair<NodeList<Parameter>, ReceiverParameter>(emptyList(), null);
 	NodeList<ReferenceType> throws_ = emptyList();
 	ExplicitConstructorInvocationStmt exConsInv = null;
 	NodeList<Statement> stmts = emptyList();
@@ -1318,9 +1210,9 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	ReferenceType throwType;
 }
 {
-  [ typeParameters = TypeParameters() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); } ]
+  [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
   // Modifiers matched in the caller
-  name = SimpleName() { begin = begin.orIfInvalid(typeParameters.range.getBegin()); begin = begin.orIfInvalid(token()); } parameters = Parameters() [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
+  name = SimpleName() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); begin = orIfInvalid(begin, token()); } parameters = Parameters() [ "throws" throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); }
   ("," throwType = AnnotatedReferenceType() { throws_ = add(throws_, throwType); })* ]
 
   /**
@@ -1341,7 +1233,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
   	if (exConsInv != null) {
   		stmts = prepend(stmts, exConsInv);
   	}
-  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters, throws_, new BlockStmt(range(blockBegin, token()), stmts));
+  	return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
   }
 }
 
@@ -1357,16 +1249,16 @@ ExplicitConstructorInvocationStmt ExplicitConstructorInvocation():
   (
 	  LOOKAHEAD([ TypeArguments() ] <THIS> "(")
 	  [ typeArgs = TypeArguments() { begin=typeArgs.range.getBegin(); } ]
-	  <THIS> { begin = begin.orIfInvalid(token()); isThis = true; }
+	  <THIS> { begin = orIfInvalid(begin, token()); isThis = true; }
 	  args = Arguments() ";"
 	|
 	  [
 	    LOOKAHEAD( PrimaryExpressionWithoutSuperSuffix() "." )
 	  	expr = PrimaryExpressionWithoutSuperSuffix() "."
-	  	{ begin=expr.getTokenRange().get().getBegin(); }
+	  	{ begin = orIfInvalid(begin, expr); }
 	  ]
-	  [ typeArgs = TypeArguments() { begin = begin.orIfInvalid(typeArgs.range.getBegin()); } ]
-	  <SUPER> {begin = begin.orIfInvalid(token());}
+	  [ typeArgs = TypeArguments() { begin = orIfInvalid(begin, typeArgs.range.getBegin()); } ]
+	  <SUPER> {begin = orIfInvalid(begin, token());}
 	  args = Arguments() ";"
   )
   { return new ExplicitConstructorInvocationStmt(range(begin, token()),typeArgs.list, isThis, expr, args); }
@@ -1390,7 +1282,7 @@ InitializerDeclaration InitializerDeclaration():
 }
 {
   [ "static" { isStatic = true; begin=token();} ] 
-  body = Block() {begin = begin.orIfInvalid(body.getTokenRange().get().getBegin());}
+  body = Block() {begin = orIfInvalid(begin, body);}
   { return new InitializerDeclaration(range(begin, token()), isStatic, body); }
 }
 
@@ -1434,18 +1326,18 @@ ArrayBracketPair ArrayBracketPair(Origin origin):
 }
 {
     annotations = Annotations()
-    "[" { begin = begin.orIfInvalid(token()); } "]"
+    "[" { begin = orIfInvalid(begin, token()); } "]"
     { return new ArrayBracketPair(range(begin, token()), origin, annotations); }
 }
 
 IntersectionType IntersectionType(NodeList<AnnotationExpr> annotations):
 {
-	JavaToken begin;
+	JavaToken begin = INVALID;
 	ReferenceType elementType;
 	NodeList<ReferenceType> elements = emptyList();
 }
 {
-    elementType = ReferenceType(annotations) { begin=elementType.getTokenRange().get().getBegin(); elements = add(elements, elementType); }
+    elementType = ReferenceType(annotations) { begin = orIfInvalid(begin, elementType); elements = add(elements, elementType); }
     "&" (elementType = AnnotatedReferenceType() { elements = add(elements, elementType); } )+
     { return new IntersectionType(range(begin, token()), elements); }
 }
@@ -1584,7 +1476,7 @@ Name Name():
 {
   annotations=Annotations() Identifier() { ret = new Name(tokenRange(), null, token.image, annotations); }
   ( LOOKAHEAD("." Annotations() Identifier()) 
-  "." annotations=Annotations() Identifier() { ret = new Name(range(ret.getTokenRange().get().getBegin(), token()), ret, token.image, annotations); } )*
+  "." annotations=Annotations() Identifier() { ret = new Name(range(ret, token()), ret, token.image, annotations); } )*
   { return ret; }
 }
 
@@ -1636,23 +1528,23 @@ Expression Expression():
     ret = ConditionalExpression()
     [
         ( LOOKAHEAD(2)
-            op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, value, op); }
+            op = AssignmentOperator() value = Expression() { ret = new AssignExpr(range(ret, token()), ret, value, op); }
         |
             "->" lambdaBody = LambdaBody()
             {
                 if (ret instanceof CastExpr) {
-                    ret = generateLambda(this, ret, lambdaBody);
+                    ret = generateLambda(ret, lambdaBody);
                 } else if (ret instanceof ConditionalExpr) {
                     ConditionalExpr ce = (ConditionalExpr) ret;
                     if(ce.getElseExpr() != null) {
-                        ce.setElseExpr(generateLambda(this, ce.getElseExpr(), lambdaBody));
+                        ce.setElseExpr(generateLambda(ce.getElseExpr(), lambdaBody));
                     }
                 } else {
-                    ret = generateLambda(this, ret, lambdaBody);
+                    ret = generateLambda(ret, lambdaBody);
                 }
             }
         |
-            "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, token.image); }
+            "::"  [typeArgs = TypeArguments() ] (Identifier() | "new") { ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image); }
         )
     ]
     
@@ -1689,7 +1581,7 @@ Expression ConditionalExpression():
 }
 {
   ret = ConditionalOrExpression()
-  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, left, right); } ]
+  [ "?" left = Expression() ":" right = ConditionalExpression() { ret = new ConditionalExpr(range(ret, token()), ret, left, right); } ]
   { return ret; }
 }
 
@@ -1699,7 +1591,7 @@ Expression ConditionalOrExpression():
 	Expression right;
 }
 {
-  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.OR); } )*
+  ret = ConditionalAndExpression() ( "||" right = ConditionalAndExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.OR); } )*
   { return ret; }
 }
 
@@ -1709,7 +1601,7 @@ Expression ConditionalAndExpression():
 	Expression right;
 }
 {
-  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.AND); } )*
+  ret = InclusiveOrExpression() ( "&&" right = InclusiveOrExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.AND); } )*
   { return ret; }
 }
 
@@ -1719,7 +1611,7 @@ Expression InclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
+  ret = ExclusiveOrExpression() ( "|" right = ExclusiveOrExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.BINARY_OR); } )*
   { return ret; }
 }
 
@@ -1729,7 +1621,7 @@ Expression ExclusiveOrExpression():
 	Expression right;
 }
 {
-  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.XOR); } )*
+  ret = AndExpression() ( "^" right = AndExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.XOR); } )*
   { return ret; }
 }
 
@@ -1739,7 +1631,7 @@ Expression AndExpression():
 	Expression right;
 }
 {
-  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
+  ret = EqualityExpression() ( "&" right = EqualityExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, BinaryExpr.Operator.BINARY_AND); } )*
   { return ret; }
 }
 
@@ -1754,7 +1646,7 @@ Expression EqualityExpression():
   (
     ( "==" { op = BinaryExpr.Operator.EQUALS; } |
       "!=" { op = BinaryExpr.Operator.NOT_EQUALS; }
-    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
+    ) right = InstanceOfExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1767,7 +1659,7 @@ Expression InstanceOfExpression():
 }
 {
     ret = RelationalExpression() [ "instanceof" type = AnnotatedReferenceType() {
-        ret = new InstanceOfExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, type); 
+        ret = new InstanceOfExpr(range(ret, token()), ret, type); 
     } ]
     { return ret; }
 }
@@ -1785,7 +1677,7 @@ Expression RelationalExpression():
   	  ">"  { op = BinaryExpr.Operator.GREATER; } |
   	  "<=" { op = BinaryExpr.Operator.LESS_EQUALS; } |
   	  ">=" { op = BinaryExpr.Operator.GREATER_EQUALS; }
-  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
+  	) right = ShiftExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1802,7 +1694,7 @@ Expression ShiftExpression():
   	( "<<"             { op = BinaryExpr.Operator.LEFT_SHIFT; } |
   	  RSIGNEDSHIFT()   { op = BinaryExpr.Operator.SIGNED_RIGHT_SHIFT; } |
   	  RUNSIGNEDSHIFT() { op = BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
-  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
+  	) right = AdditiveExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1818,7 +1710,7 @@ Expression AdditiveExpression():
   (
   	( "+" { op = BinaryExpr.Operator.PLUS; } |
   	  "-" { op = BinaryExpr.Operator.MINUS; }
-  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
+  	) right = MultiplicativeExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1835,7 +1727,7 @@ Expression MultiplicativeExpression():
   	( "*" { op = BinaryExpr.Operator.MULTIPLY; } |
   	  "/" { op = BinaryExpr.Operator.DIVIDE; } |
   	  "%" { op = BinaryExpr.Operator.REMAINDER; }
-  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, right, op); }
+  	) right = UnaryExpression() { ret = new BinaryExpr(range(ret, token()), ret, right, op); }
   )*
   { return ret; }
 }
@@ -1915,7 +1807,7 @@ Expression PostfixExpression():
   	LOOKAHEAD(2)
     ( "++" { op = UnaryExpr.Operator.POSTFIX_INCREMENT; } |
       "--" { op = UnaryExpr.Operator.POSTFIX_DECREMENT; }
-    ) { ret = new UnaryExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, op); }
+    ) { ret = new UnaryExpr(range(ret, token()), ret, op); }
   ]
   { return ret; }
 }
@@ -1943,7 +1835,7 @@ Expression CastExpression():
   	  )*
   	  ")" ret = UnaryExpressionNotPlusMinus() {
   	    if (typesOfMultiCast.size() > 1) {
-  	        ret = new CastExpr(range(begin, token()), new IntersectionType(range(typesOfMultiCast.get(0).getTokenRange().get().getBegin(), typesOfMultiCast.get(typesOfMultiCast.size() -1).getTokenRange().get().getBegin()), typesOfMultiCast), ret);
+  	        ret = new CastExpr(range(begin, token()), new IntersectionType(range(typesOfMultiCast.get(0), typesOfMultiCast.get(typesOfMultiCast.size() -1)), typesOfMultiCast), ret);
   	    } else {
   	        ret = new CastExpr(range(begin, token()), referenceType, ret);
   	    }
@@ -2000,15 +1892,15 @@ Expression PrimaryPrefix():
 	  [ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(ret, token()), ret, typeArgs.list, name, args);
 			} else {
-	  			ret = new FieldAccessExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, emptyList(), name);
+	  			ret = new FieldAccessExpr(range(ret, token()), ret, emptyList(), name);
 			}
 	  	}
 	 |
 		"::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
-		  ret = new MethodReferenceExpr(range(ret.getTokenRange().get().getBegin(), token()), ret, typeArgs.list, token.image);
+		  ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
 		}
 	  )
 	|
@@ -2027,13 +1919,13 @@ Expression PrimaryPrefix():
 	  ret = AllocationExpression(null)
 	|
 	  LOOKAHEAD( ResultType() "." "class" )
-	  type = ResultType(emptyList())  "." "class" { ret = new ClassExpr(range(type.getTokenRange().get().getBegin(), token()), type); }
+	  type = ResultType(emptyList())  "." "class" { ret = new ClassExpr(range(type, token()), type); }
 
 	| LOOKAHEAD (AnnotatedType() "::" )
 	  type = AnnotatedType() "::" [typeArgs = TypeArguments() ] (Identifier() | "new")
 		{
-		  ret = new TypeExpr(type.getTokenRange().get(), type);
-		  ret = new MethodReferenceExpr(ret.getTokenRange().get(), ret, typeArgs.list, token.image);
+		  ret = new TypeExpr(range(type, type), type);
+		  ret = new MethodReferenceExpr(range(ret, token()), ret, typeArgs.list, token.image);
 		}
 
 	|
@@ -2041,7 +1933,7 @@ Expression PrimaryPrefix():
 	  	[ args = Arguments() { hasArgs=true; } ]
 	  	{
 	  		if (hasArgs) {
-	  			ret = new MethodCallExpr(range(begin, token()), null, emptyList(), name, args);
+	  			ret = new MethodCallExpr(range(begin, token()), null, null, name, args);
 			} else {
 	  			ret = new NameExpr(name);
 			}
@@ -2059,7 +1951,7 @@ Expression PrimarySuffix(Expression scope):
   	LOOKAHEAD(2)
 	ret = PrimarySuffixWithoutSuper(scope)
 	|
-  	"." "super" { ret = new SuperExpr(range(scope.getTokenRange().get().getBegin(), token()), scope); }
+  	"." "super" { ret = new SuperExpr(range(scope, token()), scope); }
   )
   { return ret; }
 }
@@ -2076,7 +1968,7 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
   (
   	"."
   	(
-		"this" { ret = new ThisExpr(range(scope.getTokenRange().get().getBegin(), token()), scope); }
+		"this" { ret = new ThisExpr(range(scope, token()), scope); }
 	  |
 	  	ret = AllocationExpression(scope)
 	  |
@@ -2086,14 +1978,14 @@ Expression PrimarySuffixWithoutSuper(Expression scope):
 	  	[ args = Arguments() {hasArgs=true;} ]
 	  	{
 			if (hasArgs) {
-	  			ret = new MethodCallExpr(range(scope.getTokenRange().get().getBegin(), token()), scope, typeArgs.list, name, args);
+	  			ret = new MethodCallExpr(range(scope, token()), scope, typeArgs.list, name, args);
 			} else {
-	  			ret =  new FieldAccessExpr(range(scope.getTokenRange().get().getBegin(), token()), scope, typeArgs.list, name);
+	  			ret =  new FieldAccessExpr(range(scope, token()), scope, typeArgs.list, name);
 			}
 	  	}
 	)
 	|
-	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope.getTokenRange().get().getBegin(), token()), scope, ret); }
+	  "["ret = Expression() "]" { ret = new ArrayAccessExpr(range(scope, token()), scope, ret); }
   )
   { return ret; }
 }
@@ -2177,11 +2069,11 @@ Expression AllocationExpression(Expression scope):
 	RangedList<Type> typeArgs = new RangedList<Type>(null);
 	NodeList<BodyDeclaration<?>> anonymousBody = null;
 	NodeList<Expression> args;
-	JavaToken begin;
+	JavaToken begin = INVALID;
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-    "new" { if(scope==null) {begin=token();} else {begin=scope.getTokenRange().get().getBegin();} }
+    "new" { if(scope==null) {begin=token();} else {begin = orIfInvalid(begin, scope);} }
     
     annotations = Annotations() 
     (
@@ -2207,15 +2099,15 @@ ArrayCreationExpr ArrayCreation(JavaToken begin, Type type):
 	NodeList<Expression> inits = emptyList();
 	List<NodeList<AnnotationExpr>> accum = new ArrayList<NodeList<AnnotationExpr>>();
 	NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
-	JavaToken arrayCreationLevelStart = null;
+	JavaToken arrayCreationLevelStart = INVALID;
 	List<TokenRange> levelRanges = new ArrayList<TokenRange>();
 }
 { 
     ( LOOKAHEAD(2)
         annotations = Annotations()
-        "[" { arrayCreationLevelStart = annotations.isEmpty() ? token() : annotations.get(0).getTokenRange().get().getBegin(); }
+        "[" { arrayCreationLevelStart = annotations.isEmpty() ? token() : orIfInvalid(arrayCreationLevelStart, annotations.get(0)); }
         (expr = Expression())? { accum = add(accum, annotations); inits = add(inits, expr); annotations=null; expr=null; } 
-        "]" { levelRanges.add(new TokenRange(arrayCreationLevelStart, token())); }
+        "]" { levelRanges.add(range(arrayCreationLevelStart, token())); }
     )+ 
     (arrayInitializerExpr = ArrayInitializer())? 
     {  
@@ -2328,10 +2220,10 @@ Statement BlockStatement():
     try {
         ( LOOKAHEAD( Modifiers() ("class" | "interface") )
             modifier = Modifiers()
-            typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl.getTokenRange().get().getBegin(), token()), typeDecl); }
+            typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
         | LOOKAHEAD(VariableDeclarationExpression() )
             expr = VariableDeclarationExpression() ";"
-            { ret = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); } 
+            { ret = new ExpressionStmt(range(expr, token()), expr); } 
         |
             ret = Statement()
         )
@@ -2352,7 +2244,7 @@ VariableDeclarationExpr VariableDeclarationExpression():
 {
     modifier = Modifiers() partialType = Type(emptyList()) var = VariableDeclarator(partialType) { variables.add(var); } ( "," var = VariableDeclarator(partialType) { variables.add(var); } )*
     {
-        JavaToken begin=modifier.begin.orIfInvalid(partialType.getTokenRange().get().getBegin());
+        JavaToken begin=orIfInvalid(modifier.begin, partialType);
         return new VariableDeclarationExpr(range(begin, token()), modifier.modifiers, modifier.annotations, variables);
     }
 }
@@ -2371,7 +2263,7 @@ Statement LambdaBody():
 }
 {
     (
-        expr = Expression() { n = new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); }
+        expr = Expression() { n = new ExpressionStmt(range(expr, token()), expr); }
         |  
         n = Block()
     )
@@ -2399,15 +2291,15 @@ ExpressionStmt StatementExpression():
         |
         expr = PrimaryExpression()
         [
-            "++" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
+            "++" { expr = new UnaryExpr(range(expr, token()), expr, UnaryExpr.Operator.POSTFIX_INCREMENT);  }
             |
-            "--" { expr = new UnaryExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
+            "--" { expr = new UnaryExpr(range(expr, token()), expr, UnaryExpr.Operator.POSTFIX_DECREMENT);  }
             |
-            op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr.getTokenRange().get().getBegin(), token()), expr, value, op); }
+            op = AssignmentOperator() value = Expression() { expr = new AssignExpr(range(expr, token()), expr, value, op); }
         ]
     )
     ";"
-    { return new ExpressionStmt(range(expr.getTokenRange().get().getBegin(), token()), expr); }
+    { return new ExpressionStmt(range(expr, token()), expr); }
 }
 
 SwitchStmt SwitchStatement():
@@ -2637,7 +2529,7 @@ TryStmt TryStatement():
   			    } else {
   			        type = (Type)exceptionTypes.get(0);
   			    }
-				Parameter catchType = new Parameter(range(type.getTokenRange().get().getBegin(), paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
+				Parameter catchType = new Parameter(range(type, paramEnd), exceptModifier.modifiers, exceptModifier.annotations, type, false, emptyList(), exceptId.a);
   			    catchs = add(catchs, new CatchClause(range(catchBegin, token()), catchType, catchBlock));
   			    exceptionTypes = emptyList(); }
   		)*
@@ -2695,7 +2587,7 @@ void RUNSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((CustomToken)getToken(1)).realKind == RUNSIGNEDSHIFT} )
+                getToken(1).realKind == RUNSIGNEDSHIFT} )
    ">" ">" ">"
   )
 }
@@ -2704,7 +2596,7 @@ void RSIGNEDSHIFT():
 {}
 {
   ( LOOKAHEAD({ getToken(1).kind == GT &&
-                ((CustomToken)getToken(1)).realKind == RSIGNEDSHIFT} )
+                getToken(1).realKind == RSIGNEDSHIFT} )
   ">" ">"
   )
 }
@@ -2771,7 +2663,7 @@ Expression MemberValue():
 	Expression ret;
 }
 {
-  (
+  ( LOOKAHEAD("@")
 	   ret = Annotation()
 	 |
 	   ret = MemberValueArrayInitializer()
@@ -2804,7 +2696,7 @@ AnnotationDeclaration AnnotationTypeDeclaration(ModifierHolder modifier):
 	JavaToken begin = modifier.begin;
 }
 {
-  "@" { begin=begin.orIfInvalid(token()); }
+  "@" { begin=orIfInvalid(begin, token()); }
   "interface" name = SimpleName() members = AnnotationTypeBody()
   { 
       return new AnnotationDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, name, members);
@@ -2838,7 +2730,7 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 	   ret = AnnotationTypeMemberDeclaration(modifier)
 	  |
 	   ret = ClassOrInterfaceDeclaration(modifier)
-	  |
+	  | LOOKAHEAD("enum")
 	   ret = EnumDeclaration(modifier)
 	  |
 	   ret = AnnotationTypeDeclaration(modifier)
@@ -2859,7 +2751,7 @@ AnnotationMemberDeclaration AnnotationTypeMemberDeclaration(ModifierHolder modif
   type = Type(emptyList()) name = SimpleName() "(" ")" [ defaultVal = DefaultValue() ] ";"
 
   {
-	JavaToken begin = modifier.begin.orIfInvalid(type.getTokenRange().get().getBegin());
+	JavaToken begin = orIfInvalid(modifier.begin, type);
     return new AnnotationMemberDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, type, name, defaultVal);
   }
 }
@@ -2917,8 +2809,8 @@ ModuleDeclaration ModuleDeclaration(ModifierHolder modifier):
     JavaToken begin = modifier.begin;
 }
 {
-    [ <OPEN> {open=true; begin = begin.orIfInvalid(token());} ]
-    <MODULE> { begin = begin.orIfInvalid(token()); }
+    [ <OPEN> {open=true; begin = orIfInvalid(begin, token());} ]
+    <MODULE> { begin = orIfInvalid(begin, token()); }
     name = Name() "{"
     ( st = ModuleStmt() { statements = add(statements, st); } )*
     "}"
@@ -2938,7 +2830,7 @@ BlockStmt BlockParseStart():
 
 Statement BlockStatementParseStart():
 { Statement ret; }
-{ ret = BlockStatement() <EOF> { return ret; } }
+{ (LOOKAHEAD(3) ret = BlockStatement()|ret = ExplicitConstructorInvocation()) <EOF> { return ret; } }
 
 ImportDeclaration ImportDeclarationParseStart():
 { ImportDeclaration ret; }

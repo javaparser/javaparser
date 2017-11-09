@@ -29,6 +29,7 @@ import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -42,7 +43,9 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         this(null, value);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public LiteralStringValueExpr(TokenRange tokenRange, String value) {
         super(tokenRange);
@@ -92,5 +95,22 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isLiteralStringValueExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public LiteralStringValueExpr asLiteralStringValueExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
+        action.accept(this);
     }
 }

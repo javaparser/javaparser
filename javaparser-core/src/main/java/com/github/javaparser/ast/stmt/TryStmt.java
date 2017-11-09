@@ -36,17 +36,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.function.Consumer;
 
 /**
  * <h1>The try statement</h1>
  * <h2>Java 1-6</h2>
  * <pre>
  * try {
- *   // ...
+ * // ...
  * } catch (IOException e) {
- *   // ...
+ * // ...
  * } finally {
- *   // ...
+ * // ...
  * }
  * </pre>
  * In this code, "// do things" is the content of the tryBlock, there is one catch clause that catches IOException e,
@@ -56,34 +57,34 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * <h2>Java 7-8</h2>
  * <pre>
  * try (InputStream i = new FileInputStream("file")) {
- *   // ...
+ * // ...
  * } catch (IOException|NullPointerException e) {
- *   // ...
+ * // ...
  * } finally {
- *   // ...
+ * // ...
  * }
  * </pre>
  * Java 7 introduced two things:
  * <ul>
- *     <li>Resources can be specified after "try", but only variable declarations (VariableDeclarationExpr.)</li>
- *     <li>A single catch can catch multiple exception types. This uses the IntersectionType.</li>
+ * <li>Resources can be specified after "try", but only variable declarations (VariableDeclarationExpr.)</li>
+ * <li>A single catch can catch multiple exception types. This uses the IntersectionType.</li>
  * </ul>
  * <h2>Java 9+</h2>
  * <pre>
  * try (r) {
- *   // ...
+ * // ...
  * } catch (IOException|NullPointerException e) {
- *   // ...
+ * // ...
  * } finally {
- *   // ...
+ * // ...
  * }
  * </pre>
  * Java 9 finishes resources: you can now refer to a resource that was declared somewhere else.
  * The following types are allowed:
  * <ul>
- *     <li>VariableDeclarationExpr: "X x = new X()" like in Java 7-8.</li>
- *     <li>NameExpr: "a".</li>
- *     <li>FieldAccessExpr: "x.y.z", "super.test" etc.</li>
+ * <li>VariableDeclarationExpr: "X x = new X()" like in Java 7-8.</li>
+ * <li>NameExpr: "a".</li>
+ * <li>FieldAccessExpr: "x.y.z", "super.test" etc.</li>
  * </ul>
  *
  * @author Julio Vilmar Gesser
@@ -115,7 +116,9 @@ public final class TryStmt extends Statement {
         this(null, resources, tryBlock, catchClauses, finallyBlock);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TryStmt(TokenRange tokenRange, NodeList<Expression> resources, BlockStmt tryBlock, NodeList<CatchClause> catchClauses, BlockStmt finallyBlock) {
         super(tokenRange);
@@ -127,11 +130,13 @@ public final class TryStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -287,5 +292,22 @@ public final class TryStmt extends Statement {
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTryStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public TryStmt asTryStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifTryStmt(Consumer<TryStmt> action) {
+        action.accept(this);
     }
 }

@@ -394,9 +394,9 @@ public class Difference {
         return new Difference(elements);
     }
 
-    private TextElement toTextElement(LexicalPreservingPrinter lpp, CsmElement csmElement) {
+    private TextElement toTextElement(CsmElement csmElement) {
         if (csmElement instanceof CsmChild) {
-            return new ChildTextElement(lpp, ((CsmChild) csmElement).getChild());
+            return new ChildTextElement(((CsmChild) csmElement).getChild());
         } else if (csmElement instanceof CsmToken) {
             return new TokenTextElement(((CsmToken) csmElement).getTokenType(), ((CsmToken) csmElement).getContent(null));
         } else {
@@ -484,7 +484,7 @@ public class Difference {
             throw new NullPointerException();
         }
         boolean addedIndentation = false;
-        List<TokenTextElement> indentation = nodeText.getLexicalPreservingPrinter().findIndentation(node);
+        List<TokenTextElement> indentation = LexicalPreservingPrinter.findIndentation(node);
         int diffIndex = 0;
         int nodeTextIndex = 0;
         do {
@@ -505,7 +505,7 @@ public class Difference {
                                 + nodeText + ". Difference: " + this);
                     }
                 } else if (diffEl instanceof Added) {
-                    nodeText.addElement(nodeTextIndex, toTextElement(nodeText.getLexicalPreservingPrinter(), ((Added) diffEl).element));
+                    nodeText.addElement(nodeTextIndex, toTextElement(((Added) diffEl).element));
                     nodeTextIndex++;
                     diffIndex++;
                 } else {
@@ -540,7 +540,7 @@ public class Difference {
                         diffIndex++;
                         continue;
                     }
-                    TextElement textElement = toTextElement(nodeText.getLexicalPreservingPrinter(), addedElement);
+                    TextElement textElement = toTextElement(addedElement);
                     boolean used = false;
                     if (nodeTextIndex > 0 && nodeText.getElements().get(nodeTextIndex - 1).isNewline()) {
                         for (TextElement e : processIndentation(indentation, nodeText.getElements().subList(0, nodeTextIndex - 1))) {

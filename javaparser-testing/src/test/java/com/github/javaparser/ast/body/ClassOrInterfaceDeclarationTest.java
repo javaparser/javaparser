@@ -11,7 +11,7 @@ public class ClassOrInterfaceDeclarationTest {
     @Test
     public void staticNestedClass() {
         CompilationUnit cu = JavaParser.parse("class X{static class Y{}}");
-        ClassOrInterfaceDeclaration y = (ClassOrInterfaceDeclaration) cu.getClassByName("X").get().getMembers().get(0);
+        ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertFalse(y.isInnerClass());
         assertTrue(y.isNestedType());
@@ -21,7 +21,7 @@ public class ClassOrInterfaceDeclarationTest {
     @Test
     public void nestedInterface() {
         CompilationUnit cu = JavaParser.parse("class X{interface Y{}}");
-        ClassOrInterfaceDeclaration y = (ClassOrInterfaceDeclaration) cu.getClassByName("X").get().getMembers().get(0);
+        ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertFalse(y.isInnerClass());
         assertTrue(y.isNestedType());
@@ -31,7 +31,7 @@ public class ClassOrInterfaceDeclarationTest {
     @Test
     public void nonStaticNestedClass() {
         CompilationUnit cu = JavaParser.parse("class X{class Y{}}");
-        ClassOrInterfaceDeclaration y = (ClassOrInterfaceDeclaration) cu.getClassByName("X").get().getMembers().get(0);
+        ClassOrInterfaceDeclaration y = cu.getClassByName("X").get().getMembers().get(0).asClassOrInterfaceDeclaration();
 
         assertTrue(y.isInnerClass());
         assertTrue(y.isNestedType());
@@ -51,7 +51,7 @@ public class ClassOrInterfaceDeclarationTest {
     @Test
     public void localClass() {
         MethodDeclaration method= (MethodDeclaration)JavaParser.parseBodyDeclaration("void x(){class X{};}");
-        ClassOrInterfaceDeclaration x = method.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0);
+        ClassOrInterfaceDeclaration x = method.findFirst(ClassOrInterfaceDeclaration.class).get();
 
         assertFalse(x.isInnerClass());
         assertFalse(x.isNestedType());

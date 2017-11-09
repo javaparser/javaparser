@@ -34,6 +34,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -86,7 +87,9 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
         this(null, expression, operator);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
         super(tokenRange);
@@ -96,11 +99,13 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -180,5 +185,22 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isUnaryExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public UnaryExpr asUnaryExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifUnaryExpr(Consumer<UnaryExpr> action) {
+        action.accept(this);
     }
 }

@@ -41,6 +41,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import java.util.function.Consumer;
 
 /**
  * A class or an interface type. <br/><code>Object</code> <br/><code>HashMap&lt;String, String></code>
@@ -86,7 +88,9 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
         this(null, scope, name, typeArguments, annotations);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
@@ -97,11 +101,13 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -261,5 +267,27 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isClassOrInterfaceType() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ClassOrInterfaceType asClassOrInterfaceType() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public ResolvedReferenceType resolve() {
+        return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
     }
 }

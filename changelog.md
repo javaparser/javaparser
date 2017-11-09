@@ -1,3 +1,56 @@
+Version 3.5.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/65?closed=1)
+* The pretty printer now cleans up Javadoc comments.
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.5.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/64?closed=1)
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.5.0
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/63?closed=1)
+* A functional visitor API has been added. See [PR 1195](https://github.com/javaparser/javaparser/pull/1195) for now.
+* Build is working again on Windows thanks to Leonardo Herrera.
+* The pretty printer now has an option to order imports, also thanks to Leonardo Herrera.
+* Receiver parameters are now well-supported instead of being a hack. See [issue 1194](https://github.com/javaparser/javaparser/pull/1194) for a description.
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.4.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/62?closed=1)
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.4.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/61?closed=1)
+* BETA: we're still doing work to integrate parts of [Java Symbol Solver](https://github.com/javaparser/javasymbolsolver) to simplify its API.
+* `VisitorMap` is joined by `VisitorSet` and `VisitorList`, 
+for when you want to store `Node`s in collection but don't want its default equals/hascode behaviour
+
+Version 3.4.2
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/60?closed=1)
+* BETA: we're doing work to integrate parts of [Java Symbol Solver](https://github.com/javaparser/javasymbolsolver) to simplify its API.
+* JDK 9 will compile JavaParser now.
+* [An official sample Maven setup](https://github.com/javaparser/javaparser-maven-sample) was added.
+
+Version 3.4.1
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/59?closed=1)
+* Two visitors were added: `NoCommentEqualsVisitor` and `NoCommentHashCodeVisitor` - 
+as the name implies you can use these to compare nodes without considering comments.
+Thanks Ryan Beckett!
+* `isSomeType()` methods have been added for many types that help avoid `instanceof`.
+* `asSomeType()` methods have been added for many types that help avoid casting to that type.
+* `ifSomeType()` methods have been added for many types, giving a nice functional way of doing if-is-type-then-cast-to-type-then-use.
+* The `LexicalPreservingPrinter` had its API changed a little: setup and printing are now separate things,
+so you don't have to drag an instance of `LexicalPreservingPrinter` through your code anymore.  
+* `traverseScope` was added to all nodes with a scope, so you can travel through the scope without tripping over (non-)optionality.
+
+
 Version 3.4.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/58?closed=1)

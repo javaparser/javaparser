@@ -31,6 +31,8 @@ import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -52,7 +54,9 @@ public abstract class Comment extends Node {
         this(null, content);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public Comment(TokenRange tokenRange, String content) {
         super(tokenRange);
@@ -86,16 +90,14 @@ public abstract class Comment extends Node {
         return this;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isLineComment() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        if (isLineComment()) {
-            return (LineComment) this;
-        } else {
-            throw new UnsupportedOperationException("Not a line comment");
-        }
+        throw new IllegalStateException(f("%s is not an LineComment", this));
     }
 
     public Optional<Node> getCommentedNode() {
@@ -167,5 +169,37 @@ public abstract class Comment extends Node {
         if (node == null)
             return false;
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isBlockComment() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public BlockComment asBlockComment() {
+        throw new IllegalStateException(f("%s is not an BlockComment", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isJavadocComment() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public JavadocComment asJavadocComment() {
+        throw new IllegalStateException(f("%s is not an JavadocComment", this));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifBlockComment(Consumer<BlockComment> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifJavadocComment(Consumer<JavadocComment> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifLineComment(Consumer<LineComment> action) {
     }
 }

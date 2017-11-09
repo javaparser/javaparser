@@ -27,9 +27,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ProvidersTest {
 
@@ -41,6 +39,7 @@ public class ProvidersTest {
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertTrue(parse.isSuccessful());
     }
+
     @Test
     public void testResourceProviderWithWrongEncoding() throws IOException {
         Provider provider = Providers.resourceProvider("com/github/javaparser/TestFileIso88591.java");
@@ -49,6 +48,7 @@ public class ProvidersTest {
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
         assertFalse(parse.isSuccessful());
     }
+
     @Test
     public void testResourceProviderWithEncoding() throws IOException {
         Provider provider = Providers.resourceProvider(

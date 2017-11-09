@@ -30,8 +30,6 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
@@ -40,6 +38,7 @@ import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A method call on an object. <br/><code>circle.circumference()</code> <br/>In <code>a.&lt;String&gt;bb(15);</code> a
@@ -59,6 +58,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
 
     public MethodCallExpr() {
         this(null, null, new NodeList<>(), new SimpleName(), new NodeList<>());
+    }
+
+    public MethodCallExpr(String name, Expression... arguments) {
+        this(null, null, new NodeList<>(), new SimpleName(name), new NodeList<>(arguments));
     }
 
     public MethodCallExpr(final Expression scope, final String name) {
@@ -82,7 +85,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         this(null, scope, typeArguments, name, arguments);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public MethodCallExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name, NodeList<Expression> arguments) {
         super(tokenRange);
@@ -94,11 +99,13 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -258,5 +265,22 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isMethodCallExpr() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public MethodCallExpr asMethodCallExpr() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifMethodCallExpr(Consumer<MethodCallExpr> action) {
+        action.accept(this);
     }
 }

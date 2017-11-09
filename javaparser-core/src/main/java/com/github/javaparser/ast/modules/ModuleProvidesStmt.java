@@ -17,6 +17,7 @@ import java.util.List;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType<ModuleProvidesStmt, Type> {
 
@@ -33,7 +34,9 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
         this(null, type, withTypes);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ModuleProvidesStmt(TokenRange tokenRange, Type type, NodeList<Type> withTypes) {
         super(tokenRange);
@@ -43,12 +46,14 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -132,5 +137,22 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isModuleProvidesStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ModuleProvidesStmt asModuleProvidesStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifModuleProvidesStmt(Consumer<ModuleProvidesStmt> action) {
+        action.accept(this);
     }
 }

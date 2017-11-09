@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.ContinueStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import java.util.function.Consumer;
 
 /**
  * A continue statement with an optional label;
@@ -58,7 +59,9 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
         this(null, label);
     }
 
-    /**This constructor is used by the parser and is considered private.*/
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public ContinueStmt(TokenRange tokenRange, SimpleName label) {
         super(tokenRange);
@@ -67,11 +70,13 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
@@ -143,5 +148,22 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isContinueStmt() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public ContinueStmt asContinueStmt() {
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifContinueStmt(Consumer<ContinueStmt> action) {
+        action.accept(this);
     }
 }
