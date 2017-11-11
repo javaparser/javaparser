@@ -21,7 +21,6 @@
 
 options {
   STATIC=false;
-  JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
   TOKEN_EXTENDS ="TokenBase";

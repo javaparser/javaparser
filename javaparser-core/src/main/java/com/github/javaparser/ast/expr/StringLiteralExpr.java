@@ -37,6 +37,7 @@ import java.util.function.Consumer;
  * A literal string.
  * <br/><code>"Hello World!"</code>
  * <br/><code>"\"\n"</code>
+ * <br/><code>"\u2122"</code>
  * <br/><code>"™"</code>
  * <br/><code>"💩"</code>
  *
