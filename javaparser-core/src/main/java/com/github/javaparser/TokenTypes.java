@@ -171,6 +171,7 @@ public class TokenTypes {
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
             case LETTER:
+            case UNICODE_ESCAPE:
             case PART_LETTER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
