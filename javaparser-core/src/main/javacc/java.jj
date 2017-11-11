@@ -2760,28 +2760,26 @@ Type ResultTypeParseStart():
 { NodeList<AnnotationExpr> annotations; Type ret; }
 { annotations = Annotations() ret = ResultType(annotations) <EOF> { return ret; } }
 
-
 VariableDeclarationExpr VariableDeclarationExpressionParseStart():
 { VariableDeclarationExpr ret; }
 { ret = VariableDeclarationExpression() <EOF> { return ret; } }
-
 
 ExplicitConstructorInvocationStmt ExplicitConstructorInvocationParseStart():
 { ExplicitConstructorInvocationStmt ret; }
 { ret = ExplicitConstructorInvocation() <EOF> { return ret; } }
 
-
 Name NameParseStart():
 { Name ret; }
 { ret = Name() <EOF> { return ret; } }
 
+SimpleName SimpleNameParseStart():
+{ SimpleName ret; }
+{ ret = SimpleName() <EOF> { return ret; } }
 
 Parameter ParameterParseStart():
 { Parameter ret; }
 { ret = Parameter() <EOF> { return ret; } }
 
-
 PackageDeclaration PackageDeclarationParseStart():
 { PackageDeclaration ret; }
 { ret = PackageDeclaration() <EOF> { return ret; } }
-
