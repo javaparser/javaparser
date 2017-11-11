@@ -8,12 +8,7 @@ import static org.junit.Assert.*;
 public class StringLiteralExprTest {
     @Test
     public void unicodeEscapesDoNotGetPreprocessed() {
-        StringLiteralExpr omega = parseExpression("\"\\u03a9\"");
-        assertEquals('\\', omega.getValue().charAt(0));
-        assertEquals('u', omega.getValue().charAt(1));
-        assertEquals('0', omega.getValue().charAt(2));
-        assertEquals('3', omega.getValue().charAt(3));
-        assertEquals('a', omega.getValue().charAt(4));
-        assertEquals('9', omega.getValue().charAt(5));
+        StringLiteralExpr omega = parseExpression("\"xxx\\u03a9xxx\"");
+        assertEquals("xxx\\u03a9xxx", omega.getValue());
     }
 }
