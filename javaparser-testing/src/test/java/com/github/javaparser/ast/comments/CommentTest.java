@@ -64,7 +64,7 @@ public class CommentTest {
     }
 
     @Test
-    public void mayContainUnicodeEscapes() {
+    public void unicodeEscapesArePreservedInComments() {
         CompilationUnit cu = parse("// xxx\\u2122xxx");
         Comment comment = cu.getAllContainedComments().get(0);
         assertEquals(" xxx\\u2122xxx", comment.getContent());

@@ -44,7 +44,7 @@ public class SimpleNameTest {
     }
 
     @Test
-    public void mayContainUnicodeEscapes() {
+    public void unicodeEscapesArePreservedInIdentifiers() {
         SimpleName name = parseSimpleName("xxx\\u2122xxx");
         assertEquals("xxx\\u2122xxx", name.asString());
     }

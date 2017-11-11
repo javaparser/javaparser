@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 public class StringLiteralExprTest {
     @Test
-    public void unicodeEscapesDoNotGetPreprocessed() {
+    public void unicodeEscapesArePreservedInStrings() {
         StringLiteralExpr omega = parseExpression("\"xxx\\u03a9xxx\"");
         assertEquals("xxx\\u03a9xxx", omega.getValue());
     }
