@@ -21,12 +21,16 @@
 
 package com.github.javaparser.ast.comments;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.expr.Name;
 import org.junit.Test;
 
 import java.util.EnumSet;
 
+import static com.github.javaparser.JavaParser.parse;
+import static com.github.javaparser.JavaParser.parseName;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -57,5 +61,12 @@ public class CommentTest {
     public void cannotRemoveCommentNotUsedAnywhere() {
         Comment c = new LineComment("A comment");
         assertFalse(c.remove());
+    }
+
+    @Test
+    public void unicodeEscapesArePreservedInComments() {
+        CompilationUnit cu = parse("// xxx\\u2122xxx");
+        Comment comment = cu.getAllContainedComments().get(0);
+        assertEquals(" xxx\\u2122xxx", comment.getContent());
     }
 }

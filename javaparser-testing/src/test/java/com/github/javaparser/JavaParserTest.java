@@ -31,16 +31,20 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.SwitchEntryStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.*;
+import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
+import static com.github.javaparser.utils.CodeGenerationUtils.mavenModuleRoot;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
@@ -191,7 +195,7 @@ public class JavaParserTest {
         Statement lambdaBody = lambdaExpr.getBody();
         assertEquals(range(3, 68, 3, 101), lambdaBody.getRange().get());
     }
-    
+
     @Test
     public void testNotStoringTokens() {
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setStoreTokens(false));
@@ -207,6 +211,17 @@ public class JavaParserTest {
     @Test
     public void trailingWhitespaceIsIgnored() {
         BlockStmt blockStmt = JavaParser.parseBlock("{} // hello");
-        assertEquals("\"}\"   <94>   (line 1,col 2)-(line 1,col 2)", blockStmt.getTokenRange().get().getEnd().toString());
+        assertEquals("{}", blockStmt.getTokenRange().get().toString());
+    }
+
+    @Test
+    public void everyTokenHasACategory() throws IOException {
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class).resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
+        CompilationUnit tokenTypesCu = JavaParser.parse(tokenTypesPath);
+        // -1 to take off the default: case.
+        int switchEntries = tokenTypesCu.findAll(SwitchEntryStmt.class).size()-1;
+        // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
+        assertEquals(tokenCount, switchEntries);
     }
 }
