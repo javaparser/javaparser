@@ -42,6 +42,9 @@ import com.github.javaparser.metamodel.ObjectCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -338,5 +341,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifObjectCreationExpr(Consumer<ObjectCreationExpr> action) {
         action.accept(this);
+    }
+
+    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
 }

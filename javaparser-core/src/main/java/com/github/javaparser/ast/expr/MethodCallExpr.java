@@ -38,6 +38,9 @@ import com.github.javaparser.metamodel.MethodCallExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -282,5 +285,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifMethodCallExpr(Consumer<MethodCallExpr> action) {
         action.accept(this);
+    }
+
+    public ResolvedMethodDeclaration resolveInvokedMethod() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
 }
