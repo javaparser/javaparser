@@ -1,3 +1,10 @@
+Version 3.5.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/66?closed=1)
+* Unicode escapes (`\u1234`) are now retained in the AST,
+    but they are now only allowed in comments, string and character literals, and identifiers. 
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
 Version 3.5.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/65?closed=1)
