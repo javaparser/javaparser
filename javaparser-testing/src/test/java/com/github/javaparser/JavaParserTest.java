@@ -207,6 +207,6 @@ public class JavaParserTest {
     @Test
     public void trailingWhitespaceIsIgnored() {
         BlockStmt blockStmt = JavaParser.parseBlock("{} // hello");
-        assertEquals("\"}\"   <95>   (line 1,col 2)-(line 1,col 2)", blockStmt.getTokenRange().get().getEnd().toString());
+        assertEquals("{}", blockStmt.getTokenRange().get().toString());
     }
 }
