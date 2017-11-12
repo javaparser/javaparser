@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.parseSimpleName;
 import static junit.framework.TestCase.assertEquals;
 
 public class SimpleNameTest {
@@ -42,4 +43,9 @@ public class SimpleNameTest {
         new SimpleName(null);
     }
 
+    @Test
+    public void unicodeEscapesArePreservedInIdentifiers() {
+        SimpleName name = parseSimpleName("xxx\\u2122xxx");
+        assertEquals("xxx\\u2122xxx", name.asString());
+    }
 }

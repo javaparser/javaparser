@@ -28,10 +28,7 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.comments.CommentsCollection;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -501,6 +498,17 @@ public final class JavaParser {
      */
     public static Name parseName(String qualifiedName) {
         return simplifiedParse(NAME, provider(qualifiedName));
+    }
+
+    /**
+     * Parses a simple name (one that can NOT have "."s in it) and returns it as a SimpleName.
+     *
+     * @param name a name like "parameter_source"
+     * @return the AST for the name
+     * @throws ParseProblemException if the source code has parser errors
+     */
+    public static SimpleName parseSimpleName(String name) {
+        return simplifiedParse(SIMPLE_NAME, provider(name));
     }
 
     /**

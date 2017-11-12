@@ -21,7 +21,6 @@
 
 options {
   STATIC=false;
-  JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
   TOKEN_EXTENDS ="TokenBase";
@@ -177,7 +176,7 @@ MORE :
 {
   <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVADOC_COMMENT
 |
-  <"/*"> : IN_MULTI_LINE_COMMENT
+  <ENTER_MULTILINE_COMMENT: "/*"> : IN_MULTI_LINE_COMMENT
 }
 
 <IN_JAVADOC_COMMENT>
@@ -316,6 +315,13 @@ TOKEN :
 |
   < #HEX_DIGITS: ["0"-"9","a"-"f","A"-"F"]((["0"-"9","a"-"f","A"-"F","_"])*["0"-"9","a"-"f","A"-"F"])? >
 |
+  < #UNICODE_ESCAPE:
+    "\\u"
+    ["0"-"9","A"-"F","a"-"f"]
+    ["0"-"9","A"-"F","a"-"f"]
+    ["0"-"9","A"-"F","a"-"f"]
+    ["0"-"9","A"-"F","a"-"f"] >
+|
   < CHARACTER_LITERAL:
       "'"
       (   (~["'","\\","\n","\r"])
@@ -325,12 +331,7 @@ TOKEN :
             | ["0"-"3"] ["0"-"7"] ["0"-"7"]
             )
           )
-        | ("\\u"
-        	["0"-"9","A"-"F","a"-"f"]
-        	["0"-"9","A"-"F","a"-"f"]
-        	["0"-"9","A"-"F","a"-"f"]
-        	["0"-"9","A"-"F","a"-"f"]
-          )
+        | <UNICODE_ESCAPE>
       )
       "'"
   >
@@ -429,6 +430,7 @@ TOKEN :
          "\ufe76"-"\ufefc",  "\uff04",  "\uff21"-"\uff3a",  "\uff3f",  "\uff41"-"\uff5a",  "\uff66"-"\uffbe",  
          "\uffc2"-"\uffc7",  "\uffca"-"\uffcf",  "\uffd2"-"\uffd7",  "\uffda"-"\uffdc",  "\uffe0"-"\uffe1",  
          "\uffe5"-"\uffe6"  ]
+        | <UNICODE_ESCAPE>
   >
 |
   < #PART_LETTER: [
@@ -512,6 +514,7 @@ TOKEN :
          "\ufe4d"-"\ufe4f",  "\ufe69",  "\ufe70"-"\ufe74",  "\ufe76"-"\ufefc",  "\ufeff",  "\uff04",  "\uff10"-"\uff19",  
          "\uff21"-"\uff3a",  "\uff3f",  "\uff41"-"\uff5a",  "\uff66"-"\uffbe",  "\uffc2"-"\uffc7",  "\uffca"-"\uffcf",  
          "\uffd2"-"\uffd7",  "\uffda"-"\uffdc",  "\uffe0"-"\uffe1",  "\uffe5"-"\uffe6",  "\ufff9"-"\ufffb" ]
+        | <UNICODE_ESCAPE>
   >
 }
 
@@ -592,6 +595,7 @@ TOKEN :
 | < GT: ">" >
 }
 
+TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
 
 /*****************************************
  * THE JAVA LANGUAGE GRAMMAR STARTS HERE *
@@ -633,7 +637,7 @@ CompilationUnit CompilationUnit():
                 )
             )
         )*
-        (<EOF> | "\u001A" /** ctrl+z char **/)
+        (<EOF> | <CTRL_Z>)
         { return new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module); }
     } catch (ParseException e) {
         recover(EOF, e);
@@ -2765,28 +2769,26 @@ Type ResultTypeParseStart():
 { NodeList<AnnotationExpr> annotations; Type ret; }
 { annotations = Annotations() ret = ResultType(annotations) <EOF> { return ret; } }
 
-
 VariableDeclarationExpr VariableDeclarationExpressionParseStart():
 { VariableDeclarationExpr ret; }
 { ret = VariableDeclarationExpression() <EOF> { return ret; } }
-
 
 ExplicitConstructorInvocationStmt ExplicitConstructorInvocationParseStart():
 { ExplicitConstructorInvocationStmt ret; }
 { ret = ExplicitConstructorInvocation() <EOF> { return ret; } }
 
-
 Name NameParseStart():
 { Name ret; }
 { ret = Name() <EOF> { return ret; } }
 
+SimpleName SimpleNameParseStart():
+{ SimpleName ret; }
+{ ret = SimpleName() <EOF> { return ret; } }
 
 Parameter ParameterParseStart():
 { Parameter ret; }
 { ret = Parameter() <EOF> { return ret; } }
 
-
 PackageDeclaration PackageDeclarationParseStart():
 { PackageDeclaration ret; }
 { ret = PackageDeclaration() <EOF> { return ret; } }
-
