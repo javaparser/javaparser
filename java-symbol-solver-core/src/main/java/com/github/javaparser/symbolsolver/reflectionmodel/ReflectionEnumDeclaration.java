@@ -28,6 +28,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -190,4 +191,11 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implement
     }
 }
 
+  @Override
+  public List<ResolvedEnumConstantDeclaration> getEnumConstants() {
+      return Arrays.stream(clazz.getFields())
+              .filter(f -> f.isEnumConstant())
+              .map(c -> new ReflectionEnumConstantDeclaration(c, typeSolver))
+              .collect(Collectors.toList());
+  }
 }
