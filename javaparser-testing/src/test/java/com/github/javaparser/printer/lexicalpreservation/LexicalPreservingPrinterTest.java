@@ -996,6 +996,10 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 c.remove(method);
             }
         });
+        assertEquals("public class Foo {\n" +
+                "// Some comment\n" +
+                "\n" +
+                "}", LexicalPreservingPrinter.print(cu));
     }
 
 }
