@@ -984,9 +984,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
     @Test
     public void issue1244() {
-        String code = "public class Foo {\n\n"
-                + "// Some comment\n\n" // does work with only one \n
-                + "public void writeExternal() {}\n" + "}";
+        String code = "public class Foo {" + EOL + EOL
+                + "// Some comment" + EOL + EOL // does work with only one \n
+                + "public void writeExternal() {}" + EOL + "}";
         CompilationUnit originalCu = JavaParser.parse(code);
         CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
 
@@ -996,9 +996,9 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 c.remove(method);
             }
         });
-        assertEquals("public class Foo {\n" +
-                "// Some comment\n" +
-                "\n" +
+        assertEquals("public class Foo {" + EOL+
+                "// Some comment" + EOL+
+                EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
