@@ -982,4 +982,20 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 "public abstract class A {}" , LexicalPreservingPrinter.print(cu));
     }
 
+    @Test
+    public void issue1244() {
+        String code = "public class Foo {\n\n"
+                + "// Some comment\n\n" // does work with only one \n
+                + "public void writeExternal() {}\n" + "}";
+        CompilationUnit originalCu = JavaParser.parse(code);
+        CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
+
+        cu.findAll(ClassOrInterfaceDeclaration.class).stream().forEach(c -> {
+            List<MethodDeclaration> methods = c.getMethodsByName("writeExternal");
+            for (MethodDeclaration method : methods) {
+                c.remove(method);
+            }
+        });
+    }
+
 }
