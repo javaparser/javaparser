@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="javaparser-core-generators/src/main/java"/>
+	<classpathentry kind="src" path="javaparser-core/target/generated-sources/java-templates"/>
+	<classpathentry kind="src" path="javaparser-core/target/generated-sources/javacc"/>
+	<classpathentry kind="src" path="javaparser-core/src/main/java"/>
+	<classpathentry kind="src" path="javaparser-core/src/main/javacc-support"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="javaparser-core/target/classes"/>
+</classpath>
