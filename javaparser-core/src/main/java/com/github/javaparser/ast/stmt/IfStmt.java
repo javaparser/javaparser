@@ -167,21 +167,33 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
         return setElseStmt((Statement) null);
     }
 
+    /**
+     * This method returns true if the then branch (which should be always present) is a block statement.
+     */
     @DerivedProperty
     public boolean hasThenBlock() {
         return thenStmt instanceof BlockStmt;
     }
 
+    /**
+     * This method returns true if the If Statement has an else branch and that branch is a block statement.
+     */
     @DerivedProperty
     public boolean hasElseBlock() {
         return elseStmt instanceof BlockStmt;
     }
 
+    /**
+     * This method returns true if the If Statement has an else branch and that branch is another If Statement.
+     */
     @DerivedProperty
     public boolean hasCascadingIfStmt() {
         return elseStmt instanceof IfStmt;
     }
 
+    /**
+     * This method returns true if the If Statement has an else branch.
+     */
     @DerivedProperty
     public boolean hasElseBranch() {
         return elseStmt != null;
