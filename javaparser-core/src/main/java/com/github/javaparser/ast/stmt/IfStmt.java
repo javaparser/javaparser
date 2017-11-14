@@ -174,7 +174,17 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
 
     @DerivedProperty
     public boolean hasElseBlock() {
-        return elseStmt instanceof BlockStmt || elseStmt instanceof IfStmt;
+        return elseStmt instanceof BlockStmt;
+    }
+
+    @DerivedProperty
+    public boolean hasCascadingIf() {
+        return elseStmt instanceof IfStmt;
+    }
+
+    @DerivedProperty
+    public boolean hasElseBranch() {
+        return elseStmt != null;
     }
 
     @Override
