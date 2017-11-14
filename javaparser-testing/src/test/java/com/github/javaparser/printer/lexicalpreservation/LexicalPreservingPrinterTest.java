@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -996,9 +997,8 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                 c.remove(method);
             }
         });
-        assertEquals("public class Foo {" + EOL+
-                "// Some comment" + EOL+
-                EOL +
+        assertEqualsNoEol("public class Foo {\n" +
+                "// Some comment\n\n" +
                 "}", LexicalPreservingPrinter.print(cu));
     }
 
