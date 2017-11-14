@@ -38,7 +38,7 @@ import javax.annotation.Generated;
  */
 public interface GenericVisitor<R, A> {
 
-    //- Compilation Unit ----------------------------------
+    // - Compilation Unit ----------------------------------
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(CompilationUnit n, A arg);
 
@@ -54,7 +54,7 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(BlockComment n, A arg);
 
-    //- Body ----------------------------------------------
+    // - Body ----------------------------------------------
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ClassOrInterfaceDeclaration n, A arg);
 
@@ -91,7 +91,7 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(JavadocComment n, A arg);
 
-    //- Type ----------------------------------------------
+    // - Type ----------------------------------------------
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ClassOrInterfaceType n, A arg);
 
@@ -119,7 +119,7 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(UnknownType n, A arg);
 
-    //- Expression ----------------------------------------
+    // - Expression ----------------------------------------
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ArrayAccessExpr n, A arg);
 
@@ -207,7 +207,7 @@ public interface GenericVisitor<R, A> {
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(MemberValuePair n, A arg);
 
-    //- Statements ----------------------------------------
+    // - Statements ----------------------------------------
     @Generated("com.github.javaparser.generator.core.visitor.GenericVisitorGenerator")
     R visit(ExplicitConstructorInvocationStmt n, A arg);
 

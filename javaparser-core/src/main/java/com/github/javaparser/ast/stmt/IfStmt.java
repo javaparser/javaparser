@@ -178,7 +178,7 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     }
 
     @DerivedProperty
-    public boolean hasCascadingIf() {
+    public boolean hasCascadingIfStmt() {
         return elseStmt instanceof IfStmt;
     }
 

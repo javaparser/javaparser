@@ -15,7 +15,7 @@ public class IfElseStmtTest {
         IfStmt ifStmt = (IfStmt) JavaParser.parseStatement("if (cond) doSomething(); else doSomethingElse();");
         assertEquals(false, ifStmt.hasElseBlock());
         assertEquals(true, ifStmt.hasElseBranch());
-        assertEquals(false, ifStmt.hasCascadingIf());
+        assertEquals(false, ifStmt.hasCascadingIfStmt());
     }
 
     @Test
@@ -23,7 +23,7 @@ public class IfElseStmtTest {
         IfStmt ifStmt = (IfStmt) JavaParser.parseStatement("if (cond) doSomething(); else { doSomethingElse(); }");
         assertEquals(true, ifStmt.hasElseBlock());
         assertEquals(true, ifStmt.hasElseBranch());
-        assertEquals(false, ifStmt.hasCascadingIf());
+        assertEquals(false, ifStmt.hasCascadingIfStmt());
     }
 
     @Test
@@ -31,7 +31,7 @@ public class IfElseStmtTest {
         IfStmt ifStmt = (IfStmt) JavaParser.parseStatement("if (cond1) doSomething(); else if (cond2) doSomethingElse();");
         assertEquals(false, ifStmt.hasElseBlock());
         assertEquals(true, ifStmt.hasElseBranch());
-        assertEquals(true, ifStmt.hasCascadingIf());
+        assertEquals(true, ifStmt.hasCascadingIfStmt());
     }
 
 }
