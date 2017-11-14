@@ -2,6 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
@@ -633,25 +634,38 @@ public class Difference {
                 } else if (diffEl instanceof Removed) {
                     Removed removed = (Removed)diffEl;
                     if ((removed.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
-                        nodeText.removeElement(nodeTextIndex);
-                        if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isNewline()) {
-                            nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
-                        } else {
-                            if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
-                                nodeTextIndex = considerEnforcingIndentation(nodeText, nodeTextIndex);
+                        ChildTextElement actualChild = (ChildTextElement)nodeTextEl;
+                        if (actualChild.isComment()) {
+                            CsmChild csmChild = (CsmChild)removed.element;
+                            // We expected to remove a proper node but we found a comment in between.
+                            // If the comment is associated to the node we want to remove we remove it as well, otherwise we keep it
+                            Comment comment = (Comment)actualChild.getChild();
+                            if (!comment.isOrphan() && comment.getCommentedNode().isPresent() && comment.getCommentedNode().get().equals(csmChild.getChild())) {
+                                nodeText.removeElement(nodeTextIndex);
+                            } else {
+                                nodeTextIndex++;
                             }
-                            // If in front we have one space and before also we had space let's drop one space
-                            if (nodeText.getElements().size() > nodeTextIndex && nodeTextIndex > 0) {
-                                if (nodeText.getElements().get(nodeTextIndex).isWhiteSpace()
-                                        && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace()) {
-                                    // However we do not want to do that when we are about to adding or removing elements
-                                    if ((diffIndex + 1 )== this.elements.size() || (elements.get(diffIndex +1 ) instanceof Kept)) {
-                                        nodeText.getElements().remove(nodeTextIndex--);
+                        } else {
+                            nodeText.removeElement(nodeTextIndex);
+                            if (nodeTextIndex < nodeText.getElements().size() && nodeText.getElements().get(nodeTextIndex).isNewline()) {
+                                nodeTextIndex = considerCleaningTheLine(nodeText, nodeTextIndex);
+                            } else {
+                                if (diffIndex + 1 >= this.getElements().size() || !(this.getElements().get(diffIndex + 1) instanceof Added)) {
+                                    nodeTextIndex = considerEnforcingIndentation(nodeText, nodeTextIndex);
+                                }
+                                // If in front we have one space and before also we had space let's drop one space
+                                if (nodeText.getElements().size() > nodeTextIndex && nodeTextIndex > 0) {
+                                    if (nodeText.getElements().get(nodeTextIndex).isWhiteSpace()
+                                            && nodeText.getElements().get(nodeTextIndex - 1).isWhiteSpace()) {
+                                        // However we do not want to do that when we are about to adding or removing elements
+                                        if ((diffIndex + 1) == this.elements.size() || (elements.get(diffIndex + 1) instanceof Kept)) {
+                                            nodeText.getElements().remove(nodeTextIndex--);
+                                        }
                                     }
                                 }
                             }
+                            diffIndex++;
                         }
-                        diffIndex++;
                     } else if ((removed.element instanceof CsmToken) && nodeTextEl instanceof TokenTextElement
                             && ((CsmToken)removed.element).getTokenType() == ((TokenTextElement)nodeTextEl).getTokenKind()) {
                         nodeText.removeElement(nodeTextIndex);
