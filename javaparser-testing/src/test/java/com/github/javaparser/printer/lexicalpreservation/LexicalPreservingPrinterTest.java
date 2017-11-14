@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -980,6 +981,25 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
 
         assertEquals("@Deprecated()" + EOL +
                 "public abstract class A {}" , LexicalPreservingPrinter.print(cu));
+    }
+
+    @Test
+    public void issue1244() {
+        String code = "public class Foo {" + EOL + EOL
+                + "// Some comment" + EOL + EOL // does work with only one \n
+                + "public void writeExternal() {}" + EOL + "}";
+        CompilationUnit originalCu = JavaParser.parse(code);
+        CompilationUnit cu = LexicalPreservingPrinter.setup(originalCu);
+
+        cu.findAll(ClassOrInterfaceDeclaration.class).stream().forEach(c -> {
+            List<MethodDeclaration> methods = c.getMethodsByName("writeExternal");
+            for (MethodDeclaration method : methods) {
+                c.remove(method);
+            }
+        });
+        assertEqualsNoEol("public class Foo {\n" +
+                "// Some comment\n\n" +
+                "}", LexicalPreservingPrinter.print(cu));
     }
 
 }
