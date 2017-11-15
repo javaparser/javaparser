@@ -136,6 +136,26 @@ public class SourceZip {
     public Path getZipPath() {
         return zipPath;
     }
+    
+    /**
+     * @deprecated store ParserConfiguration now
+     */
+    @Deprecated
+    public JavaParser getJavaParser() {
+        return new JavaParser(parserConfiguration);
+    }
+
+    /**
+     * Set the parser that is used for parsing by default.
+     *
+     * @deprecated store ParserConfiguration now
+     */
+    @Deprecated
+    public SourceZip setJavaParser(JavaParser javaParser) {
+        assertNotNull(javaParser);
+        this.parserConfiguration = javaParser.getParserConfiguration();
+        return this;
+    }
 
     public ParserConfiguration getParserConfiguration() {
         return parserConfiguration;
