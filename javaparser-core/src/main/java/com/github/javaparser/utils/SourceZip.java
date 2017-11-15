@@ -47,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class SourceZip {
 
     private final Path zipPath;
-    private JavaParser javaParser;
+    private ParserConfiguration parserConfiguration;
 
     /**
      * Create a new ZIP parser. An instance of {@link JavaParser} with the default {@link ParserConfiguration} will be
@@ -70,7 +70,7 @@ public class SourceZip {
         assertNotNull(zipPath);
         assertNotNull(configuration);
         this.zipPath = zipPath.normalize();
-        this.javaParser = new JavaParser(configuration);
+        this.parserConfiguration = configuration;
         Log.info("New source zip at \"%s\"", this.zipPath);
     }
 
@@ -99,6 +99,7 @@ public class SourceZip {
      */
     public SourceZip parse(Callback callback) throws IOException {
         Log.info("Parsing zip at \"%s\"", zipPath);
+        JavaParser javaParser = new JavaParser(parserConfiguration);
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
             for (ZipEntry entry : Collections.list(zipFile.entries())) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
@@ -136,23 +137,13 @@ public class SourceZip {
         return zipPath;
     }
 
-    /**
-     * Get the parser used for parsing.
-     *
-     * @return The currently set parser.
-     */
-    public JavaParser getJavaParser() {
-        return javaParser;
+    public ParserConfiguration getParserConfiguration() {
+        return parserConfiguration;
     }
 
-    /**
-     * Set the parser that is used for parsing.
-     *
-     * @param javaParser The parser to use.
-     */
-    public SourceZip setJavaParser(JavaParser javaParser) {
-        assertNotNull(javaParser);
-        this.javaParser = javaParser;
+    public SourceZip setParserConfiguration(ParserConfiguration parserConfiguration) {
+        assertNotNull(parserConfiguration);
+        this.parserConfiguration = parserConfiguration;
         return this;
     }
 }
