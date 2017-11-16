@@ -649,7 +649,7 @@ public class ConcreteSyntaxModel {
                                 unindent())),
                 conditional(ObservableProperty.ELSE_STMT, IS_PRESENT,
                         sequence(token(GeneratedJavaParserConstants.ELSE),
-                                conditional(ObservableProperty.ELSE_BLOCK, CsmConditional.Condition.FLAG,
+                                conditional(Arrays.asList(ObservableProperty.ELSE_BLOCK, ObservableProperty.CASCADING_IF_STMT), CsmConditional.Condition.FLAG,
                                         sequence(space(), child(ObservableProperty.ELSE_STMT)),
                                         sequence(newline(), CsmElement.indent(), child(ObservableProperty.ELSE_STMT), unindent()))))
         ));
