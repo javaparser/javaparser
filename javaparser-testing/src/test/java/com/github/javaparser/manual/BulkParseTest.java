@@ -1,9 +1,7 @@
 package com.github.javaparser.manual;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
-import com.github.javaparser.ast.validator.Java8Validator;
 import com.github.javaparser.ast.validator.Java9Validator;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Log;
@@ -23,7 +21,8 @@ import java.util.TreeMap;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.SourceRoot.Callback.Result.DONT_SAVE;
-import static com.github.javaparser.utils.TestUtils.*;
+import static com.github.javaparser.utils.TestUtils.download;
+import static com.github.javaparser.utils.TestUtils.temporaryDirectory;
 import static java.util.Comparator.comparing;
 
 public class BulkParseTest {
@@ -59,13 +58,16 @@ public class BulkParseTest {
 
     @Test
     public void parseOwnSourceCode() throws IOException {
-        bulkTest(new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), "javaparser_test_results.txt", new ParserConfiguration().setValidator(new Java9Validator()));
+        bulkTest(
+                new SourceRoot(CodeGenerationUtils.mavenModuleRoot(BulkParseTest.class).resolve("..")), 
+                "javaparser_test_results.txt", 
+                new ParserConfiguration().setValidator(new Java9Validator()));
     }
 
     public void bulkTest(SourceRoot sourceRoot, String testResultsFileName, ParserConfiguration configuration) throws IOException {
-        sourceRoot.setJavaParser(new JavaParser(configuration));
+        sourceRoot.setParserConfiguration(configuration);
         TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
-        sourceRoot.parse("", new JavaParser(), (localPath, absolutePath, result) -> {
+        sourceRoot.parseParallelized((localPath, absolutePath, result) -> {
             if (!localPath.toString().contains("target")) {
                 if (!result.isSuccessful()) {
                     results.put(localPath, result.getProblems());
@@ -77,7 +79,7 @@ public class BulkParseTest {
     }
 
     public void bulkTest(SourceZip sourceRoot, String testResultsFileName, ParserConfiguration configuration) throws IOException {
-        sourceRoot.setJavaParser(new JavaParser(configuration));
+        sourceRoot.setParserConfiguration(configuration);
         TreeMap<Path, List<Problem>> results = new TreeMap<>(comparing(o -> o.toString().toLowerCase()));
         sourceRoot.parse((path, result) -> {
             if (!path.toString().contains("target")) {
