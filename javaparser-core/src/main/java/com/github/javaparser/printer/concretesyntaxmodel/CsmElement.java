@@ -27,6 +27,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.github.javaparser.TokenTypes.*;
 import static com.github.javaparser.utils.Utils.EOL;
@@ -77,6 +78,10 @@ public interface CsmElement {
 
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
         return new CsmConditional(property, condition, thenElement, elseElement);
+    }
+
+    static CsmElement conditional(List<ObservableProperty> properties, CsmConditional.Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        return new CsmConditional(properties, condition, thenElement, elseElement);
     }
 
     static CsmElement space() {
