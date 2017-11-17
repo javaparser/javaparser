@@ -56,4 +56,11 @@ public class TypeTest {
         type.ifArrayType(t -> s[0] = t);
         assertNotNull(s[0]);
     }
+    
+    @Test
+    public void issue1251() {
+        final Type type = parseType("TypeUtilsTest<String>.Tester");
+        assertEquals("TypeUtilsTest<String>.Tester", type.toString());
+    }
+
 }
