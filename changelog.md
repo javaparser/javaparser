@@ -1,3 +1,8 @@
+Version 3.5.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/67?closed=1)
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
 Version 3.5.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/66?closed=1)
