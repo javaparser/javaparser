@@ -72,9 +72,9 @@ final class ASTParser implements ASTParserConstants {
     private void throwParseException(Token token, String message) throws ParseException {
         StringBuilder buf = new StringBuilder();
         buf.append(message);
-        buf.append(": \u005c"");
+        buf.append(": \"");
         buf.append(token.image);
-        buf.append("\u005c" at line ");
+        buf.append("\" at line ");
         buf.append(token.beginLine);
         buf.append(", column ");
         buf.append(token.beginColumn);
@@ -948,7 +948,7 @@ final class ASTParser implements ASTParserConstants {
               ret = MethodDeclaration(modifier);
                 if(isDefault && ret!= null && ((MethodDeclaration)ret).getBody() == null)
                 {
-                  throwParseException(token, "\u005c"default\u005c" methods must have a body");
+                  throwParseException(token, "\"default\" methods must have a body");
                 }
                 ((MethodDeclaration)ret).setDefault(isDefault);
                 if(modifier2!= null)
@@ -966,7 +966,7 @@ final class ASTParser implements ASTParserConstants {
         }
             if(isDefault && ! (ret instanceof MethodDeclaration))
             {
-              throwParseException(token, "Just methods can have the keyword \u005c"default\u005c".");
+              throwParseException(token, "Just methods can have the keyword \"default\".");
             }
         break;
       case SEMICOLON:
