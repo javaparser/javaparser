@@ -83,6 +83,8 @@ public class JavaParserTypeSolver implements TypeSolver {
                     cu = Optional.of(JavaParser.parse(srcFile));
                 } catch (FileNotFoundException e) {
                     cu = Optional.empty();
+                } catch (RuntimeException e) {
+                    throw new RuntimeException("Issue while parsing " + srcFile.getAbsolutePath(), e);
                 }
                 return cu;
             });
