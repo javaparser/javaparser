@@ -13,9 +13,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserFieldDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.Optional;
@@ -64,8 +62,10 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof EnumConstantDeclaration) {
             ResolvedEnumDeclaration enumDeclaration = Navigator.findAncestor(node, EnumDeclaration.class).get().resolve().asEnum();
-            // TODO look among the members
-            throw new UnsupportedOperationException();
+            ResolvedEnumConstantDeclaration resolved = enumDeclaration.getEnumConstants().stream().filter(c -> ((JavaParserEnumConstantDeclaration)c).getWrappedNode() == node).findFirst().get();
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
+            }
         }
         if (node instanceof ConstructorDeclaration) {
             ConstructorDeclaration constructorDeclaration = (ConstructorDeclaration)node;
@@ -84,10 +84,9 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof AnnotationMemberDeclaration) {
             ResolvedAnnotationDeclaration annotationDeclaration = Navigator.findAncestor(node, AnnotationDeclaration.class).get().resolve();
-            AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)node;
-            Optional<ResolvedAnnotationMemberDeclaration> resolved = annotationDeclaration.getAnnotationMembers().stream().filter(m -> m.getName().equals(memberDeclaration.getNameAsString())).findFirst();
-            if (resolved.isPresent() && resultClass.isInstance(resolved.get())) {
-                return resultClass.cast(resolved.get());
+            ResolvedAnnotationMemberDeclaration resolved = annotationDeclaration.getAnnotationMembers().stream().filter(c -> ((JavaParserAnnotationMemberDeclaration)c).getWrappedNode() == node).findFirst().get();
+            if (resultClass.isInstance(resolved)) {
+                return resultClass.cast(resolved);
             }
         }
         if (node instanceof FieldDeclaration) {

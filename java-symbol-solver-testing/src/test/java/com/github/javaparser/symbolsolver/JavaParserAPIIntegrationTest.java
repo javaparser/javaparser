@@ -107,16 +107,16 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         ResolvedEnumDeclaration resolvedDeclaration = declaration.resolve();
     }
 
-//    @Test
-//    public void enumConstantDeclarationResolve() throws IOException {
-//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
-//        CompilationUnit cu = parseWithSymbolResolution(f);
-//        EnumDeclaration enumDeclaration = (EnumDeclaration) cu.getType(0);
-//        assertEquals("AccessSpecifier", enumDeclaration.getNameAsString());
-//        EnumConstantDeclaration declaration = enumDeclaration.getEntry(0);
-//        assertEquals("PUBLIC", declaration.getNameAsString());
-//        ResolvedEnumConstantDeclaration resolvedDeclaration = declaration.resolve();
-//    }
+    @Test
+    public void enumConstantDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
+        CompilationUnit cu = parseWithSymbolResolution(f);
+        EnumDeclaration enumDeclaration = (EnumDeclaration) cu.getType(0);
+        assertEquals("AccessSpecifier", enumDeclaration.getNameAsString());
+        EnumConstantDeclaration declaration = enumDeclaration.getEntry(0);
+        assertEquals("PUBLIC", declaration.getNameAsString());
+        ResolvedEnumConstantDeclaration resolvedDeclaration = declaration.resolve();
+    }
 
     @Test
     public void fieldDeclarationResolve() throws IOException {

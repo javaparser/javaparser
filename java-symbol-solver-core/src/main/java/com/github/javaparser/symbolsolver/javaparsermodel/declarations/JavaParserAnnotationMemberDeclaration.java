@@ -14,6 +14,10 @@ public class JavaParserAnnotationMemberDeclaration implements ResolvedAnnotation
     private com.github.javaparser.ast.body.AnnotationMemberDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
+    public AnnotationMemberDeclaration getWrappedNode() {
+        return wrappedNode;
+    }
+
     public JavaParserAnnotationMemberDeclaration(AnnotationMemberDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
