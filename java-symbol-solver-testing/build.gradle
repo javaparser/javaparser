@@ -4,7 +4,7 @@ dependencies {
     compile project(':java-symbol-solver-logic')
     compile project(':java-symbol-solver-core')
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.easymock', name: 'easymock', version: '3.3.1'
+    testCompile group: 'org.easymock', name: 'easymock', version: '3.5.1'
 }
 
 apply plugin: 'java'
