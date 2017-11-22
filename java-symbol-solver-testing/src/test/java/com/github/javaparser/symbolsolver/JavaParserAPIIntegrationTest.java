@@ -54,17 +54,17 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         ResolvedAnnotationDeclaration resolvedDeclaration = declaration.resolve();
     }
 
-//    @Test
-//    public void annotationMemberDeclarationResolve() throws IOException {
-//        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
-//        ParserConfiguration parserConfiguration = new ParserConfiguration();
-//        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-//        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
-//        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
-//        assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
-//        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
-//        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
-//    }
+    @Test
+    public void annotationMemberDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
+        assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
+        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
+    }
 
     @Test
     public void classDeclarationResolve() throws IOException {

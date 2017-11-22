@@ -7,6 +7,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
@@ -16,6 +17,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserFieldDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.Optional;
 
 /**
  * This implementation of the SymbolResolver wraps the functionalities of the library to make them easily usable
@@ -81,8 +84,11 @@ public class JavaSymbolSolver implements SymbolResolver {
         }
         if (node instanceof AnnotationMemberDeclaration) {
             ResolvedAnnotationDeclaration annotationDeclaration = Navigator.findAncestor(node, AnnotationDeclaration.class).get().resolve();
-            // TODO look among the members
-            throw new UnsupportedOperationException();
+            AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)node;
+            Optional<ResolvedAnnotationMemberDeclaration> resolved = annotationDeclaration.getAnnotationMembers().stream().filter(m -> m.getName().equals(memberDeclaration.getNameAsString())).findFirst();
+            if (resolved.isPresent() && resultClass.isInstance(resolved.get())) {
+                return resultClass.cast(resolved.get());
+            }
         }
         if (node instanceof FieldDeclaration) {
             FieldDeclaration fieldDeclaration = (FieldDeclaration)node;
