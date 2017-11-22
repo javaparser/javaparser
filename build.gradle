@@ -10,7 +10,7 @@ plugins {
   id 'com.github.kt3k.coveralls' version '2.6.3'
 }
 
-def jssVersion = '0.6.2'
+def jssVersion = '0.6.3-SNAPSHOT'
 def descriptions = ["java-symbol-solver-core": "A Symbol Solver for Java, built on top of JavaParser (core)",
                     "java-symbol-solver-model": "A Symbol Solver for Java, built on top of JavaParser (model)",
                     "java-symbol-solver-logic": "A Symbol Solver for Java, built on top of JavaParser (logic)",
