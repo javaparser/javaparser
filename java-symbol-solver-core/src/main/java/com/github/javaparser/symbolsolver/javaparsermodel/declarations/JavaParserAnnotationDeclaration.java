@@ -1,5 +1,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -9,6 +11,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
 
@@ -20,7 +23,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     private com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode;
     private TypeSolver typeSolver;
 
-    public JavaParserAnnotationDeclaration(com.github.javaparser.ast.body.AnnotationDeclaration wrappedNode, TypeSolver typeSolver) {
+    public JavaParserAnnotationDeclaration(AnnotationDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
@@ -88,5 +91,13 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
+    }
+
+    @Override
+    public List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers() {
+        return wrappedNode.getMembers().stream()
+                .filter(m -> m instanceof AnnotationMemberDeclaration)
+                .map(m -> new JavaParserAnnotationMemberDeclaration((AnnotationMemberDeclaration)m, typeSolver))
+                .collect(Collectors.toList());
     }
 }

@@ -264,4 +264,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration implements
     private String[] getInterfaceFQNs() {
         return ctClass.getClassFile().getInterfaces();
     }
+
+    @Override
+    public List<ResolvedEnumConstantDeclaration> getEnumConstants() {
+        return Arrays.stream(ctClass.getFields())
+                .filter(f -> (f.getFieldInfo2().getAccessFlags() & AccessFlag.ENUM) != 0)
+                .map(f -> new JavassistEnumConstantDeclaration(f, typeSolver))
+                .collect(Collectors.toList());
+    }
 }

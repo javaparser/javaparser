@@ -54,17 +54,17 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         ResolvedAnnotationDeclaration resolvedDeclaration = declaration.resolve();
     }
 
-//    @Test
-//    public void annotationMemberDeclarationResolve() throws IOException {
-//        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
-//        ParserConfiguration parserConfiguration = new ParserConfiguration();
-//        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
-//        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
-//        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
-//        assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
-//        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
-//        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
-//    }
+    @Test
+    public void annotationMemberDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/Annotations.java.txt"));
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StreamProvider(new FileInputStream(f))).getResult().get();
+        AnnotationDeclaration declaration = (AnnotationDeclaration)cu.getType(2);
+        assertEquals("MyAnnotationWithFields", declaration.getNameAsString());
+        AnnotationMemberDeclaration memberDeclaration = (AnnotationMemberDeclaration)declaration.getMember(0);
+        ResolvedAnnotationMemberDeclaration resolvedDeclaration = memberDeclaration.resolve();
+    }
 
     @Test
     public void classDeclarationResolve() throws IOException {
@@ -107,16 +107,16 @@ public class JavaParserAPIIntegrationTest extends AbstractTest {
         ResolvedEnumDeclaration resolvedDeclaration = declaration.resolve();
     }
 
-//    @Test
-//    public void enumConstantDeclarationResolve() throws IOException {
-//        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
-//        CompilationUnit cu = parseWithSymbolResolution(f);
-//        EnumDeclaration enumDeclaration = (EnumDeclaration) cu.getType(0);
-//        assertEquals("AccessSpecifier", enumDeclaration.getNameAsString());
-//        EnumConstantDeclaration declaration = enumDeclaration.getEntry(0);
-//        assertEquals("PUBLIC", declaration.getNameAsString());
-//        ResolvedEnumConstantDeclaration resolvedDeclaration = declaration.resolve();
-//    }
+    @Test
+    public void enumConstantDeclarationResolve() throws IOException {
+        File f = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core/com/github/javaparser/ast/AccessSpecifier.java"));
+        CompilationUnit cu = parseWithSymbolResolution(f);
+        EnumDeclaration enumDeclaration = (EnumDeclaration) cu.getType(0);
+        assertEquals("AccessSpecifier", enumDeclaration.getNameAsString());
+        EnumConstantDeclaration declaration = enumDeclaration.getEntry(0);
+        assertEquals("PUBLIC", declaration.getNameAsString());
+        ResolvedEnumConstantDeclaration resolvedDeclaration = declaration.resolve();
+    }
 
     @Test
     public void fieldDeclarationResolve() throws IOException {

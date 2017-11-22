@@ -40,6 +40,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -236,6 +237,13 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
      */
     public com.github.javaparser.ast.body.EnumDeclaration getWrappedNode() {
         return wrappedNode;
+    }
+
+    @Override
+    public List<ResolvedEnumConstantDeclaration> getEnumConstants() {
+        return wrappedNode.getEntries().stream()
+                .map(entry -> new JavaParserEnumConstantDeclaration(entry, typeSolver))
+                .collect(Collectors.toList());
     }
 
     // Needed by ContextHelper

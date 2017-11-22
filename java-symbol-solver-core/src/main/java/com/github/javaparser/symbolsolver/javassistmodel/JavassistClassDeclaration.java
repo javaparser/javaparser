@@ -50,6 +50,8 @@ import java.util.stream.Collectors;
  */
 public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
+
+
     private CtClass ctClass;
     private TypeSolver typeSolver;
     private JavassistTypeDeclarationAdapter javassistTypeDeclarationAdapter;
