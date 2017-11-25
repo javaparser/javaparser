@@ -23,10 +23,7 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.UnknownType;
-import com.github.javaparser.ast.type.WildcardType;
+import com.github.javaparser.ast.type.*;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
@@ -487,6 +484,9 @@ public class JavaParserFacade {
         } else if (type instanceof com.github.javaparser.ast.type.ArrayType) {
             com.github.javaparser.ast.type.ArrayType jpArrayType = (com.github.javaparser.ast.type.ArrayType) type;
             return new ResolvedArrayType(convertToUsage(jpArrayType.getComponentType(), context));
+        } else if (type instanceof UnionType) {
+            UnionType unionType = (UnionType)type;
+            return new ResolvedUnionType(unionType.getElements().stream().map(el -> convertToUsage(el, context)).collect(Collectors.toList()));
         } else {
             throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
