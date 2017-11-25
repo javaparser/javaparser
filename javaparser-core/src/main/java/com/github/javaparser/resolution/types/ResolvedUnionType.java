@@ -66,4 +66,14 @@ public class ResolvedUnionType implements ResolvedType {
     public boolean isAssignableBy(ResolvedType other) {
         return elements.stream().allMatch(e -> e.isAssignableBy(other));
     }
+
+    @Override
+    public boolean isUnionType() {
+        return true;
+    }
+
+    @Override
+    public ResolvedUnionType asUnionType() {
+        return this;
+    }
 }

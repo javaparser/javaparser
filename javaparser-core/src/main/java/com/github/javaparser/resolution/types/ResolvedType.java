@@ -73,10 +73,17 @@ public interface ResolvedType {
     }
 
     /**
+     * Is this a union type (as the ones used in multi catch clauses)?
+     */
+    default boolean isUnionType() {
+        return false;
+    }
+
+    /**
      * Is this a non primitive value?
      */
     default boolean isReference() {
-        return isReferenceType() || isArray() || isTypeVariable() || isNull() || isWildcard();
+        return isReferenceType() || isArray() || isTypeVariable() || isNull() || isWildcard() || isUnionType();
     }
 
     /**
@@ -134,6 +141,10 @@ public interface ResolvedType {
 
     default ResolvedLambdaConstraintType asConstraintType() {
         throw new UnsupportedOperationException(String.format("%s is not a constraint type", this));
+    }
+
+    default ResolvedUnionType asUnionType() {
+        throw new UnsupportedOperationException(String.format("%s is not a union type", this));
     }
 
     ///
