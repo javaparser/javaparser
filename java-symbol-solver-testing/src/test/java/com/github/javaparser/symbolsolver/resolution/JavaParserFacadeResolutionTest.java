@@ -16,23 +16,27 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.stmt.CatchClause;
+import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
+import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
 
@@ -129,5 +133,31 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);
         assertEquals(true, type.isReferenceType());
         assertEquals("java.util.Scanner", type.asReferenceType().getQualifiedName());
+    }
+
+    private CompilationUnit parseWithTypeSolver(String code) {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParser javaParser = new JavaParser(parserConfiguration);
+        return javaParser.parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
+    }
+
+    @Test
+    public void solveMultiCatchType() {
+        String code = "class A {\n" +
+                "        public void foo() {\n" +
+                "            try {\n" +
+                "                \n" +
+                "            } catch (IllegalStateException | IllegalArgumentException e) {\n" +
+                "                \n" +
+                "            }\n" +
+                "        }\n" +
+                "    }";
+        CompilationUnit cu = parseWithTypeSolver(code);
+        CatchClause catchClause = Navigator.findNodeOfGivenClass(cu, CatchClause.class);
+        Type jpType = catchClause.getParameter().getType();
+        ResolvedType jssType = jpType.resolve();
+        assertEquals(true, jssType instanceof ResolvedUnionType);
     }
 }
