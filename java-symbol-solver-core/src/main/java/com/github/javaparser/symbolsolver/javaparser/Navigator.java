@@ -45,6 +45,14 @@ public final class Navigator {
         return parent;
     }
 
+    public static Node requireParentNode(Node node) {
+        Node parent = getParentNode(node);
+        if (parent == null) {
+            throw new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST");
+        }
+        return parent;
+    }
+
     public static Optional<TypeDeclaration<?>> findType(CompilationUnit cu, String qualifiedName) {
         if (cu.getTypes().isEmpty()) {
             return Optional.empty();

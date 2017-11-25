@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -55,17 +56,17 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
             }
         }
-        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveSymbol(name, typeSolver);
+        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveSymbol(name, typeSolver);
     }
 
     @Override
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveType(name, typeSolver);
+        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveType(name, typeSolver);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly, TypeSolver typeSolver) {
-        return JavaParserFactory.getContext(getParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, false, typeSolver);
+        return JavaParserFactory.getContext(requireParentNode(wrappedNode), typeSolver).solveMethod(name, parameterTypes, false, typeSolver);
     }
 
     @Override

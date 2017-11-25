@@ -121,6 +121,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         while (notMethod instanceof MethodCallExpr || notMethod instanceof FieldAccessExpr) {
             notMethod = getParentNode(notMethod);
         }
+        if (notMethod == null) {
+            return null;
+        }
         return JavaParserFactory.getContext(notMethod, typeSolver);
     }
 
