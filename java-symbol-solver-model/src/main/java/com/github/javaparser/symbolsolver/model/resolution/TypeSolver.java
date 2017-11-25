@@ -18,6 +18,7 @@ package com.github.javaparser.symbolsolver.model.resolution;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * An element able to find TypeDeclaration from their name.

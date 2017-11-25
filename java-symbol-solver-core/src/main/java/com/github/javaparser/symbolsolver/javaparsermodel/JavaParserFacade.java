@@ -35,6 +35,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.ConstructorResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
@@ -443,6 +444,9 @@ public class JavaParserFacade {
     }
 
     protected ResolvedType convertToUsage(com.github.javaparser.ast.type.Type type, Context context) {
+        if (context == null) {
+            throw new NullPointerException("Context should not be null");
+        }
         if (type instanceof ClassOrInterfaceType) {
             ClassOrInterfaceType classOrInterfaceType = (ClassOrInterfaceType) type;
             String name = qName(classOrInterfaceType);
@@ -553,5 +557,12 @@ public class JavaParserFacade {
 
     public ResolvedReferenceTypeDeclaration getTypeDeclaration(com.github.javaparser.ast.body.TypeDeclaration<?> typeDeclaration) {
         return JavaParserFactory.toTypeDeclaration(typeDeclaration, typeSolver);
+    }
+
+    public ResolvedType classToResolvedType(Class<?> clazz) {
+        if (clazz.isPrimitive()) {
+            return ResolvedPrimitiveType.byName(clazz.getName());
+        }
+        return new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
     }
 }

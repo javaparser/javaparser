@@ -46,7 +46,7 @@ public class JavaParserFactory {
 
     public static Context getContext(Node node, TypeSolver typeSolver) {
         if (node == null) {
-            return null;
+            throw new NullPointerException("Node should not be null");
         } else if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit) node, typeSolver);
         } else if (node instanceof ForeachStmt) {
@@ -86,8 +86,11 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = getParentNode(node);
-            if(parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
+            if (parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
                 return getContext(getParentNode(parentNode), typeSolver);
+            }
+            if (parentNode == null) {
+                throw new IllegalStateException("The AST node does not appear to be inserted in a propert AST, therefore we cannot resolve symbols correctly");
             }
             return getContext(parentNode, typeSolver);
         }
