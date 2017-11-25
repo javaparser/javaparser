@@ -65,10 +65,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(VariableDeclarator node, Boolean solveLambdas) {
         if (getParentNode(node) instanceof FieldDeclaration) {
-//                FieldDeclaration parent = (FieldDeclaration) getParentNode(node);
             return facade.convertToUsageVariableType(node);
         } else if (getParentNode(node) instanceof VariableDeclarationExpr) {
-//                VariableDeclarationExpr parent = (VariableDeclarationExpr) getParentNode(node);
             return facade.convertToUsageVariableType(node);
         } else {
             throw new UnsupportedOperationException(getParentNode(node).getClass().getCanonicalName());
@@ -526,5 +524,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
     }
 
-
+    @Override
+    public ResolvedType visit(FieldDeclaration node, Boolean solveLambdas) {
+        if (node.getVariables().size() == 1) {
+            return node.getVariables().get(0).accept(this, solveLambdas);
+        } else {
+            throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
+        }
+    }
 }
