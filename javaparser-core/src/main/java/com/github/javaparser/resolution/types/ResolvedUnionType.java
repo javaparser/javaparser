@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class ResolvedUnionType implements ResolvedType {
     private List<ResolvedType> elements;
 
-    public ResolvedUnionType(Collection<ResolvedType> elements) {
+    public ResolvedUnionType(List<ResolvedType> elements) {
         if (elements.size() < 2) {
             throw new IllegalArgumentException("An union type should have at least two elements. This has " + elements.size());
         }
