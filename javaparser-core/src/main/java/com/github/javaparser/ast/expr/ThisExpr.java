@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -31,6 +32,10 @@ import com.github.javaparser.metamodel.ThisExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -42,7 +47,7 @@ import java.util.function.Consumer;
  * @see com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
  * @see ThisExpr
  */
-public final class ThisExpr extends Expression {
+public final class ThisExpr extends Expression implements Resolvable<ResolvedTypeDeclaration> {
 
     private Expression classExpr;
 
@@ -155,5 +160,10 @@ public final class ThisExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThisExpr(Consumer<ThisExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedTypeDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedTypeDeclaration.class);
     }
 }
