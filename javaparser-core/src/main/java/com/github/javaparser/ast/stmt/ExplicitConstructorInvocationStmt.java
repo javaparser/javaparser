@@ -38,6 +38,8 @@ import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaMode
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+
 import java.util.function.Consumer;
 
 /**
@@ -281,5 +283,9 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
         action.accept(this);
+    }
+
+    public ResolvedConstructorDeclaration resolveInvokedConstructor() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
 }
