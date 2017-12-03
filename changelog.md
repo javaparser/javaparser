@@ -1,3 +1,9 @@
+Version 3.5.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/68?closed=1)
+* SourceRoot is now silent by default - look at the Log class if you want to change that. 
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
 Version 3.5.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/67?closed=1)
