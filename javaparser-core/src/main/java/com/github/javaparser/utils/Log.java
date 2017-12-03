@@ -13,7 +13,7 @@ public class Log {
     /**
      * This adapter logs to standard out and standard error.
      */
-    public static class DefaultAdapter implements Adapter {
+    public static class StandardOutStandardErrorAdapter implements Adapter {
         @Override
         public void info(String message) {
             System.out.println(message);
@@ -76,20 +76,13 @@ public class Log {
         void error(Throwable throwable, String f);
     }
 
-    private static Adapter CURRENT_ADAPTER = new DefaultAdapter();
+    private static Adapter CURRENT_ADAPTER = new SilentAdapter();
 
     /**
      * Change how logging is handled. You can set your own implementation that forwards to your logging library.
      */
     public static void setAdapter(Adapter adapter) {
         CURRENT_ADAPTER = adapter;
-    }
-
-    /**
-     * Stop logging from appearing.
-     */
-    public static void beQuiet() {
-        setAdapter(new SilentAdapter());
     }
 
     /**

@@ -31,6 +31,7 @@ public class BulkParseTest {
      * exception, increase the JVM's stack size.
      */
     public static void main(String[] args) throws IOException {
+        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         // This contains all kinds of test cases so it will lead to a lot of errors:
         new BulkParseTest().parseOpenJdkLangToolsRepository();
         // This contains the JDK source code, so it should have zero errors:
