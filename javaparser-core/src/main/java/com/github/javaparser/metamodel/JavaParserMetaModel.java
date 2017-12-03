@@ -663,8 +663,8 @@ public final class JavaParserMetaModel {
         ifStmtMetaModel.getDeclaredPropertyMetaModels().add(ifStmtMetaModel.elseStmtPropertyMetaModel);
         ifStmtMetaModel.thenStmtPropertyMetaModel = new PropertyMetaModel(ifStmtMetaModel, "thenStmt", com.github.javaparser.ast.stmt.Statement.class, Optional.of(statementMetaModel), false, false, false, false, false);
         ifStmtMetaModel.getDeclaredPropertyMetaModels().add(ifStmtMetaModel.thenStmtPropertyMetaModel);
-        ifStmtMetaModel.cascadingIfPropertyMetaModel = new PropertyMetaModel(ifStmtMetaModel, "cascadingIf", boolean.class, Optional.empty(), false, false, false, false, false);
-        ifStmtMetaModel.getDerivedPropertyMetaModels().add(ifStmtMetaModel.cascadingIfPropertyMetaModel);
+        ifStmtMetaModel.cascadingIfStmtPropertyMetaModel = new PropertyMetaModel(ifStmtMetaModel, "cascadingIfStmt", boolean.class, Optional.empty(), false, false, false, false, false);
+        ifStmtMetaModel.getDerivedPropertyMetaModels().add(ifStmtMetaModel.cascadingIfStmtPropertyMetaModel);
         ifStmtMetaModel.elseBlockPropertyMetaModel = new PropertyMetaModel(ifStmtMetaModel, "elseBlock", boolean.class, Optional.empty(), false, false, false, false, false);
         ifStmtMetaModel.getDerivedPropertyMetaModels().add(ifStmtMetaModel.elseBlockPropertyMetaModel);
         ifStmtMetaModel.elseBranchPropertyMetaModel = new PropertyMetaModel(ifStmtMetaModel, "elseBranch", boolean.class, Optional.empty(), false, false, false, false, false);
