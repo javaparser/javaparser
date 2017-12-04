@@ -25,4 +25,17 @@ public class LambdaExprTest {
         assertEquals(startToken, tokenRange.getBegin().asString());
         assertEquals(endToken, tokenRange.getEnd().asString());
     }
+
+    @Test
+    public void getExpressionBody(){
+        LambdaExpr lambdaExpr = parseExpression("x -> y").asLambdaExpr();
+        assertEquals("Optional[y]", lambdaExpr.getExpressionBody().toString());
+    }
+
+    @Test
+    public void getNoExpressionBody(){
+        LambdaExpr lambdaExpr = parseExpression("x -> {y;}").asLambdaExpr();
+        assertEquals("Optional.empty", lambdaExpr.getExpressionBody().toString());
+    }
+
 }
