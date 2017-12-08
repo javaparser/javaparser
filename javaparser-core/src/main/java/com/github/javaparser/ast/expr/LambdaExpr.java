@@ -105,6 +105,9 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
         return this;
     }
 
+    /**
+     * @return a BlockStatement or an ExpressionStatement. See class Javadoc.
+     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
