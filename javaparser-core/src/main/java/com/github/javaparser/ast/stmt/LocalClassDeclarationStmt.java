@@ -35,11 +35,14 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * A class declaration inside a method.
- * Note that JavaParser wil parse interface declarations too, but these are not valid Java code.
- * <p>
+ * <h1>A class declaration inside a method.</h1>
+ * <h2>Java 1.0</h2>
+ * Not available.
+ * <h2>Java 1.1+</h2>
+ * A statement consisting of a class declaration.
  * <br/><code>class X { void m() { <b>class Y { }</b> } }</code>
  *
+ * @see ClassOrInterfaceDeclaration
  * @author Julio Vilmar Gesser
  */
 public final class LocalClassDeclarationStmt extends Statement {
