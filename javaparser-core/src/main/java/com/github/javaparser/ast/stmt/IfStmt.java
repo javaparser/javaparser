@@ -249,4 +249,9 @@ public final class IfStmt extends Statement implements NodeWithCondition<IfStmt>
     public void ifIfStmt(Consumer<IfStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<IfStmt> toIfStmt() {
+        return Optional.of(this);
+    }
 }

@@ -338,4 +338,9 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
     public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
+
+    @Override
+    public Optional<MethodDeclaration> toMethodDeclaration() {
+        return Optional.of(this);
+    }
 }

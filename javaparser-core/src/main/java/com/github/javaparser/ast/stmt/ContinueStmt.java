@@ -166,4 +166,9 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     public void ifContinueStmt(Consumer<ContinueStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<ContinueStmt> toContinueStmt() {
+        return Optional.of(this);
+    }
 }

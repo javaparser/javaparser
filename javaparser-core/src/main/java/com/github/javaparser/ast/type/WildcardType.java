@@ -289,4 +289,9 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     public ResolvedWildcard resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedWildcard.class);
     }
+
+    @Override
+    public Optional<WildcardType> toWildcardType() {
+        return Optional.of(this);
+    }
 }

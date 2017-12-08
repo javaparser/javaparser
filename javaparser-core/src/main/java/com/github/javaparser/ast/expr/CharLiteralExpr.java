@@ -32,6 +32,7 @@ import com.github.javaparser.utils.Utils;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A literal character.
@@ -152,5 +153,10 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCharLiteralExpr(Consumer<CharLiteralExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<CharLiteralExpr> toCharLiteralExpr() {
+        return Optional.of(this);
     }
 }

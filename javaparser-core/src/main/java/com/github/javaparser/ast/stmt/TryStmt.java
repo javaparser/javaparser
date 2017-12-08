@@ -310,4 +310,9 @@ public final class TryStmt extends Statement {
     public void ifTryStmt(Consumer<TryStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<TryStmt> toTryStmt() {
+        return Optional.of(this);
+    }
 }

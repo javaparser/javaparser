@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * <p>
@@ -114,5 +115,10 @@ public final class LineComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLineComment(Consumer<LineComment> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<LineComment> toLineComment() {
+        return Optional.of(this);
     }
 }

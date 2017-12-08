@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A do-while.
@@ -170,5 +171,10 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifDoStmt(Consumer<DoStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<DoStmt> toDoStmt() {
+        return Optional.of(this);
     }
 }

@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Array brackets [] being used to get a value from an array.
@@ -166,5 +167,10 @@ public final class ArrayAccessExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifArrayAccessExpr(Consumer<ArrayAccessExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ArrayAccessExpr> toArrayAccessExpr() {
+        return Optional.of(this);
     }
 }

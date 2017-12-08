@@ -37,6 +37,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * The return type of a {@link com.github.javaparser.ast.body.MethodDeclaration}
@@ -131,5 +132,10 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     @Override
     public ResolvedVoidType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedVoidType.class);
+    }
+
+    @Override
+    public Optional<VoidType> toVoidType() {
+        return Optional.of(this);
     }
 }

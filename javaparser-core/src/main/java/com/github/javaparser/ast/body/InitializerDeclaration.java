@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: <code>class X { static { a=3; }  } </code>
@@ -163,5 +164,10 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<InitializerDeclaration> toInitializerDeclaration() {
+        return Optional.of(this);
     }
 }
