@@ -222,6 +222,10 @@ public final class Navigator {
         }
     }
 
+    /**
+     * @deprecated use Node.findFirst instead
+     */
+    @Deprecated
     public static <N> N findNodeOfGivenClass(Node node, Class<N> clazz) {
         N res = findNodeOfGivenClassHelper(node, clazz);
         if (res == null) {
@@ -231,6 +235,10 @@ public final class Navigator {
         }
     }
 
+    /**
+     * @deprecated use Node.findAll instead
+     */
+    @Deprecated
     public static <N> List<N> findAllNodesOfGivenClass(Node node, Class<N> clazz) {
         List<N> res = new LinkedList<>();
         findAllNodesOfGivenClassHelper(node, clazz, res);
