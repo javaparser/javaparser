@@ -51,21 +51,9 @@ The `run_metamodel_generator.sh` script will rebuild the metamodel,
 which is used by the code generators which are run by `run_core_generators.sh`
 Make sure that `javaparser-core` at least compiles before you run these.
 
-## Manual
+## More information
 
-Examples of how to use the library can be found on the [Manual](https://github.com/javaparser/javaparser/wiki/Manual) page of the wiki
-
-## Troubleshooting
-
-First try the [wiki](https://github.com/javaparser/javaparser/wiki).
-
-Didn't find an answer? Try [searching for existing issues](https://github.com/javaparser/javaparser/issues?utf8=%E2%9C%93&q=is%3Aissue%20)
-
-Still nothing? [Open an issue](https://github.com/javaparser/javaparser/issues/new) or [come chat on Gitter](https://gitter.im/javaparser/javaparser)
-
-## Javadoc
-
-The libraries javadoc can be found [here](http://www.javadoc.io/doc/com.github.javaparser/javaparser-core/)
+#### [JavaParser.org](https://www.javaparser.org) is the main information site.
 
 ## License
 
