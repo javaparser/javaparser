@@ -290,4 +290,9 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     public ResolvedReferenceType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
     }
+
+    @Override
+    public Optional<ClassOrInterfaceType> toClassOrInterfaceType() {
+        return Optional.of(this);
+    }
 }

@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A typecast. The (long) in <code>(long)15</code>
@@ -169,5 +170,10 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifCastExpr(Consumer<CastExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<CastExpr> toCastExpr() {
+        return Optional.of(this);
     }
 }

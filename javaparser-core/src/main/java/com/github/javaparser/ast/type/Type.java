@@ -38,6 +38,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import java.util.Optional;
 
 /**
  * Base class for types.
@@ -298,4 +299,44 @@ public abstract class Type extends Node implements Resolvable<Object> {
 
     @Override
     public abstract ResolvedType resolve();
+
+    public Optional<ArrayType> toArrayType() {
+        return Optional.empty();
+    }
+
+    public Optional<ClassOrInterfaceType> toClassOrInterfaceType() {
+        return Optional.empty();
+    }
+
+    public Optional<IntersectionType> toIntersectionType() {
+        return Optional.empty();
+    }
+
+    public Optional<PrimitiveType> toPrimitiveType() {
+        return Optional.empty();
+    }
+
+    public Optional<ReferenceType> toReferenceType() {
+        return Optional.empty();
+    }
+
+    public Optional<TypeParameter> toTypeParameter() {
+        return Optional.empty();
+    }
+
+    public Optional<UnionType> toUnionType() {
+        return Optional.empty();
+    }
+
+    public Optional<UnknownType> toUnknownType() {
+        return Optional.empty();
+    }
+
+    public Optional<VoidType> toVoidType() {
+        return Optional.empty();
+    }
+
+    public Optional<WildcardType> toWildcardType() {
+        return Optional.empty();
+    }
 }

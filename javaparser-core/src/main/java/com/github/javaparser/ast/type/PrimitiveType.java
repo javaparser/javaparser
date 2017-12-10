@@ -41,6 +41,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A primitive type.
@@ -229,5 +230,10 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     @Override
     public ResolvedPrimitiveType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedPrimitiveType.class);
+    }
+
+    @Override
+    public Optional<PrimitiveType> toPrimitiveType() {
+        return Optional.of(this);
     }
 }

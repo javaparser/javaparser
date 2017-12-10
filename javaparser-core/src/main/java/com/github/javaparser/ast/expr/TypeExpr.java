@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
@@ -144,5 +145,10 @@ public final class TypeExpr extends Expression implements NodeWithType<TypeExpr,
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeExpr(Consumer<TypeExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<TypeExpr> toTypeExpr() {
+        return Optional.of(this);
     }
 }

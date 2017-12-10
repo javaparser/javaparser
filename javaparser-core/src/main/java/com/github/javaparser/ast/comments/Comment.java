@@ -202,4 +202,16 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLineComment(Consumer<LineComment> action) {
     }
+
+    public Optional<BlockComment> toBlockComment() {
+        return Optional.empty();
+    }
+
+    public Optional<JavadocComment> toJavadocComment() {
+        return Optional.empty();
+    }
+
+    public Optional<LineComment> toLineComment() {
+        return Optional.empty();
+    }
 }

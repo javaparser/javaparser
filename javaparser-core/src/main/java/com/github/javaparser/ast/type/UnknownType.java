@@ -37,6 +37,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * An unknown parameter type object. It plays the role of a null object for
@@ -136,5 +137,10 @@ public final class UnknownType extends Type {
     @Override
     public ResolvedType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
+    }
+
+    @Override
+    public Optional<UnknownType> toUnknownType() {
+        return Optional.of(this);
     }
 }

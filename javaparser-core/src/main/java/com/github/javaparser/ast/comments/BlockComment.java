@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * <p>
@@ -115,5 +116,10 @@ public final class BlockComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBlockComment(Consumer<BlockComment> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<BlockComment> toBlockComment() {
+        return Optional.of(this);
     }
 }

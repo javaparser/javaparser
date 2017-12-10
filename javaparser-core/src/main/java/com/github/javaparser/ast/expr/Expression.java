@@ -30,6 +30,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import java.util.Optional;
 
 /**
  * A base class for all expressions.
@@ -558,5 +559,141 @@ public abstract class Expression extends Node {
 
     public ResolvedType calculateResolvedType() {
         return getSymbolResolver().calculateType(this);
+    }
+
+    public Optional<AnnotationExpr> toAnnotationExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ArrayAccessExpr> toArrayAccessExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ArrayCreationExpr> toArrayCreationExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ArrayInitializerExpr> toArrayInitializerExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<AssignExpr> toAssignExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<BinaryExpr> toBinaryExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<BooleanLiteralExpr> toBooleanLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<CastExpr> toCastExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<CharLiteralExpr> toCharLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ClassExpr> toClassExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ConditionalExpr> toConditionalExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<DoubleLiteralExpr> toDoubleLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<EnclosedExpr> toEnclosedExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<FieldAccessExpr> toFieldAccessExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<InstanceOfExpr> toInstanceOfExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<IntegerLiteralExpr> toIntegerLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<LambdaExpr> toLambdaExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<LiteralExpr> toLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<LiteralStringValueExpr> toLiteralStringValueExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<LongLiteralExpr> toLongLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<MarkerAnnotationExpr> toMarkerAnnotationExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<MethodCallExpr> toMethodCallExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<MethodReferenceExpr> toMethodReferenceExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<NameExpr> toNameExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<NormalAnnotationExpr> toNormalAnnotationExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<NullLiteralExpr> toNullLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ObjectCreationExpr> toObjectCreationExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<SingleMemberAnnotationExpr> toSingleMemberAnnotationExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<StringLiteralExpr> toStringLiteralExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<SuperExpr> toSuperExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<ThisExpr> toThisExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<TypeExpr> toTypeExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<UnaryExpr> toUnaryExpr() {
+        return Optional.empty();
+    }
+
+    public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
+        return Optional.empty();
     }
 }
