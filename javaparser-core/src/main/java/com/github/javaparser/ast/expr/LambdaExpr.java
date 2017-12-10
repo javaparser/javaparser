@@ -30,8 +30,6 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
@@ -44,13 +42,18 @@ import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 
 /**
- * A lambda expression. The parameters are on the left side of the ->.
- * If a parameter uses type inference (it has no type specified) then its type is set to UnknownType.
- * If they are in ( ), "isEnclosingParameters" is true.
- * The body is to the right of the ->.
- * <br/><code>(a, b) -> a+b</code>
+ * <h1>A lambda expression</h1>
+ * <h2>Java 1-7</h2>
+ * Does not exist.
+ * <h2>Java 8+</h2>
+ * <code>(a, b) -> a + b</code>
  * <br/><code>a -> ...</code>
- * <br/><code>(Long a) -> {println(a);}</code>
+ * <br/><code>(Long a) -> { println(a); }</code>
+ * <p/>The parameters are on the left side of the ->.
+ * If a parameter uses type inference (it has no type specified) then its type is set to <code>UnknownType</code>.
+ * If they are in ( ), "isEnclosingParameters" is true.
+ * <br/>The body is to the right of the ->.
+ * The body is either a BlockStatement when it is in { } braces, or an ExpressionStatement when it is not in braces.
  *
  * @author Raquel Pau
  */
@@ -102,6 +105,9 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
         return this;
     }
 
+    /**
+     * @return a BlockStatement or an ExpressionStatement. See class Javadoc.
+     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Statement getBody() {
         return body;
@@ -162,10 +168,14 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
         return super.remove(node);
     }
 
+    /**
+     * @return if the body of this lambda is a simple expression, return that expression.
+     * Otherwise (when the body is a block) return Optional.empty().
+     */
     @DerivedProperty
     public Optional<Expression> getExpressionBody() {
-        if (body instanceof ExpressionStmt) {
-            return Optional.of(((ExpressionStmt) body).getExpression());
+        if (body.isExpressionStmt()) {
+            return Optional.of(body.asExpressionStmt().getExpression());
         } else {
             return Optional.empty();
         }
