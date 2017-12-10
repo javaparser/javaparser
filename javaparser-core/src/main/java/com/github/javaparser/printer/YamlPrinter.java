@@ -83,7 +83,8 @@ public class YamlPrinter {
             NodeList<? extends Node> nl = (NodeList<? extends Node>) sl.getValue(node);
             if (nl != null && nl.isNonEmpty()) {
                 builder.append(System.lineSeparator() + indent(level) + sl.getName() + ": ");
-                String slName = sl.getName().substring(0, sl.getName().length() - 1);
+                String slName = sl.getName();
+                slName = slName.endsWith("s") ? slName.substring(0, sl.getName().length() - 1) : slName;
                 for (Node nd : nl)
                     output(nd, "- " + slName, level + 1, builder);
             }
