@@ -1376,7 +1376,7 @@ Type ResultType(NodeList<AnnotationExpr> annotations):
 
 Name Name():
 /*
- * A lookahead of 2 is required below since "Name" can be followed
+ * A lookahead is required below since "Name" can be followed
  * by a ".*" when used in the context of an "ImportDeclaration".
  */
 {
