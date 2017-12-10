@@ -345,4 +345,9 @@ public final class ObjectCreationExpr extends Expression implements NodeWithType
     public ResolvedConstructorDeclaration resolveInvokedConstructor() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
+
+    @Override
+    public Optional<ObjectCreationExpr> toObjectCreationExpr() {
+        return Optional.of(this);
+    }
 }

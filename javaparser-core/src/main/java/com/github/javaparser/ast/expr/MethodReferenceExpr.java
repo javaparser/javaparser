@@ -218,4 +218,9 @@ public final class MethodReferenceExpr extends Expression implements NodeWithTyp
     public void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<MethodReferenceExpr> toMethodReferenceExpr() {
+        return Optional.of(this);
+    }
 }

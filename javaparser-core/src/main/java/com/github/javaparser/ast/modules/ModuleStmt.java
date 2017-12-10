@@ -9,6 +9,7 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import java.util.Optional;
 
 public abstract class ModuleStmt extends Node {
 
@@ -122,5 +123,25 @@ public abstract class ModuleStmt extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleUsesStmt(Consumer<ModuleUsesStmt> action) {
+    }
+
+    public Optional<ModuleExportsStmt> toModuleExportsStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ModuleOpensStmt> toModuleOpensStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ModuleProvidesStmt> toModuleProvidesStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ModuleRequiresStmt> toModuleRequiresStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ModuleUsesStmt> toModuleUsesStmt() {
+        return Optional.empty();
     }
 }

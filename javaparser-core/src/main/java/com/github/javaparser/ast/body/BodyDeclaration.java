@@ -36,6 +36,7 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import java.util.Optional;
 
 /**
  * Any declaration that can appear between the { and } of a class, interface, or enum.
@@ -281,5 +282,49 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
+    }
+
+    public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<CallableDeclaration> toCallableDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<ConstructorDeclaration> toConstructorDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<EnumConstantDeclaration> toEnumConstantDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<EnumDeclaration> toEnumDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<FieldDeclaration> toFieldDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<InitializerDeclaration> toInitializerDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<MethodDeclaration> toMethodDeclaration() {
+        return Optional.empty();
+    }
+
+    public Optional<TypeDeclaration> toTypeDeclaration() {
+        return Optional.empty();
     }
 }
