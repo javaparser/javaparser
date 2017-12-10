@@ -28,10 +28,7 @@ import com.github.javaparser.ast.expr.ArrayCreationExpr;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
-import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.stmt.SwitchEntryStmt;
+import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
@@ -223,5 +220,30 @@ public class JavaParserTest {
         int switchEntries = tokenTypesCu.findAll(SwitchEntryStmt.class).size()-1;
         // The amount of "case XXX:" in TokenTypes.java should be equal to the amount of tokens JavaCC knows about:
         assertEquals(tokenCount, switchEntries);
+    }
+
+    @Test
+    public void parsingInitializedAndUnitializedVarsInForStmt() {
+        ForStmt forStmt = JavaParser.parseStatement("for(int a,b=0;;){}").asForStmt();
+        assertEquals(1, forStmt.getInitialization().size());
+        assertEquals(true, forStmt.getInitialization().get(0).isVariableDeclarationExpr());
+        assertEquals(2, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().size());
+        assertEquals("a", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getNameAsString());
+        assertEquals("b", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getNameAsString());
+        assertEquals(false, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
+        assertEquals(true, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
+    }
+
+    @Test
+    public void parsingInitializedAndUnitializedVarsInForStmtComplexCase() {
+        // See issue 1281
+        ForStmt forStmt = JavaParser.parseStatement("for(int i, j = array2.length - 1;;){}").asForStmt();
+        assertEquals(1, forStmt.getInitialization().size());
+        assertEquals(true, forStmt.getInitialization().get(0).isVariableDeclarationExpr());
+        assertEquals(2, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().size());
+        assertEquals("i", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getNameAsString());
+        assertEquals("j", forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getNameAsString());
+        assertEquals(false, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(0).getInitializer().isPresent());
+        assertEquals(true, forStmt.getInitialization().get(0).asVariableDeclarationExpr().getVariables().get(1).getInitializer().isPresent());
     }
 }
