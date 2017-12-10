@@ -32,6 +32,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A Javadoc comment. <code>/&#42;&#42; a comment &#42;/</code>
@@ -117,5 +118,10 @@ public final class JavadocComment extends Comment {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJavadocComment(Consumer<JavadocComment> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<JavadocComment> toJavadocComment() {
+        return Optional.of(this);
     }
 }

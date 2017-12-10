@@ -281,4 +281,9 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     public void ifForStmt(Consumer<ForStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<ForStmt> toForStmt() {
+        return Optional.of(this);
+    }
 }

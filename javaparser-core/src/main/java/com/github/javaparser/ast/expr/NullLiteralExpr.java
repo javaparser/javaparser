@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A literal "null".
@@ -108,5 +109,10 @@ public final class NullLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<NullLiteralExpr> toNullLiteralExpr() {
+        return Optional.of(this);
     }
 }

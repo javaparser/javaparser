@@ -164,4 +164,9 @@ public final class BreakStmt extends Statement {
     public void ifBreakStmt(Consumer<BreakStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<BreakStmt> toBreakStmt() {
+        return Optional.of(this);
+    }
 }

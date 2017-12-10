@@ -270,4 +270,9 @@ public final class ArrayCreationExpr extends Expression {
     public void ifArrayCreationExpr(Consumer<ArrayCreationExpr> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<ArrayCreationExpr> toArrayCreationExpr() {
+        return Optional.of(this);
+    }
 }

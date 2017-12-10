@@ -417,4 +417,9 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     public CallableDeclaration removeReceiverParameter() {
         return setReceiverParameter((ReceiverParameter) null);
     }
+
+    @Override
+    public Optional<CallableDeclaration> toCallableDeclaration() {
+        return Optional.of(this);
+    }
 }

@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.LongLiteralExprMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * All ways to specify a long literal.
@@ -146,5 +147,10 @@ public final class LongLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<LongLiteralExpr> toLongLiteralExpr() {
+        return Optional.of(this);
     }
 }

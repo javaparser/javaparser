@@ -44,6 +44,7 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: <code>enum X { A(1), B(2) }</code>
@@ -228,5 +229,10 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     @Override
     public ResolvedEnumConstantDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedEnumConstantDeclaration.class);
+    }
+
+    @Override
+    public Optional<EnumConstantDeclaration> toEnumConstantDeclaration() {
+        return Optional.of(this);
     }
 }

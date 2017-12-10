@@ -227,4 +227,9 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     public void ifLambdaExpr(Consumer<LambdaExpr> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<LambdaExpr> toLambdaExpr() {
+        return Optional.of(this);
+    }
 }

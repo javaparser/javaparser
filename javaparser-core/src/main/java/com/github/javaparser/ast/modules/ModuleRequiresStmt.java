@@ -18,6 +18,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A require statement in module-info.java. <code>require a.b.C;</code>
@@ -150,5 +151,10 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifModuleRequiresStmt(Consumer<ModuleRequiresStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ModuleRequiresStmt> toModuleRequiresStmt() {
+        return Optional.of(this);
     }
 }
