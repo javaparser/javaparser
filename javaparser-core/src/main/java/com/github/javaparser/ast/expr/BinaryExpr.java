@@ -33,6 +33,7 @@ import com.github.javaparser.printer.Printable;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
@@ -203,5 +204,10 @@ public final class BinaryExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifBinaryExpr(Consumer<BinaryExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<BinaryExpr> toBinaryExpr() {
+        return Optional.of(this);
     }
 }

@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Usage of the instanceof operator.
@@ -170,5 +171,10 @@ public final class InstanceOfExpr extends Expression implements NodeWithType<Ins
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<InstanceOfExpr> toInstanceOfExpr() {
+        return Optional.of(this);
     }
 }

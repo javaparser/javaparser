@@ -39,7 +39,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-
 import java.util.function.Consumer;
 
 /**
@@ -287,5 +286,10 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
 
     public ResolvedConstructorDeclaration resolveInvokedConstructor() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
+    }
+
+    @Override
+    public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
+        return Optional.of(this);
     }
 }

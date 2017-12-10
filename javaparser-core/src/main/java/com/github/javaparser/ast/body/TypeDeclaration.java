@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 import com.github.javaparser.ast.Node;
+import java.util.Optional;
 
 /**
  * A base class for all types of type declarations.
@@ -235,5 +236,10 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<TypeDeclaration> toTypeDeclaration() {
+        return Optional.of(this);
     }
 }

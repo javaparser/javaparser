@@ -35,8 +35,8 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
-
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -155,5 +155,10 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
     @Override
     public ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
+    }
+
+    @Override
+    public Optional<NameExpr> toNameExpr() {
+        return Optional.of(this);
     }
 }

@@ -67,6 +67,11 @@ public class SourceRoot {
         Log.info("New source root at \"%s\"", this.root);
     }
 
+    public SourceRoot(Path root, ParserConfiguration parserConfiguration) {
+        this(root);
+        setParserConfiguration(parserConfiguration);
+    }
+
     /**
      * Tries to parse a .java files under the source root and returns the ParseResult. It keeps track of the parsed file
      * so you can write it out with the saveAll() call. Note that the cache grows with every file parsed, so if you

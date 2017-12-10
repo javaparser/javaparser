@@ -41,6 +41,7 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * An annotation type declaration.<br/><code>@interface X { ... }</code>
@@ -131,5 +132,10 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     @Override
     public ResolvedAnnotationDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationDeclaration.class);
+    }
+
+    @Override
+    public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
+        return Optional.of(this);
     }
 }
