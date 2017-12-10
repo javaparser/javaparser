@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.FieldAccessContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -268,6 +269,10 @@ public class JavaParserFacade {
         } else {
             return SymbolReference.unsolved(ResolvedAnnotationDeclaration.class);
         }
+    }
+
+    public SymbolReference<ResolvedFieldDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
+        return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId(), typeSolver);
     }
 
     public ResolvedType getType(Node node) {
