@@ -29,6 +29,7 @@ import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import java.util.Optional;
 
 /**
  * A base class for all statements.
@@ -371,5 +372,89 @@ public abstract class Statement extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifWhileStmt(Consumer<WhileStmt> action) {
+    }
+
+    public Optional<AssertStmt> toAssertStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<BlockStmt> toBlockStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<BreakStmt> toBreakStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ContinueStmt> toContinueStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<DoStmt> toDoStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<EmptyStmt> toEmptyStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ExpressionStmt> toExpressionStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ForStmt> toForStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ForeachStmt> toForeachStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<IfStmt> toIfStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<LabeledStmt> toLabeledStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ReturnStmt> toReturnStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<SwitchEntryStmt> toSwitchEntryStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<SwitchStmt> toSwitchStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<SynchronizedStmt> toSynchronizedStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<ThrowStmt> toThrowStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<TryStmt> toTryStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<UnparsableStmt> toUnparsableStmt() {
+        return Optional.empty();
+    }
+
+    public Optional<WhileStmt> toWhileStmt() {
+        return Optional.empty();
     }
 }

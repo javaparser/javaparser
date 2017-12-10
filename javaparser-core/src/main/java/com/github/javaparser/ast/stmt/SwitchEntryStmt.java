@@ -213,4 +213,9 @@ public final class SwitchEntryStmt extends Statement implements NodeWithStatemen
     public void ifSwitchEntryStmt(Consumer<SwitchEntryStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<SwitchEntryStmt> toSwitchEntryStmt() {
+        return Optional.of(this);
+    }
 }

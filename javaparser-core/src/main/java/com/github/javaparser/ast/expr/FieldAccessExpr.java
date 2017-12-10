@@ -251,4 +251,9 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<FieldAccessExpr> toFieldAccessExpr() {
+        return Optional.of(this);
+    }
 }

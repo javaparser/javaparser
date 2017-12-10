@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * The ternary conditional expression.
@@ -193,5 +194,10 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifConditionalExpr(Consumer<ConditionalExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ConditionalExpr> toConditionalExpr() {
+        return Optional.of(this);
     }
 }

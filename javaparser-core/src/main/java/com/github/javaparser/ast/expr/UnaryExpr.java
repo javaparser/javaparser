@@ -35,6 +35,7 @@ import com.github.javaparser.printer.Printable;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -202,5 +203,10 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifUnaryExpr(Consumer<UnaryExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<UnaryExpr> toUnaryExpr() {
+        return Optional.of(this);
     }
 }

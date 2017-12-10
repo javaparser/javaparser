@@ -1,7 +1,6 @@
 package com.github.javaparser.generator.core.node;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.generator.NodeGenerator;
@@ -10,6 +9,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.utils.Pair;
 import com.github.javaparser.utils.SourceRoot;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -56,6 +56,7 @@ public class TypeCastingGenerator extends NodeGenerator {
         
         generateIsType(baseCu, nodeCoid, baseCoid, typeName);
         generateAsType(baseCu, nodeCoid, baseCoid, typeName);
+        generateToType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
         generateIfType(nodeCu, baseCu, nodeCoid, baseCoid, typeName);
     }
 
@@ -65,7 +66,15 @@ public class TypeCastingGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
         addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
         baseCu.addImport("com.github.javaparser.utils.CodeGenerationUtils.f", true, false);
+    }
 
+    private void generateToType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {
+        baseCu.addImport(Optional.class);
+        nodeCu.addImport(Optional.class);
+        final MethodDeclaration asTypeBaseMethod = (MethodDeclaration) parseBodyDeclaration(f("public Optional<%s> to%s() { return Optional.empty(); }", typeName, typeName, typeName));
+        final MethodDeclaration asTypeNodeMethod = (MethodDeclaration) parseBodyDeclaration(f("@Override public Optional<%s> to%s() { return Optional.of(this); }", typeName, typeName));
+        addOrReplaceWhenSameSignature(baseCoid, asTypeBaseMethod);
+        addOrReplaceWhenSameSignature(nodeCoid, asTypeNodeMethod);
     }
 
     private void generateIfType(CompilationUnit nodeCu, CompilationUnit baseCu, ClassOrInterfaceDeclaration nodeCoid, ClassOrInterfaceDeclaration baseCoid, String typeName) {

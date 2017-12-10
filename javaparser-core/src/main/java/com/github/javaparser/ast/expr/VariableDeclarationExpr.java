@@ -45,6 +45,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A declaration of variables.
@@ -250,5 +251,10 @@ public final class VariableDeclarationExpr extends Expression implements NodeWit
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVariableDeclarationExpr(Consumer<VariableDeclarationExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
+        return Optional.of(this);
     }
 }

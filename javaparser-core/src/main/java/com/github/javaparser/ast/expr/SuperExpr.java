@@ -162,4 +162,9 @@ public final class SuperExpr extends Expression {
     public void ifSuperExpr(Consumer<SuperExpr> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<SuperExpr> toSuperExpr() {
+        return Optional.of(this);
+    }
 }

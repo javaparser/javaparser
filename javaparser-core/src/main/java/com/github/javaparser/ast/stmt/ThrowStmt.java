@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Usage of the throw statement.
@@ -143,5 +144,10 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifThrowStmt(Consumer<ThrowStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ThrowStmt> toThrowStmt() {
+        return Optional.of(this);
     }
 }

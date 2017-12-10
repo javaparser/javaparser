@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * An annotation that has zero or more key-value pairs.<br/><code>@Mapping(a=5, d=10)</code>
@@ -169,5 +170,10 @@ public final class NormalAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNormalAnnotationExpr(Consumer<NormalAnnotationExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<NormalAnnotationExpr> toNormalAnnotationExpr() {
+        return Optional.of(this);
     }
 }

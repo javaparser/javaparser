@@ -289,4 +289,9 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
     public ResolvedMethodDeclaration resolveInvokedMethod() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
+
+    @Override
+    public Optional<MethodCallExpr> toMethodCallExpr() {
+        return Optional.of(this);
+    }
 }

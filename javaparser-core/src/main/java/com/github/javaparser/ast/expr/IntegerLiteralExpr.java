@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * All ways to specify an int literal.
@@ -142,5 +143,10 @@ public final class IntegerLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifIntegerLiteralExpr(Consumer<IntegerLiteralExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<IntegerLiteralExpr> toIntegerLiteralExpr() {
+        return Optional.of(this);
     }
 }

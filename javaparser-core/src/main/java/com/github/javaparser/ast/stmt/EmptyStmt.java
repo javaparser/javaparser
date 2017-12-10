@@ -30,6 +30,7 @@ import com.github.javaparser.metamodel.EmptyStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * An empty statement is a ";" where a statement is expected.
@@ -106,5 +107,10 @@ public final class EmptyStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifEmptyStmt(Consumer<EmptyStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<EmptyStmt> toEmptyStmt() {
+        return Optional.of(this);
     }
 }
