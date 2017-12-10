@@ -167,4 +167,9 @@ public final class ReturnStmt extends Statement {
     public void ifReturnStmt(Consumer<ReturnStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<ReturnStmt> toReturnStmt() {
+        return Optional.of(this);
+    }
 }

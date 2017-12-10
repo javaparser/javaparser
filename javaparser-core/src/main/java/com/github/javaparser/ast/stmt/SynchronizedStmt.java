@@ -36,6 +36,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Usage of the synchronized keyword.
@@ -170,5 +171,10 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<SynchronizedStmt> toSynchronizedStmt() {
+        return Optional.of(this);
     }
 }

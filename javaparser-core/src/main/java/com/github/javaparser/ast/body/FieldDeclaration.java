@@ -298,4 +298,9 @@ public final class FieldDeclaration extends BodyDeclaration<FieldDeclaration> im
     public ResolvedFieldDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedFieldDeclaration.class);
     }
+
+    @Override
+    public Optional<FieldDeclaration> toFieldDeclaration() {
+        return Optional.of(this);
+    }
 }

@@ -264,4 +264,9 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     public ResolvedAnnotationMemberDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationMemberDeclaration.class);
     }
+
+    @Override
+    public Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
+        return Optional.of(this);
+    }
 }

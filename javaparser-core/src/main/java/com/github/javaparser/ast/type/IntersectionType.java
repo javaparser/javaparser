@@ -41,6 +41,7 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -175,5 +176,10 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
     @Override
     public ResolvedIntersectionType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedIntersectionType.class);
+    }
+
+    @Override
+    public Optional<IntersectionType> toIntersectionType() {
+        return Optional.of(this);
     }
 }

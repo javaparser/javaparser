@@ -28,9 +28,9 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ReferenceTypeMetaModel;
-
 import javax.annotation.Generated;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Base class for reference types.
@@ -100,5 +100,10 @@ public abstract class ReferenceType extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifReferenceType(Consumer<ReferenceType> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ReferenceType> toReferenceType() {
+        return Optional.of(this);
     }
 }

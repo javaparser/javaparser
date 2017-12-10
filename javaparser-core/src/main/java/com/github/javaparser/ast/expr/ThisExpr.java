@@ -35,7 +35,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-
 import java.util.function.Consumer;
 
 /**
@@ -165,5 +164,10 @@ public final class ThisExpr extends Expression implements Resolvable<ResolvedTyp
     @Override
     public ResolvedTypeDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedTypeDeclaration.class);
+    }
+
+    @Override
+    public Optional<ThisExpr> toThisExpr() {
+        return Optional.of(this);
     }
 }
