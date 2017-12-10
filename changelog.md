@@ -1,3 +1,9 @@
+Version 3.5.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/69?closed=1)
+* `toSomeType()` methods have been added for many types that give more functional access to a subtype.
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
 Version 3.5.5
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/68?closed=1)
