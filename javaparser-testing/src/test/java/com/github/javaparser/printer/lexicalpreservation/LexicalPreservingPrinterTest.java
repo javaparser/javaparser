@@ -9,6 +9,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.ast.visitor.Visitable;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -1000,6 +1001,29 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         assertEqualsNoEol("public class Foo {\n" +
                 "// Some comment\n\n" +
                 "}", LexicalPreservingPrinter.print(cu));
+    }
+
+    static class AddFooCallModifierVisitor extends ModifierVisitor<Void> {
+        @Override
+        public Visitable visit(MethodCallExpr n, Void arg) {
+            // Add a call to foo() on every found method call
+            return new MethodCallExpr(n, "foo");
+        }
+    }
+
+    // See issue 1277
+    @Test
+    public void testInvokeModifierVisitor() throws IOException {
+        String code = "class A {" + EOL +
+                "  public String message = \"hello\";" + EOL +
+                "   void bar() {" + EOL +
+                "     System.out.println(\"hello\");" + EOL +
+                "   }" + EOL +
+                "}";
+
+        CompilationUnit cu = JavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.accept(new AddFooCallModifierVisitor(), null);
     }
 
 }
