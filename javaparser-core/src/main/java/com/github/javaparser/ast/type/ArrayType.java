@@ -285,6 +285,7 @@ public final class ArrayType extends ReferenceType implements NodeWithAnnotation
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayType> toArrayType() {
         return Optional.of(this);
     }

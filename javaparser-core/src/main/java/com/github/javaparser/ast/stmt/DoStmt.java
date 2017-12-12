@@ -174,6 +174,7 @@ public final class DoStmt extends Statement implements NodeWithBody<DoStmt>, Nod
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<DoStmt> toDoStmt() {
         return Optional.of(this);
     }

@@ -135,6 +135,7 @@ public final class AnnotationDeclaration extends TypeDeclaration<AnnotationDecla
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
         return Optional.of(this);
     }

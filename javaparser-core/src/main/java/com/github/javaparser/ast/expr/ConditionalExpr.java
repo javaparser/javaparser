@@ -197,6 +197,7 @@ public final class ConditionalExpr extends Expression implements NodeWithConditi
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ConditionalExpr> toConditionalExpr() {
         return Optional.of(this);
     }

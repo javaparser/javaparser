@@ -154,6 +154,7 @@ public final class ModuleRequiresStmt extends ModuleStmt implements NodeWithStat
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleRequiresStmt> toModuleRequiresStmt() {
         return Optional.of(this);
     }

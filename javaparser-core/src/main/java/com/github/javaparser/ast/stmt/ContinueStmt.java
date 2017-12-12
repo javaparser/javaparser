@@ -33,6 +33,7 @@ import com.github.javaparser.metamodel.ContinueStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.function.Consumer;
 
 /**
@@ -44,6 +45,7 @@ import java.util.function.Consumer;
  */
 public final class ContinueStmt extends Statement implements NodeWithOptionalLabel<ContinueStmt> {
 
+    @OptionalProperty
     private SimpleName label;
 
     public ContinueStmt() {
@@ -168,6 +170,7 @@ public final class ContinueStmt extends Statement implements NodeWithOptionalLab
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ContinueStmt> toContinueStmt() {
         return Optional.of(this);
     }

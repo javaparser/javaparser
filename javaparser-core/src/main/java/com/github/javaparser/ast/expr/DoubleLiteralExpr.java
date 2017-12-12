@@ -134,6 +134,7 @@ public final class DoubleLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<DoubleLiteralExpr> toDoubleLiteralExpr() {
         return Optional.of(this);
     }

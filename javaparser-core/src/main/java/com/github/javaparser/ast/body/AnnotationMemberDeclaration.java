@@ -41,6 +41,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.AnnotationMemberDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
@@ -66,6 +67,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
 
     private SimpleName name;
 
+    @OptionalProperty
     private Expression defaultValue;
 
     public AnnotationMemberDeclaration() {
@@ -266,6 +268,7 @@ public final class AnnotationMemberDeclaration extends BodyDeclaration<Annotatio
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
         return Optional.of(this);
     }

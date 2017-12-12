@@ -30,6 +30,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import java.util.Arrays;
 import java.util.List;
@@ -50,8 +51,10 @@ import java.util.function.Consumer;
  */
 public final class WildcardType extends Type implements NodeWithAnnotations<WildcardType> {
 
+    @OptionalProperty
     private ReferenceType extendedType;
 
+    @OptionalProperty
     private ReferenceType superType;
 
     public WildcardType() {
@@ -291,6 +294,7 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<WildcardType> toWildcardType() {
         return Optional.of(this);
     }

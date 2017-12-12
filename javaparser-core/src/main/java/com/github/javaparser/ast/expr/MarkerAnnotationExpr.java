@@ -121,6 +121,7 @@ public final class MarkerAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MarkerAnnotationExpr> toMarkerAnnotationExpr() {
         return Optional.of(this);
     }

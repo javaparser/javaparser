@@ -143,6 +143,7 @@ public final class SingleMemberAnnotationExpr extends AnnotationExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SingleMemberAnnotationExpr> toSingleMemberAnnotationExpr() {
         return Optional.of(this);
     }

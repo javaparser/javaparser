@@ -199,6 +199,7 @@ public final class SwitchStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SwitchStmt> toSwitchStmt() {
         return Optional.of(this);
     }

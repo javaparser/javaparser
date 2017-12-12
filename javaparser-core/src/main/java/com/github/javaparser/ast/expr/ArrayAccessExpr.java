@@ -170,6 +170,7 @@ public final class ArrayAccessExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayAccessExpr> toArrayAccessExpr() {
         return Optional.of(this);
     }

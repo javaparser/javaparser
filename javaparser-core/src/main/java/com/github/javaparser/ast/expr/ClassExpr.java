@@ -147,6 +147,7 @@ public final class ClassExpr extends Expression implements NodeWithType<ClassExp
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassExpr> toClassExpr() {
         return Optional.of(this);
     }

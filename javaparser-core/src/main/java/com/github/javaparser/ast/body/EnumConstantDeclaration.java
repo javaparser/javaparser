@@ -232,6 +232,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumConstantDeclaration> toEnumConstantDeclaration() {
         return Optional.of(this);
     }

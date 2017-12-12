@@ -27,6 +27,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import java.util.Optional;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SuperExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
@@ -44,6 +45,7 @@ import java.util.function.Consumer;
  */
 public final class SuperExpr extends Expression {
 
+    @OptionalProperty
     private Expression classExpr;
 
     public SuperExpr() {
@@ -164,6 +166,7 @@ public final class SuperExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SuperExpr> toSuperExpr() {
         return Optional.of(this);
     }

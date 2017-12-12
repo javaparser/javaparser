@@ -14,8 +14,8 @@ import static com.github.javaparser.generator.metamodel.MetaModelGenerator.nodeM
 import static com.github.javaparser.generator.metamodel.MetaModelGenerator.propertyMetaModelFieldName;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
-public class InitializeConstructorParametersStatementsGenerator {
-    public void generate(Class<? extends Node> nodeClass, NodeList<Statement> initializeConstructorParametersStatements) {
+class InitializeConstructorParametersStatementsGenerator {
+    void generate(Class<? extends Node> nodeClass, NodeList<Statement> initializeConstructorParametersStatements) {
         if (nodeClass == Node.class) {
             return;
         }

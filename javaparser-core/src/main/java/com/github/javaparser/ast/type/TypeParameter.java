@@ -239,6 +239,7 @@ public final class TypeParameter extends ReferenceType implements NodeWithSimple
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypeParameter> toTypeParameter() {
         return Optional.of(this);
     }

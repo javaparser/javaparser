@@ -125,22 +125,27 @@ public abstract class ModuleStmt extends Node {
     public void ifModuleUsesStmt(Consumer<ModuleUsesStmt> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleExportsStmt> toModuleExportsStmt() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleOpensStmt> toModuleOpensStmt() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleProvidesStmt> toModuleProvidesStmt() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleRequiresStmt> toModuleRequiresStmt() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleUsesStmt> toModuleUsesStmt() {
         return Optional.empty();
     }

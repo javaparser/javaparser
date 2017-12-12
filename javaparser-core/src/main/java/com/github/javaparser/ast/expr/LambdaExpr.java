@@ -229,6 +229,7 @@ public final class LambdaExpr extends Expression implements NodeWithParameters<L
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LambdaExpr> toLambdaExpr() {
         return Optional.of(this);
     }

@@ -37,6 +37,7 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import javax.annotation.Generated;
 import java.util.EnumSet;
 import java.util.List;
@@ -61,6 +62,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     private NodeList<ReferenceType> thrownExceptions;
 
+    @OptionalProperty
     private ReceiverParameter receiverParameter;
 
     @AllFieldsConstructor
@@ -419,6 +421,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CallableDeclaration> toCallableDeclaration() {
         return Optional.of(this);
     }

@@ -118,6 +118,7 @@ public final class LineComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LineComment> toLineComment() {
         return Optional.of(this);
     }

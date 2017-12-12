@@ -206,6 +206,7 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnaryExpr> toUnaryExpr() {
         return Optional.of(this);
     }

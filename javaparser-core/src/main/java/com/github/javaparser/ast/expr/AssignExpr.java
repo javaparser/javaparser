@@ -206,6 +206,7 @@ public final class AssignExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AssignExpr> toAssignExpr() {
         return Optional.of(this);
     }
