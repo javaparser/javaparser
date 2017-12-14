@@ -38,7 +38,7 @@ class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    private static final Map<Object, Boolean> isPhantomNodeCache = synchronizedMap(new IdentityHashMap<>());
+    private static final Map<Node, Boolean> isPhantomNodeCache = synchronizedMap(new IdentityHashMap<>());
 
     private static final AstObserver cacheCleaner = new AstObserverAdapter() {
         @Override
