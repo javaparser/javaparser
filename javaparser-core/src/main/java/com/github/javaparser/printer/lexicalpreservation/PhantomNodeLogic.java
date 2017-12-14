@@ -27,6 +27,9 @@ import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.type.UnknownType;
 
 import java.util.IdentityHashMap;
+import java.util.Map;
+
+import static java.util.Collections.synchronizedMap;
 
 /**
  * We want to recognize and ignore "phantom" nodes, like the fake type of variable in FieldDeclaration
@@ -35,7 +38,7 @@ class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    private static final IdentityHashMap<Node, Boolean> isPhantomNodeCache = new IdentityHashMap<>();
+    private static final Map<Node, Boolean> isPhantomNodeCache = synchronizedMap(new IdentityHashMap<>());
 
     private static final AstObserver cacheCleaner = new AstObserverAdapter() {
         @Override
@@ -45,19 +48,19 @@ class PhantomNodeLogic {
     };
 
     static boolean isPhantomNode(Node node) {
-        boolean res;
         if (isPhantomNodeCache.containsKey(node)) {
-            res = isPhantomNodeCache.get(node);
+            return isPhantomNodeCache.get(node);
         } else {
             if (node instanceof UnknownType) {
                 return true;
             }
-            res = (node.getParentNode().isPresent() && !node.getParentNode().get().getRange().get().contains(
-                    node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
+            boolean res = (node.getParentNode().isPresent() &&
+                    !node.getParentNode().get().getRange().get().contains(node.getRange().get())
+                    || inPhantomNode(node, LEVELS_TO_EXPLORE));
             isPhantomNodeCache.put(node, res);
             node.register(cacheCleaner);
+            return res;
         }
-        return res;
     }
 
     /**

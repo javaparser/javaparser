@@ -140,6 +140,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
             return element;
         }
         notifyElementReplaced(index, element);
+        innerList.get(index).setParentNode(null);
         setAsParentNodeOf(element);
         return innerList.set(index, element);
     }
