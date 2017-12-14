@@ -1,3 +1,27 @@
+Version 3.5.6
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/69?closed=1)
+* `toSomeType()` methods have been added for many types that give more functional access to a subtype.
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.5.5
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/68?closed=1)
+* SourceRoot is now silent by default - look at the Log class if you want to change that. 
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.5.4
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/67?closed=1)
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
+Version 3.5.3
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/66?closed=1)
+* Unicode escapes (`\u1234`) are now retained in the AST,
+    but they are now only allowed in comments, string and character literals, and identifiers. 
+* BETA: the below work on Java Symbol Solver is still ongoing.
+
 Version 3.5.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/65?closed=1)

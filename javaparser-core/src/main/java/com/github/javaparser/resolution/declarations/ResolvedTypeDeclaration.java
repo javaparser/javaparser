@@ -110,6 +110,30 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
         return true;
     }
 
+    /**
+     * Is this type declaration corresponding to an anonymous class?
+     *
+     * This is an example of anonymous class:
+     * <pre>
+     * HelloWorld frenchGreeting = new HelloWorld() {
+     *     String name = "tout le monde";
+     *
+     *     public void greet() {
+     *         greetSomeone("tout le monde");
+     *     }
+     *
+     *     public void greetSomeone(String someone) {
+     *         name = someone;
+     *         System.out.println("Salut " + name);
+     *     }
+     * };
+     * </pre>
+     * @return
+     */
+    default boolean isAnonymousClass() {
+        return false;
+    }
+
     @Override
     default ResolvedTypeDeclaration asType() {
         return this;

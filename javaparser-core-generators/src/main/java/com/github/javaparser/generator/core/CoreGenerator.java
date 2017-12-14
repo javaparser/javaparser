@@ -1,10 +1,9 @@
 package com.github.javaparser.generator.core;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.generator.core.node.*;
 import com.github.javaparser.generator.core.visitor.*;
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.nio.file.Path;
@@ -18,15 +17,15 @@ public class CoreGenerator {
         if (args.length != 1) {
             throw new RuntimeException("Need 1 parameter: the JavaParser source checkout root directory.");
         }
+        Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
         final SourceRoot sourceRoot = new SourceRoot(root)
 //                .setPrinter(LexicalPreservingPrinter::print)
-                .setJavaParser(new JavaParser(
-                        new ParserConfiguration()
+                .setParserConfiguration(new ParserConfiguration()
 //                                .setStoreTokens(false)
 //                                .setAttributeComments(false)
 //                                .setLexicalPreservationEnabled(true)
-                ));
+                );
 
         new CoreGenerator().run(sourceRoot);
 

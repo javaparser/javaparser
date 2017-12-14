@@ -32,7 +32,11 @@ import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.resolution.Resolvable;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.types.ResolvedUnionType;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
@@ -40,7 +44,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public final class NameExpr extends Expression implements NodeWithSimpleName<NameExpr> {
+public final class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>, Resolvable<ResolvedValueDeclaration> {
 
     private SimpleName name;
 
@@ -146,5 +150,15 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifNameExpr(Consumer<NameExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public ResolvedValueDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
+    }
+
+    @Override
+    public Optional<NameExpr> toNameExpr() {
+        return Optional.of(this);
     }
 }

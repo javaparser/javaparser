@@ -32,11 +32,13 @@ import com.github.javaparser.utils.Utils;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A literal string.
  * <br/><code>"Hello World!"</code>
  * <br/><code>"\"\n"</code>
+ * <br/><code>"\u2122"</code>
  * <br/><code>"™"</code>
  * <br/><code>"💩"</code>
  *
@@ -161,5 +163,10 @@ public final class StringLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifStringLiteralExpr(Consumer<StringLiteralExpr> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<StringLiteralExpr> toStringLiteralExpr() {
+        return Optional.of(this);
     }
 }
