@@ -3,6 +3,7 @@ package com.github.javaparser.ast.expr;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseExpression;
+import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodCallExprTest {
@@ -15,6 +16,7 @@ public class MethodCallExprTest {
         lambdaExpr.replace(lambdaWrapper);
         
         assertEquals(2, methodCallExpr.getChildNodes().size());
+        assertEquals(empty(), lambdaExpr.getParentNode());
     }
 
 }
