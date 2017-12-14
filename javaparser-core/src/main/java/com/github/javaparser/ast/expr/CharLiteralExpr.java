@@ -156,6 +156,7 @@ public final class CharLiteralExpr extends LiteralStringValueExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CharLiteralExpr> toCharLiteralExpr() {
         return Optional.of(this);
     }

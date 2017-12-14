@@ -226,6 +226,7 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration> impl
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumDeclaration> toEnumDeclaration() {
         return Optional.of(this);
     }

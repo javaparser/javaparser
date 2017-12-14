@@ -155,6 +155,7 @@ public final class EnclosedExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnclosedExpr> toEnclosedExpr() {
         return Optional.of(this);
     }

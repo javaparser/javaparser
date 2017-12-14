@@ -239,6 +239,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypeDeclaration> toTypeDeclaration() {
         return Optional.of(this);
     }

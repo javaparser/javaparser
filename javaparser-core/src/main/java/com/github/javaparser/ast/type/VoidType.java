@@ -135,6 +135,7 @@ public final class VoidType extends Type implements NodeWithAnnotations<VoidType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<VoidType> toVoidType() {
         return Optional.of(this);
     }

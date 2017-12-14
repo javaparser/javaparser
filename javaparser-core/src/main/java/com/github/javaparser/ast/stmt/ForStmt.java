@@ -33,11 +33,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
+import com.github.javaparser.metamodel.OptionalProperty;
 import javax.annotation.Generated;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -71,6 +70,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
     private NodeList<Expression> initialization;
 
+    @OptionalProperty
     private Expression compare;
 
     private NodeList<Expression> update;
@@ -283,6 +283,7 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ForStmt> toForStmt() {
         return Optional.of(this);
     }

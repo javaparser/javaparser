@@ -157,6 +157,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayInitializerExpr> toArrayInitializerExpr() {
         return Optional.of(this);
     }

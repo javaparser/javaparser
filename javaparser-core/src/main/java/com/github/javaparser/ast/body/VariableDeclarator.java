@@ -37,6 +37,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.VariableDeclaratorMetaModel;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +59,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
 
     private SimpleName name;
 
+    @OptionalProperty
     @NonEmptyProperty
     private Expression initializer;
 

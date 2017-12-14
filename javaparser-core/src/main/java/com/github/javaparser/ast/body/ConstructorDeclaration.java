@@ -241,6 +241,7 @@ public final class ConstructorDeclaration extends CallableDeclaration<Constructo
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ConstructorDeclaration> toConstructorDeclaration() {
         return Optional.of(this);
     }

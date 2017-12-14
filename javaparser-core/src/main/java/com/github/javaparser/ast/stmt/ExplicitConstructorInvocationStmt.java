@@ -38,6 +38,7 @@ import com.github.javaparser.metamodel.ExplicitConstructorInvocationStmtMetaMode
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.function.Consumer;
 
@@ -52,10 +53,12 @@ import java.util.function.Consumer;
  */
 public final class ExplicitConstructorInvocationStmt extends Statement implements NodeWithTypeArguments<ExplicitConstructorInvocationStmt> {
 
+    @OptionalProperty
     private NodeList<Type> typeArguments;
 
     private boolean isThis;
 
+    @OptionalProperty
     private Expression expression;
 
     private NodeList<Expression> arguments;
@@ -289,6 +292,7 @@ public final class ExplicitConstructorInvocationStmt extends Statement implement
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
         return Optional.of(this);
     }

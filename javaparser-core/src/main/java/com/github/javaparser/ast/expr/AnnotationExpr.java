@@ -130,6 +130,7 @@ public abstract class AnnotationExpr extends Expression implements NodeWithName<
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationExpr> toAnnotationExpr() {
         return Optional.of(this);
     }

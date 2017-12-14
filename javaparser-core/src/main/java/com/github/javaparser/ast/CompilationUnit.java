@@ -40,6 +40,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CompilationUnitMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
@@ -77,12 +78,14 @@ import com.github.javaparser.ast.Node;
  */
 public final class CompilationUnit extends Node {
 
+    @OptionalProperty
     private PackageDeclaration packageDeclaration;
 
     private NodeList<ImportDeclaration> imports;
 
     private NodeList<TypeDeclaration<?>> types;
 
+    @OptionalProperty
     private ModuleDeclaration module;
 
     @InternalProperty

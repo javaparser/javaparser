@@ -204,6 +204,7 @@ public final class ForeachStmt extends Statement implements NodeWithBody<Foreach
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ForeachStmt> toForeachStmt() {
         return Optional.of(this);
     }

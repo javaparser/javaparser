@@ -121,6 +121,7 @@ public final class JavadocComment extends Comment {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JavadocComment> toJavadocComment() {
         return Optional.of(this);
     }

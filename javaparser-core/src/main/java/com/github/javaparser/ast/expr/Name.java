@@ -40,6 +40,7 @@ import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -58,6 +59,7 @@ public final class Name extends Node implements NodeWithIdentifier<Name>, NodeWi
     @NonEmptyProperty
     private String identifier;
 
+    @OptionalProperty
     private Name qualifier;
 
     private NodeList<AnnotationExpr> annotations;

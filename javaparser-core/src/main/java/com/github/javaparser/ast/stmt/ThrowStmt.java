@@ -147,6 +147,7 @@ public final class ThrowStmt extends Statement implements NodeWithExpression<Thr
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ThrowStmt> toThrowStmt() {
         return Optional.of(this);
     }

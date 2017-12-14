@@ -97,6 +97,7 @@ public abstract class LiteralExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LiteralExpr> toLiteralExpr() {
         return Optional.of(this);
     }

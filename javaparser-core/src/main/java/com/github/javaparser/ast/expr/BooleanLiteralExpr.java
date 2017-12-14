@@ -136,6 +136,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BooleanLiteralExpr> toBooleanLiteralExpr() {
         return Optional.of(this);
     }

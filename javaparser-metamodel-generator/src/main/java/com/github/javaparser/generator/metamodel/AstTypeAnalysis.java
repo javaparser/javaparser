@@ -22,7 +22,7 @@ public class AstTypeAnalysis {
     public boolean isSelfType = false;
     public Class<?> innerType;
 
-    public AstTypeAnalysis(Type type) {
+    AstTypeAnalysis(Type type) {
         if (type instanceof Class<?>) {
             TypeVariable<? extends Class<?>>[] typeParameters = ((Class<?>) type).getTypeParameters();
             if (typeParameters.length > 0) {

@@ -112,6 +112,7 @@ public final class NullLiteralExpr extends LiteralExpr {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<NullLiteralExpr> toNullLiteralExpr() {
         return Optional.of(this);
     }

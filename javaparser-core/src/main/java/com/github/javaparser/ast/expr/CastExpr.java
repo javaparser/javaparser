@@ -173,6 +173,7 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr,
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CastExpr> toCastExpr() {
         return Optional.of(this);
     }

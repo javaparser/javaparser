@@ -110,6 +110,7 @@ public final class EmptyStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EmptyStmt> toEmptyStmt() {
         return Optional.of(this);
     }

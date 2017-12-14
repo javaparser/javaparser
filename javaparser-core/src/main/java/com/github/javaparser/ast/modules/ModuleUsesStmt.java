@@ -120,6 +120,7 @@ public final class ModuleUsesStmt extends ModuleStmt implements NodeWithType<Mod
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleUsesStmt> toModuleUsesStmt() {
         return Optional.of(this);
     }

@@ -207,6 +207,7 @@ public final class BinaryExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BinaryExpr> toBinaryExpr() {
         return Optional.of(this);
     }

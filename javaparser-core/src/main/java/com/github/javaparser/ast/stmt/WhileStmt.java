@@ -174,6 +174,7 @@ public final class WhileStmt extends Statement implements NodeWithBody<WhileStmt
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<WhileStmt> toWhileStmt() {
         return Optional.of(this);
     }

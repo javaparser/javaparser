@@ -37,6 +37,7 @@ import com.github.javaparser.metamodel.ArrayCreationLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 
 /**
  * In <code>new int[1][2];</code> there are two ArrayCreationLevel objects,
@@ -45,6 +46,7 @@ import com.github.javaparser.TokenRange;
  */
 public final class ArrayCreationLevel extends Node implements NodeWithAnnotations<ArrayCreationLevel> {
 
+    @OptionalProperty
     private Expression dimension;
 
     private NodeList<AnnotationExpr> annotations = new NodeList<>();

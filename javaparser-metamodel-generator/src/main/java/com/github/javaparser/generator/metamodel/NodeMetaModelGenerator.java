@@ -85,7 +85,7 @@ public class NodeMetaModelGenerator {
                 continue;
             }
 
-            initializePropertyMetaModelsStatementsGenerator.generate(nodeClass, field, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
+            initializePropertyMetaModelsStatementsGenerator.generate(field, nodeMetaModelClass, nodeMetaModelFieldName, initializePropertyMetaModelsStatements);
         }
         final List<Method> methods = new ArrayList<>(Arrays.asList(nodeClass.getMethods()));
         methods.sort(Comparator.comparing(Method::getName));

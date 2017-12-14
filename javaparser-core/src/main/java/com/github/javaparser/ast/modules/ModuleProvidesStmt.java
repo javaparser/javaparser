@@ -158,6 +158,7 @@ public final class ModuleProvidesStmt extends ModuleStmt implements NodeWithType
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleProvidesStmt> toModuleProvidesStmt() {
         return Optional.of(this);
     }

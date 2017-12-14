@@ -41,6 +41,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import java.util.function.Consumer;
 
@@ -58,10 +59,12 @@ import java.util.function.Consumer;
  */
 public final class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpleName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType>, NodeWithTypeArguments<ClassOrInterfaceType> {
 
+    @OptionalProperty
     private ClassOrInterfaceType scope;
 
     private SimpleName name;
 
+    @OptionalProperty
     private NodeList<Type> typeArguments;
 
     public ClassOrInterfaceType() {
@@ -292,6 +295,7 @@ public final class ClassOrInterfaceType extends ReferenceType implements NodeWit
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassOrInterfaceType> toClassOrInterfaceType() {
         return Optional.of(this);
     }

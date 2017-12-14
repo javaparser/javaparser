@@ -179,6 +179,7 @@ public final class IntersectionType extends Type implements NodeWithAnnotations<
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<IntersectionType> toIntersectionType() {
         return Optional.of(this);
     }

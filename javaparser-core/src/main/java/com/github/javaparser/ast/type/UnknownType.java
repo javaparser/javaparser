@@ -140,6 +140,7 @@ public final class UnknownType extends Type {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnknownType> toUnknownType() {
         return Optional.of(this);
     }

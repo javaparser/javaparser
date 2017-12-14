@@ -233,6 +233,7 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<PrimitiveType> toPrimitiveType() {
         return Optional.of(this);
     }

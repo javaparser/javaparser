@@ -96,6 +96,7 @@ public final class UnparsableStmt extends Statement {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnparsableStmt> toUnparsableStmt() {
         return Optional.of(this);
     }

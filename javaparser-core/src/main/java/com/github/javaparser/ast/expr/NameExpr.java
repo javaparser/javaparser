@@ -158,6 +158,7 @@ public final class NameExpr extends Expression implements NodeWithSimpleName<Nam
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<NameExpr> toNameExpr() {
         return Optional.of(this);
     }
