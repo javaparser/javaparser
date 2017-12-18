@@ -153,4 +153,9 @@ public final class EnclosedExpr extends Expression {
     public void ifEnclosedExpr(Consumer<EnclosedExpr> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<EnclosedExpr> toEnclosedExpr() {
+        return Optional.of(this);
+    }
 }

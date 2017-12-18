@@ -20,32 +20,52 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import javax.annotation.Generated;
-import com.github.javaparser.TokenRange;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 /**
- * A classic for statement.
- * <br/>In <code>for(int a=3,b==5; a<99; a++) { ... }</code> the intialization is int a=3,b=5,
- * compare is b==5, update is a++, and the statement or block statement following it is in body.
+ * <h1>The classic for statement</h1>
+ * Examples:
+ * <ol>
+ * <li><code>for(int a=3, b=5; a<99; a++, b++) hello();</code></li>
+ * <li><code>for(a=3, b=5; a<99; a++) { hello(); }</code> </li>
+ * <li><code>for(a(),b();;) hello();</code> </li>
+ * </ol>
+ * <ul>
+ * <li><i>initialization</i> is a list of expressions.
+ * These can be any kind of expression as can be seen in example 3,
+ * but the common ones are a single VariableDeclarationExpr (which declares multiple variables) in example 1,
+ * or a list of AssignExpr's in example 2.</li>
+ * <li><i>compare</i> is an expression,
+ * in example 1 and 2 it is a BinaryExpr.
+ * In example 3 there is no expression, it is empty.</li>
+ * <li><i>update</i> is a list of expressions,
+ * in example 1 and 2 they are UnaryExpr's.
+ * In example 3 there is no expression, the list empty.</li>
+ * <li><i>body</i> is a statement,
+ * in example 1 and 3 it is an ExpressionStmt.
+ * in example 2 it is a BlockStmt.</li>
+ * </ul>
  *
  * @author Julio Vilmar Gesser
+ * @see com.github.javaparser.ast.expr.VariableDeclarationExpr
  */
 public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
 
@@ -260,5 +280,10 @@ public final class ForStmt extends Statement implements NodeWithBody<ForStmt> {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifForStmt(Consumer<ForStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ForStmt> toForStmt() {
+        return Optional.of(this);
     }
 }

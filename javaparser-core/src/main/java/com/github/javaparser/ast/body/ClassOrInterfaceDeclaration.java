@@ -49,6 +49,7 @@ import javax.annotation.Generated;
 import java.util.EnumSet;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * A definition of a class or interface.<br/><code>class X { ... }</code>
@@ -275,5 +276,10 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     @Override
     public ResolvedReferenceTypeDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedReferenceTypeDeclaration.class);
+    }
+
+    @Override
+    public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
+        return Optional.of(this);
     }
 }

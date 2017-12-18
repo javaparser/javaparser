@@ -132,6 +132,13 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     @Override
     public N set(int index, N element) {
+        if (index < 0 || index >= innerList.size()) {
+            throw new IllegalArgumentException("Illegal index. The index should be between 0 and " + innerList.size()
+                    + " excluded. It is instead " + index);
+        }
+        if (element == innerList.get(index)) {
+            return element;
+        }
         notifyElementReplaced(index, element);
         setAsParentNodeOf(element);
         return innerList.set(index, element);

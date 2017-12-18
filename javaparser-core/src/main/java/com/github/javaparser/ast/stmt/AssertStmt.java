@@ -191,4 +191,9 @@ public final class AssertStmt extends Statement {
     public void ifAssertStmt(Consumer<AssertStmt> action) {
         action.accept(this);
     }
+
+    @Override
+    public Optional<AssertStmt> toAssertStmt() {
+        return Optional.of(this);
+    }
 }

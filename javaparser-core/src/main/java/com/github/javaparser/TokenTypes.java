@@ -86,6 +86,7 @@ public class TokenTypes {
                 return JavaToken.Category.EOL;
             case EOF:
             case SPACE:
+            case CTRL_Z:
                 return JavaToken.Category.WHITESPACE_NO_EOL;
             case SINGLE_LINE_COMMENT:
             case JAVADOC_COMMENT:
@@ -170,8 +171,6 @@ public class TokenTypes {
             case STRING_LITERAL:
                 return JavaToken.Category.LITERAL;
             case IDENTIFIER:
-            case LETTER:
-            case PART_LETTER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
             case RPAREN:
@@ -225,6 +224,14 @@ public class TokenTypes {
             case RSIGNEDSHIFT:
             case GT:
                 return JavaToken.Category.OPERATOR;
+            // The following are tokens that are only used internally by the lexer
+            case ENTER_JAVADOC_COMMENT:
+            case ENTER_MULTILINE_COMMENT:
+            case COMMENT_CONTENT:
+            case HEX_DIGITS:
+            case LETTER:
+            case UNICODE_ESCAPE:
+            case PART_LETTER:
             default:
                 throw new AssertionError("Invalid token kind " + kind);
         }

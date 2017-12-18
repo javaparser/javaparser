@@ -74,6 +74,9 @@ public abstract class PropagatingAstObserver implements AstObserver {
 
     @Override
     public void listReplacement(NodeList observedNode, int index, Node oldNode, Node newNode) {
+        if (oldNode == newNode) {
+            return;
+        }
         considerRemoving(oldNode);
         considerAdding(newNode);
         concreteListReplacement(observedNode, index, oldNode, newNode);

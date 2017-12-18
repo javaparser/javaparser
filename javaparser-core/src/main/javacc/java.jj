@@ -21,7 +21,6 @@
 
 options {
   STATIC=false;
-  JAVA_UNICODE_ESCAPE=true;
   COMMON_TOKEN_ACTION=true;
   JDK_VERSION = "1.8";
   TOKEN_EXTENDS ="TokenBase";
@@ -30,19 +29,26 @@ options {
 
 PARSER_BEGIN(GeneratedJavaParser)
 /*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
+ * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
- * JavaParser is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with JavaParser 9.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser;
-
 import java.io.*;
 import java.util.*;
 import com.github.javaparser.ast.*;
@@ -53,9 +59,7 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.*;
-
 import javax.annotation.Generated;
-
 import static com.github.javaparser.JavaToken.INVALID;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.*;
@@ -64,7 +68,6 @@ import static com.github.javaparser.GeneratedJavaParser.*;
 import static com.github.javaparser.Range.*;
 import static com.github.javaparser.Position.*;
 import static com.github.javaparser.ast.type.ArrayType.*;
-
 import static com.github.javaparser.GeneratedJavaParserTokenManagerBase.*;
 
 @Generated("JavaCC")
@@ -173,7 +176,7 @@ MORE :
 {
   <ENTER_JAVADOC_COMMENT: "/**" ~["/"]> { input_stream.backup(1); } : IN_JAVADOC_COMMENT
 |
-  <"/*"> : IN_MULTI_LINE_COMMENT
+  <ENTER_MULTILINE_COMMENT: "/*"> : IN_MULTI_LINE_COMMENT
 }
 
 <IN_JAVADOC_COMMENT>
@@ -312,6 +315,13 @@ TOKEN :
 |
   < #HEX_DIGITS: ["0"-"9","a"-"f","A"-"F"]((["0"-"9","a"-"f","A"-"F","_"])*["0"-"9","a"-"f","A"-"F"])? >
 |
+  < #UNICODE_ESCAPE:
+    "\\u"
+    ["0"-"9","A"-"F","a"-"f"]
+    ["0"-"9","A"-"F","a"-"f"]
+    ["0"-"9","A"-"F","a"-"f"]
+    ["0"-"9","A"-"F","a"-"f"] >
+|
   < CHARACTER_LITERAL:
       "'"
       (   (~["'","\\","\n","\r"])
@@ -321,12 +331,7 @@ TOKEN :
             | ["0"-"3"] ["0"-"7"] ["0"-"7"]
             )
           )
-        | ("\\u"
-        	["0"-"9","A"-"F","a"-"f"]
-        	["0"-"9","A"-"F","a"-"f"]
-        	["0"-"9","A"-"F","a"-"f"]
-        	["0"-"9","A"-"F","a"-"f"]
-          )
+        | <UNICODE_ESCAPE>
       )
       "'"
   >
@@ -425,6 +430,7 @@ TOKEN :
          "\ufe76"-"\ufefc",  "\uff04",  "\uff21"-"\uff3a",  "\uff3f",  "\uff41"-"\uff5a",  "\uff66"-"\uffbe",  
          "\uffc2"-"\uffc7",  "\uffca"-"\uffcf",  "\uffd2"-"\uffd7",  "\uffda"-"\uffdc",  "\uffe0"-"\uffe1",  
          "\uffe5"-"\uffe6"  ]
+        | <UNICODE_ESCAPE>
   >
 |
   < #PART_LETTER: [
@@ -508,6 +514,7 @@ TOKEN :
          "\ufe4d"-"\ufe4f",  "\ufe69",  "\ufe70"-"\ufe74",  "\ufe76"-"\ufefc",  "\ufeff",  "\uff04",  "\uff10"-"\uff19",  
          "\uff21"-"\uff3a",  "\uff3f",  "\uff41"-"\uff5a",  "\uff66"-"\uffbe",  "\uffc2"-"\uffc7",  "\uffca"-"\uffcf",  
          "\uffd2"-"\uffd7",  "\uffda"-"\uffdc",  "\uffe0"-"\uffe1",  "\uffe5"-"\uffe6",  "\ufff9"-"\ufffb" ]
+        | <UNICODE_ESCAPE>
   >
 }
 
@@ -588,6 +595,7 @@ TOKEN :
 | < GT: ">" >
 }
 
+TOKEN: { <CTRL_Z: "\u001A" /** ctrl+z char **/> }
 
 /*****************************************
  * THE JAVA LANGUAGE GRAMMAR STARTS HERE *
@@ -715,7 +723,7 @@ CompilationUnit CompilationUnit():
                 )
             )
         )*
-        (<EOF> | "\u001A" /** ctrl+z char **/)
+        (<EOF> | <CTRL_Z>)
         { return new CompilationUnit(range(token_source.getHomeToken(), token()), pakage, imports, types, module); }
     } catch (ParseException e) {
         recover(EOF, e);
@@ -1366,13 +1374,14 @@ ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotati
   [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
   {
       ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, firstAnnotations);
+      typeArgs = new RangedList<Type>(null);
   }
   (
 	  LOOKAHEAD(2) "." annotations = Annotations()  name = SimpleName()
 	  [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
 	  {
 	    ret = new ClassOrInterfaceType(range(begin, token()), ret, name, typeArgs.list, annotations);
-	    annotations = null;
+        typeArgs = new RangedList<Type>(null);
       }
   )*
   { return ret; }
@@ -1466,7 +1475,7 @@ Type ResultType(NodeList<AnnotationExpr> annotations):
 
 Name Name():
 /*
- * A lookahead of 2 is required below since "Name" can be followed
+ * A lookahead is required below since "Name" can be followed
  * by a ".*" when used in the context of an "ImportDeclaration".
  */
 {
@@ -2860,28 +2869,26 @@ Type ResultTypeParseStart():
 { NodeList<AnnotationExpr> annotations; Type ret; }
 { annotations = Annotations() ret = ResultType(annotations) <EOF> { return ret; } }
 
-
 VariableDeclarationExpr VariableDeclarationExpressionParseStart():
 { VariableDeclarationExpr ret; }
 { ret = VariableDeclarationExpression() <EOF> { return ret; } }
-
 
 ExplicitConstructorInvocationStmt ExplicitConstructorInvocationParseStart():
 { ExplicitConstructorInvocationStmt ret; }
 { ret = ExplicitConstructorInvocation() <EOF> { return ret; } }
 
-
 Name NameParseStart():
 { Name ret; }
 { ret = Name() <EOF> { return ret; } }
 
+SimpleName SimpleNameParseStart():
+{ SimpleName ret; }
+{ ret = SimpleName() <EOF> { return ret; } }
 
 Parameter ParameterParseStart():
 { Parameter ret; }
 { ret = Parameter() <EOF> { return ret; } }
 
-
 PackageDeclaration PackageDeclarationParseStart():
 { PackageDeclaration ret; }
 { ret = PackageDeclaration() <EOF> { return ret; } }
-

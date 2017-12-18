@@ -21,8 +21,12 @@
 
 package com.github.javaparser.resolution.declarations;
 
+import java.util.List;
+
 /**
  * @author Federico Tomassetti
  */
 public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDeclaration {
+
+    List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers();
 }

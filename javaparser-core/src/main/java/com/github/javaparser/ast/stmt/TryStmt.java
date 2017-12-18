@@ -40,7 +40,7 @@ import java.util.function.Consumer;
 
 /**
  * <h1>The try statement</h1>
- * <h2>Java 1-6</h2>
+ * <h2>Java 1.0-6</h2>
  * <pre>
  * try {
  * // ...
@@ -309,5 +309,10 @@ public final class TryStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTryStmt(Consumer<TryStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<TryStmt> toTryStmt() {
+        return Optional.of(this);
     }
 }

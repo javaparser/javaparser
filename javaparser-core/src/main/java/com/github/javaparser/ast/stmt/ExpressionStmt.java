@@ -35,6 +35,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import javax.annotation.Generated;
 import com.github.javaparser.TokenRange;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -142,5 +143,10 @@ public final class ExpressionStmt extends Statement implements NodeWithExpressio
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
         action.accept(this);
+    }
+
+    @Override
+    public Optional<ExpressionStmt> toExpressionStmt() {
+        return Optional.of(this);
     }
 }

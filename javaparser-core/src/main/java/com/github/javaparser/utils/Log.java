@@ -7,10 +7,13 @@ import java.io.StringWriter;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
- * To avoid dependencies on logging frameworks, we have invited yet another logging framework :-)
+ * To avoid dependencies on logging frameworks, we have invented yet another logging framework :-)
  */
 public class Log {
-    public static class DefaultAdapter implements Adapter {
+    /**
+     * This adapter logs to standard out and standard error.
+     */
+    public static class StandardOutStandardErrorAdapter implements Adapter {
         @Override
         public void info(String message) {
             System.out.println(message);
@@ -44,6 +47,23 @@ public class Log {
         }
     }
 
+    /**
+     * This adapter logs nothing.
+     */
+    public static class SilentAdapter implements Adapter {
+        @Override
+        public void info(String message) {
+        }
+
+        @Override
+        public void trace(String message) {
+        }
+
+        @Override
+        public void error(Throwable throwable, String f) {
+        }
+    }
+
     public interface Adapter {
 
         void info(String message);
@@ -56,8 +76,11 @@ public class Log {
         void error(Throwable throwable, String f);
     }
 
-    private static Adapter CURRENT_ADAPTER = new DefaultAdapter();
+    private static Adapter CURRENT_ADAPTER = new SilentAdapter();
 
+    /**
+     * Change how logging is handled. You can set your own implementation that forwards to your logging library.
+     */
     public static void setAdapter(Adapter adapter) {
         CURRENT_ADAPTER = adapter;
     }

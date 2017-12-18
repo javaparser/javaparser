@@ -26,9 +26,12 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CsmConditional implements CsmElement {
     private final Condition condition;
-    private final ObservableProperty property;
+    private final List<ObservableProperty> properties;
     private final CsmElement thenElement;
     private final CsmElement elseElement;
 
@@ -37,7 +40,10 @@ public class CsmConditional implements CsmElement {
     }
 
     public ObservableProperty getProperty() {
-        return property;
+        if (properties.size() > 1) {
+            throw new IllegalStateException();
+        }
+        return properties.get(0);
     }
 
     public CsmElement getThenElement() {
@@ -74,7 +80,17 @@ public class CsmConditional implements CsmElement {
     }
 
     public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
-        this.property = property;
+        this.properties = Arrays.asList(property);
+        this.condition = condition;
+        this.thenElement = thenElement;
+        this.elseElement = elseElement;
+    }
+
+    public CsmConditional(List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+        if (properties.size() < 1) {
+            throw new IllegalArgumentException();
+        }
+        this.properties = properties;
         this.condition = condition;
         this.thenElement = thenElement;
         this.elseElement = elseElement;
@@ -86,7 +102,10 @@ public class CsmConditional implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
-        boolean test = condition.evaluate(node, property);
+        boolean test = false;
+        for (ObservableProperty prop : properties) {
+            test = test || condition.evaluate(node, prop);
+        }
         if (test) {
             thenElement.prettyPrint(node, printer);
         } else {
