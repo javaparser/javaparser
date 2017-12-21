@@ -53,14 +53,33 @@ import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
     protected final PrettyPrinterConfiguration configuration;
     protected final SourcePrinter printer;
+    private Deque<Position> methodChainPositions = new LinkedList<>();
 
     public PrettyPrintVisitor(PrettyPrinterConfiguration prettyPrinterConfiguration) {
         configuration = prettyPrinterConfiguration;
         printer = new SourcePrinter(configuration.getIndent(), configuration.getEndOfLineCharacter());
+        pushMethodChainPosition(printer.getCursor()); // initialize a default position for methodChainPositions, it is expected by method #resetMethodChainPosition()
     }
 
     public String getSource() {
         return printer.getSource();
+    }
+
+    public void resetMethodChainPosition(Position position) {
+        this.methodChainPositions.pop();
+        this.methodChainPositions.push(position);
+    }
+
+    public void pushMethodChainPosition(Position position) {
+        this.methodChainPositions.push(position);
+    }
+
+    public Position peekMethodChainPosition() {
+        return this.methodChainPositions.peek();
+    }
+
+    public Position popMethodChainPosition() {
+        return this.methodChainPositions.pop();
     }
 
     private void printModifiers(final EnumSet<Modifier> modifiers) {
@@ -700,18 +719,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getScope().get().accept(this, arg);
             if (configuration.isColumnAlignFirstMethodChain()) {
                 if (!(n.getScope().get() instanceof MethodCallExpr) || (!((MethodCallExpr) n.getScope().get()).getScope().isPresent())) {
-                    printer.resetMethodChainPosition(printer.getCursor());
+                    resetMethodChainPosition(printer.getCursor());
                 } else {
-                    printer.wrapToColumn(printer.peekMethodChainPosition().column);
+                    printer.wrapToColumn(peekMethodChainPosition().column);
                 }
             }
             printer.print(".");
         }
         printTypeArgs(n, arg);
         n.getName().accept(this, arg);
-        printer.pushMethodChainPosition(printer.getCursor());
+        pushMethodChainPosition(printer.getCursor());
         printArguments(n.getArguments(), arg);
-        printer.popMethodChainPosition();
+        popMethodChainPosition();
     }
 
     @Override
@@ -1348,10 +1367,15 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        printer
-                .print("/*")
-                .print(normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter()))
-                .println("*/");
+        final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
+        String[] lines = commentContent.split("\\R", -1); // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
+        printer.print("/*");
+        for (int i = 0; i < (lines.length - 1); i++) {
+            printer.print(lines[i]);
+            printer.print(configuration.getEndOfLineCharacter()); // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
+        }
+        printer.print(lines[lines.length - 1]); // last line is not followed by a newline, and simply terminated with `*/`
+        printer.println("*/");
     }
 
     @Override
