@@ -21,30 +21,23 @@
 
 package com.github.javaparser.printer;
 
-import java.text.Normalizer;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.regex.Pattern;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.utils.Utils;
 
 public class SourcePrinter {
 
-    private static final Pattern NEWLINE_PATTERN = Pattern.compile("\r\n|\r|\n");
-
     private final String indentation;
+    private final int indentationLength;
     private final String endOfLineCharacter;
     private int level = 0;
     private boolean indented = false;
     private final StringBuilder buf = new StringBuilder();
     private Position cursor = new Position(1, 0);
-    private Deque<Position> methodChainPositions = new LinkedList<>();
 
     SourcePrinter(final String indentation, final String endOfLineCharacter) {
         this.indentation = indentation;
+        this.indentationLength = indentation.length();
         this.endOfLineCharacter = endOfLineCharacter;
-        pushMethodChainPosition(cursor); // initialize a default position for methodChainPositions, it is expected by method #resetMethodChainPosition()
     }
 
     public SourcePrinter indent() {
@@ -59,66 +52,75 @@ public class SourcePrinter {
 
     private void makeIndent() {
         for (int i = 0; i < level; i++) {
-            bufAppend(indentation);
+            buf.append(indentation);
+            cursor = Position.pos(cursor.line, cursor.column + indentationLength);
         }
     }
 
+    /**
+     * Append the source string passed as argument to the buffer.
+     * If this is being appended at the beginning of a line, performs indentation first.
+     * <p> 
+     * The source line to be printed should not contain newline/carriage-return characters;
+     * use {@link #println(String)} to automatically append a newline at the end of the source string.
+     * If the source line passed as argument contains newline/carriage-return characters would
+     * impredictably affect a correct computation of the current {@link #getCursor()} position. 
+     * 
+     * @see {@link #println(String)}
+     * @param arg source line to be printed (should not contain newline/carriage-return characters)
+     * @return this instance, for nesting calls to method as fluent interface
+     */
     public SourcePrinter print(final String arg) {
         if (!indented) {
             makeIndent();
             indented = true;
         }
-        bufAppend(arg);
+        buf.append(arg);
+        cursor = Position.pos(cursor.line, cursor.column + arg.length());
         return this;
     }
 
+    /**
+     * Append the source string passed as argument to the buffer, then append a newline.
+     * If this is being appended at the beginning of a line, performs indentation first.
+     * <p>  
+     * The source line to be printed should not contain newline/carriage-return characters.
+     * If the source line passed as argument contains newline/carriage-return characters would
+     * impredictably affect a correct computation of the current {@link #getCursor()} position. 
+     * 
+     * @param arg source line to be printed (should not contain newline/carriage-return characters)
+     * @return this instance, for nesting calls to method as fluent interface
+     */
     public SourcePrinter println(final String arg) {
         print(arg);
         println();
         return this;
     }
 
+    /**
+     * Append a newline to the buffer.
+     * 
+     * @return this instance, for nesting calls to method as fluent interface
+     */
     public SourcePrinter println() {
-        bufAppend(endOfLineCharacter);
+        buf.append(endOfLineCharacter);
+        cursor = Position.pos(cursor.line + 1, 0);
         indented = false;
         return this;
     }
 
-    private StringBuilder bufAppend(final String arg) {
-        updateCursor(arg);
-        return buf.append(arg);
-    }
-
-    private void updateCursor(String arg) {
-        String[] lines = NEWLINE_PATTERN.split(arg);
-        if ( lines.length == 0 ) {
-            cursor = Position.pos(cursor.line + 1, 0);
-        } else if ( lines.length == 1 ) {
-            cursor = Position.pos(cursor.line, cursor.column + Normalizer.normalize(lines[0],Normalizer.Form.NFC).length() );
-        } else {
-            cursor = Position.pos(cursor.line + (lines.length -1), 0 + Normalizer.normalize(lines[lines.length-1],Normalizer.Form.NFC).length());
-        }
-    }
-
+    /**
+     * Return the current cursor position (line, column) in the source printer buffer.
+     * <p> 
+     * Please notice in order to guarantee a correct computation of the cursor position,
+     * this printer expect the contracts of the methods {@link #print(String)} and {@link #println(String)}
+     * has been respected through all method calls, meaning the source string passed as argument to those method
+     * calls did not contain newline/carriage-return characters.
+     * 
+     * @return the current cursor position (line, column).
+     */
     public Position getCursor() {
         return cursor;
-    }
-
-    public void resetMethodChainPosition(Position position) {
-        this.methodChainPositions.pop();
-        this.methodChainPositions.push(position);
-    }
-
-    public void pushMethodChainPosition(Position position) {
-        this.methodChainPositions.push(position);
-    }
-
-    public Position peekMethodChainPosition() {
-        return this.methodChainPositions.peek();
-    }
-
-    public Position popMethodChainPosition() {
-        return this.methodChainPositions.pop();
     }
 
     /**
