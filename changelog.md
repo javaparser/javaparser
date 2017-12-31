@@ -1,3 +1,8 @@
+Version 3.5.8
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/71?closed=1)
+* the module name is now set to com.github.javaparser.core
+
 Version 3.5.7
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/70?closed=1)
