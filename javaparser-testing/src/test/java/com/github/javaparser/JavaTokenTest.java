@@ -60,12 +60,20 @@ public class JavaTokenTest {
         token.getPreviousToken().ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
         assertTrue(token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
     }
-    
+
     @Test
     public void testAFewImagesForTokenKinds() {
         assertEquals("=", new JavaToken(ASSIGN).getText());
         // TODO this shouldn't be a space.
         assertEquals(" ", new JavaToken(EOF).getText());
         assertEquals("*/", new JavaToken(JAVADOC_COMMENT).getText());
+    }
+
+    @Test
+    public void testKindEnum() {
+        JavaToken.Kind kind = JavaToken.Kind.valueOf(GeneratedJavaParserConstants.ASSERT);
+
+        assertEquals(JavaToken.Kind.ASSERT, kind);
+        assertEquals(GeneratedJavaParserConstants.ASSERT, kind.getKind());
     }
 }

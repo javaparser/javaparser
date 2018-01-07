@@ -249,7 +249,7 @@ public class JavaToken {
             this.kind = kind;
         }
 
-        public Kind valueOf(int kind) {
+        public static Kind valueOf(int kind) {
             switch(kind) {
                 case 142:
                     return CTRL_Z;
