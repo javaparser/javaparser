@@ -1,3 +1,10 @@
+Version 3.5.9
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/72?closed=1)
+* BREAKING: the very confusing constructor `NodeList(Node)` (which sets the parent) was removed.
+* To avoid using the int type for token kinds, use the new `JavaToken.Kind` enum.
+It can convert to and from the int kind. 
+
 Version 3.5.8
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/71?closed=1)
