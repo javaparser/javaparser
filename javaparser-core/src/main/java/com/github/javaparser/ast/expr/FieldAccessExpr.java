@@ -144,7 +144,7 @@ public final class FieldAccessExpr extends Expression implements NodeWithSimpleN
     /**
      * Sets the scope
      *
-     * @param scope the scope, can be null
+     * @param scope the scope, can not be null
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
