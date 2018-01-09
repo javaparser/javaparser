@@ -20,8 +20,10 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -31,6 +33,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,5 +93,16 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         } else {
             return getParent().solveSymbolAsValue(name, typeSolver);
         }
+    }
+
+    public SymbolReference<ResolvedFieldDeclaration> solveField(String name, TypeSolver typeSolver) {
+        Collection<ResolvedReferenceTypeDeclaration> rrtds = findTypeDeclarations(Optional.of(wrappedNode.getScope()), typeSolver);
+        for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
+            try {
+                return SymbolReference.solved(rrtd.getField(wrappedNode.getName().getId()));
+            } catch (Throwable t) {
+            }
+        }
+        return SymbolReference.unsolved(ResolvedFieldDeclaration.class);
     }
 }
