@@ -28,6 +28,9 @@ package com.github.javaparser.resolution.declarations;
  */
 public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclaration {
 
+    /**
+     * A constructor can be declared in a class or an enum.
+     */
     @Override
-    ResolvedClassDeclaration declaringType();
+    ResolvedReferenceTypeDeclaration declaringType();
 }
