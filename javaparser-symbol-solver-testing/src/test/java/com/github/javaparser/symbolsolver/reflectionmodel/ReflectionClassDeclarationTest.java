@@ -20,6 +20,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ReflectionClassDeclarationTest {
+public class ReflectionClassDeclarationTest extends AbstractTest {
     
     private TypeSolver typeResolver = new ReflectionTypeSolver(false);
 
@@ -172,15 +173,26 @@ public class ReflectionClassDeclarationTest {
                 .filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE && m.accessSpecifier() != AccessSpecifier.DEFAULT)
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
-        assertEquals(67, methods.size());
+        if (isJava9()) {
+            assertEquals(69, methods.size());
+        } else {
+            assertEquals(67, methods.size());
+        }
         assertEquals("charAt", methods.get(0).getName());
         assertEquals(false, methods.get(0).isAbstract());
         assertEquals(1, methods.get(0).getNumberOfParams());
         assertEquals("int", methods.get(0).getParam(0).getType().describe());
-        assertEquals("concat", methods.get(6).getName());
-        assertEquals(false, methods.get(6).isAbstract());
-        assertEquals(1, methods.get(6).getNumberOfParams());
-        assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
+        if (isJava9()) {
+            assertEquals("compareTo", methods.get(6).getName());
+            assertEquals(false, methods.get(6).isAbstract());
+            assertEquals(1, methods.get(6).getNumberOfParams());
+            assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
+        } else {
+            assertEquals("concat", methods.get(6).getName());
+            assertEquals(false, methods.get(6).isAbstract());
+            assertEquals(1, methods.get(6).getNumberOfParams());
+            assertEquals("java.lang.String", methods.get(6).getParam(0).getType().describe());
+        }
     }
 
     @Test

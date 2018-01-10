@@ -36,4 +36,12 @@ public abstract class AbstractTest {
     protected static String adaptPath(String path) {
         return adaptPath(new File(path)).getPath();
     }
+
+    protected boolean isJava9() {
+        return System.getProperty("java.version").startsWith("9.");
+    }
+
+    protected boolean isJava8() {
+        return System.getProperty("java.version").startsWith("1.8.");
+    }
 }

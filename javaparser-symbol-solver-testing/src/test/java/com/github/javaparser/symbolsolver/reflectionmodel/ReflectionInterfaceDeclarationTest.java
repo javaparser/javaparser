@@ -21,6 +21,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public class ReflectionInterfaceDeclarationTest {
+public class ReflectionInterfaceDeclarationTest extends AbstractTest {
 
     @Test
     public void testGetDeclaredMethods() {
@@ -44,15 +45,27 @@ public class ReflectionInterfaceDeclarationTest {
         List<ResolvedMethodDeclaration> methods = list.getDeclaredMethods().stream()
                 .sorted((a, b) -> a.getName().compareTo(b.getName()))
                 .collect(Collectors.toList());
-        assertEquals(28, methods.size());
-        assertEquals("clear", methods.get(4).getName());
-        assertEquals(true, methods.get(4).isAbstract());
-        assertEquals(0, methods.get(4).getNumberOfParams());
-        assertEquals("contains", methods.get(5).getName());
-        assertEquals(true, methods.get(5).isAbstract());
-        assertEquals(1, methods.get(5).getNumberOfParams());
-        assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
-        assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
+        if (isJava9()) {
+            assertEquals(40, methods.size());
+            assertEquals("clear", methods.get(4).getName());
+            assertEquals(true, methods.get(4).isAbstract());
+            assertEquals(0, methods.get(4).getNumberOfParams());
+            assertEquals("contains", methods.get(5).getName());
+            assertEquals(true, methods.get(5).isAbstract());
+            assertEquals(1, methods.get(5).getNumberOfParams());
+            assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
+            assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
+        } else {
+            assertEquals(28, methods.size());
+            assertEquals("clear", methods.get(4).getName());
+            assertEquals(true, methods.get(4).isAbstract());
+            assertEquals(0, methods.get(4).getNumberOfParams());
+            assertEquals("contains", methods.get(5).getName());
+            assertEquals(true, methods.get(5).isAbstract());
+            assertEquals(1, methods.get(5).getNumberOfParams());
+            assertEquals(true, methods.get(5).getParam(0).getType().isReferenceType());
+            assertEquals(Object.class.getCanonicalName(), methods.get(5).getParam(0).getType().asReferenceType().getQualifiedName());
+        }
     }
 
     @Test
