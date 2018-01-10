@@ -5,6 +5,10 @@
         <module>javaparser-testing</module>
         <module>javaparser-core-generators</module>
         <module>javaparser-metamodel-generator</module>
+        <module>java-symbol-solver-model</module>
+        <module>java-symbol-solver-logic</module>
+        <module>java-symbol-solver-core</module>
+        <module>java-symbol-solver-testing</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>
