@@ -89,7 +89,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
-      <artifactId>java-symbol-solver-logic</artifactId>
+      <artifactId>javaparser-symbol-solver-logic</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
@@ -101,13 +101,13 @@
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
-      <artifactId>java-symbol-solver-model</artifactId>
+      <artifactId>javaparser-symbol-solver-model</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
-      <artifactId>java-symbol-solver-core</artifactId>
+      <artifactId>javaparser-symbol-solver-core</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>

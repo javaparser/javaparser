@@ -34,7 +34,7 @@
   <dependencies>
     <dependency>
       <groupId>com.github.javaparser</groupId>
-      <artifactId>java-symbol-solver-logic</artifactId>
+      <artifactId>javaparser-symbol-solver-logic</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
@@ -46,7 +46,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
-      <artifactId>java-symbol-solver-model</artifactId>
+      <artifactId>javaparser-symbol-solver-model</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>

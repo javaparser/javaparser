@@ -40,7 +40,7 @@
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
-      <artifactId>java-symbol-solver-model</artifactId>
+      <artifactId>javaparser-symbol-solver-model</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
