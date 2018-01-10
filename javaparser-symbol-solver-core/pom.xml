@@ -8,7 +8,7 @@
   </parent>    
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>java-symbol-solver-core</artifactId>
+  <artifactId>javaparser-symbol-solver-core</artifactId>
   <packaging>jar</packaging>
   <description>A Symbol Solver for Java, built on top of JavaParser (core)</description>
   

@@ -8,9 +8,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>java-symbol-solver-model</artifactId>
+    <artifactId>javaparser-symbol-solver-logic</artifactId>
     <packaging>jar</packaging>
-    <description>A Symbol Solver for Java, built on top of JavaParser (model)</description>
+    <description>A Symbol Solver for Java, built on top of JavaParser (logic)</description>
 
     <licenses>
         <license>
@@ -33,15 +33,15 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.github.javaparser</groupId>
-      <artifactId>javaparser-core</artifactId>
-      <version>${project.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
       <version>3.22.0-GA</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>java-symbol-solver-model</artifactId>
+      <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -205,7 +205,6 @@
             </plugin>
         </plugins>
     </build>
-
 
 
 </project>
