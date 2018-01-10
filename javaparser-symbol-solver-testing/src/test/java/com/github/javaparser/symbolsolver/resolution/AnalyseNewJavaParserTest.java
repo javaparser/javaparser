@@ -71,8 +71,18 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
         sourceFileInfoExtractor.solveMethodCalls(sourceFile);
         String output = outErrStream.toString();
 
-        String path = adaptPath(new File("src/test/resources/javaparser_methodcalls_expected_output")).getPath() + "/" + fileName.replaceAll("/", "_") + ".txt";
+        File expectedOutput = new File("src/test/resources/javaparser_methodcalls_expected_output");
+        String path = adaptPath(expectedOutput).getPath() + "/" + fileName.replaceAll("/", "_") + ".txt";
         File dstFile = new File(path);
+
+        if (isJava9()) {
+            String path9 = adaptPath(expectedOutput).getPath() + "/" + fileName.replaceAll("/", "_") + "_J9.txt";
+            File dstFile9 = new File(path9);
+            if (dstFile9.exists()) {
+                path = path9;
+                dstFile = dstFile9;
+            }
+        }
 
         if (DEBUG && (sourceFileInfoExtractor.getKo() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);
