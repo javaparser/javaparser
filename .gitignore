@@ -33,3 +33,4 @@ build-*
 *.asc
 build
 out
+.java-version
