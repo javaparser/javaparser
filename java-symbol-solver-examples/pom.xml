@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.javaparser</groupId>
+  <artifactId>java-symbol-solver-examples</artifactId>
+  <version>0.6.4-SNAPSHOT</version>
+  <name>java-symbol-solver-examples</name>
+  <description>null</description>
+  <url>https://github.com/javaparser/java-symbol-solver</url>
+  <licenses>
+    <license>
+      <name>The MIT License (MIT)</name>
+      <url>http://opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>ftomassetti</id>
+      <name>Federico Tomassetti</name>
+      <email>federico@tomassetti.me</email>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:https://github.com/javaparser/java-symbol-solver.git</connection>
+    <developerConnection>scm:git:git@github.com:javaparser/java-symbol-solver.git</developerConnection>
+    <url>https://github.com/javaparser/java-symbol-solver.git</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>3.3.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>21.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>java-symbol-solver-core</artifactId>
+      <version>0.6.4-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>
