@@ -1,8 +1,0 @@
-
-description = ''
-dependencies {
-    compile group: 'com.google.guava', name: 'guava', version:'21.0'
-    compile project(':java-symbol-solver-core')
-    testCompile group: 'junit', name: 'junit', version:'4.12'
-    testCompile group: 'org.easymock', name: 'easymock', version:'3.3.1'
-}
