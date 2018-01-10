@@ -1,0 +1,7 @@
+  Line 58) setIdentifier(identifier) ==> com.github.javaparser.ast.expr.MethodReferenceExpr.setIdentifier(java.lang.String)
+  Line 59) setScope(scope) ==> com.github.javaparser.ast.expr.MethodReferenceExpr.setScope(com.github.javaparser.ast.expr.Expression)
+  Line 60) setTypeArguments(typeArguments) ==> com.github.javaparser.ast.expr.MethodReferenceExpr.setTypeArguments(java.util.List<com.github.javaparser.ast.type.Type<?>>)
+  Line 66) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.MethodReferenceExpr, A)
+  Line 71) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.MethodReferenceExpr, A)
+  Line 80) setAsParentNodeOf(this.scope) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 92) setAsParentNodeOf(this.typeArguments) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

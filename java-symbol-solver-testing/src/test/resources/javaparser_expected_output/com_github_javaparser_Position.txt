@@ -1,0 +1,11 @@
+
+[ Class com.github.javaparser.Position ]
+  superclass: java.lang.Object
+  Line 30) new Position(Node.ABSOLUTE_BEGIN_LINE, -1) ==> com.github.javaparser.Position
+  Line 31) new Position(Node.ABSOLUTE_END_LINE, -1) ==> com.github.javaparser.Position
+  Line 34) new Position(node.getBeginLine(), node.getBeginColumn()) ==> com.github.javaparser.Position
+  Line 38) new Position(node.getEndLine(), node.getEndColumn()) ==> com.github.javaparser.Position
+  Line 42) this.line = line ==> int
+  Line 43) this.column = column ==> int
+  Line 47) this.line ==> int
+  Line 51) this.column ==> int

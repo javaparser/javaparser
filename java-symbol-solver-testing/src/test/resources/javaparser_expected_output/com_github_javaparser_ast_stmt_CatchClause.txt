@@ -1,0 +1,23 @@
+
+[ Class com.github.javaparser.ast.stmt.CatchClause ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 47) setExcept(except) ==> void
+  Line 48) setCatchBlock(catchBlock) ==> void
+  Line 52) new MultiTypeParameter(exceptModifier, exceptAnnotations, exceptTypes, exceptId) ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 52) catchBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 58) beginLine ==> int
+  Line 58) beginColumn ==> int
+  Line 58) endLine ==> int
+  Line 58) endColumn ==> int
+  Line 59) setExcept(new MultiTypeParameter(beginLine, beginColumn, endLine, endColumn, exceptModifier, exceptAnnotations, exceptTypes, exceptId)) ==> void
+  Line 60) setCatchBlock(catchBlock) ==> void
+  Line 64) v.visit(this, arg) ==> R
+  Line 68) v.visit(this, arg) ==> void
+  Line 72) catchBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 76) except ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 80) this.catchBlock = catchBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 81) setAsParentNodeOf(this.catchBlock) ==> void
+  Line 85) this.except = except ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 86) setAsParentNodeOf(this.except) ==> void

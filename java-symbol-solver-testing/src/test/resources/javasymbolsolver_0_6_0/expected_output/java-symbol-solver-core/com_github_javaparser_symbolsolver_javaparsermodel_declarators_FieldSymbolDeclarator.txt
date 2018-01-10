@@ -1,0 +1,3 @@
+  Line 40) wrappedNode.getVariables() ==> com.github.javaparser.ast.body.FieldDeclaration.getVariables()
+  Line 41) symbols.add(JavaParserSymbolDeclaration.field(v, typeSolver)) ==> java.util.List.add(E)
+  Line 41) JavaParserSymbolDeclaration.field(v, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration.field(com.github.javaparser.ast.body.VariableDeclarator, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

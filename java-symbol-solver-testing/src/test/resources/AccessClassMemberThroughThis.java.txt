@@ -1,0 +1,17 @@
+class AccessClassMemberThroughThis {
+
+	private String label;
+
+	public void setLabel(final String label) {
+		this.label = label;
+	}
+
+	public String getLabel1() {
+		return label;
+	}
+
+	public String getLabel2() {
+		return this.label;
+	}
+
+}

@@ -1,0 +1,11 @@
+class A {
+    A[] foo(String[] p1, int[] p2) { }
+}
+
+class B extends A {
+    float b;
+}
+
+class C extends B {
+    int c;
+}

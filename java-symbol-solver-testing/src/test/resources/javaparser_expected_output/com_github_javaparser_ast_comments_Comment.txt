@@ -1,0 +1,26 @@
+
+[ Class com.github.javaparser.ast.comments.Comment ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 43) this.content = content ==> java.lang.String
+  Line 47) beginLine ==> int
+  Line 47) beginColumn ==> int
+  Line 47) endLine ==> int
+  Line 47) endColumn ==> int
+  Line 48) this.content = content ==> java.lang.String
+  Line 57) content ==> java.lang.String
+  Line 67) this.content = content ==> java.lang.String
+  Line 72) false ==> boolean
+  Line 77) isLineComment() ==> boolean
+  Line 79) (LineComment) this ==> com.github.javaparser.ast.comments.LineComment
+  Line 81) new UnsupportedOperationException("Not a line comment") ==> java.lang.UnsupportedOperationException
+  Line 87) this.commentedNode ==> com.github.javaparser.ast.Node
+  Line 92) commentedNode == null ==> boolean
+  Line 94) this.commentedNode = commentedNode ==> com.github.javaparser.ast.Node
+  Line 97) commentedNode == this ==> boolean
+  Line 99) new IllegalArgumentException() ==> java.lang.IllegalArgumentException
+  Line 101) commentedNode instanceof Comment ==> boolean
+  Line 103) new IllegalArgumentException() ==> java.lang.IllegalArgumentException
+  Line 105) this.commentedNode = commentedNode ==> com.github.javaparser.ast.Node
+  Line 110) this.commentedNode == null ==> boolean

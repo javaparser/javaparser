@@ -1,0 +1,7 @@
+class Foo<A, B> {
+    public <C> void foo(C c);
+
+    public void usage(String s) {
+        return foo(s);
+    }
+}

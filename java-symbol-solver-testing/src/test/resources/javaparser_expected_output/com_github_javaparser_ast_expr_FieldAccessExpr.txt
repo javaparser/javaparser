@@ -1,0 +1,27 @@
+
+[ Class com.github.javaparser.ast.expr.FieldAccessExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 45) setScope(scope) ==> void
+  Line 46) setField(field) ==> void
+  Line 51) beginLine ==> int
+  Line 51) beginColumn ==> int
+  Line 51) endLine ==> int
+  Line 51) endColumn ==> int
+  Line 52) setScope(scope) ==> void
+  Line 53) setTypeArgs(typeArgs) ==> void
+  Line 54) setField(field) ==> void
+  Line 58) v.visit(this, arg) ==> R
+  Line 62) v.visit(this, arg) ==> void
+  Line 66) field.getName() ==> java.lang.String
+  Line 70) field ==> com.github.javaparser.ast.expr.NameExpr
+  Line 74) scope ==> com.github.javaparser.ast.expr.Expression
+  Line 78) typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 82) this.field = new NameExpr(field) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 86) this.field = field ==> com.github.javaparser.ast.expr.NameExpr
+  Line 90) this.scope = scope ==> com.github.javaparser.ast.expr.Expression
+  Line 91) setAsParentNodeOf(this.scope) ==> void
+  Line 95) this.typeArgs = typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 96) setAsParentNodeOf(this.typeArgs) ==> void

@@ -1,0 +1,7 @@
+  Line 38) getParentNode(wrappedNode) ==> com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode(com.github.javaparser.ast.Node)
+  Line 45) wrappedNode.getVariables().stream().map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver)).collect(Collectors.toCollection(() -> new LinkedList<>())) ==> ERROR
+  Line 45) wrappedNode.getVariables().stream().map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver)) ==> ERROR
+  Line 45) wrappedNode.getVariables().stream() ==> java.util.Collection.stream()
+  Line 45) wrappedNode.getVariables() ==> com.github.javaparser.ast.expr.VariableDeclarationExpr.getVariables()
+  Line 46) JavaParserSymbolDeclaration.localVar(v, typeSolver) ==> ERROR
+  Line 48) Collectors.toCollection(() -> new LinkedList<>()) ==> java.util.stream.Collectors.toCollection(java.util.function.Supplier<C>)

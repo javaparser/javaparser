@@ -1,0 +1,16 @@
+<!DOCTYPE walkmod PUBLIC "-//WALKMOD//DTD"  "http://www.walkmod.com/dtd/walkmod-1.1.dtd" >
+<walkmod>
+
+    <chain name="main-chain">
+        <reader path="src/main/java">
+        </reader>
+        <walker>
+            <transformations>
+                <transformation type="dead-code-cleaner"/>
+            </transformations>
+        </walker>
+        <writer path="src/main/java"
+                type="javalang:string-writer">
+        </writer>
+    </chain>
+</walkmod>

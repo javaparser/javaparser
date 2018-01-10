@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.body.MultiTypeParameter ]
+  superclass: com.github.javaparser.ast.body.BaseParameter
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 37) modifiers ==> int
+  Line 37) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 37) id ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 38) this.types = types ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 42) beginLine ==> int
+  Line 42) beginColumn ==> int
+  Line 42) endLine ==> int
+  Line 42) endColumn ==> int
+  Line 42) modifiers ==> int
+  Line 42) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 42) id ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 43) this.types = types ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 48) v.visit(this, arg) ==> R
+  Line 53) v.visit(this, arg) ==> void
+  Line 57) types ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 61) this.types = types ==> java.util.List<com.github.javaparser.ast.type.Type>

@@ -1,0 +1,32 @@
+import java.util.List;
+
+public class JavaTest {
+    class MethodDeclaration {
+        public <T> List<T> getNodesByType(Class<T> clazz) {
+            return new ArrayList<T>();
+        }
+    }
+    class JavaParserFacade {
+        public Solved solve(MethodDeclaration method) {
+            return new Solved();
+        }
+    }
+    class Solved {
+        public boolean isSolved() {
+            return true;
+        }
+    }
+    private List<String> foo(MethodDeclaration methodDecl) {
+        return methodDecl
+                .getNodesByType(MethodDeclaration.class)
+                .stream()
+                .map(statement -> {
+                    try {
+                        return new JavaParserFacade().solve(statement);
+                    } catch (Throwable e) {
+                        return null;
+                    }
+                })
+                .filter(parsed -> parsed != null && parsed.isSolved());
+    }
+}

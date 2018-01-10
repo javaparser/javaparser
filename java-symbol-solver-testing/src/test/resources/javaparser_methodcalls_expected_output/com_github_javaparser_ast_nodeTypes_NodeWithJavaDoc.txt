@@ -1,0 +1,1 @@
+  Line 45) ((Node) this).setComment(new JavadocComment(comment)) ==> com.github.javaparser.ast.Node.setComment(com.github.javaparser.ast.comments.Comment)

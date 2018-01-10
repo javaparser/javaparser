@@ -1,0 +1,10 @@
+public class VariadicIssue {
+
+  public static void main(String[] args) {
+     variadicMethod(true, 1, 2, 3);
+  }
+
+  static String variadicMethod(boolean b, int... ints) {
+    return "";
+  }
+}

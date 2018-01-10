@@ -1,0 +1,27 @@
+
+[ Class com.github.javaparser.ast.stmt.ForeachStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 45) setVariable(var) ==> void
+  Line 46) setIterable(iterable) ==> void
+  Line 47) setBody(body) ==> void
+  Line 54) beginLine ==> int
+  Line 54) beginColumn ==> int
+  Line 54) endLine ==> int
+  Line 54) endColumn ==> int
+  Line 55) setVariable(var) ==> void
+  Line 56) setIterable(iterable) ==> void
+  Line 57) setBody(body) ==> void
+  Line 62) v.visit(this, arg) ==> R
+  Line 67) v.visit(this, arg) ==> void
+  Line 71) body ==> com.github.javaparser.ast.stmt.Statement
+  Line 75) iterable ==> com.github.javaparser.ast.expr.Expression
+  Line 79) var ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 83) this.body = body ==> com.github.javaparser.ast.stmt.Statement
+  Line 84) setAsParentNodeOf(this.body) ==> void
+  Line 88) this.iterable = iterable ==> com.github.javaparser.ast.expr.Expression
+  Line 89) setAsParentNodeOf(this.iterable) ==> void
+  Line 93) this.var = var ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 94) setAsParentNodeOf(this.var) ==> void

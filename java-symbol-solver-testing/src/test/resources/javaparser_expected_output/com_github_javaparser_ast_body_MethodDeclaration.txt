@@ -1,0 +1,120 @@
+
+[ Class com.github.javaparser.ast.body.MethodDeclaration ]
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: com.github.javaparser.ast.body.WithDeclaration
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  Line 60) false ==> boolean
+  Line 66) setModifiers(modifiers) ==> void
+  Line 67) setType(type) ==> void
+  Line 68) setName(name) ==> void
+  Line 72) setModifiers(modifiers) ==> void
+  Line 73) setType(type) ==> void
+  Line 74) setName(name) ==> void
+  Line 75) setParameters(parameters) ==> void
+  Line 81) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 82) setModifiers(modifiers) ==> void
+  Line 83) setTypeParameters(typeParameters) ==> void
+  Line 84) setType(type) ==> void
+  Line 85) setName(name) ==> void
+  Line 86) setParameters(parameters) ==> void
+  Line 87) setArrayCount(arrayCount) ==> void
+  Line 88) setThrows(throws_) ==> void
+  Line 89) setBody(block) ==> void
+  Line 96) beginLine ==> int
+  Line 96) beginColumn ==> int
+  Line 96) endLine ==> int
+  Line 96) endColumn ==> int
+  Line 96) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 97) setModifiers(modifiers) ==> void
+  Line 98) setTypeParameters(typeParameters) ==> void
+  Line 99) setType(type) ==> void
+  Line 100) setName(name) ==> void
+  Line 101) setParameters(parameters) ==> void
+  Line 102) setArrayCount(arrayCount) ==> void
+  Line 103) setThrows(throws_) ==> void
+  Line 104) setBody(block) ==> void
+  Line 108) v.visit(this, arg) ==> R
+  Line 112) v.visit(this, arg) ==> void
+  Line 116) arrayCount ==> int
+  Line 121) body ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 131) modifiers ==> int
+  Line 135) name.getName() ==> java.lang.String
+  Line 139) name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 143) parameters == null ==> boolean
+  Line 144) parameters = new ArrayList<Parameter>() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 146) parameters ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 150) throws_ == null ==> boolean
+  Line 151) throws_ = new ArrayList<NameExpr>() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 153) throws_ ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 157) type ==> com.github.javaparser.ast.type.Type
+  Line 161) typeParameters ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 165) this.arrayCount = arrayCount ==> int
+  Line 169) this.body = body ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 170) setAsParentNodeOf(this.body) ==> void
+  Line 174) this.modifiers = modifiers ==> int
+  Line 178) this.name = new NameExpr(name) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 182) this.name = name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 186) this.parameters = parameters ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 187) setAsParentNodeOf(this.parameters) ==> void
+  Line 191) this.throws_ = throws_ ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 192) setAsParentNodeOf(this.throws_) ==> void
+  Line 196) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 197) setAsParentNodeOf(this.type) ==> void
+  Line 201) this.typeParameters = typeParameters ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 202) setAsParentNodeOf(typeParameters) ==> void
+  Line 207) isDefault ==> boolean
+  Line 211) this.isDefault = isDefault ==> boolean
+  Line 217) getDeclarationAsString(true, true, true) ==> java.lang.String
+  Line 222) getDeclarationAsString(includingModifiers, includingThrows, true) ==> java.lang.String
+  Line 235) StringBuffer sb = new StringBuffer() ==> java.lang.StringBuffer
+  Line 235) new StringBuffer() ==> java.lang.StringBuffer
+  Line 236) includingModifiers ==> boolean
+  Line 237) AccessSpecifier accessSpecifier = ModifierSet.getAccessSpecifier(getModifiers()) ==> com.github.javaparser.ast.AccessSpecifier
+  Line 237) ModifierSet.getAccessSpecifier(getModifiers()) ==> com.github.javaparser.ast.AccessSpecifier
+  Line 238) sb.append(accessSpecifier.getCodeRepresenation()) ==> java.lang.StringBuffer
+  Line 239) sb.append(accessSpecifier == AccessSpecifier.DEFAULT ? "" : " ") ==> java.lang.StringBuffer
+  Line 240) ModifierSet.isStatic(getModifiers()) ==> boolean
+  Line 241) sb.append("static ") ==> java.lang.StringBuffer
+  Line 243) ModifierSet.isAbstract(getModifiers()) ==> boolean
+  Line 244) sb.append("abstract ") ==> java.lang.StringBuffer
+  Line 246) ModifierSet.isFinal(getModifiers()) ==> boolean
+  Line 247) sb.append("final ") ==> java.lang.StringBuffer
+  Line 249) ModifierSet.isNative(getModifiers()) ==> boolean
+  Line 250) sb.append("native ") ==> java.lang.StringBuffer
+  Line 252) ModifierSet.isSynchronized(getModifiers()) ==> boolean
+  Line 253) sb.append("synchronized ") ==> java.lang.StringBuffer
+  Line 257) sb.append(getType().toStringWithoutComments()) ==> java.lang.StringBuffer
+  Line 258) sb.append(" ") ==> java.lang.StringBuffer
+  Line 259) sb.append(getName()) ==> java.lang.StringBuffer
+  Line 260) sb.append("(") ==> java.lang.StringBuffer
+  Line 261) boolean firstParam = true ==> boolean
+  Line 261) true ==> boolean
+  Line 262) Parameter param ==> com.github.javaparser.ast.body.Parameter
+  Line 262) getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 264) firstParam ==> boolean
+  Line 265) firstParam = false ==> boolean
+  Line 267) sb.append(", ") ==> java.lang.StringBuffer
+  Line 269) includingParameterName ==> boolean
+  Line 270) sb.append(param.toStringWithoutComments()) ==> java.lang.StringBuffer
+  Line 272) sb.append(param.getType().toStringWithoutComments()) ==> java.lang.StringBuffer
+  Line 273) param.isVarArgs() ==> boolean
+  Line 274) sb.append("...") ==> java.lang.StringBuffer
+  Line 278) sb.append(")") ==> java.lang.StringBuffer
+  Line 279) includingThrows ==> boolean
+  Line 280) boolean firstThrow = true ==> boolean
+  Line 280) true ==> boolean
+  Line 281) NameExpr thr ==> com.github.javaparser.ast.expr.NameExpr
+  Line 281) getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 282) firstThrow ==> boolean
+  Line 283) firstThrow = false ==> boolean
+  Line 284) sb.append(" throws ") ==> java.lang.StringBuffer
+  Line 286) sb.append(", ") ==> java.lang.StringBuffer
+  Line 288) sb.append(thr.toStringWithoutComments()) ==> java.lang.StringBuffer
+  Line 291) sb.toString() ==> java.lang.String
+  Line 296) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 301) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

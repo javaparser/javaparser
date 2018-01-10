@@ -1,0 +1,5 @@
+  Line 39) setClassExpr(classExpr) ==> com.github.javaparser.ast.expr.SuperExpr.setClassExpr(com.github.javaparser.ast.expr.Expression)
+  Line 44) setClassExpr(classExpr) ==> com.github.javaparser.ast.expr.SuperExpr.setClassExpr(com.github.javaparser.ast.expr.Expression)
+  Line 48) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.SuperExpr, A)
+  Line 52) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.SuperExpr, A)
+  Line 61) setAsParentNodeOf(this.classExpr) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

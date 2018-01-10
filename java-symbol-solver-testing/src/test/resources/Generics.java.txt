@@ -1,0 +1,46 @@
+package me.tomassetti.symbolsolver.javaparser;
+
+import java.util.Optional;
+import java.util.List;
+
+public final class Generics {
+
+    Optional<String> s;
+    Optional<Integer> i;
+    Optional<Generics> g;
+
+}
+
+public final class SomeCollection<A> {
+
+    public A a;
+    public List<A> as;
+
+    public void foo1(){
+        new SomeCollection<String>().a;
+    }
+
+    public void foo2(){
+        new SomeCollection<String>().as;
+    }
+
+}
+
+public final class GenericMethodCalls {
+
+    public class Base <T> {
+
+        public void callee(T data) {
+        }
+
+    }
+
+    public class Derived extends Base<String> {
+
+        public void caller() {
+            callee("test");
+        }
+
+    }
+
+}

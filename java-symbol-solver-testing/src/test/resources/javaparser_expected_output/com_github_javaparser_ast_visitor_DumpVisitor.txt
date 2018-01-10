@@ -1,0 +1,1076 @@
+
+[ Class com.github.javaparser.ast.visitor.DumpVisitor ]
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.visitor.VoidVisitor
+  Line 93) true ==> boolean
+  Line 97) this.printComments = printComments ==> boolean
+
+[ Class com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter ]
+  superclass: java.lang.Object
+  Line 102) 0 ==> int
+  Line 104) false ==> boolean
+  Line 106) new StringBuilder() ==> java.lang.StringBuilder
+  Line 109) level++ ==> int
+  Line 113) level-- ==> int
+  Line 117) int i = 0 ==> int
+  Line 117) 0 ==> int
+  Line 117) i < level ==> boolean
+  Line 117) i++ ==> int
+  Line 118) buf.append("    ") ==> java.lang.StringBuilder
+  Line 123) !indented ==> boolean
+  Line 124) makeIndent() ==> void
+  Line 125) indented = true ==> boolean
+  Line 127) buf.append(arg) ==> java.lang.StringBuilder
+  Line 131) print(arg) ==> void
+  Line 132) printLn() ==> void
+  Line 136) buf.append(System.getProperty("line.separator")) ==> java.lang.StringBuilder
+  Line 137) indented = false ==> boolean
+  Line 141) buf.toString() ==> java.lang.String
+  Line 145) getSource() ==> java.lang.String
+  Line 149) new SourcePrinter() ==> com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter
+  Line 152) printer.getSource() ==> java.lang.String
+  Line 156) ModifierSet.isPrivate(modifiers) ==> boolean
+  Line 157) printer.print("private ") ==> void
+  Line 159) ModifierSet.isProtected(modifiers) ==> boolean
+  Line 160) printer.print("protected ") ==> void
+  Line 162) ModifierSet.isPublic(modifiers) ==> boolean
+  Line 163) printer.print("public ") ==> void
+  Line 165) ModifierSet.isAbstract(modifiers) ==> boolean
+  Line 166) printer.print("abstract ") ==> void
+  Line 168) ModifierSet.isStatic(modifiers) ==> boolean
+  Line 169) printer.print("static ") ==> void
+  Line 171) ModifierSet.isFinal(modifiers) ==> boolean
+  Line 172) printer.print("final ") ==> void
+  Line 174) ModifierSet.isNative(modifiers) ==> boolean
+  Line 175) printer.print("native ") ==> void
+  Line 177) ModifierSet.isStrictfp(modifiers) ==> boolean
+  Line 178) printer.print("strictfp ") ==> void
+  Line 180) ModifierSet.isSynchronized(modifiers) ==> boolean
+  Line 181) printer.print("synchronized ") ==> void
+  Line 183) ModifierSet.isTransient(modifiers) ==> boolean
+  Line 184) printer.print("transient ") ==> void
+  Line 186) ModifierSet.isVolatile(modifiers) ==> boolean
+  Line 187) printer.print("volatile ") ==> void
+  Line 192) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 192) members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 193) printer.printLn() ==> void
+  Line 194) member.accept(this, arg) ==> void
+  Line 195) printer.printLn() ==> void
+  Line 200) !isNullOrEmpty(annotations) ==> boolean
+  Line 201) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 201) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 202) a.accept(this, arg) ==> void
+  Line 203) printer.printLn() ==> void
+  Line 209) !isNullOrEmpty(annotations) ==> boolean
+  Line 210) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 210) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 211) a.accept(this, arg) ==> void
+  Line 212) printer.print(" ") ==> void
+  Line 218) !isNullOrEmpty(args) ==> boolean
+  Line 219) printer.print("<") ==> void
+  Line 220) final Iterator<Type> i = args.iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 220) args.iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 220) i.hasNext() ==> boolean
+  Line 221) final Type t = i.next() ==> com.github.javaparser.ast.type.Type
+  Line 221) i.next() ==> com.github.javaparser.ast.type.Type
+  Line 222) t.accept(this, arg) ==> void
+  Line 223) i.hasNext() ==> boolean
+  Line 224) printer.print(", ") ==> void
+  Line 227) printer.print(">") ==> void
+  Line 232) !isNullOrEmpty(args) ==> boolean
+  Line 233) printer.print("<") ==> void
+  Line 234) final Iterator<TypeParameter> i = args.iterator() ==> java.util.Iterator<com.github.javaparser.ast.TypeParameter>
+  Line 234) args.iterator() ==> java.util.Iterator<com.github.javaparser.ast.TypeParameter>
+  Line 234) i.hasNext() ==> boolean
+  Line 235) final TypeParameter t = i.next() ==> com.github.javaparser.ast.TypeParameter
+  Line 235) i.next() ==> com.github.javaparser.ast.TypeParameter
+  Line 236) t.accept(this, arg) ==> void
+  Line 237) i.hasNext() ==> boolean
+  Line 238) printer.print(", ") ==> void
+  Line 241) printer.print(">") ==> void
+  Line 246) printer.print("(") ==> void
+  Line 247) !isNullOrEmpty(args) ==> boolean
+  Line 248) final Iterator<Expression> i = args.iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 248) args.iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 248) i.hasNext() ==> boolean
+  Line 249) final Expression e = i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 249) i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 250) e.accept(this, arg) ==> void
+  Line 251) i.hasNext() ==> boolean
+  Line 252) printer.print(", ") ==> void
+  Line 256) printer.print(")") ==> void
+  Line 260) javadoc != null ==> boolean
+  Line 261) javadoc.accept(this, arg) ==> void
+  Line 266) javacomment != null ==> boolean
+  Line 267) javacomment.accept(this, arg) ==> void
+  Line 272) printJavaComment(n.getComment(), arg) ==> void
+  Line 274) n.getPackage() != null ==> boolean
+  Line 275) n.getPackage().accept(this, arg) ==> void
+  Line 278) n.getImports() != null ==> boolean
+  Line 279) final ImportDeclaration i ==> com.github.javaparser.ast.ImportDeclaration
+  Line 279) n.getImports() ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 280) i.accept(this, arg) ==> void
+  Line 282) printer.printLn() ==> void
+  Line 285) n.getTypes() != null ==> boolean
+  Line 286) final Iterator<TypeDeclaration> i = n.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 286) n.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 286) i.hasNext() ==> boolean
+  Line 287) i.next().accept(this, arg) ==> void
+  Line 288) printer.printLn() ==> void
+  Line 289) i.hasNext() ==> boolean
+  Line 290) printer.printLn() ==> void
+  Line 295) printOrphanCommentsEnding(n) ==> void
+  Line 299) printJavaComment(n.getComment(), arg) ==> void
+  Line 300) printAnnotations(n.getAnnotations(), arg) ==> void
+  Line 301) printer.print("package ") ==> void
+  Line 302) n.getName().accept(this, arg) ==> void
+  Line 303) printer.printLn(";") ==> void
+  Line 304) printer.printLn() ==> void
+  Line 306) printOrphanCommentsEnding(n) ==> void
+  Line 310) printJavaComment(n.getComment(), arg) ==> void
+  Line 311) printer.print(n.getName()) ==> void
+  Line 313) printOrphanCommentsEnding(n) ==> void
+  Line 317) printJavaComment(n.getComment(), arg) ==> void
+  Line 318) n.getQualifier().accept(this, arg) ==> void
+  Line 319) printer.print(".") ==> void
+  Line 320) printer.print(n.getName()) ==> void
+  Line 322) printOrphanCommentsEnding(n) ==> void
+  Line 326) printJavaComment(n.getComment(), arg) ==> void
+  Line 327) printer.print("import ") ==> void
+  Line 328) n.isStatic() ==> boolean
+  Line 329) printer.print("static ") ==> void
+  Line 331) n.getName().accept(this, arg) ==> void
+  Line 332) n.isAsterisk() ==> boolean
+  Line 333) printer.print(".*") ==> void
+  Line 335) printer.printLn(";") ==> void
+  Line 337) printOrphanCommentsEnding(n) ==> void
+  Line 341) printJavaComment(n.getComment(), arg) ==> void
+  Line 342) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 343) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 344) printModifiers(n.getModifiers()) ==> void
+  Line 346) n.isInterface() ==> boolean
+  Line 347) printer.print("interface ") ==> void
+  Line 349) printer.print("class ") ==> void
+  Line 352) printer.print(n.getName()) ==> void
+  Line 354) printTypeParameters(n.getTypeParameters(), arg) ==> void
+  Line 356) !isNullOrEmpty(n.getExtends()) ==> boolean
+  Line 357) printer.print(" extends ") ==> void
+  Line 358) final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 358) n.getExtends().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 358) i.hasNext() ==> boolean
+  Line 359) final ClassOrInterfaceType c = i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 359) i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 360) c.accept(this, arg) ==> void
+  Line 361) i.hasNext() ==> boolean
+  Line 362) printer.print(", ") ==> void
+  Line 367) !isNullOrEmpty(n.getImplements()) ==> boolean
+  Line 368) printer.print(" implements ") ==> void
+  Line 369) final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 369) n.getImplements().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 369) i.hasNext() ==> boolean
+  Line 370) final ClassOrInterfaceType c = i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 370) i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 371) c.accept(this, arg) ==> void
+  Line 372) i.hasNext() ==> boolean
+  Line 373) printer.print(", ") ==> void
+  Line 378) printer.printLn(" {") ==> void
+  Line 379) printer.indent() ==> void
+  Line 380) !isNullOrEmpty(n.getMembers()) ==> boolean
+  Line 381) printMembers(n.getMembers(), arg) ==> void
+  Line 384) printOrphanCommentsEnding(n) ==> void
+  Line 386) printer.unindent() ==> void
+  Line 387) printer.print("}") ==> void
+  Line 391) printJavaComment(n.getComment(), arg) ==> void
+  Line 392) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 393) printer.print(";") ==> void
+  Line 395) printOrphanCommentsEnding(n) ==> void
+  Line 399) printer.print("/**") ==> void
+  Line 400) printer.print(n.getContent()) ==> void
+  Line 401) printer.printLn("*/") ==> void
+  Line 405) printJavaComment(n.getComment(), arg) ==> void
+  Line 407) n.getAnnotations() != null ==> boolean
+  Line 408) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 408) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 409) ae.accept(this, arg) ==> void
+  Line 410) printer.print(" ") ==> void
+  Line 414) n.getScope() != null ==> boolean
+  Line 415) n.getScope().accept(this, arg) ==> void
+  Line 416) printer.print(".") ==> void
+  Line 418) printer.print(n.getName()) ==> void
+  Line 419) printTypeArgs(n.getTypeArgs(), arg) ==> void
+  Line 423) printJavaComment(n.getComment(), arg) ==> void
+  Line 424) n.getAnnotations() != null ==> boolean
+  Line 425) AnnotationExpr ann ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 425) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 426) ann.accept(this, arg) ==> void
+  Line 427) printer.print(" ") ==> void
+  Line 430) printer.print(n.getName()) ==> void
+  Line 431) n.getTypeBound() != null ==> boolean
+  Line 432) printer.print(" extends ") ==> void
+  Line 433) final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 433) n.getTypeBound().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 433) i.hasNext() ==> boolean
+  Line 434) final ClassOrInterfaceType c = i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 434) i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 435) c.accept(this, arg) ==> void
+  Line 436) i.hasNext() ==> boolean
+  Line 437) printer.print(" & ") ==> void
+  Line 444) printJavaComment(n.getComment(), arg) ==> void
+  Line 445) n.getAnnotations() != null ==> boolean
+  Line 446) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 446) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 447) ae.accept(this, arg) ==> void
+  Line 448) printer.print(" ") ==> void
+  Line 451) n.getType() ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 452) Boolean ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 453) printer.print("boolean") ==> void
+  Line 455) Byte ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 456) printer.print("byte") ==> void
+  Line 458) Char ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 459) printer.print("char") ==> void
+  Line 461) Double ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 462) printer.print("double") ==> void
+  Line 464) Float ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 465) printer.print("float") ==> void
+  Line 467) Int ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 468) printer.print("int") ==> void
+  Line 470) Long ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 471) printer.print("long") ==> void
+  Line 473) Short ==> com.github.javaparser.ast.type.PrimitiveType.Primitive
+  Line 474) printer.print("short") ==> void
+  Line 480) printJavaComment(n.getComment(), arg) ==> void
+  Line 481) n.getAnnotations() != null ==> boolean
+  Line 482) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 482) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 483) ae.accept(this, arg) ==> void
+  Line 484) printer.print(" ") ==> void
+  Line 487) n.getType().accept(this, arg) ==> void
+  Line 488) List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 488) n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 489) int i = 0 ==> int
+  Line 489) 0 ==> int
+  Line 489) i < n.getArrayCount() ==> boolean
+  Line 489) i++ ==> int
+  Line 490) arraysAnnotations != null && i < arraysAnnotations.size() ==> boolean
+  Line 491) List<AnnotationExpr> annotations = arraysAnnotations.get(i) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 491) arraysAnnotations.get(i) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 492) annotations != null ==> boolean
+  Line 493) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 493) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 494) printer.print(" ") ==> void
+  Line 495) ae.accept(this, arg) ==> void
+  Line 500) printer.print("[]") ==> void
+  Line 505) printJavaComment(n.getComment(), arg) ==> void
+  Line 506) n.getAnnotations() != null ==> boolean
+  Line 507) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 507) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 508) printer.print(" ") ==> void
+  Line 509) ae.accept(this, arg) ==> void
+  Line 512) printer.print("?") ==> void
+  Line 513) n.getExtends() != null ==> boolean
+  Line 514) printer.print(" extends ") ==> void
+  Line 515) n.getExtends().accept(this, arg) ==> void
+  Line 517) n.getSuper() != null ==> boolean
+  Line 518) printer.print(" super ") ==> void
+  Line 519) n.getSuper().accept(this, arg) ==> void
+  Line 528) printOrphanCommentsBeforeThisChildNode(n) ==> void
+  Line 530) printJavaComment(n.getComment(), arg) ==> void
+  Line 531) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 532) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 533) printModifiers(n.getModifiers()) ==> void
+  Line 534) n.getType().accept(this, arg) ==> void
+  Line 536) printer.print(" ") ==> void
+  Line 537) final Iterator<VariableDeclarator> i = n.getVariables().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 537) n.getVariables().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 537) i.hasNext() ==> boolean
+  Line 538) final VariableDeclarator var = i.next() ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 538) i.next() ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 539) var.accept(this, arg) ==> void
+  Line 540) i.hasNext() ==> boolean
+  Line 541) printer.print(", ") ==> void
+  Line 545) printer.print(";") ==> void
+  Line 549) printJavaComment(n.getComment(), arg) ==> void
+  Line 550) n.getId().accept(this, arg) ==> void
+  Line 551) n.getInit() != null ==> boolean
+  Line 552) printer.print(" = ") ==> void
+  Line 553) n.getInit().accept(this, arg) ==> void
+  Line 558) printJavaComment(n.getComment(), arg) ==> void
+  Line 559) printer.print(n.getName()) ==> void
+  Line 560) int i = 0 ==> int
+  Line 560) 0 ==> int
+  Line 560) i < n.getArrayCount() ==> boolean
+  Line 560) i++ ==> int
+  Line 561) printer.print("[]") ==> void
+  Line 566) printJavaComment(n.getComment(), arg) ==> void
+  Line 567) printer.print("{") ==> void
+  Line 568) n.getValues() != null ==> boolean
+  Line 569) printer.print(" ") ==> void
+  Line 570) final Iterator<Expression> i = n.getValues().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 570) n.getValues().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 570) i.hasNext() ==> boolean
+  Line 571) final Expression expr = i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 571) i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 572) expr.accept(this, arg) ==> void
+  Line 573) i.hasNext() ==> boolean
+  Line 574) printer.print(", ") ==> void
+  Line 577) printer.print(" ") ==> void
+  Line 579) printer.print("}") ==> void
+  Line 583) printJavaComment(n.getComment(), arg) ==> void
+  Line 584) printer.print("void") ==> void
+  Line 588) printJavaComment(n.getComment(), arg) ==> void
+  Line 589) n.getName().accept(this, arg) ==> void
+  Line 590) printer.print("[") ==> void
+  Line 591) n.getIndex().accept(this, arg) ==> void
+  Line 592) printer.print("]") ==> void
+  Line 596) printJavaComment(n.getComment(), arg) ==> void
+  Line 597) printer.print("new ") ==> void
+  Line 598) n.getType().accept(this, arg) ==> void
+  Line 599) List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 599) n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 600) n.getDimensions() != null ==> boolean
+  Line 601) int j = 0 ==> int
+  Line 601) 0 ==> int
+  Line 602) final Expression dim ==> com.github.javaparser.ast.expr.Expression
+  Line 602) n.getDimensions() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 604) arraysAnnotations != null && j < arraysAnnotations.size() ==> boolean
+  Line 605) List<AnnotationExpr> annotations = arraysAnnotations.get(j) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 605) arraysAnnotations.get(j) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 606) annotations != null ==> boolean
+  Line 607) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 607) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 608) printer.print(" ") ==> void
+  Line 609) ae.accept(this, arg) ==> void
+  Line 613) printer.print("[") ==> void
+  Line 614) dim.accept(this, arg) ==> void
+  Line 615) printer.print("]") ==> void
+  Line 616) j++ ==> int
+  Line 618) int i = 0 ==> int
+  Line 618) 0 ==> int
+  Line 618) i < n.getArrayCount() ==> boolean
+  Line 618) i++ ==> int
+  Line 619) arraysAnnotations != null && i < arraysAnnotations.size() ==> boolean
+  Line 621) List<AnnotationExpr> annotations = arraysAnnotations.get(i) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 621) arraysAnnotations.get(i) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 622) annotations != null ==> boolean
+  Line 623) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 623) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 624) printer.print(" ") ==> void
+  Line 625) ae.accept(this, arg) ==> void
+  Line 630) printer.print("[]") ==> void
+  Line 634) int i = 0 ==> int
+  Line 634) 0 ==> int
+  Line 634) i < n.getArrayCount() ==> boolean
+  Line 634) i++ ==> int
+  Line 635) arraysAnnotations != null && i < arraysAnnotations.size() ==> boolean
+  Line 636) List<AnnotationExpr> annotations = arraysAnnotations.get(i) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 636) arraysAnnotations.get(i) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 637) annotations != null ==> boolean
+  Line 638) AnnotationExpr ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 638) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 639) ae.accept(this, arg) ==> void
+  Line 640) printer.print(" ") ==> void
+  Line 644) printer.print("[]") ==> void
+  Line 646) printer.print(" ") ==> void
+  Line 647) n.getInitializer().accept(this, arg) ==> void
+  Line 652) printJavaComment(n.getComment(), arg) ==> void
+  Line 653) n.getTarget().accept(this, arg) ==> void
+  Line 654) printer.print(" ") ==> void
+  Line 655) n.getOperator() ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 656) assign ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 657) printer.print("=") ==> void
+  Line 659) and ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 660) printer.print("&=") ==> void
+  Line 662) or ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 663) printer.print("|=") ==> void
+  Line 665) xor ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 666) printer.print("^=") ==> void
+  Line 668) plus ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 669) printer.print("+=") ==> void
+  Line 671) minus ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 672) printer.print("-=") ==> void
+  Line 674) rem ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 675) printer.print("%=") ==> void
+  Line 677) slash ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 678) printer.print("/=") ==> void
+  Line 680) star ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 681) printer.print("*=") ==> void
+  Line 683) lShift ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 684) printer.print("<<=") ==> void
+  Line 686) rSignedShift ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 687) printer.print(">>=") ==> void
+  Line 689) rUnsignedShift ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 690) printer.print(">>>=") ==> void
+  Line 693) printer.print(" ") ==> void
+  Line 694) n.getValue().accept(this, arg) ==> void
+  Line 698) printJavaComment(n.getComment(), arg) ==> void
+  Line 699) n.getLeft().accept(this, arg) ==> void
+  Line 700) printer.print(" ") ==> void
+  Line 701) n.getOperator() ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 702) or ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 703) printer.print("||") ==> void
+  Line 705) and ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 706) printer.print("&&") ==> void
+  Line 708) binOr ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 709) printer.print("|") ==> void
+  Line 711) binAnd ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 712) printer.print("&") ==> void
+  Line 714) xor ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 715) printer.print("^") ==> void
+  Line 717) equals ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 718) printer.print("==") ==> void
+  Line 720) notEquals ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 721) printer.print("!=") ==> void
+  Line 723) less ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 724) printer.print("<") ==> void
+  Line 726) greater ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 727) printer.print(">") ==> void
+  Line 729) lessEquals ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 730) printer.print("<=") ==> void
+  Line 732) greaterEquals ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 733) printer.print(">=") ==> void
+  Line 735) lShift ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 736) printer.print("<<") ==> void
+  Line 738) rSignedShift ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 739) printer.print(">>") ==> void
+  Line 741) rUnsignedShift ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 742) printer.print(">>>") ==> void
+  Line 744) plus ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 745) printer.print("+") ==> void
+  Line 747) minus ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 748) printer.print("-") ==> void
+  Line 750) times ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 751) printer.print("*") ==> void
+  Line 753) divide ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 754) printer.print("/") ==> void
+  Line 756) remainder ==> com.github.javaparser.ast.expr.BinaryExpr.Operator
+  Line 757) printer.print("%") ==> void
+  Line 760) printer.print(" ") ==> void
+  Line 761) n.getRight().accept(this, arg) ==> void
+  Line 765) printJavaComment(n.getComment(), arg) ==> void
+  Line 766) printer.print("(") ==> void
+  Line 767) n.getType().accept(this, arg) ==> void
+  Line 768) printer.print(") ") ==> void
+  Line 769) n.getExpr().accept(this, arg) ==> void
+  Line 773) printJavaComment(n.getComment(), arg) ==> void
+  Line 774) n.getType().accept(this, arg) ==> void
+  Line 775) printer.print(".class") ==> void
+  Line 779) printJavaComment(n.getComment(), arg) ==> void
+  Line 780) n.getCondition().accept(this, arg) ==> void
+  Line 781) printer.print(" ? ") ==> void
+  Line 782) n.getThenExpr().accept(this, arg) ==> void
+  Line 783) printer.print(" : ") ==> void
+  Line 784) n.getElseExpr().accept(this, arg) ==> void
+  Line 788) printJavaComment(n.getComment(), arg) ==> void
+  Line 789) printer.print("(") ==> void
+  Line 790) n.getInner() != null ==> boolean
+  Line 791) n.getInner().accept(this, arg) ==> void
+  Line 793) printer.print(")") ==> void
+  Line 797) printJavaComment(n.getComment(), arg) ==> void
+  Line 798) n.getScope().accept(this, arg) ==> void
+  Line 799) printer.print(".") ==> void
+  Line 800) printer.print(n.getField()) ==> void
+  Line 804) printJavaComment(n.getComment(), arg) ==> void
+  Line 805) n.getExpr().accept(this, arg) ==> void
+  Line 806) printer.print(" instanceof ") ==> void
+  Line 807) n.getType().accept(this, arg) ==> void
+  Line 811) printJavaComment(n.getComment(), arg) ==> void
+  Line 812) printer.print("'") ==> void
+  Line 813) printer.print(n.getValue()) ==> void
+  Line 814) printer.print("'") ==> void
+  Line 818) printJavaComment(n.getComment(), arg) ==> void
+  Line 819) printer.print(n.getValue()) ==> void
+  Line 823) printJavaComment(n.getComment(), arg) ==> void
+  Line 824) printer.print(n.getValue()) ==> void
+  Line 828) printJavaComment(n.getComment(), arg) ==> void
+  Line 829) printer.print(n.getValue()) ==> void
+  Line 833) printJavaComment(n.getComment(), arg) ==> void
+  Line 834) printer.print(n.getValue()) ==> void
+  Line 838) printJavaComment(n.getComment(), arg) ==> void
+  Line 839) printer.print(n.getValue()) ==> void
+  Line 843) printJavaComment(n.getComment(), arg) ==> void
+  Line 844) printer.print("\"") ==> void
+  Line 845) printer.print(n.getValue()) ==> void
+  Line 846) printer.print("\"") ==> void
+  Line 850) printJavaComment(n.getComment(), arg) ==> void
+  Line 851) printer.print(String.valueOf(n.getValue())) ==> void
+  Line 855) printJavaComment(n.getComment(), arg) ==> void
+  Line 856) printer.print("null") ==> void
+  Line 860) printJavaComment(n.getComment(), arg) ==> void
+  Line 861) n.getClassExpr() != null ==> boolean
+  Line 862) n.getClassExpr().accept(this, arg) ==> void
+  Line 863) printer.print(".") ==> void
+  Line 865) printer.print("this") ==> void
+  Line 869) printJavaComment(n.getComment(), arg) ==> void
+  Line 870) n.getClassExpr() != null ==> boolean
+  Line 871) n.getClassExpr().accept(this, arg) ==> void
+  Line 872) printer.print(".") ==> void
+  Line 874) printer.print("super") ==> void
+  Line 878) printJavaComment(n.getComment(), arg) ==> void
+  Line 879) n.getScope() != null ==> boolean
+  Line 880) n.getScope().accept(this, arg) ==> void
+  Line 881) printer.print(".") ==> void
+  Line 883) printTypeArgs(n.getTypeArgs(), arg) ==> void
+  Line 884) printer.print(n.getName()) ==> void
+  Line 885) printArguments(n.getArgs(), arg) ==> void
+  Line 889) printJavaComment(n.getComment(), arg) ==> void
+  Line 890) n.getScope() != null ==> boolean
+  Line 891) n.getScope().accept(this, arg) ==> void
+  Line 892) printer.print(".") ==> void
+  Line 895) printer.print("new ") ==> void
+  Line 897) printTypeArgs(n.getTypeArgs(), arg) ==> void
+  Line 898) !isNullOrEmpty(n.getTypeArgs()) ==> boolean
+  Line 899) printer.print(" ") ==> void
+  Line 902) n.getType().accept(this, arg) ==> void
+  Line 904) printArguments(n.getArgs(), arg) ==> void
+  Line 906) n.getAnonymousClassBody() != null ==> boolean
+  Line 907) printer.printLn(" {") ==> void
+  Line 908) printer.indent() ==> void
+  Line 909) printMembers(n.getAnonymousClassBody(), arg) ==> void
+  Line 910) printer.unindent() ==> void
+  Line 911) printer.print("}") ==> void
+  Line 916) printJavaComment(n.getComment(), arg) ==> void
+  Line 917) n.getOperator() ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 918) positive ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 919) printer.print("+") ==> void
+  Line 921) negative ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 922) printer.print("-") ==> void
+  Line 924) inverse ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 925) printer.print("~") ==> void
+  Line 927) not ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 928) printer.print("!") ==> void
+  Line 930) preIncrement ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 931) printer.print("++") ==> void
+  Line 933) preDecrement ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 934) printer.print("--") ==> void
+  Line 939) n.getExpr().accept(this, arg) ==> void
+  Line 941) n.getOperator() ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 942) posIncrement ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 943) printer.print("++") ==> void
+  Line 945) posDecrement ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 946) printer.print("--") ==> void
+  Line 953) printJavaComment(n.getComment(), arg) ==> void
+  Line 954) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 955) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 956) printModifiers(n.getModifiers()) ==> void
+  Line 958) printTypeParameters(n.getTypeParameters(), arg) ==> void
+  Line 959) n.getTypeParameters() != null ==> boolean
+  Line 960) printer.print(" ") ==> void
+  Line 962) printer.print(n.getName()) ==> void
+  Line 964) printer.print("(") ==> void
+  Line 965) n.getParameters() != null ==> boolean
+  Line 966) final Iterator<Parameter> i = n.getParameters().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.Parameter>
+  Line 966) n.getParameters().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.Parameter>
+  Line 966) i.hasNext() ==> boolean
+  Line 967) final Parameter p = i.next() ==> com.github.javaparser.ast.body.Parameter
+  Line 967) i.next() ==> com.github.javaparser.ast.body.Parameter
+  Line 968) p.accept(this, arg) ==> void
+  Line 969) i.hasNext() ==> boolean
+  Line 970) printer.print(", ") ==> void
+  Line 974) printer.print(")") ==> void
+  Line 976) !isNullOrEmpty(n.getThrows()) ==> boolean
+  Line 977) printer.print(" throws ") ==> void
+  Line 978) final Iterator<NameExpr> i = n.getThrows().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.NameExpr>
+  Line 978) n.getThrows().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.NameExpr>
+  Line 978) i.hasNext() ==> boolean
+  Line 979) final NameExpr name = i.next() ==> com.github.javaparser.ast.expr.NameExpr
+  Line 979) i.next() ==> com.github.javaparser.ast.expr.NameExpr
+  Line 980) name.accept(this, arg) ==> void
+  Line 981) i.hasNext() ==> boolean
+  Line 982) printer.print(", ") ==> void
+  Line 986) printer.print(" ") ==> void
+  Line 987) n.getBlock().accept(this, arg) ==> void
+  Line 991) printOrphanCommentsBeforeThisChildNode(n) ==> void
+  Line 993) printJavaComment(n.getComment(), arg) ==> void
+  Line 994) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 995) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 996) printModifiers(n.getModifiers()) ==> void
+  Line 997) n.isDefault() ==> boolean
+  Line 998) printer.print("default ") ==> void
+  Line 1000) printTypeParameters(n.getTypeParameters(), arg) ==> void
+  Line 1001) n.getTypeParameters() != null ==> boolean
+  Line 1002) printer.print(" ") ==> void
+  Line 1005) n.getType().accept(this, arg) ==> void
+  Line 1006) printer.print(" ") ==> void
+  Line 1007) printer.print(n.getName()) ==> void
+  Line 1009) printer.print("(") ==> void
+  Line 1010) n.getParameters() != null ==> boolean
+  Line 1011) final Iterator<Parameter> i = n.getParameters().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.Parameter>
+  Line 1011) n.getParameters().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.Parameter>
+  Line 1011) i.hasNext() ==> boolean
+  Line 1012) final Parameter p = i.next() ==> com.github.javaparser.ast.body.Parameter
+  Line 1012) i.next() ==> com.github.javaparser.ast.body.Parameter
+  Line 1013) p.accept(this, arg) ==> void
+  Line 1014) i.hasNext() ==> boolean
+  Line 1015) printer.print(", ") ==> void
+  Line 1019) printer.print(")") ==> void
+  Line 1021) int i = 0 ==> int
+  Line 1021) 0 ==> int
+  Line 1021) i < n.getArrayCount() ==> boolean
+  Line 1021) i++ ==> int
+  Line 1022) printer.print("[]") ==> void
+  Line 1025) !isNullOrEmpty(n.getThrows()) ==> boolean
+  Line 1026) printer.print(" throws ") ==> void
+  Line 1027) final Iterator<NameExpr> i = n.getThrows().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.NameExpr>
+  Line 1027) n.getThrows().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.NameExpr>
+  Line 1027) i.hasNext() ==> boolean
+  Line 1028) final NameExpr name = i.next() ==> com.github.javaparser.ast.expr.NameExpr
+  Line 1028) i.next() ==> com.github.javaparser.ast.expr.NameExpr
+  Line 1029) name.accept(this, arg) ==> void
+  Line 1030) i.hasNext() ==> boolean
+  Line 1031) printer.print(", ") ==> void
+  Line 1035) n.getBody() == null ==> boolean
+  Line 1036) printer.print(";") ==> void
+  Line 1038) printer.print(" ") ==> void
+  Line 1039) n.getBody().accept(this, arg) ==> void
+  Line 1044) printJavaComment(n.getComment(), arg) ==> void
+  Line 1045) printAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1046) printModifiers(n.getModifiers()) ==> void
+  Line 1047) n.getType() != null ==> boolean
+  Line 1048) n.getType().accept(this, arg) ==> void
+  Line 1050) n.isVarArgs() ==> boolean
+  Line 1051) printer.print("...") ==> void
+  Line 1053) printer.print(" ") ==> void
+  Line 1054) n.getId().accept(this, arg) ==> void
+  Line 1058) printAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1059) printModifiers(n.getModifiers()) ==> void
+  Line 1061) Iterator<Type> types = n.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 1061) n.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 1062) types.next().accept(this, arg) ==> void
+  Line 1063) types.hasNext() ==> boolean
+  Line 1064) printer.print(" | ") ==> void
+  Line 1065) types.next().accept(this, arg) ==> void
+  Line 1068) printer.print(" ") ==> void
+  Line 1069) n.getId().accept(this, arg) ==> void
+  Line 1073) printJavaComment(n.getComment(), arg) ==> void
+  Line 1074) n.isThis() ==> boolean
+  Line 1075) printTypeArgs(n.getTypeArgs(), arg) ==> void
+  Line 1076) printer.print("this") ==> void
+  Line 1078) n.getExpr() != null ==> boolean
+  Line 1079) n.getExpr().accept(this, arg) ==> void
+  Line 1080) printer.print(".") ==> void
+  Line 1082) printTypeArgs(n.getTypeArgs(), arg) ==> void
+  Line 1083) printer.print("super") ==> void
+  Line 1085) printArguments(n.getArgs(), arg) ==> void
+  Line 1086) printer.print(";") ==> void
+  Line 1090) printJavaComment(n.getComment(), arg) ==> void
+  Line 1091) printAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1092) printModifiers(n.getModifiers()) ==> void
+  Line 1094) n.getType().accept(this, arg) ==> void
+  Line 1095) printer.print(" ") ==> void
+  Line 1097) final Iterator<VariableDeclarator> i = n.getVars().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 1097) n.getVars().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 1097) i.hasNext() ==> boolean
+  Line 1098) final VariableDeclarator v = i.next() ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 1098) i.next() ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 1099) v.accept(this, arg) ==> void
+  Line 1100) i.hasNext() ==> boolean
+  Line 1101) printer.print(", ") ==> void
+  Line 1107) printJavaComment(n.getComment(), arg) ==> void
+  Line 1108) n.getTypeDeclaration().accept(this, arg) ==> void
+  Line 1112) printJavaComment(n.getComment(), arg) ==> void
+  Line 1113) printer.print("assert ") ==> void
+  Line 1114) n.getCheck().accept(this, arg) ==> void
+  Line 1115) n.getMessage() != null ==> boolean
+  Line 1116) printer.print(" : ") ==> void
+  Line 1117) n.getMessage().accept(this, arg) ==> void
+  Line 1119) printer.print(";") ==> void
+  Line 1123) printOrphanCommentsBeforeThisChildNode(n) ==> void
+  Line 1124) printJavaComment(n.getComment(), arg) ==> void
+  Line 1125) printer.printLn("{") ==> void
+  Line 1126) n.getStmts() != null ==> boolean
+  Line 1127) printer.indent() ==> void
+  Line 1128) final Statement s ==> com.github.javaparser.ast.stmt.Statement
+  Line 1128) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 1129) s.accept(this, arg) ==> void
+  Line 1130) printer.printLn() ==> void
+  Line 1132) printer.unindent() ==> void
+  Line 1134) printOrphanCommentsEnding(n) ==> void
+  Line 1135) printer.print("}") ==> void
+  Line 1140) printJavaComment(n.getComment(), arg) ==> void
+  Line 1141) printer.print(n.getLabel()) ==> void
+  Line 1142) printer.print(": ") ==> void
+  Line 1143) n.getStmt().accept(this, arg) ==> void
+  Line 1147) printJavaComment(n.getComment(), arg) ==> void
+  Line 1148) printer.print(";") ==> void
+  Line 1152) printOrphanCommentsBeforeThisChildNode(n) ==> void
+  Line 1153) printJavaComment(n.getComment(), arg) ==> void
+  Line 1154) n.getExpression().accept(this, arg) ==> void
+  Line 1155) printer.print(";") ==> void
+  Line 1159) printJavaComment(n.getComment(), arg) ==> void
+  Line 1160) printer.print("switch(") ==> void
+  Line 1161) n.getSelector().accept(this, arg) ==> void
+  Line 1162) printer.printLn(") {") ==> void
+  Line 1163) n.getEntries() != null ==> boolean
+  Line 1164) printer.indent() ==> void
+  Line 1165) final SwitchEntryStmt e ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 1165) n.getEntries() ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 1166) e.accept(this, arg) ==> void
+  Line 1168) printer.unindent() ==> void
+  Line 1170) printer.print("}") ==> void
+  Line 1175) printJavaComment(n.getComment(), arg) ==> void
+  Line 1176) n.getLabel() != null ==> boolean
+  Line 1177) printer.print("case ") ==> void
+  Line 1178) n.getLabel().accept(this, arg) ==> void
+  Line 1179) printer.print(":") ==> void
+  Line 1181) printer.print("default:") ==> void
+  Line 1183) printer.printLn() ==> void
+  Line 1184) printer.indent() ==> void
+  Line 1185) n.getStmts() != null ==> boolean
+  Line 1186) final Statement s ==> com.github.javaparser.ast.stmt.Statement
+  Line 1186) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 1187) s.accept(this, arg) ==> void
+  Line 1188) printer.printLn() ==> void
+  Line 1191) printer.unindent() ==> void
+  Line 1195) printJavaComment(n.getComment(), arg) ==> void
+  Line 1196) printer.print("break") ==> void
+  Line 1197) n.getId() != null ==> boolean
+  Line 1198) printer.print(" ") ==> void
+  Line 1199) printer.print(n.getId()) ==> void
+  Line 1201) printer.print(";") ==> void
+  Line 1205) printJavaComment(n.getComment(), arg) ==> void
+  Line 1206) printer.print("return") ==> void
+  Line 1207) n.getExpr() != null ==> boolean
+  Line 1208) printer.print(" ") ==> void
+  Line 1209) n.getExpr().accept(this, arg) ==> void
+  Line 1211) printer.print(";") ==> void
+  Line 1215) printJavaComment(n.getComment(), arg) ==> void
+  Line 1216) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 1217) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1218) printModifiers(n.getModifiers()) ==> void
+  Line 1220) printer.print("enum ") ==> void
+  Line 1221) printer.print(n.getName()) ==> void
+  Line 1223) n.getImplements() != null ==> boolean
+  Line 1224) printer.print(" implements ") ==> void
+  Line 1225) final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 1225) n.getImplements().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 1225) i.hasNext() ==> boolean
+  Line 1226) final ClassOrInterfaceType c = i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 1226) i.next() ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 1227) c.accept(this, arg) ==> void
+  Line 1228) i.hasNext() ==> boolean
+  Line 1229) printer.print(", ") ==> void
+  Line 1234) printer.printLn(" {") ==> void
+  Line 1235) printer.indent() ==> void
+  Line 1236) n.getEntries() != null ==> boolean
+  Line 1237) printer.printLn() ==> void
+  Line 1238) final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 1238) n.getEntries().iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 1238) i.hasNext() ==> boolean
+  Line 1239) final EnumConstantDeclaration e = i.next() ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 1239) i.next() ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 1240) e.accept(this, arg) ==> void
+  Line 1241) i.hasNext() ==> boolean
+  Line 1242) printer.print(", ") ==> void
+  Line 1246) n.getMembers() != null ==> boolean
+  Line 1247) printer.printLn(";") ==> void
+  Line 1248) printMembers(n.getMembers(), arg) ==> void
+  Line 1250) n.getEntries() != null ==> boolean
+  Line 1251) printer.printLn() ==> void
+  Line 1254) printer.unindent() ==> void
+  Line 1255) printer.print("}") ==> void
+  Line 1259) printJavaComment(n.getComment(), arg) ==> void
+  Line 1260) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 1261) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1262) printer.print(n.getName()) ==> void
+  Line 1264) n.getArgs() != null ==> boolean
+  Line 1265) printArguments(n.getArgs(), arg) ==> void
+  Line 1268) n.getClassBody() != null ==> boolean
+  Line 1269) printer.printLn(" {") ==> void
+  Line 1270) printer.indent() ==> void
+  Line 1271) printMembers(n.getClassBody(), arg) ==> void
+  Line 1272) printer.unindent() ==> void
+  Line 1273) printer.printLn("}") ==> void
+  Line 1278) printJavaComment(n.getComment(), arg) ==> void
+  Line 1279) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 1280) printer.print(";") ==> void
+  Line 1284) printJavaComment(n.getComment(), arg) ==> void
+  Line 1285) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 1286) n.isStatic() ==> boolean
+  Line 1287) printer.print("static ") ==> void
+  Line 1289) n.getBlock().accept(this, arg) ==> void
+  Line 1293) printJavaComment(n.getComment(), arg) ==> void
+  Line 1294) printer.print("if (") ==> void
+  Line 1295) n.getCondition().accept(this, arg) ==> void
+  Line 1296) final boolean thenBlock = n.getThenStmt() instanceof BlockStmt ==> boolean
+  Line 1296) n.getThenStmt() instanceof BlockStmt ==> boolean
+  Line 1297) // block statement should start on the same line
+thenBlock ==> boolean
+  Line 1298) printer.print(") ") ==> void
+  Line 1300) printer.printLn(")") ==> void
+  Line 1301) printer.indent() ==> void
+  Line 1303) n.getThenStmt().accept(this, arg) ==> void
+  Line 1304) !thenBlock ==> boolean
+  Line 1305) printer.unindent() ==> void
+  Line 1306) n.getElseStmt() != null ==> boolean
+  Line 1307) thenBlock ==> boolean
+  Line 1308) printer.print(" ") ==> void
+  Line 1310) printer.printLn() ==> void
+  Line 1311) final boolean elseIf = n.getElseStmt() instanceof IfStmt ==> boolean
+  Line 1311) n.getElseStmt() instanceof IfStmt ==> boolean
+  Line 1312) final boolean elseBlock = n.getElseStmt() instanceof BlockStmt ==> boolean
+  Line 1312) n.getElseStmt() instanceof BlockStmt ==> boolean
+  Line 1313) // put chained if and start of block statement on a same level
+elseIf || elseBlock ==> boolean
+  Line 1314) printer.print("else ") ==> void
+  Line 1316) printer.printLn("else") ==> void
+  Line 1317) printer.indent() ==> void
+  Line 1319) n.getElseStmt().accept(this, arg) ==> void
+  Line 1320) !(elseIf || elseBlock) ==> boolean
+  Line 1321) printer.unindent() ==> void
+  Line 1326) printJavaComment(n.getComment(), arg) ==> void
+  Line 1327) printer.print("while (") ==> void
+  Line 1328) n.getCondition().accept(this, arg) ==> void
+  Line 1329) printer.print(") ") ==> void
+  Line 1330) n.getBody().accept(this, arg) ==> void
+  Line 1334) printJavaComment(n.getComment(), arg) ==> void
+  Line 1335) printer.print("continue") ==> void
+  Line 1336) n.getId() != null ==> boolean
+  Line 1337) printer.print(" ") ==> void
+  Line 1338) printer.print(n.getId()) ==> void
+  Line 1340) printer.print(";") ==> void
+  Line 1344) printJavaComment(n.getComment(), arg) ==> void
+  Line 1345) printer.print("do ") ==> void
+  Line 1346) n.getBody().accept(this, arg) ==> void
+  Line 1347) printer.print(" while (") ==> void
+  Line 1348) n.getCondition().accept(this, arg) ==> void
+  Line 1349) printer.print(");") ==> void
+  Line 1353) printJavaComment(n.getComment(), arg) ==> void
+  Line 1354) printer.print("for (") ==> void
+  Line 1355) n.getVariable().accept(this, arg) ==> void
+  Line 1356) printer.print(" : ") ==> void
+  Line 1357) n.getIterable().accept(this, arg) ==> void
+  Line 1358) printer.print(") ") ==> void
+  Line 1359) n.getBody().accept(this, arg) ==> void
+  Line 1363) printJavaComment(n.getComment(), arg) ==> void
+  Line 1364) printer.print("for (") ==> void
+  Line 1365) n.getInit() != null ==> boolean
+  Line 1366) final Iterator<Expression> i = n.getInit().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 1366) n.getInit().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 1366) i.hasNext() ==> boolean
+  Line 1367) final Expression e = i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 1367) i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 1368) e.accept(this, arg) ==> void
+  Line 1369) i.hasNext() ==> boolean
+  Line 1370) printer.print(", ") ==> void
+  Line 1374) printer.print("; ") ==> void
+  Line 1375) n.getCompare() != null ==> boolean
+  Line 1376) n.getCompare().accept(this, arg) ==> void
+  Line 1378) printer.print("; ") ==> void
+  Line 1379) n.getUpdate() != null ==> boolean
+  Line 1380) final Iterator<Expression> i = n.getUpdate().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 1380) n.getUpdate().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.Expression>
+  Line 1380) i.hasNext() ==> boolean
+  Line 1381) final Expression e = i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 1381) i.next() ==> com.github.javaparser.ast.expr.Expression
+  Line 1382) e.accept(this, arg) ==> void
+  Line 1383) i.hasNext() ==> boolean
+  Line 1384) printer.print(", ") ==> void
+  Line 1388) printer.print(") ") ==> void
+  Line 1389) n.getBody().accept(this, arg) ==> void
+  Line 1393) printJavaComment(n.getComment(), arg) ==> void
+  Line 1394) printer.print("throw ") ==> void
+  Line 1395) n.getExpr().accept(this, arg) ==> void
+  Line 1396) printer.print(";") ==> void
+  Line 1400) printJavaComment(n.getComment(), arg) ==> void
+  Line 1401) printer.print("synchronized (") ==> void
+  Line 1402) n.getExpr().accept(this, arg) ==> void
+  Line 1403) printer.print(") ") ==> void
+  Line 1404) n.getBlock().accept(this, arg) ==> void
+  Line 1408) printJavaComment(n.getComment(), arg) ==> void
+  Line 1409) printer.print("try ") ==> void
+  Line 1410) !n.getResources().isEmpty() ==> boolean
+  Line 1411) printer.print("(") ==> void
+  Line 1412) Iterator<VariableDeclarationExpr> resources = n.getResources().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 1412) n.getResources().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 1413) boolean first = true ==> boolean
+  Line 1413) true ==> boolean
+  Line 1414) resources.hasNext() ==> boolean
+  Line 1415) visit(resources.next(), arg) ==> void
+  Line 1416) resources.hasNext() ==> boolean
+  Line 1417) printer.print(";") ==> void
+  Line 1418) printer.printLn() ==> void
+  Line 1419) first ==> boolean
+  Line 1420) printer.indent() ==> void
+  Line 1423) first = false ==> boolean
+  Line 1425) n.getResources().size() > 1 ==> boolean
+  Line 1426) printer.unindent() ==> void
+  Line 1428) printer.print(") ") ==> void
+  Line 1430) n.getTryBlock().accept(this, arg) ==> void
+  Line 1431) n.getCatchs() != null ==> boolean
+  Line 1432) final CatchClause c ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1432) n.getCatchs() ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 1433) c.accept(this, arg) ==> void
+  Line 1436) n.getFinallyBlock() != null ==> boolean
+  Line 1437) printer.print(" finally ") ==> void
+  Line 1438) n.getFinallyBlock().accept(this, arg) ==> void
+  Line 1443) printJavaComment(n.getComment(), arg) ==> void
+  Line 1444) printer.print(" catch (") ==> void
+  Line 1445) n.getExcept().accept(this, arg) ==> void
+  Line 1446) printer.print(") ") ==> void
+  Line 1447) n.getCatchBlock().accept(this, arg) ==> void
+  Line 1452) printJavaComment(n.getComment(), arg) ==> void
+  Line 1453) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 1454) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1455) printModifiers(n.getModifiers()) ==> void
+  Line 1457) printer.print("@interface ") ==> void
+  Line 1458) printer.print(n.getName()) ==> void
+  Line 1459) printer.printLn(" {") ==> void
+  Line 1460) printer.indent() ==> void
+  Line 1461) n.getMembers() != null ==> boolean
+  Line 1462) printMembers(n.getMembers(), arg) ==> void
+  Line 1464) printer.unindent() ==> void
+  Line 1465) printer.print("}") ==> void
+  Line 1469) printJavaComment(n.getComment(), arg) ==> void
+  Line 1470) printJavadoc(n.getJavaDoc(), arg) ==> void
+  Line 1471) printMemberAnnotations(n.getAnnotations(), arg) ==> void
+  Line 1472) printModifiers(n.getModifiers()) ==> void
+  Line 1474) n.getType().accept(this, arg) ==> void
+  Line 1475) printer.print(" ") ==> void
+  Line 1476) printer.print(n.getName()) ==> void
+  Line 1477) printer.print("()") ==> void
+  Line 1478) n.getDefaultValue() != null ==> boolean
+  Line 1479) printer.print(" default ") ==> void
+  Line 1480) n.getDefaultValue().accept(this, arg) ==> void
+  Line 1482) printer.print(";") ==> void
+  Line 1486) printJavaComment(n.getComment(), arg) ==> void
+  Line 1487) printer.print("@") ==> void
+  Line 1488) n.getName().accept(this, arg) ==> void
+  Line 1492) printJavaComment(n.getComment(), arg) ==> void
+  Line 1493) printer.print("@") ==> void
+  Line 1494) n.getName().accept(this, arg) ==> void
+  Line 1495) printer.print("(") ==> void
+  Line 1496) n.getMemberValue().accept(this, arg) ==> void
+  Line 1497) printer.print(")") ==> void
+  Line 1501) printJavaComment(n.getComment(), arg) ==> void
+  Line 1502) printer.print("@") ==> void
+  Line 1503) n.getName().accept(this, arg) ==> void
+  Line 1504) printer.print("(") ==> void
+  Line 1505) n.getPairs() != null ==> boolean
+  Line 1506) final Iterator<MemberValuePair> i = n.getPairs().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 1506) n.getPairs().iterator() ==> java.util.Iterator<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 1506) i.hasNext() ==> boolean
+  Line 1507) final MemberValuePair m = i.next() ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 1507) i.next() ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 1508) m.accept(this, arg) ==> void
+  Line 1509) i.hasNext() ==> boolean
+  Line 1510) printer.print(", ") ==> void
+  Line 1514) printer.print(")") ==> void
+  Line 1518) printJavaComment(n.getComment(), arg) ==> void
+  Line 1519) printer.print(n.getName()) ==> void
+  Line 1520) printer.print(" = ") ==> void
+  Line 1521) n.getValue().accept(this, arg) ==> void
+  Line 1525) !this.printComments ==> boolean
+  Line 1528) printer.print("//") ==> void
+  Line 1529) String tmp = n.getContent() ==> java.lang.String
+  Line 1529) n.getContent() ==> java.lang.String
+  Line 1530) tmp = tmp.replace('\r', ' ') ==> java.lang.String
+  Line 1531) tmp = tmp.replace('\n', ' ') ==> java.lang.String
+  Line 1532) printer.printLn(tmp) ==> void
+  Line 1536) !this.printComments ==> boolean
+  Line 1539) printer.print("/*") ==> void
+  Line 1540) printer.print(n.getContent()) ==> void
+  Line 1541) printer.printLn("*/") ==> void
+  Line 1546) printJavaComment(n.getComment(), arg) ==> void
+  Line 1548) List<Parameter> parameters = n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 1548) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 1549) boolean printPar = false ==> boolean
+  Line 1549) false ==> boolean
+  Line 1550) printPar = n.isParametersEnclosed() ==> boolean
+  Line 1552) printPar ==> boolean
+  Line 1553) printer.print("(") ==> void
+  Line 1555) parameters != null ==> boolean
+  Line 1556) Iterator<Parameter> i = parameters.iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.Parameter>
+  Line 1556) parameters.iterator() ==> java.util.Iterator<com.github.javaparser.ast.body.Parameter>
+  Line 1556) i.hasNext() ==> boolean
+  Line 1557) Parameter p = i.next() ==> com.github.javaparser.ast.body.Parameter
+  Line 1557) i.next() ==> com.github.javaparser.ast.body.Parameter
+  Line 1558) p.accept(this, arg) ==> void
+  Line 1559) i.hasNext() ==> boolean
+  Line 1560) printer.print(", ") ==> void
+  Line 1564) printPar ==> boolean
+  Line 1565) printer.print(")") ==> void
+  Line 1568) printer.print(" -> ") ==> void
+  Line 1569) Statement body = n.getBody() ==> com.github.javaparser.ast.stmt.Statement
+  Line 1569) n.getBody() ==> com.github.javaparser.ast.stmt.Statement
+  Line 1570) body instanceof ExpressionStmt ==> boolean
+  Line 1572) ((ExpressionStmt) body).getExpression().accept(this, arg) ==> void
+  Line 1574) body.accept(this, arg) ==> void
+  Line 1581) printJavaComment(n.getComment(), arg) ==> void
+  Line 1582) Expression scope = n.getScope() ==> com.github.javaparser.ast.expr.Expression
+  Line 1582) n.getScope() ==> com.github.javaparser.ast.expr.Expression
+  Line 1583) String identifier = n.getIdentifier() ==> java.lang.String
+  Line 1583) n.getIdentifier() ==> java.lang.String
+  Line 1584) scope != null ==> boolean
+  Line 1585) n.getScope().accept(this, arg) ==> void
+  Line 1588) printer.print("::") ==> void
+  Line 1589) n.getTypeParameters() != null ==> boolean
+  Line 1590) printer.print("<") ==> void
+  Line 1591) Iterator<TypeParameter> i = n.getTypeParameters().iterator() ==> java.util.Iterator<com.github.javaparser.ast.TypeParameter>
+  Line 1591) n.getTypeParameters().iterator() ==> java.util.Iterator<com.github.javaparser.ast.TypeParameter>
+  Line 1591) i.hasNext() ==> boolean
+  Line 1593) TypeParameter p = i.next() ==> com.github.javaparser.ast.TypeParameter
+  Line 1593) i.next() ==> com.github.javaparser.ast.TypeParameter
+  Line 1594) p.accept(this, arg) ==> void
+  Line 1595) i.hasNext() ==> boolean
+  Line 1596) printer.print(", ") ==> void
+  Line 1599) printer.print(">") ==> void
+  Line 1601) identifier != null ==> boolean
+  Line 1602) printer.print(identifier) ==> void
+  Line 1609) printJavaComment(n.getComment(), arg) ==> void
+  Line 1610) n.getType() != null ==> boolean
+  Line 1611) n.getType().accept(this, arg) ==> void
+  Line 1616) node instanceof Comment ==> boolean
+  Line 1618) Node parent = node.getParentNode() ==> com.github.javaparser.ast.Node
+  Line 1618) node.getParentNode() ==> com.github.javaparser.ast.Node
+  Line 1619) parent == null ==> boolean
+  Line 1620) List<Node> everything = new LinkedList<Node>() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 1620) new LinkedList<Node>() ==> java.util.LinkedList<com.github.javaparser.ast.Node>
+  Line 1621) everything.addAll(parent.getChildrenNodes()) ==> boolean
+  Line 1622) sortByBeginPosition(everything) ==> void
+  Line 1623) int positionOfTheChild = -1 ==> int
+  Line 1623) -1 ==> int
+  Line 1624) int i = 0 ==> int
+  Line 1624) 0 ==> int
+  Line 1624) i < everything.size() ==> boolean
+  Line 1624) i++ ==> int
+  Line 1625) everything.get(i) == node ==> boolean
+  Line 1625) positionOfTheChild = i ==> int
+  Line 1627) positionOfTheChild == -1 ==> boolean
+  Line 1627) new RuntimeException("My index not found!!! " + node) ==> java.lang.RuntimeException
+  Line 1628) int positionOfPreviousChild = -1 ==> int
+  Line 1628) -1 ==> int
+  Line 1629) int i = positionOfTheChild - 1 ==> int
+  Line 1629) positionOfTheChild - 1 ==> int
+  Line 1629) i >= 0 && positionOfPreviousChild == -1 ==> boolean
+  Line 1629) i-- ==> int
+  Line 1630) !(everything.get(i) instanceof Comment) ==> boolean
+  Line 1630) positionOfPreviousChild = i ==> int
+  Line 1632) int i = positionOfPreviousChild + 1 ==> int
+  Line 1632) positionOfPreviousChild + 1 ==> int
+  Line 1632) i < positionOfTheChild ==> boolean
+  Line 1632) i++ ==> int
+  Line 1633) Node nodeToPrint = everything.get(i) ==> com.github.javaparser.ast.Node
+  Line 1633) everything.get(i) ==> com.github.javaparser.ast.Node
+  Line 1634) !(nodeToPrint instanceof Comment) ==> boolean
+  Line 1634) new RuntimeException("Expected comment, instead " + nodeToPrint.getClass() + ". Position of previous child: " + positionOfPreviousChild + ", position of child " + positionOfTheChild) ==> java.lang.RuntimeException
+  Line 1635) nodeToPrint.accept(this, null) ==> void
+  Line 1641) List<Node> everything = new LinkedList<Node>() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 1641) new LinkedList<Node>() ==> java.util.LinkedList<com.github.javaparser.ast.Node>
+  Line 1642) everything.addAll(node.getChildrenNodes()) ==> boolean
+  Line 1643) sortByBeginPosition(everything) ==> void
+  Line 1644) everything.size() == 0 ==> boolean
+  Line 1646) int commentsAtEnd = 0 ==> int
+  Line 1646) 0 ==> int
+  Line 1647) boolean findingComments = true ==> boolean
+  Line 1647) true ==> boolean
+  Line 1648) findingComments && commentsAtEnd < everything.size() ==> boolean
+  Line 1649) Node last = everything.get(everything.size() - 1 - commentsAtEnd) ==> com.github.javaparser.ast.Node
+  Line 1649) everything.get(everything.size() - 1 - commentsAtEnd) ==> com.github.javaparser.ast.Node
+  Line 1650) findingComments = (last instanceof Comment) ==> boolean
+  Line 1651) findingComments ==> boolean
+  Line 1651) commentsAtEnd++ ==> int
+  Line 1653) int i = 0 ==> int
+  Line 1653) 0 ==> int
+  Line 1653) i < commentsAtEnd ==> boolean
+  Line 1653) i++ ==> int
+  Line 1654) everything.get(everything.size() - commentsAtEnd + i).accept(this, null) ==> void

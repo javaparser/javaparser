@@ -1,0 +1,19 @@
+
+[ Class com.github.javaparser.ast.body.VariableDeclaratorId ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  Line 42) setName(name) ==> void
+  Line 46) beginLine ==> int
+  Line 46) beginColumn ==> int
+  Line 46) endLine ==> int
+  Line 46) endColumn ==> int
+  Line 47) setName(name) ==> void
+  Line 48) setArrayCount(arrayCount) ==> void
+  Line 53) v.visit(this, arg) ==> R
+  Line 58) v.visit(this, arg) ==> void
+  Line 62) arrayCount ==> int
+  Line 66) name ==> java.lang.String
+  Line 70) this.arrayCount = arrayCount ==> int
+  Line 74) this.name = name ==> java.lang.String

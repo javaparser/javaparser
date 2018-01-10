@@ -1,0 +1,17 @@
+
+[ Class com.github.javaparser.ast.expr.SuperExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 38) setClassExpr(classExpr) ==> void
+  Line 43) beginLine ==> int
+  Line 43) beginColumn ==> int
+  Line 43) endLine ==> int
+  Line 43) endColumn ==> int
+  Line 44) setClassExpr(classExpr) ==> void
+  Line 48) v.visit(this, arg) ==> R
+  Line 52) v.visit(this, arg) ==> void
+  Line 56) classExpr ==> com.github.javaparser.ast.expr.Expression
+  Line 60) this.classExpr = classExpr ==> com.github.javaparser.ast.expr.Expression
+  Line 61) setAsParentNodeOf(this.classExpr) ==> void

@@ -1,0 +1,13 @@
+import java.util.List;
+
+class A {
+    String a;
+}
+
+class B<T> extends A {
+    List<T> b;
+}
+
+class C extends B<String> {
+    int c;
+}

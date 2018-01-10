@@ -1,0 +1,70 @@
+import java.util.List;
+
+class MethodCalls {
+
+    public int member;
+    
+    public MethodCalls getSelf()
+    {
+        return this;
+    }
+
+
+    public void foo()
+    {
+    }
+
+    void bar1()
+    {
+        getSelf().getSelf().foo();
+    }
+
+    int bar2()
+    {
+        return getSelf().m;
+    }
+
+    void inheritedInterfaceMethod(){
+        List<Integer> list;
+        list.toString();
+    }
+
+    void variadicTest(){
+        String[] varArg = new String[2];
+        foobar("a");
+        foobar(varArg);
+    }
+
+    int foobar(String s){
+        return 1;
+    }
+
+    void foobar(String... s){
+        return;
+    }
+
+    void variadicMethod(String... s)
+    {
+        this.variadicMethod("test");
+    }
+
+    <T> T genericMethod0() { return null; }
+    <T> T genericMethod1(T x) { return x; }
+
+    static <T> T staticGenericMethod0() { return null; }
+    static <T> T staticGenericMethod1(T x) { return x; }
+
+    static class GenericClass<T> {}
+
+    static void variadicWithGenericArg(int i, GenericClass<?>... c) {}
+
+    void genericMethodTest() {
+        this.<Integer>genericMethod0();
+        this.genericMethod1("Hello");
+
+        MethodCalls.<Integer>staticGenericMethod0();
+        MethodCalls.staticGenericMethod1("Hello");
+
+        MethodCalls.variadicWithGenericArg(1, new GenericClass<Long>());
+    }
+}

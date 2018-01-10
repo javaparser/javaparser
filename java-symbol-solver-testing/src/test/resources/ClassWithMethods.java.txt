@@ -1,0 +1,14 @@
+class Super {
+    public void foo1() { }
+    public void foo2() { }
+}
+
+class A extends Super {
+    public void foo0() { }
+    public void foo1() { }
+    public void foo3(int i) { }
+    public void foo4(Object o) { }
+    public void foo4(String a) { }
+    public void foo5(String a) { }
+    public void foo5(A a) { }
+}

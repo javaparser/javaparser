@@ -1,0 +1,7 @@
+  Line 54) getTypeArguments() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.getTypeArguments()
+  Line 57) getTypeArguments().isEmpty() ==> java.util.List.isEmpty()
+  Line 57) getTypeArguments() ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.getTypeArguments()
+  Line 65) setTypeArguments(empty) ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.setTypeArguments(java.util.List<com.github.javaparser.ast.type.Type<?>>)
+  Line 73) setTypeArguments((List<Type<?>>) null) ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.setTypeArguments(java.util.List<com.github.javaparser.ast.type.Type<?>>)
+  Line 78) setTypeArguments(arrayToList(typeArguments)) ==> com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments.setTypeArguments(java.util.List<com.github.javaparser.ast.type.Type<?>>)
+  Line 78) arrayToList(typeArguments) ==> com.github.javaparser.utils.Utils.arrayToList(T[])

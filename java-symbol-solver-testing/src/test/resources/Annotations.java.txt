@@ -1,0 +1,22 @@
+package foo.bar;
+
+public @interface MyAnnotation {
+}
+
+public @interface MyAnnotation2 {
+}
+
+public @interface MyAnnotationWithFields {
+    int field();
+}
+
+@MyAnnotation
+class CA {
+
+}
+
+@MyAnnotation2
+class CB extends CA {
+
+}
+

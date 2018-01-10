@@ -1,0 +1,10 @@
+import java.io.*;
+
+class MyClass {
+
+	public void foo1() {
+	    java.util.Scanner s = new java.util.Scanner(in, encoding).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+	}
+
+}

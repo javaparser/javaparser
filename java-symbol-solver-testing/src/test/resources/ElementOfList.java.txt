@@ -1,0 +1,23 @@
+import java.util.List;
+
+class Comment {
+
+}
+
+class AnnotationExpr {
+
+}
+
+class ElementOfList {
+
+    void foo() {
+        List<Comment> comments = commentsCollection.getAll();
+        Object a = comments.get(0);
+    }
+
+    void annotations() {
+        List<AnnotationExpr> annotations = new LinkedList<AnnotationExpr>();
+        Object a = annotations.get(annotations.size()-1);
+    }
+
+}

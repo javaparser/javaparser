@@ -1,0 +1,25 @@
+class AccessThroughSuper {
+	
+	class SuperClass {
+
+		protected String field;
+
+		protected String method() { 
+			return field;
+		}
+
+	}
+
+	class SubClass extends SuperClass {
+
+		protected String fieldTest() { 
+			return super.field;
+		}
+
+		protected String methodTest() { 
+			return super.method();
+		}
+
+	}
+
+}

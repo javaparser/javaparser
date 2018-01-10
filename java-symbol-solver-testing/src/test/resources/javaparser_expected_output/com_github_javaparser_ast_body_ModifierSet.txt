@@ -1,0 +1,36 @@
+
+[ Class com.github.javaparser.ast.body.ModifierSet ]
+  superclass: java.lang.Object
+  Line 37) Modifier.PUBLIC ==> int
+  Line 39) Modifier.PRIVATE ==> int
+  Line 41) Modifier.PROTECTED ==> int
+  Line 43) Modifier.STATIC ==> int
+  Line 45) Modifier.FINAL ==> int
+  Line 47) Modifier.SYNCHRONIZED ==> int
+  Line 49) Modifier.VOLATILE ==> int
+  Line 51) Modifier.TRANSIENT ==> int
+  Line 53) Modifier.NATIVE ==> int
+  Line 55) Modifier.ABSTRACT ==> int
+  Line 57) Modifier.STRICT ==> int
+  Line 60) isPublic(modifiers) ==> boolean
+  Line 61) AccessSpecifier.PUBLIC ==> com.github.javaparser.ast.AccessSpecifier
+  Line 62) isProtected(modifiers) ==> boolean
+  Line 63) AccessSpecifier.PROTECTED ==> com.github.javaparser.ast.AccessSpecifier
+  Line 64) isPrivate(modifiers) ==> boolean
+  Line 65) AccessSpecifier.PRIVATE ==> com.github.javaparser.ast.AccessSpecifier
+  Line 67) AccessSpecifier.DEFAULT ==> com.github.javaparser.ast.AccessSpecifier
+  Line 72) modifiers | mod ==> int
+  Line 76) (modifiers & modifier) != 0 ==> boolean
+  Line 80) (modifiers & ABSTRACT) != 0 ==> boolean
+  Line 84) (modifiers & FINAL) != 0 ==> boolean
+  Line 88) (modifiers & NATIVE) != 0 ==> boolean
+  Line 92) (modifiers & PRIVATE) != 0 ==> boolean
+  Line 96) (modifiers & PROTECTED) != 0 ==> boolean
+  Line 107) !isPublic(modifiers) && !isProtected(modifiers) && !isPrivate(modifiers) ==> boolean
+  Line 111) (modifiers & PUBLIC) != 0 ==> boolean
+  Line 115) (modifiers & STATIC) != 0 ==> boolean
+  Line 119) (modifiers & STRICTFP) != 0 ==> boolean
+  Line 123) (modifiers & SYNCHRONIZED) != 0 ==> boolean
+  Line 127) (modifiers & TRANSIENT) != 0 ==> boolean
+  Line 131) (modifiers & VOLATILE) != 0 ==> boolean
+  Line 141) modifiers & ~mod ==> int

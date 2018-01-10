@@ -1,0 +1,23 @@
+
+[ Class com.github.javaparser.ast.expr.LambdaExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 52) beginLine ==> int
+  Line 52) beginColumn ==> int
+  Line 52) endLine ==> int
+  Line 52) endColumn ==> int
+  Line 53) setParameters(parameters) ==> void
+  Line 54) setBody(body) ==> void
+  Line 55) setParametersEnclosed(parametersEnclosed) ==> void
+  Line 59) parameters ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 63) this.parameters = parameters ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 64) setAsParentNodeOf(this.parameters) ==> void
+  Line 68) body ==> com.github.javaparser.ast.stmt.Statement
+  Line 72) this.body = body ==> com.github.javaparser.ast.stmt.Statement
+  Line 73) setAsParentNodeOf(this.body) ==> void
+  Line 78) v.visit(this, arg) ==> R
+  Line 83) v.visit(this, arg) ==> void
+  Line 87) parametersEnclosed ==> boolean
+  Line 91) this.parametersEnclosed = parametersEnclosed ==> boolean

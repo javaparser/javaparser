@@ -1,0 +1,4 @@
+  Line 65) ((Node) this).tryAddImportToParentCompilationUnit(typeClass) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
+  Line 66) setElementType(new ClassOrInterfaceType(typeClass.getSimpleName())) ==> com.github.javaparser.ast.nodeTypes.NodeWithElementType.setElementType(com.github.javaparser.ast.type.Type<?>)
+  Line 66) typeClass.getSimpleName() ==> java.lang.Class.getSimpleName()
+  Line 71) setElementType(classOrInterfaceType) ==> com.github.javaparser.ast.nodeTypes.NodeWithElementType.setElementType(com.github.javaparser.ast.type.Type<?>)
