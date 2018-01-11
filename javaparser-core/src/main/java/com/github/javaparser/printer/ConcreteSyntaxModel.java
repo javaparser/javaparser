@@ -65,7 +65,7 @@ public class ConcreteSyntaxModel {
     }
 
     private static CsmElement memberAnnotations() {
-        return list(ObservableProperty.ANNOTATIONS, none(), none(), newline());
+        return list(ObservableProperty.ANNOTATIONS, newline(), none(), newline());
     }
 
     private static CsmElement annotations() {

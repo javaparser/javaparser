@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 /**
  * A group of elements that could be in any order.
  */
-public class CsmMix implements CsmElement {private List<CsmElement> elements;
+public class CsmMix implements CsmElement {
+    private List<CsmElement> elements;
 
     public CsmMix(List<CsmElement> elements) {
         if (elements == null) {
@@ -48,6 +49,6 @@ public class CsmMix implements CsmElement {private List<CsmElement> elements;
 
     @Override
     public String toString() {
-        return "CsmMix[" + String.join(", ",elements.stream().map(e -> elements.toString()).collect(Collectors.toList())) + "]";
+        return "CsmMix[" + String.join(", ", elements.stream().map(e -> elements.toString()).collect(Collectors.toList())) + "]";
     }
 }
