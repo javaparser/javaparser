@@ -19,8 +19,6 @@ release.properties
 hs_err_pid*
 target
 
-# Generated javadoc
-javadoc
 .gradle
 *.ipr
 *.iws
