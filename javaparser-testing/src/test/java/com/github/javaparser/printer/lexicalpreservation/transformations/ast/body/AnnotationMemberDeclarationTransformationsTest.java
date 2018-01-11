@@ -30,7 +30,6 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.EnumSet;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -50,7 +49,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Name
 
     @Test
-    public void changingName() throws IOException {
+    public void changingName() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setName("bar");
         assertTransformedToString("int bar();", md);
@@ -59,7 +58,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Type
 
     @Test
-    public void changingType() throws IOException {
+    public void changingType() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setType("String");
         assertTransformedToString("String foo();", md);
@@ -68,21 +67,21 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Modifiers
 
     @Test
-    public void addingModifiers() throws IOException {
+    public void addingModifiers() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setModifiers(EnumSet.of(Modifier.PUBLIC));
         assertTransformedToString("public int foo();", md);
     }
 
     @Test
-    public void removingModifiers() throws IOException {
+    public void removingModifiers() {
         AnnotationMemberDeclaration md = consider("public int foo();");
         md.setModifiers(EnumSet.noneOf(Modifier.class));
         assertTransformedToString("int foo();", md);
     }
 
     @Test
-    public void replacingModifiers() throws IOException {
+    public void replacingModifiers() {
         AnnotationMemberDeclaration md = consider("public int foo();");
         md.setModifiers(EnumSet.of(Modifier.PROTECTED));
         assertTransformedToString("protected int foo();", md);
@@ -91,21 +90,21 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Default value
 
     @Test
-    public void addingDefaultValue() throws IOException {
+    public void addingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo();");
         md.setDefaultValue(new IntegerLiteralExpr("10"));
         assertTransformedToString("int foo() default 10;", md);
     }
 
     @Test
-    public void removingDefaultValue() throws IOException {
+    public void removingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo() default 10;");
         assertEquals(true, md.getDefaultValue().get().remove());
         assertTransformedToString("int foo();", md);
     }
 
     @Test
-    public void replacingDefaultValue() throws IOException {
+    public void replacingDefaultValue() {
         AnnotationMemberDeclaration md = consider("int foo() default 10;");
         md.setDefaultValue(new IntegerLiteralExpr("11"));
         assertTransformedToString("int foo() default 11;", md);
@@ -114,28 +113,36 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Annotations
 
     @Test
-    public void addingAnnotation() throws IOException {
+    public void addingAnnotation() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()"+EOL+"int foo();", it);
+        assertTransformedToString("@myAnno()" + EOL + "int foo();", it);
     }
 
     @Test
-    public void removingAnnotationOnSomeLine() throws IOException {
+    public void addingTwoAnnotations() {
+        AnnotationMemberDeclaration it = consider("int foo();");
+        it.addAnnotation("myAnno");
+        it.addAnnotation("myAnno2");
+        assertTransformedToString("@myAnno()" + EOL + "@myAnno2()" + EOL + "int foo();", it);
+    }
+
+    @Test
+    public void removingAnnotationOnSomeLine() {
         AnnotationMemberDeclaration it = consider("@myAnno int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
 
     @Test
-    public void removingAnnotationOnPrevLine() throws IOException {
+    public void removingAnnotationOnPrevLine() {
         AnnotationMemberDeclaration it = consider("@myAnno" + EOL + "int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
 
     @Test
-    public void replacingAnnotation() throws IOException {
+    public void replacingAnnotation() {
         AnnotationMemberDeclaration it = consider("@myAnno int foo();");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
         assertTransformedToString("@myOtherAnno() int foo();", it);
@@ -144,7 +151,7 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     // Javadoc
 
     @Test
-    public void addingJavadoc() throws IOException {
+    public void addingJavadoc() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
         assertTransformedToString("@interface AD { /**Cool this annotation!*/" + EOL +
@@ -152,14 +159,14 @@ public class AnnotationMemberDeclarationTransformationsTest extends AbstractLexi
     }
 
     @Test
-    public void removingJavadoc() throws IOException {
+    public void removingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         assertTrue(it.getJavadocComment().get().remove());
         assertTransformedToString("@interface AD {  int foo(); }", it.getParentNode().get());
     }
 
     @Test
-    public void replacingJavadoc() throws IOException {
+    public void replacingJavadoc() {
         AnnotationMemberDeclaration it = consider("/**Cool this annotation!*/ int foo();");
         it.setJavadocComment("Super extra cool this annotation!!!");
         assertTransformedToString("@interface AD { /**Super extra cool this annotation!!!*/ int foo(); }", it.getParentNode().get());
