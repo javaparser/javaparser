@@ -115,14 +115,18 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Make sure the bnd-generated manifest is picked up, see MJAR-193 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <archive>
+                        <!-- Make sure the bnd-generated manifest is picked up, see MJAR-193 -->
                         <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                        <!-- Set module name -->
+                        <manifestEntries>
+                            <Automatic-Module-Name>com.github.javaparser.core</Automatic-Module-Name>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -167,18 +171,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Set JPMS module name to `com.github.javaparser.core` -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>com.github.javaparser.core</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </build>
