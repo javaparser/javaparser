@@ -208,7 +208,9 @@ public class LexicalPreservingPrinter {
     private static void storeInitialText(Node root) {
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
-        // We go over tokens and find to which nodes they belong. Note that we choose most specific nodes.
+        // We go over tokens and find to which nodes they belong. Note that we do not traverse the tokens as they were
+        // on a list but as they were organized in a tree. At each time we select only the branch corresponding to the
+        // range of interest and ignore all other branches
         for (JavaToken token : root.getTokenRange().get()) {
             Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
             Node owner = findNodeForToken(root, tokenRange);
