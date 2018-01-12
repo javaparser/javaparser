@@ -1,3 +1,9 @@
+Version 3.5.10
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/73?closed=1)
+* JavaSymbolSolver is now in the same project as JavaParser, meaning they get released together from now on.
+* LexicalPreservingPrinter has had a big speed optimization.
+
 Version 3.5.9
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/72?closed=1)
