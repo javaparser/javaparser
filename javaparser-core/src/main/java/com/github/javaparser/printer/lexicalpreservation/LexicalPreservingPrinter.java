@@ -208,26 +208,13 @@ public class LexicalPreservingPrinter {
     private static void storeInitialText(Node root) {
         Map<Node, List<JavaToken>> tokensByNode = new IdentityHashMap<>();
 
-        // Take all nodes and sort them to get the leaves first
-        List<Node> nodesDepthFirst = new LinkedList<>();
-        new TreeVisitor(){
-            @Override
-            public void process(Node node) {
-                // we do not consider "phantom" nodes here, like the fake type of variable in FieldDeclaration
-                if (!PhantomNodeLogic.isPhantomNode(node)) {
-                    nodesDepthFirst.add(node);
-                }
-            }
-        }.visitLeavesFirst(root);
-
-        // We go over tokens and find to which nodes they belong. Note that we start from the most specific nodes
-        // and we move up to more general nodes
+        // We go over tokens and find to which nodes they belong. Note that we choose most specific nodes.
         for (JavaToken token : root.getTokenRange().get()) {
             Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
-            Node owner = nodesDepthFirst.stream()
-                    .filter(n -> n.getRange().get().contains(tokenRange))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
+            Node owner = findNodeForToken(root, tokenRange);
+            if (owner == null) {
+                throw new RuntimeException("Token without node owning it: " + token);
+            }
             if (!tokensByNode.containsKey(owner)) {
                 tokensByNode.put(owner, new LinkedList<>());
             }
@@ -243,6 +230,23 @@ public class LexicalPreservingPrinter {
                 }
             }
         }.visitBreadthFirst(root);
+    }
+
+    private static Node findNodeForToken(Node node, Range tokenRange) {
+        if (PhantomNodeLogic.isPhantomNode(node)) {
+            return null;
+        }
+        if (node.getRange().get().contains(tokenRange)) {
+            for (Node child : node.getChildNodes()) {
+                Node found = findNodeForToken(child, tokenRange);
+                if (found != null) {
+                    return found;
+                }
+            }
+            return node;
+        } else {
+            return null;
+        }
     }
 
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {
@@ -264,7 +268,7 @@ public class LexicalPreservingPrinter {
         elements.sort(Comparator.comparing(e -> e.a.begin));
         node.setData(NODE_TEXT_DATA, new NodeText(elements.stream().map(p -> p.b).collect(Collectors.toList())));
     }
-    
+
     //
     // Iterators
     //
