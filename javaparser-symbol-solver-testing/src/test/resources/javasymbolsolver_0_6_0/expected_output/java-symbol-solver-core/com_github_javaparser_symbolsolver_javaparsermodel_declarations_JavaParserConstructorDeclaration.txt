@@ -1,0 +1,15 @@
+  Line 48) this.wrappedNode.getParameters().size() ==> com.github.javaparser.ast.NodeList.size()
+  Line 48) this.wrappedNode.getParameters() ==> com.github.javaparser.ast.body.CallableDeclaration.getParameters()
+  Line 53) getNumberOfParams() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration.getNumberOfParams()
+  Line 54) String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 54) getNumberOfParams() ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserConstructorDeclaration.getNumberOfParams()
+  Line 56) wrappedNode.getParameters().get(i) ==> com.github.javaparser.ast.NodeList.get(int)
+  Line 56) wrappedNode.getParameters() ==> com.github.javaparser.ast.body.CallableDeclaration.getParameters()
+  Line 61) this.classDeclaration.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
+  Line 75) Helper.toAccessLevel(wrappedNode.getModifiers()) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.Helper.toAccessLevel(java.util.EnumSet<com.github.javaparser.ast.Modifier>)
+  Line 75) wrappedNode.getModifiers() ==> com.github.javaparser.ast.body.CallableDeclaration.getModifiers()
+  Line 80) this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)).collect(Collectors.toList()) ==> ERROR
+  Line 80) this.wrappedNode.getTypeParameters().stream().map((astTp) -> new JavaParserTypeParameter(astTp, typeSolver)) ==> ERROR
+  Line 80) this.wrappedNode.getTypeParameters().stream() ==> java.util.Collection.stream()
+  Line 80) this.wrappedNode.getTypeParameters() ==> com.github.javaparser.ast.body.CallableDeclaration.getTypeParameters()
+  Line 80) Collectors.toList() ==> java.util.stream.Collectors.toList()

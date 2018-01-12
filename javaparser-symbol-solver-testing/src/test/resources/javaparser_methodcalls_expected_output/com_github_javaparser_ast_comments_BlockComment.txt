@@ -1,0 +1,2 @@
+  Line 52) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.comments.BlockComment, A)
+  Line 57) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.comments.BlockComment, A)

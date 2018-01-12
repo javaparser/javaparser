@@ -1,0 +1,23 @@
+
+[ Class com.github.javaparser.ast.type.WildcardType ]
+  superclass: com.github.javaparser.ast.type.Type
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) setExtends(ext) ==> void
+  Line 44) setExtends(ext) ==> void
+  Line 45) setSuper(sup) ==> void
+  Line 50) beginLine ==> int
+  Line 50) beginColumn ==> int
+  Line 50) endLine ==> int
+  Line 50) endColumn ==> int
+  Line 51) setExtends(ext) ==> void
+  Line 52) setSuper(sup) ==> void
+  Line 56) v.visit(this, arg) ==> R
+  Line 60) v.visit(this, arg) ==> void
+  Line 64) ext ==> com.github.javaparser.ast.type.ReferenceType
+  Line 68) sup ==> com.github.javaparser.ast.type.ReferenceType
+  Line 72) this.ext = ext ==> com.github.javaparser.ast.type.ReferenceType
+  Line 73) setAsParentNodeOf(this.ext) ==> void
+  Line 77) this.sup = sup ==> com.github.javaparser.ast.type.ReferenceType
+  Line 78) setAsParentNodeOf(this.sup) ==> void

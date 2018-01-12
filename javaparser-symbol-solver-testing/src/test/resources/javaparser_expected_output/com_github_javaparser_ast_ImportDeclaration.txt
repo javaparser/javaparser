@@ -1,0 +1,24 @@
+
+[ Class com.github.javaparser.ast.ImportDeclaration ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 53) setAsterisk(isAsterisk) ==> void
+  Line 54) setName(name) ==> void
+  Line 55) setStatic(isStatic) ==> void
+  Line 59) beginLine ==> int
+  Line 59) beginColumn ==> int
+  Line 59) endLine ==> int
+  Line 59) endColumn ==> int
+  Line 60) setAsterisk(isAsterisk) ==> void
+  Line 61) setName(name) ==> void
+  Line 62) setStatic(isStatic) ==> void
+  Line 67) v.visit(this, arg) ==> R
+  Line 72) v.visit(this, arg) ==> void
+  Line 81) name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 91) asterisk ==> boolean
+  Line 101) static_ ==> boolean
+  Line 111) this.asterisk = asterisk ==> boolean
+  Line 121) this.name = name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 122) setAsParentNodeOf(this.name) ==> void
+  Line 132) this.static_ = static_ ==> boolean

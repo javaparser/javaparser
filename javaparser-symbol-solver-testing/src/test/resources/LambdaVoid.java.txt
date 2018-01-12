@@ -1,0 +1,14 @@
+import java.util.List;
+import java.util.stream.IntStream;
+
+public class Agenda {
+
+    private List<String> persons;
+
+    public void lambdaEmpty() {
+        return persons.stream().forEach(p -> {
+            System.out.println(p);
+        });
+    }
+
+}

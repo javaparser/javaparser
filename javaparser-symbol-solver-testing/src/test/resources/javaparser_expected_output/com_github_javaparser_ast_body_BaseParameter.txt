@@ -1,0 +1,26 @@
+
+[ Class com.github.javaparser.ast.body.BaseParameter ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) setId(id) ==> void
+  Line 44) setModifiers(modifiers) ==> void
+  Line 45) setId(id) ==> void
+  Line 49) setModifiers(modifiers) ==> void
+  Line 50) setAnnotations(annotations) ==> void
+  Line 51) setId(id) ==> void
+  Line 55) beginLine ==> int
+  Line 55) beginColumn ==> int
+  Line 55) endLine ==> int
+  Line 55) endColumn ==> int
+  Line 56) setModifiers(modifiers) ==> void
+  Line 57) setAnnotations(annotations) ==> void
+  Line 58) setId(id) ==> void
+  Line 62) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 66) id ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 76) modifiers ==> int
+  Line 80) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 81) setAsParentNodeOf(this.annotations) ==> void
+  Line 85) this.id = id ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 86) setAsParentNodeOf(this.id) ==> void
+  Line 90) this.modifiers = modifiers ==> int

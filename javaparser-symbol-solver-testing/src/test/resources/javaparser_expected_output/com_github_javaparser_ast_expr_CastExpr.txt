@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.expr.CastExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 41) setType(type) ==> void
+  Line 42) setExpr(expr) ==> void
+  Line 46) beginLine ==> int
+  Line 46) beginColumn ==> int
+  Line 46) endLine ==> int
+  Line 46) endColumn ==> int
+  Line 47) setType(type) ==> void
+  Line 48) setExpr(expr) ==> void
+  Line 53) v.visit(this, arg) ==> R
+  Line 58) v.visit(this, arg) ==> void
+  Line 62) expr ==> com.github.javaparser.ast.expr.Expression
+  Line 66) type ==> com.github.javaparser.ast.type.Type
+  Line 70) this.expr = expr ==> com.github.javaparser.ast.expr.Expression
+  Line 71) setAsParentNodeOf(this.expr) ==> void
+  Line 75) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 76) setAsParentNodeOf(this.type) ==> void

@@ -1,0 +1,27 @@
+
+[ Class com.github.javaparser.ast.stmt.IfStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 43) setCondition(condition) ==> void
+  Line 44) setThenStmt(thenStmt) ==> void
+  Line 45) setElseStmt(elseStmt) ==> void
+  Line 50) beginLine ==> int
+  Line 50) beginColumn ==> int
+  Line 50) endLine ==> int
+  Line 50) endColumn ==> int
+  Line 51) setCondition(condition) ==> void
+  Line 52) setThenStmt(thenStmt) ==> void
+  Line 53) setElseStmt(elseStmt) ==> void
+  Line 57) v.visit(this, arg) ==> R
+  Line 61) v.visit(this, arg) ==> void
+  Line 65) condition ==> com.github.javaparser.ast.expr.Expression
+  Line 69) elseStmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 73) thenStmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 77) this.condition = condition ==> com.github.javaparser.ast.expr.Expression
+  Line 78) setAsParentNodeOf(this.condition) ==> void
+  Line 82) this.elseStmt = elseStmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 83) setAsParentNodeOf(this.elseStmt) ==> void
+  Line 87) this.thenStmt = thenStmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 88) setAsParentNodeOf(this.thenStmt) ==> void

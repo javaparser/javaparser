@@ -1,0 +1,425 @@
+
+[ Class com.github.javaparser.ast.visitor.VoidVisitorAdapter ]
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.visitor.VoidVisitor
+  Line 82) visitComment(n.getComment(), arg) ==> void
+  Line 83) n.getJavaDoc() != null ==> boolean
+  Line 84) n.getJavaDoc().accept(this, arg) ==> void
+  Line 86) n.getAnnotations() != null ==> boolean
+  Line 87) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 87) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 88) a.accept(this, arg) ==> void
+  Line 91) n.getMembers() != null ==> boolean
+  Line 92) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 92) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 93) member.accept(this, arg) ==> void
+  Line 99) visitComment(n.getComment(), arg) ==> void
+  Line 100) n.getJavaDoc() != null ==> boolean
+  Line 101) n.getJavaDoc().accept(this, arg) ==> void
+  Line 103) n.getAnnotations() != null ==> boolean
+  Line 104) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 104) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 105) a.accept(this, arg) ==> void
+  Line 108) n.getType().accept(this, arg) ==> void
+  Line 109) n.getDefaultValue() != null ==> boolean
+  Line 110) n.getDefaultValue().accept(this, arg) ==> void
+  Line 115) visitComment(n.getComment(), arg) ==> void
+  Line 116) n.getName().accept(this, arg) ==> void
+  Line 117) n.getIndex().accept(this, arg) ==> void
+  Line 121) visitComment(n.getComment(), arg) ==> void
+  Line 122) n.getType().accept(this, arg) ==> void
+  Line 123) !isNullOrEmpty(n.getDimensions()) ==> boolean
+  Line 124) final Expression dim ==> com.github.javaparser.ast.expr.Expression
+  Line 124) n.getDimensions() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 125) dim.accept(this, arg) ==> void
+  Line 128) n.getInitializer().accept(this, arg) ==> void
+  Line 133) visitComment(n.getComment(), arg) ==> void
+  Line 134) n.getValues() != null ==> boolean
+  Line 135) final Expression expr ==> com.github.javaparser.ast.expr.Expression
+  Line 135) n.getValues() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 136) expr.accept(this, arg) ==> void
+  Line 142) visitComment(n.getComment(), arg) ==> void
+  Line 143) n.getCheck().accept(this, arg) ==> void
+  Line 144) n.getMessage() != null ==> boolean
+  Line 145) n.getMessage().accept(this, arg) ==> void
+  Line 150) visitComment(n.getComment(), arg) ==> void
+  Line 151) n.getTarget().accept(this, arg) ==> void
+  Line 152) n.getValue().accept(this, arg) ==> void
+  Line 156) visitComment(n.getComment(), arg) ==> void
+  Line 157) n.getLeft().accept(this, arg) ==> void
+  Line 158) n.getRight().accept(this, arg) ==> void
+  Line 162) visitComment(n.getComment(), arg) ==> void
+  Line 166) visitComment(n.getComment(), arg) ==> void
+  Line 167) n.getStmts() != null ==> boolean
+  Line 168) final Statement s ==> com.github.javaparser.ast.stmt.Statement
+  Line 168) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 169) s.accept(this, arg) ==> void
+  Line 175) visitComment(n.getComment(), arg) ==> void
+  Line 179) visitComment(n.getComment(), arg) ==> void
+  Line 183) visitComment(n.getComment(), arg) ==> void
+  Line 184) n.getType().accept(this, arg) ==> void
+  Line 185) n.getExpr().accept(this, arg) ==> void
+  Line 189) visitComment(n.getComment(), arg) ==> void
+  Line 190) n.getExcept().accept(this, arg) ==> void
+  Line 191) n.getCatchBlock().accept(this, arg) ==> void
+  Line 195) visitComment(n.getComment(), arg) ==> void
+  Line 199) visitComment(n.getComment(), arg) ==> void
+  Line 200) n.getType().accept(this, arg) ==> void
+  Line 204) visitComment(n.getComment(), arg) ==> void
+  Line 205) n.getJavaDoc() != null ==> boolean
+  Line 206) n.getJavaDoc().accept(this, arg) ==> void
+  Line 208) n.getAnnotations() != null ==> boolean
+  Line 209) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 209) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 210) a.accept(this, arg) ==> void
+  Line 213) n.getTypeParameters() != null ==> boolean
+  Line 214) final TypeParameter t ==> com.github.javaparser.ast.TypeParameter
+  Line 214) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 215) t.accept(this, arg) ==> void
+  Line 218) n.getExtends() != null ==> boolean
+  Line 219) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 219) n.getExtends() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 220) c.accept(this, arg) ==> void
+  Line 224) n.getImplements() != null ==> boolean
+  Line 225) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 225) n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 226) c.accept(this, arg) ==> void
+  Line 229) n.getMembers() != null ==> boolean
+  Line 230) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 230) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 231) member.accept(this, arg) ==> void
+  Line 237) visitComment(n.getComment(), arg) ==> void
+  Line 238) n.getScope() != null ==> boolean
+  Line 239) n.getScope().accept(this, arg) ==> void
+  Line 241) n.getTypeArgs() != null ==> boolean
+  Line 242) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 242) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 243) t.accept(this, arg) ==> void
+  Line 249) visitComment(n.getComment(), arg) ==> void
+  Line 250) n.getPackage() != null ==> boolean
+  Line 251) n.getPackage().accept(this, arg) ==> void
+  Line 253) n.getImports() != null ==> boolean
+  Line 254) final ImportDeclaration i ==> com.github.javaparser.ast.ImportDeclaration
+  Line 254) n.getImports() ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 255) i.accept(this, arg) ==> void
+  Line 258) n.getTypes() != null ==> boolean
+  Line 259) final TypeDeclaration typeDeclaration ==> com.github.javaparser.ast.body.TypeDeclaration
+  Line 259) n.getTypes() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 260) typeDeclaration.accept(this, arg) ==> void
+  Line 266) visitComment(n.getComment(), arg) ==> void
+  Line 267) n.getCondition().accept(this, arg) ==> void
+  Line 268) n.getThenExpr().accept(this, arg) ==> void
+  Line 269) n.getElseExpr().accept(this, arg) ==> void
+  Line 273) visitComment(n.getComment(), arg) ==> void
+  Line 274) n.getJavaDoc() != null ==> boolean
+  Line 275) n.getJavaDoc().accept(this, arg) ==> void
+  Line 277) n.getAnnotations() != null ==> boolean
+  Line 278) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 278) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 279) a.accept(this, arg) ==> void
+  Line 282) n.getTypeParameters() != null ==> boolean
+  Line 283) final TypeParameter t ==> com.github.javaparser.ast.TypeParameter
+  Line 283) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 284) t.accept(this, arg) ==> void
+  Line 287) n.getParameters() != null ==> boolean
+  Line 288) final Parameter p ==> com.github.javaparser.ast.body.Parameter
+  Line 288) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 289) p.accept(this, arg) ==> void
+  Line 292) n.getThrows() != null ==> boolean
+  Line 293) final NameExpr name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 293) n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 294) name.accept(this, arg) ==> void
+  Line 297) n.getBlock().accept(this, arg) ==> void
+  Line 301) visitComment(n.getComment(), arg) ==> void
+  Line 305) visitComment(n.getComment(), arg) ==> void
+  Line 306) n.getBody().accept(this, arg) ==> void
+  Line 307) n.getCondition().accept(this, arg) ==> void
+  Line 311) visitComment(n.getComment(), arg) ==> void
+  Line 315) visitComment(n.getComment(), arg) ==> void
+  Line 316) n.getJavaDoc() != null ==> boolean
+  Line 317) n.getJavaDoc().accept(this, arg) ==> void
+  Line 322) visitComment(n.getComment(), arg) ==> void
+  Line 326) visitComment(n.getComment(), arg) ==> void
+  Line 327) n.getJavaDoc() != null ==> boolean
+  Line 328) n.getJavaDoc().accept(this, arg) ==> void
+  Line 333) visitComment(n.getComment(), arg) ==> void
+  Line 334) n.getInner().accept(this, arg) ==> void
+  Line 338) visitComment(n.getComment(), arg) ==> void
+  Line 339) n.getJavaDoc() != null ==> boolean
+  Line 340) n.getJavaDoc().accept(this, arg) ==> void
+  Line 342) n.getAnnotations() != null ==> boolean
+  Line 343) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 343) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 344) a.accept(this, arg) ==> void
+  Line 347) n.getArgs() != null ==> boolean
+  Line 348) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 348) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 349) e.accept(this, arg) ==> void
+  Line 352) n.getClassBody() != null ==> boolean
+  Line 353) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 353) n.getClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 354) member.accept(this, arg) ==> void
+  Line 360) visitComment(n.getComment(), arg) ==> void
+  Line 361) n.getJavaDoc() != null ==> boolean
+  Line 362) n.getJavaDoc().accept(this, arg) ==> void
+  Line 364) n.getAnnotations() != null ==> boolean
+  Line 365) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 365) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 366) a.accept(this, arg) ==> void
+  Line 369) n.getImplements() != null ==> boolean
+  Line 370) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 370) n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 371) c.accept(this, arg) ==> void
+  Line 374) n.getEntries() != null ==> boolean
+  Line 375) final EnumConstantDeclaration e ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 375) n.getEntries() ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 376) e.accept(this, arg) ==> void
+  Line 379) n.getMembers() != null ==> boolean
+  Line 380) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 380) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 381) member.accept(this, arg) ==> void
+  Line 387) visitComment(n.getComment(), arg) ==> void
+  Line 388) !n.isThis() ==> boolean
+  Line 389) n.getExpr() != null ==> boolean
+  Line 390) n.getExpr().accept(this, arg) ==> void
+  Line 393) n.getTypeArgs() != null ==> boolean
+  Line 394) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 394) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 395) t.accept(this, arg) ==> void
+  Line 398) n.getArgs() != null ==> boolean
+  Line 399) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 399) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 400) e.accept(this, arg) ==> void
+  Line 406) visitComment(n.getComment(), arg) ==> void
+  Line 407) n.getExpression().accept(this, arg) ==> void
+  Line 411) visitComment(n.getComment(), arg) ==> void
+  Line 412) n.getScope().accept(this, arg) ==> void
+  Line 416) visitComment(n.getComment(), arg) ==> void
+  Line 417) n.getJavaDoc() != null ==> boolean
+  Line 418) n.getJavaDoc().accept(this, arg) ==> void
+  Line 420) n.getAnnotations() != null ==> boolean
+  Line 421) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 421) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 422) a.accept(this, arg) ==> void
+  Line 425) n.getType().accept(this, arg) ==> void
+  Line 426) final VariableDeclarator var ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 426) n.getVariables() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 427) var.accept(this, arg) ==> void
+  Line 432) visitComment(n.getComment(), arg) ==> void
+  Line 433) n.getVariable().accept(this, arg) ==> void
+  Line 434) n.getIterable().accept(this, arg) ==> void
+  Line 435) n.getBody().accept(this, arg) ==> void
+  Line 439) visitComment(n.getComment(), arg) ==> void
+  Line 440) n.getInit() != null ==> boolean
+  Line 441) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 441) n.getInit() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 442) e.accept(this, arg) ==> void
+  Line 445) n.getCompare() != null ==> boolean
+  Line 446) n.getCompare().accept(this, arg) ==> void
+  Line 448) n.getUpdate() != null ==> boolean
+  Line 449) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 449) n.getUpdate() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 450) e.accept(this, arg) ==> void
+  Line 453) n.getBody().accept(this, arg) ==> void
+  Line 457) visitComment(n.getComment(), arg) ==> void
+  Line 458) n.getCondition().accept(this, arg) ==> void
+  Line 459) n.getThenStmt().accept(this, arg) ==> void
+  Line 460) n.getElseStmt() != null ==> boolean
+  Line 461) n.getElseStmt().accept(this, arg) ==> void
+  Line 466) visitComment(n.getComment(), arg) ==> void
+  Line 467) n.getName().accept(this, arg) ==> void
+  Line 471) visitComment(n.getComment(), arg) ==> void
+  Line 472) n.getJavaDoc() != null ==> boolean
+  Line 473) n.getJavaDoc().accept(this, arg) ==> void
+  Line 475) n.getBlock().accept(this, arg) ==> void
+  Line 479) visitComment(n.getComment(), arg) ==> void
+  Line 480) n.getExpr().accept(this, arg) ==> void
+  Line 481) n.getType().accept(this, arg) ==> void
+  Line 485) visitComment(n.getComment(), arg) ==> void
+  Line 489) visitComment(n.getComment(), arg) ==> void
+  Line 493) visitComment(n.getComment(), arg) ==> void
+  Line 497) visitComment(n.getComment(), arg) ==> void
+  Line 498) n.getStmt().accept(this, arg) ==> void
+  Line 502) visitComment(n.getComment(), arg) ==> void
+  Line 506) visitComment(n.getComment(), arg) ==> void
+  Line 510) visitComment(n.getComment(), arg) ==> void
+  Line 514) visitComment(n.getComment(), arg) ==> void
+  Line 515) n.getName().accept(this, arg) ==> void
+  Line 519) visitComment(n.getComment(), arg) ==> void
+  Line 520) n.getValue().accept(this, arg) ==> void
+  Line 524) visitComment(n.getComment(), arg) ==> void
+  Line 525) n.getScope() != null ==> boolean
+  Line 526) n.getScope().accept(this, arg) ==> void
+  Line 528) n.getTypeArgs() != null ==> boolean
+  Line 529) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 529) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 530) t.accept(this, arg) ==> void
+  Line 533) n.getArgs() != null ==> boolean
+  Line 534) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 534) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 535) e.accept(this, arg) ==> void
+  Line 541) visitComment(n.getComment(), arg) ==> void
+  Line 542) n.getJavaDoc() != null ==> boolean
+  Line 543) n.getJavaDoc().accept(this, arg) ==> void
+  Line 545) n.getAnnotations() != null ==> boolean
+  Line 546) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 546) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 547) a.accept(this, arg) ==> void
+  Line 550) n.getTypeParameters() != null ==> boolean
+  Line 551) final TypeParameter t ==> com.github.javaparser.ast.TypeParameter
+  Line 551) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 552) t.accept(this, arg) ==> void
+  Line 555) n.getType().accept(this, arg) ==> void
+  Line 556) n.getParameters() != null ==> boolean
+  Line 557) final Parameter p ==> com.github.javaparser.ast.body.Parameter
+  Line 557) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 558) p.accept(this, arg) ==> void
+  Line 561) n.getThrows() != null ==> boolean
+  Line 562) final NameExpr name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 562) n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 563) name.accept(this, arg) ==> void
+  Line 566) n.getBody() != null ==> boolean
+  Line 567) n.getBody().accept(this, arg) ==> void
+  Line 572) visitComment(n.getComment(), arg) ==> void
+  Line 576) visitComment(n.getComment(), arg) ==> void
+  Line 577) n.getName().accept(this, arg) ==> void
+  Line 578) n.getPairs() != null ==> boolean
+  Line 579) final MemberValuePair m ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 579) n.getPairs() ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 580) m.accept(this, arg) ==> void
+  Line 586) visitComment(n.getComment(), arg) ==> void
+  Line 590) visitComment(n.getComment(), arg) ==> void
+  Line 591) n.getScope() != null ==> boolean
+  Line 592) n.getScope().accept(this, arg) ==> void
+  Line 594) n.getTypeArgs() != null ==> boolean
+  Line 595) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 595) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 596) t.accept(this, arg) ==> void
+  Line 599) n.getType().accept(this, arg) ==> void
+  Line 600) n.getArgs() != null ==> boolean
+  Line 601) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 601) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 602) e.accept(this, arg) ==> void
+  Line 605) n.getAnonymousClassBody() != null ==> boolean
+  Line 606) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 606) n.getAnonymousClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 607) member.accept(this, arg) ==> void
+  Line 613) visitComment(n.getComment(), arg) ==> void
+  Line 614) n.getAnnotations() != null ==> boolean
+  Line 615) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 615) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 616) a.accept(this, arg) ==> void
+  Line 619) n.getName().accept(this, arg) ==> void
+  Line 623) visitComment(n.getComment(), arg) ==> void
+  Line 624) n.getAnnotations() != null ==> boolean
+  Line 625) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 625) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 626) a.accept(this, arg) ==> void
+  Line 629) n.getType().accept(this, arg) ==> void
+  Line 630) n.getId().accept(this, arg) ==> void
+  Line 634) visitComment(n.getComment(), arg) ==> void
+  Line 635) n.getAnnotations() != null ==> boolean
+  Line 636) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 636) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 637) a.accept(this, arg) ==> void
+  Line 640) final Type type ==> com.github.javaparser.ast.type.Type
+  Line 640) n.getTypes() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 641) type.accept(this, arg) ==> void
+  Line 643) n.getId().accept(this, arg) ==> void
+  Line 647) visitComment(n.getComment(), arg) ==> void
+  Line 651) visitComment(n.getComment(), arg) ==> void
+  Line 652) n.getQualifier().accept(this, arg) ==> void
+  Line 656) visitComment(n.getComment(), arg) ==> void
+  Line 657) n.getType().accept(this, arg) ==> void
+  Line 661) visitComment(n.getComment(), arg) ==> void
+  Line 662) n.getExpr() != null ==> boolean
+  Line 663) n.getExpr().accept(this, arg) ==> void
+  Line 668) visitComment(n.getComment(), arg) ==> void
+  Line 669) n.getName().accept(this, arg) ==> void
+  Line 670) n.getMemberValue().accept(this, arg) ==> void
+  Line 674) visitComment(n.getComment(), arg) ==> void
+  Line 678) visitComment(n.getComment(), arg) ==> void
+  Line 679) n.getClassExpr() != null ==> boolean
+  Line 680) n.getClassExpr().accept(this, arg) ==> void
+  Line 685) visitComment(n.getComment(), arg) ==> void
+  Line 686) n.getLabel() != null ==> boolean
+  Line 687) n.getLabel().accept(this, arg) ==> void
+  Line 689) n.getStmts() != null ==> boolean
+  Line 690) final Statement s ==> com.github.javaparser.ast.stmt.Statement
+  Line 690) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 691) s.accept(this, arg) ==> void
+  Line 697) visitComment(n.getComment(), arg) ==> void
+  Line 698) n.getSelector().accept(this, arg) ==> void
+  Line 699) n.getEntries() != null ==> boolean
+  Line 700) final SwitchEntryStmt e ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 700) n.getEntries() ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 701) e.accept(this, arg) ==> void
+  Line 707) visitComment(n.getComment(), arg) ==> void
+  Line 708) n.getExpr().accept(this, arg) ==> void
+  Line 709) n.getBlock().accept(this, arg) ==> void
+  Line 713) visitComment(n.getComment(), arg) ==> void
+  Line 714) n.getClassExpr() != null ==> boolean
+  Line 715) n.getClassExpr().accept(this, arg) ==> void
+  Line 720) visitComment(n.getComment(), arg) ==> void
+  Line 721) n.getExpr().accept(this, arg) ==> void
+  Line 725) visitComment(n.getComment(), arg) ==> void
+  Line 726) n.getResources() != null ==> boolean
+  Line 727) final VariableDeclarationExpr v ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 727) n.getResources() ==> java.util.List<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 728) v.accept(this, arg) ==> void
+  Line 731) n.getTryBlock().accept(this, arg) ==> void
+  Line 732) n.getCatchs() != null ==> boolean
+  Line 733) final CatchClause c ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 733) n.getCatchs() ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 734) c.accept(this, arg) ==> void
+  Line 737) n.getFinallyBlock() != null ==> boolean
+  Line 738) n.getFinallyBlock().accept(this, arg) ==> void
+  Line 743) visitComment(n.getComment(), arg) ==> void
+  Line 744) n.getTypeDeclaration().accept(this, arg) ==> void
+  Line 748) visitComment(n.getComment(), arg) ==> void
+  Line 749) n.getTypeBound() != null ==> boolean
+  Line 750) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 750) n.getTypeBound() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 751) c.accept(this, arg) ==> void
+  Line 757) visitComment(n.getComment(), arg) ==> void
+  Line 758) n.getExpr().accept(this, arg) ==> void
+  Line 762) visitComment(n.getComment(), arg) ==> void
+  Line 766) visitComment(n.getComment(), arg) ==> void
+  Line 767) n.getAnnotations() != null ==> boolean
+  Line 768) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 768) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 769) a.accept(this, arg) ==> void
+  Line 772) n.getType().accept(this, arg) ==> void
+  Line 773) final VariableDeclarator v ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 773) n.getVars() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 774) v.accept(this, arg) ==> void
+  Line 779) visitComment(n.getComment(), arg) ==> void
+  Line 780) n.getId().accept(this, arg) ==> void
+  Line 781) n.getInit() != null ==> boolean
+  Line 782) n.getInit().accept(this, arg) ==> void
+  Line 787) visitComment(n.getComment(), arg) ==> void
+  Line 791) visitComment(n.getComment(), arg) ==> void
+  Line 795) visitComment(n.getComment(), arg) ==> void
+  Line 796) n.getCondition().accept(this, arg) ==> void
+  Line 797) n.getBody().accept(this, arg) ==> void
+  Line 801) visitComment(n.getComment(), arg) ==> void
+  Line 802) n.getExtends() != null ==> boolean
+  Line 803) n.getExtends().accept(this, arg) ==> void
+  Line 805) n.getSuper() != null ==> boolean
+  Line 806) n.getSuper().accept(this, arg) ==> void
+  Line 812) n.getParameters() != null ==> boolean
+  Line 813) final Parameter a ==> com.github.javaparser.ast.body.Parameter
+  Line 813) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 814) a.accept(this, arg) ==> void
+  Line 817) n.getBody() != null ==> boolean
+  Line 818) n.getBody().accept(this, arg) ==> void
+  Line 824) n.getTypeParameters() != null ==> boolean
+  Line 825) final TypeParameter a ==> com.github.javaparser.ast.TypeParameter
+  Line 825) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 826) a.accept(this, arg) ==> void
+  Line 829) n.getScope() != null ==> boolean
+  Line 830) n.getScope().accept(this, arg) ==> void
+  Line 836) n.getType() != null ==> boolean
+  Line 837) n.getType().accept(this, arg) ==> void
+  Line 842) n != null ==> boolean
+  Line 843) n.accept(this, arg) ==> void

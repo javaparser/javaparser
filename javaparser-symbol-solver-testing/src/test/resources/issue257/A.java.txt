@@ -1,0 +1,9 @@
+package com.testbug;
+import net.testbug.B;
+public class A {
+	private B obj;
+	public void run()
+	{
+		obj.setParameter(null);
+	}
+}

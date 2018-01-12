@@ -1,0 +1,8 @@
+  Line 43) setType(type) ==> com.github.javaparser.ast.expr.CastExpr.setType(com.github.javaparser.ast.type.Type)
+  Line 44) setExpr(expr) ==> com.github.javaparser.ast.expr.CastExpr.setExpr(com.github.javaparser.ast.expr.Expression)
+  Line 49) setType(type) ==> com.github.javaparser.ast.expr.CastExpr.setType(com.github.javaparser.ast.type.Type)
+  Line 50) setExpr(expr) ==> com.github.javaparser.ast.expr.CastExpr.setExpr(com.github.javaparser.ast.expr.Expression)
+  Line 55) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.CastExpr, A)
+  Line 60) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.CastExpr, A)
+  Line 74) setAsParentNodeOf(this.expr) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 81) setAsParentNodeOf(this.type) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

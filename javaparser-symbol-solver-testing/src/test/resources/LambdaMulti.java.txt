@@ -1,0 +1,32 @@
+import java.util.List;
+import java.util.stream.IntStream;
+
+public class Agenda {
+
+    private List<String> persons;
+
+    public void lambdaImpliedReturn() {
+        return persons.stream().parallel().map(i -> {
+            addPerson("");
+        }).findFirst().get();
+    }
+
+    public void lambdaSingleReturn() {
+        return persons.stream().parallel().map(i -> {
+            return addPerson("");
+        }).findFirst().get();
+    }
+
+    public void multiLineReturn() {
+        return persons.stream().parallel().map(i -> {
+            int irrelevant;
+            return addPerson("");
+        }).findFirst().get();
+    }
+
+
+    String addPerson(String x){
+
+    }
+
+}

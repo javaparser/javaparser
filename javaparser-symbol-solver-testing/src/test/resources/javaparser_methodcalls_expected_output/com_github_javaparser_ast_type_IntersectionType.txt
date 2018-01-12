@@ -1,0 +1,6 @@
+  Line 28) setElements(elements) ==> com.github.javaparser.ast.type.IntersectionType.setElements(java.util.List<com.github.javaparser.ast.type.ReferenceType>)
+  Line 33) setElements(elements) ==> com.github.javaparser.ast.type.IntersectionType.setElements(java.util.List<com.github.javaparser.ast.type.ReferenceType>)
+  Line 38) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.type.IntersectionType, A)
+  Line 43) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.type.IntersectionType, A)
+  Line 53) element.setParentNode(null) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 57) setAsParentNodeOf(this.elements) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

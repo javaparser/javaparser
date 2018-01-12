@@ -1,0 +1,57 @@
+import java.util.List;
+
+class Node {
+}
+
+class Comment {
+}
+
+class LocalVariableInParent {
+
+    void foo1() {
+       for (Node child : null){
+            String s;
+            for (Object c : null){
+                if (true){
+                    s;
+                }
+            }
+        }
+    }
+
+    void foo3() {
+       for (Node child : null){
+            String s;
+            for (Object c : null){
+                s;
+            }
+        }
+    }
+
+    void foo2() {
+       for (Node child : null){
+            String s;
+            s;
+        }
+    }
+
+    void foo4() {
+        List<Node> children = node.getChildrenNodes();
+        for (Node child : children){
+            List<Comment> commentsInsideChild = new LinkedList<Comment>();
+            for (Comment c : commentsToAttribute){
+                if (true){
+                    commentsInsideChild.add(c);
+                }
+            }
+        }
+    }
+
+    void foo5() {
+        List<Comment> commentsInsideChild;
+        Comment c;
+        commentsInsideChild.add(c);
+    }
+
+
+}

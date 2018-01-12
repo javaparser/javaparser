@@ -1,0 +1,7 @@
+  Line 16) assertNotNull(message) ==> com.github.javaparser.utils.Utils.assertNotNull(T)
+  Line 17) assertNotNull(range) ==> com.github.javaparser.utils.Utils.assertNotNull(T)
+  Line 18) assertNotNull(cause) ==> com.github.javaparser.utils.Utils.assertNotNull(T)
+  Line 24) range.ifPresent(r -> str.append(" ").append(r)) ==> java.util.Optional.ifPresent(java.util.function.Consumer<? super T>)
+  Line 24) str.append(" ").append(r) ==> java.lang.StringBuilder.append(java.lang.Object)
+  Line 24) str.append(" ") ==> java.lang.StringBuilder.append(java.lang.String)
+  Line 25) str.toString() ==> java.lang.StringBuilder.toString()

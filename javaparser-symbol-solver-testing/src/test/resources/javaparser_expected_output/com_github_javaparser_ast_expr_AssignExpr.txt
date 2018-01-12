@@ -1,0 +1,26 @@
+
+[ Class com.github.javaparser.ast.expr.AssignExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 57) setTarget(target) ==> void
+  Line 58) setValue(value) ==> void
+  Line 59) setOperator(op) ==> void
+  Line 63) beginLine ==> int
+  Line 63) beginColumn ==> int
+  Line 63) endLine ==> int
+  Line 63) endColumn ==> int
+  Line 64) setTarget(target) ==> void
+  Line 65) setValue(value) ==> void
+  Line 66) setOperator(op) ==> void
+  Line 71) v.visit(this, arg) ==> R
+  Line 76) v.visit(this, arg) ==> void
+  Line 80) op ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 84) target ==> com.github.javaparser.ast.expr.Expression
+  Line 88) value ==> com.github.javaparser.ast.expr.Expression
+  Line 92) this.op = op ==> com.github.javaparser.ast.expr.AssignExpr.Operator
+  Line 96) this.target = target ==> com.github.javaparser.ast.expr.Expression
+  Line 97) setAsParentNodeOf(this.target) ==> void
+  Line 101) this.value = value ==> com.github.javaparser.ast.expr.Expression
+  Line 102) setAsParentNodeOf(this.value) ==> void

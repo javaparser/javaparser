@@ -1,0 +1,2 @@
+  Line 52) classDeclaration.getName() ==> com.github.javaparser.symbolsolver.model.declarations.Declaration.getName()
+  Line 62) Collections.emptyList() ==> java.util.Collections.emptyList()

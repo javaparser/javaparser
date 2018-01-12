@@ -1,0 +1,23 @@
+
+[ Class com.github.javaparser.SourcesHelper ]
+  superclass: java.lang.Object
+  Line 29) encoding == null ==> boolean
+  Line 30) streamToString(in) ==> java.lang.String
+  Line 32) java.util.Scanner s = new java.util.Scanner(in, encoding).useDelimiter("\\A") ==> java.util.Scanner
+  Line 32) new java.util.Scanner(in, encoding).useDelimiter("\\A") ==> java.util.Scanner
+  Line 33) s.hasNext() ? s.next() : "" ==> java.lang.String
+  Line 38) java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A") ==> java.util.Scanner
+  Line 38) new java.util.Scanner(in).useDelimiter("\\A") ==> java.util.Scanner
+  Line 39) s.hasNext() ? s.next() : "" ==> java.lang.String
+  Line 43) byte[] rawData = encoding != null ? s.getBytes(encoding) : s.getBytes() ==> byte[]
+  Line 43) encoding != null ? s.getBytes(encoding) : s.getBytes() ==> byte[]
+  Line 44) new ByteArrayInputStream(rawData) ==> java.io.ByteArrayInputStream
+  Line 48) char[] arr = new char[8 * 1024] ==> char[]
+  Line 48) new char[8 * 1024] ==> char[]
+  Line 49) StringBuilder buf = new StringBuilder() ==> java.lang.StringBuilder
+  Line 49) new StringBuilder() ==> java.lang.StringBuilder
+  Line 50) int numChars ==> int
+  Line 52) (numChars = reader.read(arr, 0, arr.length)) > 0 ==> boolean
+  Line 53) buf.append(arr, 0, numChars) ==> java.lang.StringBuilder
+  Line 56) buf.toString() ==> java.lang.String
+  Line 60) new StringReader(s) ==> java.io.StringReader

@@ -1,0 +1,2 @@
+  Line 39) symbols.add(JavaParserSymbolDeclaration.parameter(wrappedNode, typeSolver)) ==> java.util.List.add(E)
+  Line 39) JavaParserSymbolDeclaration.parameter(wrappedNode, typeSolver) ==> com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration.parameter(com.github.javaparser.ast.body.Parameter, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.body.VariableDeclarator ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 42) setId(id) ==> void
+  Line 46) setId(id) ==> void
+  Line 47) setInit(init) ==> void
+  Line 51) beginLine ==> int
+  Line 51) beginColumn ==> int
+  Line 51) endLine ==> int
+  Line 51) endColumn ==> int
+  Line 52) setId(id) ==> void
+  Line 53) setInit(init) ==> void
+  Line 58) v.visit(this, arg) ==> R
+  Line 63) v.visit(this, arg) ==> void
+  Line 67) id ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 71) init ==> com.github.javaparser.ast.expr.Expression
+  Line 75) this.id = id ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 76) setAsParentNodeOf(this.id) ==> void
+  Line 80) this.init = init ==> com.github.javaparser.ast.expr.Expression
+  Line 81) setAsParentNodeOf(this.init) ==> void

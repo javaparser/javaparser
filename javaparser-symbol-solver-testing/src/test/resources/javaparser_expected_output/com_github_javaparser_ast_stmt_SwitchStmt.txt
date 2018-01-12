@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.stmt.SwitchStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 44) setSelector(selector) ==> void
+  Line 45) setEntries(entries) ==> void
+  Line 51) beginLine ==> int
+  Line 51) beginColumn ==> int
+  Line 51) endLine ==> int
+  Line 51) endColumn ==> int
+  Line 52) setSelector(selector) ==> void
+  Line 53) setEntries(entries) ==> void
+  Line 58) v.visit(this, arg) ==> R
+  Line 63) v.visit(this, arg) ==> void
+  Line 67) entries ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 71) selector ==> com.github.javaparser.ast.expr.Expression
+  Line 75) this.entries = entries ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 76) setAsParentNodeOf(this.entries) ==> void
+  Line 80) this.selector = selector ==> com.github.javaparser.ast.expr.Expression
+  Line 81) setAsParentNodeOf(this.selector) ==> void

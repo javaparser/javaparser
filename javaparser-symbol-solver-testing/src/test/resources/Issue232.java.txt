@@ -1,0 +1,12 @@
+class Double {
+}
+
+class DoubleConsumer {
+}
+
+interface OfDouble extends OfPrimitive<Double, DoubleConsumer, OfDouble> {
+
+}
+
+interface OfPrimitive<T, C, S extends OfPrimitive<T, C, S>> {
+}

@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.expr.ArrayAccessExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) setName(name) ==> void
+  Line 41) setIndex(index) ==> void
+  Line 45) beginLine ==> int
+  Line 45) beginColumn ==> int
+  Line 45) endLine ==> int
+  Line 45) endColumn ==> int
+  Line 46) setName(name) ==> void
+  Line 47) setIndex(index) ==> void
+  Line 52) v.visit(this, arg) ==> R
+  Line 57) v.visit(this, arg) ==> void
+  Line 61) index ==> com.github.javaparser.ast.expr.Expression
+  Line 65) name ==> com.github.javaparser.ast.expr.Expression
+  Line 69) this.index = index ==> com.github.javaparser.ast.expr.Expression
+  Line 70) setAsParentNodeOf(this.index) ==> void
+  Line 74) this.name = name ==> com.github.javaparser.ast.expr.Expression
+  Line 75) setAsParentNodeOf(this.name) ==> void

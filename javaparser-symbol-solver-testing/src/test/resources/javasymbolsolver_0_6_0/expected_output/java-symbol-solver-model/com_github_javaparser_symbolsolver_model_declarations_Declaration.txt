@@ -1,0 +1,4 @@
+  Line 70) String.format("%s is not a FieldDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 77) String.format("%s is not a ParameterDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 84) String.format("%s is not a TypeDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)
+  Line 91) String.format("%s is not a MethodDeclaration", this) ==> java.lang.String.format(java.lang.String, java.lang.Object...)

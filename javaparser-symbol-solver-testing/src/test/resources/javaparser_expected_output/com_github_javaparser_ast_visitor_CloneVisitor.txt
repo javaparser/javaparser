@@ -1,0 +1,819 @@
+
+[ Class com.github.javaparser.ast.visitor.CloneVisitor ]
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.visitor.GenericVisitor
+  Line 62) PackageDeclaration package_ = cloneNodes(_n.getPackage(), _arg) ==> com.github.javaparser.ast.PackageDeclaration
+  Line 62) cloneNodes(_n.getPackage(), _arg) ==> com.github.javaparser.ast.PackageDeclaration
+  Line 63) List<ImportDeclaration> imports = visit(_n.getImports(), _arg) ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 63) visit(_n.getImports(), _arg) ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 64) List<TypeDeclaration> types = visit(_n.getTypes(), _arg) ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 64) visit(_n.getTypes(), _arg) ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 66) new CompilationUnit(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), package_, imports, types) ==> com.github.javaparser.ast.CompilationUnit
+  Line 74) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 74) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 75) NameExpr name = cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 75) cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 76) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 76) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 78) PackageDeclaration r = new PackageDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), annotations, name) ==> com.github.javaparser.ast.PackageDeclaration
+  Line 78) new PackageDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), annotations, name) ==> com.github.javaparser.ast.PackageDeclaration
+  Line 82) r.setComment(comment) ==> void
+  Line 83) r ==> com.github.javaparser.ast.PackageDeclaration
+  Line 88) NameExpr name = cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 88) cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 89) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 89) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 91) ImportDeclaration r = new ImportDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, _n.isStatic(), _n.isAsterisk()) ==> com.github.javaparser.ast.ImportDeclaration
+  Line 91) new ImportDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, _n.isStatic(), _n.isAsterisk()) ==> com.github.javaparser.ast.ImportDeclaration
+  Line 95) r.setComment(comment) ==> void
+  Line 96) r ==> com.github.javaparser.ast.ImportDeclaration
+  Line 101) List<ClassOrInterfaceType> typeBound = visit(_n.getTypeBound(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 101) visit(_n.getTypeBound(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 103) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 103) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 104) TypeParameter r = new TypeParameter(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName(), typeBound, annotations) ==> com.github.javaparser.ast.TypeParameter
+  Line 104) new TypeParameter(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName(), typeBound, annotations) ==> com.github.javaparser.ast.TypeParameter
+  Line 108) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 108) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 109) r.setComment(comment) ==> void
+  Line 110) r ==> com.github.javaparser.ast.TypeParameter
+  Line 115) new LineComment(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getContent()) ==> com.github.javaparser.ast.comments.LineComment
+  Line 120) new BlockComment(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getContent()) ==> com.github.javaparser.ast.comments.BlockComment
+  Line 125) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 125) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 126) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 126) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 127) List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 127) visit(_n.getTypeParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 128) List<ClassOrInterfaceType> extendsList = visit(_n.getExtends(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 128) visit(_n.getExtends(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 129) List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 129) visit(_n.getImplements(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 130) List<BodyDeclaration> members = visit(_n.getMembers(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 130) visit(_n.getMembers(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 131) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 131) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 133) ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, _n.isInterface(), _n.getName(), typeParameters, extendsList, implementsList, members) ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 133) new ClassOrInterfaceDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, _n.isInterface(), _n.getName(), typeParameters, extendsList, implementsList, members) ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 137) r.setComment(comment) ==> void
+  Line 138) r ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 143) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 143) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 144) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 144) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 145) List<ClassOrInterfaceType> implementsList = visit(_n.getImplements(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 145) visit(_n.getImplements(), _arg) ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 146) List<EnumConstantDeclaration> entries = visit(_n.getEntries(), _arg) ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 146) visit(_n.getEntries(), _arg) ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 147) List<BodyDeclaration> members = visit(_n.getMembers(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 147) visit(_n.getMembers(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 148) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 148) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 150) EnumDeclaration r = new EnumDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, _n.getName(), implementsList, entries, members) ==> com.github.javaparser.ast.body.EnumDeclaration
+  Line 150) new EnumDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, _n.getName(), implementsList, entries, members) ==> com.github.javaparser.ast.body.EnumDeclaration
+  Line 154) r.setComment(comment) ==> void
+  Line 155) r ==> com.github.javaparser.ast.body.EnumDeclaration
+  Line 160) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 160) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 161) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 161) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 163) EmptyTypeDeclaration r = new EmptyTypeDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.body.EmptyTypeDeclaration
+  Line 163) new EmptyTypeDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.body.EmptyTypeDeclaration
+  Line 166) r.setComment(comment) ==> void
+  Line 167) r ==> com.github.javaparser.ast.body.EmptyTypeDeclaration
+  Line 172) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 172) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 173) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 173) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 174) List<Expression> args = visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 174) visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 175) List<BodyDeclaration> classBody = visit(_n.getClassBody(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 175) visit(_n.getClassBody(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 176) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 176) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 178) EnumConstantDeclaration r = new EnumConstantDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), annotations, _n.getName(), args, classBody) ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 178) new EnumConstantDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), annotations, _n.getName(), args, classBody) ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 182) r.setComment(comment) ==> void
+  Line 183) r ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 188) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 188) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 189) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 189) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 190) List<BodyDeclaration> members = visit(_n.getMembers(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 190) visit(_n.getMembers(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 191) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 191) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 193) AnnotationDeclaration r = new AnnotationDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, _n.getName(), members) ==> com.github.javaparser.ast.body.AnnotationDeclaration
+  Line 193) new AnnotationDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, _n.getName(), members) ==> com.github.javaparser.ast.body.AnnotationDeclaration
+  Line 197) r.setComment(comment) ==> void
+  Line 198) r ==> com.github.javaparser.ast.body.AnnotationDeclaration
+  Line 203) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 203) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 204) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 204) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 205) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 205) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 206) Expression defaultValue = cloneNodes(_n.getDefaultValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 206) cloneNodes(_n.getDefaultValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 207) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 207) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 209) AnnotationMemberDeclaration r = new AnnotationMemberDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, _n.getName(), defaultValue) ==> com.github.javaparser.ast.body.AnnotationMemberDeclaration
+  Line 209) new AnnotationMemberDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, _n.getName(), defaultValue) ==> com.github.javaparser.ast.body.AnnotationMemberDeclaration
+  Line 213) r.setComment(comment) ==> void
+  Line 214) r ==> com.github.javaparser.ast.body.AnnotationMemberDeclaration
+  Line 219) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 219) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 220) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 220) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 221) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 221) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 222) List<VariableDeclarator> variables = visit(_n.getVariables(), _arg) ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 222) visit(_n.getVariables(), _arg) ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 223) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 223) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 225) FieldDeclaration r = new FieldDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, variables) ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 225) new FieldDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, variables) ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 229) r.setComment(comment) ==> void
+  Line 230) r ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 235) VariableDeclaratorId id = cloneNodes(_n.getId(), _arg) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 235) cloneNodes(_n.getId(), _arg) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 236) Expression init = cloneNodes(_n.getInit(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 236) cloneNodes(_n.getInit(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 237) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 237) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 239) VariableDeclarator r = new VariableDeclarator(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), id, init) ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 239) new VariableDeclarator(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), id, init) ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 243) r.setComment(comment) ==> void
+  Line 244) r ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 249) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 249) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 251) VariableDeclaratorId r = new VariableDeclaratorId(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName(), _n.getArrayCount()) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 251) new VariableDeclaratorId(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName(), _n.getArrayCount()) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 255) r.setComment(comment) ==> void
+  Line 256) r ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 261) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 261) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 262) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 262) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 263) List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 263) visit(_n.getTypeParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 264) List<Parameter> parameters = visit(_n.getParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 264) visit(_n.getParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 265) List<NameExpr> throws_ = visit(_n.getThrows(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 265) visit(_n.getThrows(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 266) BlockStmt block = cloneNodes(_n.getBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 266) cloneNodes(_n.getBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 267) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 267) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 269) ConstructorDeclaration r = new ConstructorDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, typeParameters, _n.getName(), parameters, throws_, block) ==> com.github.javaparser.ast.body.ConstructorDeclaration
+  Line 269) new ConstructorDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, typeParameters, _n.getName(), parameters, throws_, block) ==> com.github.javaparser.ast.body.ConstructorDeclaration
+  Line 273) r.setComment(comment) ==> void
+  Line 274) r ==> com.github.javaparser.ast.body.ConstructorDeclaration
+  Line 279) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 279) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 280) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 280) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 281) List<TypeParameter> typeParameters = visit(_n.getTypeParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 281) visit(_n.getTypeParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 282) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 282) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 283) List<Parameter> parameters = visit(_n.getParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 283) visit(_n.getParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 284) List<NameExpr> throws_ = visit(_n.getThrows(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 284) visit(_n.getThrows(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 285) BlockStmt block = cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 285) cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 286) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 286) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 288) MethodDeclaration r = new MethodDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, typeParameters, type_, _n.getName(), parameters, _n.getArrayCount(), throws_, block) ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 288) new MethodDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, typeParameters, type_, _n.getName(), parameters, _n.getArrayCount(), throws_, block) ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 292) r.setComment(comment) ==> void
+  Line 293) r ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 298) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 298) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 299) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 299) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 300) VariableDeclaratorId id = cloneNodes(_n.getId(), _arg) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 300) cloneNodes(_n.getId(), _arg) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 301) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 301) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 303) Parameter r = new Parameter(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, _n.isVarArgs(), id) ==> com.github.javaparser.ast.body.Parameter
+  Line 303) new Parameter(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, _n.isVarArgs(), id) ==> com.github.javaparser.ast.body.Parameter
+  Line 307) r.setComment(comment) ==> void
+  Line 308) r ==> com.github.javaparser.ast.body.Parameter
+  Line 313) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 313) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 314) List<Type> types = visit(_n.getTypes(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 314) visit(_n.getTypes(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 315) VariableDeclaratorId id = cloneNodes(_n.getId(), _arg) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 315) cloneNodes(_n.getId(), _arg) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 316) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 316) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 318) MultiTypeParameter r = new MultiTypeParameter(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, types, id) ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 318) new MultiTypeParameter(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, types, id) ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 322) r.setComment(comment) ==> void
+  Line 323) r ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 328) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 328) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 329) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 329) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 331) EmptyMemberDeclaration r = new EmptyMemberDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.body.EmptyMemberDeclaration
+  Line 331) new EmptyMemberDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.body.EmptyMemberDeclaration
+  Line 334) r.setComment(comment) ==> void
+  Line 335) r ==> com.github.javaparser.ast.body.EmptyMemberDeclaration
+  Line 340) JavadocComment javaDoc = cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 340) cloneNodes(_n.getJavaDoc(), _arg) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 341) BlockStmt block = cloneNodes(_n.getBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 341) cloneNodes(_n.getBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 342) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 342) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 344) InitializerDeclaration r = new InitializerDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.isStatic(), block) ==> com.github.javaparser.ast.body.InitializerDeclaration
+  Line 344) new InitializerDeclaration(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.isStatic(), block) ==> com.github.javaparser.ast.body.InitializerDeclaration
+  Line 348) r.setComment(comment) ==> void
+  Line 349) r ==> com.github.javaparser.ast.body.InitializerDeclaration
+  Line 354) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 354) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 355) JavadocComment r = new JavadocComment(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getContent()) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 355) new JavadocComment(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getContent()) ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 359) r.setComment(comment) ==> void
+  Line 360) r ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 365) ClassOrInterfaceType scope = cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 365) cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 366) List<Type> typeArgs = visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 366) visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 367) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 367) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 369) ClassOrInterfaceType r = new ClassOrInterfaceType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, _n.getName(), typeArgs) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 369) new ClassOrInterfaceType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, _n.getName(), typeArgs) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 373) r.setComment(comment) ==> void
+  Line 374) r ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 379) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 379) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 381) PrimitiveType r = new PrimitiveType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getType()) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 381) new PrimitiveType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getType()) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 385) r.setComment(comment) ==> void
+  Line 386) r ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 391) List<AnnotationExpr> ann = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 391) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 392) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 392) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 393) List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 393) _n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 394) List<List<AnnotationExpr>> _arraysAnnotations = null ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 394) null ==> null
+  Line 395) arraysAnnotations != null ==> boolean
+  Line 396) _arraysAnnotations = new LinkedList<List<AnnotationExpr>>() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 397) List<AnnotationExpr> aux ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 397) arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 398) _arraysAnnotations.add(visit(aux, _arg)) ==> boolean
+  Line 402) ReferenceType r = new ReferenceType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, _n.getArrayCount(), ann, _arraysAnnotations) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 402) new ReferenceType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, _n.getArrayCount(), ann, _arraysAnnotations) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 405) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 405) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 406) r.setComment(comment) ==> void
+  Line 407) r ==> com.github.javaparser.ast.type.ReferenceType
+  Line 412) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 412) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 414) VoidType r = new VoidType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.type.VoidType
+  Line 414) new VoidType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.type.VoidType
+  Line 415) r.setComment(comment) ==> void
+  Line 416) r ==> com.github.javaparser.ast.type.VoidType
+  Line 421) ReferenceType ext = cloneNodes(_n.getExtends(), _arg) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 421) cloneNodes(_n.getExtends(), _arg) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 422) ReferenceType sup = cloneNodes(_n.getSuper(), _arg) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 422) cloneNodes(_n.getSuper(), _arg) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 423) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 423) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 425) WildcardType r = new WildcardType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), ext, sup) ==> com.github.javaparser.ast.type.WildcardType
+  Line 425) new WildcardType(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), ext, sup) ==> com.github.javaparser.ast.type.WildcardType
+  Line 429) r.setComment(comment) ==> void
+  Line 430) r ==> com.github.javaparser.ast.type.WildcardType
+  Line 435) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 435) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 437) UnknownType r = new UnknownType() ==> com.github.javaparser.ast.type.UnknownType
+  Line 437) new UnknownType() ==> com.github.javaparser.ast.type.UnknownType
+  Line 438) r.setComment(comment) ==> void
+  Line 439) r ==> com.github.javaparser.ast.type.UnknownType
+  Line 444) Expression name = cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 444) cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 445) Expression index = cloneNodes(_n.getIndex(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 445) cloneNodes(_n.getIndex(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 446) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 446) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 448) ArrayAccessExpr r = new ArrayAccessExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, index) ==> com.github.javaparser.ast.expr.ArrayAccessExpr
+  Line 448) new ArrayAccessExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, index) ==> com.github.javaparser.ast.expr.ArrayAccessExpr
+  Line 452) r.setComment(comment) ==> void
+  Line 453) r ==> com.github.javaparser.ast.expr.ArrayAccessExpr
+  Line 458) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 458) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 459) List<Expression> dimensions = visit(_n.getDimensions(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 459) visit(_n.getDimensions(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 460) ArrayCreationExpr r = new ArrayCreationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, dimensions, _n.getArrayCount()) ==> com.github.javaparser.ast.expr.ArrayCreationExpr
+  Line 460) new ArrayCreationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, dimensions, _n.getArrayCount()) ==> com.github.javaparser.ast.expr.ArrayCreationExpr
+  Line 463) _n.getInitializer() != null ==> boolean
+  Line 465) r.setInitializer(cloneNodes(_n.getInitializer(), _arg)) ==> void
+  Line 467) List<List<AnnotationExpr>> arraysAnnotations = _n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 467) _n.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 468) List<List<AnnotationExpr>> _arraysAnnotations = null ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 468) null ==> null
+  Line 469) arraysAnnotations != null ==> boolean
+  Line 470) _arraysAnnotations = new LinkedList<List<AnnotationExpr>>() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 471) List<AnnotationExpr> aux ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 471) arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 472) _arraysAnnotations.add(visit(aux, _arg)) ==> boolean
+  Line 475) r.setArraysAnnotations(_arraysAnnotations) ==> void
+  Line 476) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 476) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 477) r.setComment(comment) ==> void
+  Line 478) r ==> com.github.javaparser.ast.expr.ArrayCreationExpr
+  Line 483) List<Expression> values = visit(_n.getValues(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 483) visit(_n.getValues(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 484) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 484) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 486) ArrayInitializerExpr r = new ArrayInitializerExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), values) ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 486) new ArrayInitializerExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), values) ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 490) r.setComment(comment) ==> void
+  Line 491) r ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 496) Expression target = cloneNodes(_n.getTarget(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 496) cloneNodes(_n.getTarget(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 497) Expression value = cloneNodes(_n.getValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 497) cloneNodes(_n.getValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 498) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 498) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 500) AssignExpr r = new AssignExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), target, value, _n.getOperator()) ==> com.github.javaparser.ast.expr.AssignExpr
+  Line 500) new AssignExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), target, value, _n.getOperator()) ==> com.github.javaparser.ast.expr.AssignExpr
+  Line 503) r.setComment(comment) ==> void
+  Line 504) r ==> com.github.javaparser.ast.expr.AssignExpr
+  Line 509) Expression left = cloneNodes(_n.getLeft(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 509) cloneNodes(_n.getLeft(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 510) Expression right = cloneNodes(_n.getRight(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 510) cloneNodes(_n.getRight(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 511) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 511) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 513) BinaryExpr r = new BinaryExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), left, right, _n.getOperator()) ==> com.github.javaparser.ast.expr.BinaryExpr
+  Line 513) new BinaryExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), left, right, _n.getOperator()) ==> com.github.javaparser.ast.expr.BinaryExpr
+  Line 517) r.setComment(comment) ==> void
+  Line 518) r ==> com.github.javaparser.ast.expr.BinaryExpr
+  Line 523) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 523) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 524) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 524) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 525) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 525) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 527) CastExpr r = new CastExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, expr) ==> com.github.javaparser.ast.expr.CastExpr
+  Line 527) new CastExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_, expr) ==> com.github.javaparser.ast.expr.CastExpr
+  Line 531) r.setComment(comment) ==> void
+  Line 532) r ==> com.github.javaparser.ast.expr.CastExpr
+  Line 537) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 537) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 538) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 538) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 540) ClassExpr r = new ClassExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_) ==> com.github.javaparser.ast.expr.ClassExpr
+  Line 540) new ClassExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), type_) ==> com.github.javaparser.ast.expr.ClassExpr
+  Line 544) r.setComment(comment) ==> void
+  Line 545) r ==> com.github.javaparser.ast.expr.ClassExpr
+  Line 550) Expression condition = cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 550) cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 551) Expression thenExpr = cloneNodes(_n.getThenExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 551) cloneNodes(_n.getThenExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 552) Expression elseExpr = cloneNodes(_n.getElseExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 552) cloneNodes(_n.getElseExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 553) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 553) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 555) ConditionalExpr r = new ConditionalExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), condition, thenExpr, elseExpr) ==> com.github.javaparser.ast.expr.ConditionalExpr
+  Line 555) new ConditionalExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), condition, thenExpr, elseExpr) ==> com.github.javaparser.ast.expr.ConditionalExpr
+  Line 559) r.setComment(comment) ==> void
+  Line 560) r ==> com.github.javaparser.ast.expr.ConditionalExpr
+  Line 565) Expression inner = cloneNodes(_n.getInner(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 565) cloneNodes(_n.getInner(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 566) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 566) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 568) EnclosedExpr r = new EnclosedExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), inner) ==> com.github.javaparser.ast.expr.EnclosedExpr
+  Line 568) new EnclosedExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), inner) ==> com.github.javaparser.ast.expr.EnclosedExpr
+  Line 572) r.setComment(comment) ==> void
+  Line 573) r ==> com.github.javaparser.ast.expr.EnclosedExpr
+  Line 578) Expression scope = cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 578) cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 579) List<Type> typeArgs = visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 579) visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 580) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 580) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 582) FieldAccessExpr r = new FieldAccessExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, typeArgs, _n.getField()) ==> com.github.javaparser.ast.expr.FieldAccessExpr
+  Line 582) new FieldAccessExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, typeArgs, _n.getField()) ==> com.github.javaparser.ast.expr.FieldAccessExpr
+  Line 586) r.setComment(comment) ==> void
+  Line 587) r ==> com.github.javaparser.ast.expr.FieldAccessExpr
+  Line 592) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 592) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 593) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 593) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 594) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 594) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 596) InstanceOfExpr r = new InstanceOfExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr, type_) ==> com.github.javaparser.ast.expr.InstanceOfExpr
+  Line 596) new InstanceOfExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr, type_) ==> com.github.javaparser.ast.expr.InstanceOfExpr
+  Line 600) r.setComment(comment) ==> void
+  Line 601) r ==> com.github.javaparser.ast.expr.InstanceOfExpr
+  Line 606) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 606) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 607) StringLiteralExpr r = new StringLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.StringLiteralExpr
+  Line 607) new StringLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.StringLiteralExpr
+  Line 611) r.setComment(comment) ==> void
+  Line 612) r ==> com.github.javaparser.ast.expr.StringLiteralExpr
+  Line 617) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 617) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 619) IntegerLiteralExpr r = new IntegerLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
+  Line 619) new IntegerLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
+  Line 623) r.setComment(comment) ==> void
+  Line 624) r ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
+  Line 629) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 629) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 631) LongLiteralExpr r = new LongLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.LongLiteralExpr
+  Line 631) new LongLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.LongLiteralExpr
+  Line 635) r.setComment(comment) ==> void
+  Line 636) r ==> com.github.javaparser.ast.expr.LongLiteralExpr
+  Line 641) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 641) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 643) IntegerLiteralMinValueExpr r = new IntegerLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
+  Line 643) new IntegerLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
+  Line 644) r.setComment(comment) ==> void
+  Line 645) r ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
+  Line 650) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 650) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 652) LongLiteralMinValueExpr r = new LongLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.expr.LongLiteralMinValueExpr
+  Line 652) new LongLiteralMinValueExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.expr.LongLiteralMinValueExpr
+  Line 653) r.setComment(comment) ==> void
+  Line 654) r ==> com.github.javaparser.ast.expr.LongLiteralMinValueExpr
+  Line 659) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 659) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 661) CharLiteralExpr r = new CharLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.CharLiteralExpr
+  Line 661) new CharLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.CharLiteralExpr
+  Line 665) r.setComment(comment) ==> void
+  Line 666) r ==> com.github.javaparser.ast.expr.CharLiteralExpr
+  Line 671) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 671) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 673) DoubleLiteralExpr r = new DoubleLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.DoubleLiteralExpr
+  Line 673) new DoubleLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.DoubleLiteralExpr
+  Line 677) r.setComment(comment) ==> void
+  Line 678) r ==> com.github.javaparser.ast.expr.DoubleLiteralExpr
+  Line 683) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 683) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 685) BooleanLiteralExpr r = new BooleanLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.BooleanLiteralExpr
+  Line 685) new BooleanLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getValue()) ==> com.github.javaparser.ast.expr.BooleanLiteralExpr
+  Line 689) r.setComment(comment) ==> void
+  Line 690) r ==> com.github.javaparser.ast.expr.BooleanLiteralExpr
+  Line 695) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 695) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 697) NullLiteralExpr r = new NullLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.expr.NullLiteralExpr
+  Line 697) new NullLiteralExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.expr.NullLiteralExpr
+  Line 698) r.setComment(comment) ==> void
+  Line 699) r ==> com.github.javaparser.ast.expr.NullLiteralExpr
+  Line 704) Expression scope = cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 704) cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 705) List<Type> typeArgs = visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 705) visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 706) List<Expression> args = visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 706) visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 707) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 707) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 709) MethodCallExpr r = new MethodCallExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, typeArgs, _n.getName(), args) ==> com.github.javaparser.ast.expr.MethodCallExpr
+  Line 709) new MethodCallExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, typeArgs, _n.getName(), args) ==> com.github.javaparser.ast.expr.MethodCallExpr
+  Line 713) r.setComment(comment) ==> void
+  Line 714) r ==> com.github.javaparser.ast.expr.MethodCallExpr
+  Line 719) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 719) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 721) NameExpr r = new NameExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName()) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 721) new NameExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName()) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 725) r.setComment(comment) ==> void
+  Line 726) r ==> com.github.javaparser.ast.expr.NameExpr
+  Line 731) Expression scope = cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 731) cloneNodes(_n.getScope(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 732) ClassOrInterfaceType type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 732) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 733) List<Type> typeArgs = visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 733) visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 734) List<Expression> args = visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 734) visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 735) List<BodyDeclaration> anonymousBody = visit(_n.getAnonymousClassBody(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 735) visit(_n.getAnonymousClassBody(), _arg) ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 736) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 736) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 738) ObjectCreationExpr r = new ObjectCreationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, type_, typeArgs, args, anonymousBody) ==> com.github.javaparser.ast.expr.ObjectCreationExpr
+  Line 738) new ObjectCreationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, type_, typeArgs, args, anonymousBody) ==> com.github.javaparser.ast.expr.ObjectCreationExpr
+  Line 742) r.setComment(comment) ==> void
+  Line 743) r ==> com.github.javaparser.ast.expr.ObjectCreationExpr
+  Line 748) NameExpr scope = cloneNodes(_n.getQualifier(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 748) cloneNodes(_n.getQualifier(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 749) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 749) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 751) QualifiedNameExpr r = new QualifiedNameExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, _n.getName()) ==> com.github.javaparser.ast.expr.QualifiedNameExpr
+  Line 751) new QualifiedNameExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, _n.getName()) ==> com.github.javaparser.ast.expr.QualifiedNameExpr
+  Line 755) r.setComment(comment) ==> void
+  Line 756) r ==> com.github.javaparser.ast.expr.QualifiedNameExpr
+  Line 761) Expression classExpr = cloneNodes(_n.getClassExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 761) cloneNodes(_n.getClassExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 762) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 762) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 764) ThisExpr r = new ThisExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), classExpr) ==> com.github.javaparser.ast.expr.ThisExpr
+  Line 764) new ThisExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), classExpr) ==> com.github.javaparser.ast.expr.ThisExpr
+  Line 768) r.setComment(comment) ==> void
+  Line 769) r ==> com.github.javaparser.ast.expr.ThisExpr
+  Line 774) Expression classExpr = cloneNodes(_n.getClassExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 774) cloneNodes(_n.getClassExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 775) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 775) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 777) SuperExpr r = new SuperExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), classExpr) ==> com.github.javaparser.ast.expr.SuperExpr
+  Line 777) new SuperExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), classExpr) ==> com.github.javaparser.ast.expr.SuperExpr
+  Line 781) r.setComment(comment) ==> void
+  Line 782) r ==> com.github.javaparser.ast.expr.SuperExpr
+  Line 787) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 787) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 788) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 788) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 790) UnaryExpr r = new UnaryExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr, _n.getOperator()) ==> com.github.javaparser.ast.expr.UnaryExpr
+  Line 790) new UnaryExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr, _n.getOperator()) ==> com.github.javaparser.ast.expr.UnaryExpr
+  Line 794) r.setComment(comment) ==> void
+  Line 795) r ==> com.github.javaparser.ast.expr.UnaryExpr
+  Line 800) List<AnnotationExpr> annotations = visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 800) visit(_n.getAnnotations(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 801) Type type_ = cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 801) cloneNodes(_n.getType(), _arg) ==> com.github.javaparser.ast.type.Type
+  Line 802) List<VariableDeclarator> vars = visit(_n.getVars(), _arg) ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 802) visit(_n.getVars(), _arg) ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 803) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 803) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 805) VariableDeclarationExpr r = new VariableDeclarationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, vars) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 805) new VariableDeclarationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getModifiers(), annotations, type_, vars) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 809) r.setComment(comment) ==> void
+  Line 810) r ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 815) NameExpr name = cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 815) cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 816) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 816) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 818) MarkerAnnotationExpr r = new MarkerAnnotationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name) ==> com.github.javaparser.ast.expr.MarkerAnnotationExpr
+  Line 818) new MarkerAnnotationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name) ==> com.github.javaparser.ast.expr.MarkerAnnotationExpr
+  Line 822) r.setComment(comment) ==> void
+  Line 823) r ==> com.github.javaparser.ast.expr.MarkerAnnotationExpr
+  Line 828) NameExpr name = cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 828) cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 829) Expression memberValue = cloneNodes(_n.getMemberValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 829) cloneNodes(_n.getMemberValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 830) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 830) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 832) SingleMemberAnnotationExpr r = new SingleMemberAnnotationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, memberValue) ==> com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+  Line 832) new SingleMemberAnnotationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, memberValue) ==> com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+  Line 836) r.setComment(comment) ==> void
+  Line 837) r ==> com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+  Line 842) NameExpr name = cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 842) cloneNodes(_n.getName(), _arg) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 843) List<MemberValuePair> pairs = visit(_n.getPairs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 843) visit(_n.getPairs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 844) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 844) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 846) NormalAnnotationExpr r = new NormalAnnotationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, pairs) ==> com.github.javaparser.ast.expr.NormalAnnotationExpr
+  Line 846) new NormalAnnotationExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), name, pairs) ==> com.github.javaparser.ast.expr.NormalAnnotationExpr
+  Line 850) r.setComment(comment) ==> void
+  Line 851) r ==> com.github.javaparser.ast.expr.NormalAnnotationExpr
+  Line 856) Expression value = cloneNodes(_n.getValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 856) cloneNodes(_n.getValue(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 857) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 857) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 859) MemberValuePair r = new MemberValuePair(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName(), value) ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 859) new MemberValuePair(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getName(), value) ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 863) r.setComment(comment) ==> void
+  Line 864) r ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 869) List<Type> typeArgs = visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 869) visit(_n.getTypeArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 870) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 870) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 871) List<Expression> args = visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 871) visit(_n.getArgs(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 872) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 872) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 874) ExplicitConstructorInvocationStmt r = new ExplicitConstructorInvocationStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), typeArgs, _n.isThis(), expr, args) ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+  Line 874) new ExplicitConstructorInvocationStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), typeArgs, _n.isThis(), expr, args) ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+  Line 878) r.setComment(comment) ==> void
+  Line 879) r ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+  Line 884) TypeDeclaration typeDecl = cloneNodes(_n.getTypeDeclaration(), _arg) ==> com.github.javaparser.ast.body.TypeDeclaration
+  Line 884) cloneNodes(_n.getTypeDeclaration(), _arg) ==> com.github.javaparser.ast.body.TypeDeclaration
+  Line 885) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 885) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 887) TypeDeclarationStmt r = new TypeDeclarationStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), typeDecl) ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt
+  Line 887) new TypeDeclarationStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), typeDecl) ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt
+  Line 891) r.setComment(comment) ==> void
+  Line 892) r ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt
+  Line 897) Expression check = cloneNodes(_n.getCheck(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 897) cloneNodes(_n.getCheck(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 898) Expression message = cloneNodes(_n.getMessage(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 898) cloneNodes(_n.getMessage(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 899) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 899) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 901) AssertStmt r = new AssertStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), check, message) ==> com.github.javaparser.ast.stmt.AssertStmt
+  Line 901) new AssertStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), check, message) ==> com.github.javaparser.ast.stmt.AssertStmt
+  Line 905) r.setComment(comment) ==> void
+  Line 906) r ==> com.github.javaparser.ast.stmt.AssertStmt
+  Line 911) List<Statement> stmts = visit(_n.getStmts(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 911) visit(_n.getStmts(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 912) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 912) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 914) BlockStmt r = new BlockStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), stmts) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 914) new BlockStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), stmts) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 918) r.setComment(comment) ==> void
+  Line 919) r ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 924) Statement stmt = cloneNodes(_n.getStmt(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 924) cloneNodes(_n.getStmt(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 925) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 925) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 927) LabeledStmt r = new LabeledStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getLabel(), stmt) ==> com.github.javaparser.ast.stmt.LabeledStmt
+  Line 927) new LabeledStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getLabel(), stmt) ==> com.github.javaparser.ast.stmt.LabeledStmt
+  Line 931) r.setComment(comment) ==> void
+  Line 932) r ==> com.github.javaparser.ast.stmt.LabeledStmt
+  Line 937) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 937) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 939) EmptyStmt r = new EmptyStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.stmt.EmptyStmt
+  Line 939) new EmptyStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn()) ==> com.github.javaparser.ast.stmt.EmptyStmt
+  Line 940) r.setComment(comment) ==> void
+  Line 941) r ==> com.github.javaparser.ast.stmt.EmptyStmt
+  Line 946) Expression expr = cloneNodes(_n.getExpression(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 946) cloneNodes(_n.getExpression(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 947) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 947) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 949) ExpressionStmt r = new ExpressionStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr) ==> com.github.javaparser.ast.stmt.ExpressionStmt
+  Line 949) new ExpressionStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr) ==> com.github.javaparser.ast.stmt.ExpressionStmt
+  Line 953) r.setComment(comment) ==> void
+  Line 954) r ==> com.github.javaparser.ast.stmt.ExpressionStmt
+  Line 959) Expression selector = cloneNodes(_n.getSelector(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 959) cloneNodes(_n.getSelector(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 960) List<SwitchEntryStmt> entries = visit(_n.getEntries(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 960) visit(_n.getEntries(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 961) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 961) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 963) SwitchStmt r = new SwitchStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), selector, entries) ==> com.github.javaparser.ast.stmt.SwitchStmt
+  Line 963) new SwitchStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), selector, entries) ==> com.github.javaparser.ast.stmt.SwitchStmt
+  Line 967) r.setComment(comment) ==> void
+  Line 968) r ==> com.github.javaparser.ast.stmt.SwitchStmt
+  Line 973) Expression label = cloneNodes(_n.getLabel(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 973) cloneNodes(_n.getLabel(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 974) List<Statement> stmts = visit(_n.getStmts(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 974) visit(_n.getStmts(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 975) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 975) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 977) SwitchEntryStmt r = new SwitchEntryStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), label, stmts) ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 977) new SwitchEntryStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), label, stmts) ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 981) r.setComment(comment) ==> void
+  Line 982) r ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 987) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 987) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 989) BreakStmt r = new BreakStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getId()) ==> com.github.javaparser.ast.stmt.BreakStmt
+  Line 989) new BreakStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getId()) ==> com.github.javaparser.ast.stmt.BreakStmt
+  Line 993) r.setComment(comment) ==> void
+  Line 994) r ==> com.github.javaparser.ast.stmt.BreakStmt
+  Line 999) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 999) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1000) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1000) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1002) ReturnStmt r = new ReturnStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr) ==> com.github.javaparser.ast.stmt.ReturnStmt
+  Line 1002) new ReturnStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr) ==> com.github.javaparser.ast.stmt.ReturnStmt
+  Line 1006) r.setComment(comment) ==> void
+  Line 1007) r ==> com.github.javaparser.ast.stmt.ReturnStmt
+  Line 1012) Expression condition = cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1012) cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1013) Statement thenStmt = cloneNodes(_n.getThenStmt(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1013) cloneNodes(_n.getThenStmt(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1014) Statement elseStmt = cloneNodes(_n.getElseStmt(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1014) cloneNodes(_n.getElseStmt(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1015) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1015) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1017) IfStmt r = new IfStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), condition, thenStmt, elseStmt) ==> com.github.javaparser.ast.stmt.IfStmt
+  Line 1017) new IfStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), condition, thenStmt, elseStmt) ==> com.github.javaparser.ast.stmt.IfStmt
+  Line 1021) r.setComment(comment) ==> void
+  Line 1022) r ==> com.github.javaparser.ast.stmt.IfStmt
+  Line 1027) Expression condition = cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1027) cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1028) Statement body = cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1028) cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1029) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1029) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1031) WhileStmt r = new WhileStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), condition, body) ==> com.github.javaparser.ast.stmt.WhileStmt
+  Line 1031) new WhileStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), condition, body) ==> com.github.javaparser.ast.stmt.WhileStmt
+  Line 1035) r.setComment(comment) ==> void
+  Line 1036) r ==> com.github.javaparser.ast.stmt.WhileStmt
+  Line 1041) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1041) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1043) ContinueStmt r = new ContinueStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getId()) ==> com.github.javaparser.ast.stmt.ContinueStmt
+  Line 1043) new ContinueStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), _n.getId()) ==> com.github.javaparser.ast.stmt.ContinueStmt
+  Line 1047) r.setComment(comment) ==> void
+  Line 1048) r ==> com.github.javaparser.ast.stmt.ContinueStmt
+  Line 1053) Statement body = cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1053) cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1054) Expression condition = cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1054) cloneNodes(_n.getCondition(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1055) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1055) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1057) DoStmt r = new DoStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), body, condition) ==> com.github.javaparser.ast.stmt.DoStmt
+  Line 1057) new DoStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), body, condition) ==> com.github.javaparser.ast.stmt.DoStmt
+  Line 1061) r.setComment(comment) ==> void
+  Line 1062) r ==> com.github.javaparser.ast.stmt.DoStmt
+  Line 1067) VariableDeclarationExpr var = cloneNodes(_n.getVariable(), _arg) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 1067) cloneNodes(_n.getVariable(), _arg) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 1068) Expression iterable = cloneNodes(_n.getIterable(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1068) cloneNodes(_n.getIterable(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1069) Statement body = cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1069) cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1070) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1070) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1072) ForeachStmt r = new ForeachStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), var, iterable, body) ==> com.github.javaparser.ast.stmt.ForeachStmt
+  Line 1072) new ForeachStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), var, iterable, body) ==> com.github.javaparser.ast.stmt.ForeachStmt
+  Line 1076) r.setComment(comment) ==> void
+  Line 1077) r ==> com.github.javaparser.ast.stmt.ForeachStmt
+  Line 1082) List<Expression> init = visit(_n.getInit(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 1082) visit(_n.getInit(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 1083) Expression compare = cloneNodes(_n.getCompare(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1083) cloneNodes(_n.getCompare(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1084) List<Expression> update = visit(_n.getUpdate(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 1084) visit(_n.getUpdate(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 1085) Statement body = cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1085) cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1086) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1086) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1088) ForStmt r = new ForStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), init, compare, update, body) ==> com.github.javaparser.ast.stmt.ForStmt
+  Line 1088) new ForStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), init, compare, update, body) ==> com.github.javaparser.ast.stmt.ForStmt
+  Line 1092) r.setComment(comment) ==> void
+  Line 1093) r ==> com.github.javaparser.ast.stmt.ForStmt
+  Line 1098) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1098) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1099) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1099) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1101) ThrowStmt r = new ThrowStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr) ==> com.github.javaparser.ast.stmt.ThrowStmt
+  Line 1101) new ThrowStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr) ==> com.github.javaparser.ast.stmt.ThrowStmt
+  Line 1105) r.setComment(comment) ==> void
+  Line 1106) r ==> com.github.javaparser.ast.stmt.ThrowStmt
+  Line 1111) Expression expr = cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1111) cloneNodes(_n.getExpr(), _arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1112) BlockStmt block = cloneNodes(_n.getBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1112) cloneNodes(_n.getBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1113) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1113) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1115) SynchronizedStmt r = new SynchronizedStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr, block) ==> com.github.javaparser.ast.stmt.SynchronizedStmt
+  Line 1115) new SynchronizedStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), expr, block) ==> com.github.javaparser.ast.stmt.SynchronizedStmt
+  Line 1119) r.setComment(comment) ==> void
+  Line 1120) r ==> com.github.javaparser.ast.stmt.SynchronizedStmt
+  Line 1125) List<VariableDeclarationExpr> resources = visit(_n.getResources(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 1125) visit(_n.getResources(), _arg) ==> java.util.List<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 1126) BlockStmt tryBlock = cloneNodes(_n.getTryBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1126) cloneNodes(_n.getTryBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1127) List<CatchClause> catchs = visit(_n.getCatchs(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 1127) visit(_n.getCatchs(), _arg) ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 1128) BlockStmt finallyBlock = cloneNodes(_n.getFinallyBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1128) cloneNodes(_n.getFinallyBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1129) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1129) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1131) TryStmt r = new TryStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), resources, tryBlock, catchs, finallyBlock) ==> com.github.javaparser.ast.stmt.TryStmt
+  Line 1131) new TryStmt(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), resources, tryBlock, catchs, finallyBlock) ==> com.github.javaparser.ast.stmt.TryStmt
+  Line 1135) r.setComment(comment) ==> void
+  Line 1136) r ==> com.github.javaparser.ast.stmt.TryStmt
+  Line 1141) MultiTypeParameter except = cloneNodes(_n.getExcept(), _arg) ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 1141) cloneNodes(_n.getExcept(), _arg) ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 1142) BlockStmt catchBlock = cloneNodes(_n.getCatchBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1142) cloneNodes(_n.getCatchBlock(), _arg) ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1143) Comment comment = cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1143) cloneNodes(_n.getComment(), _arg) ==> com.github.javaparser.ast.comments.Comment
+  Line 1145) CatchClause r = new CatchClause(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), except.getModifiers(), except.getAnnotations(), except.getTypes(), except.getId(), catchBlock) ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1145) new CatchClause(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), except.getModifiers(), except.getAnnotations(), except.getTypes(), except.getId(), catchBlock) ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1149) r.setComment(comment) ==> void
+  Line 1150) r ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1156) List<Parameter> lambdaParameters = visit(_n.getParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 1156) visit(_n.getParameters(), _arg) ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 1158) Statement body = cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1158) cloneNodes(_n.getBody(), _arg) ==> com.github.javaparser.ast.stmt.Statement
+  Line 1160) LambdaExpr r = new LambdaExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), lambdaParameters, body, _n.isParametersEnclosed()) ==> com.github.javaparser.ast.expr.LambdaExpr
+  Line 1160) new LambdaExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), lambdaParameters, body, _n.isParametersEnclosed()) ==> com.github.javaparser.ast.expr.LambdaExpr
+  Line 1164) r ==> com.github.javaparser.ast.expr.LambdaExpr
+  Line 1170) List<TypeParameter> typeParams = visit(_n.getTypeParameters(), arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 1170) visit(_n.getTypeParameters(), arg) ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 1171) Expression scope = cloneNodes(_n.getScope(), arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1171) cloneNodes(_n.getScope(), arg) ==> com.github.javaparser.ast.expr.Expression
+  Line 1173) MethodReferenceExpr r = new MethodReferenceExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, typeParams, _n.getIdentifier()) ==> com.github.javaparser.ast.expr.MethodReferenceExpr
+  Line 1173) new MethodReferenceExpr(_n.getBeginLine(), _n.getBeginColumn(), _n.getEndLine(), _n.getEndColumn(), scope, typeParams, _n.getIdentifier()) ==> com.github.javaparser.ast.expr.MethodReferenceExpr
+  Line 1176) r ==> com.github.javaparser.ast.expr.MethodReferenceExpr
+  Line 1182) Type t = cloneNodes(n.getType(), arg) ==> com.github.javaparser.ast.type.Type
+  Line 1182) cloneNodes(n.getType(), arg) ==> com.github.javaparser.ast.type.Type
+  Line 1184) TypeExpr r = new TypeExpr(n.getBeginLine(), n.getBeginColumn(), n.getEndLine(), n.getEndColumn(), t) ==> com.github.javaparser.ast.expr.TypeExpr
+  Line 1184) new TypeExpr(n.getBeginLine(), n.getBeginColumn(), n.getEndLine(), n.getEndColumn(), t) ==> com.github.javaparser.ast.expr.TypeExpr
+  Line 1187) r ==> com.github.javaparser.ast.expr.TypeExpr
+  Line 1191) _nodes == null ==> boolean
+  Line 1192) null ==> null
+  Line 1193) List<T> r = new ArrayList<T>(_nodes.size()) ==> java.util.List<T>
+  Line 1193) new ArrayList<T>(_nodes.size()) ==> java.util.ArrayList<T>
+  Line 1194) T n ==> T
+  Line 1194) _nodes ==> java.util.List<T>
+  Line 1195) T rN = cloneNodes(n, _arg) ==> T
+  Line 1195) cloneNodes(n, _arg) ==> T
+  Line 1196) rN != null ==> boolean
+  Line 1197) r.add(rN) ==> boolean
+  Line 1199) r ==> java.util.List<T>
+  Line 1203) _node == null ==> boolean
+  Line 1204) null ==> null
+  Line 1205) Node r = _node.accept(this, _arg) ==> com.github.javaparser.ast.Node
+  Line 1205) _node.accept(this, _arg) ==> com.github.javaparser.ast.Node
+  Line 1206) r == null ==> boolean
+  Line 1207) null ==> null
+  Line 1208) (T) r ==> T

@@ -1,0 +1,35 @@
+
+[ Class com.github.javaparser.ast.expr.ObjectCreationExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 51) setScope(scope) ==> void
+  Line 52) setType(type) ==> void
+  Line 53) setArgs(args) ==> void
+  Line 59) beginLine ==> int
+  Line 59) beginColumn ==> int
+  Line 59) endLine ==> int
+  Line 59) endColumn ==> int
+  Line 60) setScope(scope) ==> void
+  Line 61) setType(type) ==> void
+  Line 62) setTypeArgs(typeArgs) ==> void
+  Line 63) setArgs(args) ==> void
+  Line 64) setAnonymousClassBody(anonymousBody) ==> void
+  Line 68) v.visit(this, arg) ==> R
+  Line 72) v.visit(this, arg) ==> void
+  Line 76) anonymousClassBody ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 80) args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 84) scope ==> com.github.javaparser.ast.expr.Expression
+  Line 88) type ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 92) typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 96) this.anonymousClassBody = anonymousClassBody ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 97) setAsParentNodeOf(this.anonymousClassBody) ==> void
+  Line 101) this.args = args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 102) setAsParentNodeOf(this.args) ==> void
+  Line 106) this.scope = scope ==> com.github.javaparser.ast.expr.Expression
+  Line 107) setAsParentNodeOf(this.scope) ==> void
+  Line 111) this.type = type ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 112) setAsParentNodeOf(this.type) ==> void
+  Line 116) this.typeArgs = typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 117) setAsParentNodeOf(this.typeArgs) ==> void
