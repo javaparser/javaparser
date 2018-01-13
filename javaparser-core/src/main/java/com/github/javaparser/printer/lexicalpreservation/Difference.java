@@ -583,7 +583,7 @@ public class Difference {
                     diffIndex++;
                 } else if (diffEl instanceof Kept) {
                     Kept kept = (Kept)diffEl;
-                    if ((kept.element instanceof CsmChild) && nodeTextEl.isComment()) {
+                    if (nodeTextEl.isComment()) {
                         nodeTextIndex++;
                     } else if ((kept.element instanceof CsmChild) && nodeTextEl instanceof ChildTextElement) {
                         diffIndex++;

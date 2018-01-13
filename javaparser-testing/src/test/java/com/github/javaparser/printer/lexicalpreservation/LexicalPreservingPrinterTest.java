@@ -1026,4 +1026,26 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
         cu.accept(new AddFooCallModifierVisitor(), null);
     }
 
+    static class CallModifierVisitor extends ModifierVisitor<Void> {
+        @Override
+        public Visitable visit(MethodCallExpr n, Void arg) {
+            // Add a call to foo() on every found method call
+            return new MethodCallExpr(n.clone(), "foo");
+        }
+    }
+
+    @Test
+    public void invokeModifierVisitorIssue1297() {
+        String code = "class A {" + EOL +
+                "   public void bar() {" + EOL +
+                "     System.out.println(\"hello\");" + EOL +
+                "     System.out.println(\"hello\");" + EOL +
+                "     // comment" + EOL +
+                "   }" + EOL +
+                "}";
+
+        CompilationUnit cu = JavaParser.parse(code);
+        LexicalPreservingPrinter.setup(cu);
+        cu.accept(new CallModifierVisitor(), null);
+    }
 }
