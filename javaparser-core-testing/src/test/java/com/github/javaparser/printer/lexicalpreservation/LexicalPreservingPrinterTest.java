@@ -10,8 +10,10 @@ import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.utils.Pair;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -1104,4 +1106,61 @@ public class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest 
                           "}" + EOL +
                           "}", LexicalPreservingPrinter.print(cu));
     }
+
+    @Test
+    public void issue1321() {
+        String code = "class A { public void consume(final List<Node> pNodesToProcess, final Optional<FieldDeclaration> p) {\n" +
+                "        // Workaround to add multiple children from same node in LexicalPreserving printer => Save former parent (Issue #358 on Java-Symbol-Solver project)\n" +
+                "        Optional<BlockStmt> parent = Optional.empty();\n" +
+                "        for (final Node n : pNodesToProcess) {\n" +
+                "            parent = parent.isPresent() ? parent : n.findParent(BlockStmt.class);\n" +
+                "            parent.ifPresent(surroundingBlock -> {\n" +
+                "                final NodeList<Statement> newStatements = new NodeList<>();\n" +
+                "                Iterator<Node> iterator = surroundingBlock.getChildNodes().iterator();\n" +
+                "                while (iterator.hasNext()) {\n" +
+                "                    Statement next = (Statement) iterator.next();\n" +
+                "                    Statement child = copy(next);\n" +
+                "                    newStatements.add(child);\n" +
+                "                    if (pNodesToProcess.contains(child)) {\n" +
+                "                        process(p, newStatements, child);\n" +
+                "                    }\n" +
+                "                }\n" +
+                "                surroundingBlock.replace(new BlockStmt(newStatements)); **// Errornous line #1**\n" +
+                "            });\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    private void process(final Optional<FieldDeclaration> p, final NodeList<Statement> newStatements, Statement child) {\n" +
+                "        final Optional<MethodCallExpr> firstContainedMethodCall = child.findFirst(MethodCallExpr.class);\n" +
+                "        if (firstContainedMethodCall.isPresent()) {\n" +
+                "            final MethodCallExpr methodCallExpr = firstContainedMethodCall.get().clone();\n" +
+                "            Expression expression = methodCallExpr.getScope().get();\n" +
+                "            **// Potential beginning of error causing Code #2**\n" +
+                "            if (expression.isNameExpr()) {\n" +
+                "                expression.asNameExpr().setName(p.get().findFirst(VariableDeclarator.class).get().getNameAsString());\n" +
+                "            } else if (expression.isFieldAccessExpr()) {\n" +
+                "                expression.asFieldAccessExpr().getName().setIdentifier(p.get().findFirst(VariableDeclarator.class).get().getNameAsString());\n" +
+                "            }\n" +
+                "            newStatements.add(new ExpressionStmt(methodCallExpr));\n" +
+                "            **// end of error causing code**\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    private Statement copy(final Statement next) {\n" +
+                "        if (next.isExpressionStmt()) {\n" +
+                "            ExpressionStmt expressionStmt = new ExpressionStmt(next.asExpressionStmt().getExpression());\n" +
+                "            next.getRange().ifPresent(r -> {\n" +
+                "                expressionStmt.setRange(r);\n" +
+                "            });\n" +
+                "            return expressionStmt;\n" +
+                "        }\n" +
+                "        return next.clone();\n" +
+                "    } }";
+        // Create type solver from CodeBase
+        final TypeSolver mySolver = TypeSolverFactory.createFrom(codeBase);
+
+        // Create new preserving compilation unit
+        Pair<File, CompilationUnit> cu = CompilationUnitFactory.createPreservingCompilationUnit(next, mySolver);
+    }
+
 }
