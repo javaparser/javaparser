@@ -35,6 +35,7 @@ import java.nio.file.Paths;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Category(SlowTest.class)
 public class AnalyseJavaParserTest extends AbstractTest {
 
     private static final File src = adaptPath(new File("src/test/resources/javaparser_src/proper_source"));
@@ -99,31 +100,26 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parsePositionUtils() throws IOException, ParseException {
         parse("com/github/javaparser/PositionUtils");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseJavaParser() throws IOException, ParseException {
         parse("com/github/javaparser/JavaParser");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseStatement() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/Statement");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCatchClause() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/CatchClause");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseStatements() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/LabeledStmt");
         parse("com/github/javaparser/ast/stmt/BreakStmt");
@@ -148,7 +144,6 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseExpressions() throws IOException, ParseException {
         parse("com/github/javaparser/ast/expr/NameExpr");
         parse("com/github/javaparser/ast/expr/FieldAccessExpr");
@@ -191,7 +186,6 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseTypes() throws IOException, ParseException {
         parse("com/github/javaparser/ast/type/ClassOrInterfaceType");
         parse("com/github/javaparser/ast/type/PrimitiveType");
@@ -203,7 +197,6 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseVisitors() throws IOException, ParseException {
         parse("com/github/javaparser/ast/visitor/EqualsVisitor");
         parse("com/github/javaparser/ast/visitor/ModifierVisitorAdapter");
@@ -215,19 +208,16 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCloneVisitor() throws IOException, ParseException {
         parse("com/github/javaparser/ast/visitor/CloneVisitor");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseSourcesHelper() throws IOException, ParseException {
         parse("com/github/javaparser/SourcesHelper");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseComments() throws IOException, ParseException {
         parse("com/github/javaparser/ast/comments/LineComment");
         parse("com/github/javaparser/ast/comments/Comment");
@@ -238,7 +228,6 @@ public class AnalyseJavaParserTest extends AbstractTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseTheRest() throws IOException, ParseException {
         parse("com/github/javaparser/ast/internal/Utils");
         parse("com/github/javaparser/ast/body/AnnotationMemberDeclaration");

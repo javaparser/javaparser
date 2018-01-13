@@ -37,6 +37,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * We analyze a more recent version of JavaParser, after the project moved to Java 8.
  */
+@Category(SlowTest.class)
 public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
 
     private static final File src = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
@@ -115,37 +116,31 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseUtilsUtils() throws IOException, ParseException {
         parse("com/github/javaparser/utils/Utils");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCommentsInserter() throws IOException, ParseException {
         parse("com/github/javaparser/CommentsInserter");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parsePositionUtils() throws IOException, ParseException {
         parse("com/github/javaparser/utils/PositionUtils");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseModifier() throws IOException, ParseException {
         parse("com/github/javaparser/ast/Modifier");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseNodeWithMembers() throws IOException, ParseException {
         parse("com/github/javaparser/ast/nodeTypes/NodeWithMembers");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstStmts() throws IOException, ParseException {
         parse("com/github/javaparser/ast/stmt/AssertStmt");
         parse("com/github/javaparser/ast/stmt/BlockStmt");
@@ -172,7 +167,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstExprs() throws IOException, ParseException {
         parse("com/github/javaparser/ast/expr/AnnotationExpr");
         parse("com/github/javaparser/ast/expr/ArrayAccessExpr");
@@ -214,13 +208,11 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseVariableDeclarationExpr() throws IOException, ParseException {
         parse("com/github/javaparser/ast/expr/VariableDeclarationExpr");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstBody() throws IOException, ParseException {
         parse("com/github/javaparser/ast/body/AnnotationDeclaration");
         parse("com/github/javaparser/ast/body/AnnotationMemberDeclaration");
@@ -241,7 +233,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstComments() throws IOException, ParseException {
         parse("com/github/javaparser/ast/comments/BlockComment");
         parse("com/github/javaparser/ast/comments/Comment");
@@ -251,7 +242,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstRest() throws IOException, ParseException {
         parse("com/github/javaparser/ast/AccessSpecifier");
         parse("com/github/javaparser/ast/ArrayBracketPair");
@@ -265,7 +255,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstNodeTypes() throws IOException, ParseException {
         parse("com/github/javaparser/ast/nodeTypes/NodeWithAnnotations");
         parse("com/github/javaparser/ast/nodeTypes/NodeWithBlockStmt");
@@ -286,7 +275,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstTypes() throws IOException, ParseException {
         parse("com/github/javaparser/ast/type/ArrayType");
         parse("com/github/javaparser/ast/type/ClassOrInterfaceType");
@@ -302,7 +290,6 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAstVisitor() throws IOException, ParseException {
         parse("com/github/javaparser/ast/visitor/CloneVisitor");
         parse("com/github/javaparser/ast/visitor/EqualsVisitor");
@@ -315,20 +302,17 @@ public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseDumpVisitor() throws IOException, ParseException {
         parse("com/github/javaparser/ast/visitor/DumpVisitor");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseUtils() throws IOException, ParseException {
         parse("com/github/javaparser/utils/ClassUtils");
         parse("com/github/javaparser/utils/Pair");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseAllOtherNodes() throws IOException, ParseException {
         parse("com/github/javaparser/JavaParser");
         parse("com/github/javaparser/ParseProblemException");

@@ -40,6 +40,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * We analyze JavaParser version 0.6.0.
  */
+@Category(SlowTest.class)
 public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static final File root = adaptPath(new File("src/test/resources/javasymbolsolver_0_6_0"));
@@ -136,32 +137,27 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreSourceFileInfoExtractor() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/SourceFileInfoExtractor");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreCoreResolution() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/core/resolution/Context");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/core/resolution/ContextHelper");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreDeclarationsCommon() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/declarations/common/MethodDeclarationCommonLogic");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreJavaparserNavigator() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparser/Navigator");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreJavaparsermodel() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/DefaultVisitorAdapter");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/JavaParserFacade");
@@ -172,7 +168,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreJavaparsermodelContexts() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/AbstractJavaParserContext");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/contexts/AbstractMethodLikeDeclarationContext");
@@ -196,7 +191,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreJavaparsermodelDeclarations() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/DefaultConstructorDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarations/Helper");
@@ -217,7 +211,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreJavaparsermodelDeclarators() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/AbstractSymbolDeclarator");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javaparsermodel/declarators/FieldSymbolDeclarator");
@@ -227,7 +220,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreJavassistmodel() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistClassDeclaration");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/javassistmodel/JavassistConstructorDeclaration");
@@ -243,14 +235,12 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreModelTypesystem() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/model/typesystem/LazyType");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/model/typesystem/ReferenceTypeImpl");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreReflectionmodel() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/MyObjectProvider");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/ReflectionClassAdapter");
@@ -267,7 +257,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreReflectionmodelComparators() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/comparators/ClassComparator");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/reflectionmodel/comparators/MethodComparator");
@@ -275,7 +264,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreResolution() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/ConstructorResolutionLogic");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/MethodResolutionLogic");
@@ -284,7 +272,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseCoreResolutionTypesolvers() throws IOException, ParseException {
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/CombinedTypeSolver");
         parse("java-symbol-solver-core", "com/github/javaparser/symbolsolver/resolution/typesolvers/JarTypeSolver");
@@ -294,7 +281,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseLogic() throws IOException, ParseException {
 		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractClassDeclaration");
 		parse("java-symbol-solver-logic", "com/github/javaparser/symbolsolver/logic/AbstractTypeDeclaration");
@@ -306,7 +292,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseModelDeclarations() throws IOException, ParseException {
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/AccessLevel");
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/declarations/AnnotationDeclaration");
@@ -329,13 +314,11 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseModelMethodsMethodUsage() throws IOException, ParseException {
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/methods/MethodUsage");
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseModelResolution() throws IOException, ParseException {
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/resolution/SymbolReference");
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/resolution/TypeSolver");
@@ -344,7 +327,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseModelTypesystem() throws IOException, ParseException {
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/ArrayType");
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/LambdaConstraintType");
@@ -359,7 +341,6 @@ public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
     }
 
     @Test
-    @Category(SlowTest.class)
     public void parseModelTypesystemParametrization() throws IOException, ParseException {
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParametersMap");
         parse("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParameterValueProvider");
