@@ -128,7 +128,6 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
         f;
 
         public enum Sexo_ implements Serializable, Cloneable {
-
         }
 
         private Sexo() {

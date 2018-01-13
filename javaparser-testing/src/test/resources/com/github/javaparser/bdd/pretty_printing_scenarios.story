@@ -131,7 +131,6 @@ Then it is printed as:
 package test;
 
 enum XYZ {
-
 }
 
 Scenario: An enum without fields has no () on its members
@@ -426,7 +425,6 @@ When the class is parsed by the Java parser
 Then it is printed as:
 @C
 enum Abc {
-
 }
 
 Scenario: Annotations are supported on classes (issue 436 is the commented part)

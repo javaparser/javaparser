@@ -38,6 +38,7 @@ public class PrettyPrinterConfiguration {
     private String indent = "    ";
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
+    private int maxEnumConstantsToAlignHorizontally = 5;
 
     public String getIndent() {
         return indent;
@@ -148,6 +149,15 @@ public class PrettyPrinterConfiguration {
      */
     public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
         this.orderImports = orderImports;
+        return this;
+    }
+
+    public int getMaxEnumConstantsToAlignHorizontally() {
+        return maxEnumConstantsToAlignHorizontally;
+    }
+
+    public PrettyPrinterConfiguration setMaxEnumConstantsToAlignHorizontally(int maxEnumConstantsToAlignHorizontally) {
+        this.maxEnumConstantsToAlignHorizontally = maxEnumConstantsToAlignHorizontally;
         return this;
     }
 }
