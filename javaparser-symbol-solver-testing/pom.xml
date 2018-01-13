@@ -27,6 +27,9 @@
     <profiles>
         <profile>
             <id>NonSlowTests</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
