@@ -128,7 +128,6 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      *     }
      * };
      * </pre>
-     * @return
      */
     default boolean isAnonymousClass() {
         return false;
