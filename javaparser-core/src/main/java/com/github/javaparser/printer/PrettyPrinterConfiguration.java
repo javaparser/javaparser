@@ -30,6 +30,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Configuration options for the {@link PrettyPrinter}.
  */
 public class PrettyPrinterConfiguration {
+    public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
+    
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
@@ -38,7 +40,7 @@ public class PrettyPrinterConfiguration {
     private String indent = "    ";
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
-    private int maxEnumConstantsToAlignHorizontally = 5;
+    private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
     public String getIndent() {
         return indent;
@@ -167,9 +169,9 @@ public class PrettyPrinterConfiguration {
      * Then they get aligned like this:
      * <pre>
      *     enum X {
-     *        A, 
-     *        B, 
-     *        C, 
+     *        A,
+     *        B,
+     *        C,
      *        D,
      *        E,
      *        F,

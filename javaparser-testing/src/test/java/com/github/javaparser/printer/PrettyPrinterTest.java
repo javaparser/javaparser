@@ -96,9 +96,9 @@ public class PrettyPrinterTest {
 
     @Test
     public void prettyColumnAlignParameters_enabled() {
-        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
-        config.setIndent("\t");
-        config.setColumnAlignParameters(true);
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
+                .setIndent("\t")
+                .setColumnAlignParameters(true);
 
         final String EOL = config.getEndOfLineCharacter();
 
@@ -137,9 +137,9 @@ public class PrettyPrinterTest {
 
     @Test
     public void prettyAlignMethodCallChains_enabled() {
-        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
-        config.setIndent("\t");
-        config.setColumnAlignFirstMethodChain(true);
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
+                .setIndent("\t")
+                .setColumnAlignFirstMethodChain(true);
 
         final String EOL = config.getEndOfLineCharacter();
 
