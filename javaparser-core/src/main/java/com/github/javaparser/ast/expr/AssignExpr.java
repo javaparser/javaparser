@@ -49,7 +49,18 @@ public final class AssignExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        ASSIGN("="), PLUS("+="), MINUS("-="), MULTIPLY("*="), DIVIDE("/="), AND("&="), OR("|="), XOR("^="), REMAINDER("%="), LEFT_SHIFT("<<="), SIGNED_RIGHT_SHIFT(">>="), UNSIGNED_RIGHT_SHIFT(">>>=");
+        ASSIGN("="),
+        PLUS("+="),
+        MINUS("-="),
+        MULTIPLY("*="),
+        DIVIDE("/="),
+        AND("&="),
+        OR("|="),
+        XOR("^="),
+        REMAINDER("%="),
+        LEFT_SHIFT("<<="),
+        SIGNED_RIGHT_SHIFT(">>="),
+        UNSIGNED_RIGHT_SHIFT(">>>=");
 
         private final String codeRepresentation;
 

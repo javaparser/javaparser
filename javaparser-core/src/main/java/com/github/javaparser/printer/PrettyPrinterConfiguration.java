@@ -30,6 +30,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * Configuration options for the {@link PrettyPrinter}.
  */
 public class PrettyPrinterConfiguration {
+    public static final int DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY = 5;
+    
     private boolean orderImports = false;
     private boolean printComments = true;
     private boolean printJavadoc = true;
@@ -38,6 +40,7 @@ public class PrettyPrinterConfiguration {
     private String indent = "    ";
     private String endOfLineCharacter = EOL;
     private Function<PrettyPrinterConfiguration, PrettyPrintVisitor> visitorFactory = PrettyPrintVisitor::new;
+    private int maxEnumConstantsToAlignHorizontally = DEFAULT_MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY;
 
     public String getIndent() {
         return indent;
@@ -148,6 +151,38 @@ public class PrettyPrinterConfiguration {
      */
     public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
         this.orderImports = orderImports;
+        return this;
+    }
+
+    public int getMaxEnumConstantsToAlignHorizontally() {
+        return maxEnumConstantsToAlignHorizontally;
+    }
+
+    /**
+     * By default enum constants get aligned like this:
+     * <pre>
+     *     enum X {
+     *        A, B, C, D
+     *     }
+     * </pre>
+     * until the amount of constants passes this value (5 by default).
+     * Then they get aligned like this:
+     * <pre>
+     *     enum X {
+     *        A,
+     *        B,
+     *        C,
+     *        D,
+     *        E,
+     *        F,
+     *        G
+     *     }
+     * </pre>
+     * Set it to a large number to always align horizontally.
+     * Set it to 1 or less to always align vertically.
+     */
+    public PrettyPrinterConfiguration setMaxEnumConstantsToAlignHorizontally(int maxEnumConstantsToAlignHorizontally) {
+        this.maxEnumConstantsToAlignHorizontally = maxEnumConstantsToAlignHorizontally;
         return this;
     }
 }

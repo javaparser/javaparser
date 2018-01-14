@@ -66,7 +66,7 @@ public class SourcePrinter {
      * If the source line passed as argument contains newline/carriage-return characters would
      * impredictably affect a correct computation of the current {@link #getCursor()} position. 
      * 
-     * @see {@link #println(String)}
+     * @see SourcePrinter#println(String) 
      * @param arg source line to be printed (should not contain newline/carriage-return characters)
      * @return this instance, for nesting calls to method as fluent interface
      */
