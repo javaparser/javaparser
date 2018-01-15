@@ -28,6 +28,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
 public class PrettyPrinterTest {
@@ -87,92 +88,103 @@ public class PrettyPrinterTest {
     }
 
     @Test
-    public void printUseTestVisitor(){
+    public void printUseTestVisitor() {
         String code;
         code = "class A { void foo(){ int a, b[]; }}";
         assertEquals("test", prettyPrintConfigurable(code));
     }
-    
+
     @Test
     public void prettyColumnAlignParameters_enabled() {
-        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
-        config.setIndent("\t");
-        config.setColumnAlignParameters(true);
-        
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
+                .setIndent("\t")
+                .setColumnAlignParameters(true);
+
         final String EOL = config.getEndOfLineCharacter();
-        
+
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
-        String expected = "class Example {" + EOL + 
-                "" + EOL + 
-                "\tvoid foo(Object arg0, Object arg1) {" + EOL + 
-                "\t\tmyMethod(1," + EOL + 
-                "\t\t         2," + EOL + 
-                "\t\t         3," + EOL + 
-                "\t\t         5," + EOL + 
-                "\t\t         Object.class);" + EOL + 
-                "\t}" + EOL + 
-                "}" + EOL + 
+        String expected = "class Example {" + EOL +
+                "" + EOL +
+                "\tvoid foo(Object arg0, Object arg1) {" + EOL +
+                "\t\tmyMethod(1," + EOL +
+                "\t\t         2," + EOL +
+                "\t\t         3," + EOL +
+                "\t\t         5," + EOL +
+                "\t\t         Object.class);" + EOL +
+                "\t}" + EOL +
+                "}" + EOL +
                 "";
-        
+
         assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
     }
-    
+
     @Test
     public void prettyColumnAlignParameters_disabled() {
         PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
         final String EOL = config.getEndOfLineCharacter();
-        
+
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
-        String expected = "class Example {" + EOL + 
-                "" + EOL + 
-                "    void foo(Object arg0, Object arg1) {" + EOL + 
-                "        myMethod(1, 2, 3, 5, Object.class);" + EOL + 
-                "    }" + EOL + 
-                "}" + EOL + 
-                "";
-        
-        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
-    }
-    
-    @Test
-    public void prettyAlignMethodCallChains_enabled() {
-        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
-        config.setIndent("\t");
-        config.setColumnAlignFirstMethodChain(true);
-        
-        final String EOL = config.getEndOfLineCharacter();
-        
-        String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
-        String expected = "class Example {" + EOL + 
-                "" + EOL + 
-                "\tvoid foo() {" + EOL + 
-                "\t\tIntStream.range(0, 10)" + EOL + 
-                "\t\t         .filter(x -> x % 2 == 0)" + EOL + 
-                "\t\t         .map(x -> x * IntStream.of(1, 3, 5, 1)" + EOL + 
-                "\t\t                                .sum())" + EOL + 
-                "\t\t         .forEach(System.out::println);" + EOL + 
-                "\t}" + EOL + 
-                "}" + EOL + 
+        String expected = "class Example {" + EOL +
+                "" + EOL +
+                "    void foo(Object arg0, Object arg1) {" + EOL +
+                "        myMethod(1, 2, 3, 5, Object.class);" + EOL +
+                "    }" + EOL +
+                "}" + EOL +
                 "";
 
         assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
     }
-    
+
+    @Test
+    public void prettyAlignMethodCallChains_enabled() {
+        PrettyPrinterConfiguration config = new PrettyPrinterConfiguration()
+                .setIndent("\t")
+                .setColumnAlignFirstMethodChain(true);
+
+        final String EOL = config.getEndOfLineCharacter();
+
+        String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
+        String expected = "class Example {" + EOL +
+                "" + EOL +
+                "\tvoid foo() {" + EOL +
+                "\t\tIntStream.range(0, 10)" + EOL +
+                "\t\t         .filter(x -> x % 2 == 0)" + EOL +
+                "\t\t         .map(x -> x * IntStream.of(1, 3, 5, 1)" + EOL +
+                "\t\t                                .sum())" + EOL +
+                "\t\t         .forEach(System.out::println);" + EOL +
+                "\t}" + EOL +
+                "}" + EOL +
+                "";
+
+        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+    }
+
     @Test
     public void prettyAlignMethodCallChains_disabled() {
         PrettyPrinterConfiguration config = new PrettyPrinterConfiguration();
         final String EOL = config.getEndOfLineCharacter();
-        
+
         String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
-        String expected = "class Example {" + EOL + 
-                "" + EOL + 
-                "    void foo() {" + EOL + 
-                "        IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1, 3, 5, 1).sum()).forEach(System.out::println);" + EOL + 
-                "    }" + EOL + 
-                "}" + EOL + 
+        String expected = "class Example {" + EOL +
+                "" + EOL +
+                "    void foo() {" + EOL +
+                "        IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1, 3, 5, 1).sum()).forEach(System.out::println);" + EOL +
+                "    }" + EOL +
+                "}" + EOL +
                 "";
 
         assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
     }
 
+    @Test
+    public void enumConstantsHorizontally() {
+        CompilationUnit cu = JavaParser.parse("enum X{A, B, C, D, E}");
+        assertEqualsNoEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void enumConstantsVertically() {
+        CompilationUnit cu = JavaParser.parse("enum X{A, B, C, D, E, F}");
+        assertEqualsNoEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrinter().print(cu));
+    }
 }

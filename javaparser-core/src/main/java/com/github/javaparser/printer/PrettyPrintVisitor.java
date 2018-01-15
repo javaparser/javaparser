@@ -1061,13 +1061,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
         printer.println(" {");
         printer.indent();
-        if (n.getEntries() != null) {
+        if (n.getEntries().isNonEmpty()) {
+            boolean alignVertically = n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally();
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
-                    printer.print(", ");
+                    if (alignVertically) {
+                        printer.println(",");
+                    } else {
+                        printer.print(", ");
+                    }
                 }
             }
         }

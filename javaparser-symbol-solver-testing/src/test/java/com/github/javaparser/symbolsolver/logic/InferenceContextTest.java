@@ -27,13 +27,14 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Federico Tomassetti
@@ -53,9 +54,9 @@ public class InferenceContextTest {
         string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
         object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
         listOfString = listOf(string);
-        tpE = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
-        EasyMock.expect(tpE.getName()).andReturn("T").anyTimes();
-        EasyMock.replay(tpE);
+        tpE = mock(ResolvedTypeParameterDeclaration.class);
+        when(tpE.getName()).thenReturn("T");
+
         listOfE = listOf(new ResolvedTypeVariable(tpE));
     }
 

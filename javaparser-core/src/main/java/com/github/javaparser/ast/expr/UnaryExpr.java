@@ -51,7 +51,14 @@ public final class UnaryExpr extends Expression implements NodeWithExpression<Un
 
     public enum Operator implements Printable {
 
-        PLUS("+", false), MINUS("-", false), PREFIX_INCREMENT("++", false), PREFIX_DECREMENT("--", false), LOGICAL_COMPLEMENT("!", false), BITWISE_COMPLEMENT("~", false), POSTFIX_INCREMENT("++", true), POSTFIX_DECREMENT("--", true);
+        PLUS("+", false),
+        MINUS("-", false),
+        PREFIX_INCREMENT("++", false),
+        PREFIX_DECREMENT("--", false),
+        LOGICAL_COMPLEMENT("!", false),
+        BITWISE_COMPLEMENT("~", false),
+        POSTFIX_INCREMENT("++", true),
+        POSTFIX_DECREMENT("--", true);
 
         private final String codeRepresentation;
 

@@ -45,8 +45,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
-import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ContextTest extends AbstractTest {
 
@@ -111,22 +112,20 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ResolvedClassDeclaration compilationUnitDecl = createMock(ResolvedClassDeclaration.class);
-        expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
-        expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
-        TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.getRoot()).andReturn(typeSolver);
-        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
-        expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
+        ResolvedClassDeclaration compilationUnitDecl = mock(ResolvedClassDeclaration.class);
+        when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
+        when(compilationUnitDecl.getQualifiedName()).thenReturn("com.github.javaparser.ast.CompilationUnit");
+        TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.getRoot()).thenReturn(typeSolver);
+        when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
+        when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        replay(typeSolver, compilationUnitDecl);
+
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
-
-        verify(typeSolver, compilationUnitDecl);
     }
 
     @Test
@@ -136,23 +135,21 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ResolvedClassDeclaration compilationUnitDecl = createMock(ResolvedClassDeclaration.class);
-        expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
-        expect(compilationUnitDecl.getQualifiedName()).andReturn("com.github.javaparser.ast.CompilationUnit");
-        TypeSolver typeSolver = createMock(TypeSolver.class);
-        //expect(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.unsolved(ClassDeclaration.class));
-        expect(typeSolver.getRoot()).andReturn(typeSolver);
-        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
-        expect(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
+        ResolvedClassDeclaration compilationUnitDecl = mock(ResolvedClassDeclaration.class);
+        when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
+        when(compilationUnitDecl.getQualifiedName()).thenReturn("com.github.javaparser.ast.CompilationUnit");
+        TypeSolver typeSolver = mock(TypeSolver.class);
+        //when(typeSolver.tryToSolveType("java.lang.com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.unsolved(ClassDeclaration.class));
+        when(typeSolver.getRoot()).thenReturn(typeSolver);
+        when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
+        when(typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        replay(typeSolver, compilationUnitDecl);
+        
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("com.github.javaparser.ast.CompilationUnit", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("com.github.javaparser.ast.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
-
-        verify(typeSolver, compilationUnitDecl);
     }
 
     @Test
@@ -162,22 +159,20 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(0);
 
-        ResolvedClassDeclaration compilationUnitDecl = createMock(ResolvedClassDeclaration.class);
-        expect(compilationUnitDecl.getName()).andReturn("CompilationUnit");
-        expect(compilationUnitDecl.getQualifiedName()).andReturn("my.packagez.CompilationUnit");
-        TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.getRoot()).andReturn(typeSolver);
-        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
-        expect(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).andReturn(SymbolReference.solved(compilationUnitDecl));
+        ResolvedClassDeclaration compilationUnitDecl = mock(ResolvedClassDeclaration.class);
+        when(compilationUnitDecl.getName()).thenReturn("CompilationUnit");
+        when(compilationUnitDecl.getQualifiedName()).thenReturn("my.packagez.CompilationUnit");
+        TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.getRoot()).thenReturn(typeSolver);
+        when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
+        when(typeSolver.tryToSolveType("my.packagez.CompilationUnit")).thenReturn(SymbolReference.solved(compilationUnitDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        replay(typeSolver, compilationUnitDecl);
+
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("CompilationUnit", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("CompilationUnit", ref.getCorrespondingDeclaration().getName());
         assertEquals("my.packagez.CompilationUnit", ref.getCorrespondingDeclaration().getQualifiedName());
-
-        verify(typeSolver, compilationUnitDecl);
     }
 
     @Test
@@ -187,23 +182,21 @@ public class ContextTest extends AbstractTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
         Parameter param = method.getParameters().get(1);
 
-        ResolvedClassDeclaration stringDecl = createMock(ResolvedClassDeclaration.class);
-        expect(stringDecl.getName()).andReturn("String");
-        expect(stringDecl.getQualifiedName()).andReturn("java.lang.String");
-        TypeSolver typeSolver = createMock(TypeSolver.class);
-        expect(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).andReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
-        expect(typeSolver.getRoot()).andReturn(typeSolver);
-        expect(typeSolver.solveType("java.lang.Object")).andReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
-        expect(typeSolver.tryToSolveType("java.lang.String")).andReturn(SymbolReference.solved(stringDecl));
+        ResolvedClassDeclaration stringDecl = mock(ResolvedClassDeclaration.class);
+        when(stringDecl.getName()).thenReturn("String");
+        when(stringDecl.getQualifiedName()).thenReturn("java.lang.String");
+        TypeSolver typeSolver = mock(TypeSolver.class);
+        when(typeSolver.tryToSolveType("me.tomassetti.symbolsolver.javaparser.String")).thenReturn(SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
+        when(typeSolver.getRoot()).thenReturn(typeSolver);
+        when(typeSolver.solveType("java.lang.Object")).thenReturn(new ReflectionClassDeclaration(Object.class, typeSolver));
+        when(typeSolver.tryToSolveType("java.lang.String")).thenReturn(SymbolReference.solved(stringDecl));
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
-        replay(typeSolver, stringDecl);
+
         SymbolReference<? extends ResolvedTypeDeclaration> ref = symbolSolver.solveType("String", param);
 
         assertEquals(true, ref.isSolved());
         assertEquals("String", ref.getCorrespondingDeclaration().getName());
         assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getQualifiedName());
-
-        verify(typeSolver, stringDecl);
     }
 
     @Test
@@ -242,7 +235,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToMethodCalledOnArrayAccess() throws ParseException, IOException {
+    public void resolveReferenceToMethodCalledOnArrayAccess() throws ParseException {
         CompilationUnit cu = parseSample("ArrayAccess");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
@@ -258,7 +251,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToJreType() throws ParseException, IOException {
+    public void resolveReferenceToJreType() throws ParseException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -271,7 +264,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToMethodWithLambda() throws ParseException, IOException {
+    public void resolveReferenceToMethodWithLambda() throws ParseException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -286,7 +279,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParamBase() throws ParseException, IOException {
+    public void resolveReferenceToLambdaParamBase() throws ParseException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -300,7 +293,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParamSimplified() throws ParseException, IOException {
+    public void resolveReferenceToLambdaParamSimplified() throws ParseException {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
@@ -421,7 +414,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodWithNullParam() throws ParseException, IOException {
+    public void resolveReferenceToOverloadMethodWithNullParam() throws ParseException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
@@ -436,7 +429,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodFindStricter() throws ParseException, IOException {
+    public void resolveReferenceToOverloadMethodFindStricter() throws ParseException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
@@ -465,7 +458,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodFindOnlyCompatible() throws ParseException, IOException {
+    public void resolveReferenceToOverloadMethodFindOnlyCompatible() throws ParseException {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");

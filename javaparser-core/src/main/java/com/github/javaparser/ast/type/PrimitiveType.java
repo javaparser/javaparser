@@ -87,7 +87,14 @@ public final class PrimitiveType extends Type implements NodeWithAnnotations<Pri
 
     public enum Primitive {
 
-        BOOLEAN("Boolean"), CHAR("Character"), BYTE("Byte"), SHORT("Short"), INT("Integer"), LONG("Long"), FLOAT("Float"), DOUBLE("Double");
+        BOOLEAN("Boolean"),
+        CHAR("Character"),
+        BYTE("Byte"),
+        SHORT("Short"),
+        INT("Integer"),
+        LONG("Long"),
+        FLOAT("Float"),
+        DOUBLE("Double");
 
         final String nameOfBoxedType;
 
