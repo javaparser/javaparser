@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EntryPointsManager">
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="com.github.javaparser.metamodel.DerivedProperty" />
+      <item index="1" class="java.lang.String" itemvalue="org.jbehave.core.annotations.Given" />
+      <item index="2" class="java.lang.String" itemvalue="org.jbehave.core.annotations.Then" />
+      <item index="3" class="java.lang.String" itemvalue="org.jbehave.core.annotations.When" />
+    </list>
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+</project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/javaparser-core/javaparser-core.iml" filepath="$PROJECT_DIR$/javaparser-core/javaparser-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-core-generators/javaparser-core-generators.iml" filepath="$PROJECT_DIR$/javaparser-core-generators/javaparser-core-generators.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-metamodel-generator/javaparser-metamodel-generator.iml" filepath="$PROJECT_DIR$/javaparser-metamodel-generator/javaparser-metamodel-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-parent.iml" filepath="$PROJECT_DIR$/javaparser-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-symbol-solver-core/javaparser-symbol-solver-core.iml" filepath="$PROJECT_DIR$/javaparser-symbol-solver-core/javaparser-symbol-solver-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-symbol-solver-logic/javaparser-symbol-solver-logic.iml" filepath="$PROJECT_DIR$/javaparser-symbol-solver-logic/javaparser-symbol-solver-logic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-symbol-solver-model/javaparser-symbol-solver-model.iml" filepath="$PROJECT_DIR$/javaparser-symbol-solver-model/javaparser-symbol-solver-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-symbol-solver-testing/javaparser-symbol-solver-testing.iml" filepath="$PROJECT_DIR$/javaparser-symbol-solver-testing/javaparser-symbol-solver-testing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaparser-testing/javaparser-testing.iml" filepath="$PROJECT_DIR$/javaparser-testing/javaparser-testing.iml" />
+    </modules>
+  </component>
+</project>
