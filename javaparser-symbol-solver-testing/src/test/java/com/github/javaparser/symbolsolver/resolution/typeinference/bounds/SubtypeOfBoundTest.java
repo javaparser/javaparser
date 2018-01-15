@@ -8,7 +8,6 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,6 +16,7 @@ import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class SubtypeOfBoundTest {
 
@@ -29,7 +29,7 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperLowerBound1() {
-        ResolvedTypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration = mock(ResolvedTypeParameterDeclaration.class);
 
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
@@ -41,7 +41,7 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperLowerBound2() {
-        ResolvedTypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration = mock(ResolvedTypeParameterDeclaration.class);
 
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
@@ -53,7 +53,7 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperUpperBound1() {
-        ResolvedTypeParameterDeclaration typeParameterDeclaration = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration = mock(ResolvedTypeParameterDeclaration.class);
 
         // { Integer <: α, Double <: α, α <: Object } describes two proper lower bounds and one proper upper bound for α.
 
@@ -65,8 +65,8 @@ public class SubtypeOfBoundTest {
 
     @Test
     public void recognizeProperUpperBound2() {
-        ResolvedTypeParameterDeclaration typeParameterDeclaration1 = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
-        ResolvedTypeParameterDeclaration typeParameterDeclaration2 = EasyMock.createMock(ResolvedTypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration1 = mock(ResolvedTypeParameterDeclaration.class);
+        ResolvedTypeParameterDeclaration typeParameterDeclaration2 = mock(ResolvedTypeParameterDeclaration.class);
         // { α <: Iterable<?>, β <: Object, α <: List<β> } describes a proper upper bound for each of α and β, along with a dependency between them.
 
         InferenceVariable alpha = new InferenceVariable("α", typeParameterDeclaration1);

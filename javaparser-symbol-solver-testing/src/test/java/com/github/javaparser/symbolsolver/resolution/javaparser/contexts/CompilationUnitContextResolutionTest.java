@@ -36,7 +36,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,6 +44,8 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Federico Tomassetti
@@ -167,11 +168,10 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
-        ResolvedReferenceTypeDeclaration otherClass = EasyMock.createMock(ResolvedReferenceTypeDeclaration.class);
-        EasyMock.expect(otherClass.getQualifiedName()).andReturn("com.foo.OtherClassInSamePackage");
+        ResolvedReferenceTypeDeclaration otherClass = mock(ResolvedReferenceTypeDeclaration.class);
+        when(otherClass.getQualifiedName()).thenReturn("com.foo.OtherClassInSamePackage");
         MemoryTypeSolver memoryTypeSolver = new MemoryTypeSolver();
         memoryTypeSolver.addDeclaration("com.foo.OtherClassInSamePackage", otherClass);
-        EasyMock.replay(otherClass);
 
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType("OtherClassInSamePackage", memoryTypeSolver);
         assertEquals(true, ref.isSolved());
