@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-core-generators" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-metamodel-generator" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-symbol-solver-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-symbol-solver-logic" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-symbol-solver-model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-symbol-solver-testing" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/javaparser-testing" charset="UTF-8" />
+  </component>
+</project>
