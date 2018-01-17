@@ -49,27 +49,33 @@ public final class AssignExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        ASSIGN("="),
-        PLUS("+="),
-        MINUS("-="),
-        MULTIPLY("*="),
-        DIVIDE("/="),
-        AND("&="),
-        OR("|="),
-        XOR("^="),
-        REMAINDER("%="),
-        LEFT_SHIFT("<<="),
-        SIGNED_RIGHT_SHIFT(">>="),
-        UNSIGNED_RIGHT_SHIFT(">>>=");
+        ASSIGN("=", null),
+        PLUS("+=", BinaryExpr.Operator.PLUS),
+        MINUS("-=", BinaryExpr.Operator.MINUS),
+        MULTIPLY("*=", BinaryExpr.Operator.MULTIPLY),
+        DIVIDE("/=", BinaryExpr.Operator.DIVIDE),
+        BINARY_AND("&=", BinaryExpr.Operator.BINARY_AND),
+        BINARY_OR("|=", BinaryExpr.Operator.BINARY_OR),
+        XOR("^=", BinaryExpr.Operator.XOR),
+        REMAINDER("%=", BinaryExpr.Operator.REMAINDER),
+        LEFT_SHIFT("<<=", BinaryExpr.Operator.LEFT_SHIFT),
+        SIGNED_RIGHT_SHIFT(">>=", BinaryExpr.Operator.SIGNED_RIGHT_SHIFT),
+        UNSIGNED_RIGHT_SHIFT(">>>=", BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT);
 
         private final String codeRepresentation;
+        private final BinaryExpr.Operator binaryOperatorEquivalent;
 
-        Operator(String codeRepresentation) {
+        Operator(String codeRepresentation, BinaryExpr.Operator binaryOperatorEquivalent) {
             this.codeRepresentation = codeRepresentation;
+            this.binaryOperatorEquivalent = binaryOperatorEquivalent;
         }
 
         public String asString() {
             return codeRepresentation;
+        }
+
+        public Optional<BinaryExpr.Operator> toBinaryOperator() {
+            return Optional.ofNullable(binaryOperatorEquivalent);
         }
     }
 
