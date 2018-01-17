@@ -87,4 +87,22 @@ public class CompilationUnitTest {
 
         assertEquals(false, cu.getPrimaryTypeName().isPresent());
     }
+    @Test
+    public void testGetPrimaryType() throws IOException {
+        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
+        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
+        CompilationUnit cu = JavaParser.parse(testFile);
+
+        assertEquals("PrimaryType",     cu.getPrimaryType().get().getNameAsString());
+    }
+
+    @Test
+    public void testNoPrimaryType() throws IOException {
+        Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
+        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType2.java"));
+        CompilationUnit cu = JavaParser.parse(testFile);
+
+        assertEquals(false, cu.getPrimaryType().isPresent());
+    }
+
 }
