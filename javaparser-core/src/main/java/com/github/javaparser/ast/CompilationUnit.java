@@ -34,6 +34,7 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.modules.ModuleDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -44,6 +45,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.annotation.Generated;
 import java.io.IOException;
@@ -476,6 +478,15 @@ public final class CompilationUnit extends Node {
                 .map(Storage::getFileName)
                 .map(filename -> filename.replace(".java", ""))
                 .map(filename -> filename.replace(".jav", ""));
+    }
+
+    /**
+     * @return the type whose name corresponds to the file name.
+     * Empty if no file information is present (when this compilation unit wasn't parsed from a file.)
+     */
+    public Optional<TypeDeclaration<?>> getPrimaryType() {
+        return getPrimaryTypeName()
+                .flatMap(name -> getTypes().stream().filter(t -> t.getNameAsString().equals(name)).findFirst());
     }
 
     /**
