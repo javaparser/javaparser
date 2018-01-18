@@ -17,12 +17,14 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
+import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -35,6 +37,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * We analyze a more recent version of JavaParser, after the project moved to Java 8.
  */
+@Category(SlowTest.class)
 public class AnalyseNewJavaParserTest extends AbstractResolutionTest {
 
     private static final File src = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
