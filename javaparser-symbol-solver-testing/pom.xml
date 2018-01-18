@@ -39,6 +39,7 @@
                         <configuration>
                             <excludedGroups>com.github.javaparser.SlowTest</excludedGroups>
                             <parallel>methods</parallel>
+                            <threadCount>4</threadCount>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -54,6 +55,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <parallel>methods</parallel>
+                            <threadCount>4</threadCount>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -101,6 +103,100 @@
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-test-jss-sources</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.github.javaparser</groupId>
+                                    <artifactId>java-symbol-solver-core</artifactId>
+                                    <version>0.6.0</version>
+                                    <classifier>sources</classifier>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/src/java-symbol-solver-core
+                                    </outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.github.javaparser</groupId>
+                                    <artifactId>java-symbol-solver-logic</artifactId>
+                                    <version>0.6.0</version>
+                                    <classifier>sources</classifier>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/src/java-symbol-solver-logic
+                                    </outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.github.javaparser</groupId>
+                                    <artifactId>java-symbol-solver-model</artifactId>
+                                    <version>0.6.0</version>
+                                    <classifier>sources</classifier>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/src/java-symbol-solver-model
+                                    </outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-test-jss-libs</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.google.guava</groupId>
+                                    <artifactId>guava</artifactId>
+                                    <version>21.0</version>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/lib
+                                    </outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.github.javaparser</groupId>
+                                    <artifactId>javaparser-core</artifactId>
+                                    <version>3.5.10</version>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/lib
+                                    </outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>io.javaslang</groupId>
+                                    <artifactId>javaslang</artifactId>
+                                    <version>2.0.3</version>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/lib
+                                    </outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.javassist</groupId>
+                                    <artifactId>javassist</artifactId>
+                                    <version>3.19.0-GA</version>
+                                    <outputDirectory>
+                                        ${project.build.directory}/test-classes/javasymbolsolver_0_6_0/lib
+                                    </outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
