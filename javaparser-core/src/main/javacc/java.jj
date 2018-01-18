@@ -1476,9 +1476,9 @@ AssignExpr.Operator AssignmentOperator():
     | "<<="  { ret = AssignExpr.Operator.LEFT_SHIFT; }
     | ">>="  { ret = AssignExpr.Operator.SIGNED_RIGHT_SHIFT; }
     | ">>>=" { ret = AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT; }
-    | "&="   { ret = AssignExpr.Operator.AND; }
+    | "&="   { ret = AssignExpr.Operator.BINARY_AND; }
     | "^="   { ret = AssignExpr.Operator.XOR; }
-    | "|="   { ret = AssignExpr.Operator.OR; }
+    | "|="   { ret = AssignExpr.Operator.BINARY_OR; }
   )
   { return ret; }
 }
