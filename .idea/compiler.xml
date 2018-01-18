@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="javaparser-core" />
+        <module name="javaparser-core-generators" />
+        <module name="javaparser-metamodel-generator" />
+        <module name="javaparser-symbol-solver-core" />
+        <module name="javaparser-symbol-solver-logic" />
+        <module name="javaparser-symbol-solver-model" />
+        <module name="javaparser-symbol-solver-testing" />
+        <module name="javaparser-testing" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="javaparser-core" target="1.8" />
+      <module name="javaparser-core-generators" target="1.8" />
+      <module name="javaparser-metamodel-generator" target="1.8" />
+      <module name="javaparser-parent" target="1.8" />
+      <module name="javaparser-symbol-solver-core" target="1.8" />
+      <module name="javaparser-symbol-solver-logic" target="1.8" />
+      <module name="javaparser-symbol-solver-model" target="1.8" />
+      <module name="javaparser-symbol-solver-testing" target="1.8" />
+      <module name="javaparser-testing" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
