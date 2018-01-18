@@ -47,34 +47,40 @@ public final class BinaryExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        OR("||"),
-        AND("&&"),
-        BINARY_OR("|"),
-        BINARY_AND("&"),
-        XOR("^"),
-        EQUALS("=="),
-        NOT_EQUALS("!="),
-        LESS("<"),
-        GREATER(">"),
-        LESS_EQUALS("<="),
-        GREATER_EQUALS(">="),
-        LEFT_SHIFT("<<"),
-        SIGNED_RIGHT_SHIFT(">>"),
-        UNSIGNED_RIGHT_SHIFT(">>>"),
-        PLUS("+"),
-        MINUS("-"),
-        MULTIPLY("*"),
-        DIVIDE("/"),
-        REMAINDER("%");
+        OR("||", null),
+        AND("&&", null),
+        BINARY_OR("|", AssignExpr.Operator.BINARY_OR),
+        BINARY_AND("&", AssignExpr.Operator.BINARY_AND),
+        XOR("^", AssignExpr.Operator.XOR),
+        EQUALS("==", null),
+        NOT_EQUALS("!=", null),
+        LESS("<", null),
+        GREATER(">", null),
+        LESS_EQUALS("<=", null),
+        GREATER_EQUALS(">=", null),
+        LEFT_SHIFT("<<", AssignExpr.Operator.LEFT_SHIFT),
+        SIGNED_RIGHT_SHIFT(">>", AssignExpr.Operator.SIGNED_RIGHT_SHIFT),
+        UNSIGNED_RIGHT_SHIFT(">>>", AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT),
+        PLUS("+", AssignExpr.Operator.PLUS),
+        MINUS("-", AssignExpr.Operator.MINUS),
+        MULTIPLY("*", AssignExpr.Operator.MULTIPLY),
+        DIVIDE("/", AssignExpr.Operator.DIVIDE),
+        REMAINDER("%", AssignExpr.Operator.REMAINDER);
 
         private final String codeRepresentation;
+        private final AssignExpr.Operator assignOperatorEquivalent;
 
-        Operator(String codeRepresentation) {
+        Operator(String codeRepresentation, AssignExpr.Operator assignOperatorEquivalent) {
             this.codeRepresentation = codeRepresentation;
+            this.assignOperatorEquivalent = assignOperatorEquivalent;
         }
 
         public String asString() {
             return codeRepresentation;
+        }
+
+        public Optional<AssignExpr.Operator> toAssignOperator() {
+            return Optional.ofNullable(assignOperatorEquivalent);
         }
     }
 
