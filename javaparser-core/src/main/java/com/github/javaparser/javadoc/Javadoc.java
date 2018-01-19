@@ -106,8 +106,16 @@ public class Javadoc {
         return description;
     }
 
-    public List<JavadocBlockTag> getBlockTags() {
-        return blockTags;
+    public JavadocBlockTag getBlockTag(int i) {
+        return this.blockTags.get(i);
+    }
+
+    public int getBlockTagCount() {
+        return this.blockTags.size();
+    }
+
+    public JavadocBlockTag removeBlockTag(int i) {
+        return this.blockTags.get(i);
     }
 
     @Override

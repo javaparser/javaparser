@@ -103,7 +103,8 @@ public class JavadocParserTest {
 
 
         assertEquals(underTest, JavadocParser.parse(expectedText));
-        assertEquals(underTest.getBlockTags().get(0).getTagName(), "unofficial");
+        assertEquals(1, underTest.getBlockTagCount());
+        assertEquals("unofficial", underTest.getBlockTag(0).getTagName());
     }
 
     @Test
@@ -137,10 +138,10 @@ public class JavadocParserTest {
                 "     ";
         Javadoc res = JavadocParser.parse(text);
         assertEquals(new Javadoc(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
-                             .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field continued in a second line"))
-                             .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
-                             .addBlockTag(JavadocBlockTag.createParamBlockTag("modifiers", "the modifiers like {@link Modifier#PUBLIC}"))
-                             .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "the {@link FieldDeclaration} created")), res);
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field continued in a second line"))
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("modifiers", "the modifiers like {@link Modifier#PUBLIC}"))
+                .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "the {@link FieldDeclaration} created")), res);
     }
 
 

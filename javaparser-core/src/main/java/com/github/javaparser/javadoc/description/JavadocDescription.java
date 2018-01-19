@@ -69,8 +69,26 @@ public class JavadocDescription {
         elements = new LinkedList<>();
     }
 
-    public void addElement(JavadocDescriptionElement element) {
-        this.elements.add(element);
+    public JavadocDescription(List<JavadocDescriptionElement> elements) {
+        this();
+
+        this.elements.addAll(elements);
+    }
+
+    public boolean addElement(JavadocDescriptionElement element) {
+        return this.elements.add(element);
+    }
+
+    public JavadocDescriptionElement getElement(int i) {
+        return this.elements.get(i);
+    }
+
+    public JavadocDescriptionElement removeElement(int i) {
+        return this.elements.remove(i);
+    }
+
+    public int getElementCount() {
+        return this.elements.size();
     }
 
     public String toText() {
