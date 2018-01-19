@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
+import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -26,6 +27,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +40,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * We analyze JavaParser version 0.6.0.
  */
+@Category(SlowTest.class)
 public class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     private static final File root = adaptPath(new File("src/test/resources/javasymbolsolver_0_6_0"));
