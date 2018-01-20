@@ -17,6 +17,7 @@
 package com.github.javaparser.symbolsolver.resolution;
 
 import com.github.javaparser.ParseException;
+import com.github.javaparser.SlowTest;
 import com.github.javaparser.symbolsolver.AbstractTest;
 import com.github.javaparser.symbolsolver.SourceFileInfoExtractor;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -24,6 +25,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +35,7 @@ import java.nio.file.Paths;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Category(SlowTest.class)
 public class AnalyseJavaParserTest extends AbstractTest {
 
     private static final File src = adaptPath(new File("src/test/resources/javaparser_src/proper_source"));
