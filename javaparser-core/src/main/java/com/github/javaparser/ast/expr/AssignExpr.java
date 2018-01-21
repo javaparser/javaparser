@@ -63,6 +63,7 @@ public final class AssignExpr extends Expression {
         UNSIGNED_RIGHT_SHIFT(">>>=", BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT);
 
         private final String codeRepresentation;
+
         private final BinaryExpr.Operator binaryOperatorEquivalent;
 
         Operator(String codeRepresentation, BinaryExpr.Operator binaryOperatorEquivalent) {
