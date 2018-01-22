@@ -45,7 +45,6 @@ import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.Utils;
-
 import javax.annotation.Generated;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,12 +56,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.JavaParser.parseName;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <p>
@@ -473,9 +472,7 @@ public final class CompilationUnit extends Node {
      * Empty if no file information is present (when this compilation unit wasn't parsed from a file.)
      */
     public Optional<String> getPrimaryTypeName() {
-        return getStorage()
-                .map(Storage::getFileName)
-                .map(Utils::removeFileExtension);
+        return getStorage().map(Storage::getFileName).map(Utils::removeFileExtension);
     }
 
     /**
@@ -484,8 +481,7 @@ public final class CompilationUnit extends Node {
      * If for some strange reason there are multiple types of this name, the first one is returned.
      */
     public Optional<TypeDeclaration<?>> getPrimaryType() {
-        return getPrimaryTypeName()
-                .flatMap(name -> getTypes().stream().filter(t -> t.getNameAsString().equals(name)).findFirst());
+        return getPrimaryTypeName().flatMap(name -> getTypes().stream().filter(t -> t.getNameAsString().equals(name)).findFirst());
     }
 
     /**
