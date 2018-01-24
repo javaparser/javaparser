@@ -1,3 +1,12 @@
+Version 3.5.11
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/74?closed=1)
+* BREAKING: `AssignExpr.Operator.AND` is now `AssignExpr.Operator.BINARY_AND`.
+* BREAKING: `AssignExpr.Operator.OR` is now `AssignExpr.Operator.BINARY_OR`.
+* `getPrimaryTypeName` and `getPrimaryType` give access to the type that has the same name as the file it came from.
+* Enums will now get their constants aligned vertically if there are more than five.
+* You can now convert between `AssignExpr.Operator` and `AssignExpr.Operator` if you like.
+
 Version 3.5.10
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/73?closed=1)
