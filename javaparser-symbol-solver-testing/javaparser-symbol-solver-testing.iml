@@ -19,10 +19,10 @@
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.0.18" level="project" />
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
-    <orderEntry type="library" name="Maven: org.mockito:mockito-core:2.13.0" level="project" />
-    <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.7.9" level="project" />
-    <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy-agent:1.7.9" level="project" />
-    <orderEntry type="library" name="Maven: org.objenesis:objenesis:2.6" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:2.13.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.7.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.7.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:2.6" level="project" />
     <orderEntry type="module" module-name="javaparser-symbol-solver-model" />
     <orderEntry type="module" module-name="javaparser-core" />
     <orderEntry type="module" module-name="javaparser-symbol-solver-core" />
