@@ -118,7 +118,7 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
                     if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
                         NodeWithVariables nodeWithVariables = (NodeWithVariables) vd.getParentNode().get();
                         // We calculate the value the property will assume after the change will be completed
-                        Type currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
+                        Optional<Type> currentMaxCommonType = nodeWithVariables.getMaximumCommonType();
                         List<Type> types = new LinkedList<>();
                         int index = nodeWithVariables.getVariables().indexOf(vd);
                         for (int i = 0; i < nodeWithVariables.getVariables().size(); i++) {
@@ -128,8 +128,8 @@ public final class VariableDeclarator extends Node implements NodeWithType<Varia
                                 types.add(nodeWithVariables.getVariable(i).getType());
                             }
                         }
-                        Type newMaxCommonType = NodeWithVariables.calculateMaximumCommonType(types);
-                        ((Node) nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType, newMaxCommonType);
+                        Optional<Type> newMaxCommonType = NodeWithVariables.calculateMaximumCommonType(types);
+                        ((Node) nodeWithVariables).notifyPropertyChange(ObservableProperty.MAXIMUM_COMMON_TYPE, currentMaxCommonType.orElse(null), newMaxCommonType.orElse(null));
                     }
                 }
             }

@@ -57,7 +57,7 @@ import static com.github.javaparser.utils.Utils.decapitalize;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
- * operating on the AST and then used them to reproduce the source code 
+ * operating on the AST and then used them to reproduce the source code
  * in its original formatting including the AST changes.
  */
 public class LexicalPreservingPrinter {
@@ -110,7 +110,7 @@ public class LexicalPreservingPrinter {
         });
         return node;
     }
-    
+
     //
     // Constructor and setup
     //
@@ -401,16 +401,17 @@ public class LexicalPreservingPrinter {
         // Array brackets are a pain... we do not have a way to represent them explicitly in the AST
         // so they have to be handled in a special way
         if (node instanceof VariableDeclarator) {
-            VariableDeclarator variableDeclarator = (VariableDeclarator)node;
-            if (!variableDeclarator.getParentNode().isPresent()) {
-                throw new RuntimeException("VariableDeclarator without parent: I cannot handle the array levels");
-            }
-            NodeWithVariables<?> nodeWithVariables = (NodeWithVariables)variableDeclarator.getParentNode().get();
-            int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - nodeWithVariables.getMaximumCommonType().getArrayLevel();
-            for (int i=0; i<extraArrayLevels; i++) {
-                nodeText.addElement(new TokenTextElement(LBRACKET));
-                nodeText.addElement(new TokenTextElement(RBRACKET));
-            }
+            VariableDeclarator variableDeclarator = (VariableDeclarator) node;
+            variableDeclarator.getParentNode().ifPresent(parent -> {
+                NodeWithVariables<?> nodeWithVariables = (NodeWithVariables) parent;
+                nodeWithVariables.getMaximumCommonType().ifPresent(mct -> {
+                    int extraArrayLevels = variableDeclarator.getType().getArrayLevel() - mct.getArrayLevel();
+                    for (int i = 0; i < extraArrayLevels; i++) {
+                        nodeText.addElement(new TokenTextElement(LBRACKET));
+                        nodeText.addElement(new TokenTextElement(RBRACKET));
+                    }
+                });
+            });
         }
         return nodeText;
     }
