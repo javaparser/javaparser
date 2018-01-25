@@ -482,7 +482,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
         if (!n.getVariables().isEmpty()) {
-            n.getMaximumCommonType().ifPresent(t -> t.accept(this, arg));
+            Optional<Type> maximumCommonType = n.getMaximumCommonType();
+            maximumCommonType.ifPresent(t -> t.accept(this, arg));
+            if(!maximumCommonType.isPresent()){
+                printer.print("???");
+            }
         }
 
         printer.print(" ");
