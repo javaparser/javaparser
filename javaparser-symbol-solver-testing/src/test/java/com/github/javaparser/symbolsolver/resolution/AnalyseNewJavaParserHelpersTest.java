@@ -40,7 +40,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 
-    private static final File src = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
+    private static final File src = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core"));
 
     private static TypeSolver TYPESOLVER = typeSolver();
 
@@ -48,14 +48,13 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-generated-sources"))));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources"))));
         return combinedTypeSolver;
     }
 
-    private CompilationUnit parse(String fileName) throws IOException, ParseException {
+    private CompilationUnit parse(String fileName) throws IOException {
         File sourceFile = new File(src.getAbsolutePath() + "/" + fileName + ".java");
-        CompilationUnit cu = JavaParser.parse(sourceFile);
-        return cu;
+        return JavaParser.parse(sourceFile);
     }
 
 //    @Test
@@ -81,9 +80,9 @@ public class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
 //    }
 
     @Test
-    public void nodesTypeIsCorrect() throws IOException, ParseException {
+    public void nodesTypeIsCorrect() throws IOException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
-        NameExpr nodes = Navigator.findAllNodesOfGivenClass(cu, NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
+        NameExpr nodes = cu.findAll(NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
         ResolvedType type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
         assertEquals("java.util.List<T>", type.describe());
         assertEquals(1, type.asReferenceType().typeParametersValues().size());

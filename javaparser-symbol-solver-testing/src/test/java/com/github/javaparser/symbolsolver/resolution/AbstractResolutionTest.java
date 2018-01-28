@@ -28,23 +28,19 @@ import java.io.InputStream;
  */
 public abstract class AbstractResolutionTest extends AbstractTest {
 
-    protected CompilationUnit parseSampleWithStandardExtension(String sampleName) throws ParseException {
+    protected CompilationUnit parseSampleWithStandardExtension(String sampleName) {
         return parseSample(sampleName, "java");
     }
 
-    protected CompilationUnit parseSample(String sampleName) throws ParseException {
+    protected CompilationUnit parseSample(String sampleName) {
         return parseSample(sampleName, "java.txt");
     }
 
-    private CompilationUnit parseSample(String sampleName, String extension) throws ParseException {
+    private CompilationUnit parseSample(String sampleName, String extension) {
         InputStream is = this.getClass().getClassLoader().getResourceAsStream(sampleName + "." + extension);
         if (is == null) {
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
-        CompilationUnit cu = JavaParser.parse(is);
-        if (cu == null) {
-            throw new IllegalStateException();
-        }
-        return cu;
+        return JavaParser.parse(is);
     }
 }

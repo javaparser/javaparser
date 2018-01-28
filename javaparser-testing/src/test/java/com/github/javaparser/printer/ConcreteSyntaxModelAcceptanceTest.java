@@ -24,14 +24,17 @@ package com.github.javaparser.printer;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 
 public class ConcreteSyntaxModelAcceptanceTest {
+    private final Path rootDir = CodeGenerationUtils.mavenModuleRoot(ConcreteSyntaxModelAcceptanceTest.class).resolve("src/test/test_sourcecode");
 
     private String prettyPrint(Node node) {
         return ConcreteSyntaxModel.genericPrettyPrint(node);
@@ -43,13 +46,13 @@ public class ConcreteSyntaxModelAcceptanceTest {
 
     @Test
     public void printingExamplePrettyPrintVisitor() throws IOException {
-        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/PrettyPrintVisitor_saved.java");
+        CompilationUnit cu = JavaParser.parse(rootDir.resolve("com/github/javaparser/printer/PrettyPrintVisitor.java"));
         assertEquals(prettyPrintedExpectation("PrettyPrintVisitor"), prettyPrint(cu));
     }
 
     @Test
     public void printingExampleJavaConcepts() throws IOException {
-        CompilationUnit cu = JavaParser.parseResource("com/github/javaparser/printer/JavaConcepts_saved.java");
+        CompilationUnit cu = JavaParser.parse(rootDir.resolve("com/github/javaparser/printer/JavaConcepts.java"));
         assertEquals(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
     }
 
