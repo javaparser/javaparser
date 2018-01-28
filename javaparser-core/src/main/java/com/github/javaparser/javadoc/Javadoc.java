@@ -106,8 +106,11 @@ public class Javadoc {
         return description;
     }
 
+    /**
+     * @return the current List of associated JavadocBlockTags
+     */
     public List<JavadocBlockTag> getBlockTags() {
-        return blockTags;
+        return this.blockTags;
     }
 
     @Override

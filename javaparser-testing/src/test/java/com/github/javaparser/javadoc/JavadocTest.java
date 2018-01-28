@@ -24,9 +24,9 @@ package com.github.javaparser.javadoc;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
+import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import org.junit.Test;
-
-import java.io.FileNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,38 +34,38 @@ import static org.junit.Assert.assertTrue;
 public class JavadocTest {
 
     @Test
-    public void toTextForEmptyJavadoc() throws FileNotFoundException {
+    public void toTextForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
         assertEquals("", javadoc.toText());
     }
 
     @Test
-    public void toTextForJavadocWithTwoLinesOfJustDescription() throws FileNotFoundException {
+    public void toTextForJavadocWithTwoLinesOfJustDescription() {
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
         assertEquals("first line\nsecond line\n", javadoc.toText());
     }
 
     @Test
-    public void toTextForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() throws FileNotFoundException {
+    public void toTextForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() {
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
         javadoc.addBlockTag("foo", "something useful");
         assertEquals("first line\nsecond line\n\n@foo something useful\n", javadoc.toText());
     }
 
     @Test
-    public void toCommentForEmptyJavadoc() throws FileNotFoundException {
+    public void toCommentForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
         assertEquals(new JavadocComment("\n\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
-    public void toCommentorJavadocWithTwoLinesOfJustDescription() throws FileNotFoundException {
+    public void toCommentorJavadocWithTwoLinesOfJustDescription() {
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
         assertEquals(new JavadocComment("\n\t\t * first line\n\t\t * second line\n\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
-    public void toCommentForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() throws FileNotFoundException {
+    public void toCommentForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() {
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
         javadoc.addBlockTag("foo", "something useful");
         assertEquals(new JavadocComment("\n\t\t * first line\n\t\t * second line\n\t\t * \n\t\t * @foo something useful\n\t\t "), javadoc.toComment("\t\t"));
@@ -74,8 +74,8 @@ public class JavadocTest {
     @Test
     public void descriptionAndBlockTagsAreRetrievable() {
         Javadoc javadoc = JavaParser.parseJavadoc("first line\nsecond line\n\n@param node a node\n@return result the result");
-        assertEquals(javadoc.getDescription().toText(), "first line\nsecond line");
-        assertEquals(javadoc.getBlockTags().size(), 2);
+        assertEquals("first line\nsecond line", javadoc.getDescription().toText());
+        assertEquals(2, javadoc.getBlockTags().size());
     }
 
     @Test
@@ -101,7 +101,38 @@ public class JavadocTest {
                 " * \n" +
                 " * @param <T>\n";
         Javadoc javadoc = JavaParser.parseJavadoc(comment);
-        assertEquals(javadoc.getBlockTags().size(), 2);
+        assertEquals(2, javadoc.getBlockTags().size());
+    }
+
+    @Test
+    public void blockTagModificationWorks() {
+        Javadoc javadoc = new Javadoc(new JavadocDescription());
+
+        assertEquals(0, javadoc.getBlockTags().size());
+        JavadocBlockTag blockTag = new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "a value");
+        javadoc.addBlockTag(blockTag);
+
+        assertEquals(1, javadoc.getBlockTags().size());
+        assertEquals(blockTag, javadoc.getBlockTags().get(0));
+
+        assertEquals(blockTag, javadoc.getBlockTags().remove(0));
+        assertEquals(0, javadoc.getBlockTags().size());
+    }
+
+    @Test
+    public void descriptionModificationWorks() {
+        JavadocDescription description = new JavadocDescription();
+
+        assertEquals(0, description.getElements().size());
+
+        JavadocDescriptionElement inlineTag = new JavadocInlineTag("inheritDoc", JavadocInlineTag.Type.INHERIT_DOC, "");
+        assertTrue(description.addElement(inlineTag));
+
+        assertEquals(1, description.getElements().size());
+        assertEquals(inlineTag, description.getElements().get(0));
+
+        assertEquals(inlineTag, description.getElements().remove(0));
+        assertEquals(0, description.getElements().size());
     }
 
 }
