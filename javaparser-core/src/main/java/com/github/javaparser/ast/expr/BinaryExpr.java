@@ -68,6 +68,7 @@ public final class BinaryExpr extends Expression {
         REMAINDER("%", AssignExpr.Operator.REMAINDER);
 
         private final String codeRepresentation;
+
         private final AssignExpr.Operator assignOperatorEquivalent;
 
         Operator(String codeRepresentation, AssignExpr.Operator assignOperatorEquivalent) {
