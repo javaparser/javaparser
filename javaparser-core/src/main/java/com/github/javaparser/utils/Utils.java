@@ -221,8 +221,22 @@ public class Utils {
         return new HashSet<>(asList(items));
     }
 
+    /**
+     * @return content with all kinds of EOL characters replaced by endOfLineCharacter
+     */
     public static String normalizeEolInTextBlock(String content, String endOfLineCharacter) {
         return content
                 .replaceAll("\\R", endOfLineCharacter);
+    }
+
+    /**
+     * @return the filename with the last "." and everything following it removed.
+     */
+    public static String removeFileExtension(String filename) {
+        int extensionIndex = filename.lastIndexOf(".");
+        if (extensionIndex == -1)
+            return filename;
+
+        return filename.substring(0, extensionIndex);
     }
 }

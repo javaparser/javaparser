@@ -44,6 +44,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.printer.PrettyPrinter;
 import com.github.javaparser.utils.ClassUtils;
 import com.github.javaparser.utils.CodeGenerationUtils;
+import com.github.javaparser.utils.Utils;
 import javax.annotation.Generated;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,6 +76,7 @@ import com.github.javaparser.ast.Node;
  * @see PackageDeclaration
  * @see ImportDeclaration
  * @see TypeDeclaration
+ * @see Storage
  */
 public final class CompilationUnit extends Node {
 
@@ -463,6 +465,23 @@ public final class CompilationUnit extends Node {
      */
     public Optional<EnumDeclaration> getEnumByName(String enumName) {
         return getTypes().stream().filter(type -> type.getNameAsString().equals(enumName) && type instanceof EnumDeclaration).findFirst().map(t -> (EnumDeclaration) t);
+    }
+
+    /**
+     * @return the name that the primary type in this file should have, according to the filename in {@link Storage#getFileName()}.
+     * Empty if no file information is present (when this compilation unit wasn't parsed from a file.)
+     */
+    public Optional<String> getPrimaryTypeName() {
+        return getStorage().map(Storage::getFileName).map(Utils::removeFileExtension);
+    }
+
+    /**
+     * @return the type whose name corresponds to the file name.
+     * Empty if no file information is present (when this compilation unit wasn't parsed from a file.)
+     * If for some strange reason there are multiple types of this name, the first one is returned.
+     */
+    public Optional<TypeDeclaration<?>> getPrimaryType() {
+        return getPrimaryTypeName().flatMap(name -> getTypes().stream().filter(t -> t.getNameAsString().equals(name)).findFirst());
     }
 
     /**
