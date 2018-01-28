@@ -482,7 +482,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
         if (!n.getVariables().isEmpty()) {
-            n.getMaximumCommonType().accept(this, arg);
+            Optional<Type> maximumCommonType = n.getMaximumCommonType();
+            maximumCommonType.ifPresent(t -> t.accept(this, arg));
+            if(!maximumCommonType.isPresent()){
+                printer.print("???");
+            }
         }
 
         printer.print(" ");
@@ -502,25 +506,25 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
 
-        Optional<NodeWithVariables> ancestor = n.getAncestorOfType(NodeWithVariables.class);
-        if (!ancestor.isPresent()) {
-            throw new RuntimeException("Unable to work with VariableDeclarator not owned by a NodeWithVariables");
-        }
-        Type commonType = ancestor.get().getMaximumCommonType();
+        n.getAncestorOfType(NodeWithVariables.class).ifPresent(ancestor -> {
+            Optional<Type> maximumCommonType = ancestor.getMaximumCommonType();
+            maximumCommonType.ifPresent(commonType -> {
 
-        Type type = n.getType();
+                Type type = n.getType();
 
-        ArrayType arrayType = null;
+                ArrayType arrayType = null;
 
-        for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
-            if (arrayType == null) {
-                arrayType = (ArrayType) type;
-            } else {
-                arrayType = (ArrayType) arrayType.getComponentType();
-            }
-            printAnnotations(arrayType.getAnnotations(), true, arg);
-            printer.print("[]");
-        }
+                for (int i = commonType.getArrayLevel(); i < type.getArrayLevel(); i++) {
+                    if (arrayType == null) {
+                        arrayType = (ArrayType) type;
+                    } else {
+                        arrayType = (ArrayType) arrayType.getComponentType();
+                    }
+                    printAnnotations(arrayType.getAnnotations(), true, arg);
+                    printer.print("[]");
+                }
+            });
+        });
 
         if (n.getInitializer().isPresent()) {
             printer.print(" = ");
@@ -913,7 +917,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printModifiers(n.getModifiers());
 
         if (!n.getVariables().isEmpty()) {
-            n.getMaximumCommonType().accept(this, arg);
+            n.getMaximumCommonType().ifPresent(t -> t.accept(this, arg));
         }
         printer.print(" ");
 

@@ -21,25 +21,26 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
+import static com.github.javaparser.JavaParser.*;
 import static com.github.javaparser.utils.TestUtils.assertEqualsNoEol;
 import static org.junit.Assert.assertEquals;
 
 public class PrettyPrinterTest {
 
     private String prettyPrintField(String code) {
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         return new PrettyPrinter().print(cu.findFirst(FieldDeclaration.class).get());
     }
 
     private String prettyPrintVar(String code) {
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         return new PrettyPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
 
@@ -82,7 +83,7 @@ public class PrettyPrinterTest {
     }
 
     private String prettyPrintConfigurable(String code) {
-        CompilationUnit cu = JavaParser.parse(code);
+        CompilationUnit cu = parse(code);
         PrettyPrinter printer = new PrettyPrinter(new PrettyPrinterConfiguration().setVisitorFactory(TestVisitor::new));
         return printer.print(cu.findFirst(ClassOrInterfaceDeclaration.class).get());
     }
@@ -115,7 +116,7 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -132,7 +133,7 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -156,7 +157,7 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
@@ -173,18 +174,33 @@ public class PrettyPrinterTest {
                 "}" + EOL +
                 "";
 
-        assertEquals(expected, new PrettyPrinter(config).print(JavaParser.parse(code)));
+        assertEquals(expected, new PrettyPrinter(config).print(parse(code)));
     }
 
     @Test
     public void enumConstantsHorizontally() {
-        CompilationUnit cu = JavaParser.parse("enum X{A, B, C, D, E}");
+        CompilationUnit cu = parse("enum X{A, B, C, D, E}");
         assertEqualsNoEol("enum X {\n\n    A, B, C, D, E\n}\n", new PrettyPrinter().print(cu));
     }
 
     @Test
     public void enumConstantsVertically() {
-        CompilationUnit cu = JavaParser.parse("enum X{A, B, C, D, E, F}");
+        CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
         assertEqualsNoEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new PrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void printingInconsistentVariables() {
+        FieldDeclaration fieldDeclaration = parseBodyDeclaration("int a, b;").asFieldDeclaration();
+
+        assertEquals("int a, b;", fieldDeclaration.toString());
+
+        fieldDeclaration.getVariable(0).setType(PrimitiveType.doubleType());
+
+        assertEquals("??? a, b;", fieldDeclaration.toString());
+
+        fieldDeclaration.getVariable(1).setType(PrimitiveType.doubleType());
+
+        assertEquals("double a, b;", fieldDeclaration.toString());
     }
 }
