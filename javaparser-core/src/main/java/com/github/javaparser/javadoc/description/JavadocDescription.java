@@ -79,16 +79,8 @@ public class JavadocDescription {
         return this.elements.add(element);
     }
 
-    public JavadocDescriptionElement getElement(int i) {
-        return this.elements.get(i);
-    }
-
-    public JavadocDescriptionElement removeElement(int i) {
-        return this.elements.remove(i);
-    }
-
-    public int getElementCount() {
-        return this.elements.size();
+    public List<JavadocDescriptionElement> getElements() {
+        return this.elements;
     }
 
     public String toText() {

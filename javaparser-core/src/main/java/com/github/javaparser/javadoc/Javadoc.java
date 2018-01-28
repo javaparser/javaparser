@@ -106,25 +106,11 @@ public class Javadoc {
         return description;
     }
 
-    public JavadocBlockTag getBlockTag(int i) {
-        return this.blockTags.get(i);
-    }
-
-    public int getBlockTagCount() {
-        return this.blockTags.size();
-    }
-
     /**
      * @return the current List of associated JavadocBlockTags
-     * @deprecated This method has been deprecated in favor of {@link #getBlockTag(int)}, {@link #getBlockTagCount()} and {@link #removeBlockTag(int)}
      */
-    @Deprecated
     public List<JavadocBlockTag> getBlockTags() {
         return this.blockTags;
-    }
-
-    public JavadocBlockTag removeBlockTag(int i) {
-        return this.blockTags.get(i);
     }
 
     @Override
