@@ -38,13 +38,13 @@ import static org.junit.Assert.assertTrue;
 @Category(SlowTest.class)
 public class AnalyseJavaParserTest extends AbstractTest {
 
-    private static final File src = adaptPath(new File("src/test/resources/javaparser_src/proper_source"));
+    private static final File src = adaptPath(new File("src/test/test_sourcecode/javaparser_src/proper_source"));
 
     private SourceFileInfoExtractor getSourceFileInfoExtractor() {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
-        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_src/generated"))));
+        combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath(new File("src/test/test_sourcecode/javaparser_src/generated"))));
         SourceFileInfoExtractor sourceFileInfoExtractor = new SourceFileInfoExtractor();
         sourceFileInfoExtractor.setTypeSolver(combinedTypeSolver);
         sourceFileInfoExtractor.setPrintFileName(false);
