@@ -34,11 +34,11 @@ public class JavaParserInterfaceDeclarationTest extends AbstractTest {
 
     @Before
     public void setup() {
-        File srcNewCode = adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-core"));
+        File srcNewCode = adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-core"));
         CombinedTypeSolver combinedTypeSolverNewCode = new CombinedTypeSolver();
         combinedTypeSolverNewCode.add(new ReflectionTypeSolver());
         combinedTypeSolverNewCode.add(new JavaParserTypeSolver(srcNewCode));
-        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath(new File("src/test/resources/javaparser_new_src/javaparser-generated-sources"))));
+        combinedTypeSolverNewCode.add(new JavaParserTypeSolver(adaptPath(new File("src/test/test_sourcecode/javaparser_new_src/javaparser-generated-sources"))));
         typeSolver = combinedTypeSolverNewCode;
     }
 
