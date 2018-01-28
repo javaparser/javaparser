@@ -53,7 +53,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
-        if (wrappedNode.getField().toString().equals(name)) {
+        if (wrappedNode.getName().toString().equals(name)) {
             if (wrappedNode.getScope() instanceof ThisExpr) {
                 ResolvedType typeOfThis = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
                 return new SymbolSolver(typeSolver).solveSymbolInType(typeOfThis.asReferenceType().getTypeDeclaration(), name);
@@ -75,18 +75,14 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
     @Override
     public Optional<Value> solveSymbolAsValue(String name, TypeSolver typeSolver) {
         Expression scope = wrappedNode.getScope();
-        if (wrappedNode.getField().toString().equals(name)) {
+        if (wrappedNode.getName().toString().equals(name)) {
             ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             if (typeOfScope.isArray() && name.equals(ARRAY_LENGTH_FIELD_NAME)) {
                 return Optional.of(new Value(ResolvedPrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME));
             }
             if (typeOfScope.isReferenceType()) {
                 Optional<ResolvedType> typeUsage = typeOfScope.asReferenceType().getFieldType(name);
-                if (typeUsage.isPresent()) {
-                    return Optional.of(new Value(typeUsage.get(), name));
-                } else {
-                    return Optional.empty();
-                }
+                return typeUsage.map(resolvedType -> new Value(resolvedType, name));
             } else {
                 return Optional.empty();
             }
