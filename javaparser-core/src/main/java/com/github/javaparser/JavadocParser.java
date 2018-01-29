@@ -47,7 +47,7 @@ class JavadocParser {
     }
 
     public static Javadoc parse(String commentContent) {
-        List<String> cleanLines = cleanLines(commentContent);
+        List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, EOL));
         int indexOfFirstBlockTag = cleanLines.stream()
                 .filter(JavadocParser::isABlockLine)
                 .map(cleanLines::indexOf)
@@ -56,16 +56,16 @@ class JavadocParser {
         List<String> blockLines;
         String descriptionText;
         if (indexOfFirstBlockTag == -1) {
-            descriptionText = trimRight(String.join("\n", cleanLines));
+            descriptionText = trimRight(String.join(EOL, cleanLines));
             blockLines = Collections.emptyList();
         } else {
-            descriptionText = trimRight(String.join("\n", cleanLines.subList(0, indexOfFirstBlockTag)));
+            descriptionText = trimRight(String.join(EOL, cleanLines.subList(0, indexOfFirstBlockTag)));
 
             //Combine cleaned lines, but only starting with the first block tag till the end
             //In this combined string it is easier to handle multiple lines which actually belong together
             String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size())
                 .stream()
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining(EOL));
 
             //Split up the entire tag back again, considering now that some lines belong to the same block tag.
             //The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
@@ -100,7 +100,7 @@ class JavadocParser {
     }
 
     private static List<String> cleanLines(String content) {
-        String[] lines = content.split("\n");
+        String[] lines = content.split(EOL);
         List<String> cleanedLines = Arrays.stream(lines).map(l -> {
             int asteriskIndex = startsWithAsterisk(l);
             if (asteriskIndex == -1) {
