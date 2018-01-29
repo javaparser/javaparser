@@ -27,6 +27,7 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 
 public class JavadocParserTest {
@@ -46,46 +47,46 @@ public class JavadocParserTest {
     @Test
     public void parseSingleLineWithNewLines() {
         assertEquals(new Javadoc(JavadocDescription.parseText("The string image of the token.")),
-                JavadocParser.parse("\n" +
-                        "   * The string image of the token.\n" +
+                JavadocParser.parse(EOL +
+                        "   * The string image of the token." + EOL +
                         "   "));
     }
 
     @Test
     public void parseCommentWithNewLines() {
-        String text = "\n" +
-                "   * The version identifier for this Serializable class.\n" +
-                "   * Increment only if the <i>serialized</i> form of the\n" +
-                "   * class changes.\n" +
+        String text = EOL +
+                "   * The version identifier for this Serializable class." + EOL +
+                "   * Increment only if the <i>serialized</i> form of the" + EOL +
+                "   * class changes." + EOL +
                 "   ";
-        assertEquals(new Javadoc(JavadocDescription.parseText("The version identifier for this Serializable class.\n" +
-                        "Increment only if the <i>serialized</i> form of the\n" +
+        assertEquals(new Javadoc(JavadocDescription.parseText("The version identifier for this Serializable class." + EOL +
+                        "Increment only if the <i>serialized</i> form of the" + EOL +
                         "class changes.")),
                 JavadocParser.parse(text));
     }
 
     @Test
     public void parseCommentWithIndentation() {
-        String text = "Returns a new Token object, by default.\n" +
-                "   * However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
-                "   *\n" +
-                "   *    case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
-                "   *\n" +
+        String text = "Returns a new Token object, by default." + EOL +
+                "   * However, if you want, you can create and return subclass objects based on the value of ofKind." + EOL +
+                "   *" + EOL +
+                "   *    case MyParserConstants.ID : return new IDToken(ofKind, image);" + EOL +
+                "   *" + EOL +
                 "   * to the following switch statement. Then you can cast matchedToken";
-        assertEquals(new Javadoc(JavadocDescription.parseText("Returns a new Token object, by default.\n" +
-                        "However, if you want, you can create and return subclass objects based on the value of ofKind.\n" +
-                        "\n" +
-                        "   case MyParserConstants.ID : return new IDToken(ofKind, image);\n" +
-                        "\n" +
+        assertEquals(new Javadoc(JavadocDescription.parseText("Returns a new Token object, by default." + EOL +
+                        "However, if you want, you can create and return subclass objects based on the value of ofKind." + EOL +
+                        EOL +
+                        "   case MyParserConstants.ID : return new IDToken(ofKind, image);" + EOL +
+                        EOL +
                         "to the following switch statement. Then you can cast matchedToken")),
                 JavadocParser.parse(text));
     }
 
     @Test
     public void parseBlockTagsAndEmptyDescription() {
-        String text = "\n" +
-                "   * @deprecated\n" +
-                "   * @see #getEndColumn\n" +
+        String text = EOL +
+                "   * @deprecated" + EOL +
+                "   * @see #getEndColumn" + EOL +
                 "   ";
         assertEquals(new Javadoc(JavadocDescription.parseText(""))
                 .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.DEPRECATED, ""))
@@ -94,8 +95,8 @@ public class JavadocParserTest {
 
     @Test
     public void parseBlockTagsAndProvideTagName() {
-        String expectedText = "\n" +
-                "   * @unofficial\n " +
+        String expectedText = EOL +
+                "   * @unofficial" + EOL + " " +
                 "   ";
 
         Javadoc underTest = new Javadoc(JavadocDescription.parseText(""))
@@ -108,13 +109,13 @@ public class JavadocParserTest {
 
     @Test
     public void parseParamBlockTags() {
-        String text = "\n" +
-                "     * Add a field to this and automatically add the import of the type if needed\n" +
-                "     *\n" +
-                "     * @param typeClass the type of the field\n" +
-                "     * @param name the name of the field\n" +
-                "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}\n" +
-                "     * @return the {@link FieldDeclaration} created\n" +
+        String text = EOL +
+                "     * Add a field to this and automatically add the import of the type if needed" + EOL +
+                "     *" + EOL +
+                "     * @param typeClass the type of the field" + EOL +
+                "     * @param name the name of the field" + EOL +
+                "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}" + EOL +
+                "     * @return the {@link FieldDeclaration} created" + EOL +
                 "     ";
         Javadoc res = JavadocParser.parse(text);
         assertEquals(new Javadoc(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
@@ -126,18 +127,18 @@ public class JavadocParserTest {
 
     @Test
     public void parseMultilineParamBlockTags() {
-        String text = "\n" +
-                "     * Add a field to this and automatically add the import of the type if needed\n" +
-                "     *\n" +
-                "     * @param typeClass the type of the field\n" +
-                "     *     continued in a second line\n" +
-                "     * @param name the name of the field\n" +
-                "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}\n" +
-                "     * @return the {@link FieldDeclaration} created\n" +
+        String text = EOL +
+                "     * Add a field to this and automatically add the import of the type if needed" + EOL +
+                "     *" + EOL +
+                "     * @param typeClass the type of the field" + EOL +
+                "     *     continued in a second line" + EOL +
+                "     * @param name the name of the field" + EOL +
+                "     * @param modifiers the modifiers like {@link Modifier#PUBLIC}" + EOL +
+                "     * @return the {@link FieldDeclaration} created" + EOL +
                 "     ";
         Javadoc res = JavadocParser.parse(text);
         assertEquals(new Javadoc(JavadocDescription.parseText("Add a field to this and automatically add the import of the type if needed"))
-                .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field\n    continued in a second line"))
+                .addBlockTag(JavadocBlockTag.createParamBlockTag("typeClass", "the type of the field" + EOL + "    continued in a second line"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("name", "the name of the field"))
                 .addBlockTag(JavadocBlockTag.createParamBlockTag("modifiers", "the modifiers like {@link Modifier#PUBLIC}"))
                 .addBlockTag(new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "the {@link FieldDeclaration} created")), res);
