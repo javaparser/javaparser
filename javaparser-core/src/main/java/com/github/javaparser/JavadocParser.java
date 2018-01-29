@@ -25,13 +25,13 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-import com.github.javaparser.utils.Utils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.utils.Utils.*;
 import static com.github.javaparser.utils.Utils.nextWord;
 
 /**
@@ -67,13 +67,13 @@ class JavadocParser {
                 .stream()
                 .collect(Collectors.joining("\n"));
 
-            //Split up the entire tag black again, considering now that some lines belong to the same block tag.
-            //The pattern used splits the block at each new line starting with the '@' symbol, thus the symbol
+            //Split up the entire tag back again, considering now that some lines belong to the same block tag.
+            //The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
             //then needs to be added again so that the block parsers handles everything correctly.
             blockLines = BLOCK_PATTERN
                 .splitAsStream(tagBlock)
-                .filter(Utils.STRING_NOT_EMPTY)
-                .map(s -> BLOCK_TAG_PREFIX + s.replace("\n", " ").trim())
+                .filter(STRING_NOT_EMPTY)
+                .map(s -> BLOCK_TAG_PREFIX + s)
                 .collect(Collectors.toList());
         }
         Javadoc document = new Javadoc(JavadocDescription.parseText(descriptionText));
