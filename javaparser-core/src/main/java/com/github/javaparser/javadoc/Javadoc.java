@@ -27,6 +27,8 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.javaparser.utils.Utils.*;
+
 /**
  * The structured content of a single Javadoc comment.
  * <p>
@@ -66,14 +68,14 @@ public class Javadoc {
         StringBuilder sb = new StringBuilder();
         if (!description.isEmpty()) {
             sb.append(description.toText());
-            sb.append("\n");
+            sb.append(EOL);
         }
         if (!blockTags.isEmpty()) {
-            sb.append("\n");
+            sb.append(EOL);
         }
         blockTags.forEach(bt -> {
             sb.append(bt.toText());
-            sb.append("\n");
+            sb.append(EOL);
         });
         return sb.toString();
     }
@@ -88,13 +90,14 @@ public class Javadoc {
             }
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        if (!toText().isEmpty()) {
-            for (String line : toText().split("\n")) {
+        sb.append(EOL);
+        final String text = toText();
+        if (!text.isEmpty()) {
+            for (String line : text.split(EOL)) {
                 sb.append(indentation);
                 sb.append(" * ");
                 sb.append(line);
-                sb.append("\n");
+                sb.append(EOL);
             }
         }
         sb.append(indentation);
