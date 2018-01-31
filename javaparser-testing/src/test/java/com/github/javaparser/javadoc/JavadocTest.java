@@ -26,82 +26,80 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-
+import static com.github.javaparser.utils.Utils.EOL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class JavadocTest {
 
     @Test
-    public void toTextForEmptyJavadoc() throws FileNotFoundException {
+    public void toTextForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
         assertEquals("", javadoc.toText());
     }
 
     @Test
-    public void toTextForJavadocWithTwoLinesOfJustDescription() throws FileNotFoundException {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
-        assertEquals("first line\nsecond line\n", javadoc.toText());
+    public void toTextForJavadocWithTwoLinesOfJustDescription() {
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
+        assertEquals("first line" + EOL + "second line" + EOL, javadoc.toText());
     }
 
     @Test
-    public void toTextForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() throws FileNotFoundException {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
+    public void toTextForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() {
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
         javadoc.addBlockTag("foo", "something useful");
-        assertEquals("first line\nsecond line\n\n@foo something useful\n", javadoc.toText());
+        assertEquals("first line" + EOL + "second line" + EOL + EOL + "@foo something useful" + EOL, javadoc.toText());
     }
 
     @Test
-    public void toCommentForEmptyJavadoc() throws FileNotFoundException {
+    public void toCommentForEmptyJavadoc() {
         Javadoc javadoc = new Javadoc(new JavadocDescription());
-        assertEquals(new JavadocComment("\n\t\t "), javadoc.toComment("\t\t"));
+        assertEquals(new JavadocComment("" + EOL + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
-    public void toCommentorJavadocWithTwoLinesOfJustDescription() throws FileNotFoundException {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
-        assertEquals(new JavadocComment("\n\t\t * first line\n\t\t * second line\n\t\t "), javadoc.toComment("\t\t"));
+    public void toCommentorJavadocWithTwoLinesOfJustDescription() {
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
+        assertEquals(new JavadocComment("" + EOL + "\t\t * first line" + EOL + "\t\t * second line" + EOL + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
-    public void toCommentForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() throws FileNotFoundException {
-        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line\nsecond line"));
+    public void toCommentForJavadocWithTwoLinesOfJustDescriptionAndOneBlockTag() {
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("first line" + EOL + "second line"));
         javadoc.addBlockTag("foo", "something useful");
-        assertEquals(new JavadocComment("\n\t\t * first line\n\t\t * second line\n\t\t * \n\t\t * @foo something useful\n\t\t "), javadoc.toComment("\t\t"));
+        assertEquals(new JavadocComment("" + EOL + "\t\t * first line" + EOL + "\t\t * second line" + EOL + "\t\t * " + EOL + "\t\t * @foo something useful" + EOL + "\t\t "), javadoc.toComment("\t\t"));
     }
 
     @Test
     public void descriptionAndBlockTagsAreRetrievable() {
-        Javadoc javadoc = JavaParser.parseJavadoc("first line\nsecond line\n\n@param node a node\n@return result the result");
-        assertEquals(javadoc.getDescription().toText(), "first line\nsecond line");
-        assertEquals(javadoc.getBlockTags().size(), 2);
+        Javadoc javadoc = JavaParser.parseJavadoc("first line" + EOL + "second line" + EOL + EOL + "@param node a node" + EOL + "@return result the result");
+        assertEquals("first line" + EOL + "second line", javadoc.getDescription().toText());
+        assertEquals(2, javadoc.getBlockTags().size());
     }
 
     @Test
     public void inlineTagsAreParsable() {
         String docText =
-                "Returns the {@link TOFilename}s of all files that existed during the requested\n" +
-                        "{@link TOVersion}.\n" +
-                        "\n" +
-                        "@param versionID the id of the {@link TOVersion}.\n" +
-                        "@return the filenames\n" +
-                        "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID.\n";
+                "Returns the {@link TOFilename}s of all files that existed during the requested" + EOL +
+                        "{@link TOVersion}." + EOL +
+                        "" + EOL +
+                        "@param versionID the id of the {@link TOVersion}." + EOL +
+                        "@return the filenames" + EOL +
+                        "@throws InvalidIDException if the {@link IPersistence} doesn't recognize the given versionID." + EOL;
         String javadoc = JavaParser.parseJavadoc(docText).toText();
         assertTrue(javadoc.contains("{@link TOVersion}"));
     }
 
     @Test
     public void emptyLinesBetweenBlockTagsGetsFiltered() {
-        String comment = " * The type of the Object to be mapped.\n" +
-                " * This interface maps the given Objects to existing ones in the database and\n" +
-                " * saves them.\n" +
-                " * \n" +
-                " * @author censored\n" +
-                " * \n" +
-                " * @param <T>\n";
+        String comment = " * The type of the Object to be mapped." + EOL +
+                " * This interface maps the given Objects to existing ones in the database and" + EOL +
+                " * saves them." + EOL +
+                " * " + EOL +
+                " * @author censored" + EOL +
+                " * " + EOL +
+                " * @param <T>" + EOL;
         Javadoc javadoc = JavaParser.parseJavadoc(comment);
-        assertEquals(javadoc.getBlockTags().size(), 2);
+        assertEquals(2, javadoc.getBlockTags().size());
     }
-
 }
