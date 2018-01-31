@@ -24,14 +24,19 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.AssignExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
+
 import javax.annotation.Generated;
+
 import com.github.javaparser.TokenRange;
+
 import java.util.function.Consumer;
 import java.util.Optional;
 
@@ -49,26 +54,23 @@ public final class AssignExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        ASSIGN("=", null),
-        PLUS("+=", BinaryExpr.Operator.PLUS),
-        MINUS("-=", BinaryExpr.Operator.MINUS),
-        MULTIPLY("*=", BinaryExpr.Operator.MULTIPLY),
-        DIVIDE("/=", BinaryExpr.Operator.DIVIDE),
-        BINARY_AND("&=", BinaryExpr.Operator.BINARY_AND),
-        BINARY_OR("|=", BinaryExpr.Operator.BINARY_OR),
-        XOR("^=", BinaryExpr.Operator.XOR),
-        REMAINDER("%=", BinaryExpr.Operator.REMAINDER),
-        LEFT_SHIFT("<<=", BinaryExpr.Operator.LEFT_SHIFT),
-        SIGNED_RIGHT_SHIFT(">>=", BinaryExpr.Operator.SIGNED_RIGHT_SHIFT),
-        UNSIGNED_RIGHT_SHIFT(">>>=", BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT);
+        ASSIGN("="),
+        PLUS("+="),
+        MINUS("-="),
+        MULTIPLY("*="),
+        DIVIDE("/="),
+        BINARY_AND("&="),
+        BINARY_OR("|="),
+        XOR("^="),
+        REMAINDER("%="),
+        LEFT_SHIFT("<<="),
+        SIGNED_RIGHT_SHIFT(">>="),
+        UNSIGNED_RIGHT_SHIFT(">>>=");
 
         private final String codeRepresentation;
 
-        private final BinaryExpr.Operator binaryOperatorEquivalent;
-
-        Operator(String codeRepresentation, BinaryExpr.Operator binaryOperatorEquivalent) {
+        Operator(String codeRepresentation) {
             this.codeRepresentation = codeRepresentation;
-            this.binaryOperatorEquivalent = binaryOperatorEquivalent;
         }
 
         public String asString() {
@@ -76,7 +78,32 @@ public final class AssignExpr extends Expression {
         }
 
         public Optional<BinaryExpr.Operator> toBinaryOperator() {
-            return Optional.ofNullable(binaryOperatorEquivalent);
+            switch (this) {
+                case PLUS:
+                    return Optional.of(BinaryExpr.Operator.PLUS);
+                case MINUS:
+                    return Optional.of(BinaryExpr.Operator.MINUS);
+                case MULTIPLY:
+                    return Optional.of(BinaryExpr.Operator.MULTIPLY);
+                case DIVIDE:
+                    return Optional.of(BinaryExpr.Operator.DIVIDE);
+                case BINARY_AND:
+                    return Optional.of(BinaryExpr.Operator.BINARY_AND);
+                case BINARY_OR:
+                    return Optional.of(BinaryExpr.Operator.BINARY_OR);
+                case XOR:
+                    return Optional.of(BinaryExpr.Operator.XOR);
+                case REMAINDER:
+                    return Optional.of(BinaryExpr.Operator.REMAINDER);
+                case LEFT_SHIFT:
+                    return Optional.of(BinaryExpr.Operator.LEFT_SHIFT);
+                case SIGNED_RIGHT_SHIFT:
+                    return Optional.of(BinaryExpr.Operator.SIGNED_RIGHT_SHIFT);
+                case UNSIGNED_RIGHT_SHIFT:
+                    return Optional.of(BinaryExpr.Operator.UNSIGNED_RIGHT_SHIFT);
+                default:
+                    return Optional.empty();
+            }
         }
     }
 
