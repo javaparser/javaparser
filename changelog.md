@@ -1,3 +1,8 @@
+Version 3.5.12
+------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/75?closed=1)
+* Thanks to un0btanium for fixing the readme file!
+
 Version 3.5.11
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/74?closed=1)
