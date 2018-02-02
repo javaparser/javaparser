@@ -220,7 +220,6 @@ public final class MethodDeclaration extends CallableDeclaration<MethodDeclarati
                 sb.append("synchronized ");
             }
         }
-        // TODO verify it does not print comments connected to the type
         sb.append(getType().toString(prettyPrinterNoCommentsConfiguration));
         sb.append(" ");
         sb.append(getName());
