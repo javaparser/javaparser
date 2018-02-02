@@ -31,10 +31,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static org.junit.Assert.assertEquals;
@@ -226,22 +223,22 @@ public class NodeListTest {
 
         assertEquals("[abc, bcd, cde]", list.toString());
     }
-    
+
     @Test
     public void addFirst() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         list.addFirst(new Name("xxx"));
-        
+
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
-    
+
     @Test
     public void addLast() {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
 
         list.addLast(new Name("xxx"));
-        
+
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
     }
 
@@ -251,7 +248,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
 
         list.addBefore(new Name("xxx"), n);
-        
+
         assertEquals("[abc, xxx, bcd, cde]", list.toString());
     }
 
@@ -261,7 +258,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(new Name("abc"), n, new Name("cde"));
 
         list.addAfter(new Name("xxx"), n);
-        
+
         assertEquals("[abc, bcd, xxx, cde]", list.toString());
     }
 
@@ -271,7 +268,7 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(abc, new Name("bcd"), new Name("cde"));
 
         list.addBefore(new Name("xxx"), abc);
-        
+
         assertEquals("[xxx, abc, bcd, cde]", list.toString());
     }
 
@@ -281,7 +278,42 @@ public class NodeListTest {
         final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), cde);
 
         list.addAfter(new Name("xxx"), cde);
-        
+
         assertEquals("[abc, bcd, cde, xxx]", list.toString());
+    }
+
+    @Test
+    public void getFirstWhenEmpty() {
+        final NodeList<Name> list = nodeList();
+
+        Optional<Name> first = list.getFirst();
+
+        assertEquals("Optional.empty", first.toString());
+    }
+
+    @Test
+    public void getFirstWhenNonEmpty() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        Optional<Name> first = list.getFirst();
+
+        assertEquals("Optional[abc]", first.toString());
+    }
+    @Test
+    public void getLastWhenEmpty() {
+        final NodeList<Name> list = nodeList();
+
+        Optional<Name> last = list.getLast();
+
+        assertEquals("Optional.empty", last.toString());
+    }
+
+    @Test
+    public void getLastWhenNonEmpty() {
+        final NodeList<Name> list = nodeList(new Name("abc"), new Name("bcd"), new Name("cde"));
+
+        Optional<Name> last = list.getLast();
+
+        assertEquals("Optional[cde]", last.toString());
     }
 }
