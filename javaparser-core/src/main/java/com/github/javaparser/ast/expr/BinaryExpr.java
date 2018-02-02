@@ -24,14 +24,19 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BinaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
+
 import javax.annotation.Generated;
+
 import com.github.javaparser.TokenRange;
+
 import java.util.function.Consumer;
 import java.util.Optional;
 
@@ -47,33 +52,30 @@ public final class BinaryExpr extends Expression {
 
     public enum Operator implements Printable {
 
-        OR("||", null),
-        AND("&&", null),
-        BINARY_OR("|", AssignExpr.Operator.BINARY_OR),
-        BINARY_AND("&", AssignExpr.Operator.BINARY_AND),
-        XOR("^", AssignExpr.Operator.XOR),
-        EQUALS("==", null),
-        NOT_EQUALS("!=", null),
-        LESS("<", null),
-        GREATER(">", null),
-        LESS_EQUALS("<=", null),
-        GREATER_EQUALS(">=", null),
-        LEFT_SHIFT("<<", AssignExpr.Operator.LEFT_SHIFT),
-        SIGNED_RIGHT_SHIFT(">>", AssignExpr.Operator.SIGNED_RIGHT_SHIFT),
-        UNSIGNED_RIGHT_SHIFT(">>>", AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT),
-        PLUS("+", AssignExpr.Operator.PLUS),
-        MINUS("-", AssignExpr.Operator.MINUS),
-        MULTIPLY("*", AssignExpr.Operator.MULTIPLY),
-        DIVIDE("/", AssignExpr.Operator.DIVIDE),
-        REMAINDER("%", AssignExpr.Operator.REMAINDER);
+        OR("||"),
+        AND("&&"),
+        BINARY_OR("|"),
+        BINARY_AND("&"),
+        XOR("^"),
+        EQUALS("=="),
+        NOT_EQUALS("!="),
+        LESS("<"),
+        GREATER(">"),
+        LESS_EQUALS("<="),
+        GREATER_EQUALS(">="),
+        LEFT_SHIFT("<<"),
+        SIGNED_RIGHT_SHIFT(">>"),
+        UNSIGNED_RIGHT_SHIFT(">>>"),
+        PLUS("+"),
+        MINUS("-"),
+        MULTIPLY("*"),
+        DIVIDE("/"),
+        REMAINDER("%");
 
         private final String codeRepresentation;
 
-        private final AssignExpr.Operator assignOperatorEquivalent;
-
-        Operator(String codeRepresentation, AssignExpr.Operator assignOperatorEquivalent) {
+        Operator(String codeRepresentation) {
             this.codeRepresentation = codeRepresentation;
-            this.assignOperatorEquivalent = assignOperatorEquivalent;
         }
 
         public String asString() {
@@ -81,7 +83,32 @@ public final class BinaryExpr extends Expression {
         }
 
         public Optional<AssignExpr.Operator> toAssignOperator() {
-            return Optional.ofNullable(assignOperatorEquivalent);
+            switch (this) {
+                case BINARY_OR:
+                    return Optional.of(AssignExpr.Operator.BINARY_OR);
+                case BINARY_AND:
+                    return Optional.of(AssignExpr.Operator.BINARY_AND);
+                case XOR:
+                    return Optional.of(AssignExpr.Operator.XOR);
+                case LEFT_SHIFT:
+                    return Optional.of(AssignExpr.Operator.LEFT_SHIFT);
+                case SIGNED_RIGHT_SHIFT:
+                    return Optional.of(AssignExpr.Operator.SIGNED_RIGHT_SHIFT);
+                case UNSIGNED_RIGHT_SHIFT:
+                    return Optional.of(AssignExpr.Operator.UNSIGNED_RIGHT_SHIFT);
+                case PLUS:
+                    return Optional.of(AssignExpr.Operator.PLUS);
+                case MINUS:
+                    return Optional.of(AssignExpr.Operator.MINUS);
+                case MULTIPLY:
+                    return Optional.of(AssignExpr.Operator.MULTIPLY);
+                case DIVIDE:
+                    return Optional.of(AssignExpr.Operator.DIVIDE);
+                case REMAINDER:
+                    return Optional.of(AssignExpr.Operator.REMAINDER);
+                default:
+                    return Optional.empty();
+            }
         }
     }
 

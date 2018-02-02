@@ -78,4 +78,15 @@ public class UtilsTest {
         String result = Utils.normalizeEolInTextBlock("\r\n \r \n", "Q");
         assertEquals("Q Q Q", result);
     }
+
+    @Test
+    public void testTrimTrailingSpaces() {
+        assertEquals("abc", trimTrailingSpaces("abc"));
+        assertEquals("  abc", trimTrailingSpaces("  abc"));
+        assertEquals("abc", trimTrailingSpaces("abc  "));
+        assertEquals("  abc", trimTrailingSpaces("  abc  "));
+        assertEquals("abc", trimTrailingSpaces("abc\t\0"));
+        assertEquals("", trimTrailingSpaces("    "));
+        assertEquals("", trimTrailingSpaces(""));
+    }
 }

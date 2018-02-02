@@ -44,6 +44,7 @@ import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.isNullOrEmpty;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static com.github.javaparser.utils.Utils.trimTrailingSpaces;
 
 /**
  * Outputs the AST as formatted Java source code.
@@ -328,10 +329,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             boolean skippingLeadingEmptyLines = true;
             boolean prependEmptyLine = false;
             for (String line : lines) {
-                line = line.trim();
-                if (line.startsWith("*")) {
-                    line = line.substring(1).trim();
+                final String trimmedLine = line.trim();
+                if (trimmedLine.startsWith("*")) {
+                    line = trimmedLine.substring(1);
                 }
+                line = trimTrailingSpaces(line);
                 if (line.isEmpty()) {
                     if (!skippingLeadingEmptyLines) {
                         prependEmptyLine = true;
@@ -342,7 +344,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                         printer.println(" *");
                         prependEmptyLine = false;
                     }
-                    printer.println(" * " + line);
+                    printer.println(" *" + line);
                 }
             }
             printer.println(" */");
@@ -507,10 +509,9 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
 
         n.getAncestorOfType(NodeWithVariables.class).ifPresent(ancestor -> {
-            Optional<Type> maximumCommonType = ancestor.getMaximumCommonType();
-            maximumCommonType.ifPresent(commonType -> {
+            ((NodeWithVariables<?>) ancestor).getMaximumCommonType().ifPresent(commonType -> {
 
-                Type type = n.getType();
+                final Type type = n.getType();
 
                 ArrayType arrayType = null;
 
