@@ -25,16 +25,13 @@ import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithType;
-import com.github.javaparser.ast.type.Type;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.github.javaparser.ast.NodeList.*;
 import static java.lang.Integer.signum;
 
 public final class PositionUtils {
@@ -64,10 +61,10 @@ public final class PositionUtils {
     }
 
     private static int compare(Node a, Node b, boolean ignoringAnnotations) {
-        if(a.getRange().isPresent() && !b.getRange().isPresent()) {
+        if (a.getRange().isPresent() && !b.getRange().isPresent()) {
             return -1;
         }
-        if(!a.getRange().isPresent() && b.getRange().isPresent()) {
+        if (!a.getRange().isPresent() && b.getRange().isPresent()) {
             return 1;
         }
         if (!a.getRange().isPresent() && !b.getRange().isPresent()) {
@@ -93,50 +90,50 @@ public final class PositionUtils {
         }
     }
 
-    public static AnnotationExpr getLastAnnotation(Node node) {
+    /**
+     * @return get the last annotation on the node, last meaning "last in reading order."
+     */
+    public static Optional<AnnotationExpr> getLastAnnotation(Node node) {
         if (node instanceof NodeWithAnnotations) {
-            NodeList<AnnotationExpr> annotations = NodeList.nodeList(((NodeWithAnnotations<?>) node).getAnnotations());
-            if (annotations.isEmpty()) {
-                return null;
-            }
+            final NodeList<AnnotationExpr> annotations = nodeList(((NodeWithAnnotations<?>) node).getAnnotations());
             sortByBeginPosition(annotations);
-            return annotations.get(annotations.size() - 1);
-        } else {
-            return null;
+            return annotations.getLast();
         }
+        return Optional.empty();
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getRange().get().begin.line;
+        return beginPositionWithoutConsideringAnnotations(node).line;
     }
 
 
     private static int beginColumnWithoutConsideringAnnotation(Node node) {
-        return beginNodeWithoutConsideringAnnotations(node).getRange().get().begin.column;
+        return beginPositionWithoutConsideringAnnotations(node).column;
     }
 
-    private static Node beginNodeWithoutConsideringAnnotations(Node node) {
-        if (node instanceof MethodDeclaration || node instanceof FieldDeclaration) {
-            NodeWithType<?, Type> casted = (NodeWithType<?, Type>) node;
-            return casted.getType();
-        } else if (node instanceof ClassOrInterfaceDeclaration) {
-            ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
-            return casted.getName();
-        } else {
-            return node;
-        }
+    private static Position beginPositionWithoutConsideringAnnotations(Node node) {
+        return getLastAnnotation(node)
+                .flatMap(annotation -> annotation.getRange()
+                        .map(range -> range.end))
+                .orElse(node.getRange().get().begin);
     }
 
+    /**
+     * Like {@link Node#containsWithin(Node)}, but if "ignoringAnnotations" is true,
+     * everything up to and including the last annotation on the container is not considered "within" the container.
+     */
     public static boolean nodeContains(Node container, Node contained, boolean ignoringAnnotations) {
         final Range containedRange = contained.getRange().get();
         final Range containerRange = container.getRange().get();
-        if (!ignoringAnnotations || PositionUtils.getLastAnnotation(container) == null) {
+        if (!ignoringAnnotations || !getLastAnnotation(container).isPresent()) {
+            // No special annotation logic request, or no annotations found.
             return container.containsWithin(contained);
         }
+        // It's not contained normally, don't bother with the annotation logic.
         if (!container.containsWithin(contained)) {
             return false;
         }
-        // if the node is contained, but it comes immediately after the annotations,
+        // If the node is contained, but it comes immediately after the annotations,
         // let's not consider it contained
         if (container instanceof NodeWithAnnotations) {
             int bl = beginLineWithoutConsideringAnnotation(container);

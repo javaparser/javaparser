@@ -29,6 +29,9 @@ public interface NodeWithRange<N> {
         return getRange().map(r -> r.end);
     }
 
+    /**
+     * @return true if other's range is not outside of this node's range.
+     */
     default boolean containsWithin(Node other) {
         if (getRange().isPresent() && other.getRange().isPresent()) {
             return getRange().get().contains(other.getRange().get());
