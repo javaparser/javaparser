@@ -484,7 +484,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (!n.getVariables().isEmpty()) {
             Optional<Type> maximumCommonType = n.getMaximumCommonType();
             maximumCommonType.ifPresent(t -> t.accept(this, arg));
-            if(!maximumCommonType.isPresent()){
+            if (!maximumCommonType.isPresent()) {
                 printer.print("???");
             }
         }
@@ -1066,7 +1066,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(" {");
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
-            boolean alignVertically = n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally();
+            final boolean alignVertically =
+                    // Either we hit the constant amount limit in the configurations, or...
+                    n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() ||
+                            // any of the constants has a comment.
+                            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
