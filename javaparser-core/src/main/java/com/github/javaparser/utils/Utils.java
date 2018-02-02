@@ -49,7 +49,7 @@ public class Utils {
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
     }
-    
+
     public static <T> T assertNotNull(T o) {
         if (o == null) {
             throw new AssertionError("A reference was unexpectedly null.");
@@ -239,4 +239,15 @@ public class Utils {
 
         return filename.substring(0, extensionIndex);
     }
+
+    /**
+     * Like {@link String#trim()}, but only the trailing spaces.
+     */
+    public static String trimTrailingSpaces(String line) {
+        while (line.length() > 0 && line.charAt(line.length() - 1) <= 0x20) {
+            line = line.substring(0, line.length() - 1);
+        }
+        return line;
+    }
+
 }
