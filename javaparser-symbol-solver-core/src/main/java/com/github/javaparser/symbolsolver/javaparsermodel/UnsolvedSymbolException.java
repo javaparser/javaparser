@@ -22,7 +22,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 /**
  * @author Federico Tomassetti
  *
- * @deprecated Use {@link com.github.javaparser.symbolsolver.model.resolution.UnsolvedSymbolException} instead
+ * @deprecated Use {@link com.github.javaparser.resolution.UnsolvedSymbolException} instead
  */
 // Use the one in model instead
 @Deprecated
@@ -32,24 +32,28 @@ public class UnsolvedSymbolException extends RuntimeException {
     private String name;
     private TypeSolver typeSolver;
 
+    @Deprecated
     public UnsolvedSymbolException(String name, TypeSolver typeSolver) {
         super("Unsolved symbol : " + name + " using typesolver " + typeSolver);
         this.typeSolver = typeSolver;
         this.name = name;
     }
 
+    @Deprecated
     public UnsolvedSymbolException(Context context, String name) {
         super("Unsolved symbol in " + context + " : " + name);
         this.context = context.toString();
         this.name = name;
     }
 
+    @Deprecated
     public UnsolvedSymbolException(String context, String name) {
         super("Unsolved symbol in " + context + " : " + name);
         this.context = context;
         this.name = name;
     }
 
+    @Deprecated
     public UnsolvedSymbolException(String name) {
         super("Unsolved symbol : " + name);
         this.context = "unknown";

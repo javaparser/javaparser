@@ -22,7 +22,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -39,7 +39,7 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
 
     @Override
     public ResolvedType getType() {
-        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) getParentNode(wrappedNode), typeSolver), typeSolver);
+        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) requireParentNode(wrappedNode), typeSolver), typeSolver);
     }
 
     @Override

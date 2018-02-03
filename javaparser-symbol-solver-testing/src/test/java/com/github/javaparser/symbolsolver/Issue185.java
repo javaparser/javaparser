@@ -11,10 +11,11 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeS
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 
 public class Issue185 extends AbstractResolutionTest {
@@ -26,8 +27,8 @@ public class Issue185 extends AbstractResolutionTest {
         combinedTypeSolver.add(new JavaParserTypeSolver(src));
         combinedTypeSolver.add(new ReflectionTypeSolver());
         CompilationUnit agendaCu = JavaParser.parse(adaptPath(new File("src/test/resources/recursion-issue/Usage.java")));
-        MethodCallExpr foo = Navigator.findMethodCall(agendaCu, "foo");
-        assert foo != null;
+        MethodCallExpr foo = Navigator.findMethodCall(agendaCu, "foo").get();
+        assertNotNull(foo);
         JavaParserFacade.get(combinedTypeSolver).getType(foo);
     }
 

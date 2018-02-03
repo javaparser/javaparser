@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 public class Issue116 extends AbstractResolutionTest {
 
     @Test
-    public void arrayTypeIsNotPartOfTheTree() throws ParseException {
+    public void arrayTypeIsNotPartOfTheTree() {
         CompilationUnit cu = parseSample("Issue116");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");

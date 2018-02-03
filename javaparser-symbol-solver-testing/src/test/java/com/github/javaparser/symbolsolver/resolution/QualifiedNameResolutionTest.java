@@ -33,11 +33,11 @@ import static org.junit.Assert.assertTrue;
 public class QualifiedNameResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void resolveLocalVariableInParentOfParent() throws ParseException {
+    public void resolveLocalVariableInParentOfParent() {
         CompilationUnit cu = parseSample("QualifiedNameTest");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "QualifiedNameTest");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo1");
-        NameExpr nameExpr = Navigator.findNameExpression(method, "s");
+        NameExpr nameExpr = Navigator.findNameExpression(method, "s").get();
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());

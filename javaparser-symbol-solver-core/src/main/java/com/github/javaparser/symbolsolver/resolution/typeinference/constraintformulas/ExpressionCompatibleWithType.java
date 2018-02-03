@@ -5,7 +5,6 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -16,12 +15,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper.isPolyExpression;
 import static com.github.javaparser.symbolsolver.resolution.typeinference.ExpressionHelper.isStandaloneExpression;
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+import static java.util.stream.Collectors.*;
 
 /**
  * An expression is compatible in a loose invocation context with type T
@@ -204,7 +203,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                         //           expressions e1, ..., em, for all i (1 ≤ i ≤ m), ‹ei → R›.
 
                         if (lambdaExpr.getBody() instanceof BlockStmt) {
-                            getAllReturnExpressions((BlockStmt)lambdaExpr.getBody()).stream().forEach(e -> constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R)));
+                            getAllReturnExpressions((BlockStmt)lambdaExpr.getBody()).forEach(e -> constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R)));
                         } else {
                             // FEDERICO: Added - Start
                             for (int i=0;i<lambdaExpr.getParameters().size();i++) {
@@ -261,10 +260,10 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
     }
 
     private List<Expression> getAllReturnExpressions(BlockStmt blockStmt) {
-        return Navigator.findAllNodesOfGivenClass(blockStmt, ReturnStmt.class).stream()
+        return blockStmt.findAll(ReturnStmt.class).stream()
                 .filter(r -> r.getExpression().isPresent())
                 .map(r -> r.getExpression().get())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private boolean isValueCompatibleBlock(Statement statement) {
@@ -272,15 +271,13 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
         // in the block has the form return Expression;.
 
         if (statement instanceof BlockStmt) {
-            BlockStmt blockStmt = (BlockStmt)statement;
             if (!ControlFlowLogic.getInstance().canCompleteNormally(statement)) {
                 return true;
             }
-            List<ReturnStmt> returnStmts = Navigator.findAllNodesOfGivenClass(statement, ReturnStmt.class);
+            List<ReturnStmt> returnStmts = statement.findAll(ReturnStmt.class);
             return returnStmts.stream().allMatch(r -> r.getExpression().isPresent());
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override

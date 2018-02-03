@@ -24,11 +24,11 @@ import static org.junit.Assert.assertEquals;
 public class Issue156 extends AbstractResolutionTest {
 
     @Test
-    public void testFieldAccessThroughClassAndThis() throws ParseException {
+    public void testFieldAccessThroughClassAndThis() {
 
         CompilationUnit cu = parseSample("Issue156");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Issue156");
-        List<MethodCallExpr> methods = clazz.getChildNodes().get(2).getChildNodes().get(1).getNodesByType(MethodCallExpr.class);
+        List<MethodCallExpr> methods = clazz.getChildNodes().get(2).getChildNodes().get(1).findAll(MethodCallExpr.class);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 

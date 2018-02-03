@@ -28,7 +28,7 @@ public class Issue276 extends AbstractResolutionTest{
         TypeSolver typeSolver = new CombinedTypeSolver(
         		new ReflectionTypeSolver(), 
         		new JavaParserTypeSolver(adaptPath(new File("src/test/resources/issue276"))));
-        List<MethodDeclaration> methods = Navigator.findAllNodesOfGivenClass(cls, MethodDeclaration.class);
+        List<MethodDeclaration> methods = cls.findAll(MethodDeclaration.class);
         boolean isSolved = false;
         for (MethodDeclaration method: methods) {
         	if (method.getNameAsString().equals("overrideMe")) {

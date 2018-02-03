@@ -47,7 +47,7 @@ public class MethodContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void solveTypeRefToLocalClass() throws ParseException {
+    public void solveTypeRefToLocalClass() {
         CompilationUnit cu = parseSample("MethodWithTypes");
         ClassOrInterfaceDeclaration cd = Navigator.demandClass(cu, "Main");
         MethodDeclaration md = Navigator.demandMethod(cd, "methodWithLocalTypes");

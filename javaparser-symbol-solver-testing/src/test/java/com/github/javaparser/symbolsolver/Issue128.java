@@ -33,12 +33,12 @@ public class Issue128 extends AbstractResolutionTest {
     }
 
     @Test
-    public void verifyJavaTestClassIsSolved() throws ParseException {
+    public void verifyJavaTestClassIsSolved() {
         typeSolver.solveType("foo.JavaTest");
     }
 
     @Test
-    public void loopOnStaticallyImportedType() throws ParseException {
+    public void loopOnStaticallyImportedType() {
         CompilationUnit cu = parseSampleWithStandardExtension("issue128/foo/Issue128");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("test").get(0).getBody().get().getStatement(0);

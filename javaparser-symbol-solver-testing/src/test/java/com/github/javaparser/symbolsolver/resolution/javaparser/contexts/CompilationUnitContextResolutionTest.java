@@ -60,7 +60,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void getParent() throws ParseException {
+    public void getParent() {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
@@ -68,7 +68,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveExistingGenericType() throws ParseException {
+    public void solveExistingGenericType() {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
@@ -82,7 +82,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveUnexistingGenericType() throws ParseException {
+    public void solveUnexistingGenericType() {
         CompilationUnit cu = parseSample("ClassWithTypeVariables");
         Context context = new CompilationUnitContext(cu, typeSolver);
 
@@ -164,7 +164,7 @@ public class CompilationUnitContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveTypeInSamePackage() throws ParseException {
+    public void solveTypeInSamePackage() {
         CompilationUnit cu = parseSample("CompilationUnitWithImports");
         Context context = new CompilationUnitContext(cu, typeSolver);
 

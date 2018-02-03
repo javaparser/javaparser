@@ -37,29 +37,29 @@ import static org.junit.Assert.assertTrue;
 
 public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTest {
 
-    private void testGenericArguments(String containingMethodName) throws ParseException {
+    private void testGenericArguments(String containingMethodName) {
         CompilationUnit cu = parseSample("GenericMethodArguments");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ClassOrInterfaceDeclaration classDecl = Navigator.demandClass(cu, "GenericMethodArguments");
         MethodDeclaration containingMethod = Navigator.demandMethod(classDecl, containingMethodName);
-        MethodCallExpr bar = Navigator.findMethodCall(containingMethod, "apply");
+        MethodCallExpr bar = Navigator.findMethodCall(containingMethod, "apply").get();
 
         assertTrue(javaParserFacade.solve(bar).isSolved());
     }
 
     @Test
-    public void genericMethodWithGenericClassBasedArgument() throws ParseException {
+    public void genericMethodWithGenericClassBasedArgument() {
         testGenericArguments("useCase1");
     }
 
     @Test
-    public void genericMethodWithGenericClassArgument() throws ParseException {
+    public void genericMethodWithGenericClassArgument() {
         testGenericArguments("useCase2");
     }
 
     @Test
-    public void declaredOnMethodPositiveCase() throws ParseException {
+    public void declaredOnMethodPositiveCase() {
         CompilationUnit cu = parseSample("MethodTypeParameter");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
@@ -76,7 +76,7 @@ public class JavaParserTypeParameterResolutionTest extends AbstractResolutionTes
     }
 
     @Test
-    public void declaredOnMethodNegativeCase() throws ParseException {
+    public void declaredOnMethodNegativeCase() {
         CompilationUnit cu = parseSample("ClassTypeParameter");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);

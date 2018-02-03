@@ -103,11 +103,17 @@ public final class WildcardType extends Type implements NodeWithAnnotations<Wild
         return Optional.ofNullable(superType);
     }
 
+    /**
+     * @deprecated use getExtendedType instead.
+     */
     @Deprecated
     public Optional<ReferenceType> getExtendedTypes() {
         return getExtendedType();
     }
 
+    /**
+     * @deprecated use getSuperType instead.
+     */
     @Deprecated
     public Optional<ReferenceType> getSuperTypes() {
         return getSuperType();

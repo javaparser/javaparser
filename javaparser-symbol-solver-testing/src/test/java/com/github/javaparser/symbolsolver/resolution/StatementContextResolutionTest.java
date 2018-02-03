@@ -36,11 +36,11 @@ import static org.junit.Assert.assertTrue;
 public class StatementContextResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void resolveLocalVariableInParentOfParent() throws ParseException {
+    public void resolveLocalVariableInParentOfParent() {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo1");
-        NameExpr nameExpr = Navigator.findNameExpression(method, "s");
+        NameExpr nameExpr = Navigator.findNameExpression(method, "s").get();
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
@@ -48,11 +48,11 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveLocalVariableInParent() throws ParseException {
+    public void resolveLocalVariableInParent() {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo3");
-        NameExpr nameExpr = Navigator.findNameExpression(method, "s");
+        NameExpr nameExpr = Navigator.findNameExpression(method, "s").get();
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
@@ -60,11 +60,11 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveLocalVariableInSameParent() throws ParseException {
+    public void resolveLocalVariableInSameParent() {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo2");
-        NameExpr nameExpr = Navigator.findNameExpression(method, "s");
+        NameExpr nameExpr = Navigator.findNameExpression(method, "s").get();
 
         SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
@@ -72,11 +72,11 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveLocalAndSeveralAnnidatedLevels() throws ParseException {
+    public void resolveLocalAndSeveralAnnidatedLevels() {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo4");
-        MethodCallExpr call = Navigator.findMethodCall(method, "add");
+        MethodCallExpr call = Navigator.findMethodCall(method, "add").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
@@ -89,11 +89,11 @@ public class StatementContextResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveMethodOnGenericClass() throws ParseException {
+    public void resolveMethodOnGenericClass() {
         CompilationUnit cu = parseSample("LocalVariableInParent");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "LocalVariableInParent");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo5");
-        MethodCallExpr call = Navigator.findMethodCall(method, "add");
+        MethodCallExpr call = Navigator.findMethodCall(method, "add").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
 

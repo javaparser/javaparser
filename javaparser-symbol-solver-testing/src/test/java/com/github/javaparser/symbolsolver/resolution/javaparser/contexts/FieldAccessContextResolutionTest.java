@@ -36,12 +36,12 @@ import static org.junit.Assert.assertEquals;
 public class FieldAccessContextResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void solveMethodCallInFieldAccessContext() throws ParseException {
+    public void solveMethodCallInFieldAccessContext() {
         CompilationUnit cu = parseSample("MethodCalls");
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "bar2");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "getSelf");
+        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "getSelf").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);

@@ -36,9 +36,9 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
         MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
-        MethodCallExpr firstFieldMethodCall = Navigator.findMethodCall(mainMethod, "firstContainerMethod");
-        MethodCallExpr secondFieldMethodCall = Navigator.findMethodCall(mainMethod, "secondContainerMethod");
-        MethodCallExpr thirdFieldMethodCall = Navigator.findMethodCall(mainMethod, "thirdContainerMethod");
+        MethodCallExpr firstFieldMethodCall = Navigator.findMethodCall(mainMethod, "firstContainerMethod").get();
+        MethodCallExpr secondFieldMethodCall = Navigator.findMethodCall(mainMethod, "secondContainerMethod").get();
+        MethodCallExpr thirdFieldMethodCall = Navigator.findMethodCall(mainMethod, "thirdContainerMethod").get();
 
         assertEquals(true, javaParserFacade.solve(firstFieldMethodCall).isSolved());
         assertEquals(true, javaParserFacade.solve(secondFieldMethodCall).isSolved());
@@ -51,9 +51,9 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
         MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
-        MethodCallExpr methodCall = Navigator.findMethodCall(mainMethod, "methodCall");
-        MethodCallExpr innerMethodCall = Navigator.findMethodCall(mainMethod, "innerMethodCall");
-        MethodCallExpr innerInnerMethodCall = Navigator.findMethodCall(mainMethod, "innerInnerMethodCall");
+        MethodCallExpr methodCall = Navigator.findMethodCall(mainMethod, "methodCall").get();
+        MethodCallExpr innerMethodCall = Navigator.findMethodCall(mainMethod, "innerMethodCall").get();
+        MethodCallExpr innerInnerMethodCall = Navigator.findMethodCall(mainMethod, "innerInnerMethodCall").get();
 
         assertEquals(true, javaParserFacade.solve(methodCall).isSolved());
         assertEquals(true, javaParserFacade.solve(innerMethodCall).isSolved());
@@ -66,7 +66,7 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
         MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
-        MethodCallExpr methodCallWithNestedStaticFieldParam = Navigator.findMethodCall(mainMethod, "parseInt");
+        MethodCallExpr methodCallWithNestedStaticFieldParam = Navigator.findMethodCall(mainMethod, "parseInt").get();
 
         assertEquals(true, javaParserFacade.solve(methodCallWithNestedStaticFieldParam).isSolved());
     }
@@ -77,15 +77,15 @@ public class DifferentiateDotExpressionTest extends AbstractResolutionTest {
         MethodDeclaration mainMethod = Navigator.demandMethod(clazz, "main");
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 
-        MethodCallExpr staticMethodCall = Navigator.findMethodCall(mainMethod, "staticMethod");
+        MethodCallExpr staticMethodCall = Navigator.findMethodCall(mainMethod, "staticMethod").get();
 
-        MethodCallExpr methodCall = Navigator.findMethodCall(mainMethod, "methodCall");
-        MethodCallExpr innerMethodCall = Navigator.findMethodCall(mainMethod, "innerMethodCall");
-        MethodCallExpr innerInnerMethodCall = Navigator.findMethodCall(mainMethod, "innerInnerMethodCall");
+        MethodCallExpr methodCall = Navigator.findMethodCall(mainMethod, "methodCall").get();
+        MethodCallExpr innerMethodCall = Navigator.findMethodCall(mainMethod, "innerMethodCall").get();
+        MethodCallExpr innerInnerMethodCall = Navigator.findMethodCall(mainMethod, "innerInnerMethodCall").get();
 
-        MethodCallExpr firstFieldMethodCall = Navigator.findMethodCall(mainMethod, "firstContainerMethod");
-        MethodCallExpr secondFieldMethodCall = Navigator.findMethodCall(mainMethod, "secondContainerMethod");
-        MethodCallExpr thirdFieldMethodCall = Navigator.findMethodCall(mainMethod, "thirdContainerMethod");
+        MethodCallExpr firstFieldMethodCall = Navigator.findMethodCall(mainMethod, "firstContainerMethod").get();
+        MethodCallExpr secondFieldMethodCall = Navigator.findMethodCall(mainMethod, "secondContainerMethod").get();
+        MethodCallExpr thirdFieldMethodCall = Navigator.findMethodCall(mainMethod, "thirdContainerMethod").get();
 
         assertEquals(true, javaParserFacade.solve(staticMethodCall).isSolved());
 

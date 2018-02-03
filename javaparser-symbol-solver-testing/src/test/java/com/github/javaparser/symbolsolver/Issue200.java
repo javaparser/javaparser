@@ -21,13 +21,13 @@ import static org.junit.Assert.assertEquals;
 public class Issue200 extends AbstractResolutionTest {
 
     @Test
-    public void issue200() throws ParseException {
+    public void issue200() {
         CompilationUnit cu = parseSample("Issue200");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        List<ReturnStmt> nodesByType = methodDeclaration.getNodesByType(ReturnStmt.class);
+        List<ReturnStmt> nodesByType = methodDeclaration.findAll(ReturnStmt.class);
         assertEquals("java.util.stream.Stream<JavaTest.Solved>", javaParserFacade.getType((nodesByType.get(0)).getExpression().get()).describe());
     }
 }

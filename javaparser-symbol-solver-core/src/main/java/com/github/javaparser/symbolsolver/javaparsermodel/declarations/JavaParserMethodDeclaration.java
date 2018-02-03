@@ -34,7 +34,7 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -59,12 +59,11 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration {
 
     @Override
     public ResolvedReferenceTypeDeclaration declaringType() {
-        if (getParentNode(wrappedNode) instanceof ObjectCreationExpr) {
-            ObjectCreationExpr parentNode = (ObjectCreationExpr) getParentNode(wrappedNode);
+        if (requireParentNode(wrappedNode) instanceof ObjectCreationExpr) {
+            ObjectCreationExpr parentNode = (ObjectCreationExpr) requireParentNode(wrappedNode);
             return new JavaParserAnonymousClassDeclaration(parentNode, typeSolver);
-        } else {
-            return JavaParserFactory.toTypeDeclaration(getParentNode(wrappedNode), typeSolver);
         }
+        return JavaParserFactory.toTypeDeclaration(requireParentNode(wrappedNode), typeSolver);
     }
 
     @Override

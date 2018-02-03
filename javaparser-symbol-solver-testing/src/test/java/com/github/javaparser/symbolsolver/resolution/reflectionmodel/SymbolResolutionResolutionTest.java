@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void getTypeOfField() throws ParseException {
+    public void getTypeOfField() {
         CompilationUnit cu = parseSample("ReflectionFieldOfItself");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
@@ -48,7 +48,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void getTypeOfFieldAccess() throws ParseException {
+    public void getTypeOfFieldAccess() {
         CompilationUnit cu = parseSample("ReflectionFieldOfItself");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
@@ -59,7 +59,7 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void conditionalExpressionExample() throws ParseException {
+    public void conditionalExpressionExample() {
         CompilationUnit cu = parseSample("JreConditionalExpression");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
@@ -72,11 +72,11 @@ public class SymbolResolutionResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void conditionalExpressionExampleFollowUp1() throws ParseException {
+    public void conditionalExpressionExampleFollowUp1() {
         CompilationUnit cu = parseSample("JreConditionalExpression");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo1");
-        MethodCallExpr expression = Navigator.findMethodCall(method, "next");
+        MethodCallExpr expression = Navigator.findMethodCall(method, "next").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         ResolvedType ref = JavaParserFacade.get(typeSolver).getType(expression);

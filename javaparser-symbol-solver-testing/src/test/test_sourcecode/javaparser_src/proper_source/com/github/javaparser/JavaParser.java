@@ -89,7 +89,7 @@ public final class JavaParser {
     }
 
     public static CompilationUnit parse(final InputStream in,
-                                        final String encoding) throws ParseException {
+                                        final String encoding) {
         return parse(in,encoding,true);
     }
 
@@ -106,7 +106,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static CompilationUnit parse(final InputStream in,
-                                        final String encoding, boolean considerComments) throws ParseException {
+                                        final String encoding, boolean considerComments) {
         try {
             String code = SourcesHelper.streamToString(in, encoding);
             InputStream in1 = SourcesHelper.stringToStream(code, encoding);
@@ -131,7 +131,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static CompilationUnit parse(final InputStream in)
-            throws ParseException {
+            {
         return parse(in, null,true);
     }
 
@@ -180,7 +180,7 @@ public final class JavaParser {
     }
 
     public static CompilationUnit parse(final Reader reader, boolean considerComments)
-            throws ParseException {
+            {
         try {
             String code = SourcesHelper.readerToString(reader);
             Reader reader1 = SourcesHelper.stringToReader(code);
@@ -205,7 +205,7 @@ public final class JavaParser {
      *             if the source code has parser errors
      */
     public static BlockStmt parseBlock(final String blockStatement)
-            throws ParseException {
+            {
         StringReader sr = new StringReader(blockStatement);
         BlockStmt result = new ASTParser(sr).Block();
         sr.close();
@@ -222,7 +222,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static Statement parseStatement(final String statement) throws ParseException {
+    public static Statement parseStatement(final String statement) {
         StringReader sr = new StringReader(statement);
         Statement stmt = new ASTParser(sr).Statement();
         sr.close();
@@ -239,7 +239,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static ImportDeclaration parseImport(final String importDeclaration) throws ParseException {
+    public static ImportDeclaration parseImport(final String importDeclaration) {
         StringReader sr = new StringReader(importDeclaration);
         ImportDeclaration id = new ASTParser(sr).ImportDeclaration();
         sr.close();
@@ -256,7 +256,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static Expression parseExpression(final String expression) throws ParseException {
+    public static Expression parseExpression(final String expression) {
         StringReader sr = new StringReader(expression);
         Expression e = new ASTParser(sr).Expression();
         sr.close();
@@ -273,7 +273,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static AnnotationExpr parseAnnotation(final String annotation) throws ParseException {
+    public static AnnotationExpr parseAnnotation(final String annotation) {
         StringReader sr = new StringReader(annotation);
         AnnotationExpr ae = new ASTParser(sr).Annotation();
         sr.close();
@@ -290,7 +290,7 @@ public final class JavaParser {
      * @throws ParseException
      *             if the source code has parser errors
      */
-    public static BodyDeclaration parseBodyDeclaration(final String body) throws ParseException {
+    public static BodyDeclaration parseBodyDeclaration(final String body) {
         StringReader sr = new StringReader(body);
         BodyDeclaration bd = new ASTParser(sr).AnnotationBodyDeclaration();
         sr.close();

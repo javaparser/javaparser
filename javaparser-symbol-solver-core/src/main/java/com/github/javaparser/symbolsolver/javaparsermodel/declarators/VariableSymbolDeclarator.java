@@ -35,18 +35,18 @@ public class VariableSymbolDeclarator extends AbstractSymbolDeclarator<VariableD
 
     public VariableSymbolDeclarator(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
-        if (getParentNode(wrappedNode) instanceof FieldDeclaration) {
-            throw new IllegalArgumentException();
-        }
+        wrappedNode.getParentNode().ifPresent(p -> {
+            if (p instanceof FieldDeclaration) {
+                throw new IllegalArgumentException();
+            }
+        });
     }
 
     @Override
     public List<ResolvedValueDeclaration> getSymbolDeclarations() {
-        List<ResolvedValueDeclaration> symbols = wrappedNode.getVariables().stream().map(
-                v -> JavaParserSymbolDeclaration.localVar(v, typeSolver)
-        ).collect(
-                Collectors.toCollection(() -> new LinkedList<>()));
-        return symbols;
+        return wrappedNode.getVariables().stream()
+                .map(v -> JavaParserSymbolDeclaration.localVar(v, typeSolver))
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
 }

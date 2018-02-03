@@ -55,14 +55,14 @@ class Helper {
                 return p.get().getName().toString();
             }
         } else if (container != null) {
-            return getPackageName(getParentNode(container));
+            return getPackageName(container.getParentNode().orElse(null));
         }
         return "";
     }
 
     static String getClassName(String base, Node container) {
         if (container instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            String b = getClassName(base, getParentNode(container));
+            String b = getClassName(base, container.getParentNode().orElse(null));
             String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
@@ -70,7 +70,7 @@ class Helper {
                 return b + "." + cn;
             }
         } else if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
-            String b = getClassName(base, getParentNode(container));
+            String b = getClassName(base, container.getParentNode().orElse(null));
             String cn = ((com.github.javaparser.ast.body.EnumDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
@@ -78,7 +78,7 @@ class Helper {
                 return b + "." + cn;
             }
         } else if (container != null) {
-            return getClassName(base, getParentNode(container));
+            return getClassName(base, container.getParentNode().orElse(null));
         }
         return base;
     }

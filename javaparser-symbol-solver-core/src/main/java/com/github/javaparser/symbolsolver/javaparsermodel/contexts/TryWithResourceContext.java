@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
 
@@ -53,7 +54,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
             }
         }
 
-        if (getParentNode(wrappedNode) instanceof BlockStmt) {
+        if (requireParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlockAsValue(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbolAsValue(name, typeSolver);
@@ -72,7 +73,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
             }
         }
 
-        if (getParentNode(wrappedNode) instanceof BlockStmt) {
+        if (requireParentNode(wrappedNode) instanceof BlockStmt) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         } else {
             return getParent().solveSymbol(name, typeSolver);

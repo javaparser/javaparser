@@ -3,6 +3,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -17,9 +18,9 @@ public class ConvertToUsageTest extends AbstractResolutionTest {
     TypeSolver typeSolver = new ReflectionTypeSolver();
 
     @Test
-    public void testConvertTypeToUsage() throws ParseException {
+    public void testConvertTypeToUsage() {
         CompilationUnit cu = parseSample("LocalTypeDeclarations");
-        List<NameExpr> n = cu.getNodesByType(NameExpr.class);
+        List<NameExpr> n = cu.findAll(NameExpr.class);
 
         assertEquals("int", usageDescribe(n, "a"));
         assertEquals("java.lang.Integer", usageDescribe(n, "b"));
@@ -33,7 +34,7 @@ public class ConvertToUsageTest extends AbstractResolutionTest {
     private String usageDescribe(List<NameExpr> n, String name){
         return n.stream().filter(x -> x.getNameAsString().equals(name))
                 .map(JavaParserFacade.get(typeSolver)::getType)
-                .map(t -> t.describe())
+                .map(ResolvedType::describe)
                 .findFirst().orElse(null);
     }
 }

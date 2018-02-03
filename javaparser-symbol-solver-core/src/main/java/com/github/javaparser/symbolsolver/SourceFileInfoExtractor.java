@@ -43,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * It prints information extracted from a source file. It is mainly intended as an example usage of JavaSymbolSolver.
@@ -114,11 +115,11 @@ public class SourceFileInfoExtractor {
         if (node instanceof ClassOrInterfaceDeclaration) {
             solveTypeDecl((ClassOrInterfaceDeclaration) node);
         } else if (node instanceof Expression) {
-            if ((getParentNode(node) instanceof ImportDeclaration) || (getParentNode(node) instanceof Expression)
-                    || (getParentNode(node) instanceof MethodDeclaration)
-                    || (getParentNode(node) instanceof PackageDeclaration)) {
+            if ((requireParentNode(node) instanceof ImportDeclaration) || (requireParentNode(node) instanceof Expression)
+                    || (requireParentNode(node) instanceof MethodDeclaration)
+                    || (requireParentNode(node) instanceof PackageDeclaration)) {
                 // skip
-            } else if ((getParentNode(node) instanceof Statement) || (getParentNode(node) instanceof VariableDeclarator)) {
+            } else if ((requireParentNode(node) instanceof Statement) || (requireParentNode(node) instanceof VariableDeclarator)) {
                 try {
                     ResolvedType ref = JavaParserFacade.get(typeSolver).getType(node);
                     out.println("  Line " + node.getRange().get().begin.line + ") " + node + " ==> " + ref.describe());

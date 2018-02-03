@@ -431,7 +431,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
-     * @deprecated use find(Class)
+     * @deprecated use findAll(Class)
      */
     @Deprecated
     public <N extends Node> List<N> getNodesByType(Class<N> clazz) {

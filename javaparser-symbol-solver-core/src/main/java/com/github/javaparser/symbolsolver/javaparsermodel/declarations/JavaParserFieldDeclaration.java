@@ -31,6 +31,7 @@ import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import java.util.Optional;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -48,10 +49,10 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
         }
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
-        if (!(getParentNode(variableDeclarator) instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
-            throw new IllegalStateException(getParentNode(variableDeclarator).getClass().getCanonicalName());
+        if (!(requireParentNode(variableDeclarator) instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
+            throw new IllegalStateException(requireParentNode(variableDeclarator).getClass().getCanonicalName());
         }
-        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) getParentNode(variableDeclarator);
+        this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) requireParentNode(variableDeclarator);
     }
 
     public JavaParserFieldDeclaration(EnumConstantDeclaration enumConstantDeclaration, TypeSolver typeSolver) {
@@ -65,12 +66,10 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public ResolvedType getType() {
         if (enumConstantDeclaration != null) {
-            com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) getParentNode(enumConstantDeclaration);
+            com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = (com.github.javaparser.ast.body.EnumDeclaration) requireParentNode(enumConstantDeclaration);
             return new ReferenceTypeImpl(new JavaParserEnumDeclaration(enumDeclaration, typeSolver), typeSolver);
-        } else {
-            ResolvedType retType = JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), wrappedNode);
-            return retType;
         }
+        return JavaParserFacade.get(typeSolver).convert(variableDeclarator.getType(), wrappedNode);
     }
 
     @Override
@@ -113,11 +112,10 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
 
     @Override
     public ResolvedTypeDeclaration declaringType() {
-        Optional<com.github.javaparser.ast.body.TypeDeclaration> typeDeclaration = Navigator.findAncestor(wrappedNode, com.github.javaparser.ast.body.TypeDeclaration.class);
+        Optional<com.github.javaparser.ast.body.TypeDeclaration> typeDeclaration = wrappedNode.findParent(com.github.javaparser.ast.body.TypeDeclaration.class);
         if (typeDeclaration.isPresent()) {
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(typeDeclaration.get());
-        } else {
-            throw new IllegalStateException();
         }
+        throw new IllegalStateException();
     }
 }

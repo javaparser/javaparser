@@ -2,7 +2,6 @@ package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -35,7 +34,7 @@ public class Issue314 extends AbstractResolutionTest{
     }
 
     @Test
-    public void resolveReferenceToFieldInheritedByInterface() throws FileNotFoundException {
+    public void resolveReferenceToFieldInheritedByInterface() {
         String code = "package foo.bar;\n"+
                 "interface  A {\n" +
                 "        int a = 0;\n" +
@@ -47,7 +46,7 @@ public class Issue314 extends AbstractResolutionTest{
                 "        }\n" +
                 "    }";
         CompilationUnit cu = JavaParser.parse(code);
-        NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a");
+        NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a").get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = javaParserFacade.solve(refToA);
         assertEquals(true, symbolReference.isSolved());
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
