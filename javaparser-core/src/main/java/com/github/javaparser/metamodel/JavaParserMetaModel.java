@@ -349,6 +349,7 @@ public final class JavaParserMetaModel {
         nodeMetaModels.add(unionTypeMetaModel);
         nodeMetaModels.add(unknownTypeMetaModel);
         nodeMetaModels.add(unparsableStmtMetaModel);
+        nodeMetaModels.add(varTypeMetaModel);
         nodeMetaModels.add(variableDeclarationExprMetaModel);
         nodeMetaModels.add(variableDeclaratorMetaModel);
         nodeMetaModels.add(voidTypeMetaModel);
@@ -441,7 +442,7 @@ public final class JavaParserMetaModel {
         fieldDeclarationMetaModel.getDeclaredPropertyMetaModels().add(fieldDeclarationMetaModel.modifiersPropertyMetaModel);
         fieldDeclarationMetaModel.variablesPropertyMetaModel = new PropertyMetaModel(fieldDeclarationMetaModel, "variables", com.github.javaparser.ast.body.VariableDeclarator.class, Optional.of(variableDeclaratorMetaModel), false, true, true, false, false);
         fieldDeclarationMetaModel.getDeclaredPropertyMetaModels().add(fieldDeclarationMetaModel.variablesPropertyMetaModel);
-        fieldDeclarationMetaModel.maximumCommonTypePropertyMetaModel = new PropertyMetaModel(fieldDeclarationMetaModel, "maximumCommonType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false, false);
+        fieldDeclarationMetaModel.maximumCommonTypePropertyMetaModel = new PropertyMetaModel(fieldDeclarationMetaModel, "maximumCommonType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), true, false, false, false, false);
         fieldDeclarationMetaModel.getDerivedPropertyMetaModels().add(fieldDeclarationMetaModel.maximumCommonTypePropertyMetaModel);
         initializerDeclarationMetaModel.bodyPropertyMetaModel = new PropertyMetaModel(initializerDeclarationMetaModel, "body", com.github.javaparser.ast.stmt.BlockStmt.class, Optional.of(blockStmtMetaModel), false, false, false, false, false);
         initializerDeclarationMetaModel.getDeclaredPropertyMetaModels().add(initializerDeclarationMetaModel.bodyPropertyMetaModel);
@@ -605,7 +606,7 @@ public final class JavaParserMetaModel {
         variableDeclarationExprMetaModel.getDeclaredPropertyMetaModels().add(variableDeclarationExprMetaModel.modifiersPropertyMetaModel);
         variableDeclarationExprMetaModel.variablesPropertyMetaModel = new PropertyMetaModel(variableDeclarationExprMetaModel, "variables", com.github.javaparser.ast.body.VariableDeclarator.class, Optional.of(variableDeclaratorMetaModel), false, true, true, false, false);
         variableDeclarationExprMetaModel.getDeclaredPropertyMetaModels().add(variableDeclarationExprMetaModel.variablesPropertyMetaModel);
-        variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel = new PropertyMetaModel(variableDeclarationExprMetaModel, "maximumCommonType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), false, false, false, false, false);
+        variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel = new PropertyMetaModel(variableDeclarationExprMetaModel, "maximumCommonType", com.github.javaparser.ast.type.Type.class, Optional.of(typeMetaModel), true, false, false, false, false);
         variableDeclarationExprMetaModel.getDerivedPropertyMetaModels().add(variableDeclarationExprMetaModel.maximumCommonTypePropertyMetaModel);
         importDeclarationMetaModel.isAsteriskPropertyMetaModel = new PropertyMetaModel(importDeclarationMetaModel, "isAsterisk", boolean.class, Optional.empty(), false, false, false, false, false);
         importDeclarationMetaModel.getDeclaredPropertyMetaModels().add(importDeclarationMetaModel.isAsteriskPropertyMetaModel);
@@ -955,6 +956,8 @@ public final class JavaParserMetaModel {
     public static final VoidTypeMetaModel voidTypeMetaModel = new VoidTypeMetaModel(Optional.of(typeMetaModel));
 
     public static final WildcardTypeMetaModel wildcardTypeMetaModel = new WildcardTypeMetaModel(Optional.of(typeMetaModel));
+
+    public static final VarTypeMetaModel varTypeMetaModel = new VarTypeMetaModel(Optional.of(typeMetaModel));
 
     public static final ModuleRequiresStmtMetaModel moduleRequiresStmtMetaModel = new ModuleRequiresStmtMetaModel(Optional.of(moduleStmtMetaModel));
 

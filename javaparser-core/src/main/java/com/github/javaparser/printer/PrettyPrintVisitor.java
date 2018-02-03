@@ -559,6 +559,13 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(final VarType n, final Void arg) {
+        printComment(n.getComment(), arg);
+        printAnnotations(n.getAnnotations(), false, arg);
+        printer.print("var");
+    }
+
+    @Override
     public void visit(final ArrayAccessExpr n, final Void arg) {
         printComment(n.getComment(), arg);
         n.getName().accept(this, arg);
