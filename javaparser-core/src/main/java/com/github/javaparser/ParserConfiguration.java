@@ -21,13 +21,17 @@
 
 package com.github.javaparser;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.Java8Validator;
+import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The configuration that is used by the parser.
@@ -43,6 +47,34 @@ public class ParserConfiguration {
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
     private Validator validator = new Java8Validator();
+    private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
+
+    public ParserConfiguration() {
+        postProcessors.add((result, configuration) -> {
+            if (configuration.isLexicalPreservationEnabled()) {
+                if (configuration.isLexicalPreservationEnabled()) {
+                    result.ifSuccessful(LexicalPreservingPrinter::setup);
+                }
+            }
+        });
+        postProcessors.add((result, configuration) -> {
+            if (configuration.isAttributeComments()) {
+                result.ifSuccessful(resultNode -> result
+                        .getCommentsCollection().ifPresent(comments ->
+                                new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+            }
+        });
+        postProcessors.add((result, configuration) ->
+                getValidator().ifPresent(validator ->
+                        validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)))));
+        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
+                result.ifSuccessful(resultNode -> {
+                    if (resultNode instanceof CompilationUnit) {
+                        resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+                    }
+                })
+        ));
+    }
 
     public boolean isAttributeComments() {
         return attributeComments;
@@ -100,16 +132,16 @@ public class ParserConfiguration {
         return this;
     }
 
-    public Validator getValidator() {
-        return validator;
+    public Optional<Validator> getValidator() {
+        return Optional.of(validator);
     }
 
     /**
-     * The validator to run directly after parsing.
+     * The language level validator to run directly after parsing.
      * By default it is {@link Java8Validator}
+     * If it is null, all validation is turned off and only hard parse errors will be reported.
      */
     public ParserConfiguration setValidator(Validator validator) {
-        assertNotNull(validator);
         this.validator = validator;
         return this;
     }
@@ -141,5 +173,9 @@ public class ParserConfiguration {
     public ParserConfiguration setSymbolResolver(SymbolResolver symbolResolver) {
         this.symbolResolver = symbolResolver;
         return this;
+    }
+
+    public List<ParseResult.PostProcessor> getPostProcessors() {
+        return postProcessors;
     }
 }
