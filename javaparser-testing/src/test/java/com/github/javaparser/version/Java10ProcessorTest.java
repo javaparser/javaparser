@@ -5,7 +5,10 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.type.VarType;
 import org.junit.Test;
+
+import java.util.List;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
@@ -14,14 +17,18 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Java10ProcessorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_10));
 
     @Test
     public void varIsAType() {
-        ParseResult<Statement> statement = javaParser.parse(STATEMENT, provider("var x=\"\";"));
+        ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var x=\"\";"));
 
+        List<VarType> allVarTypes = result.getResult().get().findAll(VarType.class);
+
+        assertEquals(1, allVarTypes.size());
     }
 
     @Test
