@@ -104,7 +104,8 @@ public class JavadocParserTest {
 
 
         assertEquals(underTest, JavadocParser.parse(expectedText));
-        assertEquals(underTest.getBlockTags().get(0).getTagName(), "unofficial");
+        assertEquals(1, underTest.getBlockTags().size());
+        assertEquals("unofficial", underTest.getBlockTags().get(0).getTagName());
     }
 
     @Test
