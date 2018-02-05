@@ -125,5 +125,4 @@ public class ParseResult<T> {
     public interface PostProcessor {
         void process(ParseResult<? extends Node> result, ParserConfiguration configuration);
     }
-
 }

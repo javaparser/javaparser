@@ -26,7 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.version.Java10Processor;
+import com.github.javaparser.version.Java10PostProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class ParserConfiguration {
         JAVA_7(new Java7Validator(), null),
         JAVA_8(new Java8Validator(), null),
         JAVA_9(new Java9Validator(), null),
-        JAVA_10(null, new Java10Processor());
+        JAVA_10(null, new Java10PostProcessor());
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
@@ -177,7 +177,32 @@ public class ParserConfiguration {
      */
     @Deprecated
     public ParserConfiguration setValidator(Validator validator) {
-        throw new IllegalStateException("method is deprecated");
+        if (validator instanceof Java10Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_10);
+        } else if (validator instanceof Java9Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_9);
+        } else if (validator instanceof Java8Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_8);
+        } else if (validator instanceof Java7Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_7);
+        } else if (validator instanceof Java6Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_6);
+        } else if (validator instanceof Java5Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_5);
+        } else if (validator instanceof Java1_4Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_4);
+        } else if (validator instanceof Java1_3Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_3);
+        } else if (validator instanceof Java1_2Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_2);
+        } else if (validator instanceof Java1_1Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_1);
+        } else if (validator instanceof Java1_0Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_0);
+        } else if (validator instanceof NoProblemsValidator) {
+            setLanguageLevel(LanguageLevel.ANY);
+        }
+        return this;
     }
 
     /**

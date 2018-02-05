@@ -16,12 +16,13 @@ import java.util.*;
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 public class Java7ValidatorTest {
-    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setValidator(new Java7Validator()));
+    public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_7));
 
     @Test
     public void generics() {
@@ -82,7 +83,7 @@ public class Java7ValidatorTest {
         UnionType unionType = new UnionType();
 
         List<Problem> problems = new ArrayList<>();
-        javaParser.getParserConfiguration().getValidator().get().accept(unionType, new ProblemReporter(problems::add));
+        new Java7Validator().accept(unionType, new ProblemReporter(problems::add));
         
         assertProblems(problems, "UnionType.elements can not be empty.");
     }
@@ -93,7 +94,7 @@ public class Java7ValidatorTest {
         unionType.getElements().add(new ClassOrInterfaceType());
 
         List<Problem> problems = new ArrayList<>();
-        javaParser.getParserConfiguration().getValidator().get().accept(unionType, new ProblemReporter(problems::add));
+        new Java7Validator().accept(unionType, new ProblemReporter(problems::add));
         
         assertProblems(problems, "Union type (multi catch) must have at least two elements.");
     }
