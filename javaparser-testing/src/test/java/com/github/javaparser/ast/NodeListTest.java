@@ -152,11 +152,10 @@ public class NodeListTest {
         assertEquals(cd.getMembers().size(), 4);
 
         for (int i = 3; i >= 0; i--) {
-            assertTrue(cd.getMembers().removeFirst());
+            assertTrue(cd.getMembers().removeFirst() != null);
             assertEquals(cd.getMembers().size(), i);
         }
 
-        assertFalse(cd.getMembers().removeFirst());
         assertEquals(cd.getMembers().size(), 0);
     }
 
@@ -173,11 +172,10 @@ public class NodeListTest {
         assertEquals(cd.getMembers().size(), 4);
 
         for (int i = 3; i >= 0; i--) {
-            assertTrue(cd.getMembers().removeLast());
+            assertTrue(cd.getMembers().removeLast() != null);
             assertEquals(cd.getMembers().size(), i);
         }
 
-        assertFalse(cd.getMembers().removeLast());
         assertEquals(cd.getMembers().size(), 0);
     }
 

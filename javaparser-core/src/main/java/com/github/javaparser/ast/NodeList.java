@@ -87,25 +87,12 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return innerList.remove(node);
     }
 
-    public boolean removeFirst() {
-        if (innerList.size() < 1) {
-            return false;
-        }
-        Node node = innerList.get(0);
-        notifyElementRemoved(0, node);
-        node.setParentNode(null);
-        return innerList.remove(0) != null;
+    public N removeFirst() {
+        return remove(0);
     }
 
-    public boolean removeLast() {
-        if (innerList.size() < 1) {
-            return false;
-        }
-        int index = innerList.size() - 1;
-        Node node = innerList.get(index);
-        notifyElementRemoved(index, node);
-        node.setParentNode(null);
-        return innerList.remove(index) != null;
+    public N removeLast() {
+        return remove(innerList.size() - 1);
     }
 
     @SafeVarargs
