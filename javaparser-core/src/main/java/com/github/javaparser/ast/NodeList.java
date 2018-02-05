@@ -87,6 +87,14 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         return innerList.remove(node);
     }
 
+    public N removeFirst() {
+        return remove(0);
+    }
+
+    public N removeLast() {
+        return remove(innerList.size() - 1);
+    }
+
     @SafeVarargs
     public static <X extends Node> NodeList<X> nodeList(X... nodes) {
         final NodeList<X> nodeList = new NodeList<>();
