@@ -24,19 +24,14 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.BinaryExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Printable;
-
 import javax.annotation.Generated;
-
 import com.github.javaparser.TokenRange;
-
 import java.util.function.Consumer;
 import java.util.Optional;
 
@@ -83,7 +78,7 @@ public final class BinaryExpr extends Expression {
         }
 
         public Optional<AssignExpr.Operator> toAssignOperator() {
-            switch (this) {
+            switch(this) {
                 case BINARY_OR:
                     return Optional.of(AssignExpr.Operator.BINARY_OR);
                 case BINARY_AND:

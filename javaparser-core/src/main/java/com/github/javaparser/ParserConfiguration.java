@@ -21,10 +21,15 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.validator.Java8Validator;
-import com.github.javaparser.ast.validator.Validator;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.validator.*;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.version.Java10PostProcessor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -35,6 +40,29 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+    public enum LanguageLevel {
+        ANY(null, null),
+        JAVA_1_0(new Java1_0Validator(), null),
+        JAVA_1_1(new Java1_1Validator(), null),
+        JAVA_1_2(new Java1_2Validator(), null),
+        JAVA_1_3(new Java1_3Validator(), null),
+        JAVA_1_4(new Java1_4Validator(), null),
+        JAVA_5(new Java5Validator(), null),
+        JAVA_6(new Java6Validator(), null),
+        JAVA_7(new Java7Validator(), null),
+        JAVA_8(new Java8Validator(), null),
+        JAVA_9(new Java9Validator(), null),
+        JAVA_10_PREVIEW(null, new Java10PostProcessor());
+
+        final Validator validator;
+        final ParseResult.PostProcessor postProcessor;
+
+        LanguageLevel(Validator validator, ParseResult.PostProcessor postProcessor) {
+            this.validator = validator;
+            this.postProcessor = postProcessor;
+        }
+    }
+
     private boolean storeTokens = true;
     private boolean attributeComments = true;
     private boolean doNotAssignCommentsPrecedingEmptyLines = true;
@@ -42,7 +70,43 @@ public class ParserConfiguration {
     private boolean lexicalPreservationEnabled = false;
     private SymbolResolver symbolResolver = null;
     private int tabSize = 1;
-    private Validator validator = new Java8Validator();
+    private LanguageLevel languageLevel;
+
+    private final List<ParseResult.PostProcessor> postProcessors = new ArrayList<>();
+
+    public ParserConfiguration() {
+        postProcessors.add((result, configuration) -> {
+            if (configuration.isLexicalPreservationEnabled()) {
+                if (configuration.isLexicalPreservationEnabled()) {
+                    result.ifSuccessful(LexicalPreservingPrinter::setup);
+                }
+            }
+        });
+        postProcessors.add((result, configuration) -> {
+            if (configuration.isAttributeComments()) {
+                result.ifSuccessful(resultNode -> result
+                        .getCommentsCollection().ifPresent(comments ->
+                                new CommentsInserter(configuration).insertComments(resultNode, comments.copy().getComments())));
+            }
+        });
+        postProcessors.add((result, configuration) -> {
+            LanguageLevel languageLevel = getLanguageLevel();
+            if (languageLevel.postProcessor != null) {
+                languageLevel.postProcessor.process(result, configuration);
+            }
+            if (languageLevel.validator != null) {
+                languageLevel.validator.accept(result.getResult().get(), new ProblemReporter(newProblem -> result.getProblems().add(newProblem)));
+            }
+        });
+        postProcessors.add((result, configuration) -> configuration.getSymbolResolver().ifPresent(symbolResolver ->
+                result.ifSuccessful(resultNode -> {
+                    if (resultNode instanceof CompilationUnit) {
+                        resultNode.setData(Node.SYMBOL_RESOLVER_KEY, symbolResolver);
+                    }
+                })
+        ));
+        setLanguageLevel(LanguageLevel.JAVA_8);
+    }
 
     public boolean isAttributeComments() {
         return attributeComments;
@@ -100,17 +164,45 @@ public class ParserConfiguration {
         return this;
     }
 
-    public Validator getValidator() {
-        return validator;
+    /**
+     * @deprecated use getLanguageLevel
+     */
+    @Deprecated
+    public Optional<Validator> getValidator() {
+        throw new IllegalStateException("method is deprecated");
     }
 
     /**
-     * The validator to run directly after parsing.
-     * By default it is {@link Java8Validator}
+     * @deprecated use setLanguageLevel, or getPostProcessors if you use a custom validator.
      */
+    @Deprecated
     public ParserConfiguration setValidator(Validator validator) {
-        assertNotNull(validator);
-        this.validator = validator;
+        // This whole method is a backwards compatability hack.
+        if (validator instanceof Java10Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_10_PREVIEW);
+        } else if (validator instanceof Java9Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_9);
+        } else if (validator instanceof Java8Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_8);
+        } else if (validator instanceof Java7Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_7);
+        } else if (validator instanceof Java6Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_6);
+        } else if (validator instanceof Java5Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_5);
+        } else if (validator instanceof Java1_4Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_4);
+        } else if (validator instanceof Java1_3Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_3);
+        } else if (validator instanceof Java1_2Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_2);
+        } else if (validator instanceof Java1_1Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_1);
+        } else if (validator instanceof Java1_0Validator) {
+            setLanguageLevel(LanguageLevel.JAVA_1_0);
+        } else if (validator instanceof NoProblemsValidator) {
+            setLanguageLevel(LanguageLevel.ANY);
+        }
         return this;
     }
 
@@ -141,5 +233,18 @@ public class ParserConfiguration {
     public ParserConfiguration setSymbolResolver(SymbolResolver symbolResolver) {
         this.symbolResolver = symbolResolver;
         return this;
+    }
+
+    public List<ParseResult.PostProcessor> getPostProcessors() {
+        return postProcessors;
+    }
+
+    public ParserConfiguration setLanguageLevel(LanguageLevel languageLevel) {
+        this.languageLevel = assertNotNull(languageLevel);
+        return this;
+    }
+
+    public LanguageLevel getLanguageLevel() {
+        return languageLevel;
     }
 }

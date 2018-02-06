@@ -20,6 +20,7 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.EOL;
 import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static java.util.Arrays.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -130,8 +131,7 @@ public class TestUtils {
 
     public static void assertProblems(List<Problem> result, String... expectedArg) {
         Set<String> actual = result.stream().map(Problem::toString).collect(Collectors.toSet());
-        Set<String> expected = new HashSet<>();
-        expected.addAll(Arrays.asList(expectedArg));
+        Set<String> expected = new HashSet<>(asList(expectedArg));
         assertCollections(expected, actual);
     }
 

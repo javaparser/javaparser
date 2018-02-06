@@ -24,6 +24,8 @@ package com.github.javaparser.javadoc;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
+import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import org.junit.Test;
 
 import static com.github.javaparser.utils.Utils.EOL;
@@ -101,5 +103,36 @@ public class JavadocTest {
                 " * @param <T>" + EOL;
         Javadoc javadoc = JavaParser.parseJavadoc(comment);
         assertEquals(2, javadoc.getBlockTags().size());
+    }
+
+    @Test
+    public void blockTagModificationWorks() {
+        Javadoc javadoc = new Javadoc(new JavadocDescription());
+
+        assertEquals(0, javadoc.getBlockTags().size());
+        JavadocBlockTag blockTag = new JavadocBlockTag(JavadocBlockTag.Type.RETURN, "a value");
+        javadoc.addBlockTag(blockTag);
+
+        assertEquals(1, javadoc.getBlockTags().size());
+        assertEquals(blockTag, javadoc.getBlockTags().get(0));
+
+        assertEquals(blockTag, javadoc.getBlockTags().remove(0));
+        assertEquals(0, javadoc.getBlockTags().size());
+    }
+
+    @Test
+    public void descriptionModificationWorks() {
+        JavadocDescription description = new JavadocDescription();
+
+        assertEquals(0, description.getElements().size());
+
+        JavadocDescriptionElement inlineTag = new JavadocInlineTag("inheritDoc", JavadocInlineTag.Type.INHERIT_DOC, "");
+        assertTrue(description.addElement(inlineTag));
+
+        assertEquals(1, description.getElements().size());
+        assertEquals(inlineTag, description.getElements().get(0));
+
+        assertEquals(inlineTag, description.getElements().remove(0));
+        assertEquals(0, description.getElements().size());
     }
 }

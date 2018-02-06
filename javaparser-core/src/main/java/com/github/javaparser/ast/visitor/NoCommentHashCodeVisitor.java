@@ -502,4 +502,9 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final ReceiverParameter n, final Void arg) {
         return (n.getAnnotations().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg));
     }
+
+    @Override
+    public Integer visit(final VarType n, final Void arg) {
+        return (n.getAnnotations().accept(this, arg));
+    }
 }

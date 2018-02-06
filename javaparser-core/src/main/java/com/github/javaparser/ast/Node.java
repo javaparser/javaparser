@@ -108,11 +108,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         /**
          * Notify exclusively for changes happening on this node alone.
          */
-        JUST_THIS_NODE, /**
+        JUST_THIS_NODE,
+        /**
          * Notify for changes happening on this node and all its descendants existing at the moment in
          * which the observer was registered. Nodes attached later will not be observed.
          */
-        THIS_NODE_AND_EXISTING_DESCENDANTS, /**
+        THIS_NODE_AND_EXISTING_DESCENDANTS,
+        /**
          * Notify for changes happening on this node and all its descendants. The descendants existing at the moment in
          * which the observer was registered will be observed immediately. As new nodes are attached later they are
          * automatically registered to be observed.

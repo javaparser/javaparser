@@ -6,10 +6,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,7 +17,7 @@ public class SourceRootTest {
     private final SourceRoot sourceRoot = new SourceRoot(root);
 
     @Test
-    public void parseTestDirectory() throws URISyntaxException, IOException {
+    public void parseTestDirectory() throws IOException {
 
         List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();

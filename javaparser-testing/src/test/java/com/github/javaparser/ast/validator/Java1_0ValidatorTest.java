@@ -91,7 +91,7 @@ public class Java1_0ValidatorTest {
     public void nonEmptyList() {
         ArrayCreationExpr expr = new ArrayCreationExpr(PrimitiveType.booleanType());
         List<Problem> problems= new ArrayList<>();
-        new Java1_0Validator().accept(expr, new ProblemReporter(problems));
+        new Java1_0Validator().accept(expr, new ProblemReporter(problems::add));
         assertEquals("ArrayCreationExpr.levels can not be empty.", problems.get(0).getMessage());
     }
 }
