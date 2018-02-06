@@ -6,11 +6,13 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
+import com.github.javaparser.ast.validator.ProblemReporter;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseType;
 import static com.github.javaparser.JavaParser.parseVariableDeclarationExpr;
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
 import static com.github.javaparser.Providers.provider;
 import static org.junit.Assert.*;
 
@@ -30,10 +32,11 @@ public class TypeTest {
 
     @Test
     public void primitiveTypeArgumentLenientValidator() {
-        ParserConfiguration config = new ParserConfiguration();
-        config.setValidator(new Java5Validator() {{
+        ParserConfiguration config = new ParserConfiguration()
+                .setLanguageLevel(ANY);
+        config.getPostProcessors().add(new Java5Validator() {{
             remove(noPrimitiveGenericArguments);
-        }});
+        }}.postProcessor());
 
         ParseResult<VariableDeclarationExpr> result = new JavaParser(config).parse(
                 VARIABLE_DECLARATION_EXPR, provider("List<long> x"));
@@ -56,7 +59,7 @@ public class TypeTest {
         type.ifArrayType(t -> s[0] = t);
         assertNotNull(s[0]);
     }
-    
+
     @Test
     public void issue1251() {
         final Type type = parseType("TypeUtilsTest<String>.Tester");
