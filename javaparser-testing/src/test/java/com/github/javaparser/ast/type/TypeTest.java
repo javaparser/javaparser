@@ -6,7 +6,6 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.validator.Java5Validator;
-import com.github.javaparser.ast.validator.ProblemReporter;
 import org.junit.Test;
 
 import static com.github.javaparser.JavaParser.parseType;
@@ -33,7 +32,7 @@ public class TypeTest {
     @Test
     public void primitiveTypeArgumentLenientValidator() {
         ParserConfiguration config = new ParserConfiguration()
-                .setLanguageLevel(ANY);
+                .setLanguageLevel(RAW);
         config.getPostProcessors().add(new Java5Validator() {{
             remove(noPrimitiveGenericArguments);
         }}.postProcessor());
