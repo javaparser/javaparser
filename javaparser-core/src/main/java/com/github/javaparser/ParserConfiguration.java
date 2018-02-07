@@ -27,6 +27,7 @@ import com.github.javaparser.ast.validator.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.version.Java10PostProcessor;
+import com.github.javaparser.version.Java11PostProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ParserConfiguration {
     public enum LanguageLevel {
-        ANY(null, null),
+        RAW(null, null),
         JAVA_1_0(new Java1_0Validator(), null),
         JAVA_1_1(new Java1_1Validator(), null),
         JAVA_1_2(new Java1_2Validator(), null),
@@ -52,7 +53,8 @@ public class ParserConfiguration {
         JAVA_7(new Java7Validator(), null),
         JAVA_8(new Java8Validator(), null),
         JAVA_9(new Java9Validator(), null),
-        JAVA_10_PREVIEW(null, new Java10PostProcessor());
+        JAVA_10_PREVIEW(null, new Java10PostProcessor()),
+        JAVA_11_PREVIEW(null, new Java11PostProcessor());
 
         final Validator validator;
         final ParseResult.PostProcessor postProcessor;
@@ -201,7 +203,7 @@ public class ParserConfiguration {
         } else if (validator instanceof Java1_0Validator) {
             setLanguageLevel(LanguageLevel.JAVA_1_0);
         } else if (validator instanceof NoProblemsValidator) {
-            setLanguageLevel(LanguageLevel.ANY);
+            setLanguageLevel(LanguageLevel.RAW);
         }
         return this;
     }

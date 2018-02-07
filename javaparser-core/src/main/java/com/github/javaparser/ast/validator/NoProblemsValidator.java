@@ -6,7 +6,7 @@ import com.github.javaparser.ast.Node;
 /**
  * Stub validator for when no validation is wanted.
  *
- * @deprecated when setting a language validator, try {@link com.github.javaparser.ParserConfiguration#setLanguageLevel(ParserConfiguration.LanguageLevel)} with ANY.
+ * @deprecated when setting a language validator, try {@link com.github.javaparser.ParserConfiguration#setLanguageLevel(ParserConfiguration.LanguageLevel)} with RAW.
  */
 @Deprecated
 public final class NoProblemsValidator implements Validator {

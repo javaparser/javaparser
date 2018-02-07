@@ -8,7 +8,7 @@ import com.github.javaparser.ast.type.VarType;
 public class Java10Validator extends Java9Validator {
 
     protected final Validator varOnlyOnLocalVariableDefinitionAndFor = new SingleNodeTypeValidator<>(VarType.class, (n, reporter) -> {
-
+        // TODO issue 1407
     });
 
     public Java10Validator() {
