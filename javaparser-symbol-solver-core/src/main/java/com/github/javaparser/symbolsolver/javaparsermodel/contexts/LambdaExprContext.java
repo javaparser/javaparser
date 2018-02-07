@@ -38,11 +38,10 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
-import javassist.compiler.ast.Pair;
 
 import java.util.*;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -60,8 +59,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             int index = 0;
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
-                    if (getParentNode(wrappedNode) instanceof MethodCallExpr) {
-                        MethodCallExpr methodCallExpr = (MethodCallExpr) getParentNode(wrappedNode);
+                    if (requireParentNode(wrappedNode) instanceof MethodCallExpr) {
+                        MethodCallExpr methodCallExpr = (MethodCallExpr) requireParentNode(wrappedNode);
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = pos(methodCallExpr, wrappedNode);
                         ResolvedType lambdaType = methodUsage.getParamTypes().get(i);
@@ -101,8 +100,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         } else{
                             return Optional.empty();
                         }
-                    } else if (getParentNode(wrappedNode) instanceof VariableDeclarator) {
-                        VariableDeclarator variableDeclarator = (VariableDeclarator) getParentNode(wrappedNode);
+                    } else if (requireParentNode(wrappedNode) instanceof VariableDeclarator) {
+                        VariableDeclarator variableDeclarator = (VariableDeclarator) requireParentNode(wrappedNode);
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {

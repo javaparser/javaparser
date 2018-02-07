@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 public class EnumResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void switchOnEnum() throws ParseException {
+    public void switchOnEnum() {
         CompilationUnit cu = parseSample("SwitchOnEnum");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "SwitchOnEnum");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -49,10 +49,10 @@ public class EnumResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void enumAndStaticInitializer() throws ParseException {
+    public void enumAndStaticInitializer() {
         CompilationUnit cu = parseSample("EnumAndStaticInitializer");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
-        MethodCallExpr call = Navigator.findMethodCall(clazz, "put");
+        MethodCallExpr call = Navigator.findMethodCall(clazz, "put").get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(call);
         assertEquals("MyClass.Primitive", ref.describe());

@@ -25,7 +25,6 @@ import com.github.javaparser.ast.expr.Expression;
 import org.junit.Test;
 
 import java.util.Iterator;
-import java.util.List;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.JavaToken.Category.*;
@@ -39,8 +38,7 @@ public class JavaTokenTest {
     @Test
     public void testAFewTokens() {
         ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/1 "));
-        List<JavaToken> tokens = result.getTokens().get();
-        Iterator<JavaToken> iterator = tokens.iterator();
+        Iterator<JavaToken> iterator = result.getResult().get().getTokenRange().get().iterator();
         assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, LITERAL, iterator.next());
         assertToken(" ", range(1, 2, 1, 2), SPACE, WHITESPACE_NO_EOL, iterator.next());
         assertToken("+", range(1, 3, 1, 3), PLUS, OPERATOR, iterator.next());

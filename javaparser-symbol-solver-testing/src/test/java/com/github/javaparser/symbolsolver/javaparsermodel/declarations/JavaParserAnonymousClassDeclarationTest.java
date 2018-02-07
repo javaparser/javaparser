@@ -18,11 +18,11 @@ import org.junit.Test;
 public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
   @Test
-  public void anonymousClassAsMethodArgument() throws Exception {
+  public void anonymousClassAsMethodArgument() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar1");
-    MethodCallExpr methodCall = Navigator.findMethodCall(method, "of");
+    MethodCallExpr methodCall = Navigator.findMethodCall(method, "of").get();
 
     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
     combinedTypeSolver.add(new ReflectionTypeSolver());
@@ -34,11 +34,11 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void callingSuperClassInnerClassMethod() throws Exception {
+  public void callingSuperClassInnerClassMethod() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar2");
-    MethodCallExpr methodCall = Navigator.findMethodCall(method, "innerClassMethod");
+    MethodCallExpr methodCall = Navigator.findMethodCall(method, "innerClassMethod").get();
 
     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
     combinedTypeSolver.add(new ReflectionTypeSolver());
@@ -50,11 +50,11 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void callingAnonymousClassInnerMethod() throws Exception {
+  public void callingAnonymousClassInnerMethod() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar3");
-    MethodCallExpr methodCall = Navigator.findMethodCall(method, "callAnnonClassInnerMethod");
+    MethodCallExpr methodCall = Navigator.findMethodCall(method, "callAnnonClassInnerMethod").get();
 
     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
     combinedTypeSolver.add(new ReflectionTypeSolver());
@@ -67,11 +67,11 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void usingAnonymousSuperClassInnerType() throws Exception {
+  public void usingAnonymousSuperClassInnerType() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar4");
-    MethodCallExpr methodCall = Navigator.findMethodCall(method, "toString");
+    MethodCallExpr methodCall = Navigator.findMethodCall(method, "toString").get();
 
     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
     combinedTypeSolver.add(new ReflectionTypeSolver());
@@ -82,11 +82,11 @@ public class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionT
   }
 
   @Test
-  public void usingAnonymousClassInnerType() throws Exception {
+  public void usingAnonymousClassInnerType() {
     CompilationUnit cu = parseSample("AnonymousClassDeclarations");
     ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
     MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar5");
-    MethodCallExpr methodCall = Navigator.findMethodCall(method, "toString");
+    MethodCallExpr methodCall = Navigator.findMethodCall(method, "toString").get();
 
     CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
     combinedTypeSolver.add(new ReflectionTypeSolver());

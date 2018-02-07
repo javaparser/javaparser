@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class Issue228 extends AbstractResolutionTest{
 
     @Test
-    public void testSolvingMethodWitPrimitiveParameterTypeAsUsage() throws ParseException {
+    public void testSolvingMethodWitPrimitiveParameterTypeAsUsage() {
         String code = 
                   "class Test { "
                 + "  long l = call(1); "
@@ -23,7 +23,7 @@ public class Issue228 extends AbstractResolutionTest{
                 + "  }"
                 + "}";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodCallExpr methodCall = cu.getChildNodesByType(MethodCallExpr.class).get(0);
+        MethodCallExpr methodCall = cu.findAll(MethodCallExpr.class).get(0);
         JavaParserFacade parserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         MethodUsage solvedCall = parserFacade.solveMethodAsUsage(methodCall);
         assertEquals("long", solvedCall.getParamType(0).describe());

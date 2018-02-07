@@ -1,6 +1,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -8,6 +9,7 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -28,7 +30,7 @@ import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentN
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T> & NodeWithTypeParameters<T>> {
+public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T>> {
 
     private T wrappedNode;
     private TypeSolver typeSolver;
@@ -79,8 +81,9 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     }
 
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name, TypeSolver typeSolver) {
-        if (this.wrappedNode.getTypeParameters() != null) {
-            for (com.github.javaparser.ast.type.TypeParameter typeParameter : this.wrappedNode.getTypeParameters()) {
+        if(wrappedNode instanceof NodeWithTypeParameters<?>) {
+            NodeList<TypeParameter> typeParameters = ((NodeWithTypeParameters<?>) wrappedNode).getTypeParameters();
+            for (com.github.javaparser.ast.type.TypeParameter typeParameter : typeParameters) {
                 if (typeParameter.getName().getId().equals(name)) {
                     return SymbolReference.solved(new JavaParserTypeVariableDeclaration(typeParameter, typeSolver));
                 }
@@ -115,14 +118,13 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     }
 
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-        Optional<Node> parent = wrappedNode.getParentNode();
-        return parent.isPresent() ? 
-                Optional.of(JavaParserFactory.toTypeDeclaration(parent.get(), typeSolver)) :
-                Optional.empty();
+        return wrappedNode
+                .getParentNode()
+                .map(node -> JavaParserFactory.toTypeDeclaration(node, typeSolver));
     }
     
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
-        ArrayList<ResolvedFieldDeclaration> fields = new ArrayList<>();
+        List<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {
             for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
                 if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {

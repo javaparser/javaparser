@@ -22,6 +22,7 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -30,7 +31,6 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
@@ -49,12 +49,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.EnumDeclaration wrappedNode;
-    private JavaParserTypeAdapter javaParserTypeAdapter;
+    private JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
 
     public JavaParserEnumDeclaration(com.github.javaparser.ast.body.EnumDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
-        this.javaParserTypeAdapter = new JavaParserTypeAdapter(wrappedNode, typeSolver);
+        this.javaParserTypeAdapter = new JavaParserTypeAdapter<>(wrappedNode, typeSolver);
     }
 
     @Override
@@ -106,21 +106,22 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration implement
 
     @Override
     public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+        String otherName = other.getQualifiedName();
         // Enums cannot be extended
-        if (other.getQualifiedName().equals(this.getQualifiedName())) {
+        if (otherName.equals(this.getQualifiedName())) {
             return true;
         }
-        if (other.getQualifiedName().equals(Enum.class.getCanonicalName())) {
+        if (otherName.equals(Enum.class.getCanonicalName())) {
             return true;
         }
         // Enum implements Comparable and Serializable
-        if (other.getQualifiedName().equals(Comparable.class.getCanonicalName())) {
+        if (otherName.equals(Comparable.class.getCanonicalName())) {
             return true;
         }
-        if (other.getQualifiedName().equals(Serializable.class.getCanonicalName())) {
+        if (otherName.equals(Serializable.class.getCanonicalName())) {
             return true;
         }
-        if (other.getQualifiedName().equals(Object.class.getCanonicalName())) {
+        if (otherName.equals(Object.class.getCanonicalName())) {
             return true;
         }
         return false;

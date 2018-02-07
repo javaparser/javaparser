@@ -22,11 +22,11 @@ import static org.junit.Assert.assertEquals;
 public class Issue186 extends AbstractResolutionTest {
 
     @Test
-    public void lambdaFlatMapIssue() throws ParseException {
+    public void lambdaFlatMapIssue() {
         CompilationUnit cu = parseSample("Issue186");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(methodDeclaration, "flatMap");
+        MethodCallExpr methodCallExpr = Navigator.findMethodCall(methodDeclaration, "flatMap").get();
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         assertEquals("java.util.stream.Stream<java.lang.String>", javaParserFacade.getType(methodCallExpr).describe());
@@ -34,11 +34,11 @@ public class Issue186 extends AbstractResolutionTest {
     }
 
     @Test
-    public void lambdaPrimitivesIssue() throws ParseException {
+    public void lambdaPrimitivesIssue() {
         CompilationUnit cu = parseSample("Issue186");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JavaTest");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");
-        List<LambdaExpr> lambdas = Navigator.findAllNodesOfGivenClass(methodDeclaration, LambdaExpr.class);
+        List<LambdaExpr> lambdas = methodDeclaration.findAll(LambdaExpr.class);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         assertEquals("java.util.function.Predicate<? super java.lang.String>", javaParserFacade.getType(lambdas.get(0)).describe());

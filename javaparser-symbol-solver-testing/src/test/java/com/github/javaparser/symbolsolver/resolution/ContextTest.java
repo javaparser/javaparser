@@ -53,13 +53,13 @@ public class ContextTest extends AbstractTest {
 
     private TypeSolver typeSolver = new CombinedTypeSolver(new MemoryTypeSolver(), new ReflectionTypeSolver());
 
-    private CompilationUnit parseSample(String sampleName) throws ParseException {
+    private CompilationUnit parseSample(String sampleName) {
         InputStream is = ContextTest.class.getClassLoader().getResourceAsStream(sampleName + ".java.txt");
         return JavaParser.parse(is);
     }
 
     @Test
-    public void resolveDeclaredFieldReference() throws ParseException {
+    public void resolveDeclaredFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToField");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method1");
@@ -75,7 +75,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveInheritedFieldReference() throws ParseException {
+    public void resolveInheritedFieldReference() {
         CompilationUnit cu = parseSample("ReferencesToField");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferencesToFieldExtendingClass");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "method2");
@@ -91,11 +91,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveParameterReference() throws ParseException {
+    public void resolveParameterReference() {
         CompilationUnit cu = parseSample("ReferencesToParameter");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "ReferenceToParameter");
         MethodDeclaration method1 = Navigator.demandMethod(referencesToField, "aMethod");
-        NameExpr foo = Navigator.findNameExpression(method1, "foo");
+        NameExpr foo = Navigator.findNameExpression(method1, "foo").get();
 
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
         SymbolReference symbolReference = symbolSolver.solveSymbol("foo", foo);
@@ -106,7 +106,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToImportedType() throws ParseException {
+    public void resolveReferenceToImportedType() {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -129,7 +129,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceUsingQualifiedName() throws ParseException {
+    public void resolveReferenceUsingQualifiedName() {
         CompilationUnit cu = parseSample("Navigator2");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -153,7 +153,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToClassesInTheSamePackage() throws ParseException {
+    public void resolveReferenceToClassesInTheSamePackage() {
         CompilationUnit cu = parseSample("Navigator3");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -176,7 +176,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToClassInJavaLang() throws ParseException {
+    public void resolveReferenceToClassInJavaLang() {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
@@ -204,7 +204,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
-        MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
+        MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
@@ -223,7 +223,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration referencesToField = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "findType");
-        MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
+        MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
@@ -235,11 +235,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToMethodCalledOnArrayAccess() throws ParseException {
+    public void resolveReferenceToMethodCalledOnArrayAccess() {
         CompilationUnit cu = parseSample("ArrayAccess");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ArrayAccess");
         MethodDeclaration method = Navigator.demandMethod(clazz, "access");
-        MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim");
+        MethodCallExpr callToTrim = Navigator.findMethodCall(method, "trim").get();
 
         File src = adaptPath(new File("src/test/resources"));
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
@@ -251,7 +251,7 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToJreType() throws ParseException {
+    public void resolveReferenceToJreType() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
@@ -264,11 +264,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToMethodWithLambda() throws ParseException {
+    public void resolveReferenceToMethodWithLambda() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter");
+        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "filter").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         ResolvedType ref = JavaParserFacade.get(typeSolver).getType(methodCallExpr);
@@ -279,11 +279,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParamBase() throws ParseException {
+    public void resolveReferenceToLambdaParamBase() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        NameExpr refToT = Navigator.findNameExpression(method, "t");
+        NameExpr refToT = Navigator.findNameExpression(method, "t").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
@@ -293,11 +293,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToLambdaParamSimplified() throws ParseException {
+    public void resolveReferenceToLambdaParamSimplified() {
         CompilationUnit cu = parseSample("NavigatorSimplified");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty");
+        MethodCallExpr call = Navigator.findMethodCall(method, "isEmpty").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         SymbolSolver symbolSolver = new SymbolSolver(typeSolver);
@@ -312,7 +312,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr call = Navigator.findMethodCall(method, "getTypes");
+        MethodCallExpr call = Navigator.findMethodCall(method, "getTypes").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
@@ -329,7 +329,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes");
+        MethodCallExpr callToGetTypes = Navigator.findMethodCall(method, "getTypes").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
@@ -345,7 +345,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream");
+        MethodCallExpr callToStream = Navigator.findMethodCall(method, "stream").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
@@ -359,7 +359,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter");
+        MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
@@ -373,7 +373,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter");
+        MethodCallExpr callToFilter = Navigator.findMethodCall(method, "filter").get();
         Expression lambdaExpr = callToFilter.getArguments().get(0);
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
@@ -388,7 +388,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
+        MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName").get();
         Expression referenceToT = callToGetName.getScope().get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
@@ -403,7 +403,7 @@ public class ContextTest extends AbstractTest {
         CompilationUnit cu = parseSample("Navigator");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Navigator");
         MethodDeclaration method = Navigator.demandMethod(clazz, "findType");
-        MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName");
+        MethodCallExpr callToGetName = Navigator.findMethodCall(method, "getName").get();
 
         String pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(pathToJar));
@@ -414,11 +414,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodWithNullParam() throws ParseException {
+    public void resolveReferenceToOverloadMethodWithNullParam() {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m1");
-        MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
+        MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
@@ -429,11 +429,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodFindStricter() throws ParseException {
+    public void resolveReferenceToOverloadMethodFindStricter() {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m2");
-        MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
+        MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);
@@ -444,11 +444,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveInheritedMethodFromInterface() throws ParseException {
+    public void resolveInheritedMethodFromInterface() {
         CompilationUnit cu = parseSample("InterfaceInheritance");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
         MethodDeclaration method = Navigator.demandMethod(clazz, "test");
-        MethodCallExpr call = Navigator.findMethodCall(method, "foobar");
+        MethodCallExpr call = Navigator.findMethodCall(method, "foobar").get();
 
         File src = adaptPath(new File("src/test/resources"));
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src));
@@ -458,11 +458,11 @@ public class ContextTest extends AbstractTest {
     }
 
     @Test
-    public void resolveReferenceToOverloadMethodFindOnlyCompatible() throws ParseException {
+    public void resolveReferenceToOverloadMethodFindOnlyCompatible() {
         CompilationUnit cu = parseSample("OverloadedMethods");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "OverloadedMethods");
         MethodDeclaration method = Navigator.demandMethod(clazz, "m3");
-        MethodCallExpr call = Navigator.findMethodCall(method, "overloaded");
+        MethodCallExpr call = Navigator.findMethodCall(method, "overloaded").get();
 
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         MethodUsage ref = JavaParserFacade.get(typeSolver).solveMethodAsUsage(call);

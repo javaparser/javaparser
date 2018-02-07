@@ -51,7 +51,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
               .get()
               .stream()
               .filter(node -> memberClass.isAssignableFrom(node.getClass()))
-              .map(node -> (T) node)
+              .map(memberClass::cast)
               .collect(Collectors.toList());
     } else {
       return Collections.emptyList();
@@ -171,7 +171,7 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
 
   @Override
   public String getQualifiedName() {
-    String containerName = Helper.containerName(getParentNode(wrappedNode));
+    String containerName = Helper.containerName(wrappedNode.getParentNode().orElse(null));
     if (containerName.isEmpty()) {
       return getName();
     } else {

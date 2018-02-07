@@ -33,7 +33,7 @@ public class Issue144 extends AbstractResolutionTest {
     }
 
     @Test(expected = UnsolvedSymbolException.class)
-    public void issue144() throws ParseException {
+    public void issue144() {
         CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
         ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("main").get(0).getBody().get().getStatement(0);
@@ -45,7 +45,7 @@ public class Issue144 extends AbstractResolutionTest {
     }
 
     @Test
-    public void issue144WithReflectionTypeSolver() throws ParseException {
+    public void issue144WithReflectionTypeSolver() {
         CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
         ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("main").get(0).getBody().get().getStatement(0);
@@ -57,7 +57,7 @@ public class Issue144 extends AbstractResolutionTest {
     }
 
     @Test
-    public void issue144WithCombinedTypeSolver() throws ParseException {
+    public void issue144WithCombinedTypeSolver() {
         CompilationUnit cu = parseSampleWithStandardExtension("issue144/HelloWorld");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "HelloWorld");
         ExpressionStmt expressionStmt = (ExpressionStmt)clazz.getMethodsByName("main").get(0).getBody().get().getStatement(0);

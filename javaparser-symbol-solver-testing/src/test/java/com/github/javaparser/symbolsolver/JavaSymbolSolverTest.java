@@ -39,7 +39,7 @@ import static org.junit.Assert.assertEquals;
 public class JavaSymbolSolverTest extends AbstractResolutionTest {
 
     @Test
-    public void resolveMethodDeclaration() throws ParseException {
+    public void resolveMethodDeclaration() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = parseSample("SymbolResolverExample");
@@ -54,7 +54,7 @@ public class JavaSymbolSolverTest extends AbstractResolutionTest {
     }
 
     @Test
-    public void resolveArrayType() throws ParseException {
+    public void resolveArrayType() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
 
         CompilationUnit cu = parseSample("SymbolResolverExample");

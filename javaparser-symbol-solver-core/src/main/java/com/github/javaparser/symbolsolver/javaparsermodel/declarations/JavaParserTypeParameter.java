@@ -36,7 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -115,7 +115,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public ResolvedTypeParametrizable getContainer() {
-        Node parentNode = getParentNode(wrappedNode);
+        Node parentNode = requireParentNode(wrappedNode);
         if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
@@ -147,8 +147,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
         ResolvedType type = JavaParserFacade.get(typeSolver).convertToUsage(classOrInterfaceType, classOrInterfaceType);
-        Bound bound = Bound.extendsBound(type);
-        return bound;
+        return Bound.extendsBound(type);
     }
 
     public Context getContext() {

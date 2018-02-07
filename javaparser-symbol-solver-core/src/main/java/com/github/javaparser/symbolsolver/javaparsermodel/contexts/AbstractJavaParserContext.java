@@ -35,13 +35,11 @@ import com.github.javaparser.symbolsolver.model.resolution.Value;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.javaparser.symbolsolver.javaparser.Navigator.getParentNode;
+import static com.github.javaparser.symbolsolver.javaparser.Navigator.requireParentNode;
+import static java.util.Collections.*;
 
 /**
  * @author Federico Tomassetti
@@ -55,7 +53,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     /// Static methods
     ///
 
-    public static final SymbolReference<ResolvedValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
+    public static SymbolReference<ResolvedValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
         for (ResolvedValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
             if (decl.getName().equals(name)) {
                 return SymbolReference.solved(decl);
@@ -109,8 +107,9 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public final Context getParent() {
-        if (getParentNode(wrappedNode) instanceof MethodCallExpr) {
-            MethodCallExpr parentCall = (MethodCallExpr) getParentNode(wrappedNode);
+        Node parent = wrappedNode.getParentNode().orElse(null);
+        if (parent instanceof MethodCallExpr) {
+            MethodCallExpr parentCall = (MethodCallExpr) parent;
             boolean found = false;
             if (parentCall.getArguments() != null) {
                 for (Expression expression : parentCall.getArguments()) {
@@ -120,16 +119,16 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
             }
             if (found) {
-                Node notMethod = getParentNode(wrappedNode);
+                Node notMethod = parent;
                 while (notMethod instanceof MethodCallExpr) {
-                    notMethod = getParentNode(notMethod);
+                    notMethod = requireParentNode(notMethod);
                 }
                 return JavaParserFactory.getContext(notMethod, typeSolver);
             }
         }
-        Node notMethod = getParentNode(wrappedNode);
+        Node notMethod = parent;
         while (notMethod instanceof MethodCallExpr || notMethod instanceof FieldAccessExpr) {
-            notMethod = getParentNode(notMethod);
+            notMethod = notMethod.getParentNode().orElse(null);
         }
         if (notMethod == null) {
             return null;
@@ -144,7 +143,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     protected Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name, TypeSolver typeSolver) {
         return symbolDeclarator.getSymbolDeclarations().stream()
                 .filter(d -> d.getName().equals(name))
-                .map(d -> Value.from(d))
+                .map(Value::from)
                 .findFirst();
     }
 
@@ -157,40 +156,38 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 NameExpr scopeAsName = (NameExpr) scope;
                 SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId(), typeSolver);
                 if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
-                    return Arrays.asList(symbolReference.getCorrespondingDeclaration().asReferenceType());
+                    return singletonList(symbolReference.getCorrespondingDeclaration().asReferenceType());
                 }
             }
 
-            ResolvedType typeOfScope = null;
+            ResolvedType typeOfScope;
             try {
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("Issue calculating the type of the scope of " + this), e);
+                throw new RuntimeException("Issue calculating the type of the scope of " + this, e);
             }
             if (typeOfScope.isWildcard()) {
                 if (typeOfScope.asWildcard().isExtends() || typeOfScope.asWildcard().isSuper()) {
-                    return Arrays.asList(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration());
+                    return singletonList(typeOfScope.asWildcard().getBoundedType().asReferenceType().getTypeDeclaration());
                 } else {
-                    return Arrays.asList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
+                    return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
                 }
             } else if (typeOfScope.isArray()) {
                 // method call on array are Object methods
-                return Arrays.asList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
+                return singletonList(new ReflectionClassDeclaration(Object.class, typeSolver).asReferenceType());
             } else if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
                     result.add(bound.getType().asReferenceType().getTypeDeclaration());
                 }
                 return result;
-            } else if (typeOfScope.isConstraint()){
-                return Arrays.asList(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration());
-            } else {
-                return Arrays.asList(typeOfScope.asReferenceType().getTypeDeclaration());
+            } else if (typeOfScope.isConstraint()) {
+                return singletonList(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration());
             }
-        } else {
-            ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
-            return Arrays.asList(typeOfScope.asReferenceType().getTypeDeclaration());
+            return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
         }
+        ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getTypeOfThisIn(wrappedNode);
+        return singletonList(typeOfScope.asReferenceType().getTypeDeclaration());
     }
 
 }

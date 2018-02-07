@@ -46,7 +46,7 @@ import static org.junit.Assert.assertEquals;
 public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
     @Test
-    public void typeDeclarationSuperClassImplicitlyIncludeObject() throws ParseException {
+    public void typeDeclarationSuperClassImplicitlyIncludeObject() {
         CompilationUnit cu = parseSample("Generics");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Generics");
         ResolvedTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(clazz);
@@ -128,7 +128,7 @@ public class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "    sc.nextLine();\n" +
                 "} } }";
         CompilationUnit cu = JavaParser.parse(code);
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine");
+        MethodCallExpr methodCallExpr = Navigator.findMethodCall(cu, "nextLine").get();
         Expression scope = methodCallExpr.getScope().get();
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver()).getType(scope);
         assertEquals(true, type.isReferenceType());

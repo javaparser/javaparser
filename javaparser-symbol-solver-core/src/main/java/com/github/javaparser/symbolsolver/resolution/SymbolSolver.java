@@ -19,6 +19,7 @@ package com.github.javaparser.symbolsolver.resolution;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -26,7 +27,6 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
@@ -84,7 +84,7 @@ public class SymbolSolver {
     public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
         SymbolReference<ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false, typeSolver);
         if (!decl.isSolved()) {
-            throw new UnsolvedSymbolException(context, methodName);
+            throw new UnsolvedSymbolException(context.toString(), methodName);
         }
         return new MethodUsage(decl.getCorrespondingDeclaration());
     }
@@ -101,7 +101,7 @@ public class SymbolSolver {
             String name = ((ClassOrInterfaceType) type).getName().getId();
             SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name, typeSolver);
             if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver), name);
+                throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);
             }
             return ref.getCorrespondingDeclaration();
         } else {
@@ -115,8 +115,7 @@ public class SymbolSolver {
             return genericType.get();
         }
         ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(name);
-        ReferenceTypeImpl typeUsage = new ReferenceTypeImpl(typeDeclaration, typeSolver);
-        return typeUsage;
+        return new ReferenceTypeImpl(typeDeclaration, typeSolver);
     }
 
     /**

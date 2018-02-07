@@ -48,7 +48,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredInstanceField() throws ParseException {
+    public void solveSymbolReferringToDeclaredInstanceField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -59,7 +59,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolReferringToDeclaredStaticField() throws ParseException {
+    public void solveSymbolReferringToDeclaredStaticField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -70,7 +70,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolReferringToValue() throws ParseException {
+    public void solveSymbolReferringToValue() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -81,7 +81,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolAsValueReferringToDeclaredInstanceField() throws ParseException {
+    public void solveSymbolAsValueReferringToDeclaredInstanceField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -92,7 +92,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolAsValueReferringToDeclaredStaticField() throws ParseException {
+    public void solveSymbolAsValueReferringToDeclaredStaticField() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
@@ -103,7 +103,7 @@ public class EnumDeclarationContextResolutionTest extends AbstractResolutionTest
     }
 
     @Test
-    public void solveSymbolAsValueReferringToValue() throws ParseException {
+    public void solveSymbolAsValueReferringToValue() {
         CompilationUnit cu = parseSample("AnEnum");
         com.github.javaparser.ast.body.EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "MyEnum");
         Context context = new EnumDeclarationContext(enumDeclaration, typeSolver);
